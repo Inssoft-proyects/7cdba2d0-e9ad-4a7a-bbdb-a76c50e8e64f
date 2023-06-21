@@ -95,12 +95,12 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaDependencias").html(result);
-                alert("Se ha Actualizado la Información");
+                $("#tablaDependencias").html(result); 
+                sitteg_success('Se ha actualizado la información');
 
             },
-            error: function (error) {
-                alert("!Sucedio um error, intente mas tarde...");
+            error: function (error) { 
+                sitteg_warning('Sucedio um error, intente mas tarde...');
             }
         });
     }
