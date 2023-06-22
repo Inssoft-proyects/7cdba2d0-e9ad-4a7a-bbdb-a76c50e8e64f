@@ -46,7 +46,7 @@
 
 
 <div class="modal fade modalCustom" id="modalCrearPersona" aria-labelledby="modalCrearPersona" aria-hidden="true">
-    <div class="modal-dialog modal-xl boxShadow modal-dialog-centered">
+    <div class="modal-dialog modal-xl boxShadow modal-dialog-centered ">
         <div class="modal-content">
             <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
                 <div class="col-auto pe-0">
@@ -144,6 +144,7 @@
             dataType: "html",
             success: function (data) {
                 $('#modalBodyCrearPersona').html(data);
+                $('#modalCrearPersona').modal({backdrop: 'static', keyboard: false})
                 $('#modalCrearPersona').modal('show');
             }
         });
@@ -157,6 +158,7 @@
             dataType: "html",
             success: function (value) {
                 $('#modalBodyEditarPersona').html(value);
+                $('#modalEditarPersona').modal({ backdrop: 'static', keyboard: false })
                 $('#modalEditarPersona').modal('show');
             }
         });
