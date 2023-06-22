@@ -91,11 +91,11 @@
             data: Mydata,
             success: function (result) {
                 $("#tablaFactoresAccidentes").html(result);
-                alert("Se ha Actualizado la Información");
+                sitteg_info('Se ha actualizado la información');
 
             },
             error: function (error) {
-                alert("!Sucedio um error, intente mas tarde...");
+                sitteg_warning('Sucedió un error, intente mas tarde...');
             }
         });
     }

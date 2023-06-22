@@ -51,7 +51,7 @@
             type: "POST",
             data: Mydata,
             success: function (response) {
-                alert("Se ha eliminado una clasificación de accidente");
+                sitteg_info("Se ha eliminado una clasificación de accidente");
                 var gridData = response.length > 0 ? response : [];
                 $("#gridClasificacion").data("kendoGrid").dataSource.data(gridData);
                 $('.modal-body').removeClass('modal-open');

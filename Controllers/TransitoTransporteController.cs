@@ -63,7 +63,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {"FechaLiberacion","Fecha Liberación"},
             };
             var ListTransitoModel = _transitoTransporteService.GetTransitoTransportes(model);
-            var result = _pdfService.CreatePdf("ReporteTransitoTransporte", "Transito Transporte", 4, ColumnsNames, ListTransitoModel);
+            var result = _pdfService.CreatePdf("ReporteTransitoTransporte", "Tránsito Transporte", 4, ColumnsNames, ListTransitoModel);
             return File(result.Item1, "application/pdf", result.Item2);
         }
 
@@ -78,7 +78,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {"FechaLiberacion","Fecha Liberación"},
             };
             var TransitoModel = _transitoTransporteService.GetTransitoTransporteById(IdDeposito);
-            var result = _pdfService.CreatePdf("ReporteTransitoTransporte", "Transito Transporte", 4, ColumnsNames, TransitoModel);
+            var result = _pdfService.CreatePdf("ReporteTransitoTransporte", "Tránsito Transporte", 4, ColumnsNames, TransitoModel);
             return File(result.Item1, "application/pdf", result.Item2);
         }
 

@@ -8,7 +8,7 @@
                         <i class="icon-traslado h1 colorPrimary"></i>
                     </div>
                     <div class="col-auto my-3">
-                        <h2 class="m-0 h3"><b>Catalogo de instituciones traslado</b></h2>
+                        <h2 class="m-0 h3"><b>Catálogo de instituciones traslado</b></h2>
                     </div>
                 </div>
             </div>

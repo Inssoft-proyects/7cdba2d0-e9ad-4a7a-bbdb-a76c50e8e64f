@@ -34,7 +34,7 @@
 
     <div class="col-12 col-md-6 col-lg-4">
         <div class="controlForm mb-3">
-            <label>Fecha:</label>
+            <label>Fecha ingreso:</label>
             <span>
                 @Html.DisplayFor(m => m.FechaIngreso,new {@class="control-label"})
             </span>
@@ -43,7 +43,7 @@
 
     <div class="col-12 col-md-6 col-lg-4">
         <div class="controlForm mb-3">
-            <label>Pension:</label>
+            <label>Pensión:</label>
             <span>
                 @Html.DisplayFor(m => m.pension,new {@class="control-label"})
             </span>
@@ -260,12 +260,12 @@
                 dataType: "json",
                 async: false,
                 success: function (result) {
-                    alert("Se ha Actualizado la Información");
+                    sitteg_info('Se ha actualizado la información');
                     //$("#listadoLiberacionVehiculos").html(result);
 
                 },
                 error: function (error) {
-                    alert("!Sucedio um error, intente mas tarde...");
+                    sitteg_warning('Sucedió un error, intente mas tarde...');
                 }
             });
         }

@@ -124,11 +124,11 @@
             data: Mydata,
             success: function (result) {
                 $("#tablaDelegacionesOficinas").html(result);
-                alert("Se ha Actualizado la Información");
+                sitteg_info('Se ha actualizado la información');
 
             },
-            error: function (error) {
-                alert("!Sucedio um error, intente mas tarde...");
+            error: function (error) { 
+                sitteg_warning('Sucedió un error, intente mas tarde...');
             }
         });
     }

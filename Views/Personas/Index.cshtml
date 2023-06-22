@@ -144,6 +144,7 @@
             dataType: "html",
             success: function (data) {
                 $('#modalBodyCrearPersona').html(data);
+                $('#modalCrearPersona').modal({backdrop: 'static', keyboard: false});
                 $('#modalCrearPersona').modal('show');
             }
         });
@@ -157,6 +158,7 @@
             dataType: "html",
             success: function (value) {
                 $('#modalBodyEditarPersona').html(value);
+                $('#modalEditarPersona').modal({ backdrop: 'static', keyboard: false });
                 $('#modalEditarPersona').modal('show');
             }
         });
