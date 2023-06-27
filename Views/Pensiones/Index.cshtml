@@ -183,6 +183,7 @@
             dataType: "html",
             success: function (data) {
                 $('#modalBodyCrearPension').html(data);
+                $('#modalCrearPension').modal({ backdrop: 'static', keyboard: false });
                 $('#modalCrearPension').modal('show');
             }
         });

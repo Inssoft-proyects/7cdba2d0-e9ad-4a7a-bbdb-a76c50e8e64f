@@ -1,5 +1,6 @@
 ﻿using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -35,7 +36,8 @@ namespace GuanajuatoAdminUsuarios.Services
                             entidad.idEntidad = Convert.ToInt32(reader["idEntidad"].ToString());
                             entidad.nombreEntidad = reader["nombreEntidad"].ToString();
                             entidad.estatusDesc = reader["estatusDesc"].ToString();
-                            entidad.fechaActualizacion = Convert.ToDateTime(reader["fechaActualizacion"].ToString());
+
+                            entidad.fechaActualizacion = String.IsNullOrEmpty(reader["fechaActualizacion"].ToString()) ? null : Convert.ToDateTime( reader["fechaActualizacion"].ToString());
                             entidad.estatus = Convert.ToInt32(reader["estatus"].ToString());
                             entidad.actualizadoPor = Convert.ToInt32(reader["actualizadoPor"].ToString());
                             ListaEntidades.Add(entidad);

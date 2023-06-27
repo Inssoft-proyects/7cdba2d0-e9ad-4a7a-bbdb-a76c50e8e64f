@@ -36,8 +36,8 @@
                         <div class="controlForm my-3">
                             <label>Día inhábil <b>(obligatorio)</b>:</label>
                             <span>
-                                @(Html.Kendo().DateInputFor(t=>t.fecha)
-                                    .HtmlAttributes(new { style = "width: 100%" })
+                                @(Html.Kendo().DatePickerFor(t => t.fecha)
+                                    .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "end" })
                                     )
                             </span>
                         </div>

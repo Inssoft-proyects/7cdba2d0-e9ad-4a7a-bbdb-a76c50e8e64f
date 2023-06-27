@@ -78,6 +78,13 @@
             )
             )
         @*</div>*@
+
+        @(Html.Kendo().Tooltip()
+            .For("#Grid")
+            .Filter("th")
+            .Position(TooltipPosition.Top)
+            .ContentHandler("tooltipContent")
+            )
     </div>
 </div>
 
@@ -181,6 +188,10 @@
         });
     }
 
+    function tooltipContent(e) {
+        var titulo = e.target.context.dataset.title;
+        return titulo;
+    }
 
 
 </script>

@@ -104,9 +104,10 @@ namespace GuanajuatoAdminUsuarios.Services
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
                 try
                 {
+                    string condicionFecha = model.FechaIngreso == DateTime.MinValue ? @"d.FechaIngreso >= @FechaIngreso " : @"d.FechaIngreso = @FechaIngreso ";
+
                     connection.Open();
-                    const string SqlTransact =
-                                @"select   top(100) d.IdDeposito,d.IdSolicitud,d.idDelegacion,d.IdMarca,d.IdSubmarca,d.IdPension,d.IdTramo,
+                    string SqlTransact = string.Format(@"select top(100) d.IdDeposito,d.IdSolicitud,d.idDelegacion,d.IdMarca,d.IdSubmarca,d.IdPension,d.IdTramo,
                                 d.IdColor,d.Serie,d.Placa,d.FechaIngreso,d.Folio,d.Km,d.Liberado,d.Autoriza,d.FechaActualizacion,
                                 d.ActualizadoPor, d.estatus, sol.solicitanteNombre,
                                 sol.solicitanteAp,sol.solicitanteAm,pen.pension	,del.delegacion,col.color,
@@ -121,14 +122,15 @@ namespace GuanajuatoAdminUsuarios.Services
                                 inner join catSubmarcasVehiculos  subm on d.idSubmarca=subm.idSubmarca
                                 where d.liberado=0 and d.estatus=1	and
 		                        (d.IdDeposito=@IdDeposito  OR d.IdMarca=@IdMarca 
-		                        OR d.Serie LIKE '%' + @Serie + '%' OR d.FechaIngreso =@FechaIngreso 
-		                        OR d.Folio LIKE '%' + @Folio + '%')";
+		                        OR d.Serie LIKE '%' + @Serie + '%' OR  {0} 
+		                        OR d.Folio LIKE '%' + @Folio + '%')", condicionFecha);
+
 
                     SqlCommand command = new SqlCommand(SqlTransact, connection);
                     command.Parameters.Add(new SqlParameter("@IdDeposito", SqlDbType.Int)).Value = (object)model.IdDeposito ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@IdMarca", SqlDbType.Int)).Value = (object)model.IdMarcaVehiculo ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@Serie", SqlDbType.NVarChar)).Value = (object)model.Serie ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@FechaIngreso", SqlDbType.DateTime)).Value = (object)model.FechaIngreso ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@FechaIngreso", SqlDbType.DateTime)).Value = model.FechaIngreso == DateTime.MinValue ? new DateTime(1800,01,01) : (object)model.FechaIngreso;
                     command.Parameters.Add(new SqlParameter("@Folio", SqlDbType.NVarChar)).Value = (object)model.Folio ?? DBNull.Value;
 
                     command.CommandType = CommandType.Text;

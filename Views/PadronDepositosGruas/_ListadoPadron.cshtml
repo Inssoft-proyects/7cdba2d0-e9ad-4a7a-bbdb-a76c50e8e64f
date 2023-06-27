@@ -33,12 +33,19 @@
             .ServerOperation(false)
             )
             )
+
+        @(Html.Kendo().Tooltip()
+            .For("#Grid")
+            .Filter("th")
+            .Position(TooltipPosition.Top)
+            .ContentHandler("tooltipContent")
+            )
     </div>
 
 </div>
 
-@*<script>
-    $(document).ready(function () {
+<script>
+  @*  $(document).ready(function () {
         var grid = $("#Grid").data("kendoGrid");
 
         var position = "top";
@@ -47,6 +54,11 @@
                 position: position
             }
         });
-    });
+    });*@
 
-</script>*@
+    function tooltipContent(e) {
+        var titulo = e.target.context.dataset.title;
+        return titulo;
+    }
+
+</script>

@@ -91,7 +91,7 @@
                                     @(Html.Kendo().TextBoxFor(t => t.Correo)
                                         .Label(l => l.Content("Correo electrónico: <b>(obligatorio)</b>:"))
                                         .Placeholder("Ingresa electrónico")
-                                        .HtmlAttributes(new { style = "width: 100%" })
+                                        .HtmlAttributes(new { style = "width: 100%"})
                                         )
                                 </div>
                             </div>
@@ -138,6 +138,8 @@
                 $("body").removeClass("modal-open").find(".modal-backdrop").remove();
                 sitteg_info('Elemento guardado correctamente');
                 $('#modalBodyEditarPension').html(data);
+
+                $('#modalEditarPension').modal({ backdrop: 'static', keyboard: false });
                 $('#modalEditarPension').modal('show');
             },
             error: function (xhr, status) {

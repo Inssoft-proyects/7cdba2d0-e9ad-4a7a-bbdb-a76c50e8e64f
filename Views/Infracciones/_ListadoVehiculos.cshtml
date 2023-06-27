@@ -15,13 +15,13 @@
             columns.Bound(c => c.idVehiculo).Hidden();
             columns.Select().Width(50).ClientHeaderTemplate(" ");
             columns.Bound(c => c.placas).Title("Placas").Width(90);
-            columns.Bound(p => p.serie).Title("serie").Width(90);
-            columns.Bound(p => p.tarjeta).Title("tarjeta").Width(90);
-            columns.Bound(p => p.marca).Title("marca").Width(90);
-            columns.Bound(c => c.submarca).Title("submarca").Width(90);
-            columns.Bound(c => c.modelo).Title("modelo").Width(90);
-            columns.Bound(p => p.propietario).Title("propietario").Width(90);
-            columns.Bound(c => c.numeroEconomico).Title("numeroEconomico").Width(90);
+            columns.Bound(p => p.serie).Title("Serie").Width(90);
+            columns.Bound(p => p.tarjeta).Title("Tarjeta").Width(90);
+            columns.Bound(p => p.marca).Title("Marca").Width(90);
+            columns.Bound(c => c.submarca).Title("Submarca").Width(90);
+            columns.Bound(c => c.modelo).Title("Modelo").Width(90);
+            columns.Bound(p => p.propietario).Title("Propietario").Width(90);
+            columns.Bound(c => c.numeroEconomico).Title("Número Económico").Width(90);
         }).HtmlAttributes(new { style = "height:auto" })
         .Pageable(pager => pager.AlwaysVisible(true).Position(GridPagerPosition.Bottom).PageSizes(true))
         .Sortable()
@@ -32,6 +32,13 @@
         .PageSize(5)
         )
         .ToolBar(t => t.Custom().Text("Buscar...").Name("search"))
+        )
+
+    @(Html.Kendo().Tooltip()
+        .For("#gridInfraccionesVehiculo")
+        .Filter("th")
+        .Position(TooltipPosition.Top)
+        .ContentHandler("tooltipContent")
         )
 </div>
 
@@ -65,4 +72,9 @@
             };
         };
     })
+
+    function tooltipContent(e) {
+        var titulo = e.target.context.dataset.title;
+        return titulo;
+    }
 </script>

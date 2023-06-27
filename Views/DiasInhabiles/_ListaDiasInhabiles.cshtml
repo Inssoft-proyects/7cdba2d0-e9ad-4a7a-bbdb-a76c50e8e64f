@@ -5,7 +5,7 @@
             .Name("grid")
             .Columns(columns =>
             {
-                columns.Bound(c => c.fecha).Width(70).Title("Fecha");
+                columns.Bound(c => c.fecha).Width(70).Title("Fecha").Format("{0: dd/MM/yyyy}");
                 columns.Bound(c => c.todosMunicipiosDesc).Title("Aplica a todos los Municipios").Width(100);
                 columns.Bound(c => c.Municipio).Width(100);
                 columns.Bound(c => c.EstatusDesc).Title("Estatus en sistema").Width(100);
@@ -38,6 +38,13 @@
 
 
 
+            )
+
+        @(Html.Kendo().Tooltip()
+            .For("#grid")
+            .Filter("th")
+            .Position(TooltipPosition.Top)
+            .ContentHandler("tooltipContent")
             )
 
 
@@ -77,5 +84,10 @@
 
             },
         })
+    }
+
+    function tooltipContent(e) {
+        var titulo = e.target.context.dataset.title;
+        return titulo;
     }
 </script>
