@@ -1,0 +1,71 @@
+﻿<script>
+    function onRowSelectC(e) {
+        var selectedRow = this.select();
+        var IdPersona; // Declarar las variables fuera del bloque if
+
+        if (selectedRow.length > 0) {
+            var dataItem = this.dataItem(selectedRow);
+            console.log(dataItem);
+
+            IdPersona = dataItem.idPersonaInvolucrado;
+        }
+
+        $.ajax({
+            url: '@Url.Action("GuardarConductorVehiculo", "CapturaAccidentes")',
+            type: 'POST',
+            data: { IdPersona: IdPersona },
+            success: function (result) {
+            alert("Se ha agregado un conductor")
+                $('#modalAgregarConductor').modal('hide');
+                $('.modal-backdrop').remove();
+                abrirModalDetalles();            
+            },
+            error: function (error) {
+                alert("ERROR");
+            }
+        });
+    }
+    function abrirModalDetalles() {
+        $.ajax({
+            url: '@Url.Action("ModalAgregarComplemeto")',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                $('#modalComplementoVehiculo').modal('show');
+                $('#ModalBodymodalComplementoVehiculo').html(data);
+            }
+        });
+    }
+    </script>
+<div class="col-12 mb-4 px-4 rounded gridCustom">
+    @(
+        Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel>()
+        .Name("gridConductores")
+        .Events(events => events.Change("onRowSelectC"))
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.idPersonaInvolucrado).Hidden();
+            columns.Bound(c => c.IdVehiculo).Hidden();
+            columns.Select().Width(50).ClientHeaderTemplate(" ");
+            columns.Bound(c => c.nombre).Title("Nombre").Width(100);
+            columns.Bound(c => c.apellidoPaterno).Title("Apellido Paterno").Width(100);
+            columns.Bound(c => c.apellidoMaterno).Title("Apellido Materno").Width(100);
+            columns.Bound(c => c.rfc).Title("RFC").Width(100);
+            columns.Bound(c => c.curp).Title("CURP").Width(100);
+            columns.Bound(c => c.licencia).Title("No. de Licencia").Width(100);
+        
+        })
+        .HtmlAttributes(new { style = "height:250px" })
+        .Sortable()
+        .Groupable()
+        .Scrollable()
+        .Pageable()
+        .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(read => read.Action("BuscarConductor", "CapturaAccidentes"))
+        .PageSize(5).Model(model => model.Id(p => p.nombre))
+        )
+        .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple).Type(GridSelectionType.Row))
+        )
+</div>

@@ -1,68 +1,218 @@
 ﻿@model GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel
 
-<div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
-    <div class="modal-content">
-        <section class=" bg-white rounded">
-            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
-           
-                <div class="col-auto">
-                    <div class="row">
-                        <div class="col-auto my-3">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+ <script>
+    function buscarInvolucrado() {
+        var Mydata = $("#buscarInvolucradoForm").serialize();
+        console.log(Mydata);
+        $.ajax({
+            url: '/CapturaAccidentes/BuscarInvolucrado',
+            type: 'POST',
+            data: Mydata,
+            success: function (response) {
+                console.log("Response:", response);
+                if (response.length === 0) {
+                    alert("La búsqueda no arrojó resultados.");
+                } else {
+                    $('#ListadoInvolucrados').show();
+                    var grid = $("#gridInvolucrados").data("kendoGrid");
+                    grid.dataSource.data(response);
+                    $('#agregarInvolucradoModal').modal('hide');
+                }
+            },
+            error: function (error) {
+                alert("Ocurrió un error en la búsqueda.");
+            }
+        });
+    }
+
+</script>
+            <!--SECCION INVOLUCRADOS-->
+<div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+    <div class="col-12 col-md-auto">
+        <div class="row align-items-center justify-content-center justify-content-md-start">
+            <div class="col-auto">
+                <div class="border border-2 border-dark rounded-circle">
+                    <h5 class="m-0 numberCard d-flex align-items-center justify-content-center">
+                        <b>3</b>
+                    </h5>
+                </div>
+            </div>
+            <div class="col-auto p-0">
+                <i class="icon-involucrado h1 colorPrimary"></i>
+            </div>
+            <div class="col-auto my-3">
+                <h2 class="m-0 h3"><b>Involucrados</b></h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-5 pe-0">
+        <div class="bgSuccess py-1"></div>
+    </div>
+    <div class="col-7 ps-0">
+        <div class="bg-light py-1"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 my-4">
+        <h5 class="px-4"><b>Datos de los involucrados</b></h5>
+        <h6 class="px-4 text-muted">Selecciona entre búsqueda / nuevo persona </h6>
+    </div>
+</div>
+<div class="row px-4 align-items-end">
+    <div class="col-12 mt-4 controlForm">
+        <label>Involucrado de accidente:</label>
+    </div>
+</div>
+<div>
+    <nav class="tabCustom">
+        <div class="nav nav-tabs row mx-0" id="nav-tab" role="tablist">
+            <button class="nav-link col active" id="busqueda-involucrado-tab" data-bs-toggle="tab" data-bs-target="#busqueda-involucrado" type="button" role="tab" aria-controls="busqueda-involucrado" aria-selected="true">
+                <div class="row justify-content-center align-items-center px-3 py-2">
+                    <div class="col-auto radioCustom p-0">
+                        <div class="rounded-circle m-2"></div>
+                    </div>
+                    <div class="col-auto p-0">
+                        <h5 class="m-0"><i class="icon-fisica h4"></i> <b>Búsqueda de involucrado</b></h5>
+                    </div>
+                </div>
+            </button>
+            <button class="nav-link col" id="none-involucrado-tab" data-bs-toggle="tab" data-bs-target="#none-involucrado" type="button" role="tab" aria-controls="none-involucrado" aria-selected="false">
+                <div class="row justify-content-center align-items-center px-3 py-2">
+                    <div class="col-auto radioCustom p-0">
+                        <div class="rounded-circle m-2"></div>
+                    </div>
+                    <div class="col-auto p-0">
+                        <h5 class="m-0"><i class="icon-sinPropietario h4"></i> <b>Se ignora involucrado</b></h5>
+                    </div>
+                </div>
+            </button>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane tabCustomConteiner fade show active" id="busqueda-involucrado" role="tabpanel" aria-labelledby="busqueda-involucrado-tab">
+            <form id="buscarInvolucradoForm">
+                <div class="row px-4 mt-4 pb-4 align-items-end">
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="controlForm my-3">
+                            @(Html.Kendo().TextBoxFor(t => t.licencia)
+                                .Label(l => l.Content("No. de licencia:"))
+                                .Placeholder("Ingresa el número de licencia valido")
+                                .HtmlAttributes(new { style = "width: 100%" })
+                                )
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="controlForm my-3">
+                            @(Html.Kendo().TextBoxFor(t => t.curp)
+                                .Label(l => l.Content("CURP:"))
+                                .Placeholder("Ingresa el CURP del propietario")
+                                .HtmlAttributes(new { style = "width: 100%" })
+                                )
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="controlForm my-3">
+                            @(Html.Kendo().TextBoxFor(t => t.rfc)
+                                .Label(l => l.Content("RFC:"))
+                                .Placeholder("Ingresa el RFC del propietario")
+                                .HtmlAttributes(new { style = "width: 100%" })
+                                )
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="controlForm my-3">
+                            @(Html.Kendo().TextBoxFor(t => t.nombre)
+                                .Label(l => l.Content("Nombre(s):"))
+                                .Placeholder("Ingresa el nombre(s) del propietario")
+                                .HtmlAttributes(new { style = "width: 100%" })
+                                )
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="controlForm my-3">
+                            @(Html.Kendo().TextBoxFor(t => t.apellidoPaterno)
+                                .Label(l => l.Content("Apellido paterno:"))
+                                .Placeholder("Ingresa el apellido paterno")
+                                .HtmlAttributes(new { style = "width: 100%" })
+                                )
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="controlForm my-3">
+                            @(Html.Kendo().TextBoxFor(t => t.apellidoMaterno)
+                                .Label(l => l.Content("Apellido materno:"))
+                                .Placeholder("Ingresa el apellido materno")
+                                .HtmlAttributes(new { style = "width: 100%" })
+                                )
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="row">
+                <div class="col-12">
+                    <div class="tabCustomEnd"></div>
+                </div>
+                <div class="col-12 col-md-6 mx-md-auto col-lg-3 mx-lg-0 ">
+                    <div class="controlButton my-3">
+                        <div class="controlButton my-3" onclick="buscarInvolucrado()">
+                            @(Html.Kendo().Button()
+                                .Name("buscarInvolucrado")
+                                .HtmlAttributes(new { @class = "btnPrimary" })
+                                .Content("<h5 class=\"m-0\"><b>Buscar</b></h5>"))
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row px-4 py-5 align-items-end bg-light">
+                <div class="col-12 col-md-10 mx-md-auto text-center">
+                    <h3><b>Aún no has realizado ninguna búsqueda</b></h3>
+                    <h4 class="fw-normal">Realiza la búsqueda del conductor</h4>
+                    <div class="row ">
+                        <div class="col-12 col-md-8 mx-md-auto col-lg-5 ">
+                            <div class="btnOutline btnOutlinePrimary my-3">
+                                <button data-bs-toggle="modal" data-bs-target="#addConductor">
+                                    <h5 class="m-0"><i class="me-2 icon-addInvolucrado"></i><b>Agregar un nuevo involucrado</b></h5>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane tabCustomConteiner fade" id="none-involucrado" role="tabpanel" aria-labelledby="none-involucrado-tab">
+            <div class="row px-4 my-4 py-5 align-items-end">
+                <div class="col-12 col-md-10 mx-md-auto text-center">
+                    <h3><b>Se utiliza cuando se tiene una infracción o accidente</b></h3>
+                    <h4 class="fw-normal">y se desconoce el involucrado</h4>
+                    <div class="row ">
+                        <div class="col-12 col-md-8 mx-md-auto col-lg-5 ">
+                            <div class="controlButton my-3">
+                                @(Html.Kendo().Button()
+                                    .Name("conductorNone")
+                                    .HtmlAttributes(new { @class = "btnPrimary" })
+                                    .Content("<h5 class=\"m-0\"><b>Finalizar captura</b></h5>"))
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12">
-                    <div class="bg-light py-1"></div>
+                    <div class="tabCustomEnd"></div>
                 </div>
-
             </div>
-            <div class="row">
-                <div class="col-12 my-4">
-                    <h5 class="px-4"><b>Involucrado</b></h5>
-                    
-                </div>
-                <div class="col-12 my-4">
-                    <button>Buscar</button>
-                    <button>Edita</button>
-                    <button>Capturar</button>
-
-                    </div>
-                </div>
-            <div class="col-12 col-lg-11 col-xl-10 mx-lg-auto my-4 px-4 rounded">
-                <partial name="_PrevioInvolucrados" model="Model" />
-            </div>
-            <form id="agregarCausaForm" class="row justify-content-center px-4 mb-4 align-items-end">
-
-               
-            </form>
-            <div class="row my-4">
-                <div class="col-12 col-md-6 mx-md-auto">
-                    <div class="row justify-content-around">
-                        <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
-                            <button type="button" data-bs-dismiss="modal" aria-label="Close">
-                                <h6 class="m-0 px-3"><b>Cerrar</b></h6>
-                            </button>
-                        </div>
-                        <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-                            <div class="controlButton" onclick="agregarCausa()">
-                                @(Html.Kendo().Button()
-                                    .Name("AddCausa")
-                                    .HtmlAttributes(new { @class = "btnPrimary px-3" })
-                                    .Content("<h5 class=\"m-0\"><b>Guardar</b></h5>"))
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-        </section>
+        </div>
     </div>
+
+
 </div>
-<script>
-
-
-</script>

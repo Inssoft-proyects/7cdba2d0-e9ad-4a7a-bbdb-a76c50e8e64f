@@ -64,6 +64,41 @@ namespace GuanajuatoAdminUsuarios.Models
         public int IdPersonaMoral { get; set; }
         
         public string DatoBusquedaVehiculo { get; set; }
+        public int IdTipoLicencia { get; set; }
+        public int IdCatTipoPersona { get; set; }
+        public DateTime fechaNacimiento { get; set; }
+
+        public DateTime vigenciaLicencia { get; set; }
+        public string TipoPersona { get; set; }
+        public string TipoLicencia { get; set; }
+        public string Genero { get; set; }
+
+        public int IdTipoCarga { get; set; }
+        public string Poliza { get; set; }
+
+        public int IdDelegacion { get; set; }
+        public int IdPension { get; set; }
+        public int IdFormaTraslado { get; set; }
+
+        //////////
+        ///MODEL INVOLUCRADOS///////////
+        ///
+
+        public int IdVehiculoInvolucrado { get; set; }
+        public int IdConductorInvolucrado { get; set; }
+        public int IdPropietarioInvolucrado { get; set; }
+        public int IdFormaTrasladoInvolucrado { get; set; }
+        public string VehiculoInvolucrado { get; set; }
+        public string PropietarioInvolucrado { get; set; }
+        public string FormaTrasladoInvolucrado { get; set; }
+        public string Pension { get; set; }
+        public string Motor { get; set; }
+        public string Capacidad { get; set; }
+        public string ConductorInvolucrado { get; set; }
+
+
+
+
 
         ///////////
         /////////////////MODEL CLASIFICACION//////////
@@ -82,11 +117,31 @@ namespace GuanajuatoAdminUsuarios.Models
         public string FactorAccidente { get; set; }
         public string FactorOpcionAccidente { get; set; }
         public int IdCausaAccidente { get; set; }
+        public int IdCausaAccidenteEdit { get; set; }
+        
         public string CausaAccidente { get; set; }
 
         public string DescripcionCausa { get; set; }
 
+        public int idPersonaInvolucrado { get; set; }
+        public string licencia { get; set; }
+        public string curp { get; set; }
+        public string rfc { get; set; }
+        public string nombre { get; set; }
+        public string apellidoPaterno { get; set; }
+        public string apellidoMaterno { get; set; }
 
+        /////////////////
+        ///CAPTURA PARTE 3//////////////
+        ///
+
+        public float montoCamino { get; set; }
+        public float montoCarga { get; set; }
+        public float montoPropietarios { get; set; }
+        public float montoOtros { get; set; }
+        public int IdInfraccionAccidente { get; set; }
+        public int IdInfraccion { get; set; }//Folio de infraccion
+        public float montoVehiculo { get; set; }
 
 
 

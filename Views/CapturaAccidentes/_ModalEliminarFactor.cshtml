@@ -32,6 +32,7 @@
      <form id="eliminarFactorForm" class="row justify-content-center px-4 mb-4 align-items-end">
 
                 @Html.HiddenFor(t => t.IdFactorOpcionAccidente)
+                @Html.HiddenFor(t => t.IdFactorAccidente)
                 @Html.HiddenFor(t => t.IdAccidente)
      </form>
 
@@ -39,11 +40,11 @@
         <div class="col-10 col-md-5 mt-1">
             
             <h6 class="px-4 text-muted">Factor:</h6>
-            <h5 class="px-4"><b>@Model.FactorAccidente</b></h5>
+        <h5 class="px-4"><b></b>@ViewBag.FactorAccidente</h5>
         </div>
         <div class="col-10 col-md-5 mt-1">
             <h6 class="px-4 text-muted">Opción:</h6>
-            <h5 class="px-4"><b>@Model.FactorOpcionAccidente</b></h5>
+        <h5 class="px-4"><b>@ViewBag.FactorOpcionAccidente</b></h5>
         </div>
 
     </div>
@@ -85,16 +86,16 @@
             success: function (data) {
                 console.log("Data", data)
 
-                $("#grid").data("kendoGrid").dataSource.data(data);
-                alert("Se ha modificado la información");
+                $("#gridFactoresA").data("kendoGrid").dataSource.data(data);
+                sitteg_success("Se ha modificado la información");
+                $('#eliminarFactorAccidenteModal').modal('hide');
                 $('modal-body').removeClass('model-open');
                 $('.modal-backdrop').remove();
-                $('#eliminarFactorAccidenteModal').modal('hide');
 
 
             },
             error: function (error) {
-                alert("!Sucedio un error, intente mas tarde...");
+                sitteg_warning("!Sucedio un error, intente mas tarde...");
             }
         });
     }

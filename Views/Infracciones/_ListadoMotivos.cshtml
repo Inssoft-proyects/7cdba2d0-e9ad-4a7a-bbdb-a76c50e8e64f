@@ -19,8 +19,8 @@
             columns.Bound(c => c.calificacionMaxima).Title("Calif. Max.");
             columns.Bound(c => c.calificacion).Title("Calificación").ClientFooterTemplate("Total : #=sum#");
             @*columns.Bound(p => p.idMotivoInfraccion).ClientTemplate(
-            "<button onclick=\"btnModalEditarConcesionario('#= idMotivoInfraccion #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>"
-            ).Title("Acciones").Sortable(false).Width(100);*@
+    "<button onclick=\"btnModalEditarConcesionario('#= idMotivoInfraccion #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>"
+    ).Title("Acciones").Sortable(false).Width(100);*@
         }).HtmlAttributes(new { style = "height:auto" })
         .Pageable(pager => pager.AlwaysVisible(true).Position(GridPagerPosition.Bottom).PageSizes(true))
         .Sortable()
@@ -41,7 +41,21 @@
 <br />
 <br />
 <br />
-<label>UMAS:</label>&nbsp;<label id="lblUmas">@ViewBag.Umas</label>
+<label>UMAS:</label>&nbsp;<label id="lblUmas">
+    @{
+        if (ViewBag.Umas != null)
+        {
+            string.Format("{0:C2}", ViewBag.Umas);
+        }
+    }
+</label>
 <br />
 <br />
-<label>Total:</label>&nbsp;<label id="lblTotales">Total: @ViewBag.Totales</label>
+<label>Total:</label>&nbsp;<label id="lblTotales">
+    @{
+        if (ViewBag.Totales != null)
+        {
+            string.Format("{0:C2}", ViewBag.Totales);
+        }
+    }
+</label>

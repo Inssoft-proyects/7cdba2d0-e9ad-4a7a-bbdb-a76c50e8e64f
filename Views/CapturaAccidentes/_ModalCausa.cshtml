@@ -94,8 +94,8 @@
             success: function (data) {
                 console.log("Data", data)
 
-                $("#gridCausa").data("kendoGrid").dataSource.data(data);
-                alert("Se ha agregado una causa de accidente");
+                $("#gridCausasA").data("kendoGrid").dataSource.data(data);
+                sitteg_success("Se ha agregado una causa de accidente");
                 $('modal-body').removeClass('model-open');
                 $('.modal-backdrop').remove();
                 $('#causaAccidenteModal').modal('hide');
@@ -103,7 +103,7 @@
 
             },
             error: function (error) {
-                alert("!Sucedio um error, intente mas tarde...");
+                sitteg_warning("!Sucedio un error, intente mas tarde...");
             }
         });
     }

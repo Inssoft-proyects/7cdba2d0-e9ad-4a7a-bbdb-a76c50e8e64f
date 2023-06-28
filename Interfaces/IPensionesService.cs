@@ -6,6 +6,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
     public interface IPensionesService
     {
         public List<PensionModel> GetAllPensiones();
+        public List<PensionModel> GetPensionesByDelegacion(int delegacionDDValue);
         public List<PensionModel> GetPensionesToGrid(string strPension, int? idDelegacion);
         public List<PensionModel> GetPensionById(int idPension);
         public List<Gruas2Model> GetGruasDisponiblesByIdPension(int idPension);

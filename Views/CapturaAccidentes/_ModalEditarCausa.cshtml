@@ -39,7 +39,9 @@
                     <div class="controlForm my-3">
                         <label>Causa <b>(obligatorio)</b>:</label>
                         <span>
-                            @(Html.Kendo().DropDownListFor(t => t.IdCausaAccidente)
+                            @Html.HiddenFor(t=>t.IdAccidente)
+                            @Html.HiddenFor(t=>t.IdCausaAccidente)
+                            @(Html.Kendo().DropDownListFor(t => t.IdCausaAccidenteEdit)
                                 .DataTextField("Text")
                                 .DataValueField("Value")
                                 .OptionLabel("Selecciona una Opción")
@@ -86,22 +88,21 @@
         console.log(Mydata);
 
         $.ajax({
-            url: '@Url.Action("AgregarCausaNuevo")',
+            url: '@Url.Action("EditarCausa")',
             type: 'POST',
             data: Mydata,
             success: function (data) {
                 console.log("Data", data)
-
-                $("#gridCausa").data("kendoGrid").dataSource.data(data);
-                alert("Se ha modificado la información");
+                $("#gridCausasA").data("kendoGrid").dataSource.data(data);
                 $('modal-body').removeClass('model-open');
                 $('.modal-backdrop').remove();
                 $('#editarCausaAccidenteModal').modal('hide');
+                sitteg_success("Se ha modificado la información");
 
 
             },
             error: function (error) {
-                alert("!Sucedio un error, intente mas tarde...");
+                sitteg_warning("!Sucedio un error, intente mas tarde...");
             }
         });
     }

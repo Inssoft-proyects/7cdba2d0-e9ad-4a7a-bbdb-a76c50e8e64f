@@ -61,5 +61,48 @@ namespace GuanajuatoAdminUsuarios.Services
 
 
         }
+        public List<CatDelegacionesOficinasTransporteModel> GetDelegacionesOficinasActivos()
+        {
+            //
+            List<CatDelegacionesOficinasTransporteModel> ListaDelegacionsOficinas = new List<CatDelegacionesOficinasTransporteModel>();
+
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+                try
+
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("SELECT del.*, e.estatusDesc FROM catDelegaciones AS del INNER JOIN estatus AS e ON del.estatus = e.estatus WHERE del.estatus = 1;", connection);
+                    command.CommandType = CommandType.Text;
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            CatDelegacionesOficinasTransporteModel delegacionOficina = new CatDelegacionesOficinasTransporteModel();
+                            delegacionOficina.IdDelegacion = Convert.ToInt32(reader["IdDelegacion"].ToString());
+                            delegacionOficina.Delegacion = reader["Delegacion"].ToString();
+                            delegacionOficina.FechaActualizacion = Convert.ToDateTime(reader["FechaActualizacion"].ToString());
+                            delegacionOficina.estatusDesc = reader["estatusDesc"].ToString();
+                            delegacionOficina.Estatus = Convert.ToInt32(reader["estatus"].ToString());
+                            //delegacionOficina.ActualizadoPor = Convert.ToInt32(reader["ActualizadoPor"].ToString());
+                            ListaDelegacionsOficinas.Add(delegacionOficina);
+
+                        }
+
+                    }
+
+                }
+                catch (SqlException ex)
+                {
+                    //Guardar la excepcion en algun log de errores
+                    //ex
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            return ListaDelegacionsOficinas;
+
+
+        }
     }
 }

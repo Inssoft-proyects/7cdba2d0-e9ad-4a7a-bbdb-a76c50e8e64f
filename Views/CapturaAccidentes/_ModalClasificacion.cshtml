@@ -93,8 +93,8 @@
             success: function (data) {
                 console.log("Data", data)
 
-                $("#grid").data("kendoGrid").dataSource.data(data);
-                alert("Se ha agregado una clasificacion de accidente");
+                $("#gridClasificacion").data("kendoGrid").dataSource.data(data);
+                sitteg_success("Se ha agregado una clasificacion de accidente");
                 $('modal-body').removeClass('model-open');
                 $('.modal-backdrop').remove();
                 $('#clasificacionAccidenteModal').modal('hide');
@@ -102,7 +102,7 @@
 
             },
             error: function (error) {
-                alert("!Sucedio um error, intente mas tarde...");
+                sitteg_warning("!Sucedio um error, intente mas tarde...");
             }
         });
     }

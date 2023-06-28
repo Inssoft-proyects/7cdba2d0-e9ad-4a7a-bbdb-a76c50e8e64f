@@ -1,0 +1,38 @@
+﻿
+<div class="col-12 mb-4 px-4 rounded gridCustom">
+    @(
+        Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel>()
+        .Name("gridVehiculosInvolucrados")
+        .Columns(columns =>
+        {
+
+            columns.Bound(c => c.IdPersona).Hidden();
+            columns.Bound(c => c.IdVehiculo).Hidden();
+            columns.Bound(c => c.IdVehiculoInvolucrado).Title("Vehiculo").Width(100);
+            columns.Bound(c => c.Placa).Title("Placas").Width(100);
+            columns.Bound(c => c.ConductorInvolucrado).Title("Conductor").Width(150);
+            columns.Bound(c => c.PropietarioInvolucrado).Title("Propietario").Width(150);
+            columns.Bound(c => c.FormaTrasladoInvolucrado).Title("Forma de traslado").Width(100);
+            //columns.Bound(c => c.Monto).Title("Monto dl daño").Width(100);
+            columns.Bound(c => c.TipoVehiculo).Title("Tipo de Vehículo").Width(100);
+            columns.Bound(c => c.Pension).Title("Pension").Width(100);
+            columns.Template("<button data-bs-toggle=modal data-bs-target='detalleVehiculo class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-research me-2'></i><b>Detalle</b></h6></button>").Width(110);
+            columns.Template("<button data-bs-toggle=modal data-bs-target= 'class='w-100 btn'><h6 class='m-0 colorDanger'><i class='h5 icon-delete me-2'></i><b>Eliminar</b></h6></button>").Width(110);
+
+
+        })
+        .HtmlAttributes(new { style = "height:400px" })
+        .Sortable()
+        .Groupable()
+        .Scrollable()
+        .Pageable()
+        .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(read => read.Action("ObtVehiculosInvol", "CapturaAccidentes"))
+        .PageSize(5).Model(model => model.Id(p => p.IdMarcaVehiculo))
+        )
+        .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple).Type(GridSelectionType.Row))
+        )
+</div>
+
+

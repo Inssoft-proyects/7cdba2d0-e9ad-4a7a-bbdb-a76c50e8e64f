@@ -93,11 +93,11 @@
             data: Mydata,
             success: function (result) {
                 $("#tablaClasificacionAccidentes").html(result);
-                alert("Se ha Actualizado la Información");
+                sitteg_success('Elemento modificado correctamente')
 
             },
             error: function (error) {
-                alert("!Sucedio um error, intente mas tarde...");
+               sitteg_warning('Lo sentimos, ha ocurrido un error.');
             }
         });
     }

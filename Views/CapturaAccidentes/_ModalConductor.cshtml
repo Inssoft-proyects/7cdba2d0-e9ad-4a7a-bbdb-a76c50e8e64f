@@ -1,0 +1,472 @@
+﻿@model GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel
+<div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
+    <div class="modal-content">
+        <section class=" bg-white rounded">
+            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+        <div class="col-12 col-md-auto">
+            <div class="row align-items-center justify-content-center justify-content-md-start">
+                <div class="col-auto">
+                    <div class="border border-2 border-dark rounded-circle">
+                        <h5 class="m-0 numberCard d-flex align-items-center justify-content-center">
+                            <b>3</b>
+                        </h5>
+                    </div>
+                </div>
+                <div class="col-auto p-0">
+                    <i class="icon-conductor h1 colorPrimary"></i>
+                </div>
+                <div class="col-auto my-3">
+                    <h2 class="m-0 h3"><b>Conductor</b></h2>
+                </div>
+            </div>
+        </div>
+               
+        <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
+            <div class="row">
+                <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
+                @(Html.Kendo().Button()
+                        .Name("backSearchConductor")
+                        .HtmlAttributes(new { @class = "px-5" })
+                        .Content("<h6 class=\"m-0\"><i class=\"icon-back me-2\"></i><b>Regresar</b></h6>"))
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-5 pe-0">
+            <div class="bgSuccess py-1"></div>
+        </div>
+        <div class="col-7 ps-0">
+            <div class="bg-light py-1"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 my-4">
+            <h5 class="px-4"><b>Datos de conductor</b></h5>
+            <h6 class="px-4 text-muted">Selecciona entre el propietario o búsqueda / nuevo conductor </h6>
+        </div>
+    </div>
+    <div class="row px-4 align-items-end">
+        <div class="col-12 mt-4 controlForm">
+            <label>Conductor de infracción:</label>
+        </div>
+    </div>
+    <div>
+        <nav class="tabCustom">
+            <div class="nav nav-tabs row mx-0" id="nav-tab" role="tablist">
+                <button class="nav-link active col" id="propietario-conductor-tab" data-bs-toggle="tab" data-bs-target="#propietario-conductor" type="button" role="tab" aria-controls="person-moral" aria-selected="true">
+                    <div class="row justify-content-center align-items-center px-3 py-2">
+                        <div class="col-auto radioCustom p-0">
+                            <div class="rounded-circle m-2"></div>
+                        </div>
+                        <div class="col-auto p-0">
+                            <h5 class="m-0"><i class="icon-propietario h4"></i> <b>Propietario</b></h5>
+                        </div>
+                    </div>
+                </button>
+                <button class="nav-link col" id="busqueda-conductor-tab" data-bs-toggle="tab" data-bs-target="#busqueda-conductor" type="button" role="tab" aria-controls="busqueda-conductor" aria-selected="false">
+                    <div class="row justify-content-center align-items-center px-3 py-2">
+                        <div class="col-auto radioCustom p-0">
+                            <div class="rounded-circle m-2"></div>
+                        </div>
+                        <div class="col-auto p-0">
+                            <h5 class="m-0"><i class="icon-fisica h4"></i> <b>Búsqueda de conductor</b></h5>
+                        </div>
+                    </div>
+                </button>
+                <button class="nav-link col" id="none-person-tab" data-bs-toggle="tab" data-bs-target="#none-person" type="button" role="tab" aria-controls="none-person" aria-selected="false">
+                    <div class="row justify-content-center align-items-center px-3 py-2">
+                        <div class="col-auto radioCustom p-0">
+                            <div class="rounded-circle m-2"></div>
+                        </div>
+                        <div class="col-auto p-0">
+                            <h5 class="m-0"><i class="icon-sinPropietario h4"></i> <b>Se ignora conductor</b></h5>
+                        </div>
+                    </div>
+                </button>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane tabCustomConteiner fade show active" id="propietario-conductor" role="tabpanel" aria-labelledby="propietario-conductor-tab">
+                <div class="row px-4 mt-3 pb-2 align-items-end">
+                    <div class="col-12 mb-4">
+                        <h5 class="px-4"><b>Datos de conductor</b></h5>
+                        <h6 class="px-4 text-muted">Selecciona entre el propietario o búsqueda / nuevo conductor </h6>
+                    </div>
+                </div>
+                <div class="row px-4 align-items-end">
+                    <div class="col">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">Tipo de propietario:</label>
+                            <label>@Model.TipoPersona</label>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">Nombre:</label>
+                                                        <label>@Model.IdAccidente </label>
+
+                            <label>@Model.Propietario </label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">RFC:</label>
+                            <label>@Model.rfc</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">CURP:</label>
+                            <label>@Model.curp</label>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">Fecha de nacimiento:</label>
+                            <label>@Model.fechaNacimiento</label>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">Sexo:</label>
+                            <label>@Model.Genero</label>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">Teléfono:</label>
+                            <label></label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">Correo electrónico:</label>
+                            <label></label>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">Modelo:</label>
+                            <label></label>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">Entidad:</label>
+                            <label></label>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">Colonia:</label>
+                            <label></label>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">Calle:</label>
+                            <label></label>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">Número:</label>
+                            <label></label>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">Municipio:</label>
+                            <label></label>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">Vigencia:</label>
+                                    <label>@Model.vigenciaLicencia</label>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">Tipo de licencia:</label>
+                            <label>@Model.TipoLicencia</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">Fecha de vencimiento:</label>
+                            <label></label>
+                        </div>
+                    </div>
+                    </div>
+                            <form id="propietarioConductorForm">
+                                @Html.HiddenFor(m=> m.IdPersona)
+                                @Html.HiddenFor(m=> m.IdVehiculo)
+                            </form>
+                <div class="row justify-content-center mb-3">
+                    <div class="col-11 col-md-auto">
+                        <div class="controlButton my-3" onclick="guardarVehiculoConductor()">
+                        @(Html.Kendo().Button()
+                                .Name("PropietarioConductor")
+                                .HtmlAttributes(new { @class = "btnPrimary" })
+                                .Content("<h5 class=\"m-0\"><b>Seleccionar al propietario como conductor</b></h5>"))
+                        </div>
+                    </div>
+                </div>
+                <div class="row px-4 py-5 align-items-end">
+                    <div class="col-12 col-md-10 mx-md-auto text-center">
+                        <h3><b>Aún no se carga propietario al vehículo en la plataforma SITTEG</b></h3>
+                        <h4 class="fw-normal">Registra un propietario o busca un conductor</h4>
+                        <div class="row ">
+                            <div class="col-12 col-md-8 mx-md-auto col-lg-5 ">
+                                <div class="btnOutline btnOutlinePrimary my-3">
+                                            <button onclick="mostrarModalCapturarConductor()">
+                                        <h5 class="m-0"><i class="me-2 icon-addConductor"></i><b>Agregar un conductor nuevo</b></h5>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="tabCustomEnd"></div>
+                    </div>
+                </div>
+            </div>
+                    <form id="otroConductorForm">
+                        <div class="tab-pane tabCustomConteiner fade" id="busqueda-conductor" role="tabpanel" aria-labelledby="busqueda-conductor-tab">
+                            <div class="row px-4 mt-4 pb-4 align-items-end">
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <div class="controlForm my-3">
+                                        @(Html.Kendo().TextBoxFor(t=>t.licencia)
+                                            .Label(l => l.Content("No. de licencia:"))
+                                            .Placeholder("Ingresa el número de licencia valido")
+                                            .HtmlAttributes(new { style = "width: 100%" })
+                                            )
+                                    </div>
+                                </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <div class="controlForm my-3">
+                                        @(Html.Kendo().TextBoxFor(t => t.curp)
+                                        .Label(l => l.Content("CURP:"))
+                                        .Placeholder("Ingresa el CURP del propietario")
+                                        .HtmlAttributes(new { style = "width: 100%" })
+                                        )
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <div class="controlForm my-3">
+                                        @(Html.Kendo().TextBoxFor(t => t.rfc)
+                                        .Label(l => l.Content("RFC:"))
+                                        .Placeholder("Ingresa el RFC del propietario")
+                                        .HtmlAttributes(new { style = "width: 100%" })
+                                        )
+
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <div class="controlForm my-3">
+                                    @(Html.Kendo().TextBoxFor(t=>t.nombre)
+                                        .Label(l => l.Content("Nombre(s):"))
+                                        .Placeholder("Ingresa el nombre(s) del propietario")
+                                        .HtmlAttributes(new { style = "width: 100%" })
+                                        )
+
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <div class="controlForm my-3">
+                                    @(Html.Kendo().TextBoxFor(t=>t.apellidoPaterno)
+                                        .Label(l => l.Content("Apellido paterno:"))
+                                        .Placeholder("Ingresa el apellido paterno")
+                                        .HtmlAttributes(new { style = "width: 100%" })
+                                        )
+
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <div class="controlForm my-3">
+                                    @(Html.Kendo().TextBoxFor(t=>t.apellidoMaterno)
+                                        .Label(l => l.Content("Apellido materno:"))
+                                        .Placeholder("Ingresa el apellido materno")
+                                        .HtmlAttributes(new { style = "width: 100%" })
+                                        )
+
+                                </div>
+                            </div>
+                          </div> 
+                        </div>
+                    </form>
+                    <div class="col-12 col-md-6 mx-md-auto col-lg-3 mx-lg-0">
+                        <div class="controlButton my-3">
+                            <div class="controlButton my-3" onclick="buscarConductor()">
+                                @(Html.Kendo().Button()
+                                    .Name("buscarOtroConductor")
+                                    .HtmlAttributes(new { @class = "btnPrimary" })
+                                    .Content("<h5 class=\"m-0\"><b>Buscar</b></h5>"))
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="tabCustomEnd"></div>
+                        </div>
+                    </div>
+                <div class="row px-4 py-5 align-items-end bg-light">
+                    <div class="col-12 col-md-10 mx-md-auto text-center">
+                        <h3><b>Aún no has realizado ninguna búsqueda</b></h3>
+                        <h4 class="fw-normal">Realiza la búsqueda del conductor</h4>
+                        <div class="row ">
+                            <div class="col-12 col-md-8 mx-md-auto col-lg-5 ">
+                                <div class="btnOutline btnOutlinePrimary my-3">
+                                    <button onclick="mostrarModalCapturarConductor()">
+                                        <h5 class="m-0"><i class="me-2 icon-addConductor"></i><b>Agregar un conductor nuevo</b></h5>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane tabCustomConteiner fade" id="none-person" role="tabpanel" aria-labelledby="none-person-tab">
+                <div class="row px-4 my-4 py-5 align-items-end">
+                    <div class="col-12 col-md-10 mx-md-auto text-center">
+                        <h3><b>Se utiliza cuando se tiene una infracción o accidente</b></h3>
+                        <h4 class="fw-normal">y se desconoce el propietario o conductor</h4>
+                        <div class="row ">
+                            <div class="col-12 col-md-8 mx-md-auto col-lg-5 ">
+                                <form id="sinConductorForm">
+                                 @Html.HiddenFor(m=> m.IdVehiculo)
+                                </form>
+                                <div class="controlButton my-3" onclick="sinConductor()">
+                                @(Html.Kendo().Button()
+                                        .Name("conductorNone")
+                                        .HtmlAttributes(new { @class = "btnPrimary" })
+                                        .Content("<h5 class=\"m-0\"><b>Finalizar captura</b></h5>"))
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="tabCustomEnd"></div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div id="ListadoCondocutores">
+                <partial name="_ListdoConductores" model="Model" />
+          </div>
+      </section>
+     </div>
+ </div>
+  <!--MODAL CAPTURAR CONDUCTOR EN SITTEG-->
+     <div class="modal fade modalCustom" id="capturarConductorModal" tabindex="-1" aria-labelledby="capturarConductorLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document"">
+                    <div class="modal-content">
+                        <div class="modal-body" id="ModalBodyCapturarConductor">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    <script>
+         function mostrarModalCapturarConductor() {
+
+        $.ajax({
+            url: '@Url.Action("ModalCapturaConductor")',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                $('#ModalBodyCapturarConductor').html(data);
+                $('#capturarConductorModal').modal('show');
+            }
+        });
+    }
+    function guardarVehiculoConductor() {
+        var formData = $("#propietarioConductorForm").serialize();
+        console.log(formData)
+        $.ajax({
+            url: '@Url.Action("ActualizarConConductor")',
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+            sitteg_success("Se ha agregado al propietario como conductor");
+                $('#modalAgregarConductor').modal('hide');
+                $('.modal-backdrop').remove();
+                abrirModalDetalles();
+               
+            },
+            error: function (error) {
+                console.log("ER",error)
+                var errorMessage = error.responseText || "Ocurrió un error, inténtelo nuevamente más tarde.";
+                sitteg_warning(errorMessage);
+            }
+        });
+    }
+     function sinConductor() {
+
+        var formData = $("#sinConductorForm").serialize();
+        console.log(formData)
+        $.ajax({
+            url: '@Url.Action("ActualizarConConductor")',
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                sitteg_success("Se desconoce al conductor");
+                $('#modalAgregarConductor').modal('hide');
+                $('.modal-backdrop').remove();
+                abrirModalDetalles();
+
+            },
+            error: function (error) {
+                console.log("ER", error)
+                var errorMessage = error.responseText || "Ocurrió un error, inténtelo nuevamente más tarde.";
+                sitteg_warning(errorMessage);
+            }
+        });
+    }
+     function abrirModalDetalles() {
+            $.ajax({
+            url: '@Url.Action("ModalAgregarComplemeto")',
+                type: 'POST',
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (data) {
+                    $('#modalComplementoVehiculo').modal('show');
+                $('#ModalBodymodalComplementoVehiculo').html(data);
+                }
+            });
+        }
+
+    function buscarConductor() {
+        var Mydata = $("#otroConductorForm").serialize();
+        console.log(Mydata);
+        $.ajax({
+            url: '/CapturaAccidentes/BuscarConductor',
+            type: 'POST',
+            data: Mydata,
+            success: function (response) {
+                console.log("Response:", response);
+                if (response.length === 0) {
+                    sitteg_warning("La búsqueda no arrojó resultados.");
+                } else {
+                    var grid = $("#gridConductores").data("kendoGrid");
+                    grid.dataSource.data(response);
+
+                }
+            },
+            error: function (error) {
+                sitteg_warning('Ocurrió un error en la búsqueda.');
+            }
+        });
+    }
+
+</script>

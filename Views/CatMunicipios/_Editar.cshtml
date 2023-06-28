@@ -64,7 +64,6 @@
                         })
                         //.HtmlAttributes(new { data_required_msg = "El campo Municipio es obligatorio" })
                         .HtmlAttributes(new { style = "width:100%;" })
-                        .Filter(FilterType.Contains)
                         )
                 </span>
             </div>
@@ -137,11 +136,11 @@
             data: Mydata,
             success: function (result) {
                 $("#tablaMunicipios").html(result);
-                alert("Se ha Actualizado la Información");
+                sitteg_success('Elemento modificado correctamente')
 
             },
             error: function (error) {
-                alert("!Sucedio un error, intente mas tarde...");
+                sitteg_warning('Lo sentimos, ha ocurrido un error.');
             }
         });
     }

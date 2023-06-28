@@ -5,8 +5,11 @@ namespace GuanajuatoAdminUsuarios.Models
     public class CatDelegacionesOficinasTransporteModel
     {
         public int IdOficinaTransporte { get; set; }
+        public int IdDelegacion { get; set; }
 
         public string NombreOficina { get; set; }
+
+        public string Delegacion { get; set; }
 
         public string JefeOficina { get; set; }
 

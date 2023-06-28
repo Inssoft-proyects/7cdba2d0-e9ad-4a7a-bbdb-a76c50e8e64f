@@ -1,5 +1,6 @@
 ﻿
 @model GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel
+
 <div class="mainContainer bg-light">
 
 <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
@@ -158,162 +159,7 @@
     </div>
 
 </section>
-
-<div id="VehiculosInvolucrados" style="display:none;">
-
-<section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
-    <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
-        <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
-            <div class="row align-items-center justify-content-center justify-content-md-start">
-                <div class="col-auto">
-                    <div class="border border-2 border-dark rounded-circle">
-                        <h5 class="m-0 numberCard d-flex align-items-center justify-content-center">
-                            <b>2</b>
-                        </h5>
-                    </div>
-                </div>
-                <div class="col-auto">
-                    <i class="icon-car h1 colorPrimary"></i>
-                </div>
-                <div class="col-auto my-3">
-                    <h2 class="m-0 h3"><b>Vehículos involucrados</b></h2>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <div class="bg-light py-1"></div>
-        </div>
-    </div>
-    <div class="row justify-content-between align-items-end mb-1">
-        <div class="col-12 col-md-auto mt-4 mb-2">
-            <h5 class="px-4"><b>Listado de vehículos involucrados</b></h5>
-            <h6 class="px-4 text-muted">Da de alta los vehículos que participaron en el accidente.</h6>
-        </div>
-        <div class="col-12 me-md-4 col-md-6 col-lg-7 col-xl-auto">
-            <div class="row">
-                <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-                            <button onclick="mostrarModalAgregarVehiculo()">
-                        <h6 class="m-0 d-flex align-items-center"><i class="icon-addCar h5 mb-0 me-2"></i><b>Agregar vehículo involucrado</b></h6>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12 mb-4 px-4 rounded">
-
-
-                    <!-- <partial name="_ListaDetalleAccidente" model="Model" />-->
-
-            </div>
-
-        </div>
-    
-
-        <div class="row">
-            <div class="col-12 col-md-6 mx-md-auto">
-                <div class="row justify-content-around">
-                    <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-                        <div class="controlButton my-3" onclick="mostrarSeccionClasificacion()">
-                            @(Html.Kendo().Button()
-                                .Name("FinalVehiculo")
-                                .HtmlAttributes(new { @class = "btnPrimary px-5" })
-                                .Content("<h5 class=\"m-0\"><b>Siguiente</b></h5>"))
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-         </section>
-        </div>
-    <!--CLASIFICACION DE ACCIDENTE-->
-     <div id="ClasificacionAccidente" style="display:none;">
-                <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
-                    <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
-                        <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
-                            <div class="row align-items-center justify-content-center justify-content-md-start">
-                                <div class="col-auto">
-                                    <div class="border border-2 border-dark rounded-circle">
-                                        <h5 class="m-0 numberCard d-flex align-items-center justify-content-center">
-                                            <b>3</b>
-                                        </h5>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="icon-clasificacionAccidente h1 colorPrimary"></i>
-                                </div>
-                                <div class="col-auto my-3">
-                                    <h2 class="m-0 h3"><b>Clasificación del accidente</b></h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-8 pe-0">
-                            <div class="bgSuccess py-1"></div>
-                        </div>
-                        <div class="col-4 ps-0">
-                            <div class="bg-light py-1"></div>
-                        </div>
-                    </div>
-                    <div class="row justify-content-between align-items-end mb-1">
-                        <div class="col-12 col-md-auto mt-4 mb-2">
-                            <h5 class="px-4"><b>Listado de clasificación del accidente</b></h5>
-                            <h6 class="px-4 text-muted">Da de alta las clasificación del accidente.</h6>
-                        </div>
-                        <div class="col-12 col-lg-auto text-center">
-                            <div class="btnOutline btnOutlinePrimary px-4 my-3">
-                                <button onclick="mostrarModalCalsificacionAccidente()">
-                                    <h5 class="m-0"><i class="me-2 icon-addClasificacionAccidente"></i><b>Agregar clasificación</b></h5>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row ">
-                        <div class="col-12 col-lg-11 col-xl-10 mx-lg-auto my-4 px-4 rounded">
-
-                            <!--TABLA-->
-                     <partial name="_ListaClasificacion" model="Model" />
-
-                             </div>
-            <div class="col-12 col-md-6 mx-md-auto">
-                <div class="row justify-content-around">
-                    <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-                        <div class="controlButton my-3">
-                                <button>
-                                    <a href="@Url.Action("CapturaBAccidente", "CapturaAccidentes")">Siguiente</a>
-                                </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-     
-  
-        <div class="modal fade modalCustom" id="agregarVehiculoModal" tabindex="-1" aria-labelledby="agregarVehiculoLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-body" id="ModalBodyAgregarVehiculo">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade modalCustom" id="clasificacionAccidenteModal" tabindex="-1" aria-labelledby="clasificacionAccidenteLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-body" id="ModalBodyClasificacionAccidente">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        </section>
-    </div>
+</div>
  <script>
     function carreteraDropDownChange() {
         var carreteraDDValue = $("#IdCarretera").data("kendoDropDownList").value();
@@ -342,48 +188,17 @@
             data: Mydata,
             success: function (result) {
                 if (result.success) {
-                    alert("Se ha Actualizado la Información");
-                    $('#VehiculosInvolucrados').show();
+                    sitteg_success("Se ha creado un registro de accidente, continue registrando la información solicitada");
+                    //$('#VehiculosInvolucrados').show();
+                    window.location.href = '/CapturaAccidentes/CapturaAaccidente/'
                 } else {
                     // Muestra los mensajes de error en el frontend
                     var errorMessages = result.errors.join("\n");
-                    alert("Ocurrieron los siguientes errores:\n" + errorMessages);
+                    sitteg_warning("Ocurrieron los siguientes errores:\n" + errorMessages);
                 }
             },
            
         });
     }
-    function mostrarSeccionClasificacion() {
-            $('#ClasificacionAccidente').show();
-        
-    }
 
-
-
-    function mostrarModalAgregarVehiculo() {
-            $.ajax({
-                url: '@Url.Action("ModalAgregarVehiculo")',
-                type: 'POST',
-                contentType: "application/json; charset=utf-8",
-                dataType: "html",
-                success: function (data) {
-                    $('#ModalBodyAgregarVehiculo').html(data);
-                    $('#agregarVehiculoModal').modal('show');
-                }
-            });
-        }
-
-    function mostrarModalCalsificacionAccidente() {
-        $.ajax({
-            url: '@Url.Action("ModalClasificacionAccidente")',
-            type: 'POST',
-            contentType: "application/json; charset=utf-8",
-            dataType: "html",
-            success: function (data) {
-                $('#ModalBodyClasificacionAccidente').html(data);
-                $('#clasificacionAccidenteModal').modal('show');
-            }
-        });
-    }
-       
- </script>
+   </script>

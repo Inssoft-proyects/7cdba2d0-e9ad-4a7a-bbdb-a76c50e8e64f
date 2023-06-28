@@ -1,4 +1,5 @@
 ﻿using GuanajuatoAdminUsuarios.Entity;
+using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
@@ -13,16 +14,23 @@ namespace Example.WebUI.Controllers
 {
     public class TiposCargaController : Controller
     {
+        private readonly ITiposCarga _tiposCargaService;
+
         DBContextInssoft dbContext = new DBContextInssoft();
+
+        public TiposCargaController(ITiposCarga tiposCargaService)
+        {
+            _tiposCargaService = tiposCargaService;
+        }
         public IActionResult Index()
         {
             //var products = dbContext.Products.ToList();
-            var ListTiposCargaModel = GetTiposCarga();
+            var ListTiposCargaModel = _tiposCargaService.GetTiposCarga();
 
             return View(ListTiposCargaModel);
 
         }
-
+       
 
         #region Modal Action
         public ActionResult IndexModal()

@@ -7,6 +7,8 @@ namespace GuanajuatoAdminUsuarios.Interfaces
     public interface ICatDelegacionesOficinasTransporteService
     {
         List<CatDelegacionesOficinasTransporteModel> GetDelegacionesOficinas();
+        List<CatDelegacionesOficinasTransporteModel> GetDelegacionesOficinasActivos();
+
 
     }
 }

@@ -564,8 +564,8 @@
         if (idCatGarantia == 3) { $("#divGarantiaTarjeta").show(); }
         if (idCatGarantia == 4) { $("#divGarantiaVehiculo").show(); }
 
-        $("#lblUmas").text('@Model.umas')
-        $("#lblTotales").text('@Model.totalInfraccion')
+        $("#lblUmas").text('@string.Format("{0:C2}", Model.umas)')
+        $("#lblTotales").text('@string.Format("{0:C2}", Model.totalInfraccion)')
     }
 
     $("#ddlTipoGarantia").on("change", function () {

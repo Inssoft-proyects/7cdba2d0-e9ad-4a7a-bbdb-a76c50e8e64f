@@ -87,7 +87,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                                                          || w.Persona.idTipoLicencia == (model.idTipoLicencia > 0 ? model.idTipoLicencia : w.Persona.idTipoLicencia)
                                                          || w.idMunicipio == (model.idMunicipio > 0 ? model.idMunicipio : w.idMunicipio)
                                                          && (w.fechaInfraccion >= model.fechaInicio && w.fechaInfraccion <= model.fechaFin))
-                                                .SelectMany(s => s.MotivosInfraccion)
+                                                .SelectMany(s => s.MotivosInfraccion.Where(w=> w.idCatMotivosInfraccion == (model.idTipoMotivo >0 ? model.idTipoMotivo : w.idCatMotivosInfraccion)))
                                                 .GroupBy(g => g.catMotivo)
                                                 .Select(s => new EstadisticaInfraccionMotivosModel() { Motivo = s.Key, Contador = s.Count() }).ToList();
 

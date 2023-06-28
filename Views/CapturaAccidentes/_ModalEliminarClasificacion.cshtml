@@ -53,7 +53,7 @@
             success: function (response) {
                 alert("Se ha eliminado una clasificación de accidente");
                 var gridData = response.length > 0 ? response : [];
-                $("#grid").data("kendoGrid").dataSource.data(gridData);
+                $("#gridClasificacion").data("kendoGrid").dataSource.data(gridData);
                 $('.modal-body').removeClass('modal-open');
                 $('.modal-backdrop').remove();
                 $('#eliminarClasificacionModal').modal('hide');

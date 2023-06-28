@@ -1,0 +1,185 @@
+﻿@model GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel
+
+<div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
+    <div class="modal-content">
+        <section class=" bg-white rounded">
+            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+    <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+        <div class="row align-items-center justify-content-center justify-content-md-start">
+            <div class="col-auto">
+                <div class="border border-2 border-dark rounded-circle">
+                    <h5 class="m-0 numberCard d-flex align-items-center justify-content-center">
+                        <b>4</b>
+                    </h5>
+                </div>
+            </div>
+            <div class="col-auto">
+                <i class="icon-infoAdicional h1 colorPrimary"></i>
+            </div>
+            <div class="col-auto my-3">
+                <h2 class="m-0 h3"><b>Información complementaria del vehículo</b></h2>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-8 pe-0">
+        <div class="bgSuccess py-1"></div>
+    </div>
+    <div class="col-4 ps-0">
+        <div class="bg-light py-1"></div>
+    </div>
+</div>
+<div class="col-12 col-md-auto mt-4 mb-2">
+    <h5 class="px-4"><b>Captura de información complementaria</b></h5>
+    <h6 class="px-4 text-muted">Registra información necesaria para el alta del accidente.</h6>
+</div>
+<form id="complementoVehiculoForm" class="row px-4 mb-4 pb-4 align-items-end">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="controlForm my-3">
+                    <label>Tipo de carga <b>(obligatorio):</b></label>
+                    <span>
+                        @(Html.Kendo().DropDownListFor(t => t.IdTipoCarga)
+                            .Label(l => l.Content("Tipo de carga:"))
+                            .DataTextField("Text")
+                            .DataValueField("Value")
+                            .OptionLabel("Selecciona el tipo de carga")
+                            .DataSource(source =>
+                            {
+                                source.Read(read =>
+                                {
+                                    read.Action("Carga_Drop", "CapturaAccidentes");
+                                });
+                            })
+                            .HtmlAttributes(new { style = "width:100%;" })
+                            )
+                    </span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="controlForm my-3">
+                    @(Html.Kendo().TextBoxFor(t => t.Poliza)
+                        .Label(l => l.Content("Póliza de carga:"))
+                        .Placeholder("Ingresa la póliza de carga")
+                        .HtmlAttributes(new { style = "width: 100%", type = "number" })
+                        )
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+        <div class="controlForm my-3">
+            <label>Delegación:</label>
+            <span>
+                @(Html.Kendo().DropDownListFor(t => t.IdDelegacion)
+                    .Label(l => l.Content("Delegación:"))
+                    .DataTextField("Text")
+                    .DataValueField("Value")
+                    .OptionLabel("Selecciona la Delegación")
+                    .Events(e => e.Change("pensionDropDownChange"))
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("Delegaciones_Drop", "CapturaAccidentes");
+                        });
+                    })
+                    .HtmlAttributes(new { style = "width:100%;" })
+                    )
+            </span>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+        <div class="controlForm my-3">
+            <label>Pensión:</label>
+            <span>
+                @(Html.Kendo().DropDownListFor(t => t.IdPension)
+                    .Label(l => l.Content("Pensión:"))
+                    .DataTextField("Text")
+                    .DataValueField("Value")
+                    .OptionLabel("Selecciona la Pensión")
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("Pensiones_Drop", "CapturaAccidentes");
+                        });
+                    })
+                    .HtmlAttributes(new { style = "width:100%;" })
+                    )
+            </span>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+        <div class="controlForm my-3">
+            <label>Forma de traslado</label>
+            <span>
+                            @(Html.Kendo().DropDownListFor(t => t.IdFormaTraslado)
+                                .Label(l => l.Content("Forma de traslado:"))
+                                .DataTextField("Text")
+                                .DataValueField("Value")
+                                .OptionLabel("Selecciona la forma de traslado")
+                                .DataSource(source =>
+                                {
+                                    source.Read(read =>
+                                    {
+                                        read.Action("Traslados_Drop", "CapturaAccidentes");
+                                    });
+                                })
+                                .HtmlAttributes(new { style = "width:100%;" })
+                                )
+            </span>
+        </div>
+    </div>
+</form>
+<div class="col-12 col-md-6 col-lg-4 col-xl-3">
+    <div class="controlButton my-3" onclick="guardarComplementoVehiculo()">
+        @(Html.Kendo().Button()
+            .Name("AltaComplemento")
+            .HtmlAttributes(new { @class = "btnPrimary" })
+            .Content("<h5 class=\"m-0\"><b>Finalizar captura</b></h5>"))
+    </div>
+</div>
+</section>
+</div>
+</div>
+   
+<script>
+    function guardarComplementoVehiculo() {
+        var Mydata = $("#complementoVehiculoForm").serialize();
+        console.log(Mydata);
+
+        $.ajax({
+            url: '/CapturaAccidentes/GuardarComplementoVehiculo',
+            type: 'POST',
+            data: Mydata,
+            success: function (result) {
+                console.log("RES")
+                if (result != 0) {
+
+                    sitteg_success("Se ha actualizado la información del vehículo");
+                    $('#modalComplementoVehiculo').modal('hide');
+                    $('.modal-backdrop').remove();
+                    $('#ClasificacionAccidente').show();
+                    $("#tablaHospitales").html(result);
+
+                    // Actualizar el grid después de guardar los datos
+                    actualizarGrid();
+                } else {
+                    alert("Sucedio un error")
+                }
+            },
+        });
+    }
+
+    function actualizarGrid() {
+        var grid = $("#gridVehiculosInvolucrados").data("kendoGrid");
+        grid.dataSource.read();
+        grid.refresh();
+    }
+
+
+</script>

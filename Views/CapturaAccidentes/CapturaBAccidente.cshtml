@@ -1,172 +1,4 @@
-﻿<div class="mainContainer bg-light">
-
-    <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
-        <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
-            <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
-                <div class="row align-items-center justify-content-center justify-content-md-start">
-                    <div class="col-auto">
-                        <div class="border border-2 border-dark rounded-circle">
-                            <h5 class="m-0 numberCard d-flex align-items-center justify-content-center">
-                                <b>1</b>
-                            </h5>
-                        </div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="icon-factorAccidente h1 colorPrimary"></i>
-                    </div>
-                    <div class="col-auto my-3">
-                        <h2 class="m-0 h3"><b>Factores que intervienen en el accidente</b></h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-8 pe-0">
-                <div class="bgSuccess py-1"></div>
-            </div>
-            <div class="col-4 ps-0">
-                <div class="bg-light py-1"></div>
-            </div>
-        </div>
-        <div class="row justify-content-between align-items-end mb-1">
-            <div class="col-12 col-md-auto mt-4 mb-2">
-                <h5 class="px-4"><b>Listado de factores del accidente</b></h5>
-                <h6 class="px-4 text-muted">Da de alta los factores del accidente.</h6>
-            </div>
-            <div class="col-12 col-lg-auto text-center">
-                <div class="btnOutline btnOutlinePrimary px-4 my-3">
-                    <button data-bs-toggle="modal" onclick="mostrarModalAgregarFactor()">
-                        <h5 class="m-0"><i class="me-2 icon-addFactorAccidente"></i><b>Agregar factor</b></h5>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12 my-4 px-4 rounded">
-
-                <partial name="_ListaFactores" model="Model" />
-                    </div>
-                </div>
-      <!--SECCION CAUSAS-->
-            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
-                <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
-                    <div class="row align-items-center justify-content-center justify-content-md-start">
-                        <div class="col-auto">
-                            <div class="border border-2 border-dark rounded-circle">
-                                <h5 class="m-0 numberCard d-flex align-items-center justify-content-center">
-                                    <b>2</b>
-                                </h5>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="icon-opciones h1 colorPrimary"></i>
-                        </div>
-                        <div class="col-auto my-3">
-                            <h2 class="m-0 h3"><b>Causas determinantes</b></h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-8 pe-0">
-                    <div class="bgSuccess py-1"></div>
-                </div>
-                <div class="col-4 ps-0">
-                    <div class="bg-light py-1"></div>
-                </div>
-            </div>
-            <div class="row justify-content-between align-items-end mb-1">
-                <div class="col-12 col-md-auto mt-4 mb-2">
-                    <h5 class="px-4"><b>Listado de causas del accidente</b></h5>
-                    <h6 class="px-4 text-muted">Da de alta las causas del accidente.</h6>
-                </div>
-                <div class="col-12 col-lg-auto text-center">
-                    <div class="btnOutline btnOutlinePrimary px-4 my-3">
-                    <button data-bs-toggle="modal" onclick="mostrarModalAgregarCausa()">
-                            <h5 class="m-0"><i class="me-2 icon-addOpciones"></i><b>Agregar causas</b></h5>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="row ">
-                <div class="col-12 my-4 px-4 rounded">
-                    <partial name="_ListaCausas" model="Model" />
-                    </div>
-                       
-                </div>
-<div class="col-12 px-4 mb-4">
-    <div class="controlForm my-3">
-        <label>Descripción de causas determinantes</label>
-        <span>
-            @(Html.Kendo().TextArea()
-                .Name("description")
-                .Rows(3)
-                .HtmlAttributes(new { style = "width:100%;" })
-                )
-        </span>
-    </div>
-</div>
-        <!--SECCION INVOLUCRADOS-->
-        <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
-            <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
-                <div class="row align-items-center justify-content-center justify-content-md-start">
-                    <div class="col-auto">
-                        <i class="icon-accidentes h1 colorPrimary"></i>
-                    </div>
-                    <div class="col-auto my-3">
-                        <h2 class="m-0 h3"><b>Personas Involucradas(victimas,conductore)</b></h2>
-                    </div>
-                </div>
-            </div>
-            <div class="row justify-content-between align-items-end mb-1">
-                <div class="col-12 col-lg-auto text-center">
-                    <div class="btnOutline btnOutlinePrimary px-4 my-3">
-                        <button data-bs-toggle="modal" onclick="mostrarModalAgregarInvolucrados()">
-                            <h5 class="m-0"><i class="me-2 icon-addClasificacionAccidente"></i><b> Agregar persona involucrada</b></h5>
-                        </button>
-                    </div>
-                </div>
-                <div class="row ">
-                    <div class="col-12 col-lg-11 col-xl-10 mx-lg-auto my-4 px-4 rounded">
-                        <partial name="_ListaInvolucrados" model="Model" />
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-
-    </section>
-    </div>
-   
-<!--Modal agregar factor accidente-->
-<div class="modal fade modalCustom" id="factorAccidenteModal" tabindex="-1" aria-labelledby="agregarVehiculoLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-body" id="ModalBodyFactorAccidente">
-            </div>
-        </div>
-    </div>
-</div>
-<!--Modal agregar causa accidente-->
-
-    <div class="modal fade modalCustom" id="causaAccidenteModal" tabindex="-1" aria-labelledby="agregarVehiculoLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-body" id="ModalBodyCausaAccidente">
-                </div>
-            </div>
-        </div>
-    </div>
-<!--Modal agregar involucrado-->
-<div class="modal fade modalCustom" id="agregarInvolucradoModal" tabindex="-1" aria-labelledby="agregarVehiculoLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-body" id="ModalBodyAgregarInvolucrado">
-                </div>
-            </div>
-        </div>
-    </div>
+﻿@model GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel
  <script>
     function mostrarModalAgregarFactor() {
         $.ajax({
@@ -220,5 +52,550 @@
             }
         });
     }
-    
- </script>
+    function buscarInvolucrado() {
+
+        var Mydata = $("#buscarInvolucradoForm").serialize();
+        console.log(Mydata);
+        $.ajax({
+            url: '/CapturaAccidentes/BuscarInvolucrado',
+            type: 'POST',
+            data: Mydata,
+                    success: function (response) {
+                        console.log("Response:", response);
+                $('#ListadoInvolucrados').show();
+                var grid = $("#gridInvolucrados").data("kendoGrid");
+                        grid.dataSource.data(response);
+                    },
+                    error: function (error) {
+                        alert("Ocurrio un error en la busqueda");
+                    }
+                });
+            }
+        function seleccionarPersona() {
+            var selectedRow = this.select();
+            if (selectedRow.length > 0) {
+            var dataItem = this.dataItem(selectedRow);
+            var idPersonaInvolucrado =dataItem.idPersonaInvolucrado
+
+                console.log("ASI", selectedRow, dataItem);
+
+                $.ajax({
+                    url: '@Url.Action("GuardarInvolucrado", "CapturaAccidentes")',
+                    type: 'POST',
+                    data: { idPersonaInvolucrado: idPersonaInvolucrado },
+                    success: function (result) {
+                        alert("Se agregó una persona involucrada");
+                        $('#ListaVehiculosInvolucrados').show();
+                    },
+                    error: function (error) {
+                        alert("ERROR");
+                    }
+                });
+            }
+        }
+    function dirigirParteC() {
+        var descripcionCausa = document.getElementById("descripcionCausaTextArea").value;       
+        console.log(descripcionCausa);
+
+        $.ajax({
+            url: '/CapturaAccidentes/LLevaParteC',
+            method: 'POST',
+            data: { descripcionCausa: descripcionCausa },
+            success: function (response) {
+                sitteg_success('Datos enviados correctamente');
+                window.location.href = '/CapturaAccidentes/CapturaAccidenteC'; // Redireccionar a la URL específica           
+            },
+            error: function (xhr, status, error) {
+                sitteg_warning('Error al enviar los datos:', error);
+            }
+        });
+    }
+
+
+</script>
+<div class="mainContainer bg-light">
+
+    <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
+        <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+            <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                <div class="row align-items-center justify-content-center justify-content-md-start">
+                    <div class="col-auto">
+                        <div class="border border-2 border-dark rounded-circle">
+                            <h5 class="m-0 numberCard d-flex align-items-center justify-content-center">
+                                <b>1</b>
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="icon-factorAccidente h1 colorPrimary"></i>
+                    </div>
+                    <div class="col-auto my-3">
+                        <h2 class="m-0 h3"><b>Factores que intervienen en el accidente</b></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8 pe-0">
+                <div class="bgSuccess py-1"></div>
+            </div>
+            <div class="col-4 ps-0">
+                <div class="bg-light py-1"></div>
+            </div>
+        </div>
+        <div class="row justify-content-between align-items-end mb-1">
+            <div class="col-12 col-md-auto mt-4 mb-2">
+                <h5 class="px-4"><b>Listado de factores del accidente</b></h5>
+                <h6 class="px-4 text-muted">Da de alta los factores del accidente.</h6>
+            </div>
+            <div class="col-12 col-lg-auto text-center">
+                <div class="btnOutline btnOutlinePrimary px-4 my-3">
+                    <button data-bs-toggle="modal" onclick="mostrarModalAgregarFactor()">
+                        <h5 class="m-0"><i class="me-2 icon-addFactorAccidente"></i><b>Agregar factor</b></h5>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 my-4 px-4 rounded">
+                <partial name="_ListaFactores" model="Model" />
+            </div>
+        </div>
+      <!--SECCION CAUSAS-->
+            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                    <div class="row align-items-center justify-content-center justify-content-md-start">
+                        <div class="col-auto">
+                            <div class="border border-2 border-dark rounded-circle">
+                                <h5 class="m-0 numberCard d-flex align-items-center justify-content-center">
+                                    <b>2</b>
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="icon-opciones h1 colorPrimary"></i>
+                        </div>
+                        <div class="col-auto my-3">
+                            <h2 class="m-0 h3"><b>Causas determinantes</b></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 pe-0">
+                    <div class="bgSuccess py-1"></div>
+                </div>
+                <div class="col-4 ps-0">
+                    <div class="bg-light py-1"></div>
+                </div>
+            </div>
+            <div class="row justify-content-between align-items-end mb-1">
+                <div class="col-12 col-md-auto mt-4 mb-2">
+                    <h5 class="px-4"><b>Listado de causas del accidente</b></h5>
+                    <h6 class="px-4 text-muted">Da de alta las causas del accidente.</h6>
+                </div>
+                <div class="col-12 col-lg-auto text-center">
+                    <div class="btnOutline btnOutlinePrimary px-4 my-3">
+                    <button data-bs-toggle="modal" onclick="mostrarModalAgregarCausa()">
+                            <h5 class="m-0"><i class="me-2 icon-addOpciones"></i><b>Agregar causas</b></h5>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-12 my-4 px-4 rounded">
+                    <partial name="_ListaCausas" model="Model" />
+                </div>
+            </div>
+            <form id="descripcionForm">
+                    <div class="col-12 px-4 mb-4">
+                        <div class="controlForm my-3">
+                            <label>Descripción de causas determinantes</label>
+                            <span>
+                                     @(Html.Kendo().TextAreaFor(t => t.DescripcionCausa)
+                                    .Rows(3)
+                                    .HtmlAttributes(new { id = "descripcionCausaTextArea", style = "width:100%;" })
+                                    )
+                            </span>
+                        </div>
+                    </div>
+              </form>
+<div id="personasInvolucrados">
+        <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded pb-1">
+            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                <div class="col-12 col-md-auto">
+                    <div class="row align-items-center justify-content-center justify-content-md-start">
+                        <div class="col-auto">
+                            <div class="border border-2 border-dark rounded-circle">
+                                <h5 class="m-0 numberCard d-flex align-items-center justify-content-center">
+                                    <b>3</b>
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-auto p-0">
+                            <i class="icon-involucrado h1 colorPrimary"></i>
+                        </div>
+                        <div class="col-auto my-3">
+                            <h2 class="m-0 h3"><b>Involucrados</b></h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
+                    <div class="row">
+                        <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
+                            @(Html.Kendo().Button()
+                                .Name("editSearchConductor")
+                                .HtmlAttributes(new { @class = "px-5" })
+                                .Content("<h6 class=\"m-0\"><i class=\"icon-edit me-2\"></i><b>Capturar nuevo involucrado</b></h6>"))
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-10 pe-0">
+                    <div class="bgSuccess py-1"></div>
+                </div>
+                <div class="col-2 ps-0">
+                    <div class="bg-light py-1"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 my-4">
+                    <h5 class="px-4"><b>Datos de los involucrados</b></h5>
+                    <h6 class="px-4 text-muted">
+                        Selecciona entre búsqueda / nuevo persona
+                    </h6>
+                </div>
+            </div>
+            <div class="row px-4 align-items-end">
+                <div class="col-12 mt-4 controlForm">
+                    <label>Involucrado del accidente:</label>
+                </div>
+                <div class="col-12 mb-4">
+                    <h5 class="m-0 colorPrimary"><i class="icon-addInvolucrado h4"></i> <b>Búsqueda de involucrado</b></h5>
+                </div>
+            </div>
+            <div class="row justify-content-between mb-1">
+                <div class="col-12 col-lg-6 mt-4 mb-2">
+                    <h5 class="px-4"><b>Listado de búsqueda</b></h5>
+                    <h6 class="px-4 text-muted">Selecciona un involucrado para continuar.</h6>
+                </div>
+                <div class="col-12 col-lg-auto text-center">
+                    <div class="btnOutline btnOutlinePrimary px-4 my-3">
+                        <button onclick="mostrarModalAgregarInvolucrados()">
+                            <h5 class="m-0"><i class="me-2 icon-addInvolucrado"></i><b>Buscar involucrado</b></h5>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 px-4 rounded mb-4">
+                    <partial name="_ListadoInvolucrados" model="Model" />
+                </div>
+            </div>
+             <div class="row">
+    <div class="col-12 col-md-8 mx-md-auto col-lg-5 ">
+                        <a href="@Url.Action("CapturaAccidenteC", "CapturaAccidentes")">Siguiente</a>
+
+    </div>
+</div>
+   
+        </section>
+   </div>
+        <!--Modal agregar involucrado-->
+        <div class="modal fade modalCustom" id="agregarInvolucradoModal" tabindex="-1" aria-labelledby="agregarVehiculoLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-body" id="ModalBodyAgregarInvolucrado">
+                    </div>
+                </div>
+            </div>
+        </div>
+  </section>
+       
+   
+<!--Modal agregar factor accidente-->
+<div class="modal fade modalCustom" id="factorAccidenteModal" tabindex="-1" aria-labelledby="agregarFactorLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body" id="ModalBodyFactorAccidente">
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal agregar causa accidente-->
+
+    <div class="modal fade modalCustom" id="causaAccidenteModal" tabindex="-1" aria-labelledby="agregarVehiculoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body" id="ModalBodyCausaAccidente">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--SECCION VEHICULOS INVOLUCRADOS-->
+    <div id="seccionVehiculos" style="display:none;">
+        <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded pb-1">
+        <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+            <div class="col-12 col-md-auto">
+                <div class="row align-items-center justify-content-center justify-content-md-start">
+                    <div class="col-auto">
+                        <div class="border border-2 border-dark rounded-circle">
+                            <h5 class="m-0 numberCard d-flex align-items-center justify-content-center">
+                                <b>3</b>
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="col-auto p-0">
+                        <i class="icon-involucrado h1 colorPrimary"></i>
+                    </div>
+                    <div class="col-auto my-3">
+                        <h2 class="m-0 h3"><b>Involucrados</b></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
+                <div class="row">
+                    <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
+                        @(Html.Kendo().Button()
+                            .Name("editSearchInvolucrado")
+                            .HtmlAttributes(new { @class = "px-5" })
+                            .Content("<h6 class=\"m-0\"><i class=\"icon-edit me-2\"></i><b>Editar busqueda</b></h6>"))
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-11 pe-0">
+                <div class="bgSuccess py-1"></div>
+            </div>
+            <div class="col-1 ps-0">
+                <div class="bg-light py-1"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 my-4">
+                <h5 class="px-4"><b>Datos de los involucrados</b></h5>
+                <h6 class="px-4 text-muted">
+                    Selecciona entre vehículos / se ignora
+                </h6>
+            </div>
+        </div>
+
+        <div class="row px-4 align-items-end">
+            <div class="col-12 mt-4 controlForm">
+                <label>Involucrado del accidente:</label>
+            </div>
+            <div class="col-12 mb-4">
+                    @{
+                        var nombre = Model != null ? Model.nombre : "Involucrado";
+                    }
+
+
+                    <h5 class="m-0 colorPrimary">
+                        <i class="icon-fisica h4"></i>
+                        <b>@nombre</b>
+                    </h5>
+
+            </div>
+        </div>
+        <div class="row px-4 align-items-end">
+            <div class="col-12 mt-4 controlForm">
+                <label>Vehículo donde iba el involucrado durante el accidente:</label>
+            </div>
+        </div>
+        <div>
+            <nav class="tabCustom">
+                <div class="nav nav-tabs row mx-0" id="nav-tab" role="tablist">
+                    <button class="nav-link col active" id="vehiculo-involucrado-tab" data-bs-toggle="tab" data-bs-target="#vehiculo-involucrado" type="button" role="tab" aria-controls="vehiculo-involucrado" aria-selected="true">
+                        <div class="row justify-content-center align-items-center px-3 py-2">
+                            <div class="col-auto radioCustom p-0">
+                                <div class="rounded-circle m-2"></div>
+                            </div>
+                            <div class="col-auto p-0">
+                                <h5 class="m-0"><i class="icon-car h4"></i> <b>Vehículos</b></h5>
+                            </div>
+                        </div>
+                    </button>
+                    <button class="nav-link col" id="noneVehiculo-involucrado-tab" data-bs-toggle="tab" data-bs-target="#noneVehiculo-involucrado" type="button" role="tab" aria-controls="noneVehiculo-involucrado" aria-selected="false">
+                        <div class="row justify-content-center align-items-center px-3 py-2">
+                            <div class="col-auto radioCustom p-0">
+                                <div class="rounded-circle m-2"></div>
+                            </div>
+                            <div class="col-auto p-0">
+                                <h5 class="m-0"><i class="icon-sinPropietario h4"></i> <b>Se ignora</b></h5>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane tabCustomConteiner fade show active" id="vehiculo-involucrado" role="tabpanel" aria-labelledby="vehiculo-involucrado-tab">
+                    <div class="px-4 mt-4 pb-4 align-items-end">
+                        <div class="justify-content-between mb-1">
+                            <div class="col-12 col-lg-6 mt-4 mb-4">
+                                <h5 class="px-4"><b>Listado de vehículo involucrados</b></h5>
+                                <h6 class="px-4 text-muted">Selecciona un vehículo involucrado para continuar.</h6>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 px-4 rounded mb-4">
+                                <partial name="_ListaVehiculosInvolucrados" model="Model"/>
+                            </div>
+                        </div>
+                        <div class="row align-items-end mt-4">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <div class="controlForm my-3">
+                                    <label>Tipo <b>(obligatorio)</b>:</label>
+                                    <span>
+                                        @(Html.Kendo().DropDownList()
+                                        .Name("Tipo")
+                                        .DataTextField("")
+                                        .DataValueField("")
+                                        .HtmlAttributes(new { style = "width:100%;" })
+                                        .Filter(FilterType.Contains)
+                                        .DataSource(source => source
+                                        .Read(read => read.Action("", ""))
+                                        )
+                                        )
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <div class="controlForm my-3">
+                                    <label>Estado de la víctima <b>(obligatorio)</b>:</label>
+                                    <span>
+                                        @(Html.Kendo().DropDownList()
+                                        .Name("Estado")
+                                        .DataTextField("")
+                                        .DataValueField("")
+                                        .HtmlAttributes(new { style = "width:100%;" })
+                                        .Filter(FilterType.Contains)
+                                        .DataSource(source => source
+                                        .Read(read => read.Action("", ""))
+                                        )
+                                        )
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <div class="controlForm my-3">
+                                    <label>Llevado a:</label>
+                                    <span>
+                                        @(Html.Kendo().DropDownList()
+                                        .Name("Llevado")
+                                        .DataTextField("")
+                                        .DataValueField("")
+                                        .HtmlAttributes(new { style = "width:100%;" })
+                                        .Filter(FilterType.Contains)
+                                        .DataSource(source => source
+                                        .Read(read => read.Action("", ""))
+                                        )
+                                        )
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <div class="controlForm my-3">
+                                    <label>Traslado por:</label>
+                                    <span>
+                                        @(Html.Kendo().DropDownList()
+                                        .Name("Traslado")
+                                        .DataTextField("")
+                                        .DataValueField("")
+                                        .HtmlAttributes(new { style = "width:100%;" })
+                                        .Filter(FilterType.Contains)
+                                        .DataSource(source => source
+                                        .Read(read => read.Action("", ""))
+                                        )
+                                        )
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <div class="controlForm my-3">
+                                    @(Html.Kendo().TextBox()
+                                            .Name("Asiento:")
+                                            .Label(l => l.Content("Asiento que ocupaba:"))
+                                            .Placeholder("Ingresa el número asiento que ocupaba")
+                                            .HtmlAttributes(new { style = "width: 100%", type = "number" })
+                                        )
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <div class="controlForm my-3">
+                                    <label>Traía cinturón <b>(obligatorio)</b>:</label>
+                                    <span>
+                                        @(Html.Kendo().DropDownList()
+                                        .Name("cinturon")
+                                        .DataTextField("")
+                                        .DataValueField("")
+                                        .HtmlAttributes(new { style = "width:100%;" })
+                                        .Filter(FilterType.Contains)
+                                        .DataSource(source => source
+                                        .Read(read => read.Action("", ""))
+                                        )
+                                        )
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row my-3 mb-4">
+                        <div class="col-12 col-md-6 mx-md-auto">
+                            <div class="row justify-content-around">
+                                <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
+                                    @(Html.Kendo().Button()
+                                    .Name("editVehiculo")
+                                    .HtmlAttributes(new { @class = "px-5" })
+                                    .Content("<h5 class=\"m-0\"><b>Editar búsqueda</b></h5>"))
+
+                                </div>
+                                <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                                    <div class="controlButton">
+                                        @(Html.Kendo().Button()
+                                .Name("saveVehiculo")
+                                .HtmlAttributes(new { @class = "btnPrimary px-5" })
+                                .Content("<h5 class=\"m-0\"><b>Siguiente</b></h5>"))
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="tabCustomEnd"></div>
+                        </div>
+                    </div>
+
+                <div class="tab-pane tabCustomConteiner fade" id="noneVehiculo-involucrado" role="tabpanel" aria-labelledby="noneVehiculo-involucrado-tab">
+                    <div class="row px-4 my-4 py-5 align-items-end">
+                        <div class="col-12 col-md-10 mx-md-auto text-center">
+                            <h3><b>Se utiliza cuando se tiene una infracción o accidente</b></h3>
+                            <h4 class="fw-normal">y se desconoce el vehículo donde iba el involucrado</h4>
+                            <div class="row ">
+                                <div class="col-12 col-md-8 mx-md-auto col-lg-5 ">
+                                    <div class="controlButton my-3">
+                                        @(Html.Kendo().Button()
+                                                .Name("involucrafoNoneCar")
+                                                .HtmlAttributes(new { @class = "btnPrimary" })
+                                                .Content("<h5 class=\"m-0\"><b>Siguiente</b></h5>"))
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="tabCustomEnd"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    </div>
+</div>

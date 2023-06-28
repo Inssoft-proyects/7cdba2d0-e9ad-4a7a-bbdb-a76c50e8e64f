@@ -1,0 +1,37 @@
+﻿<div class="col-12 mb-4 px-4 rounded gridCustom">
+
+    @(
+        Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel>()
+        .Name("gridInfraccionesAccidente")
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.IdInfraccionAccidente).Title("Id Acc/Inf").Width(90);
+            columns.Bound(c => c.NumeroReporte).Title("Accidente").Width(90);
+            columns.Bound(c => c.IdInfraccion).Title("Infracción").Width(90);
+            columns.Bound(c => c.VehiculoInvolucrado).Title("Vehículo").Width(90);
+           
+
+        }).HtmlAttributes(new { style = "height:400px" })
+        .Sortable()
+        .Groupable()
+        .Scrollable()
+        .Pageable()
+        .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(read => read.Action("ObtenerInfraccionesVehiculos", "CapturaAccidentes"))
+        .PageSize(5).Model(model => model.Id(p => p.IdInfraccionAccidente))
+        )
+        .ToolBar(t => t.Search())
+        .Search(s =>
+        {
+            s.Field(c => c.EstatusReporte);
+
+        })
+
+        .Selectable(selectable => selectable.Mode(GridSelectionMode.Single)
+        .Type(GridSelectionType.Row)
+        )
+        )
+
+</div>
+

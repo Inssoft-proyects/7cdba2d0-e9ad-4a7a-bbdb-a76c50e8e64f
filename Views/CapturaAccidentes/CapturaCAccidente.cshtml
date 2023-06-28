@@ -1,0 +1,86 @@
+﻿@model GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel
+
+<div class="mainContainer bg-light">
+
+    <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
+        <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+            <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                <div class="row align-items-center justify-content-center justify-content-md-start">
+                    <div class="col-auto">
+                        <div class="border border-2 border-dark rounded-circle">
+                            <h5 class="m-0 numberCard d-flex align-items-center justify-content-center">
+                                <b>1</b>
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="icon-danoAccidente h1 colorPrimary"></i>
+                    </div>
+                    <div class="col-auto my-3">
+                        <h2 class="m-0 h3"><b>Daños materiales del accidente</b></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8 pe-0">
+                <div class="bgSuccess py-1"></div>
+            </div>
+            <div class="col-4 ps-0">
+                <div class="bg-light py-1"></div>
+            </div>
+        </div>
+        <div class="row justify-content-between align-items-end mb-1">
+            <div class="col-12 col-md-auto mt-4 mb-2">
+                <h5 class="px-4"><b>Daños del accidente</b></h5>
+                <h6 class="px-4 text-muted">Da de alta los daños del accidente.</h6>
+            </div>
+        </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="controlForm my-3">
+                    @(Html.Kendo().TextBoxFor(t => t.montoCamino)
+                        .Label(l => l.Content("Daños al camino:"))
+                        .Placeholder("Ingresa el monto al que ascienden los daños al camino")
+                        .HtmlAttributes(new { style = "width: 100%", type = "number" })
+                        )
+
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="controlForm my-3">
+                    @(Html.Kendo().TextBoxFor(t => t.montoCarga)
+                        .Label(l => l.Content("Daños a la carga:"))
+                        .Placeholder("Ingresa el monto al que ascienden los daños a la carga")
+                        .HtmlAttributes(new { style = "width: 100%", type = "number" })
+                        )
+
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="controlForm my-3">
+                    @(Html.Kendo().TextBoxFor(t => t.montoPropietarios)
+                        .Label(l => l.Content("Daños a propietarios:"))
+                        .Placeholder("Ingresa el monto al que ascienden los daños a los propietarios")
+                        .HtmlAttributes(new { style = "width: 100%", type = "number" })
+                        )
+
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="controlForm my-3">
+                    @(Html.Kendo().TextBoxFor(t => t.montoOtros)
+                        .Label(l => l.Content("Otros daños:"))
+                        .Placeholder("Ingresa el monto al que ascienden los daños bajo el concepto de otros")
+                        .HtmlAttributes(new { style = "width: 100%", type = "number" })
+                        )
+
+                </div>
+            </div>
+
+
+    </section>
+
+
+</div>

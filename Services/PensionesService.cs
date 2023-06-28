@@ -566,5 +566,59 @@ namespace GuanajuatoAdminUsuarios.Services
             }
             return result;
         }
+        public List<PensionModel> GetPensionesByDelegacion(int delegacionDDValue)
+        {
+
+            List<PensionModel> ListPensiones = new List<PensionModel>();
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+                try
+                {
+                    connection.Open();
+                    const string SqlTransact = @"SELECT 
+                                                  p.idPension
+                                                 ,p.pension
+                                                 ,p.idDelegacion
+                                                 ,p.fechaActualizacion
+                                                 ,p.actualizadoPor
+                                                 ,p.estatus
+                                                 FROM pensiones p
+                                                 INNER JOIN catDelegaciones d
+                                                 on p.idDelegacion = d.idDelegacion 
+                                                 AND d.estatus = 1
+                                                 WHERE p.estatus = 1 AND p.idDelegacion = @delegacionDDValue";
+
+                    SqlCommand command = new SqlCommand(SqlTransact, connection);
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.Add(new SqlParameter("@delegacionDDValue", SqlDbType.Int)).Value = (object)delegacionDDValue ?? DBNull.Value;
+
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            PensionModel pension = new PensionModel();
+                            pension.IdPension = Convert.ToInt32(reader["IdPension"].ToString());
+                            pension.Pension = reader["Pension"].ToString();
+                            pension.IdDelegacion = Convert.ToInt32(reader["IdDelegacion"].ToString());                         
+                            pension.FechaActualizacion = Convert.ToDateTime(reader["fechaActualizacion"].ToString());
+                            pension.ActualizadoPor = Convert.ToInt32(reader["actualizadoPor"].ToString());
+                            pension.estatus = Convert.ToInt32(reader["estatus"].ToString());                          
+                            ListPensiones.Add(pension);
+
+                        }
+
+                    }
+
+                }
+                catch (SqlException ex)
+                {
+                    //Guardar la excepcion en algun log de errores
+                    //ex
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            return ListPensiones;
+        }
     }
 }

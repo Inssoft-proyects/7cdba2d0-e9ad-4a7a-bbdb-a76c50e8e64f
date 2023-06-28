@@ -1,0 +1,421 @@
+﻿@model GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel
+<script>
+    function mostrarModalAgregarVehiculo() {
+        var idAccidente = '@Model.IdAccidente'; 
+
+        $.ajax({
+            url: '@Url.Action("ModalAgregarVehiculo")',
+            type: 'POST',
+            data: { idAccidente: idAccidente }, 
+            success: function (data) {
+                $('#ModalBodyAgregarVehiculo').html(data);
+                $('#agregarVehiculoModal').modal('show');
+            }
+        });
+    }
+
+
+</script>
+<div class="mainContainer bg-light">
+<section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded pb-1">
+    <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+        <div class="col-12 col-md-auto">
+            <div class="row align-items-center justify-content-center justify-content-md-start">
+                <div class="col-auto">
+                    <div class="border border-2 border-dark rounded-circle">
+                        <h5 class="m-0 numberCard d-flex align-items-center justify-content-center">
+                            <b>1</b>
+                        </h5>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <i class="icon-accidentes h1 colorPrimary"></i>
+                </div>
+                <div class="col-auto my-3">
+                    <h2 class="m-0 h3"><b>Accidente</b></h2>
+                </div>
+            </div>
+        </div>
+       
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="bgSuccess py-1"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 my-4">
+            <h5 class="px-4 colorSuccess d-flex align-items-center"><b class="d-flex align-items-center justify-content-center bgSuccess mb-1 me-2 rounded-circle px-1"><i style="font-size: 10px; padding: 7px 2px;" class="icon-correct text-white"></i></b><b>Accidente registrado en SITTEG</b></h5>
+            <h6 class="px-4 text-muted">El accidente ya está registrado en la plataforma. Puede actualizar o corregir la información del vehículo.</h6>
+        </div>
+    </div>
+    <form class="row px-4 align-items-end">
+        <div class="col-auto">
+            <div class="controlForm mb-3 mt-1">
+                <label class="text-muted">No. de reporte de accidente:</label>
+                <label>@Model.IdAccidente</label>
+            </div>
+        </div>
+        <div class="col-auto">
+            <div class="controlForm mb-3 mt-1">
+                <label class="text-muted">Fecha y hora:</label>
+                <label>@Model.Fecha - @Model.Hora</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="controlForm mb-3 mt-1">
+                <label class="text-muted">Municipio:</label>
+                <label>@Model.Municipio</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="controlForm mb-3 mt-1">
+                <label class="text-muted">Carretera:</label>
+                <label>@Model.Carretera</label>
+            </div>
+        </div>
+        <div class="col-auto">
+            <div class="controlForm mb-3 mt-1">
+                <label class="text-muted">Tramo:</label>
+                <label>@Model.Tramo</label>
+            </div>
+        </div>
+        <div class="col-auto">
+            <div class="controlForm mb-3 mt-1">
+                <label class="text-muted">Kilómetro:</label>
+                <label>@Model.Kilometro</label>
+            </div>
+        </div>
+    </form>
+    <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+        <div class="col-12 col-md-auto">
+            <div class="row align-items-center justify-content-center justify-content-md-start">
+                <div class="col-auto">
+                    <div class="border border-2 border-dark rounded-circle">
+                        <h5 class="m-0 numberCard d-flex align-items-center justify-content-center">
+                            <b>2</b>
+                        </h5>
+                    </div>
+                </div>
+                <div class="col-auto p-0">
+                    <i class="icon-car h1 colorPrimary"></i>
+                </div>
+                <div class="col-auto my-3">
+                    <h2 class="m-0 h3"><b>Vehículos involucrados</b></h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
+            <div class="row">
+                <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
+                    @(Html.Kendo().Button()
+                        .Name("editSearchVehiculo")
+                        .HtmlAttributes(new { @class = "px-5" })
+                        .Content("<h6 class=\"m-0\"><i class=\"icon-edit me-2\"></i><b>Editar busqueda</b></h6>"))
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-12 ps-0">
+            <div class="bg-light py-1"></div>
+        </div>
+    </div>
+    <div class="row justify-content-between mb-1">
+        <div class="col-12 col-lg-6 mt-4 mb-2">
+            <h5 class="px-4"><b>Listado de búsqueda</b></h5>
+            <h6 class="px-4 text-muted">Selecciona un vehículo para continuar.</h6>
+        </div>
+        <div class="col-12 col-lg-auto text-center">
+            <div class="btnOutline btnOutlinePrimary px-4 my-3">
+                <button onclick="mostrarModalAgregarVehiculo()">
+                    <h5 class="m-0"><i class="me-2 icon-addCar"></i><b>Buscar vehículo</b></h5>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 px-4 rounded mb-4">
+        </div>
+            <partial name="_ListaVehiculosInvolucrados" model="Model" />
+    </div>
+    <div class="row mt-1 mb-3">
+        <div class="col-12 col-md-6 mx-md-auto">
+            <div class="row justify-content-around">
+                <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0" onclick="abrirModalAnexo2()">
+                    @(Html.Kendo().Button()
+                        .Name("editInvolucrados")
+                        .HtmlAttributes(new { @class = "px-5" })
+                        .Content("<h5 class=\"m-0\"><b>Capturar Nuevo Vehículo</b></h5>"))
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-6 mx-md-auto">
+            <div class="row justify-content-around">
+                <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                    <div class="controlButton my-3">
+                        @(Html.Kendo().Button()
+                            .Name("FinalVehiculo")
+                            .HtmlAttributes(new { @class = "btnPrimary px-5" })
+                            .Content("<h5 class=\"m-0\"><b>Siguiente</b></h5>"))
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--MODAL AGREGAR VEHICULO INVOLUCRADO-->
+     <div class="modal fade modalCustom" id="agregarVehiculoModal" tabindex="-1" aria-labelledby="agregarVehiculoLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body" id="ModalBodyAgregarVehiculo">
+                        </div>
+                    </div>
+                </div>
+            </div>
+    <!--MODAL AL ANEXO 2-->
+        <div class="modal fade modalCustom" id="anexo2Modal" tabindex="-1" aria-labelledby="anexo2Label" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-body" id="BodyModalAnexo2">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--SECCION CONDUCTOR-->
+    <div id="seccionConaductor" style="display:none;">
+        <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+            <div class="col-12 col-md-auto">
+                <div class="row align-items-center justify-content-center justify-content-md-start">
+                    <div class="col-auto">
+                        <div class="border border-2 border-dark rounded-circle">
+                            <h5 class="m-0 numberCard d-flex align-items-center justify-content-center">
+                                <b>3</b>
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="col-auto p-0">
+                        <i class="icon-conductor h1 colorPrimary"></i>
+                    </div>
+                    <div class="col-auto my-3">
+                        <h2 class="m-0 h3"><b>Conductor</b></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
+                <div class="row">
+                    <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
+                        @(Html.Kendo().Button()
+                            .Name("editSearchConductor")
+                            .HtmlAttributes(new { @class = "px-5" })
+                            .Content("<h6 class=\"m-0\"><i class=\"icon-edit me-2\"></i><b>Editar busqueda</b></h6>"))
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-12 ps-0">
+                <div class="bg-light py-1"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 my-4">
+                <h5 class="px-4"><b>Datos de conductor</b></h5>
+                <h6 class="px-4 text-muted">Propietario o búsqueda / nuevo conductor </h6>
+            </div>
+        </div>
+        <div class="row px-4 align-items-end">
+            <div class="col-12 mt-4 controlForm">
+                <label>Conductor de infracción:</label>
+            </div>
+            <div class="col-12 mb-4">
+                <h5 class="m-0 colorPrimary"><i class="icon-addConductor h4"></i> <b>Búsqueda de conductor</b></h5>
+            </div>
+        </div>
+        <div class="row justify-content-between mb-1">
+            <div class="col-12 col-lg-6 mt-4 mb-2">
+                <h5 class="px-4"><b>Listado de búsqueda</b></h5>
+                <h6 class="px-4 text-muted">Selecciona un conductor para continuar.</h6>
+            </div>
+            <div class="col-12 col-lg-auto text-center">
+                <div class="btnOutline btnOutlinePrimary px-4 my-3">
+                    <button data-bs-toggle="modal" data-bs-target="#addConductor">
+                        <h5 class="m-0"><i class="me-2 icon-addConductor"></i><b>Agregar un conductor nuevo</b></h5>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 px-4 rounded mb-4">
+                
+                </div>
+            </div>
+            <div class="row mt-1 mb-3">
+                <div class="col-12 col-md-6 mx-md-auto">
+                    <div class="row justify-content-around">
+                        <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
+                            @(Html.Kendo().Button()
+                                .Name("editConductor")
+                                .HtmlAttributes(new { @class = "px-5" })
+                                .Content("<h5 class=\"m-0\"><b>Editar búsqueda</b></h5>"))
+
+                        </div>
+                      
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--MODAL AGREGAR CONDUCTOR-->
+     <div class="modal fade modalCustom" id="modalAgregarConductor" tabindex="-1" aria-labelledby="conductorLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                 <div class="modal-body" id="ModalBodyAgregarConductor">
+
+
+            </div>
+        </div>
+    </div>
+</div>
+        <!--MODAL COMPLEMENTO-->
+
+        <div class="modal fade modalCustom" id="modalComplementoVehiculo" tabindex="-1" aria-labelledby="modalComplementoVehiculo" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-body" id="ModalBodymodalComplementoVehiculo">
+                    </div>
+                </div>
+            </div>
+        </div>
+         <!--CLASIFICACION DE ACCIDENTE-->
+     <div id="ClasificacionAccidente" style="display:block;">
+                <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
+                    <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                        <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                            <div class="row align-items-center justify-content-center justify-content-md-start">
+                                <div class="col-auto">
+                                    <div class="border border-2 border-dark rounded-circle">
+                                        <h5 class="m-0 numberCard d-flex align-items-center justify-content-center">
+                                            <b>3</b>
+                                        </h5>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="icon-clasificacionAccidente h1 colorPrimary"></i>
+                                </div>
+                                <div class="col-auto my-3">
+                                    <h2 class="m-0 h3"><b>Clasificación del accidente</b></h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8 pe-0">
+                            <div class="bgSuccess py-1"></div>
+                        </div>
+                        <div class="col-4 ps-0">
+                            <div class="bg-light py-1"></div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between align-items-end mb-1">
+                        <div class="col-12 col-md-auto mt-4 mb-2">
+                            <h5 class="px-4"><b>Listado de clasificación del accidente</b></h5>
+                            <h6 class="px-4 text-muted">Da de alta las clasificación del accidente.</h6>
+                        </div>
+                        <div class="col-12 col-lg-auto text-center">
+                            <div class="btnOutline btnOutlinePrimary px-4 my-3">
+                                <button onclick="mostrarModalCalsificacionAccidente()">
+                                    <h5 class="m-0"><i class="me-2 icon-addClasificacionAccidente"></i><b>Agregar clasificación</b></h5>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-12 col-lg-11 col-xl-10 mx-lg-auto my-4 px-4 rounded">
+                    </div>
+
+                       <!--TABLA-->
+                     <partial name="_ListaClasificacion" model="Model" />
+            <div class="col-12 col-md-6 mx-md-auto">
+                <div class="row justify-content-around">
+                    <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                        <div class="controlButton my-3">
+                                <button>
+                                    <a href="@Url.Action("CapturaBAccidente", "CapturaAccidentes")">Siguiente</a>
+                                </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+        <div class="modal fade modalCustom" id="clasificacionAccidenteModal" tabindex="-1" aria-labelledby="clasificacionAccidenteLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-body" id="ModalBodyClasificacionAccidente">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+  <script>
+                 function pensionDropDownChange() {
+        var delegacionDDValue = $("#IdDelegacion").data("kendoDropDownList").value();
+        $.ajax({
+            url: "/CapturaAccidentes/Pensiones_Drop",
+            type: "POST",
+            data: { delegacionDDValue: delegacionDDValue },
+            success: function (data) {
+                var pensionesDropDown = $("#IdPension").data("kendoDropDownList");
+                pensionesDropDown.dataSource.data(data);
+            },
+            error: function (xhr, status, error) {
+            }
+        });
+    }
+
+  function mostrarModalComplementoVehiculo() {
+            $.ajax({
+                url: '@Url.Action("ModalAgregarVehiculo")',
+                type: 'POST',
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (data) {
+                    $('#ModalBodymodalComplementoVehiculo').html(data);
+                    $('#modalComplementoVehiculo').modal('show');
+                }
+            });
+        }
+
+    function mostrarModalCalsificacionAccidente() {
+        $.ajax({
+            url: '@Url.Action("ModalClasificacionAccidente")',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                $('#ModalBodyClasificacionAccidente').html(data);
+                $('#clasificacionAccidenteModal').modal('show');
+            }
+        });
+    }
+
+     function abrirModalAnexo2() {
+        $.ajax({
+            url: '@Url.Action("ModalAnexo2")',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                        $('#BodyModalAnexo2').html(data);
+                $('#anexo2Modal').modal('show');
+            }
+        });
+    }
+</script>

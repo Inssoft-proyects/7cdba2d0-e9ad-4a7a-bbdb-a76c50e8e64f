@@ -2,16 +2,15 @@
 
     @(
         Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel>()
-        .Name("grid")
+        .Name("gridClasificacion")
         .Columns(columns =>
         {
+            columns.Bound(c => c.IdAccidente).Hidden();
+            //columns.Command(c => c.Custom("Eliminar").Click("eliminarClasificacion")).Width(80);
             columns.Bound(c => c.NombreClasificacion).Width(90);
-            columns.Command(c => c.Custom("Eliminar").Click("eliminarClasificacion")).Width(80);
+            columns.Template("<button data-bs-toggle='modal' class='w-100 btn'><h6 class='m-0 colorDanger' onclick='eliminarClasificacion(event)'><i class='h5 icon-delete me-2'></i><b>Eliminar</b></h6></button>").Width(150);
 
-
-
-
-        }).HtmlAttributes(new { style = "height:550px" })
+        }).HtmlAttributes(new { style = "height:300px" })
         .Sortable()
         .Groupable()
         .Scrollable()
@@ -43,18 +42,22 @@
     </div>
 </div>
 <script>
-    function eliminarClasificacion(e){
-        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        var IdAccidente = dataItem.IdAccidente;
-        console.log("SELEC", dataItem)
+    function eliminarClasificacion(event) {
+        var grid = $("#gridClasificacion").data("kendoGrid");
+        var row = $(event.target).closest("tr");
+        var dataItem = grid.dataItem(row);
+        var IdAccidente = dataItem.IdAccidente
+        console.log("Data clas", IdAccidente);
         $.ajax({
             url: '@Url.Action("ModalEliminarClasificacion", "CapturaAccidentes")',
-            type: 'POST', 
-            data: { IdAccidente: IdAccidente },
-            success: function (result) {
-                $('#ModalBodyEliminarClasificacion').html(result);
+            type: 'POST',           
+            data: {
+                IdAccidente: IdAccidente},
+            success: (data) => {
+                $('#ModalBodyEliminarClasificacion').html(data);
                 $('#eliminarClasificacionModal').modal('show');
             }
         });
     }
+
 </script>

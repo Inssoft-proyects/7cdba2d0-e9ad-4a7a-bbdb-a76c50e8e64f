@@ -110,6 +110,7 @@
             success: function (data) {
                 var FactorOpcionDropDown = $("#IdFactorOpcionAccidente").data("kendoDropDownList");
                 FactorOpcionDropDown.dataSource.data(data);
+           
             },
             error: function (xhr, status, error) {
             }
@@ -129,16 +130,16 @@
             success: function (data) {
                 console.log("Data", data)
 
-                $("#grid").data("kendoGrid").dataSource.data(data);
-                alert("Se ha modificado la información");
+                $("#gridFactoresA").data("kendoGrid").dataSource.data(data);
                 $('modal-body').removeClass('model-open');
                 $('.modal-backdrop').remove();
                 $('#editarFactorAccidenteModal').modal('hide');
+                sitteg_success("Se ha modificado la información");
 
 
             },
             error: function (error) {
-                alert("!Sucedio un error, intente mas tarde...");
+                sitteg_warning("!Sucedio un error, intente mas tarde...");
             }
         });
     }

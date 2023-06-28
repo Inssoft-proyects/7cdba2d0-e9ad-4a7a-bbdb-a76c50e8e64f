@@ -79,6 +79,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
+                sitteg_success('Elemento guardado correctamente')
                 $("#tablaColores").html(result);
             }
         });

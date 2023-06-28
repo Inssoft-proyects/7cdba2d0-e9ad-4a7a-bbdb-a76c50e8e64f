@@ -1,38 +1,40 @@
-﻿<div class="col-12 mb-4 px-4 rounded gridCustom">
+﻿<div class="row">
+    <div class="col-12 mb-4 px-4 rounded gridCustom">
 
-    @(
-        Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel>()
-        .Name("gridFactores")
-        .Columns(columns =>
-        {
-            columns.Bound(c => c.FactorAccidente).Title("Factor").Width(120);
-            columns.Bound(c => c.FactorOpcionAccidente).Title("Opcion").Width(120);
-            columns.Template("<button data-bs-toggle=modal  class='w-100 btn' onclick='mostrarModalEditarFactor()'><h6 class='m-0 colorPrimary'><i class='h5 icon-edit me-2'></i><b>Editar</b></h6></button>").Width(150);
-            columns.Template("<button data-bs-toggle='modal' class='w-100 btn'><h6 class='m-0 colorDanger' onclick='mostrarModalEliminarFactor(event)'><i class='h5 icon-delete me-2'></i><b>Eliminar</b></h6></button>").Width(150);
+        @(
+            Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel>()
+            .Name("gridFactoresA")
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.FactorAccidente).Width(80);
+                columns.Bound(c => c.FactorOpcionAccidente).Width(100);
+                columns.Command(c => c.Custom("Editar").Click("editarFactorA")).Width(100);
+                columns.Command(c => c.Custom("Eliminar").Click("eliminarFactorA")).Width(100);
 
-        }).HtmlAttributes(new { style = "height:250px" })
-        .Sortable()
-        .Groupable()
 
-        .Scrollable()
-        .Pageable()
-        .DataSource(dataSource => dataSource
-        .Ajax()
-        .Read(read => read.Action("AgregarFactorNuevo", "CapturaAccidentes"))
-        .PageSize(5).Model(model => model.Id(p => p.IdAccidente))
-        )
-        .ToolBar(t => t.Search())
-        .Search(s =>
-        {
-            s.Field(c => c.FactorAccidente);
-            s.Field(c => c.FactorOpcionAccidente);
-        })
+            }).HtmlAttributes(new { style = "height:550px" })
+            .Sortable()
+            .Groupable()
+            .Scrollable()
+            .Pageable()
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("AgregarFactorNuevo", "CapturaAccidentes"))
+            .PageSize(5).Model(model => model.Id(p => p.FactorAccidente))
+            )
+            .ToolBar(t => t.Search())
+            .Search(s =>
+            {
+                s.Field(c => c.Municipio);
 
-        .Selectable(selectable => selectable.Mode(GridSelectionMode.Single)
-        .Type(GridSelectionType.Row)
-        )
-        )
+            })
 
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single)
+            .Type(GridSelectionType.Row)
+            )
+
+            )
+    </div>
 </div>
 <!--Modal editar factor accidente-->
 <div class="modal fade modalCustom" id="editarFactorAccidenteModal" tabindex="-1" aria-labelledby="agregarVehiculoLabel" aria-hidden="true">
@@ -52,40 +54,8 @@
         </div>
     </div>
 </div>
+
 <script>
- function mostrarModalEditarFactor() {
-        $.ajax({
-            url: '@Url.Action("ModalEditarFactorAccidente")',
-            type: 'POST',
-            contentType: "application/json; charset=utf-8",
-            dataType: "html",
-            success: function (data) {
-                $('#ModalBodyEditarFactorAccidente').html(data);
-                $('#editarFactorAccidenteModal').modal('show');
-            }
-        });
-    }
-
-    function mostrarModalEliminarFactor(event) {
-        var grid = $("#gridFactores").data("kendoGrid");
-        var row = $(event.target).closest("tr");
-        var dataItem = grid.dataItem(row);
-        console.log("INFO", dataItem);
-
-        $.ajax({
-            url: '@Url.Action("ModalEliminarFactorAccidente")',
-            type: 'POST',
-            contentType: "application/json; charset=utf-8",
-            dataType: "html",
-            data: JSON.stringify(dataItem), 
-            success: function (data) {
-                $('#ModalBodyEliminarFactorAccidente').html(data);
-                $('#eliminarFactorAccidenteModal').modal('show');
-            }
-        });
-    }
-
-
     function factoresChangeEdit() {
         var factorDDValue = $("#IdFactorAccidente").data("kendoDropDownList").value();
         $.ajax({
@@ -100,5 +70,43 @@
             }
         });
     }
+    function editarFactorA(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var IdFactorAccidente = dataItem.IdFactorAccidente;
+        var IdFactorOpcionAccidente = dataItem.IdFactorOpcionAccidente;
+
+
+        console.log(FactorAccidente);
+
+        $.ajax({
+            url: '@Url.Action("ModalEditarFactorAccidente", "CapturaAccidentes")',
+            type: 'POST',
+            data: { IdFactorAccidente: IdFactorAccidente, IdFactorOpcionAccidente: IdFactorOpcionAccidente },
+            success: function (result) {
+                $('#ModalBodyEditarFactorAccidente').html(result);
+                $('#editarFactorAccidenteModal').modal('show');
+
+            },
+        })
+    }
+    function eliminarFactorA(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var FactorAccidente = dataItem.FactorAccidente;
+        var FactorOpcionAccidente = dataItem.FactorOpcionAccidente;
+        console.log(dataItem);
+
+        $.ajax({
+            url: '@Url.Action("ModalEliminarFactorAccidente", "CapturaAccidentes")',
+            type: 'POST',
+            data: { FactorAccidente: FactorAccidente, FactorOpcionAccidente: FactorOpcionAccidente },
+            success: function (data) {
+                $('#ModalBodyEliminarFactorAccidente').html(data);
+                $('#eliminarFactorAccidenteModal').modal('show');
+            },
+        });
+    }
+
 
 </script>
+
+

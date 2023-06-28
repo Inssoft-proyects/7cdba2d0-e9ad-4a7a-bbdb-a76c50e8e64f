@@ -1412,3 +1412,7 @@
 .barCustom path[d="M0 9 L 15 9 15 12 0 12Z"] {
     fill: var(--main-color);
 }
+
+.hidden-column {
+    display: none;
+}

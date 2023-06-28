@@ -52,14 +52,12 @@
                 </div>
                 <div class="form-group col-md-4">
                     <div class="controlForm">
-                        <label>Tramo:</label>
-                        <div id="divTramo">
+                        <label>Oficial:</label>
                             @(Html.Kendo().DropDownListFor(f => f.idOficial)
                                 .BindTo((SelectList)ViewBag.CatOficiales)
                                 .OptionLabel("-- Seleccione --")
                                 .HtmlAttributes(new { style = "width:100%;" })
                                 )
-                        </div>
                     </div>
                 </div>
             </div>
