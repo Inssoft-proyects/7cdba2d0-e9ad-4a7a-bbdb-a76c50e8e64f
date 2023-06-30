@@ -28,7 +28,7 @@
     </div>
     <div class="row">
         <div class="col-12 my-4">
-            <h5 class="px-4"><b>Datos del oficial de tránsito</b></h5>
+            <h5 class="px-4"><b>Datos de marca de vehículo</b></h5>
             <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
         </div>
     </div>
@@ -46,8 +46,8 @@
             <div class="controlForm my-3">
                 @Html.HiddenFor(m=>m.IdMarcaVehiculo)
                 @(Html.Kendo().TextBoxFor(t => t.MarcaVehiculo)
-                    .Label(l => l.Content("Nombre <b>(obligatorio)</b>:"))
-                    .Placeholder("Ingresa un nueva color")
+                    .Label(l => l.Content("Marca de vehículo <b>(obligatorio)</b>:"))
+                    .Placeholder("Ingresa marca de vehículo")
                     .HtmlAttributes(new { style = "width: 100%" })
                     )
             </div>

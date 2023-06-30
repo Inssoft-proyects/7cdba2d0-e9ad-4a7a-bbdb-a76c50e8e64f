@@ -3,9 +3,9 @@
         .Name("grid")
         .Columns(columns =>
         {
-            columns.Bound(c => c.IdSalario).Width(80);
-            columns.Bound(c => c.Area).Width(100);
-            columns.Bound(c => c.Salario).Width(190);
+            columns.Bound(c => c.IdSalario).Title("Id Salario").Width(80);
+            columns.Bound(c => c.Area).Title("Área").Width(100);
+            columns.Bound(c => c.Salario).Title("Valor").Format("{0:c}").Width(190);
             columns.Bound(c => c.estatusDesc).Title("Estatus en sistema").Width(100);
             columns.Command(c => c.Custom("Editar").Click("getId")).Width(80);
            // columns.Command(c => c.Custom("Eliminar").Click("eliminar")).Width(80);
@@ -36,6 +36,13 @@
 
     @*.Events(ev=>ev.Change("onChange"))*@
     )
+
+@(Html.Kendo().Tooltip()
+            .For("#grid")
+            .Filter("th")
+            .Position(TooltipPosition.Top)
+            .ContentHandler("tooltipContent")
+            )
 
 <script>
     function getId(e) {
@@ -70,5 +77,9 @@
 
             },
         })
+    }
+    function tooltipContent(e) {
+        var titulo = e.target.context.dataset.title;
+        return titulo;
     }
 </script>

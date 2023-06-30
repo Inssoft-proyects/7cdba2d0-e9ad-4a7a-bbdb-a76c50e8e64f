@@ -29,6 +29,8 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
+
+                        //command.Parameters.Add(new SqlParameter("@FechaIngreso", SqlDbType.DateTime)).Value = model.FechaIngreso == DateTime.MinValue ? new DateTime(1800, 01, 01) : (object)model.FechaIngreso;
                         while (reader.Read())
                         {
                             CatCarreterasModel carretera = new CatCarreterasModel();
@@ -37,7 +39,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             carretera.Carretera = reader["Carretera"].ToString();
                             carretera.nombreOficina = reader["nombreOficina"].ToString();
                             carretera.estatusDesc = reader["estatusDesc"].ToString();
-                            carretera.FechaActualizacion = Convert.ToDateTime(reader["FechaActualizacion"].ToString());
+                            carretera.FechaActualizacion = !string.IsNullOrEmpty(reader["FechaActualizacion"].ToString()) ? Convert.ToDateTime(reader["FechaActualizacion"].ToString()) : null;
                             carretera.Estatus = Convert.ToInt32(reader["estatus"].ToString());
                             carretera.ActualizadoPor = Convert.ToInt32(reader["ActualizadoPor"].ToString());
                             ListaCarreteras.Add(carretera);

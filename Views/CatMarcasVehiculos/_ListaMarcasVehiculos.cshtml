@@ -6,7 +6,7 @@
         .Name("gridCatMarcas")
         .Columns(columns =>
         {
-            columns.Bound(c => c.IdMarcaVehiculo).Width(40);
+            columns.Bound(c => c.IdMarcaVehiculo).Title("Id Marca vehículo").Width(40);
             columns.Bound(c => c.MarcaVehiculo).Width(190);
             columns.Bound(c => c.estatusDesc).Title("Estatus en sistema").Width(90);
             columns.Command(c => c.Custom("Editar").Click("getId")).Width(80);
@@ -34,6 +34,13 @@
 
     @*.Events(ev=>ev.Change("onChange"))*@
     )
+
+        @(Html.Kendo().Tooltip()
+            .For("#gridCatMarcas")
+            .Filter("th")
+            .Position(TooltipPosition.Top)
+            .ContentHandler("tooltipContent")
+            )
     </div>
     </div>
 
@@ -70,6 +77,11 @@
 
             },
         })
+    }
+
+    function tooltipContent(e) {
+        var titulo = e.target.context.dataset.title;
+        return titulo;
     }
 </script>
    

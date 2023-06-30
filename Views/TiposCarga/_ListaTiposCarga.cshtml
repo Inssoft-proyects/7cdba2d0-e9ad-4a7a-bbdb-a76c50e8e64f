@@ -7,8 +7,8 @@
             .Columns(columns =>
             {
                 columns.Bound(c => c.IdTipoCarga).Width(20);
-                columns.Bound(c => c.TipoCarga).Width(100);
-                columns.Bound(c => c.EstatusDesc).Width(90);
+                columns.Bound(c => c.TipoCarga).Title("Tipo de carga").Width(100);
+                columns.Bound(c => c.EstatusDesc).Title("Estatus").Width(90);
                 columns.Command(c => c.Custom("Editar").Click("getId")).Width(80);
                 //columns.Command(c => c.Custom("Eliminar").Click("eliminar")).Width(80);
 
@@ -39,7 +39,12 @@
 
             )
 
-
+        @(Html.Kendo().Tooltip()
+            .For("#grid")
+            .Filter("th")
+            .Position(TooltipPosition.Top)
+            .ContentHandler("tooltipContent")
+            )
     </div>
 </div>
 
@@ -77,5 +82,10 @@
 
             },
         })
+    }
+
+    function tooltipContent(e) {
+        var titulo = e.target.context.dataset.title;
+        return titulo;
     }
 </script>

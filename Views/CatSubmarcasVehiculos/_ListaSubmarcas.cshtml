@@ -6,10 +6,10 @@
             .Name("grid")
             .Columns(columns =>
             {
-                columns.Bound(c => c.IdSubmarca).Width(20);
-                columns.Bound(c => c.NombreSubmarca).Width(100);
-                columns.Bound(c => c.MarcaVehiculo).Width(90);
-                columns.Bound(c => c.estatusDesc).Width(90);
+                columns.Bound(c => c.IdSubmarca).Title("Id Submarca").Width(20);
+                columns.Bound(c => c.NombreSubmarca).Title("Nombre submarca").Width(100);
+                columns.Bound(c => c.MarcaVehiculo).Title("Marca vehículo").Width(90);
+                columns.Bound(c => c.estatusDesc).Title("Estatus").Width(90);
                 columns.Command(c => c.Custom("Editar").Click("getId")).Width(100);
                // columns.Command(c => c.Custom("Eliminar").Click("eliminar")).Width(80);
 
@@ -39,7 +39,12 @@
 
 
             )
-
+        @(Html.Kendo().Tooltip()
+            .For("#grid")
+            .Filter("th")
+            .Position(TooltipPosition.Top)
+            .ContentHandler("tooltipContent")
+            )
 
     </div>
 </div>
@@ -77,5 +82,10 @@
 
             },
         })
+    }
+
+    function tooltipContent(e) {
+        var titulo = e.target.context.dataset.title;
+        return titulo;
     }
 </script>

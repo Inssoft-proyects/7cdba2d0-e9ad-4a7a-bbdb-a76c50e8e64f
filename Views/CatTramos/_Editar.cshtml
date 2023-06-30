@@ -30,7 +30,7 @@
 
     <div class="row">
         <div class="col-12 my-4">
-            <h5 class="px-4"><b>Datos de carretera</b></h5>
+            <h5 class="px-4"><b>Datos de tramo de carretera</b></h5>
             <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
         </div>
         <div class="col-12 col-lg-6 my-4 btnToggleActive">
@@ -69,7 +69,7 @@
             <div class="controlForm my-3">
                 @(Html.Kendo().TextBoxFor(t=>t.Tramo)
                     .Label(l => l.Content("Nombre <b>(obligatorio)</b>:"))
-                    .Placeholder("Ingresa el nombre de la carretera")
+                    .Placeholder("Ingresa el nombre del tramo")
                     .HtmlAttributes(new { style = "width: 100%" })
                     )
 

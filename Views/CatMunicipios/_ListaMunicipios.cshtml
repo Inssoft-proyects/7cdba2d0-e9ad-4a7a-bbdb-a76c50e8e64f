@@ -6,7 +6,7 @@
             .Name("gridMunicipios")
             .Columns(columns =>
             {
-                columns.Bound(c => c.IdMunicipio).Width(80);
+                columns.Bound(c => c.IdMunicipio).Title("Id Municipio").Width(80);
                 columns.Bound(c => c.Municipio).Width(100);
                 columns.Bound(c => c.nombreEntidad).Title("Entidad").Width(100);
                 columns.Bound(c => c.nombreOficina).Title("Delegación").Width(100);
@@ -37,6 +37,13 @@
             )
 
             )
+
+        @(Html.Kendo().Tooltip()
+            .For("#gridMunicipios")
+            .Filter("th")
+            .Position(TooltipPosition.Top)
+            .ContentHandler("tooltipContent")
+            )
     </div>
 </div>
 
@@ -57,5 +64,8 @@
             },
         })
     }
-
+    function tooltipContent(e) {
+        var titulo = e.target.context.dataset.title;
+        return titulo;
+    }
 </script>
