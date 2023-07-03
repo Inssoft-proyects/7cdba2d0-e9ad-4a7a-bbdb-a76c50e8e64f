@@ -39,8 +39,8 @@
             <div class="controlForm col-md-6">
                 @(Html.Kendo().TextBox()
                     .Name("pension")
-                    .Label(l => l.Content("Placas:"))
-                    .Placeholder("Ingresa las placas válidas")
+                    .Label(l => l.Content("Pensión:"))
+                    .Placeholder("Ingresa un nombre de pensión")
                     .HtmlAttributes(new { style = "width: 100%", id = "txtPension" }))
             </div>
             <div class="controlForm col-md-6">
@@ -159,9 +159,10 @@
     });
     function btnBuscarPension() {
         var pension = $("#txtPension").val();
-        var idDelegacion = $("#ddlIdDelegacion")
+        var idDelegacion = $("#ddlIdDelegacion").val();
+
         $.ajax({
-            url: '@Url.Action("ajax_ModalCrear")',
+            url: '@Url.Action("ajax_BuscarPensiones")',
             type: 'GET',
             data: {
                 "pension": pension,

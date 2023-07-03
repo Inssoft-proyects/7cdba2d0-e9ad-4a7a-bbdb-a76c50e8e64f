@@ -155,10 +155,10 @@ namespace GuanajuatoAdminUsuarios.Services
                                                  on g.idConcesionario = c.idConcesionario
                                                  AND c.estatus = 1
                                                  WHERE p.estatus = 1
-                                                 AND p.pension = {0}
+                                                 AND p.pension LIKE {0}
                                                  AND p.idDelegacion = {1}";
 
-                    string strWherePension = !string.IsNullOrEmpty(strPension) ? string.Format("'{0}'", strPension) : "p.pension";
+                    string strWherePension = !string.IsNullOrEmpty(strPension) ? string.Format("'%{0}%'", strPension) : "p.pension";
                     string strWhereDelegacion = idDelegacion != null ? idDelegacion.ToString() : "p.idDelegacion";
                     SqlTransact = string.Format(SqlTransact, strWherePension, strWhereDelegacion);
 
