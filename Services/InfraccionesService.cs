@@ -165,8 +165,23 @@ namespace GuanajuatoAdminUsuarios.Services
                 try
                 {
                     connection.Open();
-                    const string SqlTransact =
-                            @"SELECT inf.idInfraccion
+
+                    string sqlCondiciones = "";
+                    sqlCondiciones += (object)model.IdGarantia == null ? "" : " gar.idGarantia=@IdGarantia AND \n";
+                    sqlCondiciones += (object)model.IdDelegacion == null ? "" : " del.idDelegacion=@IdDelegacion AND \n";
+                    sqlCondiciones += (object)model.IdEstatus == null ? "" : " estIn.idEstatusInfraccion=@IdEstatus AND \n";
+                    sqlCondiciones += (object)model.IdDependencia == null ? "" : " dep.idDependencia=@IdDependencia AND \n";
+                    sqlCondiciones += (object)model.folioInfraccion == null ? "" : " UPPER(inf.folioInfraccion)=@FolioInfraccion AND \n";
+                    sqlCondiciones += (object)model.placas == null ? "" : " UPPER(inf.placasVehiculo)=@Placas AND \n";
+                    sqlCondiciones += (object)model.Propietario == null ? "" : " UPPER(veh.propietario)=@Propietario AND \n";
+                    sqlCondiciones += (object)model.Conductor == null ? "" : "UPPER(pInf.nombre + ' ' + pInf.apellidoPaterno + ' ' + pInf.apellidoMaterno) COLLATE Latin1_general_CI_AI LIKE '%' + @Conductor + '%' AND \n";
+
+                    sqlCondiciones += (object)model.FechaInicio == null && (object)model.FechaFin == null ? "" : " inf.fechaInfraccion between @FechaInicio and  @FechaFin AND \n";
+                   
+                     
+
+                    string SqlTransact =
+                            string.Format(@"SELECT inf.idInfraccion
                                     ,inf.idOficial
                                     ,inf.idDependencia
                                     ,inf.idDelegacion
@@ -226,17 +241,13 @@ namespace GuanajuatoAdminUsuarios.Services
                                     left join catSubConceptoInfraccion catSubInf on catMotInf.IdSubConcepto = catSubInf.idSubConcepto
                                     left join catConceptoInfraccion catConInf on  catSubInf.idConcepto = catConInf.idConcepto
                                     left join personasInfracciones pInf on inf.idPersonaInfraccion = pInf.idPersonaInfraccion
-                                    where estIn.idEstatusInfraccion=@IdEstatus OR dep.idDependencia=@IdDependencia
-                                    OR gar.idGarantia=@IdGarantia OR del.idDelegacion=@IdDelegacion
-                                    OR inf.fechaInfraccion between @FechaInicio and  @FechaFin
-                                    OR UPPER(inf.folioInfraccion)=@FolioInfraccion 
-                                    OR UPPER(inf.placasVehiculo)=@Placas 
-                                    OR UPPER(veh.propietario)=@Propietario	
-                                    OR UPPER(pInf.nombre) LIKE '%' + @Conductor + '%' OR UPPER(pInf.apellidoPaterno) LIKE '%' + @Conductor + '%'
-                                    OR UPPER(pInf.apellidoMaterno) LIKE '%' + @Conductor + '%'
-                                    AND  inf.estatus=1";
+                                    where {0}  inf.estatus=1", sqlCondiciones);
 
                     
+                    
+
+
+
                     SqlCommand command = new SqlCommand(SqlTransact, connection);
                     command.Parameters.Add(new SqlParameter("@IdGarantia", SqlDbType.Int)).Value = (object)model.IdGarantia ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@IdDelegacion", SqlDbType.Int)).Value = (object)model.IdDelegacion ?? DBNull.Value;
