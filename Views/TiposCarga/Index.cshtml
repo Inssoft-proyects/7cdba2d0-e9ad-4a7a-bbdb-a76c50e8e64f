@@ -1,0 +1,106 @@
+﻿@model List<GuanajuatoAdminUsuarios.Models.TiposCargaModel>
+@*RazorCoder*@
+<div class="mainContainer bg-light">
+
+
+
+<section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
+    <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+        <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+            <div class="row align-items-center justify-content-center justify-content-md-start">
+                <div class="col-auto">
+                    <i class="icon-carga h1 colorPrimary"></i>
+                </div>
+                <div class="col-auto my-3">
+                    <h2 class="m-0 h3"><b>Catalogo de tipo de carga</b></h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
+            <div class="row">
+                <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                    <button href="#" id="btnNuevoTipoCarga" onclick="mostrarModal()">
+                        <h6 class="m-0 d-flex align-items-center"><i class="icon-addCarga h5 mb-0 me-2"></i><b>Agregar nuevo tipo de carga</b></h6>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="bg-light py-1"></div>
+        </div>
+    </div>
+    <div class="row justify-content-between mb-1 titleCustom">
+        <div class="col-12 col-md-auto mt-4 mb-2">
+            <h5 class="px-4"><b>Listado de tipo de carga</b></h5>
+            <h6 class="px-4 text-muted">Edita o inactiva los tipo de carga.</h6>
+        </div>
+    </div>
+            <div class="row">
+                <div class="col-12 mb-4 rounded gridCustom">
+                    <div id="tablaTiposCarga">
+                        <partial name="_ListaTiposCarga" model="Model" />
+       
+<div class="modal fade modalCustom" id="addTipoCarga" tabindex="-1" aria-labelledby="addTipoCargaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body" id="ModalBodyCreateTipo">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+ <!--////////////////////////////////////////////////////////////////////////////////////////////////////////////////EDITAR//////////////////////////////////////////////////////////////////////////
+     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ -->
+
+<div class="modal fade modalCustom" id="editTipoCarga" tabindex="-1" aria-labelledby="editTipoCargaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body" id="ModalTiposCargaUpdate">
+
+            </div>
+        </div>
+
+    </div>
+ </div>
+<!--////////////////////////////////////////////////////////////////////////////////////////////////////////////////ELIMINAR//////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+
+<div class="modal fade modalCustom" id="eliminarTipoCarga" tabindex="-1" aria-labelledby="delTipoCargaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">       
+            <div class="modal-body" id="ModalBodyEliminarTipoCarga">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+
+</div>
+
+    @*<script src="~/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.min.js"></script>*@
+    <script>
+        function mostrarModal() {
+            $.ajax({
+            url: '@Url.Action("AgregarTipoCargaParcial")',
+                type: 'POST',
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (data) {
+                $('#ModalBodyCreateTipo').html(data);
+                $('#addTipoCarga').modal('show');
+                }
+            });
+        }
+
+
+    </script>
+

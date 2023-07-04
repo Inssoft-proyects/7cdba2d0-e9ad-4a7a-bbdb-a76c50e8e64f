@@ -1,0 +1,81 @@
+﻿<div class="row">
+    <div class="col-12 mb-4 px-4 rounded gridCustom">
+        @(
+            Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CatHospitalesModel>()
+            .Name("grid")
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.IdHospital).Title("Id").Width(40);
+                columns.Bound(c => c.NombreHospital).Title("Nombre de Hospital").Width(100);
+                columns.Bound(c => c.Municipio).Title("Municipio").Width(100);
+                columns.Bound(c => c.estatusDesc).Title("Estatus en sistema").Width(100);
+                columns.Command(c => c.Custom("Editar").Click("getId")).Width(100);
+               // columns.Command(c => c.Custom("Eliminar").Click("eliminar")).Width(80);
+
+            }).HtmlAttributes(new { style = "height:550px" })
+            .Sortable()
+            .Groupable()
+            .Scrollable()
+            .Pageable()
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("GetHospitalesLista", "CatHospitales"))
+            .PageSize(5).Model(model => model.Id(p => p.IdHospital))
+            )
+            .ToolBar(t => t.Search())
+            .Search(s =>
+            {
+                s.Field(c => c.NombreHospital);
+                s.Field(c => c.Municipio);
+
+
+            })
+
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single)
+            .Type(GridSelectionType.Row)
+            )
+
+
+
+            )
+
+
+    </div>
+</div>
+
+
+<script>
+    function getId(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var IdHospital = dataItem.IdHospital;
+        console.log(IdHospital);
+
+        $.ajax({
+            url: '@Url.Action("EditarHospitalModal", "CatHospitales")',
+            type: 'POST',
+            data: { IdHospital: IdHospital },
+            success: function (result) {
+                $('#ModalBodEditarHospital').html(result);
+                $('#editarHospital').modal('show');
+
+            },
+        })
+    }
+
+    function eliminar(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var IdHospital = dataItem.IdHospital;
+        console.log(IdHospital);
+
+        $.ajax({
+            url: '@Url.Action("EliminarHospitalModal", "CatHospitales")',
+            type: 'POST',
+            data: { IdHospital: IdHospital },
+            success: function (result) {
+                $('#ModalBodyEliminarHospital').html(result);
+                $('#eliminarHospital').modal('show');
+
+            },
+        })
+    }
+</script>

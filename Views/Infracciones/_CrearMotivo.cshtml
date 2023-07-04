@@ -1,0 +1,150 @@
+﻿@model MotivoInfraccionModel
+
+<form id="frmCrearMotivos" class="row px-4 mb-4 align-items-end justify-content-center">
+    @Html.HiddenFor(m=> m.idInfraccion, new { id = "hndIdInfraccion"})
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <div class="controlForm">
+                @(Html.Kendo().TextBoxFor(t => t.fundamento)
+                    .Label(l => l.Content("Fundamento legal: <b>(obligatorio)</b>:"))
+                    .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
+                    )
+            </div>
+        </div>
+    </div>
+    <div class="row my-4">
+        <div class="col-12 col-md-4">
+            <div class="controlForm">
+                <label>Concepto:</label>
+                @(Html.Kendo().DropDownListFor(m => m.idConcepto)
+                    .BindTo((SelectList)ViewData["CatConcepto"])
+                    .OptionLabel("-- Seleccione --")
+                    .HtmlAttributes(new { style = "width:100%;", id = "ddlConcepto", required = "required" }))
+            </div>
+        </div>
+        <div class="form-group col-md-4">
+            <div class="controlForm">
+                <label>Subconcepto:</label>
+                <div id="divSubConcepto">
+                    @(Html.Kendo().DropDownListFor(m => m.IdSubConcepto)
+                        .OptionLabel("-- Seleccione --")
+                        .HtmlAttributes(new { style = "width:100%;" }))
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-md-4">
+            <div class="controlForm">
+                <label>Motivo:</label>
+                <div id="divCatMotivo">
+                    @(Html.Kendo().DropDownListFor(m => m.idCatMotivosInfraccion)
+                        .OptionLabel("-- Seleccione --")
+                        .HtmlAttributes(new { style = "width:100%;" }))
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row my-4">
+        <div class="form-group col-md-4">
+            <div class="controlForm">
+                @(Html.Kendo().IntegerTextBoxFor(t => t.calificacionMinima)
+                    .Label(l => l.Content("Calificación mínima: <b>(obligatorio)</b>:"))
+                    .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
+                    )
+            </div>
+        </div>
+        <div class="form-group col-md-4">
+            <div class="controlForm">
+                @(Html.Kendo().IntegerTextBoxFor(t => t.calificacionMaxima)
+                    .Label(l => l.Content("Calificación máxima: <b>(obligatorio)</b>:"))
+                    .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
+                    )
+            </div>
+        </div>
+        <div class="form-group col-md-4">
+            <div class="controlForm">
+                @(Html.Kendo().IntegerTextBoxFor(t => t.calificacion)
+                    .Label(l => l.Content("Calificación: <b>(obligatorio)</b>:"))
+                    .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
+                    )
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="row my-4">
+    <div class="col-12 col-md-6 mx-md-auto">
+        <div class="row justify-content-around">
+            <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
+                <button type="button" data-bs-dismiss="modal" aria-label="Close">
+                    <h6 class="m-0 px-3"><b>Cerrar</b></h6>
+                </button>
+            </div>
+            <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                <div class="controlButton">
+                    <button class="btnPrimary px-3" onclick="btnCrearMotivos()">
+                        <h5 class="m-0"><b>Guardar</b></h5>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function btnCrearMotivos() {
+
+
+        var validator = $("#frmCrearMotivos").kendoValidator().data('kendoValidator');
+        validator.validate();
+
+        if (validator.validate()) {
+            var idInfraccion = $("#idInfraccion").val();
+            $("#hndIdInfraccion").val(idInfraccion);
+            var formData = $("#frmCrearMotivos").serialize();
+            $.ajax({
+                url: '@Url.Action("ajax_CrearMotivos")',
+                type: 'POST',
+                data: formData,
+                //data: formData,
+                success: function (result) {
+                    $("#listadoMotivos").html(result);
+                    $('#modalCrearMotivo').modal('hide');
+                    sitteg_success('Elemento guardado correctamente')
+                },
+                error: function (xhr, status) {
+                    var errmsg = xhr.responseText;
+                    console.log(errmsg)
+                    sitteg_warning('Lo sentimos, ha ocurrido un error.');
+                }
+            });
+        }
+        else {
+            sitteg_info('Debe llenar los campos requeridos');
+            return;
+        }
+    }
+
+
+    $("#ddlConcepto").on("change", function () {
+        var value = $(this).val();
+        var ddlIdSubConcepto = $("#IdSubConcepto").data("kendoDropDownList");
+        var ddlidCatMotivosInfraccion = $("#idCatMotivosInfraccion").data("kendoDropDownList");
+        ddlIdSubConcepto.dataSource.data([]);
+        ddlidCatMotivosInfraccion.dataSource.data([]);
+
+        var functionName = "_on_change_SubConcepto";
+        _set_combo_catalog("CatSubConceptoInfraccion", value, "IdSubConcepto", "false", "divSubConcepto", functionName);
+    });
+    function _on_change_SubConcepto() {
+        var value = $("#IdSubConcepto").val();
+        if (value == "") {
+            $("#idCatMotivosInfraccion option[value!='']").remove();
+        }
+        else {
+            _set_combo_catalog("CatMotivosInfraccion", value, "idCatMotivosInfraccion", "false", "divCatMotivo", "");
+            $('#idCatMotivosInfraccion').kendoDropDownList();
+
+        }
+    }
+</script>

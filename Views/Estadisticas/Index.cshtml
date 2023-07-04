@@ -1,0 +1,209 @@
+﻿@model IncidenciasBusquedaModel
+
+@{
+    DateTime endDate = DateTime.Now;
+    endDate = endDate.AddDays(1);
+}
+
+<div class="mainContainer bg-light">
+    <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
+        <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+            <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                <div class="row align-items-center justify-content-center justify-content-md-start">
+                    <div class="col-auto">
+                        <i class="icon-estadisticas h1 colorPrimary"></i>
+                    </div>
+                    <div class="col-auto my-3">
+                        <h2 class="m-0 h3"><b>Estadísticas</b></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="bg-light py-1"></div>
+            </div>
+        </div>
+        <div class="col-12 col-md-auto mt-4 mb-2">
+            <h5 class="px-4"><b>Filtros de Búsqueda</b></h5>
+            <h6 class="px-4 text-muted">Filtros de búsqueda para localizar la incidencia de las infracciones</h6>
+        </div>
+        <form id="frmBusquedaEstadisticasIncidencias">
+            <div class="row justify-content-start align-items-end my-4 px-4">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="form-group col-12 col-md-6 col-lg-4 col-xl-3 my-3">
+                            <div class="controlForm">
+                                <label>Inicio:</label>
+                                @(Html.Kendo().DatePickerFor(t => t.fechaInicio)
+                            .Value(DateTime.Now)
+                            .Events(e => e.Change("startChange"))
+                            .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "start" })
+                            )
+                            </div>
+                        </div>
+                        <div class="form-group col-12 col-md-6 col-lg-4 col-xl-3 my-3">
+                            <div class="controlForm">
+                                <label>Fin:</label>
+                                @(Html.Kendo().DatePickerFor(t => t.fechaFin)
+                            .Value(endDate)
+                            .Events(e => e.Change("endChange"))
+                            .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "end" })
+                            )
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-12 col-md-6 col-lg-4 col-xl-3 my-3">
+                    <div class="controlForm">
+                        <label>Tipo Motivo:</label>
+                        @(Html.Kendo().DropDownListFor(m => m.idTipoMotivo)
+                            .BindTo((SelectList)ViewBag.CatMotivosInfraccion)
+                            .OptionLabel("-- Todos --")
+                            .HtmlAttributes(new { style = "width:100%;" })
+                            )
+                    </div>
+                </div>
+                <div class="form-group col-12 col-md-6 col-lg-4 col-xl-3 my-3">
+                    <div class="controlForm">
+                        <label>Delegación:</label>
+                        @(Html.Kendo().DropDownListFor(m => m.idDelegacion)
+                            .BindTo((SelectList)ViewBag.CatDelegaciones)
+                            .OptionLabel("-- Seleccione --")
+                            .HtmlAttributes(new { style = "width:100%;" })
+                            )
+                    </div>
+                </div>
+                <div class="form-group col-12 col-md-6 col-lg-4 col-xl-3 my-3">
+                    <div class="controlForm">
+                        <label>Tramo:</label>
+                        <div id="divTramo">
+                            @(Html.Kendo().DropDownListFor(f => f.idOficial)
+                                .BindTo((SelectList)ViewBag.CatOficiales)
+                                .OptionLabel("-- Seleccione --")
+                                .HtmlAttributes(new { style = "width:100%;" })
+                                )
+                        </div>
+                    </div>
+                </div>
+            
+            
+                <div class="form-group col-12 col-md-6 col-lg-4 col-xl-3 my-3">
+                    <div class="controlForm">
+                        <label>Carretera:</label>
+                        @(Html.Kendo().DropDownListFor(m => m.idCarretera)
+                            .BindTo((SelectList)ViewBag.CatCarreteras)
+                            .OptionLabel("-- Seleccione --")
+                            .HtmlAttributes(new { style = "width:100%;" })
+                            )
+                    </div>
+                </div>
+                <div class="form-group col-12 col-md-6 col-lg-4 col-xl-3 my-3">
+                    <div class="controlForm">
+                        <label>Tramo:</label>
+                        @(Html.Kendo().DropDownListFor(m => m.idTramo)
+                            .BindTo((SelectList)ViewBag.CatTramos)
+                            .OptionLabel("-- Seleccione --")
+                            .HtmlAttributes(new { style = "width:100%;" })
+                            )
+                    </div>
+                </div>
+                <div class="form-group col-12 col-md-6 col-lg-4 col-xl-3 my-3">
+                    <div class="controlForm">
+                        <label>Tipo vehículo:</label>
+                        <div id="divTramo">
+                            @(Html.Kendo().DropDownListFor(f => f.idTipoVehiculo)
+                                .BindTo((SelectList)ViewBag.CatTiposVehiculo)
+                                .OptionLabel("-- Seleccione --")
+                                .HtmlAttributes(new { style = "width:100%;" })
+                                )
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-12 col-md-6 col-lg-4 col-xl-3 my-3">
+                    <div class="controlForm">
+                        <label>Tipo servicio:</label>
+                        @(Html.Kendo().DropDownListFor(m => m.idTipoServicio)
+                            .BindTo((SelectList)ViewBag.CatTipoServicio)
+                            .OptionLabel("-- Seleccione --")
+                            .HtmlAttributes(new { style = "width:100%;" })
+                            )
+                    </div>
+                </div>
+                <div class="form-group col-12 col-md-6 col-lg-4 col-xl-3 my-3">
+                    <div class="controlForm">
+                        <label>Tipo licencia:</label>
+                        @(Html.Kendo().DropDownListFor(m => m.idTipoLicencia)
+                            .BindTo((SelectList)ViewBag.CatTipoLicencia)
+                            .OptionLabel("-- Seleccione --")
+                            .HtmlAttributes(new { style = "width:100%;" })
+                            )
+                    </div>
+                </div>
+                <div class="form-group col-12 col-md-6 col-lg-4 col-xl-3 my-3">
+                    <div class="controlForm">
+                        <label>Municipio:</label>
+                        <div id="divTramo">
+                            @(Html.Kendo().DropDownListFor(f => f.idMunicipio)
+                                .BindTo((SelectList)ViewBag.CatMunicipios)
+                                .OptionLabel("-- Seleccione --")
+                                .HtmlAttributes(new { style = "width:100%;" })
+                                )
+                        </div>
+                    </div>
+                </div>
+            
+            
+                
+                <div class="form-group col-12 col-md-6 col-lg-4 col-xl-3 my-3">
+                    <div class="controlForm">
+                        <div class="controlButton">
+                            <button class="btnPrimary" type="button" onclick="submitSearch()">  <h5 class="m-0"><b>Buscar</b></h5></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div id="estadisticasInfracciones">
+            <partial name="_EstadisticaInfraccionesMotivos" model="@ViewBag.Estadisticas" />
+        </div>
+
+    </section>
+
+</div>
+
+<script>
+    function submitSearch() {
+        var Mydata = $("#frmBusquedaEstadisticasIncidencias").serialize();
+        //console.log(Mydata);
+        $.ajax({
+            url: '@Url.Action("ajax_BusquedaIncidenciasInfracciones")',
+            type: 'POST',
+            data: Mydata,
+            success: function (result) {
+                $("#estadisticasInfracciones").html(result);
+            }
+        });
+    }
+    function startChange() {
+        var endPicker = $("#end").data("kendoDatePicker"),
+            startDate = this.value();
+
+        if (startDate) {
+            startDate = new Date(startDate);
+            startDate.setDate(startDate.getDate() + 1);
+            endPicker.min(startDate);
+        }
+    }
+
+    function endChange() {
+        var startPicker = $("#start").data("kendoDatePicker"),
+            endDate = this.value();
+
+        if (endDate) {
+            endDate = new Date(endDate);
+            endDate.setDate(endDate.getDate() - 1);
+            startPicker.max(endDate);
+        }
+    }
+</script>

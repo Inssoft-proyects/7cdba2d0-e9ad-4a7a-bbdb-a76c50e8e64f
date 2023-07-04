@@ -1,0 +1,92 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web" ToolsVersion="15.0">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp7.0</TargetFramework>
+    <AssemblyName>GuanajuatoAdminUsuarios</AssemblyName>
+    <BaseOutputPath></BaseOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="iTextSharp" Version="5.5.13.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.jQuery.Unobtrusive.Ajax" Version="3.2.6" />
+    <PackageReference Include="Microsoft.Web.Administration" Version="11.1.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.2" />
+    <PackageReference Include="System.ServiceModel.Duplex" Version="4.10.*" />
+    <PackageReference Include="System.ServiceModel.Federation" Version="4.10.*" />
+    <PackageReference Include="System.ServiceModel.Http" Version="4.10.*" />
+    <PackageReference Include="System.ServiceModel.NetTcp" Version="4.10.*" />
+    <PackageReference Include="System.ServiceModel.Security" Version="4.10.*" />
+    <PackageReference Include="Telerik.UI.for.AspNet.Core.Trial" Version="2023.1.117" />
+  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Templates\**" />
+    <Content Remove="Templates\**" />
+    <EmbeddedResource Remove="Templates\**" />
+    <None Remove="Templates\**" />
+    <None Remove="Telerik.UI.for.AspNet.Core.Trial" />
+    <None Remove="Helpers\" />
+    <None Remove="Microsoft.EntityFrameworkCore.SqlServer" />
+    <None Remove="Microsoft.EntityFrameworkCore" />
+    <None Remove="Areas\" />
+    <None Remove="Areas\Administracion\" />
+    <None Remove="Areas\Administracion\Controllers\" />
+    <None Remove="Areas\Administracion\Views\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Attributes\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Views\ModificacionVehiculos\" />
+    <Folder Include="Views\Depositos\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Inicio\About.cshtml" />
+    <None Include="Views\Inicio\Contact.cshtml" />
+    <None Include="Views\Inicio\Inicio.cshtml" />
+    <None Include="Views\Inicio\Marca.cshtml" />
+    <None Include="Views\MarcasVehiculos\Create.cshtml" />
+    <None Include="Views\MarcasVehiculos\Index.cshtml" />
+    <None Include="Views\Personas\Index.cshtml" />
+    <None Include="Views\Personas\_CrearPersona.cshtml" />
+    <None Include="Views\Personas\_EditarPersona.cshtml" />
+    <None Include="Views\Personas\_ListadoPersonas.cshtml" />
+    <None Include="Views\Shared\Components\Menu\Default.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\Country.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\Currency.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\Date.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\Email.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\EmailAddress.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\GridForeignKey.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\Integer.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\Number.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\Password.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\String.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\Time.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\Url.cshtml" />
+    <None Include="Views\Shared\Error.cshtml" />
+    <None Include="Views\Shared\_Layout.cshtml" />
+    <None Include="Views\Shared\_UserDataPartial.cshtml" />
+    <None Include="Views\Shared\_ValidationScriptsPartial.cshtml" />
+  </ItemGroup>
+  <ProjectExtensions><VisualStudio><UserProperties UseCdnSupport="" /></VisualStudio></ProjectExtensions>
+
+</Project>

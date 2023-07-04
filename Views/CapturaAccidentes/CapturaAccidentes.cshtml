@@ -1,0 +1,58 @@
+﻿<div class="mainContainer bg-light">
+    <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
+        <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+            <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                <div class="row align-items-center justify-content-center justify-content-md-start">
+                    <div class="col-auto">
+                        <i class="icon-accidentes h1 colorPrimary"></i>
+                    </div>
+                    <div class="col-auto my-3">
+                        <h2 class="m-0 h3"><b>Accidente</b></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="bgDanger py-1"></div>
+            </div>
+        </div>
+<div class="row mb-1">
+    <div class="col-12 col-md-auto mt-4 mb-2">
+        <h5 class="px-4 colorDanger"><b class="text-white bgDanger mb-1 me-2 rounded-circle px-2 h6">i</b><b>Registro de accidentes incompletos</b></h5>
+        <h6 class="px-4 text-muted">Se encontraron capturas incompletas, para llevar la numeración correcta se recomienda que todas las capturas se completen en su totalidad.</h6>
+    </div>
+</div>
+<div class="row justify-content-between align-items-end mb-1">
+    <div class="col-12 col-md-auto mt-4 mb-2">
+        <h5 class="px-4"><b>Listado de accidentes incompletos</b></h5>
+        <h6 class="px-4 text-muted">Continúa la captura de los accidentes.</h6>
+    </div>
+    <div class="col-12 col-lg-auto text-center">
+        <div class="btnOutline btnOutlinePrimary px-4 my-3">
+           
+                        <a href="@Url.Action("NuevoAccidente", "CapturaAccidentes")" class="m-0"><i class="me-2 icon-addAccidentes"></i><b>Agregar nuevo accidente</b></a>
+
+            
+        </div>
+    </div>
+</div>
+        <div id="listadoAccidentes">
+            <partial name="_ListadoAccidentes" model="Model" />
+        </div>
+    </section>
+</div>
+
+<script>
+    function agregarAccidente() {
+
+        $.ajax({
+            url: `/CapturaAccidentes/NuevoAccidente`,
+            type: 'POST',
+            success: function (result) {
+                console.log("redirigir")
+
+            },
+        })
+    }
+</script>

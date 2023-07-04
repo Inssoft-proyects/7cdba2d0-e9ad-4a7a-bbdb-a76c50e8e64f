@@ -1,0 +1,81 @@
+﻿<div class="row">
+    <div class="col-12 mb-4 px-4 rounded gridCustom">
+
+        @(
+            Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.TiposCargaModel>()
+            .Name("grid")
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.IdTipoCarga).Width(20);
+                columns.Bound(c => c.TipoCarga).Width(100);
+                columns.Bound(c => c.EstatusDesc).Width(90);
+                columns.Command(c => c.Custom("Editar").Click("getId")).Width(80);
+                //columns.Command(c => c.Custom("Eliminar").Click("eliminar")).Width(80);
+
+                //columns.Command(c => c.Custom("Delete").Click("redirectDelete")).Width(180);
+
+
+            }).HtmlAttributes(new { style = "height:550px" })
+            .Sortable()
+            .Groupable()
+            .Scrollable()
+            .Pageable()
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("GetTipos", "TiposCarga"))
+            .PageSize(5).Model(model => model.Id(p => p.IdTipoCarga))
+            )
+            .ToolBar(t => t.Search())
+            .Search(s =>
+            {
+                s.Field(c => c.TipoCarga);
+            })
+
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single)
+            .Type(GridSelectionType.Row)
+            )
+
+
+
+            )
+
+
+    </div>
+</div>
+
+
+<script>
+    function getId(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var IdTipoCarga = dataItem.IdTipoCarga;
+        console.log(IdTipoCarga);
+
+        $.ajax({
+            url: '@Url.Action("EditarParcial", "TiposCarga")', // URL de la acción del controlador
+            type: 'POST', // Tipo de solicitud HTTP (POST o GET)
+            data: { IdTipoCarga: IdTipoCarga }, // Datos que se enviarán al controlador
+            success: function (result) {
+                $('#ModalTiposCargaUpdate').html(result);
+                $('#editTipoCarga').modal('show');
+
+            },
+        })
+    }
+
+    function eliminar(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var IdTipoCarga = dataItem.IdTipoCarga;
+        console.log(IdTipoCarga);
+
+        $.ajax({
+            url: '@Url.Action("EliminarTipoCargaParcial", "TiposCarga")', // URL de la acción del controlador
+            type: 'POST', // Tipo de solicitud HTTP (POST o GET)
+            data: { IdTipoCarga: IdTipoCarga }, // Datos que se enviarán al controlador
+            success: function (result) {
+                $('#ModalBodyEliminarTipoCarga').html(result);
+                $('#eliminarTipoCarga').modal('show');
+
+            },
+        })
+    }
+</script>

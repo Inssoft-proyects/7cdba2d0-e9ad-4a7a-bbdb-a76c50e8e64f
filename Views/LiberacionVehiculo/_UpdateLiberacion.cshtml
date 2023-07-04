@@ -1,0 +1,366 @@
+﻿@model LiberacionVehiculoModel
+
+@*<div class="row">
+    <div class="col-12">
+        <div class="bg-light py-1"></div>
+    </div>
+
+</div>*@
+<div class="row justify-content-between mb-1">
+    <div class="col-12 col-md-auto my-4">
+        <h5 class="px-4"><b>Datos del vehículo</b></h5>
+        <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
+    </div>
+</div>
+<form class="row px-4 align-items-end">
+    <div class="col-auto">
+        <div class="controlForm mb-3 mt-1">
+            <label class="text-muted">Propietario:</label>
+            <label>
+                @Html.DisplayFor(m => m.fullName, new { @class = "" })
+                @*@(Html.Kendo().TextBoxFor(m=>m.IdPension)
+                    .Label(l => l.Content("ID:"))
+                    .HtmlAttributes(new { style = "width: 100%", @readonly = "readonly", type = "text" })
+                    )*@
+            </label>
+        </div>
+    </div>
+    <div class="col-auto">
+        <div class="controlForm mb-3 mt-1">
+            <label class="text-muted">ID:</label>
+            <label>
+                @Html.DisplayFor(m => m.IdDeposito, new { @class = "" })
+            @*@(Html.Kendo().TextBoxFor(m=>m.IdPension)
+                .Label(l => l.Content("ID:"))
+                .HtmlAttributes(new { style = "width: 100%", @readonly = "readonly", type = "text" })
+                )*@
+        </label>
+    </div>
+</div>
+<div class="col-auto">
+    <div class="controlForm mb-3 mt-1">
+        <label class="text-muted">Fecha:</label>
+        <label>@Html.DisplayFor(m => m.FechaIngreso, new { @class = "" })</label>
+    </div>
+</div>
+<div class="col-auto">
+    <div class="controlForm mb-3 mt-1">
+        <label class="text-muted">Pension:</label>
+        <label>@Html.DisplayFor(m => m.pension, new { @class = "" })</label>
+    </div>
+</div>
+<div class="col-auto">
+    <div class="controlForm mb-3 mt-1">
+        <label class="text-muted">Marca:</label>
+        <label>@Html.DisplayFor(m => m.marcaVehiculo, new { @class = "" })</label>
+    </div>
+</div>
+<div class="col-auto">
+    <div class="controlForm mb-3 mt-1">
+        <label class="text-muted">Carretera:</label>
+        <label>Carretera</label>
+    </div>
+</div>
+
+<div class="col-auto">
+    <div class="controlForm mb-3 mt-1">
+        <label class="text-muted">Serie:</label>
+        <label>@Html.DisplayFor(m => m.Serie, new { @class = "" })</label>
+    </div>
+</div>
+
+
+<div class="col-auto">
+    <div class="controlForm mb-3 mt-1">
+        <label class="text-muted">Sub Marca:</label>
+        <label>@Html.DisplayFor(m => m.nombreSubmarca, new { @class = "l" })</label>
+    </div>
+</div>
+<div class="col-auto">
+    <div class="controlForm mb-3 mt-1">
+        <label class="text-muted">Tramo:</label>
+        <label>@Html.DisplayFor(m => m.tramo, new { @class = "" })</label>
+    </div>
+</div>
+<div class="col-auto">
+    <div class="controlForm mb-3 mt-1">
+        <label class="text-muted">Placas:</label>
+        <label>@Html.DisplayFor(m => m.Placa, new { @class = "" })</label>
+    </div>
+</div>
+<div class="col-auto">
+    <div class="controlForm mb-3 mt-1">
+        <label class="text-muted">Color:</label>
+        <label>@Html.DisplayFor(m => m.Color, new { @class = "" })</label>
+    </div>
+</div>
+<div class="col-auto">
+    <div class="controlForm mb-3 mt-1">
+        <label class="text-muted">Kilómetro:</label>
+        <label>@Html.DisplayFor(m => m.Km, new { @class = "" })</label>
+    </div>
+</div>
+</form>
+<div class="row">
+    <div class="col-12">
+        <div class="bg-light pt-1"></div>
+    </div>
+</div>
+
+@* enctype="multipart/form-data"
+      asp-controller="LiberacionVehiculo" asp-action="UpdateLiberacion"
+      method="post"*@
+<form class="row px-4 my-4 align-items-end justify-content-start"
+      method="post"
+      id="UpdateForm">
+
+    @Html.HiddenFor(m => m.IdDeposito, new { id = "hdnIdDeposito" })
+
+
+    <div class="col-12 col-md-6 col-lg-6">
+        <div class="controlForm my-3">
+            <label>Nombre de quien Autoriza <b>(obligatorio)</b>:</label>
+            <span>
+                @(Html.Kendo().TextBoxFor(m => m.Autoriza)
+                    .HtmlAttributes(new { style = "width: 100%", type = "text", id = "txtAutoriza", required = "required" })
+                    )
+            </span>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="controlForm my-3">
+            <label>Observaciones:</label>
+            <span>
+                @(Html.Kendo().TextBoxFor(m => m.Observaciones)
+
+
+                    .HtmlAttributes(new { style = "width: 100%", type = "text", id = "txtObservaciones" })
+
+
+                    )
+            </span>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="controlForm mt-3 mb-1">
+            <label>Acreditación de Propiedad <b>(obligatorio)</b>:</label>
+        </div>
+        <div class="drop-zone border bg-light mb-3">
+            <div class="drop-zone__prompt">
+                <svg id="" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="106.791" height="87.148" viewBox="0 0 106.791 87.148">
+                    <defs>
+                        <clipPath id="clip-path">
+                            <rect id="Rectángulo_2602" data-name="Rectángulo 2602" width="106.791" height="87.148" fill="none" />
+                        </clipPath>
+                    </defs>
+                    <g id="Grupo_1206" data-name="Grupo 1206" clip-path="url(#clip-path)">
+                        <path id="Trazado_720" data-name="Trazado 720" d="M44.9,0C28.864,0,17.567,13.843,18.165,28.177A20.889,20.889,0,0,0,0,48.541C0,61.113,9.68,70.385,20.63,70.385H35.192a2.427,2.427,0,1,0,0-4.854H20.63c-8.224,0-15.776-6.878-15.776-16.99,0-8.142,7.119-15.776,15.776-15.776A2.427,2.427,0,0,0,23.018,30C21.3,17.739,30.906,4.856,44.9,4.856A21.8,21.8,0,0,1,58.022,9.065,2.427,2.427,0,1,0,60.9,5.159,26.783,26.783,0,0,0,44.9,0ZM73.419,11.718a18.018,18.018,0,0,0-7.774,1.859,2.442,2.442,0,0,0,2.2,4.361,13.4,13.4,0,0,1,12.817.493c3.844,2.306,6.713,6.581,6.713,13.121a2.426,2.426,0,0,0,2.01,2.389c7.292,1.224,12.553,8.5,12.553,15.814,0,8.781-6.924,15.776-18.2,15.776H71.6a2.427,2.427,0,1,0,0,4.854H83.734c13.4,0,23.057-9.195,23.057-20.63,0-8.993-5.879-17.7-14.79-20.137-.58-7.025-4.028-12.436-8.835-15.32a18.263,18.263,0,0,0-8.609-2.579c-.377-.016-.758-.006-1.138,0ZM53.112,41.42a2.587,2.587,0,0,0-1.539.729L41.2,52.521a2.593,2.593,0,1,0,3.646,3.687L50.8,50.252V84.518a2.593,2.593,0,1,0,5.186,0V50.252l5.956,5.956a2.593,2.593,0,1,0,3.647-3.687L55.219,42.149a2.592,2.592,0,0,0-2.107-.729Z" />
+                    </g>
+                </svg>
+
+                <h6>Arrastra o adjunta la</h6>
+                <h5 class="fw-bold">Imagen ( Jpg / Png )</h5>
+            </div>
+            <input class="drop-zone__input" type="file" name="ImageAcreditacionPropiedad" id="ImageAcreditacionPropiedad" required>
+            @*@Html.TextBoxFor(m => m.AcreditacionPropiedad, new { type = "file" ,@class = "btnPrimary px-3",id="ImageOne"})*@
+        </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="controlForm mt-3 mb-1">
+            <label>Acreditación de Personalidad <b>(obligatorio)</b>:</label>
+        </div>
+        <div class="drop-zone border bg-light mb-3">
+            <div class="drop-zone__prompt">
+                <svg id="" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="106.791" height="87.148" viewBox="0 0 106.791 87.148">
+                    <defs>
+                        <clipPath id="clip-path">
+                            <rect id="Rectángulo_2602" data-name="Rectángulo 2602" width="106.791" height="87.148" fill="none" />
+                        </clipPath>
+                    </defs>
+                    <g id="Grupo_1206" data-name="Grupo 1206" clip-path="url(#clip-path)">
+                        <path id="Trazado_720" data-name="Trazado 720" d="M44.9,0C28.864,0,17.567,13.843,18.165,28.177A20.889,20.889,0,0,0,0,48.541C0,61.113,9.68,70.385,20.63,70.385H35.192a2.427,2.427,0,1,0,0-4.854H20.63c-8.224,0-15.776-6.878-15.776-16.99,0-8.142,7.119-15.776,15.776-15.776A2.427,2.427,0,0,0,23.018,30C21.3,17.739,30.906,4.856,44.9,4.856A21.8,21.8,0,0,1,58.022,9.065,2.427,2.427,0,1,0,60.9,5.159,26.783,26.783,0,0,0,44.9,0ZM73.419,11.718a18.018,18.018,0,0,0-7.774,1.859,2.442,2.442,0,0,0,2.2,4.361,13.4,13.4,0,0,1,12.817.493c3.844,2.306,6.713,6.581,6.713,13.121a2.426,2.426,0,0,0,2.01,2.389c7.292,1.224,12.553,8.5,12.553,15.814,0,8.781-6.924,15.776-18.2,15.776H71.6a2.427,2.427,0,1,0,0,4.854H83.734c13.4,0,23.057-9.195,23.057-20.63,0-8.993-5.879-17.7-14.79-20.137-.58-7.025-4.028-12.436-8.835-15.32a18.263,18.263,0,0,0-8.609-2.579c-.377-.016-.758-.006-1.138,0ZM53.112,41.42a2.587,2.587,0,0,0-1.539.729L41.2,52.521a2.593,2.593,0,1,0,3.646,3.687L50.8,50.252V84.518a2.593,2.593,0,1,0,5.186,0V50.252l5.956,5.956a2.593,2.593,0,1,0,3.647-3.687L55.219,42.149a2.592,2.592,0,0,0-2.107-.729Z" />
+                    </g>
+                </svg>
+
+                <h6>Arrastra o adjunta la</h6>
+                <h5 class="fw-bold">Imagen ( Jpg / Png )</h5>
+            </div>
+            <input class="drop-zone__input" type="file" name="ImageAcreditacionPersonalidad" id="ImageAcreditacionPersonalidad" required>
+            @*@Html.TextBoxFor(m => m.AcreditacionPersonalidad, new { type = "file" ,@class = "btnPrimary px-3"})*@
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="controlForm mt-3 mb-1">
+            <label>Recibo de Infracción <b>(obligatorio)</b>:</label>
+        </div>
+        <div class="drop-zone border bg-light mb-3">
+            <div class="drop-zone__prompt">
+                <svg id="" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="106.791" height="87.148" viewBox="0 0 106.791 87.148">
+                    <defs>
+                        <clipPath id="clip-path">
+                            <rect id="Rectángulo_2602" data-name="Rectángulo 2602" width="106.791" height="87.148" fill="none" />
+                        </clipPath>
+                    </defs>
+                    <g id="Grupo_1206" data-name="Grupo 1206" clip-path="url(#clip-path)">
+                        <path id="Trazado_720" data-name="Trazado 720" d="M44.9,0C28.864,0,17.567,13.843,18.165,28.177A20.889,20.889,0,0,0,0,48.541C0,61.113,9.68,70.385,20.63,70.385H35.192a2.427,2.427,0,1,0,0-4.854H20.63c-8.224,0-15.776-6.878-15.776-16.99,0-8.142,7.119-15.776,15.776-15.776A2.427,2.427,0,0,0,23.018,30C21.3,17.739,30.906,4.856,44.9,4.856A21.8,21.8,0,0,1,58.022,9.065,2.427,2.427,0,1,0,60.9,5.159,26.783,26.783,0,0,0,44.9,0ZM73.419,11.718a18.018,18.018,0,0,0-7.774,1.859,2.442,2.442,0,0,0,2.2,4.361,13.4,13.4,0,0,1,12.817.493c3.844,2.306,6.713,6.581,6.713,13.121a2.426,2.426,0,0,0,2.01,2.389c7.292,1.224,12.553,8.5,12.553,15.814,0,8.781-6.924,15.776-18.2,15.776H71.6a2.427,2.427,0,1,0,0,4.854H83.734c13.4,0,23.057-9.195,23.057-20.63,0-8.993-5.879-17.7-14.79-20.137-.58-7.025-4.028-12.436-8.835-15.32a18.263,18.263,0,0,0-8.609-2.579c-.377-.016-.758-.006-1.138,0ZM53.112,41.42a2.587,2.587,0,0,0-1.539.729L41.2,52.521a2.593,2.593,0,1,0,3.646,3.687L50.8,50.252V84.518a2.593,2.593,0,1,0,5.186,0V50.252l5.956,5.956a2.593,2.593,0,1,0,3.647-3.687L55.219,42.149a2.592,2.592,0,0,0-2.107-.729Z" />
+                    </g>
+                </svg>
+
+                <h6>Arrastra o adjunta la</h6>
+                <h5 class="fw-bold">Imagen ( Jpg / Png )</h5>
+            </div>
+            <input class="drop-zone__input" type="file" name="ImageReciboPago" id="ImageReciboPago" required>
+            @*@Html.TextBoxFor(m => m.ReciboPago, new { type = "file" ,@class = "btnPrimary px-3"})*@
+        </div>
+    </div>
+
+
+
+
+    <div class="row my-4">
+        <div class="col-12 col-md-6 mx-md-auto">
+            <div class="row justify-content-around">
+                <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close">
+                        <h6 class="m-0 px-3"><b>Cerrar</b></h6>
+                    </button>
+                </div>
+                <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                    <div class="controlButton">
+                        @*<button type="submit" class="btn btn-success"><h5 class="m-0"><b>Guardar</b></h5></button>*@
+                        @*  @(Html.Kendo().Button()
+                            .Name("EditVehiculo")
+                            .HtmlAttributes(new { @class = "btnPrimary px-3" })
+                            .Content("<h5 class=\"m-0\"><b>Guardar ajustes</b></h5>"))*@
+                        <button class="btnPrimary px-3" onclick="submitVehiculo()"><h5 class="m-0"><b>Guardar ajustes</b></h5></button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</form>
+
+    <script>
+
+    function submitVehiculo() {
+        if ($("#UpdateForm")[0].checkValidity()) {
+
+            var data = {
+                IdDeposito: $('#hdnIdDeposito').val(),
+                Observaciones: $('#txtObservaciones').val(),
+                Autoriza: $('#txtAutoriza').val()
+            };
+
+            var formData = new FormData();
+
+            formData.append("data", JSON.stringify(data));
+
+            var fileOne = document.getElementById('ImageAcreditacionPropiedad').files[0];
+            formData.append("ImageAcreditacionPropiedad", fileOne);
+
+            var fileTwo = document.getElementById('ImageAcreditacionPersonalidad').files[0];
+            formData.append("ImageAcreditacionPersonalidad", fileTwo);
+
+            var fileThree = document.getElementById('ImageReciboPago').files[0];
+            formData.append("ImageReciboPago", fileThree);
+            $('#modalUpdateLiberacion').modal('hide');
+            $('body').removeClass('model-open');
+            $('.modal-backdrop').remove();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("UpdateLiberacion")',
+                data: formData,
+                contentType: false,
+                processData: false,
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    alert("Se ha Actualizado la Información");
+                    //$("#listadoLiberacionVehiculos").html(result);
+
+                },
+                error: function (error) {
+                    alert("!Sucedio um error, intente mas tarde...");
+                }
+            });
+        }
+        else {
+            $("#UpdateForm")[0].reportValidity()
+        }
+    }
+
+
+    </script>
+
+    <script>document.querySelectorAll(".drop-zone__input").forEach((inputElement) => {
+            const dropZoneElement = inputElement.closest(".drop-zone");
+
+            dropZoneElement.addEventListener("click", (e) => {
+                inputElement.click();
+            });
+
+            inputElement.addEventListener("change", (e) => {
+                if (inputElement.files.length) {
+                    updateThumbnail(dropZoneElement, inputElement.files[0]);
+                }
+            });
+
+            dropZoneElement.addEventListener("dragover", (e) => {
+                e.preventDefault();
+                dropZoneElement.classList.add("drop-zone--over");
+            });
+
+            ["dragleave", "dragend"].forEach((type) => {
+                dropZoneElement.addEventListener(type, (e) => {
+                    dropZoneElement.classList.remove("drop-zone--over");
+                });
+            });
+
+            dropZoneElement.addEventListener("drop", (e) => {
+                e.preventDefault();
+
+                if (e.dataTransfer.files.length) {
+                    inputElement.files = e.dataTransfer.files;
+                    updateThumbnail(dropZoneElement, e.dataTransfer.files[0]);
+                }
+
+                dropZoneElement.classList.remove("drop-zone--over");
+            });
+        });
+
+        function updateThumbnail(dropZoneElement, file) {
+            let thumbnailElement = dropZoneElement.querySelector(".drop-zone__thumb");
+
+            // First time - remove the prompt
+            if (dropZoneElement.querySelector(".drop-zone__prompt")) {
+                dropZoneElement.querySelector(".drop-zone__prompt").remove();
+            }
+
+            // First time - there is no thumbnail element, so lets create it
+            if (!thumbnailElement) {
+                thumbnailElement = document.createElement("div");
+                thumbnailElement.classList.add("drop-zone__thumb");
+                dropZoneElement.appendChild(thumbnailElement);
+            }
+
+            thumbnailElement.dataset.label = file.name;
+
+            // Show thumbnail for image files
+            if (file.type.startsWith("image/")) {
+                const reader = new FileReader();
+
+                reader.readAsDataURL(file);
+                reader.onload = () => {
+                    thumbnailElement.style.backgroundImage = `url('${reader.result}')`;
+                };
+            } else {
+                thumbnailElement.style.backgroundImage = null;
+            }
+        }</script>
+

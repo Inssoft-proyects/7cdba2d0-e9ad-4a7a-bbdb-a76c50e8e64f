@@ -1,0 +1,131 @@
+
+<div class="mainContainer bg-light">
+
+    <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
+        <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+            <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                <div class="row align-items-center justify-content-center justify-content-md-start">
+                    <div class="col-auto">
+                        <i class="icon-ministerio h1 colorPrimary"></i>
+                    </div>
+                    <div class="col-auto my-3">
+                        <h2 class="m-0 h3"><b>Catalogo de agencias de ministerio</b></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
+                <div class="row">
+                    <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                        <button href="#" id="btnNueaOf" onclick="mostrarModal()">
+                            <h6 class="m-0 d-flex align-items-center"><i class="icon-addMinisterio h5 mb-0 me-2"></i><b>Agregar nueva agencia del ministerio</b></h6>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="bg-light py-1"></div>
+            </div>
+        </div>
+        <div class="mt-5">
+            <nav class="tabCustom">
+                <div class="nav nav-tabs row mx-0" id="nav-tab" role="tablist">
+                    <button class="nav-link active col" id="all-delegacion-tab" data-bs-toggle="tab" data-bs-target="#all-delegacion" type="button" role="tab" aria-controls="all-delegacion" aria-selected="true">
+                        <div class="row justify-content-center align-items-center px-3 py-2">
+                            <div class="col-auto radioCustom p-0">
+                                <div class="rounded-circle m-2"></div>
+                            </div>
+                            <div class="col-auto p-0">
+                                <h5 class="m-0"><i class="icon-delegacion h4"></i> <b>Todas las delegaciones</b></h5>
+                            </div>
+                        </div>
+                    </button>
+
+                    <button class="nav-link col" id="filter-delegacion-tab" data-bs-toggle="tab" data-bs-target="#filter-delegacion" type="button" role="tab" aria-controls="filter-delegacion" aria-selected="false">
+                        <div class="row justify-content-center align-items-center px-3 py-2">
+                            <div class="col-auto radioCustom p-0">
+                                <div class="rounded-circle m-2"></div>
+                            </div>
+                            <div class="col-auto p-0">
+                                <h5 class="m-0"><i class="icon-filter h5"></i> <b>Filtrar por delegación</b></h5>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane tabCustomConteiner fade show active" id="all-delegacion" role="tabpanel" aria-labelledby="all-delegacion-tab">
+                    <div class="row justify-content-between mb-1 titleCustom">
+                        <div class="col-12 col-md-auto mt-4 mb-2">
+                            <h5 class="px-4"><b>Listado agencias de ministerio</b></h5>
+                            <h6 class="px-4 text-muted">Edita o inactiva las agencias de ministerio.</h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 mb-4 rounded gridCustom">
+                            <div id="tablaAgenciasMinisterio">
+                                <partial name="_ListaAgenciasMinisterio" model="Model" />
+
+
+
+                                <div class="modal fade modalCustom" id="agregarAgenciaministerio" tabindex="-1" aria-labelledby="agregarAgenciaministerioLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-body" id="ModalBodyaAgregarAgenciaministerio">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <!-----------------------------------------------------------UPDATE--------------------------------------------------------------------------------------------->
+                                <div class="modal fade modalCustom" id="editarAgenciaministerio" tabindex="-1" aria-labelledby="editarAgenciaministerio" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-body" id="ModalBodEditarAgenciaministerio">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-----------------------------------------------------------DELETE--------------------------------------------------------------------------------------------->
+                                <div class="modal fade modalCustom" id="eliminarAgenciaministerio" tabindex="-1" aria-labelledby="eliminarAgenciaministerioLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-body" id="ModalBodyEliminarAgenciaministerio">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+
+<script>
+    function mostrarModal() {
+        $.ajax({
+            url: '@Url.Action("AgregarAgenciaMinisterioModal")',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                $('#ModalBodyaAgregarAgenciaministerio').html(data);
+                $('#agregarAgenciaministerio').modal('show');
+            }
+        });
+    }
+
+
+
+</script>

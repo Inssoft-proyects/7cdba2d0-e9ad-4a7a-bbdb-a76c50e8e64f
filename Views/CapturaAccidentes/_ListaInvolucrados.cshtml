@@ -1,0 +1,35 @@
+﻿<div class="col-12 mb-4 px-4 rounded gridCustom">
+
+    @(
+        Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel>()
+        .Name("gridInvolucrados")
+        .Columns(columns =>
+        {
+            columns.Template("<h6 class='m-0 colorPrimary'><b>Detalles</b></h6>").Width(80).Title("Detalles");
+            columns.Template("<h6 class='m-0 colorPrimary'><b>Datos Persona</b></h6>").Width(80).Title("Datos Persona");
+            columns.Template("<h6 class='m-0 colorPrimary'><b>Domicilio persona</b></h6>").Width(120).Title("Domicilio Persona");
+            columns.Template("<h6 class='m-0 colorPrimary'><b>Vehículo en que viajaba</b></h6>").Width(120).Title("Vehículo en que viajaba");
+           // columns.Bound(c => c.FactorOpcionAccidente).Title("Opcion").Width(80);
+            columns.Template("<button data-bs-toggle='modal' class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>").Width(30);
+            columns.Template("<button data-bs-toggle='modal' class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Eliminar</b></h6></button>").Width(30);
+
+
+
+
+        }).HtmlAttributes(new { style = "height:250px" })
+        .Sortable()
+        .Groupable()
+        .Scrollable()
+        .Pageable()
+        .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(read => read.Action("AgregarFactorNuevo", "CapturaAccidentes"))
+        .PageSize(5).Model(model => model.Id(p => p.IdAccidente))
+        )
+
+        .Selectable(selectable => selectable.Mode(GridSelectionMode.Single)
+        .Type(GridSelectionType.Row)
+        )
+        )
+
+</div>

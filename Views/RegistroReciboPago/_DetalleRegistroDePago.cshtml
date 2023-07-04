@@ -1,0 +1,61 @@
+﻿@model GuanajuatoAdminUsuarios.Models.RegistroReciboPagoModel
+
+<div>
+    <h5>Registro de Recibo de pago</h5>
+
+    @if (Model != null)
+    {
+        
+        <p>Folio:@Model.FolioInfraccion</p>
+        <p>Monto Calificacion:$343.87</p>
+
+       
+
+    }
+</div>
+  <form class="row px-4 mb-4 align-items-end">
+
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="controlForm my-3">
+            @(Html.Kendo().TextBox()
+                .Name("recibo")
+                .Label(l => l.Content("Recibo:"))
+                .Placeholder("Ingresa el número del recibo")
+                .HtmlAttributes(new { style = "width: 100%" })
+                )
+
+        </div>
+    </div>
+    <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+        <div class="controlForm my-3">
+            @(Html.Kendo().TextBox()
+                .Name("monto")
+                .Label(l => l.Content("Momto:"))
+                .Placeholder("monto Pagado")
+                .HtmlAttributes(new { style = "width: 100%" })
+                )
+
+        </div>
+    </div>
+    <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+        <div class="controlForm my-3">
+            @(Html.Kendo().TextBox()
+                .Name("fechaPago")
+                .Label(l => l.Content("Fecha de Pago"))
+                .Placeholder("Fecha de Pago")
+                .HtmlAttributes(new { style = "width: 100%" })
+                )
+        </div>
+    </div>
+
+    <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+        <div class="controlForm my-3">
+            @(Html.Kendo().TextBox()
+                .Name("lugarPago")
+                .Label(l => l.Content("Lugar de pago"))
+                .Placeholder("Lugar de pago")
+                .HtmlAttributes(new { style = "width: 100%" })
+                )
+        </div>
+    </div>
+</form>

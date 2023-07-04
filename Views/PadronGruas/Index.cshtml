@@ -1,0 +1,180 @@
+﻿@model IEnumerable<Gruas2Model>
+
+<head>
+    <script>
+        
+
+    </script>
+</head>
+<div class="mainContainer bg-light">
+    <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
+        <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+            <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                <div class="row align-items-center justify-content-center justify-content-md-start">
+                    <div class="col-auto">
+                        <i class="icon-grua h1 colorPrimary"></i>
+                    </div>
+                    <div class="col-auto my-3">
+                        <h2 class="m-0 h3"><b>Padrón de grúas</b></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
+                <div class="row">
+                    <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                        <button href="#" id="btnNuevaGrua" onclick="mostrarModal()">
+                            <h6 class="m-0 d-flex align-items-center"><i class="icon-addGrua h2 mb-0 me-2"></i><b>Agregar nueva grúa</b></h6>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="bg-light py-1"></div>
+            </div>
+        </div>
+        <div class="col-12 col-md-auto mt-4 mb-2">
+            <h5 class="px-4"><b>Búsqueda de padrón</b></h5>
+            <h6 class="px-4 text-muted">Realiza una búsqueda en el padrón de grúas.</h6>
+        </div>
+        <form class="row px-4 mb-4 align-items-end">
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="controlForm my-3">
+                    @(Html.Kendo().TextBox()
+                    .Name("placas")
+                    .Label(l => l.Content("Placas:"))
+                    .Placeholder("Ingresa número de placas")
+                    .HtmlAttributes(new { style = "width: 100%", id = "txtPlacas" }))
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="controlForm my-3">
+                    @(Html.Kendo().TextBox()
+                    .Name("noEconomico")
+                    .Label(l => l.Content("Número economico:"))
+                    .Placeholder("Ingresa un número economico")
+                    .HtmlAttributes(new { style = "width: 100%", id = "txtNoEconomico" }))
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="controlForm my-3">
+                    <label>Tipo grúa:</label>
+                    @(Html.Kendo().DropDownList()
+                    .Name("idTipoGruas")
+                    .BindTo((SelectList)ViewBag.CatTipoGruas)
+                    .OptionLabel("Selecciona tipo de grúa...")
+                    .HtmlAttributes(new {style = "width:100%;", id = "ddlTipoGrua" })
+                    .Filter(FilterType.Contains))
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="controlButton my-3">
+                    <button class="btnPrimary" type="button" onclick="submitSearch()">  <h5 class="m-0"><b>Buscar</b></h5></button>
+                </div>
+            </div>
+        </form>
+
+
+
+        <div id="listadoGruas">
+            <partial name="_ListadoGruas" model="Model" />
+        </div>
+    </section>
+</div>
+
+<div class="modal fade modalCustom" id="addGrua" aria-labelledby="addGruaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                    <div class="col-auto pe-0">
+                        <div class="row align-items-center justify-content-center justify-content-md-start">
+                            <div class="col-auto pe-0">
+                                <i class="icon-addGrua h1 colorPrimary"></i>
+                            </div>
+                            <div class="col-auto my-3">
+                                <h2 class="m-0 h3"><b>Agregar grúa</b></h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*<h4 class="modal-title">Agregar grúa</h4>*@
+                <div class="col-auto">
+                    <div class="row">
+                        <div class="col-auto my-4">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-body" id="ModalBodyCreate">
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#addGrua").on("show.bs.modal shown.bs.modal", function (e) {
+            $("body").removeClass("modal-open").find(".modal-backdrop").remove();
+        });
+        $("#addGrua").on('hide.bs.modal', function () {
+            $('#ModalBodyCreate').html('');
+        });
+    });
+    function mostrarModal() {
+        $.ajax({
+            url: '@Url.Action("ajax_create")',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                $('#ModalBodyCreate').html(data);
+                $('#addGrua').modal('show');
+            }
+        });
+    }
+
+    function submitSearch() {
+
+        var placas = $("#txtPlacas").val();
+        var noEconomico = $("#txtNoEconomico").val();
+        var idTipoGrua = $("#ddlTipoGrua").val();
+        //console.log(Mydata);
+        //$.ajax({
+        //    url: '@Url.Action("ajax_BuscarPadron")',
+        //    type: 'POST',
+        //    data: Mydata,
+        //    success: function (result) {
+        //        $("#listadoGruas").html(result);
+        //    }
+        //});
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("ajax_BuscarGruas")',
+            data: {
+                "placas": placas,
+                "noEconomico": noEconomico,
+                "idTipoGrua": idTipoGrua,
+            },
+            success: function (data) {
+                $("#listadoGruas").html(data);
+            }
+            //,
+            //error: function (xhr, status) {
+            //    var errmsg = msg_err_gral;
+            //    semg_error(errmsg);
+            //}
+        });
+    }
+</script>
+
+
+
+

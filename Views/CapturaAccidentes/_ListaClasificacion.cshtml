@@ -1,0 +1,60 @@
+﻿<div class="col-12 mb-4 px-4 rounded gridCustom">
+
+    @(
+        Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel>()
+        .Name("grid")
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.NombreClasificacion).Width(90);
+            columns.Command(c => c.Custom("Eliminar").Click("eliminarClasificacion")).Width(80);
+
+
+
+
+        }).HtmlAttributes(new { style = "height:550px" })
+        .Sortable()
+        .Groupable()
+        .Scrollable()
+        .Pageable()
+        .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(read => read.Action("AgregarClasificacion", "CapturaAccidentes"))
+        .PageSize(5).Model(model => model.Id(p => p.IdClasificacionAccidente))
+        )
+        .ToolBar(t => t.Search())
+        .Search(s =>
+        {
+            s.Field(c => c.EstatusReporte);
+
+        })
+
+        .Selectable(selectable => selectable.Mode(GridSelectionMode.Single)
+        .Type(GridSelectionType.Row)
+        )
+        )
+
+</div>
+<div class="modal fade modalCustom" id="eliminarClasificacionModal" tabindex="-1" aria-labelledby="clasificacionAccidenteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body" id="ModalBodyEliminarClasificacion">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function eliminarClasificacion(e){
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var IdAccidente = dataItem.IdAccidente;
+        console.log("SELEC", dataItem)
+        $.ajax({
+            url: '@Url.Action("ModalEliminarClasificacion", "CapturaAccidentes")',
+            type: 'POST', 
+            data: { IdAccidente: IdAccidente },
+            success: function (result) {
+                $('#ModalBodyEliminarClasificacion').html(result);
+                $('#eliminarClasificacionModal').modal('show');
+            }
+        });
+    }
+</script>

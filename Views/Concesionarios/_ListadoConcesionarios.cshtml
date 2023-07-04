@@ -1,0 +1,31 @@
+﻿@model List<Concesionarios2Model>
+
+@{
+}
+    <div class="col-12 mb-4 px-4 rounded gridCustom">
+        @(Html.Kendo().Grid(Model)
+            .Name("GridConcesionarios")
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.nombre).Title("Nombre").Width(100);
+                columns.Bound(p => p.delegacion).Title("Delegación").Width(100);
+                columns.Bound(p => p.municipio).Title("Municipio").Width(100);
+                columns.Bound(p => p.alias).Title("Alias").Width(100);
+                columns.Bound(c => c.razonSocial).Title("Razón social").Width(100);
+                columns.Bound(p => p.idConcesionario).ClientTemplate(
+                "<button onclick=\"btnModalEditarConcesionario('#= idConcesionario #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>"
+                ).Title("Acciones").Sortable(false).Width(100);
+            })
+            .HtmlAttributes(new { style = "height:450px" })
+            .Pageable(pager => pager.AlwaysVisible(true).Position(GridPagerPosition.Bottom).PageSizes(true))
+            .Sortable()
+            .Scrollable(scr => scr.Enabled(true))
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .ServerOperation(false)
+            .PageSize(5)
+
+        )
+            .ToolBar(t => t.Custom().Text("Buscar...").Name("search"))
+            )
+    </div>

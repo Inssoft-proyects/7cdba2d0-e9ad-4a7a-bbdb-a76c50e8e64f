@@ -1,0 +1,170 @@
+﻿@model List<Concesionarios2Model>
+
+@{
+}
+
+<div class="mainContainer bg-light">
+    <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
+        <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+            <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                <div class="row align-items-center justify-content-center justify-content-md-start">
+                    <div class="col-auto">
+                        <i class="icon-concesonaria h1 colorPrimary"></i>
+                    </div>
+                    <div class="col-auto my-3">
+                        <h2 class="m-0 h3"><b>Concesionarios</b></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
+                <div class="row">
+                    <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                        <button href="#" id="btnCrearConcesionario" onclick="btnModalCrearConcesionario()">
+                            <h6 class="m-0 d-flex align-items-center"><i class="icon-addConcesonaria h2 mb-0 me-2"></i><b>Agregar nueva concecionaria</b></h6>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="bg-light py-1"></div>
+            </div>
+        </div>
+        <div class="row justify-content-between mb-1 titleCustom">
+            <div class="col-12 col-md-auto mt-4 mb-2">
+                <h5 class="px-4"><b>Listado de concesionarios</b></h5>
+                <h6 class="px-4 text-muted">Edita los concesionarios que lo requieran.</h6>
+            </div>
+        </div>
+        <div class="row" id="listadoConcesionarios">
+            <partial name="_ListadoConcesionarios" model="Model" />
+        </div>
+            
+    </section>
+</div>
+
+
+<div class="modal fade modalCustom" id="modalCrearConcesionario" aria-labelledby="modalCrearConcesionario" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                <div class="col-auto pe-0">
+                    <div class="row align-items-center justify-content-center justify-content-md-start">
+                        <div class="col-auto pe-0">
+                            <i class="icon-addConcesonaria h1 colorPrimary"></i>
+                        </div>
+                        <div class="col-auto my-3">
+                            <h2 class="m-0 h3"><b>Agregar concesionario</b></h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <div class="row">
+                        <div class="col-auto my-3">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="bg-light py-1"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 my-4">
+                    <h5 class="px-4"><b>Datos de nuevo concecionario</b></h5>
+                    <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
+                </div>
+            </div>
+            <div class="modal-body" id="modalBodyCrearConcesionario">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modalCustom" id="modalEditarConcesionario" aria-labelledby="modalEditarConcesionario" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                <div class="col-auto pe-0">
+                    <div class="row align-items-center justify-content-center justify-content-md-start">
+                        <div class="col-auto pe-0">
+                            <i class="icon-editConcesonaria h1 colorPrimary"></i>
+                        </div>
+                        <div class="col-auto my-3">
+                            <h2 class="m-0 h3"><b>Editar concesionario</b></h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <div class="row">
+                        <div class="col-auto my-3">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="bg-light py-1"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 my-4">
+                    <h5 class="px-4"><b>Datos de concecionario</b></h5>
+                    <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
+                </div>
+            </div>
+            <div class="modal-body" id="modalBodyEditarConcesionario">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $("#modalCrearConcesionario").on("show.bs.modal shown.bs.modal", function (e) {
+            $("body").removeClass("modal-open").find(".modal-backdrop").remove();
+        });
+        $("#modalCrearConcesionario").on('hide.bs.modal', function () {
+            $('#modalBodyEditarConcesionario').html('');
+        });
+
+        $("#modalEditarConcesionario").on("show.bs.modal shown.bs.modal", function (e) {
+            $("body").removeClass("modal-open").find(".modal-backdrop").remove();
+        });
+        $("#modalEditarConcesionario").on('hide.bs.modal', function () {
+            $('#modalBodyEditarConcesionario').html('');
+        });
+    });
+
+    function btnModalCrearConcesionario() {
+        $.ajax({
+            url: '@Url.Action("ajax_ModalCrearConcesionario")',
+            type: 'GET',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                $('#modalBodyCrearConcesionario').html(data);
+                $('#modalCrearConcesionario').modal('show');
+            }
+        });
+    }
+     function btnModalEditarConcesionario(idConcesionario) {
+        $.ajax({
+            url: '@Url.Action("ajax_ModalEditarConcesionario")',
+            type: 'GET',
+            data: { idConcesionario: idConcesionario },
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (value) {
+                $('#modalBodyEditarConcesionario').html(value);
+                $('#modalEditarConcesionario').modal('show');
+            }
+        });
+    }
+</script>

@@ -1,0 +1,48 @@
+﻿@model List<VehiculoModel>
+
+
+<div class="row mb-1 titleCustom">
+    <div class="col-12 col-md-auto mt-4 mb-2">
+        <h5 class="px-4"><b>Listado de vehículos</b></h5>
+        @*<h6 class="px-4 text-muted">Edita los datos de vehículo.</h6>*@
+    </div>
+</div>
+<br />
+<br />
+<div class="row">
+
+    <div class="col-12 mb-4 px-4 rounded gridCustom">
+        @(Html.Kendo().Grid(Model)
+            .Name("Grid")
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.idVehiculo).Hidden();
+                columns.Bound(p => p.placas).Title("Placas").Width(90);
+                columns.Bound(p => p.serie).Title("No.Serie").Width(90);
+                columns.Bound(c => c.marca).Title("Marca").Width(90);
+                columns.Bound(c => c.submarca).Title("SubMarca").Width(90);
+                columns.Bound(c => c.tipoVehiculo).Title("Tipo Vehiculo").Width(90);
+                columns.Bound(c => c.propietario).Title("Propietario").Width(90);
+                columns.Bound(c => c.tarjeta).Title("Tarjeta").Width(90);
+                columns.Bound(p => p.idVehiculo).ClientTemplate(
+                "<button onclick=\"ShowUpdate('#= idVehiculo #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>"
+                ).Title("Acciones").Sortable(false).Width(100);
+
+            }).HtmlAttributes(new { style = "height:350" })
+            .Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }))
+            .Sortable()
+            .Scrollable(scr => scr.Height(350))
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .ServerOperation(false)
+            )
+            )
+    </div>
+
+</div>
+
+<script>
+    function ShowUpdate(Id) {
+        window.location = '/Vehiculos/EditarVehiculo?id=' + Id;
+    }
+</script>

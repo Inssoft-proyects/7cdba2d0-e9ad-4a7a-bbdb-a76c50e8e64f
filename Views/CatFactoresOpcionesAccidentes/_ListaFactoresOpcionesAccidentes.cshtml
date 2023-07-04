@@ -1,0 +1,79 @@
+﻿<div class="row">
+    <div class="col-12 mb-4 px-4 rounded gridCustom">
+        @(
+            Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CatFactoresOpcionesAccidentesModel>()
+            .Name("grid")
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.IdFactorOpcionAccidente).Title("Id").Width(40);
+                columns.Bound(c => c.FactorOpcionAccidente).Title("Nombre").Width(100);
+                columns.Bound(c => c.FactorAccidente).Title("Factor").Width(100);
+                columns.Bound(c => c.estatusDesc).Title("Estatus en sistema").Width(100);
+                columns.Command(c => c.Custom("Editar").Click("getId")).Width(100);
+               // columns.Command(c => c.Custom("Eliminar").Click("eliminar")).Width(80);
+
+            }).HtmlAttributes(new { style = "height:550px" })
+            .Sortable()
+            .Groupable()
+            .Scrollable()
+            .Pageable()
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("GetFactoresOpciones", "CatFactoresOpcionesAccidentes"))
+            .PageSize(5).Model(model => model.Id(p => p.IdFactorOpcionAccidente))
+            )
+            .ToolBar(t => t.Search())
+            .Search(s =>
+            {
+                s.Field(c => c.FactorOpcionAccidente);
+                s.Field(c => c.FactorAccidente);
+            })
+
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single)
+            .Type(GridSelectionType.Row)
+            )
+
+
+
+            )
+
+
+    </div>
+</div>
+
+
+<script>
+    function getId(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var IdFactorOpcionAccidente = dataItem.IdFactorOpcionAccidente;
+        console.log(IdFactorOpcionAccidente);
+
+        $.ajax({
+            url: '@Url.Action("EditarFactoresOpcionesAccidenteModal", "CatFactoresOpcionesAccidentes")',
+            type: 'POST',
+            data: { IdFactorOpcionAccidente: IdFactorOpcionAccidente },
+            success: function (result) {
+                $('#ModalBodEditarFactorOpcAccidente').html(result);
+                $('#editarFactorOpcAccidente').modal('show');
+
+            },
+        })
+    }
+
+    function eliminar(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var IdFactorOpcionAccidente = dataItem.IdFactorOpcionAccidente;
+        console.log(IdFactorOpcionAccidente);
+
+        $.ajax({
+            url: '@Url.Action("EliminarFactoresOpcionesAccidenteModal", "CatFactoresOpcionesAccidentes")',
+            type: 'POST',
+            data: { IdFactorOpcionAccidente: IdFactorOpcionAccidente },
+            success: function (result) {
+                $('#ModalBodyEliminarFactorOpcAccidente').html(result);
+                $('#eliminarFactorOpcAccidente').modal('show');
+
+            },
+        })
+    }
+</script>

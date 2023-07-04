@@ -1,0 +1,84 @@
+﻿<div class="row">
+    <div class="col-12 mb-4 px-4 rounded gridCustom">
+
+        @(
+            Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.MotivosInfraccionModel>()
+            .Name("grid")
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.IdMotivoInfraccion).Width(40);
+                columns.Bound(c => c.Nombre).Width(100);
+                columns.Bound(c => c.Fundamento).Width(100);
+                columns.Bound(c => c.CalificacionMinima).Title("Calificación Minima").Width(100);
+                columns.Bound(c => c.CalificacionMaxima).Title("Calificación Máxima").Width(100);
+                columns.Bound(c => c.EstatusDesc).Title("Estatus en sistema").Width(80);
+                columns.Command(c => c.Custom("Editar").Click("getId")).Width(80);
+               // columns.Command(c => c.Custom("Eliminar").Click("eliminar")).Width(80);
+
+                //columns.Command(c => c.Custom("Delete").Click("redirectDelete")).Width(180);
+
+
+            }).HtmlAttributes(new { style = "height:550px" })
+            .Sortable()
+            .Groupable()
+            .Scrollable()
+            .Pageable()
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("GetMotInf", "MotivosInfraccion"))
+            .PageSize(5).Model(model => model.Id(p => p.IdMotivoInfraccion))
+            )
+            .ToolBar(t => t.Search())
+            .Search(s =>
+            {
+                s.Field(c => c.Nombre);
+                s.Field(c => c.Fundamento);
+                s.Field(c => c.CalificacionMinima);
+                s.Field(c => c.CalificacionMaxima);
+
+            })
+
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single)
+            .Type(GridSelectionType.Row)
+            ))
+
+
+    </div>
+</div>
+
+<script>
+    function getId(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var IdMotivoInfraccion = dataItem.IdMotivoInfraccion;
+        console.log(IdMotivoInfraccion);
+
+        $.ajax({
+            url: '@Url.Action("EditarParcial", "MotivosInfraccion")', // URL de la acción del controlador
+            type: 'POST', // Tipo de solicitud HTTP (POST o GET)
+            data: { IdMotivoInfraccion: IdMotivoInfraccion }, // Datos que se enviarán al controlador
+            success: function (result) {
+                $('#editarMotivoBody').html(result);
+                $('#editMotivoInfracion').modal('show');
+
+            },
+        })
+    }
+
+
+    function eliminar(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var IdMotivoInfraccion = dataItem.IdMotivoInfraccion;
+        console.log(IdMotivoInfraccion);
+
+        $.ajax({
+            url: '@Url.Action("EliminarMotivoParcial", "MotivosInfraccion")', // URL de la acción del controlador
+            type: 'POST', // Tipo de solicitud HTTP (POST o GET)
+            data: { IdMotivoInfraccion: IdMotivoInfraccion }, // Datos que se enviarán al controlador
+            success: function (result) {
+                $('#ModalBodyEliminarMotivo').html(result);
+                $('#eliminarMotivoInfraccion').modal('show');
+
+            },
+        })
+    }
+</script>

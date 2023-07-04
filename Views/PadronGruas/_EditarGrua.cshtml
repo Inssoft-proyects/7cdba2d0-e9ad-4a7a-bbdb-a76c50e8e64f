@@ -1,0 +1,179 @@
+﻿@model Gruas2Model
+
+<div class="panel">
+    <div class="panel-body container-fluid">
+        <div class="row row-lg">
+            <div class="col-md-12">
+                <section class=" bg-white rounded">
+                    <div class="row">
+                        <div class="col-12 my-4">
+                            <h5 class="px-4"><b>Datos de grúa</b></h5>
+                            <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
+                        </div>
+                    </div>
+                    <form id="frmEditarGrua">
+                        @Html.HiddenFor(f=> f.idGrua)
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <div class="controlForm">
+                                    <label>Delegación:</label>
+                                    @(Html.Kendo().DropDownList()
+                                        .Name("idDelegacion")
+                                        .BindTo((SelectList)ViewBag.CatDelegaciones)
+                                        .OptionLabel("-- Seleccione --")
+                                        .HtmlAttributes(new { style = "width:100%;", id = "ddlDelegaciones" })
+                                        .Filter(FilterType.Contains)
+                                        .Popup(p => p.AppendTo("frmEditarGrua"))
+                                        )
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <div class="controlForm">
+                                    <label>Concesionario:</label>
+                                    <div id="divConcesionario">
+                                        @(Html.Kendo().DropDownListFor(f => f.idConcesionario)
+                                            .BindTo(ViewData["CatConcesionarios"] as SelectList)
+                                            .OptionLabel("-- Seleccione --")
+                                            .HtmlAttributes(new { style = "width:100%;" })
+                                            .Filter(FilterType.Contains))
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <div class="controlForm">
+                                    @(Html.Kendo().TextBoxFor(t => t.capacidad)
+                                        .Label(l => l.Content("Capacidad: <b>(obligatorio)</b>:"))
+                                        .Placeholder("Ingresa Capacidad")
+                                        .HtmlAttributes(new { style = "width: 100%" })
+                                        )
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row  my-4">
+                            <div class="form-group col-md-4">
+                                <div class="controlForm">
+                                    @(Html.Kendo().TextBoxFor(t => t.noEconomico)
+                                        .Label(l => l.Content("No. Economico: <b>(obligatorio)</b>:"))
+                                        .Placeholder("Ingresa No. Economico")
+                                        .HtmlAttributes(new { style = "width: 100%" })
+                                        )
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <div class="controlForm">
+                                    @(Html.Kendo().TextBoxFor(t => t.modelo)
+                                        .Label(l => l.Content("Modelo: <b>(obligatorio)</b>:"))
+                                        .Placeholder("Ingresa Modelo")
+                                        .HtmlAttributes(new { style = "width: 100%" })
+                                        )
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <div class="controlForm">
+                                    @(Html.Kendo().TextBoxFor(t => t.placas)
+                                        .Label(l => l.Content("Placas: <b>(obligatorio)</b>:"))
+                                        .Placeholder("Ingresa Placas")
+                                        .HtmlAttributes(new { style = "width: 100%" })
+                                        )
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row  my-4">
+                            <div class="form-group col-md-4">
+                                <div class="controlForm">
+                                    <label>Clasificación:</label>
+                                    @(Html.Kendo().DropDownListFor(f => f.idClasificacion)
+                                        .BindTo(ViewData["CatClasificacionGruas"] as SelectList)
+                                        .OptionLabel("-- Seleccione --")
+                                        .HtmlAttributes(new { style = "width:100%;" })
+                                        .Filter(FilterType.Contains))
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <div class="controlForm">
+                                    <label>Tipo:</label>
+                                    @(Html.Kendo().DropDownListFor(f => f.idTipoGrua)
+                                        .BindTo(ViewData["CatTipoGruas"] as SelectList)
+                                        .OptionLabel("-- Seleccione --")
+                                        .HtmlAttributes(new { style = "width:100%;" })
+                                        .Filter(FilterType.Contains))
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <div class="controlForm">
+                                    <label>Situación:</label>
+                                    @(Html.Kendo().DropDownListFor(f => f.idSituacion)
+                                        .BindTo(ViewData["CatSituacionGruas"] as SelectList)
+                                        .OptionLabel("-- Seleccione --")
+                                        .HtmlAttributes(new { style = "width:100%;" })
+                                        .Filter(FilterType.Contains))
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="row my-12">
+                        <div class="col-12 col-md-6 mx-md-auto">
+                            <div class="row justify-content-around">
+                                <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
+                                    <button type="button" data-bs-dismiss="modal" aria-label="Close">
+                                        <h6 class="m-0 px-3"><b>Cerrar</b></h6>
+                                    </button>
+                                </div>
+                                <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                                    <div class="controlButton">
+                                        <button class="btnPrimary px-3" onclick="editarGrua()">
+                                            <h5 class="m-0"><b>Guardar ajustes</b></h5>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function editarGrua() {
+        //var Mydata = $("frmCrearGrua").serializeObject();
+        var formData = $("#frmEditarGrua").serialize();
+        //var formData = new FormData();
+        //formData.delete('idDelegacion');
+        //alert(json);
+        $.ajax({
+            url: '@Url.Action("ajax_editGrua")',
+            type: 'POST',
+            data: formData,
+            success: function (result) {
+                $("#listadoGruas").html(result);
+                $('#editGrua').modal('hide');
+                sitteg_success('Elemento guardado correctamente')
+            },
+            error: function (xhr, status) {
+                var errmsg = xhr.responseText;
+                console.log(errmsg)
+                sitteg_warning('Lo sentimos, ha ocurrido un error.');
+            }
+        });
+
+        //$('#addDependencia').modal('hide');
+        //$('body').removeClass('model-open');
+        //$('.modal-backdrop').remove();
+    }
+
+    $(document).ready(function () {
+        $("#ddlDelegaciones").on("change", function () {
+            var value = $(this).val();
+            if (value == "") {
+                $("#idConcesionario option[value!='']").remove();
+            }
+            else {
+                _set_combo_catalog("CatConcesionariosByIdDelegacion", value, "idConcesionario", "false", "divConcesionario", "");
+                $('#idConcesionario').kendoDropDownList();
+            }
+        });
+
+    });
+
+</script>

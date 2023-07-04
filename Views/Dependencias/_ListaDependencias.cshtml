@@ -1,0 +1,81 @@
+﻿<div class="row">
+    <div class="col-12 mb-4 px-4 rounded gridCustom">
+        @(
+            Html.Kendo().Grid<GuanajuatoAdminUsuarios.Entity.Dependencias>()
+            .Name("grid")
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.IdDependencia).Width(40);
+                columns.Bound(c => c.NombreDependencia).Width(100);
+                columns.Bound(c => c.Estatus).Width(50);
+                columns.Command(c => c.Custom("Editar").Click("getId")).Width(80);
+                //columns.Command(c => c.Custom("Eliminar").Click("eliminar")).Width(80);
+
+                //columns.Command(c => c.Custom("Delete").Click("redirectDelete")).Width(180);
+
+
+            }).HtmlAttributes(new { style = "height:550px" })
+            .Sortable()
+            .Groupable()
+            .Scrollable()
+            .Pageable()
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("GetDeps", "Dependencias"))
+            .PageSize(5).Model(model => model.Id(p => p.IdDependencia))
+            )
+            .ToolBar(t => t.Search())
+            .Search(s =>
+            {
+                s.Field(c => c.NombreDependencia);
+            })
+
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single)
+            .Type(GridSelectionType.Row)
+            )
+
+
+
+            )
+
+
+    </div>
+</div>
+
+<script>
+    function getId(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        console.log(dataItem);
+
+        var IdDependencia = dataItem.IdDependencia;
+        console.log(IdDependencia);
+
+        $.ajax({
+            url: '@Url.Action("EditarParcial", "Dependencias")', 
+            type: 'POST', 
+            data: { IdDependencia: IdDependencia }, 
+            success: function (result) {
+                $('#ModalBodyUpdateDep').html(result);
+                $('#editDependencia').modal('show');
+
+            },
+        })
+    }
+
+    function eliminar(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var IdDependencia = dataItem.IdDependencia;
+        console.log(IdDependencia);
+
+        $.ajax({
+            url: '@Url.Action("EliminarParcial", "Dependencias")',
+            type: 'POST', 
+            data: { IdDependencia: IdDependencia }, 
+            success: function (result) {
+                $('#ModalBodyEliminarDep').html(result);
+                $('#eliminarDependencia').modal('show');
+
+            },
+        })
+    }
+</script>

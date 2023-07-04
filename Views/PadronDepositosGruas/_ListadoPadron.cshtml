@@ -1,0 +1,51 @@
+﻿@model List<PadronDepositosGruasModel>
+
+@*<div class="row justify-content-between mb-1 titleCustom">*@
+
+<div class="row mb-1">
+    <div class="col-12">
+        <h5 class="px-4"><b>Listado de Padrón de depósitos y grúas</b></h5>
+        <h6 class="px-4 text-muted">Datos del padrón de depósitos y grúas.</h6>
+    </div>
+</div>
+<div class="row">
+
+    @*<column template="<button data-bs-toggle=modal data-bs-target=\#editVehiculo class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>" width="100" />*@
+    <div class="col-12 mb-4 px-4 rounded gridCustom">
+        @(Html.Kendo().Grid(Model)
+            .Name("Grid")
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.Municipio).Title("Municipio").Width(90);
+                columns.Bound(p => p.Concesionario).Title("concesionario").Width(90);
+                columns.Bound(p => p.fullPension).Title("Depósito").Width(90);
+                columns.Bound(c => c.noEconomico).Title("No. Económico").Width(90);
+                columns.Bound(c => c.Modelo).Title("Modelo").Width(90);
+                columns.Bound(c => c.Placas).Title("Placas").Width(90);
+                columns.Bound(c => c.TipoGrua).Title("Tipo de grúa").Width(90);
+            }).HtmlAttributes(new { style = "height:350" })
+            .Pageable(pager => pager.AlwaysVisible(true).Position(GridPagerPosition.Bottom).PageSizes(true))
+            .Sortable()
+            .Scrollable(scr => scr.Height(350))
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .ServerOperation(false)
+            )
+            )
+    </div>
+
+</div>
+
+@*<script>
+    $(document).ready(function () {
+        var grid = $("#Grid").data("kendoGrid");
+
+        var position = "top";
+        grid.setOptions({
+            pageable: {
+                position: position
+            }
+        });
+    });
+
+</script>*@

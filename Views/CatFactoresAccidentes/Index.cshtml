@@ -1,0 +1,97 @@
+﻿<div class="mainContainer bg-light">
+
+    <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
+        <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+            <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                <div class="row align-items-center justify-content-center justify-content-md-start">
+                    <div class="col-auto">
+                        <i class="icon-factores h1 colorPrimary"></i>
+                    </div>
+                    <div class="col-auto my-3">
+                        <h2 class="m-0 h3"><b>Catalogo de Factores de Accidentes</b></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
+                <div class="row">
+                    <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                        <button href="#" id="btnNuevoFact" onclick="mostrarModal()">
+                            <h6 class="m-0 d-flex align-items-center"><i class="icon-addFactores h5 mb-0 me-2"></i><b>Agregar nuevo factor de accidente</b></h6>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="bg-light py-1"></div>
+            </div>
+        </div>
+        <div class="row justify-content-between mb-1 titleCustom">
+            <div class="col-12 col-md-auto mt-4 mb-2">
+                <h5 class="px-4"><b>Clasificación de accidentes</b></h5>
+                <h6 class="px-4 text-muted">Edita o inactiva los factores de accidentes.</h6>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 mb-4 rounded gridCustom">
+                <div id="tablaFactoresAccidentes">
+                    <partial name="_ListaFactoresAccidentes" model="Model" />
+
+
+
+                    <div class="modal fade modalCustom" id="agregarFactornAccidente" tabindex="-1" aria-labelledby="agregarFactorAccidenteoLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body" id="ModalBodyaAgregarFactorAccidente">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!-----------------------------------------------------------UPDATE--------------------------------------------------------------------------------------------->
+                    <div class="modal fade modalCustom" id="editarFactorAccidente" tabindex="-1" aria-labelledby="editarFactorAccidenteLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body" id="ModalBodEditarFactorAccidente">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-----------------------------------------------------------DELETE--------------------------------------------------------------------------------------------->
+                    <div class="modal fade modalCustom" id="eliminarFactorAccidente" tabindex="-1" aria-labelledby="eliminarFactorAccidenteLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body" id="ModalBodyFactorAccidente">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+
+<script>
+    function mostrarModal() {
+        $.ajax({
+            url: '@Url.Action("AgregarFactoresAccidenteModal")',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                $('#ModalBodyaAgregarFactorAccidente').html(data);
+                $('#agregarFactornAccidente').modal('show');
+            }
+        });
+    }
+
+
+</script>

@@ -1,0 +1,70 @@
+﻿@model GuanajuatoAdminUsuarios.Models.CancelarInfraccionModel
+
+<script>
+    function guardarCancelacion() {
+
+        var Mydata = $("#cancelarInfraccionForm").serialize();
+
+        $.ajax({
+            url: '@Url.Action("IniciarCancelacion", "CancelarInfraccion")',
+            type: 'POST',
+            data: Mydata,
+            success: function (result) {
+
+                alert("Se ha Actualizado la Información");
+                location.reload();
+            },
+            error: function (error) {
+                alert("!Sucedio um error, intente mas tarde...");
+            }
+        });
+    }
+
+</script>
+
+    <div class="col-12 col-md-6">
+
+    @if (Model != null)
+    {
+        <div>
+         <div class="col-12 col-md-auto mt-4 mb-2">
+            <h5 class="px-4"><b>Datos de revocación del folio:</b> @Model.FolioInfraccion</h5>       
+          </div>
+            <div class="row">
+                <div class="col-md-6">
+                <h6 class="px-4 text-muted"><b>Folio:</b>@Model.FolioInfraccion</h6>
+                <h6 class="px-4 text-muted"><b>Fecha:</b>@Model.FechaInfraccion</h6>
+                <h6 class="px-4 text-muted"><b>Placas:</b>@Model.Placas</h6>
+                <h6 class="px-4 text-muted"><b>Serie:</b>@Model.Serie</h6>
+            </div>
+            <div class="col-md-6">
+                <h6 class="px-4 text-muted"><b>Conductor:</b>@Model.Conductor</h6>
+                <h6 class="px-4 text-muted"><b>Propietario:</b>@Model.Propietario</h6>
+                <h6 class="px-4 text-muted"><b>Estatus:</b>@Model.descEstatusProceso</h6>
+                </div>
+            </div>
+     </div>
+      
+    }
+ <form id="cancelarInfraccionForm" class="row px-4 mb-4 align-items-end justify-content-center">
+
+        <div class="controlForm my-3">
+            @Html.HiddenFor(m=>m.IdInfraccion)
+            @(Html.Kendo().TextBoxFor(m=>m.OficioRevocacion)
+                .Label(l => l.Content("Oficio de Revocación <b>(obligatorio)</b>:"))
+                .Placeholder("Ingresa oficio de revocación")
+                )
+
+        </div>
+    </form>
+
+    <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+        <div class="controlButton">
+            <button class="btnPrimary px-3" onclick="guardarCancelacion()">
+                <h5 class="m-0"><b>Guardar</b></h5>
+            </button>
+        </div>
+    </div>
+    
+</div>
+

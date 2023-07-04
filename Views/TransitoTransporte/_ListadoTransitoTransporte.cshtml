@@ -1,0 +1,276 @@
+﻿@model List<TransitoTransporteModel>
+
+<script>
+    function ShowGruaPopUp(id) {
+        $.ajax({
+            url: '@Url.Action("ajax_DetailGruas")',
+            type: 'GET',
+            data: { id: id },
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (value) {
+                $('#ModalBodyDetail').html(value);
+                $('#modalGruasConcDetail').modal('show');
+            }
+        });
+    }
+
+    function ShowDeletePopUp(Ids) {
+        $('#hdnIds').val(Ids);
+        $('#myDeleteModal').modal('show');
+    }
+
+    function ConfirmDelete() {
+        $('#myDeleteModal').modal('hide');
+        $('body').removeClass('model-open');
+        $('.modal-backdrop').remove();
+        var ids = $('#hdnIds').val();
+        $.ajax({
+            url: '@Url.Action("ajax_DeleteTransito")',
+            type: 'POST',
+            dataType: "html",
+            data: { ids: ids },
+            success: function (result) {
+                sitteg_success('Elemento guardado correctamente');
+                $('#listadoTransitoTransporte').html(result);
+            }
+        });
+    }
+
+    function ShowUpdatePopUp(Id) {
+        $('#hdnIdDeposito').val(Id);
+        $('#myUpdateModal').modal('show');
+    }
+
+    function downLoadPdf(Id) {
+       
+        window.location = '/TransitoTransporte/CreatePdfUnRegistro?IdDeposito=' + Id;
+    }
+</script>
+
+@*<div class="row justify-content-between mb-1 titleCustom">*@
+<div class="row mb-1">
+    <div class="col-12 col-md-auto mt-4 mb-2">
+        <h5 class="px-4"><b>Listado de Tránsito / Transporte</b></h5>
+        <h6 class="px-4 text-muted">Edita los datos de Tránsito / Transporte.</h6>
+    </div>
+</div>
+
+<div class="row">
+    @*<column template="<button data-bs-toggle=modal data-bs-target=\#editVehiculo class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>" width="100" />*@
+    <div class="col-12 mb-4 px-4 rounded gridCustom">
+        @(
+            Html.Kendo().Grid(Model)
+            .Name("Grid")
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.IdDeposito).Title("Num.").Width(70);
+                columns.Bound(p => p.fullSolicitudfolioInfraccion).Title("Fecha de evento / Folio de Solicitud / Folio de Infracción").Width(150).HtmlAttributes(new { @class = "label-control" });
+                columns.Bound(p => p.fullVehiculo).Title("Vehículo").Width(150);
+                columns.Bound(c => c.FechaIngreso).Format("{0:dd/MM/yyyy}").Width(90);
+                columns.Bound(c => c.FechaLiberacion).Format("{0:dd/MM/yyyy}").Width(90);
+                columns.Bound(c => c.pension).Title("Pension").Width(100);
+                columns.Bound(c => c.Concesionario).Title("Grúa").Width(90);
+                columns.Bound(p => p.IdConcesionario).ClientTemplate(
+                "<button onclick=\"ShowGruaPopUp('#= IdConcesionario #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i></h6></button>"
+                ).Title("Detalle Grúa(s)").Sortable(false).Width(70);
+
+                columns.Bound(c => c.fullDependencia).Title("Estatus").Width(90);
+
+                columns.Bound(p => p.IdGrua).ClientTemplate(
+                "<button onclick=\"ShowUpdatePopUp('#= IdDeposito #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i></h6></button>"
+                ).Title("Editar").Sortable(false).Width(70);
+
+                columns.Bound(p => p.IdDeposito).ClientTemplate(
+                "<button onclick=\"ShowDeletePopUp('#= IdDeposito #,#= IdSolicitud # ')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-delete me-2'></i></h6></button>"
+                ).Title("Eliminar").Sortable(false).Width(70);
+
+                columns.Bound(p => p.IdDeposito).ClientTemplate(
+                "<button onclick=\"downLoadPdf('#= IdDeposito #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-pdf me-2'></i></h6></button>"
+                ).Title("Exportar").Sortable(false).Width(70);
+
+            }).HtmlAttributes(new { style = "height:350" })
+            @*.Pageable(pager => pager.Input(true).Position(GridPagerPosition.Top))*@
+            @*.Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }))*@
+            .Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }).Position(GridPagerPosition.Bottom))
+            .Sortable()
+            .Scrollable(scr => scr.Height(350))
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .ServerOperation(false)
+            )
+            )
+    </div>
+
+</div>
+
+@*Modal*@
+<div class="modal fade modalCustom" id="modalGruasConcDetail" tabindex="-1" aria-labelledby="editVehiculo" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+
+            <section class=" bg-white rounded">
+                <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                    <div class="col-auto pe-0">
+                        <div class="row align-items-center justify-content-center justify-content-md-start">
+                            <div class="col-auto pe-0">
+                                <i class="icon-grua h1 colorPrimary"></i>
+                            </div>
+                            <div class="col-auto my-3">
+                                <h2 class="m-0 h3"><b>Detalle Grúas</b></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="row">
+                            <div class="col-auto my-3">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="bg-light py-1"></div>
+                    </div>
+
+                </div>
+
+                <div class="modal-body" id="ModalBodyDetail">
+                </div>
+
+            </section>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade modalCustom" id="myDeleteModal" tabindex="-1" aria-labelledby="editVehiculo" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <section class=" bg-white rounded">
+                <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                    <div class="col-auto pe-0">
+                        <div class="row align-items-center justify-content-center justify-content-md-start">
+                            <div class="col-auto pe-0">
+                                <i class="icon-deleteTransito h1 colorPrimary"></i>
+                            </div>
+                            <div class="col-auto my-3">
+                                <h2 class="m-0 h3"><b>Cofirmación</b></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="row">
+                            <div class="col-auto my-3">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="bg-light py-1"></div>
+                    </div>
+
+                </div>
+
+                <div class="modal-body" id="ModalBodyDelete">
+                    <input type="hidden" id="hdnIds" />
+                    <p class="success-message">¿Esta seguro que desea eliminar este registro?</p>
+                </div>
+
+                <div class="row my-4">
+                    <div class="col-12 col-md-6 mx-md-auto">
+                        <div class="row justify-content-around">
+                            <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
+                                <button type="button" data-bs-dismiss="modal" aria-label="Close">
+                                    <h6 class="m-0 v"><b>Cancelar</b></h6>
+                                </button>
+                            </div>
+                            <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                                <div class="controlButton">
+
+                                    <button type="button" class="btnPrimary px-3" onclick="ConfirmDelete()">
+                                        <h6 class="m-0 px-3"><b>Aceptar</b></h6>
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </section>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade modalCustom" id="myUpdateModal" tabindex="-1" aria-labelledby="editVehiculo" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <section class=" bg-white rounded">
+                <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                    <div class="col-auto pe-0">
+                        <div class="row align-items-center justify-content-center justify-content-md-start">
+                            <div class="col-auto pe-0">
+                                <i class="icon-editTransito h1 colorPrimary"></i>
+                            </div>
+                            <div class="col-auto my-3">
+                                <h2 class="m-0 h3"><b>Modificar</b></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="row">
+                            <div class="col-auto my-3">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="bg-light py-1"></div>
+                    </div>
+
+                </div>
+
+                <div class="modal-body" id="ModalBodyUpdate">
+                    <input type="hidden" id="hdnIdDeposito" />
+                    <p class="success-message">Datos de Registro de Solicitud</p>
+                    <p class="success-message">Datos de las Grúas Asignadas</p>
+                </div>
+
+                <div class="row my-4">
+                    <div class="col-12 col-md-6 mx-md-auto">
+                        <div class="row justify-content-around">
+                            <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
+                                <button type="button" data-bs-dismiss="modal" aria-label="Close">
+                                    <h6 class="m-0 v"><b>Cancelar</b></h6>
+                                </button>
+                            </div>
+                            <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                                <div class="controlButton">
+
+                                    <button type="button" class="btnPrimary px-3" onclick="ConfirmDelete()">
+                                        <h6 class="m-0 px-3"><b>Aceptar</b></h6>
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </section>
+        </div>
+    </div>
+</div>

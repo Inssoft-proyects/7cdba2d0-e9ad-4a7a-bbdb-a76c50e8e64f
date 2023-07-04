@@ -1,0 +1,49 @@
+﻿@model List<GruasConcesionariosModel>
+
+<div class="col-12 col-md-6 col-lg-12">
+    <div class="row">
+        <div class="col-12 mb-4 px-4 rounded gridCustom">
+            @(
+                Html.Kendo().Grid(Model)
+                .Name("GridDetail")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.TipoGrua).Title("Tipo Grúas").Width(90);
+                    columns.Bound(p => p.placas).Title("Placa Grúa").Width(90);
+                    columns.Bound(p => p.Concesionario).Title("Concesionario").Width(150);
+
+
+                }).HtmlAttributes(new { style = "height:350" })
+                .Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }))
+                .Scrollable(scr => scr.Height(350))
+                .Sortable()
+                .DataSource(dataSource => dataSource
+                .Ajax()
+                .ServerOperation(false)
+                )
+                )
+        </div>
+    </div>
+</div>
+<div class="row my-4">
+    <div class="col-12 col-md-6 mx-md-auto">
+        <div class="row justify-content-around">
+            <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
+                <button type="button" data-bs-dismiss="modal" aria-label="Close">
+                    <h6 class="m-0 px-3"><b>Cerrar</b></h6>
+                </button>
+            </div>
+            <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                <div class="controlButton">
+
+                    <button type="button" class="btnPrimary px-3" data-bs-dismiss="modal" aria-label="Close">
+                        <h6 class="m-0"><b>Aceptar</b></h6>
+                    </button>
+                    @*<button class="btnPrimary px-3" onclick="submitVehiculo()"><h5 class="m-0"><b>Guardar</b></h5></button>*@
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

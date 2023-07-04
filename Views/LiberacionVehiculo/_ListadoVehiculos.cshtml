@@ -1,0 +1,135 @@
+﻿@model List<LiberacionVehiculoModel>
+
+<script>
+    //function submitSearch() {
+
+    //    var Mydata = $("#frmSearch").serialize();
+    //    //console.log(Mydata);
+    //    $.ajax({
+    //        url: '@Url.Action("ajax_BuscarVehiculo")',
+    //        type: 'POST',
+    //        data: Mydata,
+    //        success: function (result) {
+    //            $("#listadoLiberacionVehiculos").html(result);
+    //        }
+    //    });
+    //}
+
+    function ShowDetailPopUp(id) {
+        $.ajax({
+            url: '@Url.Action("ajax_UpdateLiberacion")',
+            type: 'GET',
+            data: { id: id },
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (value) {
+                $('#ModalBodyUpdate').html(value);
+                $('#modalUpdateLiberacion').modal('show');
+            }
+        });
+    }
+
+    //$("#Grid").on("click", "#btnShowDetailPopUp", function (e) {
+    //    alert("caigo")
+    //    //var grid = $("#Grid").getKendoGrid();
+    //    //var dataItem = grid.dataItem($(this).closest("tr"));
+    //    //var id = dataItem.IdDeposito;
+    //    //console.log(id);
+    //    //$.ajax({
+    //    //    url: "@Url.Action("buttonPrompt", "Home")",
+    //    //    type: "GET",
+    //    //    data: { id: id },
+    //    //    dataType: 'json',
+    //    //    cache: false,
+    //    //    error: function (XMLHttpRequest, textStatus, errorThrown) {
+    //    //        alert("Error" + errorThrown);
+    //    //        console.log(errorThrown);
+    //    //    },
+    //    //    success: function (data) {
+    //    //        console.log("yay");
+    //    //    }
+    //    //});
+    //});
+
+</script>
+
+@*<div class="row justify-content-between mb-1 titleCustom">*@
+<div class="row justify-content-between mb-1">
+    <div class="col-12 col-md-auto my-2">
+        <h5 class="px-4"><b>Listado de vehículos</b></h5>
+        <h6 class="px-4 text-muted">Datos de liberación de vehículos registrados.</h6>
+    </div>
+</div>
+<div class="row">
+
+    @*<column template="<button data-bs-toggle=modal data-bs-target=\#editVehiculo class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>" width="100" />*@
+    <div class="col-12 mb-4 px-4 rounded gridCustom">
+        @(Html.Kendo().Grid(Model)
+            .Name("Grid")
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.IdDeposito).Title("Id").Width(90);
+                columns.Bound(p => p.marcaVehiculo).Title("Marca").Width(90);
+                columns.Bound(p => p.Serie).Title("Serie").Width(90);
+                columns.Bound(c => c.FechaIngreso).Format("{0:dd/MM/yyyy}").Width(90);
+                columns.Bound(c => c.Folio).Title("Folio").Width(90);
+                columns.Bound(c => c.nombreSubmarca).Title("Submarca").Width(90);
+                columns.Bound(c => c.delegacion).Title("Delegación").Width(90);
+                columns.Bound(p => p.IdDeposito).ClientTemplate(
+                "<button onclick=\"ShowDetailPopUp('#= IdDeposito #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Detalle</b></h6></button>"
+                ).Title("Acciones").Sortable(false).Width(150);
+            }).HtmlAttributes(new { style = "height:350" })
+            .Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }))
+            .Sortable()
+            .Scrollable(scr => scr.Height(350))
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .ServerOperation(false)
+            )
+            )
+    </div>
+
+</div>
+
+@*Modal*@
+<div class="modal fade modalCustom" id="modalUpdateLiberacion" tabindex="-1" aria-labelledby="editVehiculo" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+
+            <section class=" bg-white rounded">
+                <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                    <div class="col-auto pe-0">
+                        <div class="row align-items-center justify-content-center justify-content-md-start">
+                            <div class="col-auto pe-0">
+                                <i class="icon-editEntrega h1 colorPrimary"></i>
+                            </div>
+                            <div class="col-auto my-3">
+                                <h2 class="m-0 h3"><b>Liberación de vehículo</b></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="row">
+                            <div class="col-auto my-3">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="bg-light py-1"></div>
+                    </div>
+
+                </div>
+
+                
+
+
+                <div class="modal-body" id="ModalBodyUpdate">
+                </div>
+
+            </section>
+        </div>
+    </div>
+</div>

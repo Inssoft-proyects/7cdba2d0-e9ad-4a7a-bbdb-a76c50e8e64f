@@ -1,0 +1,96 @@
+﻿@model Concesionarios2Model
+
+@{
+}
+<form id="frmCrearConcesionario" class="row px-4 mb-4 align-items-end justify-content-center">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="controlForm my-3">
+                    @(Html.Kendo().TextBoxFor(t => t.nombre)
+                .Label(l => l.Content("Nombre <b>(obligatorio)</b>:"))
+                .Placeholder("Ingresa un nombre")
+                .HtmlAttributes(new { style = "width: 100%" })
+                )
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+        <div class="controlForm my-3">
+            <label>Delegacíon <b>(obligatorio):</b> </label>
+            @(Html.Kendo().DropDownList()
+                .Name("idDelegacion")
+                .BindTo((SelectList)ViewBag.CatDelegaciones)
+                .OptionLabel("-- Seleccione --")
+                .HtmlAttributes(new { style = "width:100%;", id = "ddlDelegaciones" }))
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+        <div class="controlForm my-3">
+            <label for="shipTo">Municipio <b>(obligatorio):</b> </label>
+            @(Html.Kendo().DropDownList()
+                .Name("idMunicipio")
+                .BindTo((SelectList)ViewBag.CatMunicipios)
+                .OptionLabel("-- Seleccione --")
+                .HtmlAttributes(new { style = "width:100%;", id = "ddlMunicipio" }))
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+        <div class="controlForm my-3">
+            @(Html.Kendo().TextBoxFor(t => t.alias)
+                .Label(l => l.Content("Alias <b>(obligatorio)</b>:"))
+                .Placeholder("Ingresa un alias")
+                .HtmlAttributes(new { style = "width: 100%" })
+                )
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+        <div class="controlForm my-3">
+            @(Html.Kendo().TextBoxFor(t => t.razonSocial)
+                .Label(l => l.Content("Razón Social <b>(obligatorio)</b>:"))
+                .Placeholder("Ingresa una razón social")
+                .HtmlAttributes(new { style = "width: 100%" })
+                )
+        </div>
+    </div>
+</form>
+<div class="row my-4">
+    <div class="col-12 col-md-6 mx-md-auto">
+        <div class="row justify-content-around">
+            <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
+                <button type="button" data-bs-dismiss="modal" aria-label="Close">
+                    <h6 class="m-0 px-3"><b>Cerrar</b></h6>
+                </button>
+            </div>
+            <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                <div class="controlButton">
+                    <button class="btnPrimary px-3" onclick="btnCrearConcesionario()">
+                        <h5 class="m-0"><b>Guardar</b></h5>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function btnCrearConcesionario() {
+        var formData = $("#frmCrearConcesionario").serialize();
+        $.ajax({
+            url: '@Url.Action("ajax_CrearConcesionario")',
+            type: 'POST',
+            data: formData,
+            success: function (result) {
+                $("#listadoConcesionarios").html(result);
+                $('#modalCrearConcesionario').modal('hide');
+                sitteg_success('Elemento guardado correctamente')
+            },
+            error: function (xhr, status) {
+                var errmsg = xhr.responseText;
+                console.log(errmsg)
+                sitteg_warning('Lo sentimos, ha ocurrido un error.');
+            }
+        });
+    }
+</script>

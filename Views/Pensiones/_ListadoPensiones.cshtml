@@ -1,0 +1,78 @@
+﻿@model List<PensionModel>
+
+<script>
+    
+
+
+</script>
+
+@*<div class="row justify-content-between mb-1 titleCustom">*@
+<div class="row mb-1">
+    <div class="col-12 col-md-auto mt-4 mb-2">
+        <h5 class="px-4"><b>Listado de Pensiones</b></h5>
+        <h6 class="px-4 text-muted">Edita los datos de las pensiones.</h6>
+    </div>
+</div>
+
+<div class="row">   
+    <div class="col-12 mb-4 px-4 rounded gridCustom">
+        @(
+            Html.Kendo().Grid(Model)
+            .Name("Grid")
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.IdPension).Width(20).Hidden();
+                columns.Bound(p => p.Pension).Hidden().ClientGroupHeaderTemplate("<label>Pensión: #=value#</label><button onclick='editarPensionByGrid()' class='btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i></h6></button>").Title("Pension").Width(150);
+                columns.Bound(p => p.Permiso).Title("Permiso").Width(100);
+                columns.Bound(p => p.delegacion).Title("Delegación").Width(100);
+                columns.Bound(c => c.Direccion).Title("Dirección").Width(150);
+                columns.Bound(c => c.Telefono).Title("Teléfono").Width(100);
+                columns.Bound(c => c.Correo).Title("Correo electrónico").Width(150);
+                columns.Bound(c => c.responsable).Title("Responsable").Width(90);
+                columns.Bound(c => c.concesionario).Title("Asociados").Width(90);
+                columns.Bound(c => c.placas).Title("Grúa (Placas)").Width(90);
+
+                @*columns.Bound(p => p.IdPension).ClientTemplate(
+                "<button onclick=\"ShowUpdatePopUp('#=IdPension#')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i></h6></button>"
+                ).Title("Editar").Sortable(false).Width(70);*@
+
+
+@*
+                columns.Bound(p => p.IdPension).ClientTemplate(
+                "<button onclick=\"ShowEstadoPopUp('#= IdPension #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i></h6></button>"
+                ).Title("Edo.").Sortable(false).Width(70);*@
+
+
+
+            }).HtmlAttributes(new { style = "height:350" })
+            .Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }).Position(GridPagerPosition.Bottom))
+            .Sortable()
+            .Scrollable(scr => scr.Height(350))
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .ServerOperation(false)
+            .Group(groups => groups.Add(p => p.Pension))
+            ))
+    </div>
+
+</div>
+
+<script>
+    function editarPensionByGrid() {
+        var grid = $("#Grid").data("kendoGrid");
+        var dataItem = grid.dataItem($(event.srcElement).closest("tr").next());
+        $.ajax({
+            url: '@Url.Action("ajax_ModalEditarPension")',
+            type: 'GET',
+            data: { idPension: dataItem.IdPension },
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (value) {
+                $('#modalBodyEditarPension').html(value);
+                $('#modalEditarPension').modal('show');
+            }
+        });
+    }
+</script>
+
+

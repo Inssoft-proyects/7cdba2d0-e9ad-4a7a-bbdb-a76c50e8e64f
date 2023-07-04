@@ -1,0 +1,156 @@
+﻿@model PensionModel
+
+<div class="panel">
+    <div class="panel-body container-fluid">
+        <div class="row row-lg">
+            <div class="col-md-12">
+                <section class=" bg-white rounded">
+                    <div class="row">
+                        <div class="col-12 my-4">
+                            <h5><b>Datos de la pensión</b></h5>
+                            <h6 class="text-muted">Completa los datos obligatorios para guardar.</h6>
+                        </div>
+                    </div>
+                    <form id="frmCrearPension">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <div class="controlForm my-3">
+                                    @(Html.Kendo().TextBoxFor(t => t.Pension)
+                                        .Label(l => l.Content("Nombre: <b>(obligatorio)</b>:"))
+                                        .Placeholder("Ingresa pensión")
+                                        .HtmlAttributes(new { style = "width: 100%" })
+                                        )
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <div class="controlForm my-3">
+                                    @(Html.Kendo().TextBoxFor(t => t.Permiso)
+                                        .Label(l => l.Content("Permiso: <b>(obligatorio)</b>:"))
+                                        .Placeholder("Ingresa Permiso")
+                                        .HtmlAttributes(new { style = "width: 100%" })
+                                        )
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <div class="controlForm my-3">
+                                    <label>Delegación:</label>
+                                    @(Html.Kendo().DropDownList()
+                                        .Name("idDelegacion")
+                                        .BindTo((SelectList)ViewBag.CatDelegaciones)
+                                        .OptionLabel("-- Seleccione --")
+                                        .HtmlAttributes(new { style = "width:100%;", id = "ddlDelegaciones" })
+                                        )
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <div class="controlForm my-3">
+                                    <label>Municipio:</label>
+                                    @(Html.Kendo().DropDownList()
+                                        .Name("idMunicipio")
+                                        .BindTo((SelectList)ViewBag.CatMunicipios)
+                                        .OptionLabel("-- Seleccione --")
+                                        .HtmlAttributes(new { style = "width:100%;" })
+                                        )
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <div class="controlForm my-3">
+                                    <label>Responsable:</label>
+                                    @(Html.Kendo().DropDownList()
+                                        .Name("idResponsable")
+                                        .BindTo((SelectList)ViewBag.CatResponsablesPensiones)
+                                        .OptionLabel("-- Seleccione --")
+                                        .HtmlAttributes(new { style = "width:100%;", id = "idResponsable" })
+                                        )
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <div class="controlForm my-3">
+                                    @(Html.Kendo().TextBoxFor(t => t.Direccion)
+                                        .Label(l => l.Content("Dirección: <b>(obligatorio)</b>:"))
+                                        .Placeholder("Ingresa Dirección")
+                                        .HtmlAttributes(new { style = "width: 100%" })
+                                        )
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <div class="controlForm my-3">
+                                    @(Html.Kendo().TextBoxFor(t => t.Telefono)
+                                        .Label(l => l.Content("Teléfono: <b>(obligatorio)</b>:"))
+                                        .Placeholder("Ingresa Teléfono")
+                                        .HtmlAttributes(new { style = "width: 100%" })
+                                        )
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <div class="controlForm my-3">
+                                    @(Html.Kendo().TextBoxFor(t => t.Correo)
+                                        .Label(l => l.Content("Correo electrónico: <b>(obligatorio)</b>:"))
+                                        .Placeholder("Ingresa electrónico")
+                                        .HtmlAttributes(new { style = "width: 100%" })
+                                        )
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="row my-12">
+                        <div class="col-12 col-md-6 mx-md-auto">
+                            <div class="row justify-content-around">
+                                <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
+                                    <button type="button" data-bs-dismiss="modal" aria-label="Close">
+                                        <h6 class="m-0 px-3"><b>Cerrar</b></h6>
+                                    </button>
+                                </div>
+                                <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                                    <div class="controlButton">
+                                        <button class="btnPrimary px-3" onclick="btnCrearPension()">
+                                            <h5 class="m-0"><b>Guardar</b></h5>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function btnCrearPension() {
+        //var Mydata = $("frmCrearGrua").serializeObject();
+        var formData = $("#frmCrearPension").serialize();
+        //var formData = new FormData();
+        //formData.delete('idDelegacion');
+        //alert(json);
+        $.ajax({
+            url: '@Url.Action("ajax_CrearPension")',
+            type: 'POST',
+            data: formData,
+            success: function (data) {
+                $('#modalBodyCrearPension').html('');
+                $('#modalCrearPension').modal('hide');
+                $("body").removeClass("modal-open").find(".modal-backdrop").remove();
+                sitteg_info('Elemento guardado correctamente');
+                $('#modalBodyEditarPension').html(data);
+                $('#modalEditarPension').modal('show');
+            },
+            error: function (xhr, status) {
+                var errmsg = xhr.responseText;
+                console.log(errmsg)
+                sitteg_warning('Lo sentimos, ha ocurrido un error.');
+            }
+        });
+
+        //$('#addDependencia').modal('hide');
+        //$('body').removeClass('model-open');
+        //$('.modal-backdrop').remove();
+    }
+   
+
+</script>

@@ -1,0 +1,59 @@
+﻿@model List<EstadisticaInfraccionMotivosModel>
+<div class="row justify-content-center">
+    <div class="px-4 my-4 rounded barCustom">
+        @(Html.Kendo().Chart(Model)
+                .Name("chart")
+                .Legend(legend => legend
+                .Position(ChartLegendPosition.Top)
+                .Labels(labels => labels
+                    .Font("700 18px Roboto, sans-serif")
+                    .Color("#6c757d")
+                    )
+                )
+                .ChartArea(chartArea => chartArea
+                .Background("transparent")
+                )
+                .Series(series =>
+                {
+                    series.Bar(model => model.Contador);
+                })
+                .CategoryAxis(axis => axis
+                .Categories(c => c.Motivo)
+                .MajorGridLines(lines => lines.Visible(false))
+                )
+                .ValueAxis(axis => axis
+                .Line(line => line.Visible(false))
+                .MajorGridLines(lines => lines.Visible(true))
+                )
+                .Tooltip(tooltip => tooltip
+                .Visible(true)
+                .Template("#= series.Motivo #: #= value #")
+                )
+                )
+
+    </div>
+</div>
+<div class="row ">
+    <div class="col-12 col-lg-11 col-xl-10 mx-lg-auto my-4 px-4 rounded">
+        @(Html.Kendo().Grid(Model)
+            .Name("gridInfraccionesPersonas")
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.Motivo).Title("Motivos de infracción");
+                columns.Bound(p => p.Contador).Title("Totales").ClientFooterTemplate("Total : #=sum#");
+            }).HtmlAttributes(new { style = "height:auto" })
+            .Pageable(pager => pager.AlwaysVisible(false).Position(GridPagerPosition.Bottom).PageSizes(false))
+            .Sortable()
+            .Scrollable(scr => scr.Enabled(false))
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .ServerOperation(false)
+            .Aggregates(aggregates =>
+            {
+                aggregates.Add(p => p.Contador).Sum();
+            })
+            )
+            )
+    </div>
+</div>
+

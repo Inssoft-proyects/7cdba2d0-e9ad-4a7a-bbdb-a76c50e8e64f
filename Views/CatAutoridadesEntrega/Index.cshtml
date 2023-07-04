@@ -1,0 +1,102 @@
+﻿@model List<GuanajuatoAdminUsuarios.Models.CatAutoridadesEntregaModel>
+
+<div class="mainContainer bg-light">
+
+    <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
+        <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+            <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                <div class="row align-items-center justify-content-center justify-content-md-start">
+                    <div class="col-auto">
+                        <i class="icon-entrega h1 colorPrimary"></i>
+                    </div>
+                    <div class="col-auto my-3">
+                        <h2 class="m-0 h3"><b>Catalogo de autoridades de entrega</b></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
+                <div class="row">
+                    <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                        <button href="#" id="btnNuevaDep" onclick="mostrarModal()">
+                            <h6 class="m-0 d-flex align-items-center"><i class="icon-addEntrega h5 mb-0 me-2"></i><b>Agregar nueva autoridad de entrega</b></h6>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="bg-light py-1"></div>
+            </div>
+        </div>
+        <div class="row justify-content-between mb-1 titleCustom">
+            <div class="col-12 col-md-auto mt-4 mb-2">
+                <h5 class="px-4"><b>Listado de autoridades de entrega</b></h5>
+                <h6 class="px-4 text-muted">Edita o inactiva las autoridades de entrega.</h6>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 mb-4 rounded gridCustom">
+                <div id="tablaAutoridadesEntrega">
+                    <partial name="_ListaAutoridadesEntrega" model="Model" />
+
+
+
+                    <div class="modal fade modalCustom" id="agregarAutEntrega" tabindex="-1" aria-labelledby="agregarAutEntregaLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body" id="ModalBodyaAgregarAutEntrega">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!-----------------------------------------------------------UPDATE--------------------------------------------------------------------------------------------->
+                    <div class="modal fade modalCustom" id="editarAutEntrega" tabindex="-1" aria-labelledby="editarAutEntregaLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body" id="ModalBodyEditarAutEntrega">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-----------------------------------------------------------DELETE--------------------------------------------------------------------------------------------->
+                    <div class="modal fade modalCustom" id="eliminarAutEntrega" tabindex="-1" aria-labelledby="eliminarAutEntregaLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body" id="ModalBodyEliminarAutEntrega">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+
+<script>
+    function mostrarModal() {
+        $.ajax({
+            url: '@Url.Action("AgregarAutoridadEntregaModal")',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                $('#ModalBodyaAgregarAutEntrega').html(data);
+                $('#agregarAutEntrega').modal('show');
+            }
+        });
+    }
+
+
+</script>

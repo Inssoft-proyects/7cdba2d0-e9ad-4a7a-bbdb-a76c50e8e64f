@@ -1,0 +1,718 @@
+﻿@model InfraccionesModel
+
+<div class="mainContainer bg-light">
+    <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
+        <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+            <div class="col-12 col-md-auto">
+                <div class="row align-items-center justify-content-center justify-content-md-start">
+                    <div class="col-auto p-0">
+                        <i class="icon-infracion h1 colorPrimary"></i>
+                    </div>
+                    <div class="col-auto my-3">
+                        <h2 class="m-0 h3"><b>Infracción</b></h2>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-5 pe-0">
+                <div class="bgSuccess py-1"></div>
+            </div>
+            <div class="col-7 ps-0">
+                <div class="bg-light py-1"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 my-4">
+                <h5 class="px-4 my-4"><b>Datos de la infracción</b></h5>
+                <h6 class="px-4 my-4 text-muted">Completa los datos solicitados.</h6>
+            </div>
+            <div class="col-md-4 auto">
+                <div class="row">
+                    <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                        <button href="#" id="btnEditarInfraccion" onclick="btnEditarInfraccion()">
+                            <h6 class="m-0 d-flex align-items-center"><i class="icon-addInfracion h5 mb-0 me-2"></i><b>Guardar infracción</b></h6>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <nav class="tabCustom">
+                    @*navegador tabs*@
+                    <div class="nav nav-tabs row mx-0" id="nav-tab" role="tablist">
+                        <button class="nav-link active col" id="informacionInfraccion-tab" data-bs-toggle="tab" data-bs-target="#informacionInfraccion-container" type="button" role="tab" aria-controls="informacionInfraccion-container" aria-selected="true">
+                            <div class="row justify-content-center align-items-center px-2 py-1">
+                                <div class="col-auto radioCustom p-0">
+                                    <div class="rounded-circle m-1"></div>
+                                </div>
+                                <div class="col-auto p-0">
+                                    <h6 class="m-0"><b>Información</b></h6>
+                                </div>
+                            </div>
+                        </button>
+                        <button class="nav-link col" id="lugar-tab" data-bs-toggle="tab" data-bs-target="#lugar-container" type="button" role="tab" aria-controls="lugar-container" aria-selected="false">
+                            <div class="row justify-content-center align-items-center px-2 py-1">
+                                <div class="col-auto radioCustom p-0">
+                                    <div class="rounded-circle m-1"></div>
+                                </div>
+                                <div class="col-auto p-0">
+                                    <h6 class="m-0"><b>Lugar</b></h6>
+                                </div>
+                            </div>
+                        </button>
+                        <button class="nav-link col" id="vehiculo-tab" data-bs-toggle="tab" data-bs-target="#vehiculo-container" type="button" role="tab" aria-controls="vehiculo-container" aria-selected="false">
+                            <div class="row justify-content-center align-items-center px-2 py-1">
+                                <div class="col-auto radioCustom p-0">
+                                    <div class="rounded-circle m-1"></div>
+                                </div>
+                                <div class="col-auto p-0">
+                                    <h6 class="m-0"><b>Vehículo</b></h6>
+                                </div>
+                            </div>
+                        </button>
+                        <button class="nav-link col" id="conductor-tab" data-bs-toggle="tab" data-bs-target="#conductor-container" type="button" role="tab" aria-controls="conductor-container" aria-selected="false">
+                            <div class="row justify-content-center align-items-center px-2 py-1">
+                                <div class="col-auto radioCustom p-0">
+                                    <div class="rounded-circle m-1"></div>
+                                </div>
+                                <div class="col-auto p-0">
+                                    <h6 class="m-0"><b>Conductor</b></h6>
+                                </div>
+                            </div>
+                        </button>
+                        <button class="nav-link col" id="motivos-tab" data-bs-toggle="tab" data-bs-target="#motivos-container" type="button" role="tab" aria-controls="motivos-container" aria-selected="false">
+                            <div class="row justify-content-center align-items-center px-2 py-1">
+                                <div class="col-auto radioCustom p-0">
+                                    <div class="rounded-circle m-1"></div>
+                                </div>
+                                <div class="col-auto p-0">
+                                    <h6 class="m-0"><b>Motivos</b></h6>
+                                </div>
+                            </div>
+                        </button>
+                        <button class="nav-link col" id="garantia-tab" data-bs-toggle="tab" data-bs-target="#garantia-container" type="button" role="tab" aria-controls="garantia-container" aria-selected="false">
+                            <div class="row justify-content-center align-items-center px-2 py-1">
+                                <div class="col-auto radioCustom p-0">
+                                    <div class="rounded-circle m-1"></div>
+                                </div>
+                                <div class="col-auto p-0">
+                                    <h6 class="m-0"><b>Garantía</b></h6>
+                                </div>
+                            </div>
+                        </button>
+
+                    </div>
+                </nav>
+                <form id="frmEditarInfraccion">
+                    @Html.HiddenFor(m=> m.idInfraccion)
+                    @Html.HiddenFor(m=> m.placasVehiculo)
+                    @Html.HiddenFor(m=> m.NumTarjetaCirculacion)
+                    @Html.HiddenFor(m=> m.idGarantia)
+                    @Html.HiddenFor(m=> m.idPersonaInfraccion)
+                    @Html.HiddenFor(m=> m.idPersona)
+                    @Html.HiddenFor(m=> m.idVehiculo)
+                    @*Contenidos de cada tab*@
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane tabCustomConteiner fade show active" id="informacionInfraccion-container" role="tabpanel" aria-labelledby="informacionInfraccion-tab">
+                            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                                <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                                    <div class="row align-items-center justify-content-center justify-content-md-start">
+                                        <div class="col-auto">
+                                            <i class="icon-infracion h1 colorPrimary"></i>
+                                        </div>
+                                        <div class="col-auto my-3">
+                                            <h5 class="px-4"><b>Información de infracción</b></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row my-4 px-4">
+                                <div class="form-group col-md-4">
+                                    <div class="controlForm">
+                                        <label>Fecha infracción:</label>
+                                        @(Html.Kendo().DateTimePickerFor(t => t.fechaInfraccion)
+                                            .Label(l => l.Content("Fecha: <b>(obligatorio)</b>:"))
+                                            .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                                            )
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row my-4 px-4">
+                                <div class="form-group col-md-4">
+                                    <div class="controlForm">
+                                        @(Html.Kendo().TextBoxFor(t => t.folioInfraccion)
+                                            .Label(l => l.Content("Folio: <b>(obligatorio)</b>:"))
+                                            .Placeholder("Ingresa folio")
+                                            .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                                            )
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <div class="controlForm">
+                                        <label>Oficial:</label>
+                                        @(Html.Kendo().DropDownListFor(m => m.idOficial)
+                                            .BindTo((SelectList)ViewBag.CatOficiales)
+                                            .OptionLabel("-- Seleccione --")
+                                            .HtmlAttributes(new { style = "width:100%;", required = "required" })
+                                            )
+                                        @Html.ValidationMessageFor(x => x.idOficial)
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <div class="controlForm">
+                                        <label>Municipio:</label>
+                                        @(Html.Kendo().DropDownListFor(m => m.idMunicipio)
+                                            .BindTo((SelectList)ViewBag.CatMunicipios)
+                                            .OptionLabel("-- Seleccione --")
+                                            .HtmlAttributes(new { style = "width:100%;", required = "required" })
+                                            )
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row my-4 px-4">
+                                <div class="form-group col-md-4">
+                                    <div class="checkbox">
+                                        <label>Infracción de cortesía: </label>&nbsp;&nbsp;
+                                        @(Html.Kendo().SwitchFor(m => m.infraccionCortesia)
+                                            .Messages(c => c.Checked("SI").Unchecked("NO"))
+                                            )
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-8">
+                                    <div class="controlForm">
+                                        @(Html.Kendo().TextAreaFor(t => t.observaciones)
+                                            .Resizable("none")
+                                            .Rows(4)
+                                            .Label(l => l.Content("Observaciones generales:"))
+                                            .Placeholder("Ingresa observaciones")
+                                            .HtmlAttributes(new { style = "width: 100%" })
+                                            )
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="tabCustomEnd"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane tabCustomConteiner fade show" id="lugar-container" role="tabpanel" aria-labelledby="lugar-tab">
+                            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                                <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                                    <div class="row align-items-center justify-content-center justify-content-md-start">
+                                        <div class="col-auto">
+                                            <i class="icon-carretera h1 colorPrimary"></i>
+                                        </div>
+                                        <div class="col-auto my-3">
+                                            <h5 class="px-4"><b>Lugar de la infracción</b></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row my-4 px-4">
+                                <div class="form-group col-md-4">
+                                    <div class="controlForm">
+                                        <label>Carretera:</label>
+                                        @(Html.Kendo().DropDownListFor(m => m.idCarretera)
+                                            .BindTo((SelectList)ViewBag.CatCarreteras)
+                                            .OptionLabel("-- Seleccione --")
+                                            .HtmlAttributes(new { style = "width:100%;", id = "ddlCarreteras", required = "required" })
+                                            )
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <div class="controlForm">
+                                        <label>Tramo:</label>
+                                        <div id="divTramo">
+                                            @(Html.Kendo().DropDownListFor(f => f.idTramo)
+                                                .BindTo((SelectList)ViewBag.CatTramos)
+                                                .OptionLabel("-- Seleccione --")
+                                                .HtmlAttributes(new { style = "width:100%;", required = "required" })
+                                                )
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <div class="controlForm">
+                                        @(Html.Kendo().IntegerTextBoxFor(t => t.kmCarretera)
+                                            .Label(l => l.Content("Kilometro: <b>(obligatorio)</b>:"))
+                                            .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
+                                            )
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row my-4 px-4">
+                                <div class="form-group col-md-3">
+                                    <div class="controlForm">
+                                        @(Html.Kendo().TextBoxFor(t => t.lugarCalle)
+                                            .Label(l => l.Content("Calle: <b>(obligatorio)</b>:"))
+                                            .Placeholder("Ingresa calle")
+                                            .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                                            )
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <div class="controlForm">
+                                        @(Html.Kendo().TextBoxFor(t => t.lugarNumero)
+                                            .Label(l => l.Content("Número: <b>(obligatorio)</b>:"))
+                                            .Placeholder("Ingresa número")
+                                            .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                                            )
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <div class="controlForm">
+                                        @(Html.Kendo().TextBoxFor(t => t.lugarColonia)
+                                            .Label(l => l.Content("Colonia: <b>(obligatorio)</b>:"))
+                                            .Placeholder("Ingresa colonia")
+                                            .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                                            )
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <div class="controlForm">
+                                        @(Html.Kendo().TextBoxFor(t => t.lugarEntreCalle)
+                                            .Label(l => l.Content("Entre calle: <b>(obligatorio)</b>:"))
+                                            .Placeholder("Ingresa entre calle")
+                                            .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                                            )
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="tabCustomEnd"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane tabCustomConteiner fade show" id="vehiculo-container" role="tabpanel" aria-labelledby="vehiculo-tab">
+                            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                                <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                                    <div class="row align-items-center justify-content-center justify-content-md-start">
+                                        <div class="col-auto">
+                                            <i class="icon-edit-car h1 colorPrimary"></i>
+                                        </div>
+                                        <div class="col-auto my-3">
+                                            <h5 class="px-4"><b>Vehículo de la infracción</b></h5>
+                                            @*<h6 class="px-4 text-muted">Marque el vehículo que desea asociar.</h6>*@
+                                        </div>
+                                    </div>
+                                </div>
+                                @*<div class="col-12 col-md-6 col-lg-7 col-xl-auto">
+                                <div class="row">
+                                <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                                <button href="#" id="btnNuevoVehiculo" onclick="mostrarModal()">
+                                <h6 class="m-0 d-flex align-items-center"><i class="icon-addCar h5 mb-0 me-2"></i><b>Agregar nuevo vehículo</b></h6>
+                                </button>
+                                </div>
+                                </div>
+                                </div>*@
+                            </div>
+                            <div id="divIsPropietarioConductor" class="row my-4 px-4">
+                                <div class="form-group col-md-8">
+                                    <div class="checkbox">
+                                        <label>El propietario del vehículo es el conductor: </label>&nbsp;&nbsp;
+                                        @{
+                                            if (Model.isPropietarioConductor)
+                                            {
+                                                <text>SI</text>
+                                            }
+                                            else
+                                            {
+                                                <text>NO</text>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row my-4 px-4">
+                                <div id="detalleVehiculo">
+                                    <partial name="_DetalleVehiculo" model="Model.Vehiculo" />
+                                </div>
+                            </div>
+                            @*<div class="row my-4 px-4">
+                            <div id="listadoVehiculos">
+                            <partial name="_ListadoVehiculos" model="ViewBag.Vehiculos" />
+                            </div>
+                            </div>*@
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="tabCustomEnd"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane tabCustomConteiner fade show" id="conductor-container" role="tabpanel" aria-labelledby="conductor-tab">
+                            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                                <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                                    <div class="row align-items-center justify-content-center justify-content-md-start">
+                                        <div class="col-auto">
+                                            <i class="icon-conductor h1 colorPrimary"></i>
+                                        </div>
+                                        <div class="col-auto my-3">
+                                            <h5 class="px-4"><b>Conductor de la infracción</b></h5>
+                                            @*<h6 class="px-4 text-muted">Marque la persona que desea asociar como conductor.</h6>*@
+                                        </div>
+                                    </div>
+                                </div>
+                                @*<div class="col-12 col-md-6 col-lg-7 col-xl-auto">
+                                <div class="row">
+                                <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                                <button href="#" id="btnNuevoConductor" onclick="mostrarModal()">
+                                <h6 class="m-0 d-flex align-items-center"><i class="icon-addConductor h5 mb-0 me-2"></i><b>Agregar nuevo conductor</b></h6>
+                                </button>
+                                </div>
+                                </div>
+                                </div>*@
+                            </div>
+                            <div class="row my-4 px-4">
+                                <div id="detallePersonas">
+                                    <partial name="_DetallePersona" model="Model.Persona" />
+                                </div>
+                            </div>
+                            <input type="hidden" id="hdnIdPersonaTemp" value="" />
+                            @*<div class="row my-4 px-4">
+                            <div id="listadoPersonas">
+                            <partial name="_ListadoPersonas" model="ViewBag.Personas" />
+                            </div>
+                            </div>*@
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="tabCustomEnd"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane tabCustomConteiner fade show" id="motivos-container" role="tabpanel" aria-labelledby="motivos-tab">
+                            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                                <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                                    <div class="row align-items-center justify-content-center justify-content-md-start">
+                                        <div class="col-auto">
+                                            <i class="icon-infracion h1 colorPrimary"></i>
+                                        </div>
+                                        <div class="col-auto my-3">
+                                            <h5 class="px-4"><b>Motivos de la infracción</b></h5>
+                                            @*<h6 class="px-4 text-muted">Marque la persona que desea asociar como conductor.</h6>*@
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
+                                    <div class="row">
+                                        <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                                            <button type="button" id="btnNuevoMotivo" onclick="btnModalCrearMotivo()">
+                                                <h6 class="m-0 d-flex align-items-center"><i class="icon-addCausas h5 mb-0 me-2"></i><b>Agregar nuevo motivo</b></h6>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row my-4 px-4">
+                                <div id="listadoMotivos">
+                                    <partial name="_ListadoMotivos" model="Model.MotivosInfraccion" />
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="tabCustomEnd"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane tabCustomConteiner fade show" id="garantia-container" role="tabpanel" aria-labelledby="garantia-tab">
+                            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                                <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                                    <div class="row align-items-center justify-content-center justify-content-md-start">
+                                        <div class="col-auto">
+                                            <i class="icon-infracion h1 colorPrimary"></i>
+                                        </div>
+                                        <div class="col-auto my-3">
+                                            <h5 class="px-4"><b>Garantía de la infracción</b></h5>
+                                            @*<h6 class="px-4 text-muted">Marque la persona que desea asociar como conductor.</h6>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @Html.HiddenFor(m=> m.idGarantia)
+                            <div class="row my-4 px-4">
+                                <div class="col-12 col-md-4">
+                                    <div class="controlForm">
+                                        <label>Concepto:</label>
+                                        @(Html.Kendo().DropDownListFor(m => m.Garantia.idCatGarantia)
+                                            .BindTo((SelectList)ViewBag.CatGarantias)
+                                            .OptionLabel("-- Seleccione --")
+                                            .HtmlAttributes(new { style = "width:100%;", id = "ddlTipoGarantia", required = "required" }))
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row my-4 px-4">
+                                <div id="divGarantiaPlaca" style="display:none">
+                                    <div class="row my-4">
+                                        <div class="col-12 col-md-4">
+                                            <div class="controlForm">
+                                                <label>Tipo placa:</label>
+                                                @(Html.Kendo().DropDownListFor(m => m.Garantia.idTipoPlaca)
+                                                    .BindTo((SelectList)ViewBag.CatTipoPlaca)
+                                                    .OptionLabel("-- Seleccione --")
+                                                    .HtmlAttributes(new { style = "width:100%;" }))
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <div class="controlForm">
+                                                <label>No. de placa:</label>
+                                                @Html.DisplayFor(m=> m.placasVehiculo)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="divGarantiaTarjeta" style="display:none">
+                                    <div class="row my-4">
+                                        <div class="col-12 col-md-4">
+                                            <div class="controlForm">
+                                                <label>Tarjeta de circulación:</label>
+                                                @Html.DisplayFor(m=> m.NumTarjetaCirculacion)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="divGarantiaLicencia" style="display:none">
+                                    <div class="row my-4">
+                                        <div class="col-12 col-md-4">
+                                            <div class="controlForm">
+                                                <label>Licencia:</label>
+                                                @(Html.Kendo().DropDownListFor(m => m.Garantia.idTipoLicencia)
+                                                    .BindTo((SelectList)ViewBag.CatTipoLicencia)
+                                                    .OptionLabel("-- Seleccione --")
+                                                    .HtmlAttributes(new { style = "width:100%;" }))
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <div class="controlForm">
+                                                @(Html.Kendo().TextBoxFor(t => t.Garantia.numLicencia)
+                                                    .Label(l => l.Content("Número licencia: <b>(obligatorio)</b>:"))
+                                                    .Placeholder("Ingresa licencia")
+                                                    .HtmlAttributes(new { style = "width: 100%" })
+                                                    )
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="divGarantiaVehiculo" style="display:none">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="tabCustomEnd"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="modal fade modalCustom" id="modalCrearMotivo" aria-labelledby="modalCrearMotivo" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                <div class="col-auto pe-0">
+                    <div class="row align-items-center justify-content-center justify-content-md-start">
+                        <div class="col-auto pe-0">
+                            <i class="icon-addConcecionario h1 colorPrimary"></i>
+                        </div>
+                        <div class="col-auto my-3">
+                            <h2 class="m-0 h3"><b>Agregar motivo de la infracción</b></h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <div class="row">
+                        <div class="col-auto my-3">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="bg-light py-1"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 my-4">
+                    <h5 class="px-4"><b>Datos de nuevo motivo</b></h5>
+                    <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
+                </div>
+            </div>
+            <div class="modal-body" id="modalBodyCrearMotivo">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        initialCharge();
+    });
+
+    function initialCharge() {
+        var idCatGarantia = '@(Model.Garantia.idCatGarantia ?? 0)';
+
+        if (idCatGarantia == 1) { $("#divGarantiaPlaca").show(); }
+        if (idCatGarantia == 2) { $("#divGarantiaLicencia").show(); }
+        if (idCatGarantia == 3) { $("#divGarantiaTarjeta").show(); }
+        if (idCatGarantia == 4) { $("#divGarantiaVehiculo").show(); }
+
+        $("#lblUmas").text('@Model.umas')
+        $("#lblTotales").text('@Model.totalInfraccion')
+    }
+
+    $("#ddlTipoGarantia").on("change", function () {
+        var idCatGarantia = $(this).val();
+        $("#divGarantiaPlaca").hide();
+        $("#divGarantiaTarjeta").hide();
+        $("#divGarantiaLicencia").hide();
+        $("#divGarantiaVehiculo").hide();
+        if (idCatGarantia == 1) { $("#divGarantiaPlaca").show(); }
+        if (idCatGarantia == 2) { $("#divGarantiaLicencia").show(); }
+        if (idCatGarantia == 3) { $("#divGarantiaTarjeta").show(); }
+        if (idCatGarantia == 4) { $("#divGarantiaVehiculo").show(); }
+    });
+
+    function btnModalCrearMotivo() {
+        $.ajax({
+            url: '@Url.Action("ajax_ModalCrearMotivo")',
+            type: 'GET',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                $('#modalBodyCrearMotivo').html(data);
+                $('#modalCrearMotivo').modal('show');
+            }
+        });
+    }
+
+    $("#ddlCarreteras").on("change", function () {
+        var value = $(this).val();
+        if (value == "") {
+            $("#idConcesionario option[value!='']").remove();
+        }
+        else {
+            _set_combo_catalog("CatTramosByFilter", value, "idTramo", "false", "divTramo", "");
+            $('#idTramo').kendoDropDownList();
+        }
+    });
+
+    function btnEditarInfraccion() {
+        var validator = $("#frmEditarInfraccion").kendoValidator().data('kendoValidator');
+        validator.validate();
+        if ($("#idVehiculo").val() == '') {
+            sitteg_info('Debe seleccionar un vehículo');
+            return;
+        }
+
+        if ($("#idPersona").val() == '') {
+            sitteg_info('Debe seleccionar un conductor');
+            return;
+        }
+
+        if (validator.validate()) {
+            var formData = $("#frmEditarInfraccion").serialize();
+            //var formData = new FormData();
+            //formData.delete('idDelegacion');
+            //alert(json);
+            $.ajax({
+                url: '@Url.Action("ajax_editarInfraccion")',
+                type: 'POST',
+                data: formData,
+                success: function (result) {
+                    sitteg_success('Elemento guardado correctamente')
+                    window.setTimeout(function () {
+                        window.location.href = '/Infracciones/Index'
+                    }, 500);
+                },
+                error: function (xhr, status) {
+                    var errmsg = xhr.responseText;
+                    console.log(errmsg)
+                    sitteg_warning('Lo sentimos, ha ocurrido un error.');
+                }
+            });
+        }
+        else {
+            sitteg_info('Debe llenar los campos requeridos');
+            return;
+        }
+
+    }
+
+    function isPropietarioOnChange(e) {
+        var isPropietario = e.checked;
+        if (isPropietario) {
+            $("#listadoPersonas").hide();
+            $("#listadoPersonas").html("");
+            $("#detallePersonas").show();
+            idPersona = $("#hdnIdPersonaTemp").val();
+            buscarPersona(idPersona);
+        }
+        else {
+            getListadoPersonasInfracciones();
+            $("#listadoPersonas").show();
+            $("#detallePersonas").hide();
+            $("#idPersona").val('');
+        }
+    }
+    function buscarVehiculo(pidVehiculo) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("ajax_detalleVehiculo")',
+            data: {
+                "idVehiculo": pidVehiculo,
+            },
+            success: function (data) {
+                $("#detalleVehiculo").html(data);
+                $("#idVehiculo").val(pidVehiculo);
+            }
+            //,
+            //error: function (xhr, status) {
+            //    var errmsg = msg_err_gral;
+            //    semg_error(errmsg);
+            //}
+        });
+    }
+
+    function buscarPersona(pidPersona) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("ajax_detallePersona")',
+            data: {
+                "idPersona": pidPersona,
+            },
+            success: function (data) {
+                $("#detallePersonas").html(data);
+                $("#idPersona").val(pidPersona);
+                $("#detallePersonas").show();
+            }
+            //,
+            //error: function (xhr, status) {
+            //    var errmsg = msg_err_gral;
+            //    semg_error(errmsg);
+            //}
+        });
+    }
+    function getListadoPersonasInfracciones() {
+        $("#listadoPersonas").show();
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("ajax_listadoPersonasInfracciones")',
+            success: function (data) {
+                $("#listadoPersonas").html(data);
+            }
+            //,
+            //error: function (xhr, status) {
+            //    var errmsg = msg_err_gral;
+            //    semg_error(errmsg);
+            //}
+        });
+    }
+</script>

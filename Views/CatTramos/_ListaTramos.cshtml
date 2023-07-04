@@ -1,0 +1,61 @@
+﻿<div class="row">
+    <div class="col-12 mb-4 px-4 rounded gridCustom">
+
+        @(
+            Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CatTramosModel>()
+            .Name("gridTramos")
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.Tramo).Width(80);
+                columns.Bound(c => c.Carretera).Width(100);
+                columns.Bound(c => c.estatusDesc).Title("Estatus en sistema").Width(100);
+                columns.Command(c => c.Custom("Editar").Click("editarTramo")).Width(100);
+                // columns.Command(c => c.Custom("Eliminar").Click("eliminar")).Width(100);
+
+
+            }).HtmlAttributes(new { style = "height:550px" })
+            .Sortable()
+            .Groupable()
+            .Scrollable()
+            .Pageable()
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("GetTra", "CatTramos"))
+            .PageSize(5).Model(model => model.Id(p => p.IdTramo))
+            )
+            .ToolBar(t => t.Search())
+            .Search(s =>
+            {
+                s.Field(c => c.Carretera);
+                s.Field(c => c.Tramo);
+
+
+            })
+
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single)
+            .Type(GridSelectionType.Row)
+            )
+
+            )
+    </div>
+</div>
+
+<script>
+    function editarTramo(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var IdTramo = dataItem.IdTramo;
+        console.log(IdTramo);
+
+        $.ajax({
+            url: '@Url.Action("EditarTramoModal", "CatTramos")',
+            type: 'POST', 
+            data: { IdTramo: IdTramo },
+            success: function (result) {
+                $('#ModalBodyEditarTramo').html(result);
+                $('#editarTramo').modal('show');
+
+            },
+        })
+    }
+
+</script>

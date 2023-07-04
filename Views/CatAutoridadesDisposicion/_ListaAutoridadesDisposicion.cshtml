@@ -1,0 +1,77 @@
+﻿<div class="row">
+    <div class="col-12 mb-4 px-4 rounded gridCustom">
+        @(
+            Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CatAutoridadesDisposicionModel>()
+            .Name("grid")
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.IdAutoridadDisposicion).Width(20);
+                columns.Bound(c => c.NombreAutoridadDisposicion).Title("Autoridad").Width(100);
+                columns.Bound(c => c.estatusDesc).Title("Estatus en sistema").Width(100);
+                columns.Command(c => c.Custom("Editar").Click("getId")).Width(100);
+               // columns.Command(c => c.Custom("Eliminar").Click("eliminar")).Width(80);
+
+            }).HtmlAttributes(new { style = "height:550px" })
+            .Sortable()
+            .Groupable()
+            .Scrollable()
+            .Pageable()
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("GetAutDisp", "CatAutoridadesDisposicion"))
+            .PageSize(5).Model(model => model.Id(p => p.IdAutoridadDisposicion))
+            )
+            .ToolBar(t => t.Search())
+            .Search(s =>
+            {
+                s.Field(c => c.NombreAutoridadDisposicion);
+            })
+
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single)
+            .Type(GridSelectionType.Row)
+            )
+
+
+
+            )
+
+
+    </div>
+</div>
+
+
+<script>
+    function getId(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var IdAutoridadDisposicion = dataItem.IdAutoridadDisposicion;
+        console.log(IdAutoridadDisposicion);
+
+        $.ajax({
+            url: '@Url.Action("EditarAutoridadDisposicionParcial", "CatAutoridadesDisposicion")', // URL de la acción del controlador
+            type: 'POST', // Tipo de solicitud HTTP (POST o GET)
+            data: { IdAutoridadDisposicion: IdAutoridadDisposicion }, // Datos que se enviarán al controlador
+            success: function (result) {
+                $('#ModalBodyEditarAutoridadDisp').html(result);
+                $('#editarAutoridadDisp').modal('show');
+
+            },
+        })
+    }
+
+    function eliminar(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var IdAutoridadDisposicion = dataItem.IdAutoridadDisposicion;
+        console.log(IdAutoridadDisposicion);
+
+        $.ajax({
+            url: '@Url.Action("EliminarAutoridadDisposicionParcial", "CatAutoridadesDisposicion")', // URL de la acción del controlador
+            type: 'POST', // Tipo de solicitud HTTP (POST o GET)
+            data: { IdAutoridadDisposicion: IdAutoridadDisposicion }, // Datos que se enviarán al controlador
+            success: function (result) {
+                $('#ModalBodyEliminarAutoridadDisp').html(result);
+                $('#eliminarAutoridadDisp').modal('show');
+
+            },
+        })
+    }
+</script>

@@ -1,0 +1,65 @@
+﻿@model List<Gruas2Model>
+
+@{
+}
+<div class="row">
+    <div class="row align-items-center justify-content-between pt-3 pb-2">
+        <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+            <div class="row">
+                <h5><b>Grúas disponibles</b></h5>
+                <h6 class="text-muted">Marque las grúas que desea asociar a la pensión.</h6>
+
+            </div>
+        </div>
+    </div>
+    @*  headerTemplate: `<input type="checkbox" id="header-chb" class="k-checkbox">
+    <label class="k-checkbox-label" for="header-chb"></label>`,
+    template: function(dataItem){
+    return `<input type="checkbox" id="${dataItem.ProductID}" class="k-checkbox">
+    <label class="k-checkbox-label" for="${dataItem.ProductID}"></label>`*@
+
+
+    <div class="col-12 mb-4 px-2 rounded gridCustom">
+        @(Html.Kendo().Grid(Model)
+            .Name("gridGruasPensiones")
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.isPension).Hidden();
+                columns.Bound(p => p.municipio).Title("Municipio").Width(90);
+                columns.Bound(p => p.concesionario).Title("Concesionario").Width(90);
+                columns.Bound(p => p.noEconomico).Title("No. Economico").Width(90);
+                columns.Bound(c => c.modelo).Title("Modelo").Width(90);
+                columns.Bound(c => c.placas).Title("Placas").Width(90);
+                columns.Bound(c => c.tipoGrua).Title("Tipo Grúa").Width(90);
+                columns.Bound(p => p.isPension)
+                .ClientTemplate("<input type='checkbox' #= isPension ? checked='checked':'' # class='controlForm input chkbx' />").Title("Seleccionar Grúa").Width(90);
+            @*.ClientTemplate("<input type='checkbox' id='${dataItem.idGrua}' class='k-checkbox'> <label class='k-checkbox-label' for='${dataItem.idGrua}'></label>").Title("Seleccionar Grúa").Width(90);*@
+        @*"<button onclick=\"ShowUpdatePopUp('#=isPension#')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i></h6></button>"*@
+
+                @*columns.Template(@<text></text>).ClientTemplate("<input type='checkbox' #= IsAdmin ? checked='checked':'' # class='chkbx' />");*@
+                @*columns.Command(c => c.Custom("Editar").Click("editar")).Width(100);*@
+            }).HtmlAttributes(new { style = "height:350" })
+            .Pageable(pager => pager.AlwaysVisible(true).Position(GridPagerPosition.Bottom).PageSizes(true))
+            .Sortable()
+            .Scrollable(scr => scr.Height(350))
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .Model(model => model.Id(id => id.idGrua))
+            .ServerOperation(false)
+            )
+        )
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#modalEditarPension").on("show.bs.modal shown.bs.modal", function (e) {
+            // Remove overlay and enable scrolling of body
+            $("body").removeClass("modal-open").find(".modal-backdrop").remove();
+        });
+        $("#modalEditarPension").on('hide.bs.modal', function () {
+            $('#modalBodyEditarPension').html('');
+        });
+    });
+</script>

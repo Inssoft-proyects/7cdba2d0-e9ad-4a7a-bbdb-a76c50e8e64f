@@ -1,0 +1,67 @@
+﻿
+
+
+    <div class="col-12 mb-4 px-4 rounded gridCustom">
+
+    @(
+        Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel>()
+        .Name("grid")
+            .Columns(columns =>
+             {
+                 columns.Bound(c => c.IdAccidente).Width(90);
+                 columns.Bound(c => c.Fecha).Format("{0:dd/MM/yyyy}").Width(90);
+                 columns.Bound(c => c.Hora).Width(90);
+                 columns.Bound(c => c.Municipio).Width(90);
+                 columns.Bound(c => c.Carretera).Width(90);
+                 columns.Bound(c => c.Tramo).Title("Tramo").Width(60);
+                 columns.Bound(c => c.EstatusReporte).Title("Estatus de Reporte").Width(80);
+                 columns.Template("<button data-bs-toggle='modal' class='w-100 btn'onclick='completarAccidente()'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Continuar</b></h6></button>").Width(90);
+
+
+                
+
+            }).HtmlAttributes(new { style = "height:550px" })
+            .Sortable()
+            .Groupable()
+            .Scrollable()
+            .Pageable()
+            .DataSource(dataSource => dataSource
+            .Ajax()
+        .Read(read => read.Action("BuscarAccidentesLista", "CapturaAccidentes"))
+            .PageSize(5).Model(model => model.Id(p => p.IdAccidente))
+            )
+            .ToolBar(t => t.Search())
+            .Search(s =>
+            {
+                s.Field(c => c.EstatusReporte);
+         
+            })
+
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single)
+            .Type(GridSelectionType.Row)
+            )
+            )
+
+    </div>
+
+
+
+<script>
+    function completarAccidente(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var IdAccidente = dataItem.IdAccidente;
+        console.log(Id);
+
+        $.ajax({
+            url: '@Url.Action("MostrarDetalle", "CancelarInfraccion")',
+            type: 'POST',
+            data: { Id: Id },
+            success: function (result) {
+                console.log("DTALLE", result)
+                $("#detalle").html(result);
+                $("#detalle").show();
+
+            },
+        })
+    }
+</script>

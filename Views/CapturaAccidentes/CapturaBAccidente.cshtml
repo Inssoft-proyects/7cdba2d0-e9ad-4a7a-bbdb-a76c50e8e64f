@@ -1,0 +1,224 @@
+﻿<div class="mainContainer bg-light">
+
+    <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
+        <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+            <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                <div class="row align-items-center justify-content-center justify-content-md-start">
+                    <div class="col-auto">
+                        <div class="border border-2 border-dark rounded-circle">
+                            <h5 class="m-0 numberCard d-flex align-items-center justify-content-center">
+                                <b>1</b>
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="icon-factorAccidente h1 colorPrimary"></i>
+                    </div>
+                    <div class="col-auto my-3">
+                        <h2 class="m-0 h3"><b>Factores que intervienen en el accidente</b></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8 pe-0">
+                <div class="bgSuccess py-1"></div>
+            </div>
+            <div class="col-4 ps-0">
+                <div class="bg-light py-1"></div>
+            </div>
+        </div>
+        <div class="row justify-content-between align-items-end mb-1">
+            <div class="col-12 col-md-auto mt-4 mb-2">
+                <h5 class="px-4"><b>Listado de factores del accidente</b></h5>
+                <h6 class="px-4 text-muted">Da de alta los factores del accidente.</h6>
+            </div>
+            <div class="col-12 col-lg-auto text-center">
+                <div class="btnOutline btnOutlinePrimary px-4 my-3">
+                    <button data-bs-toggle="modal" onclick="mostrarModalAgregarFactor()">
+                        <h5 class="m-0"><i class="me-2 icon-addFactorAccidente"></i><b>Agregar factor</b></h5>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 my-4 px-4 rounded">
+
+                <partial name="_ListaFactores" model="Model" />
+                    </div>
+                </div>
+      <!--SECCION CAUSAS-->
+            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                    <div class="row align-items-center justify-content-center justify-content-md-start">
+                        <div class="col-auto">
+                            <div class="border border-2 border-dark rounded-circle">
+                                <h5 class="m-0 numberCard d-flex align-items-center justify-content-center">
+                                    <b>2</b>
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="icon-opciones h1 colorPrimary"></i>
+                        </div>
+                        <div class="col-auto my-3">
+                            <h2 class="m-0 h3"><b>Causas determinantes</b></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 pe-0">
+                    <div class="bgSuccess py-1"></div>
+                </div>
+                <div class="col-4 ps-0">
+                    <div class="bg-light py-1"></div>
+                </div>
+            </div>
+            <div class="row justify-content-between align-items-end mb-1">
+                <div class="col-12 col-md-auto mt-4 mb-2">
+                    <h5 class="px-4"><b>Listado de causas del accidente</b></h5>
+                    <h6 class="px-4 text-muted">Da de alta las causas del accidente.</h6>
+                </div>
+                <div class="col-12 col-lg-auto text-center">
+                    <div class="btnOutline btnOutlinePrimary px-4 my-3">
+                    <button data-bs-toggle="modal" onclick="mostrarModalAgregarCausa()">
+                            <h5 class="m-0"><i class="me-2 icon-addOpciones"></i><b>Agregar causas</b></h5>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-12 my-4 px-4 rounded">
+                    <partial name="_ListaCausas" model="Model" />
+                    </div>
+                       
+                </div>
+<div class="col-12 px-4 mb-4">
+    <div class="controlForm my-3">
+        <label>Descripción de causas determinantes</label>
+        <span>
+            @(Html.Kendo().TextArea()
+                .Name("description")
+                .Rows(3)
+                .HtmlAttributes(new { style = "width:100%;" })
+                )
+        </span>
+    </div>
+</div>
+        <!--SECCION INVOLUCRADOS-->
+        <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+            <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                <div class="row align-items-center justify-content-center justify-content-md-start">
+                    <div class="col-auto">
+                        <i class="icon-accidentes h1 colorPrimary"></i>
+                    </div>
+                    <div class="col-auto my-3">
+                        <h2 class="m-0 h3"><b>Personas Involucradas(victimas,conductore)</b></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-between align-items-end mb-1">
+                <div class="col-12 col-lg-auto text-center">
+                    <div class="btnOutline btnOutlinePrimary px-4 my-3">
+                        <button data-bs-toggle="modal" onclick="mostrarModalAgregarInvolucrados()">
+                            <h5 class="m-0"><i class="me-2 icon-addClasificacionAccidente"></i><b> Agregar persona involucrada</b></h5>
+                        </button>
+                    </div>
+                </div>
+                <div class="row ">
+                    <div class="col-12 col-lg-11 col-xl-10 mx-lg-auto my-4 px-4 rounded">
+                        <partial name="_ListaInvolucrados" model="Model" />
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+    </div>
+   
+<!--Modal agregar factor accidente-->
+<div class="modal fade modalCustom" id="factorAccidenteModal" tabindex="-1" aria-labelledby="agregarVehiculoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body" id="ModalBodyFactorAccidente">
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal agregar causa accidente-->
+
+    <div class="modal fade modalCustom" id="causaAccidenteModal" tabindex="-1" aria-labelledby="agregarVehiculoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body" id="ModalBodyCausaAccidente">
+                </div>
+            </div>
+        </div>
+    </div>
+<!--Modal agregar involucrado-->
+<div class="modal fade modalCustom" id="agregarInvolucradoModal" tabindex="-1" aria-labelledby="agregarVehiculoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body" id="ModalBodyAgregarInvolucrado">
+                </div>
+            </div>
+        </div>
+    </div>
+ <script>
+    function mostrarModalAgregarFactor() {
+        $.ajax({
+            url: '@Url.Action("ModalFactorAccidente")',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                $('#ModalBodyFactorAccidente').html(data);
+                $('#factorAccidenteModal').modal('show');
+            }
+        });
+    }
+    function factoresDropDownChange() {
+        var factorDDValue = $("#IdFactorAccidente").data("kendoDropDownList").value();
+        $.ajax({
+            url: "/CapturaAccidentes/FactoresOpciones_Drop",
+            type: "POST",
+            data: { factorDDValue: factorDDValue },
+            success: function (data) {
+                var FactorOpcionDropDown = $("#IdFactorOpcionAccidente").data("kendoDropDownList");
+                FactorOpcionDropDown.dataSource.data(data);
+            },
+            error: function (xhr, status, error) {
+            }
+        });
+    }
+
+    function mostrarModalAgregarCausa() {
+        $.ajax({
+            url: '@Url.Action("ModalCausaAccidente")',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                $('#ModalBodyCausaAccidente').html(data);
+                $('#causaAccidenteModal').modal('show');
+            }
+        });
+    }
+
+    function mostrarModalAgregarInvolucrados() {
+        $.ajax({
+            url: '@Url.Action("ModalAgregarInvolucrado")',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                $('#ModalBodyAgregarInvolucrado').html(data);
+                $('#agregarInvolucradoModal').modal('show');
+            }
+        });
+    }
+    
+ </script>
