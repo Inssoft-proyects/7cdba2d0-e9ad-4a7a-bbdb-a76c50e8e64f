@@ -201,6 +201,7 @@ namespace Example.WebUI.Controllers
 
                                 {
                                     IdOficial = oficiales.IdOficial,
+                                    IdDelegacion = oficiales.IdDelegacion,
                                     Rango = oficiales.Rango,
                                     Nombre = oficiales.Nombre,
                                     ApellidoPaterno = oficiales.ApellidoPaterno,

@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Drawing;
 using static GuanajuatoAdminUsuarios.Utils.CatalogosEnums;
+using Telerik.SvgIcons;
 
 namespace GuanajuatoAdminUsuarios.Services
 {
@@ -372,7 +373,30 @@ namespace GuanajuatoAdminUsuarios.Services
             //ToDo: Revisar si se buscar primero en el registro estatal
             //Busqueda en Sitteg:
 
-            string strQuery = @"SELECT
+
+            string sqlCondiciones = "";
+            sqlCondiciones += (object)modelSearch.IdEntidadBusqueda == null ? "" : " v.idEntidad = @idEntidad AND \n";
+            sqlCondiciones += (object)modelSearch.SerieBusqueda == null ? "" : " v.serie  LIKE '%' + @Serie + '%' AND \n";
+            sqlCondiciones += (object)modelSearch.PlacasBusqueda == null ? "" : " v.placas LIKE '%' + @Placas + '%'  AND \n";
+            sqlCondiciones += (object)modelSearch.tarjeta == null ? "" : " v.tarjeta LIKE '%' + @Tarjeta + '%' AND \n";
+            sqlCondiciones += (object)modelSearch.motor == null ? "" : " v.motor LIKE '%' + @Motor + '%' AND \n";
+            sqlCondiciones += (object)modelSearch.modelo == null ? "" : " v.modelo LIKE '%' + @Modelo + '%' AND \n";
+            sqlCondiciones += (object)modelSearch.numeroEconomico == null ? "" : " v.numeroEconomico LIKE '%' + @NumeroEconomico + '%' AND \n";
+            sqlCondiciones += (object)modelSearch.propietario == null ? "" : " v.propietario LIKE '%' + @Propietario + '%' AND \n";
+            sqlCondiciones += (object)modelSearch.idMarca == null ? "" : " v.idMarcaVehiculo = @idMarca AND \n";
+            sqlCondiciones += (object)modelSearch.idSubMarca == null ? "" : " v.idSubMarca = @idSubMarca AND \n";
+            sqlCondiciones += (object)modelSearch.idTipoVehiculo == null ? "" : " v.idTipoVehiculo = @idTipoVehiculo AND \n";
+            sqlCondiciones += (object)modelSearch.idTipoServicio == null ? "" : " v.idCatTipoServicio = @idTipoServicio AND \n";
+            sqlCondiciones += (object)modelSearch.idColor == null ? "" : " v.idColor = @idColor AND \n";
+            
+            if (sqlCondiciones.Length > 0)
+            {
+                sqlCondiciones = sqlCondiciones.Remove(sqlCondiciones.Length - 5);
+                sqlCondiciones = "AND( " + sqlCondiciones + " )";
+                
+            }
+             
+            string strQuery = string.Format(@"SELECT
                                 v.idVehiculo, v.placas, v.serie, v.tarjeta, v.vigenciaTarjeta, v.idMarcaVehiculo
                                 ,v.idSubmarca, v.idTipoVehiculo, v.modelo, v.idColor, v.idEntidad, v.idCatTipoServicio
                                 ,v.propietario, v.numeroEconomico, v.paisManufactura, v.idPersona
@@ -387,20 +411,8 @@ namespace GuanajuatoAdminUsuarios.Services
                                 INNER JOIN catEntidades catE on v.idEntidad = catE.idEntidad  
                                 INNER JOIN catColores catC on v.idColor = catC.idColor  
                                 WHERE v.estatus = 1
-                                AND (v.idEntidad = @idEntidad 
-                                OR v.serie  LIKE '%' + @Serie + '%'  
-                                OR v.placas LIKE '%' + @Placas + '%'  
-                                OR v.tarjeta LIKE '%' + @Tarjeta + '%' 
-                                OR v.motor LIKE '%' + @Motor + '%'
-                                OR v.modelo LIKE '%' + @Modelo + '%'
-                                OR v.numeroEconomico LIKE '%' + @NumeroEconomico + '%'
-                                OR v.propietario LIKE '%' + @Propietario + '%'
-                                OR v.idMarcaVehiculo = @idMarca
-                                OR v.idSubMarca = @idSubMarca
-                                OR v.idTipoVehiculo = @idTipoVehiculo
-                                OR v.idCatTipoServicio = @idTipoServicio
-                                OR v.idColor = @idColor
-                                )";
+                                    {0}
+                                ",sqlCondiciones);
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
             {
                 try

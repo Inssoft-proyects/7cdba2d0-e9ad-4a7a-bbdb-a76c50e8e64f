@@ -2,13 +2,14 @@
     <div class="col-12 mb-4 px-4 rounded gridCustom">
         @(
             Html.Kendo().Grid<GuanajuatoAdminUsuarios.Entity.Dependencias>()
-            .Name("grid")
-            .Columns(columns =>
-            {
-                columns.Bound(c => c.IdDependencia).Width(40);
-                columns.Bound(c => c.NombreDependencia).Width(100);
-                columns.Bound(c => c.Estatus).Width(50);
-                columns.Command(c => c.Custom("Editar").Click("getId")).Width(80);
+                    .Name("grid")
+                    .Columns(columns =>
+                    {
+                        columns.Bound(c => c.IdDependencia).Width(40);
+                        columns.Bound(c => c.NombreDependencia).Width(100);
+                        columns.Bound(c => c.Estatus).ClientTemplate("#=calculateField(data)#").Width(50);
+                        //columns.Template(c => { }).ClientTemplate("#=calculateField(data)#");
+                        columns.Command(c => c.Custom("Editar").Click("getId")).Width(80);
                 //columns.Command(c => c.Custom("Eliminar").Click("eliminar")).Width(80);
 
                 //columns.Command(c => c.Custom("Delete").Click("redirectDelete")).Width(180);
@@ -89,5 +90,11 @@
     function tooltipContent(e) {
         var titulo = e.target.context.dataset.title;
         return titulo;
+    }
+
+    function calculateField(data) { 
+
+        let respuesta = data.Estatus == 1 ? "Activo" : "Inactivo";
+        return respuesta;
     }
 </script>

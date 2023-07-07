@@ -24,7 +24,7 @@ namespace GuanajuatoAdminUsuarios.Models
         [Required(ErrorMessage = "-Debe seleccionar una opción para Tramo")]
         public int? IdTramo { get; set; }
 
-        [Required(ErrorMessage = "-El campo Kilometro es obligatorio")]
+        [Required(ErrorMessage = "-El campo Kilómetro es obligatorio")]
         public string Kilometro { get; set; }
         public string EstatusReporte { get; set; }
         public DateTime? FechaActualizacion { get; set; }
