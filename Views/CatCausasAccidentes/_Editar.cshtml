@@ -49,8 +49,8 @@
             <div class="controlForm my-3">
                 @Html.HiddenFor(m=>m.IdCausaAccidente)
                 @(Html.Kendo().TextBoxFor(t => t.CausaAccidente)
-                    .Label(l => l.Content("Nombre <b>(obligatorio)</b>:"))
-                    .Placeholder("Ingresa el nombre de la causa")
+                    .Label(l => l.Content("Causa de accidente <b>(obligatorio)</b>:"))
+                    .Placeholder("Ingresa el nombre de la causa de accidente")
                     .HtmlAttributes(new { style = "width: 100%" })
                     )
 
