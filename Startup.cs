@@ -20,6 +20,8 @@ using GuanajuatoAdminUsuarios.Services;
 using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Utils;
 using GuanajuatoAdminUsuarios.Framework;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace GuanajuatoAdminUsuarios
 {
@@ -161,6 +163,16 @@ namespace GuanajuatoAdminUsuarios
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            var supportedCultures = new[] { new CultureInfo("es-ES") };
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("es-ES"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures
+            });
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             // implementa la validacion de sesion

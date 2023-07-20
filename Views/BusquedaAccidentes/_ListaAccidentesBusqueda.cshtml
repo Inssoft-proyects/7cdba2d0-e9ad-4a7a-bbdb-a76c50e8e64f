@@ -6,7 +6,7 @@
                         .Name("gridBusquedaAccidentes")
                         .Columns(columns =>
                         {
-                            columns.Bound(c => c.IdAccidente).Title("Numero").Width(60);
+                            columns.Bound(c => c.IdAccidente).Title("Número").Width(60);
                             columns.Bound(c => c.numeroReporte).Title("Folio").Width(100);
                             columns.Bound(c => c.fecha).Title("Fecha").Width(100);
                             columns.Bound(c => c.hora).Title("Hora").Width(70);
@@ -30,7 +30,12 @@
             )
             )
 
-
+        @(Html.Kendo().Tooltip()
+            .For("#gridBusquedaAccidentes")
+            .Filter("th")
+            .Position(TooltipPosition.Top)
+            .ContentHandler("tooltipContent")
+            )
     </div>
 </div>
 <script>
@@ -51,6 +56,11 @@
             },
 
         });
+    }
+
+    function tooltipContent(e) {
+        var titulo = e.target.context.dataset.title;
+        return titulo;
     }
     
 </script>
