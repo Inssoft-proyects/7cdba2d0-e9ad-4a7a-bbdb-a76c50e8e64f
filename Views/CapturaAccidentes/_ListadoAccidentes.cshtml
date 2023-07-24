@@ -1,53 +1,46 @@
-﻿
+﻿@model List<CapturaAccidentesModel>
 
 
     <div class="col-12 mb-4 px-4 rounded gridCustom">
 
     @(
-        Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel>()
+        Html.Kendo().Grid(Model)
         .Name("gridAciidentesIncompletos")
             .Columns(columns =>
-             {
-                 columns.Bound(c => c.IdAccidente).Width(90);
-                 columns.Bound(c => c.Fecha).Format("{0:dd/MM/yyyy}").Width(90);
-                 columns.Bound(c => c.Hora).Width(90);
-                 columns.Bound(c => c.Municipio).Width(90);
-                 columns.Bound(c => c.Carretera).Width(90);
-                 columns.Bound(c => c.Tramo).Title("Tramo").Width(60);
-                 columns.Bound(c => c.EstatusReporte).Title("Estatus de Reporte").Width(80);
+            {
+                columns.Bound(c => c.IdAccidente).Title("Id Accidente").Width(90);
+                columns.Bound(c => c.Fecha).Format("{0:dd/MM/yyyy}").Width(90);
+                columns.Bound(c => c.Hora).Width(90);
+                columns.Bound(c => c.Municipio).Width(90);
+                columns.Bound(c => c.Carretera).Width(90);
+                columns.Bound(c => c.Tramo).Title("Tramo").Width(60);
+                columns.Bound(c => c.EstatusReporte).Title("Estatus de Reporte").Width(80);
                 // columns.Template("<button onclick='completarAccidente(e)'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Continuar</b></h6></button>").Width(90);
             columns.Bound(p => p.IdAccidente).ClientTemplate(
             "<button onclick=\"editarAccidente('#= IdAccidente #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Continuar</b></h6></button>"
-            ).Title("").Sortable(false).Width(90);
-
-                
-
+            ).Title("").Sortable(false).Width(90); 
             }).HtmlAttributes(new { style = "height:550px" })
+            .Pageable(pager => pager.AlwaysVisible(true).Position(GridPagerPosition.Bottom).PageSizes(true))
             .Sortable()
-            .Groupable()
-            .Scrollable()
-            .Pageable()
+            .Scrollable(scr => scr.Enabled(true)) 
             .DataSource(dataSource => dataSource
-            .Ajax()
-        .Read(read => read.Action("BuscarAccidentesLista", "CapturaAccidentes"))
-            .PageSize(5).Model(model => model.Id(p => p.IdAccidente))
+                .Ajax()
+                .ServerOperation(false)
+                .PageSize(5)
             )
-            .ToolBar(t => t.Search())
-            .Search(s =>
-            {
-            s.Field(c => c.EstatusReporte);
-            s.Field(c => c.Municipio);
-            s.Field(c => c.Carretera);
-            s.Field(c => c.Tramo);
-         
-
-
-            })
-
+            .Groupable()
+            .ToolBar(t => t.Custom().Text("Buscar...").Name("search"))
             .Selectable(selectable => selectable.Mode(GridSelectionMode.Single)
             .Type(GridSelectionType.Row)
             )
             )
+
+    @(Html.Kendo().Tooltip()
+        .For("#gridAciidentesIncompletos")
+        .Filter("th")
+        .Position(TooltipPosition.Top)
+        .ContentHandler("tooltipContent")
+        )
 
     </div>
 
@@ -67,5 +60,9 @@
             },
 
         });
+    }
+    function tooltipContent(e) {
+        var titulo = e.target.context.dataset.title;
+        return titulo;
     }
 </script>

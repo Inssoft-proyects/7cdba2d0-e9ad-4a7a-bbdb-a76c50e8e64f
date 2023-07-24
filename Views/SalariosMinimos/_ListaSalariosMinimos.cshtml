@@ -22,7 +22,7 @@
             .Read(read => read.Action("GetMins", "SalariosMinimos"))
             .PageSize(5).Model(model => model.Id(p => p.IdSalario))
         )
-     .ToolBar(t => t.Search())
+        .ToolBar(t => t.Custom().Text("Buscar...").Name("search"))
         .Search(s =>
         {
             s.Field(c => c.Area);

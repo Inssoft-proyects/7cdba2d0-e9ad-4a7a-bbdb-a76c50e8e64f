@@ -35,7 +35,7 @@ namespace GuanajuatoAdminUsuarios.Models
         public string Municipio { get; set; }
         public string Tramo { get; set; }
         public string Carretera { get; set; }
-        public List<CapturaAccidentesModel> ListaAccidentes { get; internal set; }
+        public List<CapturaAccidentesModel> ListaAccidentes { get; set; }
 
         /// <summary>
         /// MODEL VEHICULOS

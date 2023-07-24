@@ -22,7 +22,7 @@
         .Read(read => read.Action("GetMarca2", "MarcasVehiculos"))
             .PageSize(5).Model(model => model.Id(p => p.IdMarcaVehiculo))
         )
-     .ToolBar(t => t.Search())
+        .ToolBar(t => t.Custom().Text("Buscar...").Name("search"))
         .Search(s =>
         {
             s.Field(c => c.MarcaVehiculo);

@@ -13,8 +13,8 @@
             .Name("grid")
             .Columns(columns =>
             {
-                columns.Bound(c => c.FolioInfraccion).Width(90);
-                columns.Bound(c => c.FechaInfraccion).Format("{0:dd/MM/yyyy}").Width(90);
+                columns.Bound(c => c.FolioInfraccion).Title("Folio Infracción").Width(90);
+                columns.Bound(c => c.FechaInfraccion).Title("Fecha Infracción").Format("{0:dd/MM/yyyy}").Width(90);
                 columns.Bound(c => c.Conductor).Width(110);
                 columns.Bound(c => c.Placas).Width(90);
                 columns.Bound(c => c.Propietario).Width(140);
@@ -31,14 +31,13 @@
             .Ajax()
             .PageSize(5).Model(model => model.Id(p => p.IdInfraccion))
             )
-            .ToolBar(t => t.Search())
             .Search(s =>
             {
                 s.Field(c => c.FolioInfraccion);
                 s.Field(c => c.Conductor);
                 s.Field(c => c.Placas);
-
-
+                s.Field(c => c.Propietario);
+                s.Field(c => c.Estatus);
             })
 
             .Selectable(selectable => selectable.Mode(GridSelectionMode.Single)
@@ -46,6 +45,12 @@
             )
             )
 
+        @(Html.Kendo().Tooltip()
+            .For("#grid")
+            .Filter("th")
+            .Position(TooltipPosition.Top)
+            .ContentHandler("tooltipContent")
+            )
     </div>
 </div>
 
@@ -54,19 +59,22 @@
 <script>
     function mostrarDetalle(e) {
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        var Id = dataItem.IdInfraccion;
-        console.log(Id);
+        var Id = dataItem.IdInfraccion; 
     
         $.ajax({
             url: '@Url.Action("MostrarDetalle", "CancelarInfraccion")',
             type: 'POST',
             data: { Id: Id },
-            success: function (result) {
-                console.log("DTALLE",result)
+            success: function (result) { 
                 $("#detalle").html(result);
             $("#detalle").show();
 
                   },
         })
+    }
+
+    function tooltipContent(e) {
+        var titulo = e.target.context.dataset.title;
+        return titulo;
     }
 </script>

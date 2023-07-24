@@ -25,7 +25,7 @@
             .Read(read => read.Action("GetOficialess", "Oficiales"))
             .PageSize(5).Model(model => model.Id(p => p.IdOficial))
         )
-     .ToolBar(t => t.Search())
+        .ToolBar(t => t.Custom().Text("Buscar...").Name("search"))
         .Search(s =>
         {
             s.Field(c => c.Nombre);

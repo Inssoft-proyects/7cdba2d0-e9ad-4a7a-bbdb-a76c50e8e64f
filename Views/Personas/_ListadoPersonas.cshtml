@@ -27,7 +27,21 @@
         .Ajax()
         .ServerOperation(false)
         .PageSize(5)
+
         )
         .ToolBar(t => t.Custom().Text("Buscar...").Name("search"))
         )
+
+    @(Html.Kendo().Tooltip()
+        .For("#gridPersonas")
+        .Filter("th")
+        .Position(TooltipPosition.Top)
+        .ContentHandler("tooltipContent")
+        )
 </div>
+<script>
+    function tooltipContent(e) {
+        var titulo = e.target.context.dataset.title;
+        return titulo;
+    }
+</script>

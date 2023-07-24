@@ -49,7 +49,7 @@
                     </div>
                         <div class="col-12 col-md-6">
                             <div class="controlForm my-3">
-                                @Html.HiddenFor(m=>m.IdSalario);
+                                @Html.HiddenFor(m=>m.IdSalario)
                                 @(Html.Kendo().TextBoxFor(t=>t.Area)
                                 .Label(l => l.Content("Nombre <b>(obligatorio)</b>:"))
                                 .Placeholder("Ingresa el nombre del área salarial")

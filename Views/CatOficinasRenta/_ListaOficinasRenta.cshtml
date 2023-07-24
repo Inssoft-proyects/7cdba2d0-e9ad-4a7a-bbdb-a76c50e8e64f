@@ -24,7 +24,7 @@
             .Read(read => read.Action("GetOfiRent", "CatOficinasRenta"))
             .PageSize(5).Model(model => model.Id(p => p.IdOficinaRenta))
             )
-            .ToolBar(t => t.Search())
+            .ToolBar(t => t.Custom().Text("Buscar...").Name("search"))
             .Search(s =>
             {
                 s.Field(c => c.NombreOficina);

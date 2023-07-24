@@ -27,7 +27,7 @@
         //.Read(read => read.Action("ObtInvolucradosAccidente", "CapturaAccidentes"))
         .PageSize(5).Model(model => model.Id(p => p.folioInfraccion))
         )
-        .ToolBar(t => t.Search())
+        .ToolBar(t => t.Custom().Text("Buscar...").Name("search"))
         .Search(s =>
         {
             s.Field(c => c.nombreCompletoPropietario);
@@ -35,6 +35,13 @@
         })
         .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple).Type(GridSelectionType.Row))
         .Events(events => events.Change("obtenerIdInfraccionesSeleccionadas"))
+        )
+
+    @(Html.Kendo().Tooltip()
+        .For("#gridEnvioInfracciones")
+        .Filter("th")
+        .Position(TooltipPosition.Top)
+        .ContentHandler("tooltipContent")
         )
 </div>
 
@@ -51,9 +58,9 @@
 
 <div class="row pb-4 align-items-start justify-content-start footerGrid">
     <div class="border bg-light text-center">
-        <section class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto p-0 d-flex justify-content-start">
+        <section class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto p-0 d-flex justify-content-start" >
             <button type="button" onclick="enviarIdInfraccionesSeleccionados()">
-                <h6 class="m-0 d-flex align-items-center"><i class="icon-addEnviar h5 mb-0 me-2"></i><b> Enviar infracciones</b></h6>
+                <h6 class="m-0 d-flex align-items-center"><i class="icon-addEnviar h5 mb-0 me-2"></i><b> Enviar infracciones</b> </h6>
             </button>
         </section>
     </div>
@@ -88,7 +95,10 @@
             }
         });
     }
-
+    function tooltipContent(e) {
+        var titulo = e.target.context.dataset.title;
+        return titulo;
+    }
 
 </script>
 

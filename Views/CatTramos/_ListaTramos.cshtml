@@ -23,7 +23,7 @@
             .Read(read => read.Action("GetTra", "CatTramos"))
             .PageSize(5).Model(model => model.Id(p => p.IdTramo))
             )
-            .ToolBar(t => t.Search())
+            .ToolBar(t => t.Custom().Text("Buscar...").Name("search"))
             .Search(s =>
             {
                 s.Field(c => c.Carretera);

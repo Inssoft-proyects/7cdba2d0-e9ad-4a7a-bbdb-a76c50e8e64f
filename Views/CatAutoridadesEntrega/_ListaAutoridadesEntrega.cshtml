@@ -23,7 +23,7 @@
             .Read(read => read.Action("GetAutEntrega", "CatAutoridadesEntrega"))
             .PageSize(5).Model(model => model.Id(p => p.IdAutoridadEntrega))
             )
-            .ToolBar(t => t.Search())
+            .ToolBar(t => t.Custom().Text("Buscar...").Name("search"))
             .Search(s =>
             {
                 s.Field(c => c.AutoridadEntrega);
@@ -34,6 +34,13 @@
             .Type(GridSelectionType.Row)
             )
 
+            )
+
+        @(Html.Kendo().Tooltip()
+            .For("#grid")
+            .Filter("th")
+            .Position(TooltipPosition.Top)
+            .ContentHandler("tooltipContent")
             )
     </div>
 </div>
@@ -71,5 +78,10 @@
 
             },
         })
+    }
+
+    function tooltipContent(e) {
+        var titulo = e.target.context.dataset.title;
+        return titulo;
     }
 </script>

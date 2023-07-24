@@ -90,7 +90,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         /// <summary>
         /// //PRIMERA SECCION DE CAPTURA ACCIDENTE//////////
         /// </summary>
-        public IActionResult BuscarAccidentesLista([DataSourceRequest] DataSourceRequest request)
+        public JsonResult BuscarAccidentesLista([DataSourceRequest] DataSourceRequest request)
         {
             var ListAccidentesModel = _capturaAccidentesService.ObtenerAccidentes();
             return Json(ListAccidentesModel.ToDataSourceResult(request));
