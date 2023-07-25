@@ -101,8 +101,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             var ListAccidentesModel = _capturaAccidentesService.ObtenerAccidentes();
             if (ListAccidentesModel.Count == 0)
             {
-                return View("AgregarAccidente");
-
+                return View("AgregarAccidente"); 
             }
             else
             {

@@ -2,8 +2,10 @@ using GuanajuatoAdminUsuarios.Framework;
 using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
 using GuanajuatoAdminUsuarios.Services;
+using GuanajuatoAdminUsuarios.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using static GuanajuatoAdminUsuarios.Models.PadronDepositosGruasModel;
@@ -19,10 +21,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
         private readonly IMunicipiosService _municipiosService;
         private readonly IConcesionariosService _concesionariosService;
         private readonly ICatDictionary _catDictionary;
+        private readonly IPdfGenerator<PadronDepositosGruasModel> _pdfService;
 
         public PadronDepositosGruasController(IPadronDepositosGruasService padronDepositosGruasService,
              IGruasService gruasService, IMunicipiosService municipiosService, IConcesionariosService concesionariosService
-            , ICatDictionary catDictionary
+            , ICatDictionary catDictionary, IPdfGenerator<PadronDepositosGruasModel> pdfService
             )
         {
             _padronDepositosGruasService = padronDepositosGruasService;
@@ -30,6 +33,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             _municipiosService = municipiosService;
             _concesionariosService = concesionariosService;
             _catDictionary = catDictionary;
+            _pdfService = pdfService;
         }
 
 
@@ -120,6 +124,30 @@ namespace GuanajuatoAdminUsuarios.Controllers
             }
             return ListItems;
 
+        }
+
+
+        [HttpGet]
+        public FileResult CreatePdf(string data)
+        {
+            var model = JsonConvert.DeserializeObject<PadronDepositosGruasBusquedaModel>(data);
+
+            Dictionary<string, string> ColumnsNames = new Dictionary<string, string>()
+            {
+                {"Municipio","Municipio"},
+                {"Concesionario","Concesionario"},
+                {"fullPension","Depósito"},
+                {"noEconomico","No. Económico"},
+                {"Modelo","Modelo"},
+                {"Placas","Placas"},
+                {"TipoGrua","Tipo de grúa"},
+            };
+
+            var ListPadronDepositosGruas = _padronDepositosGruasService.GetPadronDepositosGruas(model);
+             
+            var result = _pdfService.CreatePdf("ReportePadronDepositosGruas", "Padrón de depósitos y grúas", 7, ColumnsNames, ListPadronDepositosGruas);
+
+            return File(result.Item1, "application/pdf", result.Item2);
         }
 
     }

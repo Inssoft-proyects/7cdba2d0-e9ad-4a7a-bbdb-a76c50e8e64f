@@ -4,9 +4,12 @@ using GuanajuatoAdminUsuarios.Models;
 using GuanajuatoAdminUsuarios.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GuanajuatoAdminUsuarios.Utils;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
@@ -16,13 +19,16 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         private readonly IPensionesService _pensionesService;
         private readonly ICatDictionary _catDictionary;
+        private readonly IPdfGenerator<PensionModel> _pdfService;
 
         public PensionesController(
             ICatDictionary catDictionary,
-            IPensionesService pensionesService)
+            IPensionesService pensionesService,
+            IPdfGenerator<PensionModel> pdfService)
         {
             _pensionesService = pensionesService;
             _catDictionary = catDictionary;
+            _pdfService = pdfService;
         }
 
 
@@ -125,6 +131,29 @@ namespace GuanajuatoAdminUsuarios.Controllers
             //SetDDLCategories();
             //return View("Create");
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public FileResult CreatePdf(string data)
+        {
+            var model = JsonConvert.DeserializeObject<PensionDataModel>(data); 
+
+            Dictionary<string, string> ColumnsNames = new Dictionary<string, string>()
+            {
+            {"Pension","Pensión"},
+            {"Permiso","Permiso"},
+            {"Direccion","Dirección"},
+            {"Telefono","Teléfono"},
+            {"Correo","Correo Electrónico"},
+            {"responsable","Responsable"},
+            {"concesionario","Concesionario"},
+            {"placas","Grúa(Placas)"}
+            };
+
+            var ListPensionesModel = _pensionesService.GetPensionesToGrid(model.Pension, model.IdDelegacion);
+            var result = _pdfService.CreatePdf("ReportePensiones", "Pensiones", 8, ColumnsNames, ListPensionesModel);
+
+            return File(result.Item1, "application/pdf", result.Item2);
         }
     }
 }

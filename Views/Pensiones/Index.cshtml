@@ -53,12 +53,19 @@
                     .Filter(FilterType.Contains))
             </div>
         </div>
-        <div class="col-12 col-md-6 col-lg-2">
-            <div class="controlButton my-3">
-                <button class="btnPrimary" type="button" onclick="btnBuscarPension()">  <h5 class="m-0"><b>Buscar</b></h5></button>
-
+        <div class="row row-height">
+            <div class="col-12 col-md-6 col-lg-2">
+                <div class="controlButton my-3">
+                    <button class="btnPrimary" type="button" onclick="btnBuscarPension()">  <h5 class="m-0"><b>Buscar</b></h5></button>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-2">
+                <div class="controlButton my-3">
+                    <button class="btnPrimary" type="button" onclick="downLoadPdfFiltered()">  <h5 class="m-0"><i class='icon-data m-0'></i>&nbsp;&nbsp;<b>Reporte</b></h5></button>
+                </div>
             </div>
         </div>
+        
         @*//Aqui*@
 
 
@@ -188,5 +195,15 @@
                 $('#modalCrearPension').modal('show');
             }
         });
+    }
+
+    function downLoadPdfFiltered() {
+        var data = {
+            Pension: $("#txtPension").val(),
+            IdDelegacion: $("#ddlIdDelegacion").val()
+        };
+        var json = JSON.stringify(data);
+        window.location = '/Pensiones/CreatePdf?data=' + json;
+
     }
 </script>

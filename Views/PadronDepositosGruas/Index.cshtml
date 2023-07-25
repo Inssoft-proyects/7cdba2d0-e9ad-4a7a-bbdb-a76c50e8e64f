@@ -5,7 +5,7 @@
         function submitSearch() {
 
             var Mydata = $("#frmSearch").serialize();
-            //console.log(Mydata);
+            console.log(Mydata);
             $.ajax({
                 url: '@Url.Action("ajax_BuscarPadron")',
                 type: 'POST',
@@ -16,6 +16,19 @@
             });
         }
 
+        function downLoadPdfFiltered() {
+            var data = {
+                IdMunicipio: $('#ddlMunicipio').val(),
+                IdConcesionario: $('#ddlConcesionario').val(),
+                IdPension: $('#ddlDeposito').val(),
+                IdTipoGrua: $('#ddlTipoGrua').val(),
+            };
+
+            var json = JSON.stringify(data);
+
+            window.location = '/PadronDepositosGruas/CreatePdf?data=' + json; 
+
+        }
     </script>
 </head>
 <div class="mainContainer bg-light">
@@ -52,7 +65,7 @@
                             .DataTextField("Text")
                             .DataValueField("Value")
                             .OptionLabel("Seleccione Municipio...")
-                            .HtmlAttributes(new { style = "width:100%;" })
+                            .HtmlAttributes(new { style = "width:100%;", Id = "ddlMunicipio" })
                             .Filter(FilterType.Contains)
                             .DataSource(source =>
                             {
@@ -71,7 +84,7 @@
                         .DataTextField("Text")
                         .DataValueField("Value")
                         .OptionLabel("Seleccione Concesionario...")
-                        .HtmlAttributes(new { style = "width:100%;" })
+                        .HtmlAttributes(new { style = "width:100%;", Id = "ddlConcesionario" })
                         .Filter(FilterType.Contains)
                         .DataSource(source =>
                         {
@@ -90,9 +103,9 @@
                     <label>Depósitos:</label>
                     @(Html.Kendo().DropDownListFor(d => d.IdPension)
                         .DataTextField("Text")
-                        .DataValueField("Value")
+                        .DataValueField("Value") 
                         .OptionLabel("Seleccione Depósito...")
-                        .HtmlAttributes(new { style = "width:100%;" })
+                        .HtmlAttributes(new { style = "width:100%;", Id = "ddlDeposito" })
                         .Filter(FilterType.Contains)
                         .DataSource(source =>
                         {
@@ -111,9 +124,9 @@
                     <label>Tipo de grúa:</label>
                     @(Html.Kendo().DropDownListFor(d => d.IdTipoGrua)
                         .DataTextField("Text")
-                        .DataValueField("Value")
+                        .DataValueField("Value") 
                         .OptionLabel("Seleccione tipo...")
-                        .HtmlAttributes(new { style = "width:100%;" })
+                        .HtmlAttributes(new { style = "width:100%;", Id = "ddlTipoGrua" })
                         .Filter(FilterType.Contains)
                         .DataSource(source =>
                         {
@@ -133,8 +146,10 @@
 
                 </div>
             </div>
-            <div class="col-12 col-md-6 col-lg-5">
-              
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="controlButton my-3">
+                    <button class="btnPrimary" type="button" onclick="downLoadPdfFiltered()">  <h5 class="m-0"><i class='icon-data m-0'></i>&nbsp;&nbsp;<b>Reporte</b></h5></button>
+                </div>
             </div>
 
         </form>
