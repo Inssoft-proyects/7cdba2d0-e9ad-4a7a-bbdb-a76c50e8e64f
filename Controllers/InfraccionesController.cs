@@ -13,7 +13,7 @@ using System;
 using iTextSharp.text;
 using Microsoft.AspNetCore.Http;
 using System.IO;
-using System.Threading.Tasks;
+using System.Threading.Tasks; 
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
@@ -380,6 +380,23 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 return Json(new { success = false, message = "No se seleccionó ninguna imagen" });
             }
         }
-      }
+
+        [HttpGet]
+        public JsonResult GetInfraccionesLicencia(string numLicencia, string CURP)
+        { 
+            List<InfraccionesResumen> listInfracciones = _infraccionesService.GetInfraccionesLicencia(numLicencia,CURP);
+            bool tieneInfracciones = false; 
+
+            if (listInfracciones.Count > 0)
+            {
+                tieneInfracciones=true;
+            }
+            return Json(new 
+                        { 
+                            tieneInfraccion = tieneInfracciones,
+                            listInfracciones
+                        });
+        }
+    }
     }
 

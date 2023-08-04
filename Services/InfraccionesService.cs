@@ -1500,5 +1500,89 @@ namespace GuanajuatoAdminUsuarios.Services
             return result;
         }
 
+        public List<InfraccionesResumen> GetInfraccionesLicencia(string numLicencia, string CURP)
+        {
+            List<InfraccionesResumen> modelList = new List<InfraccionesResumen>();
+            string strQuery = @"SELECT inf.idInfraccion
+	                                ,piin.nombre+' '+ piin.apellidoPaterno +' '+ piin.apellidoMaterno conductor
+	                                ,piin.numeroLicencia
+	                                ,p.CURP 
+	                                ,inf.folioInfraccion
+	                                ,inf.fechaInfraccion 
+	                                ,estIn.estatusInfraccion 
+	                                ,catOfi.nombre + ' ' + catOfi.apellidoPaterno + ' ' + catOfi.apellidoMaterno nombreOficial
+	                                ,catMun.municipio  
+	                                ,col.color
+	                                ,cmv.marcaVehiculo
+	                                ,csv.nombreSubmarca
+	                                ,veh.placas
+	                                ,veh.modelo
+	                                ,veh.serie
+	                                ,veh.tarjeta
+	                                ,veh.vigenciaTarjeta   
+                                FROM infracciones as inf  
+                                left join catEstatusInfraccion  estIn on inf.IdEstatusInfraccion = estIn.idEstatusInfraccion   
+                                left join catOficiales catOfi on inf.idOficial = catOfi.idOficial  
+                                left join catMunicipios catMun on inf.idMunicipio =catMun.idMunicipio
+                                left join catEntidades catEnt on  catMun.idEntidad = catEnt.idEntidad   
+                                left join vehiculos veh on inf.idVehiculo = veh.idVehiculo   
+                                left join catMarcasVehiculos cmv on veh.idMarcaVehiculo = cmv.idMarcaVehiculo 
+                                left join catSubmarcasVehiculos csv on veh.idSubmarca  = csv.idSubmarca 
+                                LEFT join catColores col on veh.idColor = col.idColor 
+                                LEFT join personasInfracciones piin ON inf.idPersonaInfraccion  = piin.idPersonaInfraccion  
+                                LEFT JOIN personas p on piin.idPersonaInfraccion = p.idPersona 
+                                WHERE inf.estatus = 1 and (piin.numeroLicencia =@numero_licencia OR p.CURP =@CURP)";
+
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(strQuery, connection);
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.Add(new SqlParameter("@numero_licencia", SqlDbType.VarChar)).Value = (object)numLicencia ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@CURP", SqlDbType.VarChar)).Value = (object)CURP ?? DBNull.Value;
+
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            InfraccionesResumen model = new InfraccionesResumen();
+                            model.IdInfraccion = reader["idInfraccion"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idInfraccion"].ToString());
+                            model.conductor = reader["conductor"].ToString();
+                            model.numeroLicencia = reader["numeroLicencia"].ToString();
+                            model.CURP = reader["CURP"].ToString();
+                            model.folioInfraccion = reader["folioInfraccion"].ToString();
+                            model.fechaInfraccion = reader["fechaInfraccion"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["fechaInfraccion"].ToString());
+                            model.estatusInfraccion = reader["estatusInfraccion"].ToString();
+                            model.nombreOficial = reader["nombreOficial"].ToString();
+                            model.municipio = reader["municipio"].ToString();
+                            model.color = reader["color"].ToString();
+                            model.marcaVehiculo = reader["marcaVehiculo"].ToString();
+                            model.nombreSubmarca = reader["nombreSubmarca"].ToString();
+                            model.placas = reader["placas"].ToString();
+                            model.modelo = reader["modelo"].ToString();
+                            model.serie = reader["serie"].ToString();
+                            model.tarjeta = reader["tarjeta"].ToString();
+                            model.vigenciaTarjeta = reader["vigenciaTarjeta"].ToString();
+                             
+                            modelList.Add(model);
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    //Guardar la excepcion en algun log de errores
+                    //ex
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+             
+            return modelList ;
+        }
+
     }
 }
