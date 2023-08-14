@@ -6,5 +6,6 @@ namespace GuanajuatoAdminUsuarios.Interfaces
     public interface IEstadisticasAccidentesService
     {
         public List<InfraccionesModel> GetAllInfracciones2();
+        public List<BusquedaAccidentesModel> ObtenerAccidentes();
     }
 }

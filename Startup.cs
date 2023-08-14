@@ -143,6 +143,7 @@ namespace GuanajuatoAdminUsuarios
             services.AddScoped<ICatTipoUsuarioService, CatTipoUsuarioService>();
             services.AddScoped<IDepositosService, DepositosService>();
             services.AddScoped<IAsignacionGruasService, AsignacionGruasService>();
+            services.AddScoped<IEstadisticasAccidentesService, EstadisticasAccidentesService>();
 
 
 

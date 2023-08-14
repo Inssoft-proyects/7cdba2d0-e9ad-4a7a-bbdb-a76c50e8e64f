@@ -417,6 +417,53 @@ namespace GuanajuatoAdminUsuarios.Framework
                                 Text = Convert.ToString(s["nombreDependencia"])
                             }).ToList();
                     break;
+                case "CatClasificacionAccidentes":
+                    catalogModel.CatalogName = catalog;
+                    campos = new string[] { "idClasificacionAccidente", "nombreClasificacion" };
+                    catalogModel.CatalogList = _catalogosService.GetGenericCatalogos("catClasificacionAccidentes", campos)
+                            .Select(s =>
+                            new SystemCatalogListModel()
+                            {
+                                Id = Convert.ToInt32(s["idClasificacionAccidente"]),
+                                Text = Convert.ToString(s["nombreClasificacion"])
+                            }).ToList();
+                    break;
+                case "CatCausasAccidentes":
+                    catalogModel.CatalogName = catalog;  
+                    campos = new string[] { "idCausaAccidente", "causaAccidente" };
+                    catalogModel.CatalogList = _catalogosService.GetGenericCatalogos("catCausasAccidentes", campos)
+                            .Select(s =>
+                            new SystemCatalogListModel()
+                            {
+                                Id = Convert.ToInt32(s["idCausaAccidente"]),
+                                Text = Convert.ToString(s["causaAccidente"])
+                            }).ToList();
+                    break;
+                case "CatFactoresAccidentes":
+                    catalogModel.CatalogName = catalog;  
+                    campos = new string[] { "idFactorAccidente", "factorAccidente" };
+                    catalogModel.CatalogList = _catalogosService.GetGenericCatalogos("catFactoresAccidentes", campos)
+                            .Select(s =>
+                            new SystemCatalogListModel()
+                            {
+                                Id = Convert.ToInt32(s["idFactorAccidente"]),
+                                Text = Convert.ToString(s["factorAccidente"])
+                            }).ToList();
+                    break;
+
+                case "CatFactoresOpcionesAccidentesByFilter":
+                    if (int.TryParse(parameter, out intId))
+                    {
+                        catalogModel.CatalogName = catalog;
+                        campos = new string[] { "idFactorOpcionAccidente", "factorOpcionAccidente" };
+                        catalogModel.CatalogList = _catalogosService.GetGenericCatalogosByFilter("catFactoresOpcionesAccidentes", campos, "idFactorAccidente", intId)
+                                .Select(s => new SystemCatalogListModel()
+                                {
+                                    Id = Convert.ToInt32(s["idFactorOpcionAccidente"]),
+                                    Text = Convert.ToString(s["factorOpcionAccidente"])
+                                }).ToList();
+                    }
+                    break;
 
                 default:
                     return catalogModel;

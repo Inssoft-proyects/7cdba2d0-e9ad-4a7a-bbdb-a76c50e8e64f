@@ -98,6 +98,8 @@ namespace GuanajuatoAdminUsuarios.Models
         public string nombrePropietario { get; set; }
         public string apellidoPaternoPropietario { get; set; }
         public string apellidoMaternoPropietario { get; set; }
+        
+        public int idTipoLicencia { get; set; }
         public string nombreConductor { get; set; }
         public string apellidoPaternoConductor { get; set; }
         public string apellidoMaternoConductor { get; set; }
@@ -113,6 +115,9 @@ namespace GuanajuatoAdminUsuarios.Models
         public string propietario { get; set; }
 
         public string conductor { get; set; }
+        public int? IdTipoVehiculo { get; set; }
+        public int? IdTipoServicio { get; set; }
+
 
 
 
