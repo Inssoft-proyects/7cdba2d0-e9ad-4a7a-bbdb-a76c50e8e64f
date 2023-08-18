@@ -2,7 +2,7 @@
 
 namespace GuanajuatoAdminUsuarios.Entity
 {
-    public class SalariosMinimos
+    public class CatSalariosMinimos
     {
         public int IdSalario { get; set; }
 

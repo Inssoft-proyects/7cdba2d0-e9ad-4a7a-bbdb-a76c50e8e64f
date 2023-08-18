@@ -33,7 +33,7 @@ public partial class DBContextInssoft : DbContext
 
     public virtual DbSet<TipoVehiculos> TipoVehiculos { get; set; }
 
-    public virtual DbSet<SalariosMinimos> SalariosMinimos { get; set; }
+    public virtual DbSet<CatSalariosMinimos> CatSalariosMinimos { get; set; }
 
     public virtual DbSet<DiasInhabiles> DiasInhabiles { get; set; }
 
@@ -82,7 +82,7 @@ public partial class DBContextInssoft : DbContext
         {
             entity.HasKey(e => e.IdDependencia).HasName("PK__dependen__A67AC7BE849A3403");
 
-            entity.ToTable("dependencias");
+            entity.ToTable("catDependencias");
 
             entity.Property(e => e.IdDependencia).HasColumnName("idDependencia");
             entity.Property(e => e.ActualizadoPor).HasColumnName("actualizadoPor");
@@ -118,7 +118,7 @@ public partial class DBContextInssoft : DbContext
         {
             entity.HasKey(e => e.IdOficial).HasName("PK__oficiale__7BFD0DB1E280E5C4");
 
-            entity.ToTable("oficiales");
+            entity.ToTable("catOficiales");
 
             entity.Property(e => e.IdOficial).HasColumnName("idOficial");
 
@@ -142,8 +142,7 @@ public partial class DBContextInssoft : DbContext
             entity.Property(e => e.Rango)
                 .HasMaxLength(50)
                 .IsUnicode(false)
-                .HasColumnName("rango");
-            entity.Property(e => e.IdDelegacion).HasColumnName("IdDelegacion");
+                .HasColumnName("rango"); 
 
         });
 
@@ -236,11 +235,11 @@ public partial class DBContextInssoft : DbContext
 
         });
 
-        modelBuilder.Entity<SalariosMinimos>(entity =>
+        modelBuilder.Entity<CatSalariosMinimos>(entity =>
         {
             entity.HasKey(e => e.IdSalario);
 
-            entity.ToTable("salariosMinimos");
+            entity.ToTable("catSalariosMinimos");
 
 
 
@@ -267,7 +266,7 @@ public partial class DBContextInssoft : DbContext
         {
             entity.HasKey(e => e.idDiaInhabil);
 
-            entity.ToTable("diasInhabiles");
+            entity.ToTable("catDiasInhabiles");
 
 
 
@@ -275,7 +274,6 @@ public partial class DBContextInssoft : DbContext
 
             entity.Property(e => e.fecha).HasColumnName("fecha");
             entity.Property(e => e.idMunicipio).HasColumnName("idMunicipio");
-            entity.Property(e => e.todosMunicipiosBool).HasColumnName("todosMunicipiosBool");
             entity.Property(e => e.todosMunicipiosDesc).HasColumnName("todosMunicipiosDesc")
                 .HasMaxLength(10)
                 .IsUnicode(false);
@@ -307,7 +305,7 @@ public partial class DBContextInssoft : DbContext
         {
             entity.HasKey(e => e.IdTipoCarga);
 
-            entity.ToTable("tiposCarga");
+            entity.ToTable("catTiposcarga");
             entity.Property(e => e.IdTipoCarga).HasColumnName("IdTipoCarga");
 
             entity.Property(e => e.TipoCarga).HasColumnName("TipoCarga")

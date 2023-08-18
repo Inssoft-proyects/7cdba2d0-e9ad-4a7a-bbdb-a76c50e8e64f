@@ -168,7 +168,6 @@ namespace Example.WebUI.Controllers
             diaInhabil.idDiaInhabil = model.idDiaInhabil;
             diaInhabil.fecha = model.fecha;
             diaInhabil.idMunicipio = model.idMunicipio;
-            diaInhabil.todosMunicipiosBool = model.todosMunicipiosBool;
             diaInhabil.todosMunicipiosDesc = model.todosMunicipiosDesc;
             diaInhabil.Estatus = 1;
             diaInhabil.FechaActualizacion = DateTime.Now;
@@ -225,7 +224,6 @@ namespace Example.WebUI.Controllers
                                        idDiaInhabil = diasInhabiles.idDiaInhabil,
                                        fecha = diasInhabiles.fecha,
                                        idMunicipio = diasInhabiles.idMunicipio,
-                                       todosMunicipiosBool = diasInhabiles.todosMunicipiosBool,
                                        todosMunicipiosDesc = diasInhabiles.todosMunicipiosDesc,
 
 
