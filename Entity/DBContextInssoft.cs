@@ -67,7 +67,6 @@ public partial class DBContextInssoft : DbContext
 
     public virtual DbSet<Infracciones> Infracciones { get; set; }
 
-    public virtual DbSet<LicenciaPersonaDatos> PersonasDatos { get; set; }
 
 
 

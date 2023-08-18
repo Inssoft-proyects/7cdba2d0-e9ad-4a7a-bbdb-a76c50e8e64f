@@ -285,8 +285,7 @@
 
 
 function buscarConductor() {
-    var Mydata = $("#buscarConductorForm").serialize();
-    console.log(Mydata);
+    var Mydata = $("#buscarConductorForm").serialize(); 
     $.ajax({
         url: '/Personas/BuscarPorParametro',
         type: 'POST',
@@ -313,11 +312,9 @@ function buscarConductor() {
         });
     }
 
-    function mostrarModal(jsonData) {
-        console.log("JSONDAT", jsonData)
+    function mostrarModal(jsonData) { 
         const modal = document.getElementById('modalLicencias');
-
-        console.log(jsonData);
+         
         const modalContent = `
             <div class="modal-header">
                 <h5 class="modal-title">Datos encontrados en el sistema de licencias</h5>
@@ -340,8 +337,7 @@ function buscarConductor() {
           </div>
         `;
 
-        modal.querySelector('.modal-content').innerHTML = modalContent;
-        console.log("mod",modalContent)
+        modal.querySelector('.modal-content').innerHTML = modalContent; 
         const cerrarModalBtn = document.getElementById('cerrarModalBtn');
         cerrarModalBtn.addEventListener('click', () => {
             $('#modalLicencias').modal('hide');
@@ -371,8 +367,7 @@ function buscarConductor() {
                 "PD-PERMISO MOTOCICLISTA": 7,
 
                 // Puedes agregar más mapeos aquí si es necesario
-            };
-            console.log(jsonData);
+            }; 
             const tipoLicenciaNumero = tipoLicenciaMapping[jsonData.tipolicencia] || 0; // 0 o valor predeterminado si no hay coincidencia
             jsonData.id_tipo_licencia = tipoLicenciaNumero; 
 
@@ -382,8 +377,7 @@ function buscarConductor() {
                 data: jsonData,
                 success: function (response) {
                     $('#modalLicencias').modal('hide');
-                    var personasList = [response]; // Convierte el objeto en un arreglo
-                    console.log("EE", personasList);
+                    var personasList = [response]; // Convierte el objeto en un arreglo 
                     var grid = $("#gridPersonas").data("kendoGrid");
                     grid.dataSource.data(personasList);
                 },
