@@ -70,6 +70,7 @@
     function obtenerIdInfraccionesSeleccionadas(e) {
         idInfraccionesSeleccionados = $.map(this.select(), function (item) {
             var dataItem = $("#gridEnvioInfracciones").data("kendoGrid").dataItem(item);
+            console.log("DTI",dataItem)
             return dataItem.IdInfraccion;
         });
         console.log("IDS", idInfraccionesSeleccionados)

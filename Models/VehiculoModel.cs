@@ -14,6 +14,8 @@ namespace GuanajuatoAdminUsuarios.Models
 
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime vigenciaTarjeta { get; set; }
+        public DateTime fechaVencimientoFisico { get; set; }
+        
         public int idMarcaVehiculo { get; set; }
         public int idSubmarca { get; set; }
         public int idSubmarcaUpdated { get; set; }

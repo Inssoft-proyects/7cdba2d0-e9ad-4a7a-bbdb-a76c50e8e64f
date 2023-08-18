@@ -45,7 +45,7 @@
     @{
         if (ViewBag.Umas != null)
         {
-            string.Format("{0:C2}", ViewBag.Umas);
+            @string.Format("{0:C2}", ViewBag.Umas)
         }
     }
 </label>
@@ -55,7 +55,7 @@
     @{
         if (ViewBag.Totales != null)
         {
-            string.Format("{0:C2}", ViewBag.Totales);
+            @string.Format("{0:C2}", ViewBag.Totales);
         }
     }
 </label>

@@ -245,7 +245,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                     left join catSubConceptoInfraccion catSubInf on catMotInf.IdSubConcepto = catSubInf.idSubConcepto
                                     left join catConceptoInfraccion catConInf on  catSubInf.idConcepto = catConInf.idConcepto
                                     left join personasInfracciones pInf on inf.idPersonaInfraccion = pInf.idPersonaInfraccion
-                                    where {0}  inf.estatus=1 AND inf.idDelegacion = @idOficina", sqlCondiciones);
+                                    where {0}  inf.estatus=1", sqlCondiciones);
 
                     
                     
@@ -417,7 +417,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.idPersonaInfraccion = reader["idPersonaInfraccion"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idPersonaInfraccion"].ToString());
                             model.placasVehiculo = reader["placasVehiculo"].ToString();
                             model.folioInfraccion = reader["folioInfraccion"].ToString();
-                            model.fechaNacimiento = reader["fechaNacimiento"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["fechaNacimianto"].ToString());
+                            model.fechaNacimiento = reader["fechaNacimiento"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["fechaNacimiento"].ToString());
                             model.fechaInfraccion = reader["fechaInfraccion"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["fechaInfraccion"].ToString());
                             model.kmCarretera = reader["kmCarretera"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["kmCarretera"].ToString());
                             model.observaciones = reader["observaciones"].ToString();
@@ -425,6 +425,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.lugarNumero = reader["lugarNumero"].ToString();
                             model.lugarColonia = reader["lugarColonia"].ToString();
                             model.lugarEntreCalle = reader["lugarEntreCalle"].ToString();
+                            model.municipio = reader["municipio"].ToString();
                             model.infraccionCortesia = reader["infraccionCortesia"] == System.DBNull.Value ? default(bool?) : Convert.ToBoolean(reader["infraccionCortesia"].ToString());
                             model.NumTarjetaCirculacion = reader["NumTarjetaCirculacion"].ToString();
                             model.Persona = _personasService.GetPersonaById((int)model.idPersona);
@@ -434,7 +435,12 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.Garantia = model.idGarantia == null ? new GarantiaInfraccionModel() : GetGarantiaById((int)model.idGarantia);
                             model.strIsPropietarioConductor = model.Vehiculo.idPersona == model.idPersona ? "SI" : "NO";
                             model.delegacion = reader["nombreOficina"] == System.DBNull.Value ? string.Empty : reader["nombreOficina"].ToString();
+                            model.umas = GetUmas();
 
+                            if (model.MotivosInfraccion.Any(w => w.calificacion != null))
+                            {
+                                model.totalInfraccion = (model.MotivosInfraccion.Sum(s => (int)s.calificacion) * model.umas);
+                            }
                             model.NombreConductor = model.PersonaInfraccion.nombreCompleto;
                             model.NombrePropietario = model.Vehiculo.Persona.nombreCompleto;
                             model.fechaNacimiento = model.Vehiculo.Persona.fechaNacimiento;

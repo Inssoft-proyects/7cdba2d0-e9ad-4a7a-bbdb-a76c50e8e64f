@@ -314,6 +314,7 @@ function buscarConductor() {
     }
 
     function mostrarModal(jsonData) {
+        console.log("JSONDAT", jsonData)
         const modal = document.getElementById('modalLicencias');
 
         console.log(jsonData);
@@ -340,7 +341,7 @@ function buscarConductor() {
         `;
 
         modal.querySelector('.modal-content').innerHTML = modalContent;
-
+        console.log("mod",modalContent)
         const cerrarModalBtn = document.getElementById('cerrarModalBtn');
         cerrarModalBtn.addEventListener('click', () => {
             $('#modalLicencias').modal('hide');

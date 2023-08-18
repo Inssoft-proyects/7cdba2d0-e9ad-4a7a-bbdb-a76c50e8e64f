@@ -80,7 +80,11 @@ namespace GuanajuatoAdminUsuarios.Services
                         {
                             EnvioInfraccionesModel infraccion = new EnvioInfraccionesModel();
                             infraccion.IdInfraccion = reader["idInfraccion"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idInfraccion"].ToString());
-                            infraccion.idEstatusInfraccion = (int)(reader["idEstatusInfraccion"] == DBNull.Value ? default(int?) : Convert.ToInt32(reader["idEstatusInfraccion"].ToString()));
+                            object idEstatusInfraccionValue = reader["idEstatusInfraccion"];
+                            if (idEstatusInfraccionValue != DBNull.Value)
+                            {
+                                infraccion.idEstatusInfraccion = Convert.ToInt32(idEstatusInfraccionValue);
+                            }
                             infraccion.estatusInfraccion = reader["estatusInfraccion"].ToString();
                             infraccion.placas = reader["placasVehiculo"].ToString();
                             infraccion.folioInfraccion = reader["folioInfraccion"].ToString();

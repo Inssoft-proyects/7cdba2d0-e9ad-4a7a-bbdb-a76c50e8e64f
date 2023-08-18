@@ -25,11 +25,13 @@ namespace GuanajuatoAdminUsuarios.Controllers
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
         private readonly ICotejarDocumentosClientService _cotejarDocumentosClientService;
+        private readonly ICatTipoLicenciasService _catTipoLicenciasService;
 
 
         public VehiculosController(IVehiculosService vehiculosService, ICatDictionary catDictionary,
             IPersonasService personasService, HttpClient httpClientFactory, IConfiguration configuration,
-           ICotejarDocumentosClientService cotejarDocumentosClientService
+           ICotejarDocumentosClientService cotejarDocumentosClientService,ICatTipoLicenciasService catTipoLicenciasService
+
 
          )
         {
@@ -39,7 +41,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             _httpClient = httpClientFactory;
             _configuration = configuration;
             _cotejarDocumentosClientService = cotejarDocumentosClientService;
-
+            _catTipoLicenciasService = catTipoLicenciasService;
         }
 
         public IActionResult Index()
@@ -126,6 +128,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
             var result = new SelectList(catEntidades.CatalogList, "Id", "Text");
             return Json(result);
         }
+        public JsonResult TipoLicencias_Drop()
+        {
+            var result = new SelectList(_catTipoLicenciasService.ObtenerTiposLicencia(), "idTipoLicencia", "tipoLicencia");
+            return Json(result);
+        }
 
         [HttpPost]
         public ActionResult ajax_BuscarVehiculo(VehiculoBusquedaModel model)
@@ -185,8 +192,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 else if (result.MT_CotejarDatos_res != null && result.MT_CotejarDatos_res.Es_mensaje != null && result.MT_CotejarDatos_res.Es_mensaje.TpMens.ToString().Equals("E", StringComparison.OrdinalIgnoreCase))
                 {
 
-                    var errorMessage = "La placa no existe.";
-                    return Json(new { success = false, message = errorMessage });
+                    return PartialView("_Create", vehiculosModel);
+
                 }
             }*/
 
@@ -227,7 +234,14 @@ namespace GuanajuatoAdminUsuarios.Controllers
             var personasMoralesModel = _personasService.GetAllPersonasMorales();
             return PartialView("_ListPersonasMorales", personasMoralesModel);
         }
-
+        [HttpPost]
+        public ActionResult ajax_CrearPersonaFisica(PersonaModel Persona)
+        {
+            Persona.idCatTipoPersona = (int)TipoPersona.Fisica;
+            var IdPersonaFisica = _personasService.CreatePersona(Persona);
+            var personasFisicasModel = _personasService.GetAllPersonasFisicas();
+            return PartialView("_PersonasFisicas", personasFisicasModel);
+        }
         [HttpGet]
         public ActionResult ajax_GetPersonaMoral(int id)
         {

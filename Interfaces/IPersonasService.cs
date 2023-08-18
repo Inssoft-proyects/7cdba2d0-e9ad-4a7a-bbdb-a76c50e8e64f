@@ -13,6 +13,8 @@ namespace GuanajuatoAdminUsuarios.Interfaces
         public PersonaDireccionModel GetPersonaDireccionByIdPersona(int idPersona);
         public PersonaModel GetPersonaById(int idPersona);
         IEnumerable<PersonaModel> GetAllPersonasMorales();
+        IEnumerable<PersonaModel> GetAllPersonasFisicas();
+
         IEnumerable<PersonaModel> GetAllPersonasMorales(PersonaMoralBusquedaModel model);
         int CreatePersonaMoral(PersonaModel model);
         int UpdatePersonaMoral(PersonaModel model);
