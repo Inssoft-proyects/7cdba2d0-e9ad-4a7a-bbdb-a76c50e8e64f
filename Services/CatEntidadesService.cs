@@ -91,6 +91,37 @@ namespace GuanajuatoAdminUsuarios.Services
 
             return entidad;
         }
+
+        public CatEntidadesModel ObtenerEntidadesByNombre(string nombre)
+        {
+            CatEntidadesModel entidad = new CatEntidadesModel();
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("Select * from catEntidades where nombreEntidad LIKE '%' + @entidad + '%'", connection);
+                    command.Parameters.AddWithValue("@entidad", nombre); 
+                    command.CommandType = CommandType.Text;
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            entidad.idEntidad = Convert.ToInt32(reader["idEntidad"].ToString());
+                            entidad.nombreEntidad = reader["nombreEntidad"].ToString();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                }
+                finally
+                {
+                    connection.Close();
+                }
+
+            return entidad;
+        }
+
         public int CrearEntidad(CatEntidadesModel model)
         {
             int result = 0;

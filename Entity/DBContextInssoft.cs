@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
+using GuanajuatoAdminUsuarios.Models;
 
 namespace GuanajuatoAdminUsuarios.Entity;
 
@@ -65,6 +66,8 @@ public partial class DBContextInssoft : DbContext
     public virtual DbSet<CatDelegacionesOficinasTransporte> CatDelegacionesOficinasTransporte { get; set; }
 
     public virtual DbSet<Infracciones> Infracciones { get; set; }
+
+    public virtual DbSet<LicenciaPersonaDatos> PersonasDatos { get; set; }
 
 
 

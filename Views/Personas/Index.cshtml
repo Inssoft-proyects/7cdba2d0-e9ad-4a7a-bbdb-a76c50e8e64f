@@ -292,40 +292,31 @@ function buscarConductor() {
         type: 'POST',
         data: Mydata,
         success: function (response) {
-            if (response.encontrada) {
+            if (response.tipo == "success") {
                 // Crear instancia del modelo con los datos recibidos
-                    mostrarModal(response.data);
+                mostrarModal(response.datos);
 
-                } else {
-                    // Mostrar los resultados de personas encontradas en la búsqueda
-                    var personasList = response.data;
-console.log("RE",personasList)
-var grid = $("#gridPersonas").data("kendoGrid");
-                    grid.dataSource.data(personasList);
+            } else {
+                // Mostrar los resultados de personas encontradas en la búsqueda
+                var personasList = response.data;
+                var grid = $("#gridPersonas").data("kendoGrid");
+                grid.dataSource.data(personasList);
 
-                    if (personasList.length === 0) {
-                        sitteg_warning("La búsqueda no arrojó resultados.");
-                    }
+                if (personasList.length === 0) {
+                    sitteg_warning("La búsqueda no arrojó resultados.");
                 }
-            },
-            error: function (error) {
-                sitteg_warning('Ocurrió un error en la búsqueda.');
-                console.log(error);
             }
+        },
+        error: function (error) {
+            sitteg_warning('Ocurrió un error en la búsqueda.'); 
+        }
         });
     }
 
     function mostrarModal(jsonData) {
         const modal = document.getElementById('modalLicencias');
 
-        const nombre = jsonData.Nombre;
-        const apellidoPaterno = jsonData.ApellidoPaterno;
-        const apellidoMaterno = jsonData.ApellidoMaterno;
-        const tipoLicencia = jsonData.TipoLicencia;
-        const numeroLicencia = jsonData.NumeroLicencia;
-        const fechaExpedicion = jsonData.FechaExpedicion;
-        const fechaVigencia = jsonData.FechaVigencia;
-
+        console.log(jsonData);
         const modalContent = `
             <div class="modal-header">
                 <h5 class="modal-title">Datos encontrados en el sistema de licencias</h5>
@@ -334,18 +325,18 @@ var grid = $("#gridPersonas").data("kendoGrid");
                 </button>
             </div>
             <div class="modal-body">
-                <p><strong>Nombre:</strong> ${nombre}</p>
-                <p><strong>Apellido Paterno:</strong> ${apellidoPaterno}</p>
-                <p><strong>Apellido Materno:</strong> ${apellidoMaterno}</p>
-                <p><strong>Tipo de Licencia:</strong> ${tipoLicencia}</p>
-                <p><strong>Número de Licencia:</strong> ${numeroLicencia}</p>
-                <p><strong>Fecha de Expedición:</strong> ${fechaExpedicion}</p>
-                <p><strong>Fecha de Vigencia:</strong> ${fechaVigencia}</p>
+                <p><strong>Nombre:</strong> ${jsonData.nombre}</p>
+                <p><strong>Apellido Paterno:</strong> ${jsonData.primer_apellido}</p>
+                <p><strong>Apellido Materno:</strong> ${jsonData.segundo_apellido}</p>
+                <p><strong>Tipo de Licencia:</strong> ${jsonData.tipolicencia}</p>
+                <p><strong>Número de Licencia:</strong> ${jsonData.num_licencia}</p>
+                <p><strong>Fecha de Expedición:</strong> ${jsonData.fecha_inicio_vigencia}</p>
+                <p><strong>Fecha de Vigencia:</strong> ${jsonData.fecha_termino_vigencia}</p>
             </div>
           <div class="modal-footer">
-        <button type="button" id="cerrarModalBtn" class="btn btn-secondary controlButton" data-dismiss="modal">Cerrar</button>
-        <button type="button" id="guardarEnBaseDeDatosBtn" class="btn btn-primary controlButton">Guardar en Base de Datos</button>
-    </div>
+            <button type="button" id="cerrarModalBtn" class="btn btn-secondary controlButton" data-dismiss="modal">Cerrar</button>
+            <button type="button" id="guardarEnBaseDeDatosBtn" class="btn btn-primary controlButton">Guardar en Base de Datos</button>
+          </div>
         `;
 
         modal.querySelector('.modal-content').innerHTML = modalContent;
@@ -359,26 +350,35 @@ var grid = $("#gridPersonas").data("kendoGrid");
         guardarEnBaseDeDatosBtn.addEventListener('click', () => {
             const tipoLicenciaMapping = {
                 "TIPO A  CHOFER AUTOMOVILISTA": 1,
-                "TIPO B CHOFER SERVICIO PUBLICO": 2
+                "TIPO B CHOFER SERVICIO PÚBLICO": 2,
+                "TIPO C  Chofer Servicio de Carga": 3,
+                "TIPO D -MOTOCICLISTA": 4,
+                "PERMISO A -AUTOMOVIL-": 6,
+                "PERMISO D -MOTOCICLETA-": 7,
+                "NO APLICA": 8,
+                "TIPO A": 1,
+                "TIPO B": 2,
+                "TIPO C": 3,
+                "TIPO D": 4,
+                "PERMISO A": 6,
+                "PERMISO D": 7,
+                "A-AUTOMOVILISTA": 1,
+                "B-CHOFER DE SERVICIO PÚBLICO": 2,
+                "C-CHOFER DE SERVICIO DE CARGA": 3,
+                "D-MOTOCICLISTA": 4,
+                "PA-PERMISO AUTOMOVILISTA": 6,
+                "PD-PERMISO MOTOCICLISTA": 7,
+
                 // Puedes agregar más mapeos aquí si es necesario
             };
-
-            const tipoLicenciaNumero = tipoLicenciaMapping[tipoLicencia] || 0; // 0 o valor predeterminado si no hay coincidencia
-
-            const data = {
-                nombre: nombre,
-                apellidoPaterno: apellidoPaterno,
-                apellidoMaterno: apellidoMaterno,
-                tipoLicencia: tipoLicenciaNumero,
-                numeroLicencia: numeroLicencia,
-                fechaExpedicion: fechaExpedicion,
-                fechaVigencia: fechaVigencia
-            };
+            console.log(jsonData);
+            const tipoLicenciaNumero = tipoLicenciaMapping[jsonData.tipolicencia] || 0; // 0 o valor predeterminado si no hay coincidencia
+            jsonData.id_tipo_licencia = tipoLicenciaNumero; 
 
             $.ajax({
                 type: 'POST',
                 url: '/Personas/guardaDesdeServicio', // Reemplaza con la URL correcta
-                data: data,
+                data: jsonData,
                 success: function (response) {
                     $('#modalLicencias').modal('hide');
                     var personasList = [response]; // Convierte el objeto en un arreglo

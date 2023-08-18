@@ -21,7 +21,8 @@ using GuanajuatoAdminUsuarios.Models;
 using SITTEG.APIClientHelper.Client;
 using SITTEG.APIClientInfrastructure.Client;
 using System.ComponentModel;
-
+using GuanajuatoAdminUsuarios.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace GuanajuatoAdminUsuarios
 {
@@ -34,9 +35,23 @@ namespace GuanajuatoAdminUsuarios
 
         public IConfiguration Configuration { get; }
 
+        
+
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            //Connection Strings
+            string connStringLicencias = Configuration.GetConnectionString("GUANAJUATO_ADMIN_USUARIOS_DEV");
+            string connStringIncidencias = Configuration.GetConnectionString("GUANAJUATO_INCIDENCIAS_MIG_DEV");
+
+            services.AddDbContext<GuanajuatoLicenciasContext>(options => options.UseSqlServer(connStringLicencias));
+            services.AddScoped<DbContext, GuanajuatoLicenciasContext>();
+
+            services.AddDbContext<GuanajuatoIncidenciasMigContext>(options => options.UseSqlServer(connStringIncidencias));
+            services.AddScoped<DbContext, GuanajuatoLicenciasContext>();
+
             // Configure cookie based authentication
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(options =>
@@ -152,6 +167,7 @@ namespace GuanajuatoAdminUsuarios
             services.AddScoped<IAsignacionGruasService, AsignacionGruasService>();
             services.AddScoped<IEstadisticasAccidentesService, EstadisticasAccidentesService>();
             services.AddScoped<ICrearMultasTransitoClientService, CrearMultasTransitoClientService>(); 
+            services.AddScoped<ILicenciasService, LicenciasService>(); 
 
             services.AddScoped(typeof(IApiClient), typeof(ApiClient));
             services.AddScoped<IAccountClient, AccountClient>();
