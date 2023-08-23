@@ -8,11 +8,11 @@ namespace GuanajuatoAdminUsuarios.Entity
 
         public string Nombre { get; set; }
 
-        public string Fundamento { get; set; }
-
         public int? CalificacionMinima { get; set; }
 
         public int? CalificacionMaxima { get; set; }
+
+        public int? Calificacion { get; set; }
 
         public DateTime? FechaActualizacion { get; set; }
 

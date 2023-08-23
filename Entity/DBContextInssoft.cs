@@ -42,6 +42,7 @@ public partial class DBContextInssoft : DbContext
     public virtual DbSet<TiposCarga> TiposCarga { get; set; }
 
     public virtual DbSet<MotivosInfraccion> MotivosInfraccion { get; set; }
+    public virtual DbSet<CatMotivosInfraccion> CatMotivosInfracciones { get; set; }
 
     public virtual DbSet<CatAutoridadesDisposicion> CatAutoridadesDisposicion { get; set; }
 
@@ -66,10 +67,8 @@ public partial class DBContextInssoft : DbContext
     public virtual DbSet<CatDelegacionesOficinasTransporte> CatDelegacionesOficinasTransporte { get; set; }
 
     public virtual DbSet<Infracciones> Infracciones { get; set; }
-
-
-
-
+    public virtual DbSet<CatConceptoInfraccion> CatConceptosInfraccion { get; set; }
+    public virtual DbSet<CatSubConceptoInfraccion> CatSubConceptosInfraccion { get; set; }
 
 
 
@@ -329,11 +328,9 @@ public partial class DBContextInssoft : DbContext
             entity.Property(e => e.Nombre).HasColumnName("Nombre")
                 .HasMaxLength(100)
                 .IsUnicode(false);
-            entity.Property(e => e.Fundamento).HasColumnName("Fundamento")
-                .HasMaxLength(100)
-                .IsUnicode(false);
             entity.Property(e => e.CalificacionMinima).HasColumnName("CalificacionMinima");
             entity.Property(e => e.CalificacionMaxima).HasColumnName("CalificacionMaxima");
+            entity.Property(e => e.Calificacion).HasColumnName("Calificacion");
             entity.Property(e => e.ActualizadoPor).HasColumnName("actualizadoPor");
             entity.Property(e => e.FechaActualizacion)
              .HasColumnType("datetime")
@@ -607,6 +604,76 @@ public partial class DBContextInssoft : DbContext
 
 
             });
+
+        modelBuilder.Entity<CatMotivosInfraccion>(entity =>
+        {
+            entity.HasKey(e => e.idCatMotivoInfraccion);
+
+            entity.ToTable("catMotivosInfraccion");
+
+            entity.Property(e => e.idCatMotivoInfraccion).HasColumnName("idCatMotivoInfraccion");
+
+            entity.Property(e => e.Nombre)
+                .HasMaxLength(100)
+                .IsUnicode(false).
+                HasColumnName("nombre");
+
+            entity.Property(e => e.IdConcepto).HasColumnName("IdConcepto");
+            entity.Property(e => e.IdSubConcepto).HasColumnName("IdSubConcepto");
+
+
+            entity.Property(e => e.ActualizadoPor).HasColumnName("actualizadoPor");
+            entity.Property(e => e.Estatus).HasColumnName("estatus");
+            entity.Property(e => e.FechaActualizacion)
+              .HasColumnType("datetime")
+              .HasColumnName("fechaActualizacion");
+
+            entity.Property(e => e.CalificacionMinima).HasColumnName("calificacionMinima");
+            entity.Property(e => e.CalificacionMaxima).HasColumnName("calificacionMaxima");
+            entity.Property(e => e.Fundamento)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("fundamento");
+        });
+
+
+        modelBuilder.Entity<CatConceptoInfraccion>(entity =>
+        {
+            entity.HasKey(e => e.idConcepto).HasName("idConcepto");
+
+            entity.ToTable("catConceptoInfraccion");
+
+            entity.Property(e => e.idConcepto).HasColumnName("idConcepto");
+            entity.Property(e => e.concepto)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("concepto");
+            entity.Property(e => e.ActualizadoPor).HasColumnName("actualizadoPor");
+            entity.Property(e => e.FechaActualizacion)
+             .HasColumnType("datetime")
+             .HasColumnName("fechaActualizacion");
+            entity.Property(e => e.Estatus).HasColumnName("estatus");
+        });
+
+        modelBuilder.Entity<CatSubConceptoInfraccion>(entity =>
+        {
+            entity.HasKey(e => e.idSubConcepto).HasName("idSubConcepto");
+            entity.ToTable("catSubConceptoInfraccion");
+            entity.Property(e => e.idSubConcepto).HasColumnName("idSubConcepto"); 
+
+            entity.Property(e => e.subConcepto)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("subConcepto");
+            
+            entity.Property(e => e.idConcepto).HasColumnName("idConcepto");
+            entity.Property(e => e.ActualizadoPor).HasColumnName("actualizadoPor");
+            entity.Property(e => e.FechaActualizacion)
+             .HasColumnType("datetime")
+             .HasColumnName("fechaActualizacion");
+            entity.Property(e => e.Estatus).HasColumnName("estatus");
+        });
+
     }
       
 

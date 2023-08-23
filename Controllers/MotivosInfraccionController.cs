@@ -1,4 +1,5 @@
 ﻿using GuanajuatoAdminUsuarios.Entity;
+using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
@@ -10,12 +11,20 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static GuanajuatoAdminUsuarios.RESTModels.ConsultarDocumentoResponseModel;
 
 namespace Example.WebUI.Controllers
 {
     public class MotivosInfraccionController : Controller
     {
         DBContextInssoft dbContext = new DBContextInssoft();
+        private readonly ICatDictionary _catDictionary;
+
+        public MotivosInfraccionController(ICatDictionary catDictionary)
+        {
+            _catDictionary = catDictionary;
+        }
+
         public IActionResult Index()
         {
             int IdModulo = 944;
@@ -53,6 +62,8 @@ namespace Example.WebUI.Controllers
             List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
             if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
             {
+                var catConcepto = _catDictionary.GetCatalog("CatConceptoInfraccion", "0");
+                ViewData["CatConcepto"] = new SelectList(catConcepto.CatalogList, "Id", "Text");
                 return PartialView("_Crear");
             }
             else
@@ -62,15 +73,20 @@ namespace Example.WebUI.Controllers
             }
         }
 
-        public ActionResult EditarParcial(int IdMotivoInfraccion)
+        public ActionResult EditarParcial(int IdCatMotivoInfraccion)
         {
             int IdModulo = 946;
             string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
             List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
             if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
             {
-                var motivosInfraccionsModel = GetMotivoByID(IdMotivoInfraccion);
-            return View("_Editar", motivosInfraccionsModel);
+                var motivosInfraccionsModel = GetMotivoByID(IdCatMotivoInfraccion);
+                
+                var catConcepto = _catDictionary.GetCatalog("CatConceptoInfraccion", "0");
+                var catSubConcepto = _catDictionary.GetCatalog("CatSubConceptoInfraccion", motivosInfraccionsModel.idConcepto+"");
+                ViewData["CatConcepto"] = new SelectList(catConcepto.CatalogList, "Id", "Text");
+                ViewData["CatSubConceptoInfraccion"] = new SelectList(catSubConcepto.CatalogList, "Id", "Text");
+                return View("_Editar", motivosInfraccionsModel);
         }
             else
             {
@@ -79,9 +95,9 @@ namespace Example.WebUI.Controllers
     }
 }
 
-        public ActionResult EliminarMotivoParcial(int IdMotivoInfraccion)
+        public ActionResult EliminarMotivoParcial(int IdCatMotivoInfraccion)
         {
-            var motivosInfraccionsModel = GetMotivoByID(IdMotivoInfraccion);
+            var motivosInfraccionsModel = GetMotivoByID(IdCatMotivoInfraccion);
             return View("_Eliminar", motivosInfraccionsModel);
         }
         public JsonResult Categories_Read()
@@ -93,7 +109,7 @@ namespace Example.WebUI.Controllers
 
 
         [HttpPost]
-        public ActionResult CreatePartialMotivoModal(MotivosInfraccionModel model)
+        public ActionResult CreatePartialMotivoModal(CatMotivosInfraccionModel model)
         {
             var errors = ModelState.Values.Select(s => s.Errors);
             ModelState.Remove("Nombre");
@@ -111,15 +127,14 @@ namespace Example.WebUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditarParcialModal(MotivosInfraccionModel model)
+        public ActionResult EditarParcialModal(CatMotivosInfraccionModel model)
         {
             bool switchMotivosInfraccion = Request.Form["motivosInfraccionSwitch"].Contains("true");
-            model.Estatus = switchMotivosInfraccion ? 1 : 0;
+            model.estatus = switchMotivosInfraccion ? 1 : 0;
             var errors = ModelState.Values.Select(s => s.Errors);
             ModelState.Remove("Nombre");
             if (ModelState.IsValid)
-            {
-
+            { 
 
                 UpdateMotivo(model);
                 var ListMotivosInfraccionModel = GetMotivos();
@@ -129,7 +144,7 @@ namespace Example.WebUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult EliminarMotivoParcialModal(MotivosInfraccionModel model)
+        public ActionResult EliminarMotivoParcialModal(CatMotivosInfraccionModel model)
         {
             var errors = ModelState.Values.Select(s => s.Errors);
             ModelState.Remove("Nombre");
@@ -143,6 +158,14 @@ namespace Example.WebUI.Controllers
             }
             return PartialView("_Eliminar");
         }
+
+        [HttpGet]
+        public ActionResult BuscarMotivoByID(int idCatMotivoInfraccion)
+        {
+            CatMotivosInfraccionModel motivo = GetMotivoByID(idCatMotivoInfraccion);
+            return Json(motivo);  
+        }
+
         public JsonResult GetMotInf([DataSourceRequest] DataSourceRequest request)
         {
             var ListMotivosInfraccionModel = GetMotivos();
@@ -158,39 +181,43 @@ namespace Example.WebUI.Controllers
 
         #region Acciones a base de datos
 
-        public void CreateMotivo(MotivosInfraccionModel model)
+        public void CreateMotivo(CatMotivosInfraccionModel model)
         {
-            MotivosInfraccion motivo = new MotivosInfraccion();
-            motivo.IdMotivoInfraccion = model.IdMotivoInfraccion;
+            CatMotivosInfraccion motivo = new CatMotivosInfraccion();
+            motivo.idCatMotivoInfraccion = model.IdCatMotivoInfraccion;
             motivo.Nombre = model.Nombre;
             motivo.CalificacionMinima = model.CalificacionMinima;
             motivo.CalificacionMaxima = model.CalificacionMaxima;
             motivo.Fundamento = model.Fundamento;
+            motivo.IdConcepto = model.idConcepto;
+            motivo.IdSubConcepto = model.idSubConcepto;
             motivo.Estatus = 1;
             motivo.FechaActualizacion = DateTime.Now;
-            dbContext.MotivosInfraccion.Add(motivo);
+            dbContext.CatMotivosInfracciones.Add(motivo);
             dbContext.SaveChanges();
         }
 
-        public void UpdateMotivo(MotivosInfraccionModel model)
+        public void UpdateMotivo(CatMotivosInfraccionModel model)
         {
-            MotivosInfraccion motivo = new MotivosInfraccion();
-            motivo.IdMotivoInfraccion = model.IdMotivoInfraccion;
+            CatMotivosInfraccion motivo = new CatMotivosInfraccion();
+            motivo.idCatMotivoInfraccion = model.IdCatMotivoInfraccion;
             motivo.Nombre = model.Nombre;
             motivo.Fundamento = model.Fundamento;
             motivo.CalificacionMinima = model.CalificacionMinima;
             motivo.CalificacionMaxima = model.CalificacionMaxima;
-            motivo.Estatus = model.Estatus;
+            motivo.IdConcepto = model.idConcepto;
+            motivo.IdSubConcepto = model.idSubConcepto;
+            motivo.Estatus = model.estatus;
             motivo.FechaActualizacion = DateTime.Now;
             dbContext.Entry(motivo).State = EntityState.Modified;
             dbContext.SaveChanges();
 
         }
 
-        public void DeleteMotivo(MotivosInfraccionModel model)
+        public void DeleteMotivo(CatMotivosInfraccionModel model)
         {
-            MotivosInfraccion motivo = new MotivosInfraccion();
-            motivo.IdMotivoInfraccion = model.IdMotivoInfraccion;
+            CatMotivosInfraccion motivo = new CatMotivosInfraccion();
+            motivo.idCatMotivoInfraccion = model.IdCatMotivoInfraccion;
             motivo.Nombre = model.Nombre;
             motivo.Fundamento = model.Fundamento;
             motivo.CalificacionMinima = model.CalificacionMinima;
@@ -210,43 +237,67 @@ namespace Example.WebUI.Controllers
          }*/
 
 
-        public MotivosInfraccionModel GetMotivoByID(int IdMotivoInfraccion)
+        public CatMotivosInfraccionModel GetMotivoByID(int IdCatMotivoInfraccion)
         {
 
-            var productEnitity = dbContext.MotivosInfraccion.Find(IdMotivoInfraccion);
+            var productEnitity = dbContext.CatMotivosInfracciones.Find(IdCatMotivoInfraccion);
 
-            var motivosInfraccionModel = (from motivosInfraccion in dbContext.MotivosInfraccion.ToList()
-                                          select new MotivosInfraccionModel
+            var motivosInfraccionModel = (from catMotivosInfraccion in dbContext.CatMotivosInfracciones.ToList()
+                                          join estatus in dbContext.Estatus.ToList()
+                                                on catMotivosInfraccion.Estatus equals estatus.estatus
+
+                                          join concepto in dbContext.CatConceptosInfraccion.ToList()
+                                            on catMotivosInfraccion.IdConcepto equals concepto.idConcepto
+
+                                          join subconcepto in dbContext.CatSubConceptosInfraccion.ToList()
+                                            on catMotivosInfraccion.IdSubConcepto equals subconcepto.idSubConcepto
+
+                                          select new CatMotivosInfraccionModel
 
                                           {
-                                              IdMotivoInfraccion = motivosInfraccion.IdMotivoInfraccion,
-                                              Nombre = motivosInfraccion.Nombre,
-                                              CalificacionMinima = motivosInfraccion.CalificacionMinima,
-                                              CalificacionMaxima = motivosInfraccion.CalificacionMaxima,
-                                              Fundamento = motivosInfraccion.Fundamento
+                                              IdCatMotivoInfraccion = catMotivosInfraccion.idCatMotivoInfraccion,
+                                              Nombre = catMotivosInfraccion.Nombre,
+                                              Fundamento = catMotivosInfraccion.Fundamento,
+                                              CalificacionMinima = catMotivosInfraccion.CalificacionMinima,
+                                              CalificacionMaxima = catMotivosInfraccion.CalificacionMaxima,
+                                              idConcepto = catMotivosInfraccion.IdConcepto,
+                                              concepto = concepto.concepto,
+                                              idSubConcepto = catMotivosInfraccion.IdSubConcepto,
+                                              subConcepto = subconcepto.subConcepto,
+                                              ValorEstatusMotivosInfraccion = estatus.estatusDesc == "activo" 
+                                              
 
-                                          }).Where(w => w.IdMotivoInfraccion == IdMotivoInfraccion).FirstOrDefault();
+                                          }).Where(w => w.IdCatMotivoInfraccion == IdCatMotivoInfraccion).FirstOrDefault();
 
             return motivosInfraccionModel;
         }
 
-
-        public List<MotivosInfraccionModel> GetMotivos()
+        public List<CatMotivosInfraccionModel> GetMotivos()
         {
-            var ListMotivosInfraccionModel = (from motivosInfraccion in dbContext.MotivosInfraccion.ToList()
+            var ListMotivosInfraccionModel = (from catMotivosInfraccion in dbContext.CatMotivosInfracciones.ToList()
                                               join estatus in dbContext.Estatus.ToList()
-                                              on motivosInfraccion.Estatus equals estatus.estatus
-                                              where motivosInfraccion.Estatus == 1
+                                                on catMotivosInfraccion.Estatus equals estatus.estatus
 
-                                              select new MotivosInfraccionModel
+                                              join concepto in dbContext.CatConceptosInfraccion.ToList()
+                                                on catMotivosInfraccion.IdConcepto equals concepto.idConcepto
+
+                                              join subconcepto in dbContext.CatSubConceptosInfraccion.ToList()
+                                                on catMotivosInfraccion.IdSubConcepto equals subconcepto.idSubConcepto
+                                              where catMotivosInfraccion.Estatus == 1
+
+                                              select new CatMotivosInfraccionModel
                                               {
-                                                  IdMotivoInfraccion = motivosInfraccion.IdMotivoInfraccion,
-                                                  Nombre = motivosInfraccion.Nombre,
-                                                  Fundamento = motivosInfraccion.Fundamento,
-                                                  CalificacionMinima = motivosInfraccion.CalificacionMinima,
-                                                  CalificacionMaxima = motivosInfraccion.CalificacionMaxima,
-                                                  Estatus = motivosInfraccion.Estatus,
-                                                  EstatusDesc = estatus.estatusDesc,
+                                                  IdCatMotivoInfraccion = catMotivosInfraccion.idCatMotivoInfraccion,
+                                                  Nombre = catMotivosInfraccion.Nombre,
+                                                  Fundamento = catMotivosInfraccion.Fundamento,
+                                                  CalificacionMinima = catMotivosInfraccion.CalificacionMinima,
+                                                  CalificacionMaxima = catMotivosInfraccion.CalificacionMaxima,
+                                                  idConcepto = catMotivosInfraccion.IdConcepto,
+                                                  concepto = concepto.concepto,
+                                                  idSubConcepto = catMotivosInfraccion.IdSubConcepto,
+                                                  subConcepto = subconcepto.subConcepto,
+                                                  estatus = catMotivosInfraccion.Estatus,
+                                                  estatusDesc = estatus.estatusDesc,
                                               }).ToList();
             return ListMotivosInfraccionModel;
         }

@@ -69,8 +69,8 @@ namespace GuanajuatoAdminUsuarios.Services
                                     ,catCarre.idCarretera,catCarre.carretera
                                     ,veh.idMarcaVehiculo,veh.idMarcaVehiculo, veh.serie,veh.tarjeta, veh.vigenciaTarjeta,veh.idTipoVehiculo,veh.modelo
                                     ,veh.idColor,veh.idEntidad,veh.idCatTipoServicio, veh.propietario, veh.numeroEconomico
-                                    ,motInf.idMotivoInfraccion,motInf.nombre,motInf.fundamento,motInf.calificacionMinima,motInf.calificacionMaxima
-                                    ,catMotInf.idMotivoInfraccion,catMotInf.catMotivo
+                                    ,motInf.idMotivoInfraccion,catMotInf.nombre,catMotInf.fundamento,motInf.calificacionMinima,motInf.calificacionMaxima
+                                    ,catMotInf.idCatMotivoInfraccion ,catMotInf.nombre 
                                     ,catSubInf.idSubConcepto,catSubInf.subConcepto
                                     ,catConInf.idConcepto,catConInf.concepto
                                     FROM infracciones as inf
@@ -87,7 +87,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                     left join catCarreteras catCarre on catTra.IdCarretera = catCarre.idCarretera
                                     left join vehiculos veh on inf.idVehiculo = veh.idVehiculo
                                     left join motivosInfraccion motInf on inf.IdInfraccion = motInf.idInfraccion
-                                    left join catMotivosInfraccion catMotInf on motInf.idCatMotivosInfraccion = catMotInf.idMotivoInfraccion
+                                    left join catMotivosInfraccion catMotInf on motInf.idCatMotivosInfraccion = catMotInf.idCatMotivoInfraccion
                                     left join catSubConceptoInfraccion catSubInf on catMotInf.IdSubConcepto = catSubInf.idSubConcepto
                                     left join catConceptoInfraccion catConInf on  catSubInf.idConcepto = catConInf.idConcepto
                                     WHERE inf.estatus = 1 AND inf.idDelegacion = @idOficina";
@@ -223,8 +223,8 @@ namespace GuanajuatoAdminUsuarios.Services
                                     ,catCarre.idCarretera,catCarre.carretera
                                     ,veh.idMarcaVehiculo,veh.idMarcaVehiculo, veh.serie,veh.tarjeta, veh.vigenciaTarjeta,veh.idTipoVehiculo,veh.modelo
                                     ,veh.idColor,veh.idEntidad,veh.idCatTipoServicio, veh.propietario, veh.numeroEconomico
-                                    ,motInf.idMotivoInfraccion,motInf.nombre,motInf.fundamento,motInf.calificacionMinima,motInf.calificacionMaxima
-                                    ,catMotInf.idMotivoInfraccion,catMotInf.catMotivo
+                                    ,motInf.idMotivoInfraccion,catMotInf.nombre,catMotInf.fundamento,motInf.calificacionMinima,motInf.calificacionMaxima
+                                    ,catMotInf.idCatMotivoInfraccion ,catMotInf.nombre 
                                     ,catSubInf.idSubConcepto,catSubInf.subConcepto
                                     ,catConInf.idConcepto,catConInf.concepto
                                     FROM infracciones as inf
@@ -241,7 +241,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                     left join catCarreteras catCarre on catTra.IdCarretera = catCarre.idCarretera
                                     left join vehiculos veh on inf.idVehiculo = veh.idVehiculo
                                     left join motivosInfraccion motInf on inf.IdInfraccion = motInf.idInfraccion
-                                    left join catMotivosInfraccion catMotInf on motInf.idCatMotivosInfraccion = catMotInf.idMotivoInfraccion
+                                    left join catMotivosInfraccion catMotInf on motInf.idCatMotivosInfraccion = catMotInf.idCatMotivoInfraccion
                                     left join catSubConceptoInfraccion catSubInf on catMotInf.IdSubConcepto = catSubInf.idSubConcepto
                                     left join catConceptoInfraccion catConInf on  catSubInf.idConcepto = catConInf.idConcepto
                                     left join personasInfracciones pInf on inf.idPersonaInfraccion = pInf.idPersonaInfraccion
@@ -462,13 +462,13 @@ namespace GuanajuatoAdminUsuarios.Services
         }
 
 
-        public List<MotivoInfraccionModel> GetMotivosInfraccionByIdInfraccion(int idInfraccion)
+        public List<MotivosInfraccionVistaModel> GetMotivosInfraccionByIdInfraccion(int idInfraccion)
         {
-            List<MotivoInfraccionModel> modelList = new List<MotivoInfraccionModel>();
+            List<MotivosInfraccionVistaModel> modelList = new List<MotivosInfraccionVistaModel>();
             string strQuery = @"SELECT
                                 m.idMotivoInfraccion
-                                ,m.nombre
-                                ,m.fundamento
+                                ,ci.nombre
+                                ,ci.fundamento
                                 ,m.calificacionMinima
                                 ,m.calificacionMaxima
                                 ,m.fechaActualizacion
@@ -477,14 +477,14 @@ namespace GuanajuatoAdminUsuarios.Services
                                 ,m.idCatMotivosInfraccion
                                 ,m.idInfraccion
                                 ,m.calificacion
-                                ,ci.catMotivo
+                                ,ci.nombre motivo
                                 ,ci.IdSubConcepto
                                 ,csi.subConcepto
                                 ,csi.idConcepto
                                 ,cci.concepto
                                 FROM motivosInfraccion m
                                 INNER JOIN catMotivosInfraccion ci
-                                on m.idCatMotivosInfraccion = ci.idMotivoInfraccion
+                                on m.idCatMotivosInfraccion = ci.idCatMotivoInfraccion 
                                 AND ci.estatus = 1
                                 LEFT JOIN catSubConceptoInfraccion csi
                                 on ci.IdSubConcepto = csi.idSubConcepto
@@ -506,20 +506,20 @@ namespace GuanajuatoAdminUsuarios.Services
                     {
                         while (reader.Read())
                         {
-                            MotivoInfraccionModel model = new MotivoInfraccionModel();
+                            MotivosInfraccionVistaModel model = new MotivosInfraccionVistaModel();
                             model.idMotivoInfraccion = reader["idMotivoInfraccion"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idMotivoInfraccion"].ToString());
-                            model.nombre = reader["nombre"].ToString();
-                            model.fundamento = reader["fundamento"].ToString();
-                            model.calificacionMinima = reader["calificacionMinima"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["calificacionMinima"].ToString());
-                            model.calificacionMaxima = reader["calificacionMaxima"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["calificacionMaxima"].ToString());
+                            model.Nombre = reader["nombre"].ToString();
+                            model.Fundamento = reader["fundamento"].ToString();
+                            model.CalificacionMinima = reader["calificacionMinima"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["calificacionMinima"].ToString());
+                            model.CalificacionMaxima = reader["calificacionMaxima"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["calificacionMaxima"].ToString());
                             model.calificacion = reader["calificacion"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["calificacion"].ToString());
-                            model.idCatMotivosInfraccion = reader["idCatMotivosInfraccion"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idCatMotivosInfraccion"].ToString());
+                            model.idCatMotivoInfraccion = reader["idCatMotivosInfraccion"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idCatMotivosInfraccion"].ToString());
                             model.idInfraccion = reader["idInfraccion"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idInfraccion"].ToString());
                             model.IdSubConcepto = reader["IdSubConcepto"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["IdSubConcepto"].ToString());
-                            model.idConcepto = reader["idConcepto"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idConcepto"].ToString());
-                            model.catMotivo = reader["catMotivo"].ToString();
-                            model.subConcepto = reader["subConcepto"].ToString();
-                            model.concepto = reader["concepto"].ToString();
+                            model.IdConcepto = reader["idConcepto"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idConcepto"].ToString());
+                            model.Motivo = reader["motivo"].ToString();
+                            model.SubConcepto = reader["subConcepto"].ToString();
+                            //model.concepto = reader["concepto"].ToString();
                             modelList.Add(model);
                         }
                     }
@@ -792,40 +792,43 @@ namespace GuanajuatoAdminUsuarios.Services
         {
             int result = 0;
             string strQuery = @"INSERT INTO motivosInfraccion
-                                      (fundamento
-                                      ,calificacionMinima
+                                      (calificacionMinima
                                       ,calificacionMaxima
                                       ,calificacion
                                       ,fechaActualizacion
                                       ,actualizadoPor
                                       ,estatus
                                       ,idCatMotivosInfraccion
-                                      ,idInfraccion)
-                               VALUES (@fundamento
-                                      ,@calificacionMinima
+                                      ,idInfraccion
+                                      ,IdConcepto
+                                      ,IdSubConcepto)
+                               VALUES (@calificacionMinima
                                       ,@calificacionMaxima
                                       ,@calificacion
                                       ,@fechaActualizacion
                                       ,@actualizadoPor
                                       ,@estatus
                                       ,@idCatMotivosInfraccion
-                                      ,@idInfraccion);SELECT SCOPE_IDENTITY()";
+                                      ,@idInfraccion
+                                      ,@idConcepto
+                                      ,@idSubConcepto);SELECT SCOPE_IDENTITY()";
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
             {
                 try
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand(strQuery, connection);
-                    command.CommandType = CommandType.Text;
-                    command.Parameters.Add(new SqlParameter("fundamento", SqlDbType.NVarChar)).Value = (object)model.fundamento ?? DBNull.Value;
+                    command.CommandType = CommandType.Text; 
                     command.Parameters.Add(new SqlParameter("calificacionMinima", SqlDbType.Int)).Value = (object)model.calificacionMinima ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("calificacionMaxima", SqlDbType.Int)).Value = (object)model.calificacionMaxima ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("calificacion", SqlDbType.Int)).Value = (object)model.calificacion ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("fechaActualizacion", SqlDbType.DateTime)).Value = (object)DateTime.Now;
                     command.Parameters.Add(new SqlParameter("actualizadoPor", SqlDbType.Int)).Value = (object)1;
                     command.Parameters.Add(new SqlParameter("estatus", SqlDbType.Int)).Value = (object)1;
-                    command.Parameters.Add(new SqlParameter("idCatMotivosInfraccion", SqlDbType.Int)).Value = (object)model.idCatMotivosInfraccion;
+                    command.Parameters.Add(new SqlParameter("idCatMotivosInfraccion", SqlDbType.Int)).Value = (object)model.idCatMotivoInfraccion;
                     command.Parameters.Add(new SqlParameter("idInfraccion", SqlDbType.Int)).Value = (object)model.idInfraccion;
+                    command.Parameters.Add(new SqlParameter("idConcepto", SqlDbType.Int)).Value = (object)model.idConcepto;
+                    command.Parameters.Add(new SqlParameter("idSubConcepto", SqlDbType.Int)).Value = (object)model.IdSubConcepto;
                     result = Convert.ToInt32(command.ExecuteScalar());
                 }
                 catch (SqlException ex)

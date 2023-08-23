@@ -219,12 +219,12 @@ namespace GuanajuatoAdminUsuarios.Framework
                     if (int.TryParse(parameter, out intId))
                     {
                         catalogModel.CatalogName = catalog;
-                        campos = new string[] { "idMotivoInfraccion", "catMotivo" };
+                        campos = new string[] { "idCatMotivoInfraccion", "nombre" };
                         catalogModel.CatalogList = _catalogosService.GetGenericCatalogosByFilter("catMotivosInfraccion", campos, "IdSubConcepto", intId)
                                 .Select(s => new SystemCatalogListModel()
                                 {
-                                    Id = Convert.ToInt32(s["idMotivoInfraccion"]),
-                                    Text = Convert.ToString(s["catMotivo"])
+                                    Id = Convert.ToInt32(s["idCatMotivoInfraccion"]),
+                                    Text = Convert.ToString(s["nombre"])
                                 }).ToList();
                     }
                     break;
@@ -250,7 +250,7 @@ namespace GuanajuatoAdminUsuarios.Framework
                                     Text = Convert.ToString(s["subConcepto"])
                                 }).ToList();
                     }
-                    break;
+                    break; 
                 case "CatConcesionariosByIdDelegacion":
                     if (int.TryParse(parameter, out intId))
                     {

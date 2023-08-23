@@ -55,7 +55,7 @@ namespace GuanajuatoAdminUsuarios.Models
         public virtual VehiculoModel Vehiculo { get; set; }
         public PersonaModel Persona { get; set; }
         public virtual PersonaInfraccionModel PersonaInfraccion { get; set; }
-        public virtual IEnumerable<MotivoInfraccionModel> MotivosInfraccion { get; set; }
+        public virtual IEnumerable<MotivosInfraccionVistaModel> MotivosInfraccion { get; set; }
         public virtual GarantiaInfraccionModel Garantia { get; set; }
 
         #region Columnas Adicionales Reportes

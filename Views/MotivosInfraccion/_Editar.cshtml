@@ -1,4 +1,4 @@
-﻿@model GuanajuatoAdminUsuarios.Models.MotivosInfraccionModel
+﻿@model GuanajuatoAdminUsuarios.Models.CatMotivosInfraccionModel
 
 @{
     Layout = null;
@@ -35,8 +35,8 @@
                         <h5 class="px-4"><b>Datos de motivo de infracción</b></h5>
                         <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
                     </div>
-        <div class="col-12 col-lg-6 my-4 btnToggleActive">
-                    @(Html.Kendo().SwitchFor(t => t.ValorEstatusMotivosInfraccion)
+                <div class="col-12 col-lg-6 my-4 btnToggleActive">
+                        @(Html.Kendo().SwitchFor(t => t.ValorEstatusMotivosInfraccion)
                         .Name("motivosInfraccionSwitch")
                         .Checked(true)
                         .Messages(c => c.Checked("Activo").Unchecked("Inactivo"))
@@ -46,9 +46,31 @@
                  </div>
                 </div>
     <form id="EditarMotivoInfraccionForm" class="row px-4 mb-4 align-items-end justify-content-center">
-        <div class="col-12 col-md-6">
+                    <div class="col-12 col-md-6">
+                        <div class="controlForm">
+                            <label>Concepto:</label>
+                            @(
+                                Html.Kendo().DropDownListFor(m => m.idConcepto)
+                                .BindTo((SelectList)ViewData["CatConcepto"])
+                                .OptionLabel("-- Seleccione --")
+                                .HtmlAttributes(new { style = "width:100%;", id = "ddlConcepto", required = "required" })
+                                )
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="controlForm">
+                            <label>Subconcepto:</label>
+                            <div id="divSubConcepto">
+                                @(Html.Kendo().DropDownListFor(m => m.idSubConcepto)
+                                    .BindTo((SelectList)ViewData["CatSubConceptoInfraccion"])
+                                    .OptionLabel("-- Seleccione --")
+                                    .HtmlAttributes(new { style = "width:100%;" }))
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
                         <div class="controlForm my-3">
-                            @Html.HiddenFor(m=>m.IdMotivoInfraccion);      
+                            @Html.HiddenFor(m=>m.IdCatMotivoInfraccion)   
                             @(Html.Kendo().TextBoxFor(t=>t.Nombre)
                                 .Label(l => l.Content("Nombre <b>(obligatorio)</b>:"))
                                 .Placeholder("Ingresa el nombre del motivo de infracción")
@@ -128,6 +150,19 @@
                 $("#tablaMotivosInfraccion").html(result);
             }
         });
+    }
+
+    $("#ddlConcepto").on("change", function () {
+        var value = $(this).val();
+        var ddlIdSubConcepto = $("#idSubConcepto").data("kendoDropDownList");
+        ddlIdSubConcepto.dataSource.data([]);
+
+        var functionName = "_on_change_SubConcepto";
+        _set_combo_catalog("CatSubConceptoInfraccion", value, "idSubConcepto", "false", "divSubConcepto", functionName);
+    });
+
+    function _on_change_SubConcepto() {
+        var value = $("#idSubConcepto").val();
     }
 
 </script>
