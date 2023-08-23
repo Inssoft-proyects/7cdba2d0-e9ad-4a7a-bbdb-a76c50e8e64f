@@ -51,9 +51,9 @@ namespace GuanajuatoAdminUsuarios.Controllers
             if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
             {
                 var modelList = _infraccionesService.GetAllInfracciones2()
-                                            .SelectMany(s => s.MotivosInfraccion);
-                                            //.GroupBy(g => g.catMotivo)
-                                            //.Select(s => new EstadisticaInfraccionMotivosModel() { Motivo = s.Key, Contador = s.Count() }).ToList();
+                                            .SelectMany(s => s.MotivosInfraccion)
+                                            .GroupBy(g => g.Nombre)
+                                            .Select(s => new EstadisticaInfraccionMotivosModel() { Motivo = s.Key, Contador = s.Count() }).ToList();
 
                 var catMotivosInfraccion = _catDictionary.GetCatalog("CatAllMotivosInfraccion", "0");
             var catTipoServicio = _catDictionary.GetCatalog("CatTipoServicio", "0");
@@ -102,9 +102,9 @@ namespace GuanajuatoAdminUsuarios.Controllers
                                                          || w.idMunicipio == (model.idMunicipio > 0 ? model.idMunicipio : w.idMunicipio)
                                                          && (w.fechaInfraccion >= model.fechaInicio && w.fechaInfraccion <= model.fechaFin))
                                                 .SelectMany(s => s.MotivosInfraccion.
-                                                Where(w => w.idCatMotivoInfraccion == (model.idTipoMotivo > 0 ? model.idTipoMotivo : w.idCatMotivoInfraccion)));
-                                                //.GroupBy(g => g.catMotivo)
-                                                //.Select(s => new EstadisticaInfraccionMotivosModel() { Motivo = s.Key, Contador = s.Count() }).ToList();
+                                                Where(w => w.idCatMotivoInfraccion == (model.idTipoMotivo > 0 ? model.idTipoMotivo : w.idCatMotivoInfraccion)))
+                                                .GroupBy(g => g.Nombre)
+                                                .Select(s => new EstadisticaInfraccionMotivosModel() { Motivo = s.Key, Contador = s.Count() }).ToList();
 
             return PartialView("_EstadisticaInfraccionesMotivos", modelList);
 
