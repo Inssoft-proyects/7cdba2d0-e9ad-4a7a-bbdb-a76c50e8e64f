@@ -9,9 +9,7 @@ namespace GuanajuatoAdminUsuarios.Models
         public DateTime fecha { get; set; }
 
         public int idMunicipio { get; set; }
-
-        public int todosMunicipiosBool { get; set; }
-
+          
         public string todosMunicipiosDesc { get; set; }
         public DateTime? FechaActualizacion { get; set; }
 

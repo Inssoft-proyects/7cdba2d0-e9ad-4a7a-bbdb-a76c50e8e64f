@@ -2,14 +2,11 @@
 
 namespace GuanajuatoAdminUsuarios.Entity
 {
-    public class SalariosMinimos
+    public class CatConceptoInfraccion
     {
-        public int IdSalario { get; set; }
+        public int idConcepto { get; set; }
 
-        public string Area { get; set; }
-
-        public float Salario { get; set; }
-        public DateTime? Fecha { get; set; }
+        public string concepto { get; set; }
 
         public DateTime? FechaActualizacion { get; set; }
 

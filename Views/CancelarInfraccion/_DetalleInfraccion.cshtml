@@ -1,21 +1,66 @@
 ﻿@model GuanajuatoAdminUsuarios.Models.CancelarInfraccionModel
 
 <script>
-    function guardarCancelacion() {
 
+
+    function guardarCancelacion( callback) {
+        var folio = $("#folio_infraccion").val(); 
         var Mydata = $("#cancelarInfraccionForm").serialize();
-
+        console.log("first" + folio);
         $.ajax({
             url: '@Url.Action("IniciarCancelacion", "CancelarInfraccion")',
             type: 'POST',
             data: Mydata,
-            success: function (result) {
-
-                sitteg_info('Se ha actualizado la información');
-                location.reload();
+            success: function (result) {  
+                sitteg_info('Se ha cancelado la infracción en el sistema.'); 
+                callback(folio);
             },
             error: function (error) { 
                 sitteg_warning('Sucedió un error, intente mas tarde...');
+            }
+        });
+    }
+
+    function cancelarFinanzas(folio_infraccion){
+        console.log("second" + folio_infraccion);
+        $.ajax({
+            url: '/CancelarInfraccion/AnulacionDocumento',
+            type: 'POST',
+            data: { folio_infraccion: folio_infraccion },
+            success: function (response) { 
+                console.log(response);
+
+                if(response == null){
+                    sitteg_warning('No se pudo cancelar en Finanzas. El servicio no tiene respuesta.');
+
+                    setTimeout(function () {
+                            window.location.reload();
+                        }, 5000);
+                }
+                else
+                {
+                    var wType = response.MT_AnulacionDocumento_res.result.WTYPE;
+                    var wMessage = response.MT_AnulacionDocumento_res.result.WMESSAGE;
+                    var wDoctoCancel = response.MT_AnulacionDocumento_res.result.DOCTO_CANCEL;
+
+                    if (wType === "E") {
+
+                        sitteg_warning('No se pudo cancelar en Finanzas. ' + wMessage + '.');
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 5000);
+
+                    } else if (wType === "S") {
+
+                        sitteg_success('Infracción cancelada en Finanzas. ' + wMessage);
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 5000);
+                    }
+                } 
+            },
+            error: function (response) {
+                console.error('Error en la llamada AJAX:', response);
             }
         });
     }
@@ -26,6 +71,7 @@
 
     @if (Model != null)
     {
+        <input type="hidden" id="folio_infraccion" value="@Model.FolioInfraccion"/>
         <div>
          <div class="col-12 col-md-auto mt-4 mb-2">
             <h5 class="px-4"><b>Datos de revocación del folio:</b> @Model.FolioInfraccion</h5>       
@@ -62,7 +108,7 @@
 
     <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
         <div class="controlButton">
-            <button class="btnPrimary px-3" onclick="guardarCancelacion()">
+            <button class="btnPrimary px-3" onclick="guardarCancelacion(cancelarFinanzas)">
                 <h5 class="m-0"><b>Guardar</b></h5>
             </button>
         </div>

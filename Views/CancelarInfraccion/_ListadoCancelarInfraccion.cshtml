@@ -55,14 +55,13 @@
     function mostrarDetalle(e) {
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         var Id = dataItem.IdInfraccion;
-        console.log(Id);
+        //console.log(Id);
     
         $.ajax({
             url: '@Url.Action("MostrarDetalle", "CancelarInfraccion")',
             type: 'POST',
             data: { Id: Id },
             success: function (result) {
-                console.log("DTALLE",result)
                 $("#detalle").html(result);
             $("#detalle").show();
 

@@ -1,4 +1,4 @@
-﻿@model List<MotivoInfraccionModel>
+﻿@model List<MotivosInfraccionVistaModel>
 
 
 <div class="row justify-content-between my-2 mb-1 titleCustom">
@@ -13,10 +13,10 @@
         .Columns(columns =>
         {
             columns.Bound(c => c.idMotivoInfraccion).Title("Clave motivo");
-            columns.Bound(p => p.nombre).Title("Motivo");
-            columns.Bound(p => p.fundamento).Title("Fundamento legal");
-            columns.Bound(p => p.calificacionMinima).Title("Calif. Min.");
-            columns.Bound(c => c.calificacionMaxima).Title("Calif. Max.");
+            columns.Bound(p => p.Nombre).Title("Motivo");
+            columns.Bound(p => p.Fundamento).Title("Fundamento legal");
+            columns.Bound(p => p.CalificacionMinima).Title("Calif. Min.");
+            columns.Bound(c => c.CalificacionMaxima).Title("Calif. Max.");
             columns.Bound(c => c.calificacion).Title("Calificación").ClientFooterTemplate("Total : #=sum#");
             @*columns.Bound(p => p.idMotivoInfraccion).ClientTemplate(
     "<button onclick=\"btnModalEditarConcesionario('#= idMotivoInfraccion #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>"

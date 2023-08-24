@@ -1,4 +1,19 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700;900&display=swap');
+﻿@font-face {
+    font-family: 'Proxima Nova';
+    src: local('Proxima Nova'), local('Proxima Nova'), url(fonts/Proxima-Nova-Reg.otf) format('opentype');
+}
+
+@font-face {
+    font-family: 'Proxima Nova Bold';
+    src: local('Proxima Nova Bold'), local('Proxima Nova Bold'), url(fonts/Proxima-Nova-Bold.otf) format('opentype');
+}
+
+@font-face {
+    font-family: 'baloo_2bold';
+    src: url('fonts/baloo2-bold-webfont.woff2') format('woff2'), url('fonts/baloo2-bold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
 
 :root {
     --main-color: #0066FF;
@@ -9,13 +24,22 @@
 }
 
 * {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Proxima Nova', sans-serif;
 }
+
+h1 b, h2 b {
+    font-family: 'baloo_2bold', sans-serif;
+}
+
+h3 b, h4 b, h5 b, h6 b, label b {
+    font-family: 'Proxima Nova Bold', sans-serif;
+}
+
 
 @font-face {
     font-family: 'SITTEG';
-    src: url('fonts/SITTEG.eot?nsynek');
-    src: url('fonts/SITTEG.eot?nsynek#iefix') format('embedded-opentype'), url('fonts/SITTEG.ttf?nsynek') format('truetype'), url('fonts/SITTEG.woff?nsynek') format('woff'), url('fonts/SITTEG.svg?nsynek#SITTEG') format('svg');
+    src: url('fonts/SITTEG.eot?uhec5i');
+    src: url('fonts/SITTEG.eot?uhec5i#iefix') format('embedded-opentype'), url('fonts/SITTEG.ttf?uhec5i') format('truetype'), url('fonts/SITTEG.woff?uhec5i') format('woff'), url('fonts/SITTEG.svg?uhec5i#SITTEG') format('svg');
     font-weight: normal;
     font-style: normal;
     font-display: block;
@@ -35,6 +59,134 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-salir:before {
+    content: "\e9be";
+}
+
+.icon-addConcesonaria:before {
+    content: "\e9a9";
+}
+
+.icon-addDeposito:before {
+    content: "\e9aa";
+}
+
+.icon-addGrua:before {
+    content: "\e9ab";
+}
+
+.icon-addInventario:before {
+    content: "\e9ac";
+}
+
+.icon-addPension:before {
+    content: "\e9ad";
+}
+
+.icon-addTransito:before {
+    content: "\e9ae";
+}
+
+.icon-concesonaria:before {
+    content: "\e9af";
+}
+
+.icon-deleteConcesonaria:before {
+    content: "\e9b0";
+}
+
+.icon-deleteDeposito:before {
+    content: "\e9b1";
+}
+
+.icon-deleteGrua:before {
+    content: "\e9b2";
+}
+
+.icon-deleteInventario:before {
+    content: "\e9b3";
+}
+
+.icon-deletePension:before {
+    content: "\e9b4";
+}
+
+.icon-deleteTransito:before {
+    content: "\e9b5";
+}
+
+.icon-editConcesonaria:before {
+    content: "\e9b6";
+}
+
+.icon-editDeposito:before {
+    content: "\e9b7";
+}
+
+.icon-editGrua:before {
+    content: "\e9b8";
+}
+
+.icon-editInventario:before {
+    content: "\e9b9";
+}
+
+.icon-editPension:before {
+    content: "\e9ba";
+}
+
+.icon-editTransito:before {
+    content: "\e9bb";
+}
+
+.icon-pension:before {
+    content: "\e9bc";
+}
+
+.icon-transito:before {
+    content: "\e9bd";
+}
+
+.icon-accidente:before {
+    content: "\e9a7";
+}
+
+.icon-catalogos:before {
+    content: "\e9a8";
+}
+
+.icon-addDanoAccidente:before {
+    content: "\e99f";
+}
+
+.icon-addDanoVehiculo:before {
+    content: "\e9a0";
+}
+
+.icon-danoAccidente:before {
+    content: "\e9a1";
+}
+
+.icon-danoVehiculo:before {
+    content: "\e9a2";
+}
+
+.icon-deleteDanoAccidente:before {
+    content: "\e9a3";
+}
+
+.icon-deleteDanoVehiculo:before {
+    content: "\e9a4";
+}
+
+.icon-editDanoAccidente:before {
+    content: "\e9a5";
+}
+
+.icon-editDanoVehiculo:before {
+    content: "\e9a6";
+}
+
 .icon-addFactorAccidente:before {
     content: "\e996";
 }
@@ -51,7 +203,7 @@
     content: "\e999";
 }
 
-.icon-editfactorAccidente:before {
+.icon-editFactorAccidente:before {
     content: "\e99a";
 }
 
@@ -671,16 +823,15 @@
     content: "\e901";
 }
 
-
 .h7 {
-    font-size:12px
+    font-size: 12px
 }
 
 .navPrincipal {
     background-color: var(--second-color);
 }
 
-    .navPrincipal img{
+    .navPrincipal img {
         object-fit: contain;
         max-width: 280px;
     }
@@ -689,15 +840,15 @@
         padding: 1rem .2rem;
     }
 
-    .navPrincipal .nav-tabs .nav-link.active, .navPrincipal .nav-tabs .nav-item.show .nav-link {
-        background-color: var(--second-color);
-        border-color: var(--second-color);
-        border-radius: 0;
-    }
+        .navPrincipal .nav-tabs .nav-link.active, .navPrincipal .nav-tabs .nav-item.show .nav-link {
+            background-color: var(--second-color);
+            border-color: var(--second-color);
+            border-radius: 0;
+        }
 
-    .navPrincipal .nav-tabs .nav-link.active i, .navPrincipal .nav-tabs .nav-item.show .nav-link i {
-        color: var(--main-color);
-    }
+            .navPrincipal .nav-tabs .nav-link.active i, .navPrincipal .nav-tabs .nav-item.show .nav-link i {
+                color: var(--main-color);
+            }
 
 .navPrincipal-content {
     background-color: var(--main-color);
@@ -711,6 +862,7 @@
     padding-top: .4rem;
     padding-bottom: .4rem;
 }
+
     .navPrincipal-link .nav-item.active {
         background-color: white;
         border-radius: 0.25rem;
@@ -740,6 +892,7 @@
         max-width: 80%;
     }
 }
+
 .colorPrimary {
     color: var(--main-color);
 }
@@ -780,16 +933,16 @@
     .navPrincipal .k-drawer {
     }
 
-    .mainContainer {
-        width: 100%
-    }
+.mainContainer {
+    width: 100%
+}
 
 .minH100 {
     min-height: 100vh;
 }
 
 .opacity-50 {
-    opacity:.5
+    opacity: .5
 }
 
 .boxShadow {
@@ -803,19 +956,21 @@
 .controlForm .k-timepicker {
     width: 100%;
 }
+
     .controlForm .k-picker-wrap, .controlForm .k-picker-wrap input, .controlForm .k-datetimepicker input, .controlForm .k-timepicker input {
         border: none;
         height: 100%;
     }
-.controlForm .k-textbox, .controlForm .k-dropdown, .controlForm .k-datepicker, .controlForm .k-datetimepicker, .controlForm .k-timepicker input {
-    border: none;
-    height: 58px;
-}
 
-    .controlForm .k-dropdown .k-dropdown-wrap {
-        display: flex;
-        align-items: center;
+    .controlForm .k-textbox, .controlForm .k-dropdown, .controlForm .k-datepicker, .controlForm .k-datetimepicker, .controlForm .k-timepicker input {
+        border: none;
+        height: 58px;
     }
+
+        .controlForm .k-dropdown .k-dropdown-wrap {
+            display: flex;
+            align-items: center;
+        }
 
 .controlForm label {
     font-weight: bold;
@@ -823,9 +978,10 @@
     margin: 0 0 10px 8px;
     text-align: left;
 }
-.controlForm label b {
-   font-weight: 400;
- }
+
+    .controlForm label b {
+        font-weight: 400;
+    }
 
 .controlForm .k-i-calendar::before, .controlForm .k-i-clock::before {
     font-size: 32px;
@@ -853,32 +1009,36 @@
     display: block;
     border-radius: 4px;
 }
-    .controlForm .k-imageeditor .k-toolbar {
+
+.controlForm .k-imageeditor .k-toolbar {
     background-color: #f2f2f6;
-    }
-    .controlForm .k-imageeditor .k-dropdown {
-        height: 42px;
-    }
-        .controlForm .k-imageeditor .k-toolbar .k-button, .controlForm .k-imageeditor .k-toolbar .k-button-secondary {
-            border-color: #bacdd5;
-            color: #212121;
-            background-color: #f2f2f6;
-            background-image: linear-gradient(rgba(255,255,255,.1),rgba(255,255,255,0));
-        }
-        }
+}
 
-    .controlForm .k-datepicker .k-select.k-state-hover, .controlForm .k-datepicker .k-select:hover, .controlForm .k-timepicker .k-select.k-state-hover, .controlForm .k-timepicker .k-select:hover, .controlForm .k-dropdown .k-dropdown-wrap.k-state-hover, .controlForm .k-dropdown .k-dropdown-wrap:hover, .controlForm .k-dropdowntree .k-dropdown-wrap.k-state-hover, .controlForm .k-dropdowntree .k-dropdown-wrap:hover, .controlForm .k-datetimepicker .k-link:hover {
-        border-color: #f1f1f1;
-        background-color: #f1f1f1;
-    }
+.controlForm .k-imageeditor .k-dropdown {
+    height: 42px;
+}
 
-    .controlForm .k-textarea > .k-input{
-        padding: 4px 0;
-    }
+.controlForm .k-imageeditor .k-toolbar .k-button, .controlForm .k-imageeditor .k-toolbar .k-button-secondary {
+    border-color: #bacdd5;
+    color: #212121;
+    background-color: #f2f2f6;
+    background-image: linear-gradient(rgba(255,255,255,.1),rgba(255,255,255,0));
+}
 
-    .controlForm .k-datetimepicker .k-select .k-link-date, .controlForm .k-datetimepicker .k-select .k-link-time {
-        margin:auto 8px;
-    }
+
+.controlForm .k-datepicker .k-select.k-state-hover, .controlForm .k-datepicker .k-select:hover, .controlForm .k-timepicker .k-select.k-state-hover, .controlForm .k-timepicker .k-select:hover, .controlForm .k-dropdown .k-dropdown-wrap.k-state-hover, .controlForm .k-dropdown .k-dropdown-wrap:hover, .controlForm .k-dropdowntree .k-dropdown-wrap.k-state-hover, .controlForm .k-dropdowntree .k-dropdown-wrap:hover, .controlForm .k-datetimepicker .k-link:hover {
+    border-color: #f1f1f1;
+    background-color: #f1f1f1;
+}
+
+.controlForm .k-textarea > .k-input {
+    padding: 4px 0;
+}
+
+.controlForm .k-datetimepicker .k-select .k-link-date, .controlForm .k-datetimepicker .k-select .k-link-time {
+    margin: auto 8px;
+}
+
 .controlButton button {
     height: 58px;
     width: 100%;
@@ -978,7 +1138,6 @@
         width: 92%;
         max-width: 1300px;
         margin: 12px auto;
-
     }
 
 
@@ -1009,8 +1168,9 @@
 
 .btnToggleActive .k-switch {
     width: 100%;
-    height:58px;
+    height: 58px;
 }
+
 .btnToggleActive .k-switch-container, .btnToggleActive .k-switch-container:hover {
     height: 100%;
     border: solid 2px #292929c7;
@@ -1020,45 +1180,47 @@
 }
 
 
-        .btnToggleActive .k-switch-container .k-switch-label-on, .btnToggleActive .k-switch-container .k-switch-label-off {
-            font-size: 18px;
-            letter-spacing: 1px;
-            font-weight: bold;
-            text-transform: capitalize;
-            width: 50%;
-            max-width: 50%;
-            text-align: center;
-            color: #292929c7;
-            z-index: 2;
-        }
+    .btnToggleActive .k-switch-container .k-switch-label-on, .btnToggleActive .k-switch-container .k-switch-label-off {
+        font-size: 18px;
+        letter-spacing: 1px;
+        font-weight: bold;
+        text-transform: capitalize;
+        width: 50%;
+        max-width: 50%;
+        text-align: center;
+        color: #292929c7;
+        z-index: 2;
+    }
 
-        .btnToggleActive .k-switch[aria-checked="true"] .k-switch-container .k-switch-label-on {
-            color: white;
-        }
-        .btnToggleActive .k-switch[aria-checked="false"] .k-switch-container .k-switch-label-off {
-            color: white;
-        }
+.btnToggleActive .k-switch[aria-checked="true"] .k-switch-container .k-switch-label-on {
+    color: white;
+}
 
-        .btnToggleActive .k-switch-container .k-switch-handle {
-            width: 49.6%;
-            height: 50px;
-            margin-top: 2px;
-            border-radius: 2px;
-            background-color: var(--main-color);
-            border-color: var(--main-color);
-            z-index: 1;
-        }
+.btnToggleActive .k-switch[aria-checked="false"] .k-switch-container .k-switch-label-off {
+    color: white;
+}
+
+.btnToggleActive .k-switch-container .k-switch-handle {
+    width: 49.6%;
+    height: 50px;
+    margin-top: 2px;
+    border-radius: 2px;
+    background-color: var(--main-color);
+    border-color: var(--main-color);
+    z-index: 1;
+}
+
 .btnToggleActive .k-switch-on .k-switch-handle {
-    left: calc(100% - 100%);
+    left: calc(100% - 99.5%);
 }
 
 .btnToggleActive .k-switch-off .k-switch-handle {
     left: calc(100% - 50%);
 }
 
-        input[type="radio"].toggle {
-            display: none;
-        }
+input[type="radio"].toggle {
+    display: none;
+}
 
     input[type="radio"].toggle + label {
         cursor: pointer;
@@ -1082,7 +1244,6 @@
             transition: left 200ms cubic-bezier(0.77, 0, 0.175, 1);
             width: 100%;
             z-index: -1;
-            
         }
 
 .btnToggle input[type="radio"].toggle.toggle-left + label {
@@ -1160,9 +1321,9 @@
     background-image: linear-gradient(rgba(255,255,255,.1),rgba(255,255,255,0));
 }
 
-.k-grid td{
-    color:#292929;
-    font-weight:400;
+.k-grid td {
+    color: #292929;
+    font-weight: 400;
 }
 
 .k-checkbox.k-checked, .k-checkbox:checked {
@@ -1171,9 +1332,9 @@
     background-color: var(--main-color);
 }
 
-.k-checkbox{
-    width:22px;
-    height:22px;
+.k-checkbox {
+    width: 22px;
+    height: 22px;
 }
 
 .k-grid td.k-state-selected, .k-grid tr.k-state-selected > td {
@@ -1186,16 +1347,17 @@
     border: 2px #292929c7 solid;
 }
 
-.btnToggleCustom button.active {
-    border: 2px var(--main-color) solid;
-    background-color: var(--main-color);
-    color:white;
-}
-    .btnToggleCustom button.active .radioCustom div {
-        border-color: var(--main-color);
-        box-shadow: inset 0px 0px 0 3px white;
+    .btnToggleCustom button.active {
+        border: 2px var(--main-color) solid;
         background-color: var(--main-color);
+        color: white;
     }
+
+        .btnToggleCustom button.active .radioCustom div {
+            border-color: var(--main-color);
+            box-shadow: inset 0px 0px 0 3px white;
+            background-color: var(--main-color);
+        }
 
 .gridCustom .k-grid-toolbar {
     background-color: transparent;
@@ -1218,6 +1380,34 @@
         height: 100%;
     }
 
+.k-command-cell {
+    display: flex;
+    justify-content: center;
+}
+
+    .k-command-cell .k-grid-Editar {
+        background: transparent;
+        border: transparent;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: var(--main-color);
+        font-weight: bold;
+    }
+
+    .k-command-cell a::before {
+        content: "\e904";
+        display: block;
+        font-family: 'SITTEG' !important;
+        speak: never;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
 .titleCustom {
     position: initial;
     z-index: 1;
@@ -1228,39 +1418,39 @@
 .gridMotivo .k-pager-wrap {
     display: none
 }
+
 .gridEnvio .k-pager-wrap {
-    bottom:-75px;
+    bottom: -75px;
 }
 
 .gridMotivo .footerGrid {
     padding-right: 11px;
 }
 
-    .gridEnvio .footerGrid {
-        padding-left: 11px;
-    }
+.gridEnvio .footerGrid {
+    padding-left: 11px;
+}
 
-        .gridMotivo .footerGrid div {
-            max-width: calc(100% - 80% - 13px);
-            min-width: 180px;
-        }
+.gridMotivo .footerGrid div {
+    max-width: calc(100% - 80% - 13px);
+    min-width: 180px;
+}
 
-        .gridEnvio .footerGrid div {
-            max-width: calc(100% -  11px);
-            min-width: 180px;
-            top: -46px;
-            position: relative;
+.gridEnvio .footerGrid div {
+    max-width: calc(100% - 11px);
+    min-width: 180px;
+    top: -46px;
+    position: relative;
+}
 
-        }
+.gridMotivo .salarios {
+    height: 16px;
+    margin-left: 6px;
+}
 
-    .gridMotivo .salarios {
-        height: 16px;
-        margin-left: 6px;
-    }
-
-    .gridMotivo .inputSalario input {
-        height: 32px
-    }
+.gridMotivo .inputSalario input {
+    height: 32px
+}
 
 
 
@@ -1271,12 +1461,13 @@
         z-index: 1;
         width: 400px;
     }
+
     .gridCustom .k-grid-toolbar .k-grid-search {
         width: 240px;
     }
 }
 
-.inputNumberCustom input{
+.inputNumberCustom input {
     min-width: 50px;
     min-height: 40px;
     padding: 5px;
@@ -1299,7 +1490,7 @@
     border: solid #bacdd5 1px;
     background-color: #e8ebed;
     box-shadow: #292929 0px 0px 0px 1px;
-    border-radius:4px;
+    border-radius: 4px;
 }
 
 .drop-zone__input {
@@ -1338,15 +1529,15 @@
 }
 
     .radioCustomTelerik .k-radio-list li {
-        position:relative;
-        
+        position: relative;
     }
+
         .radioCustomTelerik .k-radio-list li input {
             position: absolute;
-            z-index:1;
+            z-index: 1;
             top: 21px;
             left: 18px;
-            padding:0px;
+            padding: 0px;
         }
 
 .radioCustomTelerik .k-radio {
@@ -1360,11 +1551,11 @@
 
 
 .radioCustomTelerik .k-radio-list li label {
-    margin-bottom:1rem;
+    margin-bottom: 1rem;
     padding: 1rem 1rem 1rem 2.6rem;
     border: 2px #292929c7 solid;
     font-size: 1.25rem;
-    font-weight:500;
+    font-weight: 500;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -1384,21 +1575,20 @@
     border-color: var(--main-color);
     box-shadow: var(--main-color) 0px 0px 0px 1px;
 }
+
 .radioCustomTelerik .k-radio.k-checked::before, .radioCustomTelerik .k-radio:checked::before {
     width: 10px;
     height: 10px;
-    background-color:var(--main-color)
+    background-color: var(--main-color)
 }
 
 .h-95px {
-    height:95px;
+    height: 95px;
 }
 
 .mxW-16rem {
-    max-width:16rem;
+    max-width: 16rem;
 }
-
-
 
 .borderWarning input {
     border: 2px var(--warning-color) solid;

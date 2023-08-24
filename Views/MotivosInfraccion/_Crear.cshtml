@@ -1,4 +1,4 @@
-﻿@model GuanajuatoAdminUsuarios.Models.MotivosInfraccionModel
+﻿@model GuanajuatoAdminUsuarios.Models.CatMotivosInfraccionModel
 
             <section class=" bg-white rounded">
                 <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
@@ -33,6 +33,27 @@
                     </div>
                 </div>
                 <form id="MotivosForm" class="row px-4 mb-4 align-items-end justify-content-center">
+                    <div class="col-12 col-md-6">
+                        <div class="controlForm">
+                            <label>Concepto:</label>
+                            @(
+                            Html.Kendo().DropDownListFor(m => m.idConcepto)
+                                .BindTo((SelectList)ViewData["CatConcepto"])
+                                .OptionLabel("-- Seleccione --")
+                                .HtmlAttributes(new { style = "width:100%;", id = "ddlConcepto", required = "required" })
+                            )
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="controlForm">
+                            <label>Subconcepto:</label>
+                            <div id="divSubConcepto">
+                                @(Html.Kendo().DropDownListFor(m => m.idSubConcepto)
+                                    .OptionLabel("-- Seleccione --")
+                                    .HtmlAttributes(new { style = "width:100%;" }))
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-12 col-md-6">
                         <div class="controlForm my-3">
                             @(Html.Kendo().TextBoxFor(t=>t.Nombre)
@@ -117,5 +138,18 @@
                 }
             });
         }
+
+    $("#ddlConcepto").on("change", function () {
+        var value = $(this).val();
+        var ddlIdSubConcepto = $("#idSubConcepto").data("kendoDropDownList");
+        ddlIdSubConcepto.dataSource.data([]); 
+
+        var functionName = "_on_change_SubConcepto";
+        _set_combo_catalog("CatSubConceptoInfraccion", value, "idSubConcepto", "false", "divSubConcepto", functionName);
+    });
+
+    function _on_change_SubConcepto() {
+        var value = $("#idSubConcepto").val();
+    }
 
     </script>

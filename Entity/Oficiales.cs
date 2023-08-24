@@ -21,6 +21,4 @@ public partial class Oficiales
 
     public int? Estatus { get; set; }
 
-    public int IdDelegacion { get; set; }
-
 }

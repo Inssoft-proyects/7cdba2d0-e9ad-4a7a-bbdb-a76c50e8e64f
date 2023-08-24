@@ -205,6 +205,39 @@
     function showModal(message) {
         $('#myModal .modal-body').text(message);
         $('#myModal').modal('show');
+    }*/
+    function enviarInfracciones() {
+        var formSerialized = $("#dataEnvioInfraccionForm").serialize();
+        var selectedIds = idInfraccionesSeleccionados; // idInfraccionesSeleccionados es el array de IDs seleccionados
+        var oficioValue = $("#oficio").val(); // Obtén el valor del campo "Oficio" del formulario
+        var fechaEnvioValue = $("#fechaEnvio").val(); // Obtén el valor del campo "FechaEnvio" del formulario
+        var idLugarEnvioValue = $("#idLugarEnvio").val(); // Obtén el valor del campo "IdLugarEnvio" del formulario
+
+        var data = {
+            model: {
+                SelectedIds: selectedIds,
+                Oficio: oficioValue,
+                FechaEnvio: fechaEnvioValue,
+                IdLugarEnvio: idLugarEnvioValue,
+                // Agrega otras propiedades del modelo según sea necesario
+            },
+            form: formSerialized
+        };
+
+        $.ajax({
+            url: "/EnvioInfracciones/ajax_GuardarInfraccionesEnviadas",
+            type: 'POST',
+            data: data,
+            success: function (result) {
+                sitteg_success('Infracciones enviadas correctamente');
+                $('#enviarInfraccionesModal').modal('hide');
+
+            },
+            error: function (error) {
+                sitteg_warning('Lo sentimos, ha ocurrido un error.');
+            }
+        });
     }
+
 
 </script>

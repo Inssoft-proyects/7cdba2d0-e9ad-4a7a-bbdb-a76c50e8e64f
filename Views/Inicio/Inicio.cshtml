@@ -1,51 +1,237 @@
+<style>
+    .navPrincipal {
+        display: none;
+    }
 
-<div class="mainContainer bg-light">
-        @if (!string.IsNullOrEmpty(TempData["ErrorMessage"] as string))
-        {
-            <div class="d-flex align-items-center justify-content-center" style="height: 100vh;">
-                <div class="alert alert-danger">
-                    @TempData["ErrorMessage"]
-                </div>
-            </div>
-        }
-        else
-        {
+    .mainContainer {
+        min-width: 100%;
+        max-width: 100%;
+    }
+</style>
+<div class="mainContainer row p-0 flex-wrap justify-content-center align-items-baseline bg-light">
 
-
-    <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
-        <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
-            <div class="">
-                <div class="">
-                    
-                    <center>
-                        <p>Elige una opción del menú.</p>
-                        <br />
-                        <br />
-                        <br />
-                    </center>
-                    
-                </div>
+    @if (!string.IsNullOrEmpty(TempData["ErrorMessage"] as string))
+    {
+        <div class="d-flex align-items-center justify-content-center" style="height: 100vh;">
+            <div class="alert alert-danger">
+                @TempData["ErrorMessage"]
             </div>
         </div>
+    }
+    else
+    {
+        <div class="col-12">
+            <div class="row justify-content-center justify-md-content-between mt-5 mb-2">
+                <section class="col-auto col-md-4">
+                    <img class="m-0 ms-md-4" width="220px" src="~/img/logo-gto.png" />
+                </section>
+                <section class="col-auto">
+                    <div class="border border-danger list-group bg-white my-2 rounded">
+                        <a href="/" class="text-info d-flex list-group-item list-group-item-action">
+                            <i class="icon icon-salir h6 m-0 mt-1 me-2"></i>
+                            <p class="m-0 text-start text-break fw-bold text-danger">Cerrar Sesión</p>
+                        </a>
+                    </div>
 
-        <div class="row px-4 px-md-4 pt-3 pb-2">
-            <div class="">
-                
-          
-                    <center>
-                        <img width="50%" src="~/img/logo-gto.png" style="opacity: 0.1;" />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    </center>
-              
+                </section>
             </div>
         </div>
-        
-    </section>
+        <div class="col-12 text-center mx-auto mt-5 mb-3">
+            <h1> <b>Sistema Integral de Tránsito y Transporte del Estado de Guanajuato</b></h1>
+            <h3 class="text-muted fw-light">Administrar o elige una opción para empezar</h3>
+        </div>
+        <div class="col-12 col-lg-6 row flex-wrap justify-content-around">
+            <section class="col-11 my-4 p-0">
+                <h3 class="text-uppercase text-primary fw-light">Transportes</h3>
+                <div class="border border-primary list-group bg-white boxShadow my-2 rounded">
+                    <a href="/LiberacionVehiculo/Index" class="text-primary d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-entrega h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Liberación de Vehículo</p>
+                    </a>
+
+                    <a href="@Url.Action("Index", "TransitoTransporte")" class="text-primary d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-transito h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Búsqueda Transito / Transporte</p>
+                    </a>
+                    <a href="/PadronGruas/Index" class="text-primary d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-grua h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Padrón de grúas</p>
+                    </a>
+                    <a href="/PadronDepositosGruas/Index" class="text-primary d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-inventario h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Padrón de depósitos y grúas</p>
+                    </a>
+                    <a href="/ReporteAsignacionServicios/Index" class="text-primary d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-deposito h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Reporte de asignación de servicios</p>
+                    </a>
+                    <a href="/Pensiones/Index" class="text-primary d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-pension h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Pensiones</p>
+                    </a>
+                    <a href="/Concesionarios/Index" class="text-primary d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-concesonaria h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Concesionarios</p>
+                    </a>
+                    <a href="/Vehiculos/Index" class="text-primary d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-car h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Vehículos</p>
+                    </a>
+                    <a href="/Vehiculos/Editar" class="text-primary d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-edit-car h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Modificar Vehículos</p>
+                    </a>
+                    <a href="/Personas/Index" class="text-primary d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-fisica h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Personas</p>
+                    </a>
+                </div>
+            </section>
+            <section class="col-11 col-md-5 mx-md-2 my-4 p-0">
+                <h3 class="text-uppercase text-info fw-light">Infracciones</h3>
+                <div class="border border-info list-group bg-white boxShadow my-2 rounded">
+                    <a href="/Infracciones/Index" class="text-info d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-addInfracion h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Infracciones</p>
+                    </a>
+                    <a href="/CancelarInfraccion/Index" class="text-info d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-cancelInfracion h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Cancelar Infracción</p>
+                    </a>
+                    <a href="/Estadisticas/Index" class="text-info d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-estadisticas h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Estadísticas</p>
+                    </a>
+                    <a href="/RegistroReciboPago/Index" class="text-info d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-data h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start fw-bold">Registro de Recibo de Pago</p>
+                    </a>
+                </div>
+
+            </section>
+            <section class="col-11 col-md-5 mx-md-2 my-4 p-0">
+                <h3 class="text-uppercase text-secondary fw-light">Accidentes</h3>
+                <div class="border border-secondary list-group bg-white boxShadow my-2 rounded">
+                    <a href="/CapturaAccidentes/Index" class="text-secondary d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-accidentes h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start fw-bold">Captura de Accidentes</p>
+                    </a>
+                    <a href="/BusquedaAccidentes/Index" class="text-secondary d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-research h6 m-0 me-2"></i>
+                        <p class="m-0 text-start fw-bold">Búsqueda accidentes</p>
+                    </a>
+                </div>
+
+            </section>
+        </div>
+        <div class="col-12 col-lg-6 row flex-wrap justify-content-around">
+            <section class="col-11 my-4 p-0">
+                <h3 class="text-uppercase fw-light">Catálogos</h3>
+                <div class="border border-dark list-group bg-white boxShadow my-2 rounded">
+                    <a href="/CatAgenciasMinisterio/Index" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-ministerio h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Agencias Ministerio</p>
+                    </a>
+                    <a href="/CatAutoridadesDisposicion/Index" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-autoridad h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Autoridades Disposición</p>
+                    </a>
+                    <a href="/CatAutoridadesEntrega/Index" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-entrega h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Autoridades Entrega</p>
+                    </a>
+                    <a href="/CatCarreteras/Index" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-carretera h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Carreteras</p>
+                    </a>
+                    <a href="/CatCausasAccidentes/Index" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-causas h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Causas Accidentes</p>
+                    </a>
+                    <a href="/Colores/IndexModal" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-color h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Colores</p>
+                    </a>
+                    <a href="/CatDelegacionesOficinasTransporte/Index" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-oficinas h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold"> Delegaciones / Oficinas-Transporte</p>
+                    </a>
+                    <a href="/Dependencias/IndexModal" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-dependencia h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Dependencias</p>
+                    </a>
+                    <a href="/DiasInhabiles/IndexModal" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-date h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Días Inhabiles</p>
+                    </a>
+                    <a href="/CatEntidades/Index" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-entidad h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Entidades</p>
+                    </a>
+                    <a href="/CatFactoresAccidentes/Index" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-factores h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Factores Accidentes</p>
+                    </a>
+                    <a href="/CatFactoresOpcionesAccidentes/Index" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-opciones h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Factores Opciones Accidentes</p>
+                    </a>
+                    <a href="/CatHospitales/Index" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-hospital h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Hospitales</p>
+                    </a>
+                    <a href="/CatInstitucionesTraslado/Index" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-traslado h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Instituciones Traslado</p>
+                    </a>
+                    <a href="/CatMarcasVehiculos/Index" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-marca h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Marcas Vehiculos</p>
+                    </a>
+                    <a href="/MotivosInfraccion/IndexModal" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-infracion h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Motivos Infracción</p>
+                    </a>
+                    <a href="/CatMunicipios/Index" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-municipio h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Municipios</p>
+                    </a>
+                    <a href="/Oficiales/IndexModal" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-oficial h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Oficiales</p>
+                    </a>
+                    <a href="/CatOficinasRenta/Index" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-oficina h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Oficinas Renta</p>
+                    </a>
+                    <a href="/SalariosMinimos/IndexModal" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-udi h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">UMAS</p>
+                    </a>
+                    <a href="/CatSubmarcasVehiculos/Index" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-subMarcar h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Submarcas Vehículos</p>
+                    </a>
+                    <a href="/TiposCarga/IndexModal" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-carga h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Tipo de Carga</p>
+                    </a>
+                    <a href="/TiposVehiculos/IndexModal" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-tipoVehiculo h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Tipo Vehículo</p>
+                    </a>
+                    <a href="/CatTramos/Index" class="d-flex list-group-item list-group-item-action">
+                        <i class="icon icon-tramo h6 m-0 mt-1 me-2"></i>
+                        <p class="m-0 text-start text-break fw-bold">Tramos</p>
+                    </a>
+
+                </div>
+
+            </section>
+        </div>
+
+
+
     }
 </div>
 

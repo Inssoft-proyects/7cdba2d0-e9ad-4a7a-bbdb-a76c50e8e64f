@@ -124,7 +124,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {"nombreOficina","Delegación/Oficina"}
             };
             int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
-            var ListTransitoModel = _infraccionesService.GetAllInfracciones(model,idOficina);
+            var ListTransitoModel = _infraccionesService.GetAllInfracciones(model, idOficina);
             var result = _pdfService.CreatePdf("ReporteInfracciones", "Infracciones", 6, ColumnsNames, ListTransitoModel);
             return File(result.Item1, "application/pdf", result.Item2);
         }
@@ -410,6 +410,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 return Json(new { success = false, message = "No se seleccionó ninguna imagen" });
             }
         }
+
         public IActionResult ServiceCrearInfraccion(int idInfraccion)
         {
             if (_appSettings.AllowWebServices)
@@ -461,7 +462,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                     crearMultasRequestModel.FOLIO_MULTA = prefijo + infraccionBusqueda.folioInfraccion;
                 }
                 crearMultasRequestModel.OBS_GARANT = "";
-                crearMultasRequestModel.ZMOTIVO1 = unicoMotivo.catMotivo;
+                crearMultasRequestModel.ZMOTIVO1 = unicoMotivo.Motivo;
                 crearMultasRequestModel.ZMOTIVO2 = "";
                 crearMultasRequestModel.ZMOTIVO3 = "";
                 var result = _crearMultasTransitoClientService.CrearMultasTransitoCall(crearMultasRequestModel);
@@ -488,5 +489,4 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
     }
 }
-
 

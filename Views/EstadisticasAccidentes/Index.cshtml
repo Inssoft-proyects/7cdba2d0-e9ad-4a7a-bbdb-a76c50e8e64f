@@ -1,4 +1,4 @@
-﻿@model AccidentesBusquedaModel
+﻿@model BusquedaAccidentesModel
 
 @{
     DateTime endDate = DateTime.Now;
@@ -58,7 +58,7 @@
                 <div class="form-group col-md-4">
                     <div class="controlForm">
                         <label>Oficial:</label>
-                            @(Html.Kendo().DropDownListFor(f => f.idOficial)
+                            @(Html.Kendo().DropDownListFor(f => f.IdOficial)
                                 .BindTo((SelectList)ViewBag.CatOficiales)
                                 .OptionLabel("-- Seleccione --")
                                 .HtmlAttributes(new { style = "width:100%;" })
@@ -91,7 +91,7 @@
                     <div class="controlForm">
                         <label>Tipo vehículo:</label>
                         <div id="divTramo">
-                            @(Html.Kendo().DropDownListFor(f => f.idTipoVehiculo)
+                            @(Html.Kendo().DropDownListFor(f => f.IdTipoVehiculo)
                                 .BindTo((SelectList)ViewBag.CatTiposVehiculo)
                                 .OptionLabel("-- Seleccione --")
                                 .HtmlAttributes(new { style = "width:100%;" })
@@ -104,8 +104,18 @@
                 <div class="form-group col-md-4">
                     <div class="controlForm">
                         <label>Tipo servicio:</label>
-                        @(Html.Kendo().DropDownListFor(m => m.idTipoServicio)
+                        @(Html.Kendo().DropDownListFor(m => m.IdTipoServicio)
                             .BindTo((SelectList)ViewBag.CatTipoServicio)
+                            .OptionLabel("-- Seleccione --")
+                            .HtmlAttributes(new { style = "width:100%;" })
+                            )
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <div class="controlForm">
+                        <label>Clasificación:</label>
+                        @(Html.Kendo().DropDownListFor(m => m.idClasificacionAccidente)
+                            .BindTo((SelectList)ViewBag.CatClasificacionAccidentes)
                             .OptionLabel("-- Seleccione --")
                             .HtmlAttributes(new { style = "width:100%;" })
                             )
@@ -126,8 +136,42 @@
             <div class="row my-4 px-4">
                 <div class="form-group col-md-4">
                     <div class="controlForm">
+                        <label>Causas:</label>
+                        @(Html.Kendo().DropDownListFor(m => m.idCausaAccidente)
+                            .BindTo((SelectList)ViewBag.CatCausasAccidentes)
+                            .OptionLabel("-- Seleccione --")
+                            .HtmlAttributes(new { style = "width:100%;" })
+                            )
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <div class="controlForm">
+                        <label>Factor:</label>
+                        @(Html.Kendo().DropDownListFor(m => m.idFactorAccidente)
+                            .BindTo((SelectList)ViewBag.CatFactoresAccidentes)
+                            .OptionLabel("-- Seleccione --")
+                            .HtmlAttributes(new { style = "width:100%;", id = "ddlFactores" }) 
+                            )
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <div class="controlForm">
+                        <label>Factor Opción:</label><span>
+                            <div id="divFactorOpcion">
+                                @(Html.Kendo().DropDownListFor(m => m.idFactorOpcionAccidente)
+                                    .OptionLabel("-- Seleccione --")
+                                    .HtmlAttributes(new { style = "width:100%;" })
+                                    )
+                            </div>
+                        </span>
+                    </div>
+                </div> 
+            </div>
+            <div class="row my-4 px-4">
+                <div class="form-group col-md-4">
+                    <div class="controlForm">
                         <label>Inicio:</label>
-                        @(Html.Kendo().DatePickerFor(t => t.fechaInicio)
+                        @(Html.Kendo().DatePickerFor(t => t.FechaInicio)
                             .Value(DateTime.Now)
                             .Events(e => e.Change("startChange"))
                             .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "start" })
@@ -137,7 +181,7 @@
                 <div class="form-group col-md-4">
                     <div class="controlForm">
                         <label>Fin:</label>
-                        @(Html.Kendo().DatePickerFor(t => t.fechaFin)
+                        @(Html.Kendo().DatePickerFor(t => t.FechaFin)
                             .Value(endDate)
                             .Events(e => e.Change("endChange"))
                             .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "end" })
@@ -195,4 +239,12 @@
             startPicker.max(endDate);
         }
     }
+
+    $("#ddlFactores").on("change", function () {
+        var value = $(this).val();
+        _set_combo_catalog("CatFactoresOpcionesAccidentesByFilter", value, "idFactorOpcionAccidente", "false", "divFactorOpcion", "");
+        $('#idFactorAccidente').kendoDropDownList();
+
+    });
+
 </script>

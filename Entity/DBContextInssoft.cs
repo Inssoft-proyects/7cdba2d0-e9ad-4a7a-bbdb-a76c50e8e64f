@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
+using GuanajuatoAdminUsuarios.Models;
 
 namespace GuanajuatoAdminUsuarios.Entity;
 
@@ -32,7 +33,7 @@ public partial class DBContextInssoft : DbContext
 
     public virtual DbSet<TipoVehiculos> TipoVehiculos { get; set; }
 
-    public virtual DbSet<SalariosMinimos> SalariosMinimos { get; set; }
+    public virtual DbSet<CatSalariosMinimos> CatSalariosMinimos { get; set; }
 
     public virtual DbSet<DiasInhabiles> DiasInhabiles { get; set; }
 
@@ -41,6 +42,7 @@ public partial class DBContextInssoft : DbContext
     public virtual DbSet<TiposCarga> TiposCarga { get; set; }
 
     public virtual DbSet<MotivosInfraccion> MotivosInfraccion { get; set; }
+    public virtual DbSet<CatMotivosInfraccion> CatMotivosInfracciones { get; set; }
 
     public virtual DbSet<CatAutoridadesDisposicion> CatAutoridadesDisposicion { get; set; }
 
@@ -65,9 +67,8 @@ public partial class DBContextInssoft : DbContext
     public virtual DbSet<CatDelegacionesOficinasTransporte> CatDelegacionesOficinasTransporte { get; set; }
 
     public virtual DbSet<Infracciones> Infracciones { get; set; }
-
-
-
+    public virtual DbSet<CatConceptoInfraccion> CatConceptosInfraccion { get; set; }
+    public virtual DbSet<CatSubConceptoInfraccion> CatSubConceptosInfraccion { get; set; }
 
 
 
@@ -80,7 +81,7 @@ public partial class DBContextInssoft : DbContext
         {
             entity.HasKey(e => e.IdDependencia).HasName("PK__dependen__A67AC7BE849A3403");
 
-            entity.ToTable("dependencias");
+            entity.ToTable("catDependencias");
 
             entity.Property(e => e.IdDependencia).HasColumnName("idDependencia");
             entity.Property(e => e.ActualizadoPor).HasColumnName("actualizadoPor");
@@ -116,7 +117,7 @@ public partial class DBContextInssoft : DbContext
         {
             entity.HasKey(e => e.IdOficial).HasName("PK__oficiale__7BFD0DB1E280E5C4");
 
-            entity.ToTable("oficiales");
+            entity.ToTable("catOficiales");
 
             entity.Property(e => e.IdOficial).HasColumnName("idOficial");
 
@@ -140,8 +141,7 @@ public partial class DBContextInssoft : DbContext
             entity.Property(e => e.Rango)
                 .HasMaxLength(50)
                 .IsUnicode(false)
-                .HasColumnName("rango");
-            entity.Property(e => e.IdDelegacion).HasColumnName("IdDelegacion");
+                .HasColumnName("rango"); 
 
         });
 
@@ -234,11 +234,11 @@ public partial class DBContextInssoft : DbContext
 
         });
 
-        modelBuilder.Entity<SalariosMinimos>(entity =>
+        modelBuilder.Entity<CatSalariosMinimos>(entity =>
         {
             entity.HasKey(e => e.IdSalario);
 
-            entity.ToTable("salariosMinimos");
+            entity.ToTable("catSalariosMinimos");
 
 
 
@@ -265,7 +265,7 @@ public partial class DBContextInssoft : DbContext
         {
             entity.HasKey(e => e.idDiaInhabil);
 
-            entity.ToTable("diasInhabiles");
+            entity.ToTable("catDiasInhabiles");
 
 
 
@@ -273,7 +273,6 @@ public partial class DBContextInssoft : DbContext
 
             entity.Property(e => e.fecha).HasColumnName("fecha");
             entity.Property(e => e.idMunicipio).HasColumnName("idMunicipio");
-            entity.Property(e => e.todosMunicipiosBool).HasColumnName("todosMunicipiosBool");
             entity.Property(e => e.todosMunicipiosDesc).HasColumnName("todosMunicipiosDesc")
                 .HasMaxLength(10)
                 .IsUnicode(false);
@@ -305,7 +304,7 @@ public partial class DBContextInssoft : DbContext
         {
             entity.HasKey(e => e.IdTipoCarga);
 
-            entity.ToTable("tiposCarga");
+            entity.ToTable("catTiposcarga");
             entity.Property(e => e.IdTipoCarga).HasColumnName("IdTipoCarga");
 
             entity.Property(e => e.TipoCarga).HasColumnName("TipoCarga")
@@ -329,11 +328,9 @@ public partial class DBContextInssoft : DbContext
             entity.Property(e => e.Nombre).HasColumnName("Nombre")
                 .HasMaxLength(100)
                 .IsUnicode(false);
-            entity.Property(e => e.Fundamento).HasColumnName("Fundamento")
-                .HasMaxLength(100)
-                .IsUnicode(false);
             entity.Property(e => e.CalificacionMinima).HasColumnName("CalificacionMinima");
             entity.Property(e => e.CalificacionMaxima).HasColumnName("CalificacionMaxima");
+            entity.Property(e => e.Calificacion).HasColumnName("Calificacion");
             entity.Property(e => e.ActualizadoPor).HasColumnName("actualizadoPor");
             entity.Property(e => e.FechaActualizacion)
              .HasColumnType("datetime")
@@ -607,6 +604,76 @@ public partial class DBContextInssoft : DbContext
 
 
             });
+
+        modelBuilder.Entity<CatMotivosInfraccion>(entity =>
+        {
+            entity.HasKey(e => e.idCatMotivoInfraccion);
+
+            entity.ToTable("catMotivosInfraccion");
+
+            entity.Property(e => e.idCatMotivoInfraccion).HasColumnName("idCatMotivoInfraccion");
+
+            entity.Property(e => e.Nombre)
+                .HasMaxLength(100)
+                .IsUnicode(false).
+                HasColumnName("nombre");
+
+            entity.Property(e => e.IdConcepto).HasColumnName("IdConcepto");
+            entity.Property(e => e.IdSubConcepto).HasColumnName("IdSubConcepto");
+
+
+            entity.Property(e => e.ActualizadoPor).HasColumnName("actualizadoPor");
+            entity.Property(e => e.Estatus).HasColumnName("estatus");
+            entity.Property(e => e.FechaActualizacion)
+              .HasColumnType("datetime")
+              .HasColumnName("fechaActualizacion");
+
+            entity.Property(e => e.CalificacionMinima).HasColumnName("calificacionMinima");
+            entity.Property(e => e.CalificacionMaxima).HasColumnName("calificacionMaxima");
+            entity.Property(e => e.Fundamento)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("fundamento");
+        });
+
+
+        modelBuilder.Entity<CatConceptoInfraccion>(entity =>
+        {
+            entity.HasKey(e => e.idConcepto).HasName("idConcepto");
+
+            entity.ToTable("catConceptoInfraccion");
+
+            entity.Property(e => e.idConcepto).HasColumnName("idConcepto");
+            entity.Property(e => e.concepto)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("concepto");
+            entity.Property(e => e.ActualizadoPor).HasColumnName("actualizadoPor");
+            entity.Property(e => e.FechaActualizacion)
+             .HasColumnType("datetime")
+             .HasColumnName("fechaActualizacion");
+            entity.Property(e => e.Estatus).HasColumnName("estatus");
+        });
+
+        modelBuilder.Entity<CatSubConceptoInfraccion>(entity =>
+        {
+            entity.HasKey(e => e.idSubConcepto).HasName("idSubConcepto");
+            entity.ToTable("catSubConceptoInfraccion");
+            entity.Property(e => e.idSubConcepto).HasColumnName("idSubConcepto"); 
+
+            entity.Property(e => e.subConcepto)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("subConcepto");
+            
+            entity.Property(e => e.idConcepto).HasColumnName("idConcepto");
+            entity.Property(e => e.ActualizadoPor).HasColumnName("actualizadoPor");
+            entity.Property(e => e.FechaActualizacion)
+             .HasColumnType("datetime")
+             .HasColumnName("fechaActualizacion");
+            entity.Property(e => e.Estatus).HasColumnName("estatus");
+        });
+
     }
       
 

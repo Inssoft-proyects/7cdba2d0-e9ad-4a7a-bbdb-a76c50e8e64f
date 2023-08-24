@@ -39,7 +39,7 @@ namespace GuanajuatoAdminUsuarios.Models
             // Agregar 10 días a la fecha de imposición para obtener la fecha de vencimiento
             fechaVencimiento = fechaInfraccion.AddDays(10);
         }
-        public int kmCarretera { get; set; }
+        public string kmCarretera { get; set; }
         public string observaciones { get; set; }
         public string lugarCalle { get; set; }
         public string lugarNumero { get; set; }
@@ -55,7 +55,7 @@ namespace GuanajuatoAdminUsuarios.Models
         public virtual VehiculoModel Vehiculo { get; set; }
         public PersonaModel Persona { get; set; }
         public virtual PersonaInfraccionModel PersonaInfraccion { get; set; }
-        public virtual IEnumerable<MotivoInfraccionModel> MotivosInfraccion { get; set; }
+        public virtual IEnumerable<MotivosInfraccionVistaModel> MotivosInfraccion { get; set; }
         public virtual GarantiaInfraccionModel Garantia { get; set; }
 
         #region Columnas Adicionales Reportes
