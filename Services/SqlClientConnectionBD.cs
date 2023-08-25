@@ -20,7 +20,13 @@ namespace GuanajuatoAdminUsuarios.Services
                 return CadenaConexion;
             }
 
-
+        public string GetConnection2()
+        {
+            CadenaConexion = _configuration.GetConnectionString("DefaultConnectionServices");
+            return CadenaConexion;
         }
+
+
+    }
 
     }

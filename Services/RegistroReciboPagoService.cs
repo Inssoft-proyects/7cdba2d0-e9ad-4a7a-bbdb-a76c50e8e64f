@@ -29,7 +29,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     SqlCommand command = new SqlCommand("SELECT i.*, p1.nombre AS nombre1, p1.apellidoPaterno AS apellidoPaterno1, p1.apellidoMaterno AS apellidoMaterno1, " +
                         "p2.nombre AS nombre2, p2.apellidoPaterno AS apellidoPaterno2, p2.apellidoMaterno AS apellidoMaterno2 " +
                         "FROM infracciones AS i INNER JOIN personas AS p1 ON i.idPersonaInfraccion = p1.idPersona " +
-                        "INNER JOIN personas AS p2 ON i.idPersona = p2.idPersona  where FolioInfraccion = @FolioInfraccion", connection);
+                        "LEFT JOIN personas AS p2 ON i.idPersona = p2.idPersona  where folioInfraccion = @FolioInfraccion", connection);
 
                     command.Parameters.Add(new SqlParameter("@FolioInfraccion", SqlDbType.NVarChar)).Value = FolioInfraccion;
                     command.CommandType = CommandType.Text;
@@ -39,7 +39,7 @@ namespace GuanajuatoAdminUsuarios.Services
                         {
                             RegistroReciboPagoModel infraccion = new RegistroReciboPagoModel();
                             infraccion.IdInfraccion = Convert.ToInt32(reader["IdInfraccion"].ToString());
-                            infraccion.FolioInfraccion = reader["FolioInfraccion"].ToString();
+                            infraccion.FolioInfraccion = reader["folioInfraccion"].ToString();
                             infraccion.Placas = reader["placasVehiculo"].ToString();
                             infraccion.FechaInfraccion = Convert.ToDateTime(reader["FechaInfraccion"].ToString());
                             infraccion.Conductor = $"{reader["nombre1"]} {reader["apellidoPaterno1"]} {reader["apellidoMaterno1"]}";

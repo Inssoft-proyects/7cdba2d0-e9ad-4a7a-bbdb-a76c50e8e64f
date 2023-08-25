@@ -23,7 +23,7 @@ namespace GuanajuatoAdminUsuarios.Services
             var bodyRequest = json;
             string result = string.Empty;
             RootAnulacionDocumentoResponse responseModel = new RootAnulacionDocumentoResponse();
-            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection2()))
             {
                 try
                 {
