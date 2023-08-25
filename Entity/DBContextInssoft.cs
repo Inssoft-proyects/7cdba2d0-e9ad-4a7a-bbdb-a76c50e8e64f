@@ -73,8 +73,7 @@ public partial class DBContextInssoft : DbContext
 
      
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //=> optionsBuilder.UseSqlServer("Data Source=54.39.102.101;Database=SITTEG_DEV;User Id=sitteg_admin_dev;Password=s5t3b_d3v;Trusted_Connection=False;TrustServerCertificate=True");
-    => optionsBuilder.UseSqlServer("Data Source=inssoft-sqlserver.database.windows.net;Database=sitteg-qa;User Id=sqladmin;Password=Inss0f7#2023;Trusted_Connection=False;TrustServerCertificate=True");
+    => optionsBuilder.UseSqlServer("Data Source=10.16.158.17;Database=sitteg;User Id=Soporte;Password=Seguritech123;Trusted_Connection=False;TrustServerCertificate=True");
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Dependencias>(entity =>
