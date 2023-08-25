@@ -138,38 +138,42 @@ namespace GuanajuatoAdminUsuarios.Services
                         while (reader.Read())
                         {
                             LiberacionVehiculoModel deposito = new LiberacionVehiculoModel();
-                            deposito.IdDeposito = Convert.ToInt32(reader["IdDeposito"].ToString());
-                            deposito.IdSolicitud = Convert.ToInt32(reader["IdSolicitud"].ToString());
-                            deposito.IdDelegacion = Convert.ToInt32(reader["IdDelegacion"].ToString());
-                            deposito.IdMarca = Convert.ToInt32(reader["IdMarca"].ToString());
-                            deposito.IdSubmarca = Convert.ToInt32(reader["IdSubmarca"].ToString());
-                            deposito.IdPension = Convert.ToInt32(reader["IdPension"].ToString());
-                            deposito.IdTramo = Convert.ToInt32(reader["IdTramo"].ToString());
-                            deposito.IdColor = Convert.ToInt32(reader["IdColor"].ToString());
-                            deposito.Serie = reader["Serie"].ToString();
-                            deposito.Placa = reader["Placa"].ToString();
-                            deposito.FechaIngreso = Convert.ToDateTime(reader["FechaIngreso"].ToString());
-                            deposito.Folio = reader["Folio"].ToString();
-                            deposito.Km = reader["Km"].ToString();
-                            deposito.Liberado = Convert.ToInt32(reader["Liberado"].ToString());
-                            //deposito.AcreditacionPropiedad = reader["AcreditacionPropiedad"].ToString();
-                            //deposito.AcreditacionPersonalidad = reader["AcreditacionPersonalidad"].ToString();
-                            //deposito.ReciboPago = reader["ReciboPago"].ToString();
-                            //deposito.Observaciones = reader["Observaciones"].ToString();
-                            deposito.Autoriza = reader["Autoriza"].ToString();
-                            deposito.FechaActualizacion = Convert.ToDateTime(reader["FechaActualizacion"].ToString());
-                            deposito.ActualizadoPor = Convert.ToInt32(reader["ActualizadoPor"].ToString());
-                            deposito.Estatus = Convert.ToInt32(reader["Estatus"].ToString());
+                            deposito.IdDeposito = reader["IdDeposito"] != DBNull.Value ? Convert.ToInt32(reader["IdDeposito"]) : 0;
+                            deposito.IdSolicitud = reader["IdSolicitud"] != DBNull.Value ? Convert.ToInt32(reader["IdSolicitud"]) : 0;
+                            deposito.IdDelegacion = reader["IdDelegacion"] != DBNull.Value ? Convert.ToInt32(reader["IdDelegacion"]) : 0;
+                            deposito.IdMarca = reader["IdMarca"] != DBNull.Value ? Convert.ToInt32(reader["IdMarca"]) : 0;
+                            deposito.IdSubmarca = reader["IdSubmarca"] != DBNull.Value ? Convert.ToInt32(reader["IdSubmarca"]) : 0;
+                            deposito.IdPension = reader["IdPension"] != DBNull.Value ? Convert.ToInt32(reader["IdPension"]) : 0;
+                            deposito.IdTramo = reader["IdTramo"] != DBNull.Value ? Convert.ToInt32(reader["IdTramo"]) : 0;
+                            deposito.IdColor = reader["IdColor"] != DBNull.Value ? Convert.ToInt32(reader["IdColor"]) : 0;
 
-                            deposito.marcaVehiculo = reader["marcaVehiculo"].ToString();
-                            deposito.nombreSubmarca = reader["nombreSubmarca"].ToString();
-                            deposito.delegacion = reader["delegacion"].ToString();
-                            deposito.solicitanteNombre = reader["solicitanteNombre"].ToString();
-                            deposito.solicitanteAp = reader["solicitanteAp"].ToString();
-                            deposito.solicitanteAm = reader["solicitanteAm"].ToString();
-                            deposito.Color = reader["Color"].ToString();
-                            deposito.pension = reader["pension"].ToString();
-                            deposito.tramo = reader["tramo"].ToString();
+                            deposito.Serie = reader["Serie"] != DBNull.Value ? reader["Serie"].ToString() : string.Empty;
+                            deposito.Placa = reader["Placa"] != DBNull.Value ? reader["Placa"].ToString() : string.Empty;
+                            deposito.FechaIngreso = reader["FechaIngreso"] != DBNull.Value ? Convert.ToDateTime(reader["FechaIngreso"]) : DateTime.MinValue;
+                            deposito.Folio = reader["Folio"] != DBNull.Value ? reader["Folio"].ToString() : string.Empty;
+                            deposito.Km = reader["Km"] != DBNull.Value ? reader["Km"].ToString() : string.Empty;
+                            deposito.Liberado = reader["Liberado"] != DBNull.Value ? Convert.ToInt32(reader["Liberado"]) : 0;
+
+                           // deposito.AcreditacionPropiedad = reader["AcreditacionPropiedad"] != DBNull.Value ? reader["AcreditacionPropiedad"].ToString() : null;
+                           // deposito.AcreditacionPersonalidad = reader["AcreditacionPersonalidad"] != DBNull.Value ? reader["AcreditacionPersonalidad"].ToString() : null;
+                           // deposito.ReciboPago = reader["ReciboPago"] != DBNull.Value ? reader["ReciboPago"].ToString() : null;
+                           // deposito.Observaciones = reader["Observaciones"] != DBNull.Value ? reader["Observaciones"].ToString() : null;
+
+                            deposito.Autoriza = reader["Autoriza"] != DBNull.Value ? reader["Autoriza"].ToString() : string.Empty;
+                            deposito.FechaActualizacion = reader["FechaActualizacion"] != DBNull.Value ? Convert.ToDateTime(reader["FechaActualizacion"]) : DateTime.MinValue;
+                            deposito.ActualizadoPor = reader["ActualizadoPor"] != DBNull.Value ? Convert.ToInt32(reader["ActualizadoPor"]) : 0;
+                            deposito.Estatus = reader["Estatus"] != DBNull.Value ? Convert.ToInt32(reader["Estatus"]) : 0;
+
+                            deposito.marcaVehiculo = reader["marcaVehiculo"] != DBNull.Value ? reader["marcaVehiculo"].ToString() : null;
+                            deposito.nombreSubmarca = reader["nombreSubmarca"] != DBNull.Value ? reader["nombreSubmarca"].ToString() : null;
+                            deposito.delegacion = reader["delegacion"] != DBNull.Value ? reader["delegacion"].ToString() : null;
+                            deposito.solicitanteNombre = reader["solicitanteNombre"] != DBNull.Value ? reader["solicitanteNombre"].ToString() : null;
+                            deposito.solicitanteAp = reader["solicitanteAp"] != DBNull.Value ? reader["solicitanteAp"].ToString() : null;
+                            deposito.solicitanteAm = reader["solicitanteAm"] != DBNull.Value ? reader["solicitanteAm"].ToString() : null;
+                            deposito.Color = reader["Color"] != DBNull.Value ? reader["Color"].ToString() : null;
+                            deposito.pension = reader["pension"] != DBNull.Value ? reader["pension"].ToString() : null;
+                            deposito.tramo = reader["tramo"] != DBNull.Value ? reader["tramo"].ToString() : null;
+
                             depositosList.Add(deposito);
                         }
 

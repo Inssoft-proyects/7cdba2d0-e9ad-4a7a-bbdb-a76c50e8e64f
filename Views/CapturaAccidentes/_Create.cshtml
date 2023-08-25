@@ -1216,7 +1216,10 @@
                 success: function (result) {
                     sitteg_success('Elemento guardado correctamente')
                     $('#VehiculoServiceModal').modal('hide'); 
-                                    $('#anexo2Modal').modal('hide');
+                    $('#anexo2Modal').modal('hide');
+                    var grid = $("#gridPrevioVehiculo").data("kendoGrid");
+                    grid.dataSource.data(response.data);
+                    grid.refresh();
 
 
                 },

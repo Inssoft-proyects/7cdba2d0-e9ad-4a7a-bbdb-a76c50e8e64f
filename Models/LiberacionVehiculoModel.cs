@@ -73,15 +73,18 @@ namespace GuanajuatoAdminUsuarios.Models
 
         public string solicitanteAm { get; set; }
 
-        public string fullName
+        public string? fullName
         {
             get
             {
-                return solicitanteNombre.ToString() + " " +
-                solicitanteAp + " " +
-                solicitanteAm;
+                string namePart1 = solicitanteNombre ?? string.Empty;
+                string namePart2 = solicitanteAp ?? string.Empty;
+                string namePart3 = solicitanteAm ?? string.Empty;
+
+                return $"{namePart1} {namePart2} {namePart3}";
             }
         }
+
 
         public string Color { get; set; }
 

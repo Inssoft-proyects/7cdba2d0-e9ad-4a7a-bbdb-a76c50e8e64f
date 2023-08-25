@@ -918,15 +918,22 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {
                 model.idSubmarca = model.idSubmarcaUpdated;
                 IdVehiculo = _vehiculosService.UpdateVehiculo(model);
+
             }
             else if (model.encontradoEn == (int)EstatusBusquedaVehiculo.NoEncontrado)
             {
                 IdVehiculo = _vehiculosService.CreateVehiculo(model);
+
             }
 
             if (IdVehiculo != 0)
             {
-                return Json(new { id = IdVehiculo });
+                var Placa = model.placas;
+                var Serie = model.serie;
+                var folio = "";
+                var SeleccionVehiculo = _capturaAccidentesService.BuscarPorParametro(Placa, Serie, folio);
+
+                return Json(SeleccionVehiculo);
             }
             else
             {
