@@ -19,6 +19,7 @@ using System.Net.Http;
 using System.Text;
 using GuanajuatoAdminUsuarios.RESTModels;
 using Microsoft.Extensions.Options;
+using static GuanajuatoAdminUsuarios.RESTModels.CotejarDatosResponseModel;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
@@ -273,7 +274,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {
                 var result = _infraccionesService.ModificarGarantiaInfraccion(model.Garantia);
             }
-            var idInfraccion = _infraccionesService.ModificarInfraccion(model);         
+            var idInfraccion = _infraccionesService.ModificarInfraccion(model);
+
             return Json(new { success = true, idInfraccion = idInfraccion });   
         }
 
@@ -476,14 +478,14 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 else if (result != null && result.MT_CrearMultasTransito_res.ZTYPE == "E")
                 {
 
-                    return Json(new { success = false, message = "Registro actualizado en SITTEG" });
+                    return Json(new { success = false, message = "Registro actualizado en SITTEG", id = idInfraccion });
                 }
 
                 return Json(new { success = false, message = "Ha ocurrido un error intenta mas tarde" });
             }
             else
             {
-                return Json(new { success = false, message = "Registro actualizado en SITTEG" });
+                return Json(new { success = false, message = "Registro actualizado en SITTEG", id = idInfraccion });
             }
 
         }

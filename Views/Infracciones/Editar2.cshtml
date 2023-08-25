@@ -655,8 +655,8 @@
 
        function btnEditarInfraccion() {
         var validator = $("#frmEditarInfraccion").kendoValidator().data('kendoValidator');
-        var idVehiculo = $("#idVehiculo").val();
-        var idPersona = $("#idPersona").val();
+        var idVehiculo = $("#IdVehiculo").val();
+        var idPersona = $("#IdPersona").val();
 
         if (!idVehiculo) {
             sitteg_info('Debe seleccionar un vehículo');
@@ -702,9 +702,11 @@
             data: { idInfraccion: idInfraccion },
             success: function (response) {
                 if (response.success) {
-                    sitteg_success("Informacion actualizada correctamente.");
+                    //sitteg_success("Informacion actualizada correctamente.");
+                    window.location.href = '/CapturaAccidentes/CapturaCr?IdInfraccion=' + response.id + '&IdVehiculo=' + $("#IdVehiculo").val();
                 } else if (response.success === false && response.message === "Registro actualizado en SITTEG") {
-                    sitteg_info("El registro fue actualizado en SITTEG.");
+                    //sitteg_info("El registro fue actualizado en SITTEG.");
+                    window.location.href = '/CapturaAccidentes/CapturaCr?IdInfraccion=' + response.id + '&IdVehiculo=' + $("#IdVehiculo").val();
                 } else {
                     sitteg_warning("Ha ocurrido un error: " + response.message);
                 }
@@ -728,7 +730,7 @@
             getListadoPersonasInfracciones();
             $("#listadoPersonas").show();
             $("#detallePersonas").hide();
-            $("#idPersona").val('');
+            $("#IdPersona").val('');
         }
     }
     function buscarVehiculo(pidVehiculo) {
@@ -740,7 +742,7 @@
             },
             success: function (data) {
                 $("#detalleVehiculo").html(data);
-                $("#idVehiculo").val(pidVehiculo);
+                $("#IdVehiculo").val(pidVehiculo);
             }
             //,
             //error: function (xhr, status) {
@@ -759,7 +761,7 @@
             },
             success: function (data) {
                 $("#detallePersonas").html(data);
-                $("#idPersona").val(pidPersona);
+                $("#IdPersona").val(pidPersona);
                 $("#detallePersonas").show();
             }
             //,

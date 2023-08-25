@@ -27,7 +27,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     const string SqlTransact =
                         @"select dep.iddeposito,dep.idsolicitud,dep.idDelegacion,dep.idmarca,dep.idsubmarca,dep.idpension,dep.idtramo,
                             dep.idcolor,dep.serie,dep.placa,dep.fechaingreso,dep.folio,dep.km,dep.liberado,dep.autoriza,dep.fechaactualizacion,
-                            del.delegacion, dep.actualizadopor, dep.estatus, dep.FechaLiberacion,
+                            del.delegacion, dep.actualizadopor, dep.estatus, dep.FechaLiberacion,dep.numeroEconomico,
                             dep.IdDependenciaGenera,dep.IdDependenciaTransito,dep.IdDependenciaNoTransito,
                             sol.solicitantenombre,sol.solicitanteap,sol.solicitanteam,pen.pension, sol.vehiculoCarretera,
                             sol.vehiculoTramo,sol.vehiculoKm, sol.fechasolicitud, sol.folio as FolioSolicitud,sol.evento,
@@ -50,11 +50,11 @@ namespace GuanajuatoAdminUsuarios.Services
                         while (reader.Read())
                         {
                             ReporteAsignacionModel ReporteAsignacion = new ReporteAsignacionModel();
-                            ReporteAsignacion.idSolicitud = Convert.ToInt32(reader["idSolicitud"].ToString());
+                            ReporteAsignacion.idSolicitud = reader.IsDBNull(reader.GetOrdinal("idSolicitud")) ? 0 : Convert.ToInt32(reader["idSolicitud"]);
                             ReporteAsignacion.vehiculoCarretera = reader["vehiculoCarretera"].ToString();
                             ReporteAsignacion.vehiculoTramo = reader["vehiculoTramo"].ToString();
                             ReporteAsignacion.vehiculoKm = reader["vehiculoKm"].ToString();
-                            ReporteAsignacion.fechaSolicitud = Convert.ToDateTime(reader["fechaSolicitud"].ToString());
+                            ReporteAsignacion.fechaSolicitud = reader.IsDBNull(reader.GetOrdinal("fechaSolicitud")) ? DateTime.MinValue : Convert.ToDateTime(reader["fechaSolicitud"]);
                             ReporteAsignacion.evento = reader["evento"].ToString();
                             ReporteAsignacion.solicitanteNombre = reader["solicitanteNombre"].ToString();
                             ReporteAsignacion.solicitanteAp = reader["solicitanteAp"].ToString();
@@ -67,9 +67,9 @@ namespace GuanajuatoAdminUsuarios.Services
                             ReporteAsignacion.oficial = reader["oficial"].ToString();
                             ReporteAsignacion.folio = reader["folio"].ToString();
                             ReporteAsignacion.vehiculoPension = reader["pension"].ToString();
-                            ReporteAsignacion.fechaLiberacion = Convert.ToDateTime(reader["fechaLiberacion"].ToString());
-                            ReporteAsignacion.IdGrua = Convert.ToInt32(reader["IdGrua"].ToString());
-                            ReporteAsignacion.noEconomico = reader["folio"].ToString();
+                            ReporteAsignacion.fechaLiberacion = reader.IsDBNull(reader.GetOrdinal("fechaLiberacion")) ? DateTime.MinValue : Convert.ToDateTime(reader["fechaLiberacion"]);
+                            ReporteAsignacion.IdGrua = reader.IsDBNull(reader.GetOrdinal("IdGrua")) ? 0 : Convert.ToInt32(reader["IdGrua"]);
+                            ReporteAsignacion.noEconomico = reader["numeroEconomico"].ToString(); 
                             ReporteAsignacion.Delegacion = reader["Delegacion"].ToString();
                             ReporteAsignacion.Alias = reader["concesionario"].ToString();
                             ReporteAsignacionesList.Add(ReporteAsignacion);
@@ -101,7 +101,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     const string SqlTransact =
                         @"select dep.iddeposito,dep.idsolicitud,dep.idDelegacion,dep.idmarca,dep.idsubmarca,dep.idpension,dep.idtramo,
                             dep.idcolor,dep.serie,dep.placa,dep.fechaingreso,dep.folio,dep.km,dep.liberado,dep.autoriza,dep.fechaactualizacion,
-                            del.delegacion, dep.actualizadopor, dep.estatus, dep.FechaLiberacion,
+                            del.delegacion, dep.actualizadopor, dep.estatus, dep.FechaLiberacion,dep.numeroEconomico,
                             dep.IdDependenciaGenera,dep.IdDependenciaTransito,dep.IdDependenciaNoTransito,
                             sol.solicitantenombre,sol.solicitanteap,sol.solicitanteam,pen.pension, sol.vehiculoCarretera,
                             sol.vehiculoTramo,sol.vehiculoKm, sol.fechasolicitud, sol.folio as FolioSolicitud,sol.evento,
@@ -133,11 +133,11 @@ namespace GuanajuatoAdminUsuarios.Services
                         while (reader.Read())
                         {
                             ReporteAsignacionModel ReporteAsignacion = new ReporteAsignacionModel();
-                            ReporteAsignacion.idSolicitud = Convert.ToInt32(reader["idSolicitud"].ToString());
+                            ReporteAsignacion.idSolicitud = reader.IsDBNull(reader.GetOrdinal("idSolicitud")) ? 0 : Convert.ToInt32(reader["idSolicitud"]);
                             ReporteAsignacion.vehiculoCarretera = reader["vehiculoCarretera"].ToString();
                             ReporteAsignacion.vehiculoTramo = reader["vehiculoTramo"].ToString();
                             ReporteAsignacion.vehiculoKm = reader["vehiculoKm"].ToString();
-                            ReporteAsignacion.fechaSolicitud = Convert.ToDateTime(reader["fechaSolicitud"].ToString());
+                            ReporteAsignacion.fechaSolicitud = reader.IsDBNull(reader.GetOrdinal("fechaSolicitud")) ? DateTime.MinValue : Convert.ToDateTime(reader["fechaSolicitud"]);
                             ReporteAsignacion.evento = reader["evento"].ToString();
                             ReporteAsignacion.solicitanteNombre = reader["solicitanteNombre"].ToString();
                             ReporteAsignacion.solicitanteAp = reader["solicitanteAp"].ToString();
@@ -150,11 +150,12 @@ namespace GuanajuatoAdminUsuarios.Services
                             ReporteAsignacion.oficial = reader["oficial"].ToString();
                             ReporteAsignacion.folio = reader["folio"].ToString();
                             ReporteAsignacion.vehiculoPension = reader["pension"].ToString();
-                            ReporteAsignacion.fechaLiberacion = Convert.ToDateTime(reader["fechaLiberacion"].ToString());
-                            ReporteAsignacion.IdGrua = Convert.ToInt32(reader["IdGrua"].ToString());
-                            ReporteAsignacion.noEconomico = reader["folio"].ToString();
+                            ReporteAsignacion.fechaLiberacion = reader.IsDBNull(reader.GetOrdinal("fechaLiberacion")) ? DateTime.MinValue : Convert.ToDateTime(reader["fechaLiberacion"]);
+                            ReporteAsignacion.IdGrua = reader.IsDBNull(reader.GetOrdinal("IdGrua")) ? 0 : Convert.ToInt32(reader["IdGrua"]);
+                            ReporteAsignacion.noEconomico = reader["numeroEconomico"].ToString(); // ¿Debería ser "noEconomico"?
                             ReporteAsignacion.Delegacion = reader["Delegacion"].ToString();
                             ReporteAsignacion.Alias = reader["concesionario"].ToString();
+
                             ReporteAsignacionesList.Add(ReporteAsignacion);
                         }
                     }

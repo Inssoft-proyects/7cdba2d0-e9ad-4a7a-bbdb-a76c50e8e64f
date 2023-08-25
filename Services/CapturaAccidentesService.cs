@@ -1093,7 +1093,7 @@ namespace GuanajuatoAdminUsuarios.Services
                         "cm.marcaVehiculo, csv.nombreSubmarca, tv.tipoVehiculo, COALESCE(p.nombre, pcv.nombre) AS nombre, COALESCE(p.apellidoPaterno, pcv.apellidoPaterno) AS apellidoPaterno, " +
                         "p.apellidoMaterno,p.RFC,p.CURP, p.fechaNacimiento, c.color, ts.tipoServicio, pcv.nombre AS nombreConductor, pcv.apellidoPaterno AS apellidoPConductor, pcv.apellidoMaterno AS apellidoMConductor, " +
                         "tc.tipoCarga, pen.pension, ft.formaTraslado, cent.nombreEntidad,va.montoVehiculo " +
-                        "FROM conductoresVehiculosAccidente AS cva INNER JOIN vehiculos AS v ON cva.idVehiculo = v.idVehiculo " +
+                        "FROM conductoresVehiculosAccidente AS cva LEFT JOIN vehiculos AS v ON cva.idVehiculo = v.idVehiculo " +
                         "LEFT JOIN catMarcasVehiculos AS cm ON v.idMarcaVehiculo = cm.idMarcaVehiculo " +
                         "LEFT JOIN catTiposcarga AS ctc ON cva.idTipoCarga = ctc.idTipoCarga " +
                         "LEFT JOIN catSubmarcasVehiculos AS csv ON v.idSubmarca = csv.idSubmarca " +
@@ -1371,12 +1371,12 @@ namespace GuanajuatoAdminUsuarios.Services
                         "cei.estatusInfraccion, " +
                         "i.idEstatusInfraccion, "+
                         "mv.marcaVehiculo, sv.nombreSubmarca " +
-                        "FROM infraccionesAccidente AS ia JOIN vehiculos AS v ON ia.idVehiculo = v.idVehiculo " +
-                        "JOIN accidentes AS a ON ia.idAccidente = a.idAccidente " +
-                        "JOIN infracciones AS i ON ia.idInfraccion = i.idInfraccion " +
-                        "JOIN catEstatusInfraccion AS cei ON cei.idEstatusInfraccion = i.idEstatusInfraccion " +
-                        "JOIN catMarcasVehiculos AS mv ON v.idMarcaVehiculo = mv.idMarcaVehiculo " +
-                        "JOIN catSubmarcasVehiculos AS sv ON v.idSubmarca = sv.idSubmarca " +
+                        "FROM infraccionesAccidente AS ia LEFT JOIN vehiculos AS v ON ia.idVehiculo = v.idVehiculo " +
+                        "LEFT JOIN accidentes AS a ON ia.idAccidente = a.idAccidente " +
+                        "LEFT JOIN infracciones AS i ON ia.idInfraccion = i.idInfraccion " +
+                        "LEFT JOIN catEstatusInfraccion AS cei ON cei.idEstatusInfraccion = i.idEstatusInfraccion " +
+                        "LEFT JOIN catMarcasVehiculos AS mv ON v.idMarcaVehiculo = mv.idMarcaVehiculo " +
+                        "LEFT JOIN catSubmarcasVehiculos AS sv ON v.idSubmarca = sv.idSubmarca " +
                         "WHERE ia.idAccidente = @idAccidente;", connection);
 
 

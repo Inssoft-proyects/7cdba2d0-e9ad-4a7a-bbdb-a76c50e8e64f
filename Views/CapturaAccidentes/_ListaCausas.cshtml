@@ -24,12 +24,12 @@
             .DataSource(dataSource => dataSource
             .Ajax()
             .Read(read => read.Action("AgregarCausaNuevo", "CapturaAccidentes"))
-            .PageSize(5).Model(model => model.Id(p => p.FactorAccidente))
+            .PageSize(5).Model(model => model.Id(p => p.CausaAccidente))
             )
             .ToolBar(t => t.Search())
             .Search(s =>
             {
-                s.Field(c => c.Municipio);
+                s.Field(c => c.CausaAccidente);
 
             })
 
@@ -58,8 +58,6 @@
 </div>
 </div>
 <script>
-
-  
 
     function editarCausa(e) {
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
