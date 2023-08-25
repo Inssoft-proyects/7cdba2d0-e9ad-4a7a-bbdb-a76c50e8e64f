@@ -323,7 +323,7 @@
                                 <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
                                     <div class="row">
                                         <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-                                            <button href="#" id="btnNuevoConductor" onclick="window.location.href = '@Url.Action("Index","Personas")'">
+                                            <button href="#" id="btnNuevoConductor" onclick="mostrarModalAgregarConductor()">
                                                 <h6 class="m-0 d-flex align-items-center"><i class="icon-addConductor h5 mb-0 me-2"></i><b>Agregar nuevo conductor</b></h6>
                                             </button>
                                         </div>
@@ -351,6 +351,15 @@
                     </div>
 
                 </form>
+            </div>
+        </div>
+        <!--Modal agregar conductor-->
+        <div class="modal fade modalCustom" id="agregarConductorModal" tabindex="-1" aria-labelledby="agregarVehiculoLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-body" id="ModalBodyAgregarConductor">
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -479,6 +488,19 @@
             //    var errmsg = msg_err_gral;
             //    semg_error(errmsg);
             //}
+        });
+    }
+
+    function mostrarModalAgregarConductor() {
+        $.ajax({
+            url: '@Url.Action("ModalAgregarConductor")',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                $('#ModalBodyAgregarConductor').html(data);
+                $('#agregarConductorModal').modal('show');
+            }
         });
     }
 </script>

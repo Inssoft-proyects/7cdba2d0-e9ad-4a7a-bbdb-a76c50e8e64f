@@ -1,0 +1,382 @@
+﻿@model GuanajuatoAdminUsuarios.Models.PersonaModel
+
+<section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
+    <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+        <div class="col-12 col-md-auto">
+            <div class="row align-items-center justify-content-center justify-content-md-start">
+                <div class="col-auto p-0">
+                    <i class="icon-oficial h1 colorPrimary"></i>
+                </div>
+                <div class="col-auto my-3">
+                    <h2 class="m-0 h3"><b>Personas</b></h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
+            <div class="row">
+                <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                    <button href="#" id="btnCrearPersona" onclick="btnModalCrearPersona()">
+                        <h6 class="m-0 d-flex align-items-center"><i class="icon-addConcecionario h2 mb-0 me-2"></i><b>Agregar nueva persona</b></h6>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <form id="buscarConductorForm">
+        <div class="row px-4 mt-4 pb-4 align-items-end">
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="controlForm my-3">
+                    @(Html.Kendo().TextBoxFor(t => t.numeroLicenciaBusqueda)
+                        .Label(l => l.Content("No. de licencia:"))
+                        .Placeholder("Ingresa el número de licencia valido")
+                        .HtmlAttributes(new { style = "width: 100%" })
+                        )
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="controlForm my-3">
+                    @(Html.Kendo().TextBoxFor(t => t.CURPBusqueda)
+                        .Label(l => l.Content("CURP:"))
+                        .Placeholder("Ingresa el CURP del propietario")
+                        .HtmlAttributes(new { style = "width: 100%" })
+                        )
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="controlForm my-3">
+                    @(Html.Kendo().TextBoxFor(t => t.RFCBusqueda)
+                        .Label(l => l.Content("RFC:"))
+                        .Placeholder("Ingresa el RFC del propietario")
+                        .HtmlAttributes(new { style = "width: 100%" })
+                        )
+
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="controlForm my-3">
+                    @(Html.Kendo().TextBoxFor(t => t.nombreBusqueda)
+                        .Label(l => l.Content("Nombre(s):"))
+                        .Placeholder("Ingresa el nombre(s) del propietario")
+                        .HtmlAttributes(new { style = "width: 100%" })
+                        )
+
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="controlForm my-3">
+                    @(Html.Kendo().TextBoxFor(t => t.apellidoPaternoBusqueda)
+                        .Label(l => l.Content("Apellido paterno:"))
+                        .Placeholder("Ingresa el apellido paterno")
+                        .HtmlAttributes(new { style = "width: 100%" })
+                        )
+
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="controlForm my-3">
+                    @(Html.Kendo().TextBoxFor(t => t.apellidoMaternoBusqueda)
+                        .Label(l => l.Content("Apellido materno:"))
+                        .Placeholder("Ingresa el apellido materno")
+                        .HtmlAttributes(new { style = "width: 100%" })
+                        )
+
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="col-12 col-md-6 mx-md-auto col-lg-3 mx-lg-0">
+        <div class="controlButton my-3">
+            <div class="controlButton my-3" onclick="buscarConductor()">
+                @(Html.Kendo().Button()
+                    .Name("buscarOtroConductor")
+                    .HtmlAttributes(new { @class = "btnPrimary" })
+                    .Content("<h5 class=\"m-0\"><b>Buscar</b></h5>"))
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="bg-light py-1"></div>
+        </div>
+    </div>
+    <div id="resultadoLicencia" style="display: none;">
+        <p>Nombre: <span id="nombreSpan"></span></p>
+        <label for="tipoLicenciaDropdown">Tipo de Licencia:</label>
+        <select id="tipoLicenciaDropdown">
+            <!-- Aquí se agregarán las opciones del dropdown -->
+        </select>
+        <br>
+        <p>Fecha de Expedición: <span id="fechaExpedicionSpan"></span></p>
+        <p>Fecha de Vigencia: <span id="fechaVigenciaSpan"></span></p>
+        <div class="col-12 col-md-6 mx-md-auto col-lg-3 mx-lg-0">
+            <div class="controlButton my-3">
+                <div class="controlButton my-3" onclick="guardarRegistro()">
+                    @(Html.Kendo().Button()
+                        .Name("seleccionarLicencia")
+                        .HtmlAttributes(new { @class = "btnPrimary" })
+                        .Content("<h5 class=\"m-0\"><b>Seleccionar</b></h5>"))
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-between mb-1 titleCustom">
+        <div class="col-12 col-md-auto mt-4 mb-2">
+            <h5 class="px-4"><b>Listado de Personas</b></h5>
+            <h6 class="px-4 text-muted">Edita las personas que lo requieran.</h6>
+        </div>
+    </div>
+
+
+    @*Table*@
+    <div id="listadoPersonas">
+        <partial name="_ListadoPersonasBusqueda" model="Model" />
+    </div>
+
+
+</section>
+
+
+
+<div class="modal fade modalCustom" id="modalCrearPersona" aria-labelledby="modalCrearPersona" aria-hidden="true">
+    <div class="modal-dialog modal-xl boxShadow modal-dialog-centered ">
+        <div class="modal-content">
+            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                <div class="col-auto pe-0">
+                    <div class="row align-items-center justify-content-center justify-content-md-start">
+                        <div class="col-auto pe-0">
+                            <i class="icon-addConcecionario h1 colorPrimary"></i>
+                        </div>
+                        <div class="col-auto my-3">
+                            <h2 class="m-0 h3"><b>Agregar Persona</b></h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <div class="row">
+                        <div class="col-auto my-3">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="bg-light py-1"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 my-4">
+                    <h5 class="px-4"><b>Datos de persona</b></h5>
+                    <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
+                </div>
+            </div>
+            <div class="modal-body" id="modalBodyCrearPersona">
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modalLicencias" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Contenido del modal se llenará con la función mostrarModal -->
+        </div>
+    </div>
+</div>
+<div class="modal fade modalCustom" id="modalEditarPersona" aria-labelledby="modalEditarPersona" aria-hidden="true">
+    <div class="modal-dialog modal-xl boxShadow modal-dialog-centered">
+        <div class="modal-content">
+            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                <div class="col-auto pe-0">
+                    <div class="row align-items-center justify-content-center justify-content-md-start">
+                        <div class="col-auto pe-0">
+                            <i class="icon-addConcecionario h1 colorPrimary"></i>
+                        </div>
+                        <div class="col-auto my-3">
+                            <h2 class="m-0 h3"><b>Editar Persona</b></h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <div class="row">
+                        <div class="col-auto my-3">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="bg-light py-1"></div>
+                </div>
+            </div>
+            <div class="modal-body" id="modalBodyEditarPersona">
+            </div>
+        </div>
+    </div>
+    <div class="modal fade modalCustom" id="detalleLicencias" tabindex="-1" aria-labelledby="detalleLicenciasLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body" id="ModalBodyDetalleLicencias">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $("#modalCrearPersona").on("show.bs.modal shown.bs.modal", function (e) {
+            $("body").removeClass("modal-open").find(".modal-backdrop").remove();
+        });
+        $("#modalCrearPersona").on('hide.bs.modal', function () {
+            $('#modalBodyEditarPersona').html('');
+        });
+
+        $("#modalEditarPersona").on("show.bs.modal shown.bs.modal", function (e) {
+            $("body").removeClass("modal-open").find(".modal-backdrop").remove();
+        });
+        $("#modalEditarPersona").on('hide.bs.modal', function () {
+            $('#modalBodyEditarPersona').html('');
+        });
+    });
+
+    function btnModalCrearPersona() {
+        $.ajax({
+            url: '@Url.Action("ajax_ModalCrearPersona","Personas")',
+            type: 'GET',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                $('#modalBodyCrearPersona').html(data);
+                $('#modalCrearPersona').modal({ backdrop: 'static', keyboard: false });
+                $('#modalCrearPersona').modal('show');
+            }
+        });
+    }
+    function btnModalEditarPersona(id) {
+        $.ajax({
+            url: '@Url.Action("ajax_ModalEditarPersona","Personas")',
+            type: 'GET',
+            data: { id: id },
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (value) {
+                $('#modalBodyEditarPersona').html(value);
+                $('#modalEditarPersona').modal({ backdrop: 'static', keyboard: false });
+                $('#modalEditarPersona').modal('show');
+            }
+        });
+    }
+
+
+
+    function buscarConductor() {
+        var Mydata = $("#buscarConductorForm").serialize();
+        $.ajax({
+            url: '/Personas/BuscarPorParametro',
+            type: 'POST',
+            data: Mydata,
+            success: function (response) {
+                if (response.tipo == "success") {
+                    // Crear instancia del modelo con los datos recibidos
+                    mostrarModal(response.datos);
+
+                } else {
+                    // Mostrar los resultados de personas encontradas en la búsqueda
+                    var personasList = response.data;
+                    var grid = $("#gridPersonas").data("kendoGrid");
+                    grid.dataSource.data(personasList);
+
+                    if (personasList.length === 0) {
+                        sitteg_warning("La búsqueda no arrojó resultados.");
+                    }
+                }
+            },
+            error: function (error) {
+                sitteg_warning('Ocurrió un error en la búsqueda.');
+            }
+        });
+    }
+
+    function mostrarModal(jsonData) {
+        const modal = document.getElementById('modalLicencias');
+
+        const modalContent = `
+                    <div class="modal-header">
+                        <h5 class="modal-title">Datos encontrados en el sistema de licencias</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Nombre:</strong> ${jsonData.nombre}</p>
+                        <p><strong>Apellido Paterno:</strong> ${jsonData.primer_apellido}</p>
+                        <p><strong>Apellido Materno:</strong> ${jsonData.segundo_apellido}</p>
+                        <p><strong>Tipo de Licencia:</strong> ${jsonData.tipolicencia}</p>
+                        <p><strong>Número de Licencia:</strong> ${jsonData.num_licencia}</p>
+                        <p><strong>Fecha de Expedición:</strong> ${jsonData.fecha_inicio_vigencia}</p>
+                        <p><strong>Fecha de Vigencia:</strong> ${jsonData.fecha_termino_vigencia}</p>
+                    </div>
+                  <div class="modal-footer">
+                    <button type="button" id="cerrarModalBtn" class="btn btn-secondary controlButton" data-dismiss="modal">Cerrar</button>
+                    <button type="button" id="guardarEnBaseDeDatosBtn" class="btn btn-primary controlButton">Guardar en Base de Datos</button>
+                  </div>
+                `;
+
+        modal.querySelector('.modal-content').innerHTML = modalContent;
+        const cerrarModalBtn = document.getElementById('cerrarModalBtn');
+        cerrarModalBtn.addEventListener('click', () => {
+            $('#modalLicencias').modal('hide');
+        });
+
+        const guardarEnBaseDeDatosBtn = document.getElementById('guardarEnBaseDeDatosBtn');
+        guardarEnBaseDeDatosBtn.addEventListener('click', () => {
+            const tipoLicenciaMapping = {
+                "TIPO A  CHOFER AUTOMOVILISTA": 1,
+                "TIPO B CHOFER SERVICIO PÚBLICO": 2,
+                "TIPO C  Chofer Servicio de Carga": 3,
+                "TIPO D -MOTOCICLISTA": 4,
+                "PERMISO A -AUTOMOVIL-": 6,
+                "PERMISO D -MOTOCICLETA-": 7,
+                "NO APLICA": 8,
+                "TIPO A": 1,
+                "TIPO B": 2,
+                "TIPO C": 3,
+                "TIPO D": 4,
+                "PERMISO A": 6,
+                "PERMISO D": 7,
+                "A-AUTOMOVILISTA": 1,
+                "B-CHOFER DE SERVICIO PÚBLICO": 2,
+                "C-CHOFER DE SERVICIO DE CARGA": 3,
+                "D-MOTOCICLISTA": 4,
+                "PA-PERMISO AUTOMOVILISTA": 6,
+                "PD-PERMISO MOTOCICLISTA": 7,
+
+                // Puedes agregar más mapeos aquí si es necesario
+            };
+            const tipoLicenciaNumero = tipoLicenciaMapping[jsonData.tipolicencia] || 0; // 0 o valor predeterminado si no hay coincidencia
+            jsonData.id_tipo_licencia = tipoLicenciaNumero;
+
+            $.ajax({
+                type: 'POST',
+                url: '/Personas/guardaDesdeServicio', // Reemplaza con la URL correcta
+                data: jsonData,
+                success: function (response) {
+                    $('#modalLicencias').modal('hide');
+                    var personasList = [response]; // Convierte el objeto en un arreglo
+                    var grid = $("#gridPersonas").data("kendoGrid");
+                    grid.dataSource.data(personasList);
+                },
+                error: function (error) {
+                    sitteg_warning('Error al guardar en la base de datos:');
+                }
+            });
+        });
+
+        $('#modalLicencias').modal('show');
+    }
+
+</script>

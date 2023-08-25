@@ -19,6 +19,7 @@ using System.Net.Http;
 using System.Text;
 using GuanajuatoAdminUsuarios.RESTModels;
 using Microsoft.Extensions.Options;
+using Kendo.Mvc.Extensions;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
@@ -487,6 +488,13 @@ namespace GuanajuatoAdminUsuarios.Controllers
             }
 
         }
-    }
+
+
+        public ActionResult ModalAgregarConductor()
+        {
+            return PartialView("_ModalBusquedaPersonas");
+        }
+    } 
+
 }
 
