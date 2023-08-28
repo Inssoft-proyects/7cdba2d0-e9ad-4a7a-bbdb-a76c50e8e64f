@@ -273,7 +273,7 @@
                                 <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
                                     <div class="row">
                                         <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-                                            <button href="#" id="btnNuevoVehiculo" onclick="window.location.href = '@Url.Action("Index","Vehiculos")'">
+                                            <button href="#" id="btnNuevoVehiculo" onclick="mostrarModalAgregarVehiculo()">
                                                 <h6 class="m-0 d-flex align-items-center"><i class="icon-addCar h5 mb-0 me-2"></i><b>Agregar nuevo vehículo</b></h6>
                                             </button>
                                         </div>
@@ -351,6 +351,14 @@
                     </div>
 
                 </form>
+            </div>
+        </div>
+        <div class="modal fade modalCustom" id="agregarVehiculoModal" tabindex="-1" aria-labelledby="agregarVehiculoLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-body" id="ModalBodyAgregarVehiculo">
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -479,6 +487,18 @@
             //    var errmsg = msg_err_gral;
             //    semg_error(errmsg);
             //}
+        });
+    }
+
+    function mostrarModalAgregarVehiculo() {
+
+        $.ajax({
+            url: '@Url.Action("ModalAgregarVehiculo")',
+            type: 'POST',
+            success: function (data) {
+                $('#ModalBodyAgregarVehiculo').html(data);
+                $('#agregarVehiculoModal').modal('show');
+            }
         });
     }
 </script>

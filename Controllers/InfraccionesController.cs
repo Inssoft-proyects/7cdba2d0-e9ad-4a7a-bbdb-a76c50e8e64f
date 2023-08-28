@@ -20,6 +20,7 @@ using System.Text;
 using GuanajuatoAdminUsuarios.RESTModels;
 using Microsoft.Extensions.Options;
 using static GuanajuatoAdminUsuarios.RESTModels.CotejarDatosResponseModel;
+using System.Net.Http.Json;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
@@ -35,8 +36,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
         private readonly ICatDictionary _catDictionary;
         private readonly IVehiculosService _vehiculosService;
         private readonly IPersonasService _personasService;
-        private readonly HttpClient _httpClient;
+        private readonly ICapturaAccidentesService _capturaAccidentesService;
+        private readonly IHttpClientFactory _httpClientFactory;
         private readonly ICrearMultasTransitoClientService _crearMultasTransitoClientService ;
+        private readonly ICotejarDocumentosClientService _cotejarDocumentosClientService;
+
         private readonly AppSettings _appSettings;
 
 
@@ -49,7 +53,10 @@ namespace GuanajuatoAdminUsuarios.Controllers
             IPersonasService personasService,
             IHttpClientFactory httpClientFactory,
             ICrearMultasTransitoClientService crearMultasTransitoClientService,
-             IOptions<AppSettings> appSettings
+             IOptions<AppSettings> appSettings,
+            ICapturaAccidentesService capturaAccidentesService,
+            ICotejarDocumentosClientService cotejarDocumentosClientService
+
             )
         {
             _catDictionary = catDictionary;
@@ -62,12 +69,13 @@ namespace GuanajuatoAdminUsuarios.Controllers
             _pdfService = pdfService;
             _vehiculosService = vehiculosService;
             _personasService = personasService;
-            _httpClient = httpClientFactory.CreateClient();
+            _capturaAccidentesService = capturaAccidentesService;
+            _cotejarDocumentosClientService = cotejarDocumentosClientService;
             // Configurar el cliente HTTP con la URL base del servicio
-            _httpClient.BaseAddress = new Uri("https://alfasiae.guanajuato.gob.mx/RESTAdapter/");
+        
             _crearMultasTransitoClientService = crearMultasTransitoClientService;
             _appSettings = appSettings.Value;
-
+            _httpClientFactory = httpClientFactory;
         }
 
         public IActionResult Index()
@@ -289,6 +297,137 @@ namespace GuanajuatoAdminUsuarios.Controllers
             //return Ok();
 
         }
+        public ActionResult ModalAgregarVehiculo()
+        {
+            return PartialView("_ModalVehiculo");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ajax_BuscarVehiculoAsync(VehiculoBusquedaModel model)
+        {
+            if (_appSettings.AllowWebServices)
+            {
+                var vehiculosModel = _vehiculosService.GetVehiculoToAnexo(model);
+                vehiculosModel.idSubmarcaUpdated = vehiculosModel.idSubmarca;
+                vehiculosModel.PersonaMoralBusquedaModel = new PersonaMoralBusquedaModel();
+                vehiculosModel.PersonaMoralBusquedaModel.PersonasMorales = new List<PersonaModel>();
+
+                if (vehiculosModel.encontradoEn == 3 && !string.IsNullOrEmpty(model.PlacasBusqueda))
+                {
+                    try
+                    {
+                        CotejarDatosRequestModel cotejarDatosRequestModel = new CotejarDatosRequestModel();
+                        cotejarDatosRequestModel.Tp_folio = "4";
+                        cotejarDatosRequestModel.Folio = model.PlacasBusqueda;
+                        cotejarDatosRequestModel.tp_consulta = "3";
+
+                        var endPointName = "CotejarDatosEndPoint";
+                        using (var httpClient = _httpClientFactory.CreateClient())
+                        {
+                            httpClient.BaseAddress = new Uri("https://alfasiae.guanajuato.gob.mx/RESTAdapter/");
+                            var result = _cotejarDocumentosClientService.CotejarDatos(cotejarDatosRequestModel, endPointName);
+
+                            if (result.MT_CotejarDatos_res != null && result.MT_CotejarDatos_res.Es_mensaje != null && result.MT_CotejarDatos_res.Es_mensaje.TpMens.ToString().Equals("I", StringComparison.OrdinalIgnoreCase))
+                            {
+                                var vehiculoEncontradoData = result.MT_CotejarDatos_res.tb_vehiculo[0];
+                                var vehiculoDireccionData = result.MT_CotejarDatos_res.tb_direccion[0];
+                                var vehiculoInterlocutorData = result.MT_CotejarDatos_res;
+                                var vehiculoEncontrado = new VehiculoModel
+                                {
+                                    placas = vehiculoEncontradoData.no_placa,
+                                    serie = vehiculoEncontradoData.no_serie,
+                                    tarjeta = vehiculoEncontradoData.no_tarjeta,
+                                    paisManufactura = vehiculoEncontradoData.no_motor,
+                                    otros = vehiculoEncontradoData.otros,
+
+                                    Persona = new PersonaModel
+                                    {
+                                        RFC = vehiculoInterlocutorData.Nro_rfc,
+                                        nombre = vehiculoInterlocutorData.es_per_moral?.name_org1,
+
+                                        PersonaDireccion = new PersonaDireccionModel
+                                        {
+                                            telefono = vehiculoDireccionData.telefono,
+                                            correo = vehiculoDireccionData.correo,
+                                            colonia = vehiculoDireccionData.colonia,
+                                            calle = vehiculoDireccionData.calle,
+                                            numero = vehiculoDireccionData.nro_exterior,
+                                        }
+                                    },
+
+                                    PersonaMoralBusquedaModel = new PersonaMoralBusquedaModel
+                                    {
+                                        PersonasMorales = new List<PersonaModel>()
+                                    }
+
+                                };
+
+                                return PartialView("_Create", vehiculoEncontrado);
+                            }
+                            else if (result.MT_CotejarDatos_res != null && result.MT_CotejarDatos_res.Es_mensaje != null && result.MT_CotejarDatos_res.Es_mensaje.TpMens.ToString().Equals("E", StringComparison.OrdinalIgnoreCase))
+                            {
+                                //Aqui servico repuve//////
+                                var resultSegundoServicio = await BusquedaRepuveAsync(model);
+                                return PartialView("_Create", vehiculosModel);
+
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                        return Json(new { success = false, message = "Ha ocurrido un error al comunicarse con el servicio web." });
+                    }
+                }
+                return PartialView("_Create", vehiculosModel);
+
+            }
+            else
+            {
+                var vehiculosModel = _vehiculosService.GetVehiculoToAnexo(model);
+                vehiculosModel.idSubmarcaUpdated = vehiculosModel.idSubmarca;
+                vehiculosModel.PersonaMoralBusquedaModel = new PersonaMoralBusquedaModel();
+                vehiculosModel.PersonaMoralBusquedaModel.PersonasMorales = new List<PersonaModel>();
+                return PartialView("_Create", vehiculosModel);
+            }
+        }
+        private async Task<VehiculoModel> BusquedaRepuveAsync(VehiculoBusquedaModel model)
+        {
+            try
+            {
+                // Crear una instancia de HttpClient para el segundo servicio y configurar la BaseAddress
+                using (var httpClientRepuve = _httpClientFactory.CreateClient())
+                {
+                    httpClientRepuve.BaseAddress = new Uri("http://10.16.60.71/");
+
+                    var parametros = new
+                    {
+                        token = "abl185B",
+                        placa = model.PlacasBusqueda,
+                        niv = "",
+                    };
+
+                    // Realizar la solicitud POST al servicio
+                    var response = await httpClientRepuve.PostAsJsonAsync("", parametros);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var result = await response.Content.ReadFromJsonAsync<VehiculoModel>(); // Lee el contenido JSON y deserializa
+                        return result;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Manejar excepciones aquí
+                return null;
+            }
+        }
+
+
 
 
 
