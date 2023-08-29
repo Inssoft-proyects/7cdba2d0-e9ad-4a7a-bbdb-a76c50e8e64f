@@ -61,10 +61,12 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 if (licenciaNoSITTEG)
                 {
                     try
-                    {
-                        var server = Request.Host;
+                    { 
+                        string urlServ = Request.GetDisplayUrl();
+                        Uri uri = new Uri(urlServ);
+                        string requested = uri.Scheme + Uri.SchemeDelimiter + uri.Host + ":" + uri.Port;
 
-                        var url = $"https://"+server+"/api/Licencias/datos_generales?"+ parametros;
+                        var url = requested+$"/api/Licencias/datos_generales?"+ parametros;
 
                         var httpClient = _httpClientFactory.CreateClient();
                         var response = await httpClient.GetAsync(url);
@@ -80,7 +82,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                     catch (Exception ex)
                     {
                         // En caso de errores, devolver una respuesta JSON con licencia no encontrada
-                        return Json(new { encontrada = false, message = "Ocurrió un error al obtener los datos. " + ex.Message });
+                        return Json(new { encontrada = false, message = "Ocurrió un error al obtener los datos. " + ex.Message + "; " +ex.InnerException});
                     }
                 }
             } 

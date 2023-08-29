@@ -297,6 +297,12 @@ function buscarConductor() {
 
             } else {
                 // Mostrar los resultados de personas encontradas en la búsqueda
+                if(response.encontrada != undefined)
+                {
+                    if(response.encontrada == false){
+                        sitteg_warning("No se pudieron obtener resultados.");
+                    }
+                }
                 var personasList = response.data;
                 var grid = $("#gridPersonas").data("kendoGrid");
                 grid.dataSource.data(personasList);

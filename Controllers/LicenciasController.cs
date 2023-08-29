@@ -94,7 +94,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 return UnprocessableEntity(new LicenciaRespuestaPersona
                 {
                     tipo = LicenciaTipoRespuesta.respuestas.error.ToString(),
-                    mensaje = "Ocurrió un error al obtener los datos. " + excepcion.Message,
+                    mensaje = "Ocurrió un error al obtener los datos. " + excepcion.Message +"; " + excepcion.InnerException,
                     datos = null
                 });
             }
