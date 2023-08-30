@@ -79,8 +79,9 @@ namespace GuanajuatoAdminUsuarios.Controllers
             return View("CancelarInfraccion");
         }
 
-        public IActionResult AnulacionDocumento(string folio_infraccion)
+        public IActionResult AnulacionDocumento(string folio_infraccion, int idOficina)
         {
+            string prefijo = (idOficina == 1) ? "TTO-PEC" : (idOficina == 2) ? "TTE-M" : "";
             RootAnulacionDocumentoRequest rootRequest = new RootAnulacionDocumentoRequest();
 
             MT_Consulta_documento mTConsultaDocumento = new MT_Consulta_documento(); 
