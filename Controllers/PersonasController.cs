@@ -51,41 +51,42 @@ namespace GuanajuatoAdminUsuarios.Controllers
             string ultimo = parametros.Substring(parametros.Length - 1);
             if(ultimo.Equals("&"))
                 parametros= parametros.Substring(0, parametros.Length - 1);
-              
+
+            bool licenciaNoSITTEG = true;
 
             if (!string.IsNullOrEmpty(model.numeroLicenciaBusqueda))
             {
                 // Verificar si el número de licencia no está en la base de datos
-                bool licenciaNoSITTEG = _personasService.VerificarLicenciaSitteg(model.numeroLicenciaBusqueda);
+                licenciaNoSITTEG = _personasService.VerificarLicenciaSitteg(model.numeroLicenciaBusqueda);
+            }
+            if (licenciaNoSITTEG)
+            {
+                try
+                { 
+                    string urlServ = Request.GetDisplayUrl();
+                    Uri uri = new Uri(urlServ);
+                    string requested = uri.Scheme + Uri.SchemeDelimiter + uri.Host + ":" + uri.Port;
 
-                if (licenciaNoSITTEG)
-                {
-                    try
-                    { 
-                        string urlServ = Request.GetDisplayUrl();
-                        Uri uri = new Uri(urlServ);
-                        string requested = uri.Scheme + Uri.SchemeDelimiter + uri.Host + ":" + uri.Port;
+                    var url = requested+$"/api/Licencias/datos_generales?"+ parametros;
 
-                        var url = requested+$"/api/Licencias/datos_generales?"+ parametros;
+                    var httpClient = _httpClientFactory.CreateClient();
+                    var response = await httpClient.GetAsync(url);
 
-                        var httpClient = _httpClientFactory.CreateClient();
-                        var response = await httpClient.GetAsync(url);
-
-                        if (response.IsSuccessStatusCode)
-                        {
-                            var content = await response.Content.ReadAsStringAsync();
-                            LicenciaRespuestaPersona respuesta = JsonConvert.DeserializeObject<LicenciaRespuestaPersona>(content);
-                             
-                            return Json(respuesta); 
-                        } 
-                    }
-                    catch (Exception ex)
+                    if (response.IsSuccessStatusCode)
                     {
-                        // En caso de errores, devolver una respuesta JSON con licencia no encontrada
-                        return Json(new { encontrada = false, message = "Ocurrió un error al obtener los datos. " + ex.Message + "; " +ex.InnerException});
-                    }
+                        var content = await response.Content.ReadAsStringAsync();
+                        LicenciaRespuestaPersona respuesta = JsonConvert.DeserializeObject<LicenciaRespuestaPersona>(content);
+                             
+                        return Json(respuesta); 
+                    } 
                 }
-            } 
+                catch (Exception ex)
+                {
+                    // En caso de errores, devolver una respuesta JSON con licencia no encontrada
+                    return Json(new { encontrada = false, message = "Ocurrió un error al obtener los datos. " + ex.Message + "; " +ex.InnerException});
+                }
+            }
+            
             // Si no se cumple la condición anterior, realizar la búsqueda de personas y devolver los resultados en formato JSON
             var personasList = _personasService.BusquedaPersona(model);
             return Json(new { encontrada = false, data = personasList });

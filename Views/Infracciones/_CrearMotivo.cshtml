@@ -165,7 +165,9 @@
                  
             },
             error: function (xhr, status) {
+                var errmsg = xhr.responseText;
                 console.log(errmsg)
+                sitteg_warning('Lo sentimos, ha ocurrido un error.'+errmsg);
             }
         });
     }

@@ -635,7 +635,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public ActionResult ModalAgregarConductor()
         {
-            return PartialView("_ModalBusquedaPersonas");
+            return View("_ModalBusquedaPersonas");
         }
     
 
