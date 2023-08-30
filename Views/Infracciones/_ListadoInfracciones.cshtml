@@ -33,6 +33,7 @@
             .Name("GridInf")
             .Columns(columns =>
             {
+
                 columns.Bound(p => p.folioInfraccion).Title("Folio").Width(90);
                 columns.Bound(p => p.PersonaInfraccion.nombreCompleto).Title("Conductor").Width(90);
                 columns.Bound(p => p.Vehiculo.Persona.nombreCompleto).Title("Propietario").Width(90);

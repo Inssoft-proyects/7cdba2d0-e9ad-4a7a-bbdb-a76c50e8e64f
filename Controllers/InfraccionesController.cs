@@ -606,7 +606,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                     crearMultasRequestModel.FOLIO_MULTA = prefijo + infraccionBusqueda.folioInfraccion;
                 }
                 crearMultasRequestModel.OBS_GARANT = "";
-                crearMultasRequestModel.ZMOTIVO1 = unicoMotivo.Motivo;
+               // crearMultasRequestModel.ZMOTIVO1 = unicoMotivo.Motivo;
                 crearMultasRequestModel.ZMOTIVO2 = "";
                 crearMultasRequestModel.ZMOTIVO3 = "";
                 var result = _crearMultasTransitoClientService.CrearMultasTransitoCall(crearMultasRequestModel);

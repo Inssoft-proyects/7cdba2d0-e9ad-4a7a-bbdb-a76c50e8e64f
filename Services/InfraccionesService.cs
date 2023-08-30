@@ -31,7 +31,7 @@ namespace GuanajuatoAdminUsuarios.Services
         public List<InfraccionesModel> GetAllInfracciones(int idOficina)
         {
             List<InfraccionesModel> modelList = new List<InfraccionesModel>();
-            string strQuery = @"SELECT inf.idInfraccion
+            string strQuery = @"SELECT DISTINCT inf.idInfraccion
                                     ,inf.idOficial
                                     ,inf.idDependencia
                                     ,inf.idDelegacion
@@ -60,8 +60,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                     ,inf.estatus
                                     ,del.idOficinaTransporte, del.nombreOficina,dep.idDependencia,dep.nombreDependencia,catGar.idGarantia,catGar.garantia
                                     ,estIn.idEstatusInfraccion, estIn.estatusInfraccion
-                                    ,gar.idGarantia,gar.numPlaca,gar.numLicencia,gar.vehiculoDocumento
-                                    ,tipoP.idTipoPlaca, tipoP.tipoPlaca
+                                    ,gar.numLicencia,gar.vehiculoDocumento
                                     ,tipoL.idTipoLicencia, tipoL.tipoLicencia
                                     ,catOfi.idOficial,catOfi.nombre,catOfi.apellidoPaterno,catOfi.apellidoMaterno,catOfi.rango
                                     ,catMun.idMunicipio,catMun.municipio
@@ -90,7 +89,46 @@ namespace GuanajuatoAdminUsuarios.Services
                                     left join catMotivosInfraccion catMotInf on motInf.idCatMotivosInfraccion = catMotInf.idCatMotivoInfraccion
                                     left join catSubConceptoInfraccion catSubInf on catMotInf.IdSubConcepto = catSubInf.idSubConcepto
                                     left join catConceptoInfraccion catConInf on  catSubInf.idConcepto = catConInf.idConcepto
-                                    WHERE  inf.idDelegacion = @idOficina";
+                                    WHERE  inf.idDelegacion = @idOficina AND inf.estatus= 1 GROUP BY inf.idInfraccion,inf.idOficial,inf.idDependencia
+									,inf.idDelegacion
+                                    ,inf.idVehiculo
+                                    ,inf.idAplicacion
+                                    ,inf.idGarantia
+                                    ,inf.idEstatusInfraccion
+                                    ,inf.idMunicipio
+                                    ,inf.idTramo
+                                    ,inf.idCarretera
+                                    ,inf.idPersona
+                                    ,inf.idPersonaInfraccion
+                                    ,inf.placasVehiculo
+                                    ,inf.folioInfraccion
+                                    ,inf.fechaInfraccion
+                                    ,inf.kmCarretera
+                                    ,inf.observaciones
+                                    ,inf.lugarCalle
+                                    ,inf.lugarNumero
+                                    ,inf.lugarColonia
+                                    ,inf.lugarEntreCalle
+                                    ,inf.infraccionCortesia
+                                    ,inf.NumTarjetaCirculacion
+                                    ,inf.fechaActualizacion
+                                    ,inf.actualizadoPor
+                                    ,inf.estatus
+									,del.idOficinaTransporte, del.nombreOficina,dep.idDependencia,dep.nombreDependencia,catGar.idGarantia,catGar.garantia
+                                    ,estIn.idEstatusInfraccion, estIn.estatusInfraccion
+                                    ,gar.idGarantia,gar.numPlaca,gar.numLicencia,gar.vehiculoDocumento
+                                    ,tipoP.idTipoPlaca, tipoP.tipoPlaca
+                                    ,tipoL.idTipoLicencia, tipoL.tipoLicencia
+                                    ,catOfi.idOficial,catOfi.nombre,catOfi.apellidoPaterno,catOfi.apellidoMaterno,catOfi.rango
+                                    ,catMun.idMunicipio,catMun.municipio
+                                    ,catTra.idTramo,catTra.tramo
+                                    ,catCarre.idCarretera,catCarre.carretera
+                                    ,veh.idMarcaVehiculo,veh.idMarcaVehiculo, veh.serie,veh.tarjeta, veh.vigenciaTarjeta,veh.idTipoVehiculo,veh.modelo
+                                    ,veh.idColor,veh.idEntidad,veh.idCatTipoServicio, veh.propietario, veh.numeroEconomico
+                                    ,motInf.idMotivoInfraccion,catMotInf.nombre,catMotInf.fundamento,motInf.calificacionMinima,motInf.calificacionMaxima
+                                    ,catMotInf.idCatMotivoInfraccion ,catMotInf.nombre 
+                                    ,catSubInf.idSubConcepto,catSubInf.subConcepto
+                                    ,catConInf.idConcepto,catConInf.concepto,tipoP.idTipoPlaca ";
 
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
 

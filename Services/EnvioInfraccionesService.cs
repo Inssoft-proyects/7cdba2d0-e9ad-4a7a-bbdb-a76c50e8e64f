@@ -65,8 +65,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             "LEFT JOIN catEstatusInfraccion  estIn on inf.IdEstatusInfraccion = estIn.idEstatusInfraccion " +
                             "LEFT JOIN personas AS prop ON inf.idPersona = prop.idPersona " +
                             "LEFT JOIN personas AS cond ON inf.idPersonaInfraccion = cond.idPersona " +
-                            "WHERE CONVERT(DATETIME, fechaInfraccion, 120) BETWEEN CONVERT(DATETIME, @fechaInicio, 101) AND CONVERT(DATETIME, @fechaFin, 101) AND DATEDIFF(day, inf.fechaInfraccion, GETDATE()) > 10 " +
-                            "AND inf.idEstatusEnvio != 1;", connection); 
+                            "WHERE CONVERT(DATETIME, fechaInfraccion, 120) BETWEEN CONVERT(DATETIME, @fechaInicio, 101) AND CONVERT(DATETIME, @fechaFin, 101) AND DATEDIFF(day, inf.fechaInfraccion, GETDATE()) > 10", connection); 
 
 
 
