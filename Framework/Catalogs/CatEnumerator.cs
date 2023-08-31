@@ -38,5 +38,23 @@ namespace GuanajuatoAdminUsuarios.Framework.Catalogs
             [Description("Situacion4")]
             Situacion4 = 4,
         }
+
+        public enum catEstatusInfraccion : int
+        {
+            [Description("En proceso")]
+            EnProceso = 1,
+            [Description("Capturada")]
+            Capturada = 2,
+            [Description("Pagada")]
+            Pagada = 3,
+            [Description("Pagada con descuento")]
+            PagadaConDescuento = 4,
+            [Description("Solventada")]
+            Solventada = 5,
+            [Description("Pagada con recargo")]
+            PagadaConRecargo = 6,
+            [Description("Enviada")]
+            Enviada = 7,
+        }
     }
 }

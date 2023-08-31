@@ -30,7 +30,9 @@ namespace GuanajuatoAdminUsuarios.Interfaces
         public List<InfraccionesModel> GetAllAccidentes2();
 
         public int  GuardarReponse(CrearMultasTransitoChild MT_CrearMultasTransito_res, int idInfraccion);
-        
+        public int ModificarEstatusInfraccion(int idInfraccion, int idEstatusInfraccion);
+
+
 
     }
 }

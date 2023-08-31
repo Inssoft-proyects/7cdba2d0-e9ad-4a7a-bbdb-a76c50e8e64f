@@ -6,6 +6,7 @@ using System;
 using System.Data.SqlClient;
 using GuanajuatoAdminUsuarios.Entity;
 using Microsoft.Extensions.DependencyModel;
+using GuanajuatoAdminUsuarios.Framework.Catalogs;
 
 namespace GuanajuatoAdminUsuarios.Services
 {
@@ -80,7 +81,7 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT i.IdInfraccion, i.FolioInfraccion, i.FechaInfraccion," +
+                    SqlCommand command = new SqlCommand("SELECT i.IdInfraccion,i.idDelegacion, i.FolioInfraccion, i.FechaInfraccion," +
                    " i.placasVehiculo, i.idPersona, i.idEstatusInfraccion, v.Serie, e.estatusInfraccion, CONCAT(p.nombre, ' ', p.apellidoPaterno, ' ', p.apellidoMaterno) AS nombrePropietario, CONCAT(pi.nombre, ' ', pi.apellidoPaterno, ' ', pi.apellidoMaterno) AS nombreConductor" +
                    " FROM infracciones i" +
                    " JOIN vehiculos v ON i.idVehiculo = v.idVehiculo" +
@@ -94,7 +95,9 @@ namespace GuanajuatoAdminUsuarios.Services
                     {
                         while (reader.Read())
                         {
+                            
                             infraccion.IdInfraccion = Convert.ToInt32(reader["IdInfraccion"].ToString());
+                            infraccion.IdDelegacion = Convert.ToInt32(reader["idDelegacion"].ToString());
                             infraccion.FolioInfraccion = reader["FolioInfraccion"].ToString();
                             infraccion.FechaInfraccion = Convert.ToDateTime(reader["FechaInfraccion"].ToString());
                             infraccion.Conductor = reader["nombreConductor"].ToString();
@@ -134,7 +137,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     SqlCommand command = new SqlCommand("Update infracciones set idEstatusInfraccion = @idEstatusInfraccion, oficioRevocacion = @OficioRevocacion,fechaActualizacion = @fechaActualizacion,actualizadoPor = @actualizadoPor, estatus = @estatus where idInfraccion = @IdInfraccion", connection);
                     command.Parameters.Add(new SqlParameter("@IdInfraccion", SqlDbType.Int)).Value = IdInfraccion;
                     command.Parameters.Add(new SqlParameter("@OficioRevocacion", SqlDbType.VarChar)).Value = OficioRevocacion;
-                    command.Parameters.Add(new SqlParameter("@idEstatusInfraccion", SqlDbType.Int)).Value = 4;
+                    command.Parameters.Add(new SqlParameter("@idEstatusInfraccion", SqlDbType.Int)).Value = CatEnumerator.catEstatusInfraccion.Solventada;
                     command.Parameters.Add(new SqlParameter("@fechaActualizacion", SqlDbType.DateTime)).Value = DateTime.Now.ToString("yyyy-MM-dd");
                     command.Parameters.Add(new SqlParameter("@actualizadoPor", SqlDbType.Int)).Value = 1;
                     command.Parameters.Add(new SqlParameter("@estatus", SqlDbType.Int)).Value = 1;
