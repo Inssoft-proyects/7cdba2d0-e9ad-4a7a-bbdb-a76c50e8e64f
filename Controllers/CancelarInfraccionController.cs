@@ -85,7 +85,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             RootAnulacionDocumentoRequest rootRequest = new RootAnulacionDocumentoRequest();
 
             MT_Consulta_documento mTConsultaDocumento = new MT_Consulta_documento(); 
-            mTConsultaDocumento.DOCUMENTO = folio_infraccion;
+            mTConsultaDocumento.DOCUMENTO = prefijo+folio_infraccion;
             mTConsultaDocumento.USUARIO = "INNSJACOB";
             mTConsultaDocumento.PASSWORD = "123456";
 
