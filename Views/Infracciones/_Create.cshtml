@@ -1182,12 +1182,13 @@
 
     function submitCreatePersonaFisica() {
         var Mydata = $("#personaFisicaForm").serialize();
-        console.log(Mydata);
+        
         $.ajax({
             url: '@Url.Action("ajax_CrearPersonaFisica")',
             type: 'POST',
             data: Mydata,
             success: function (result) {
+                console.log(result);
                 var grid = $("#gridPersonasFisicasInf").data("kendoGrid");
                 grid.refresh();
             }
