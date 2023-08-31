@@ -48,8 +48,8 @@
                 .MajorGridLines(lines => lines.Visible(true))
                 )
                 .Tooltip(tooltip => tooltip
-                .Visible(true)
-                .Template("#= series.Motivo #: #= value #")
+                .Visible(true) 
+                .Template("#= dataItem.Motivo #: #= value #")
                 )
                 )
         </div>

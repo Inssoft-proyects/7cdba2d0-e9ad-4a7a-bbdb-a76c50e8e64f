@@ -1276,7 +1276,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.municipio = reader["municipio"].ToString();
                             model.idCarretera = reader["idCarretera"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idCarretera"].ToString());
                             model.idTramo = reader["idTramo"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idTramo"].ToString());
-                            model.kmCarretera = reader["kmCarretera"].ToString();
+                            model.kmCarretera = reader["kilometro"].ToString();
                             model.fechaInfraccion = reader["fecha"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["fecha"].ToString());
                             modelList.Add(model);
                         }

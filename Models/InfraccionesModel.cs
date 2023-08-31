@@ -41,10 +41,10 @@ namespace GuanajuatoAdminUsuarios.Models
         }
         public string kmCarretera { get; set; }
         public string observaciones { get; set; }
-        public string lugarCalle { get; set; }
-        public string lugarNumero { get; set; }
-        public string lugarColonia { get; set; }
-        public string lugarEntreCalle { get; set; }
+        public string? lugarCalle { get; set; }
+        public string? lugarNumero { get; set; }
+        public string? lugarColonia { get; set; }
+        public string? lugarEntreCalle { get; set; }
         public bool? infraccionCortesia { get; set; }
         public string NumTarjetaCirculacion { get; set; }
         public bool isPropietarioConductor { get; set; }

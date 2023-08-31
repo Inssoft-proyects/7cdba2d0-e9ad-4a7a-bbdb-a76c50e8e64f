@@ -83,7 +83,7 @@ namespace GuanajuatoAdminUsuarios.Services
         public LicenciaPersonaDatos ObtenerDatosPersonaBD1(string licencia, string curp, string rfc, string nombre, string primer_apellido, string segundo_apellido)
         {
             string condiciones = "";
-            condiciones += string.IsNullOrEmpty(licencia) ? "" : " AND P.NUM_LICENCIA = @licencia ";
+            condiciones += string.IsNullOrEmpty(licencia) ? "" : " AND l.NUM_LICENCIA = @licencia ";
             condiciones += string.IsNullOrEmpty(curp) ? "" : " AND P.CURP = @curp ";
             condiciones += string.IsNullOrEmpty(rfc) ? "" : " AND P.RFC like '%'+ @rfc +'%' COLLATE Latin1_general_CI_AI ";
             condiciones += string.IsNullOrEmpty(nombre) ? "" : " AND p.NOMBRE like '%'+ @nombre +'%' COLLATE Latin1_general_CI_AI ";
@@ -139,7 +139,7 @@ namespace GuanajuatoAdminUsuarios.Services
         public LicenciaPersonaDatos ObtenerDatosPersonaBD2(string licencia, string curp, string rfc, string nombre, string primer_apellido, string segundo_apellido)
         {
             string condiciones = "";
-            condiciones += string.IsNullOrEmpty(licencia) ? "" : " AND P.NUM_LICENCIA = @licencia ";
+            condiciones += string.IsNullOrEmpty(licencia) ? "" : " AND l.NUM_LICENCIA = @licencia ";
             condiciones += string.IsNullOrEmpty(curp) ? "" : " AND P.CURP = @curp ";
             condiciones += string.IsNullOrEmpty(rfc) ? "" : " AND P.RFC like '%'+ @rfc +'%' COLLATE Latin1_general_CI_AI ";
             condiciones += string.IsNullOrEmpty(nombre) ? "" : " AND p.NOMBRE like '%'+ @nombre +'%' COLLATE Latin1_general_CI_AI ";
@@ -196,7 +196,7 @@ namespace GuanajuatoAdminUsuarios.Services
         public LicenciaPersonaDatos ObtenerDatosPersonaBD3(string licencia, string curp, string rfc, string nombre, string primer_apellido, string segundo_apellido)
         {
             string condiciones = "";
-            condiciones += string.IsNullOrEmpty(licencia) ? "" : " AND P.NUM_LICENCIA = @licencia ";
+            condiciones += string.IsNullOrEmpty(licencia) ? "" : " AND l.NUM_LICENCIA = @licencia ";
             condiciones += string.IsNullOrEmpty(curp) ? "" : " AND P.CURP = @curp ";
             condiciones += string.IsNullOrEmpty(rfc) ? "" : " AND P.RFC like '%'+ @rfc +'%' COLLATE Latin1_general_CI_AI ";
             condiciones += string.IsNullOrEmpty(nombre) ? "" : " AND p.NOMBRE like '%'+ @nombre +'%' COLLATE Latin1_general_CI_AI ";
