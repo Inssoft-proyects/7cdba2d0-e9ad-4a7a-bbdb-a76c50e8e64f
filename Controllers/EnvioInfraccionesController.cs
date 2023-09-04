@@ -179,8 +179,6 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 var guardarDatos = _envioInfraccionesService.GuardarEnvioInfracciones(model);
                 return PartialView("Index");
             }
-
-
         }
     }
 }

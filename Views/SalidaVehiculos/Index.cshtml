@@ -125,7 +125,9 @@
         </div>
 
     </div>
-
+        <div id="listadoTransitoTransporte">
+            <partial name="_ListadoVehiculos" model="Model" />
+        </div>
 </section>
 </div>
  <script>
@@ -133,6 +135,7 @@
     function buscarVehiculo() {
 
         var Mydata = $("#busquedaSalidaForm").serialize();
+
         console.log(Mydata);
        
     }

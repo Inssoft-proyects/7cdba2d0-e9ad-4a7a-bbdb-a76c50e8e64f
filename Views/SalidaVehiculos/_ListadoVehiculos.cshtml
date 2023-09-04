@@ -1,0 +1,67 @@
+﻿
+<script>
+    function onRowSelect(e) {
+        var selectedRow = this.select();
+        var idDeposito;
+
+        if (selectedRow.length > 0) {
+            var dataItem = this.dataItem(selectedRow);
+            idDeposito = dataItem.idDeposito;
+           
+
+
+            console.log(dataItem);
+
+            $.ajax({
+                url: '@Url.Action("ActualizarAccidenteConVehiculo", "CapturaAccidentes")',
+                type: 'POST',
+                data: { IdVehiculo: IdVehiculo, IdPersona: IdPersona, Placa: Placa, Serie: Serie },
+                success: function (result) {
+                    abrirModalConductor(IdPersona);
+
+                },
+                error: function (error) {
+                    alert("ERROR");
+                }
+            });
+        }
+    }
+
+</script>
+
+<div class="col-12 mb-4 px-4 rounded gridCustom">
+    @(
+        Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.SalidaVehiculosModel>()
+        .Name("gridVehiculosPension")
+        .Events(events => events.Change("onRowSelect"))
+        .Columns(columns =>
+        {
+
+            columns.Bound(c => c.idDeposito).Hidden();
+            columns.Select().Width(50).ClientHeaderTemplate("Seleccionar ");
+            columns.Bound(c => c.placa).Title("Placa").Width(100);
+            columns.Bound(c => c.marca).Title("Marca").Width(100);
+            columns.Bound(c => c.submarca).Title("Submarca").Width(100);
+            columns.Bound(c => c.serie).Title("Serie").Width(100);
+            columns.Bound(c => c.color).Title("Color").Width(100);
+            columns.Bound(c => c.propietario).Title("Propietario").Width(100);
+            columns.Bound(c => c.fechaIngreso).Title("Fecha Ingreso").Width(100);
+           
+
+
+        })
+        .HtmlAttributes(new { style = "height:400px" })
+        .Sortable()
+        .Groupable()
+        .Scrollable()
+        .Pageable()
+        .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(read => read.Action("ObtVehiculosInvol", "CapturaAccidentes"))
+        .PageSize(5).Model(model => model.Id(p => p.idDeposito))
+        )
+        .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple).Type(GridSelectionType.Row))
+        )
+</div>
+
+

@@ -1192,6 +1192,9 @@
     }
 
     function submitCreateVehiculo() {
+        var formData = $("#frmCreateVehiculo").serialize();
+        console.log(formData);
+
         var validator = $("#frmCreateVehiculo").kendoValidator().data('kendoValidator');
         validator.validate();
 
