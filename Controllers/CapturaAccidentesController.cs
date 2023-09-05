@@ -1122,7 +1122,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             if (IdVehiculo != 0)
             {
                 var resultados = _vehiculosService.GetAllVehiculos();
-                return PartialView("_ListadoVehiculos", resultados);
+                return Json(new { noResults = false, data = resultados });
             }
             else
             {

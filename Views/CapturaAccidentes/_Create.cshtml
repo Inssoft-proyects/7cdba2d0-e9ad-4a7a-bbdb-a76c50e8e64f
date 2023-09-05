@@ -539,7 +539,7 @@
             </div>
 
             @*PERSONA FISICA*@
-            <div class="tab-pane tabCustomConteiner fade" id="person-fisicaAcc" role="tabpanel" aria-labelledby="person-fisicaAcc-tab">
+            <div class="tab-pane tabCustomConteiner fade" id="person-fisica" role="tabpanel" aria-labelledby="person-fisica-tab">
                 <div class="row px-4 mt-4 pb-4 align-items-end">
 
                     <div id="personasFisicasAcc">
@@ -1046,7 +1046,7 @@
                         <div class="controlForm my-3">
                             <label>Fecha de vencimiento:</label>
                             <span>
-                                @(Html.Kendo().DatePickerFor(t => t.Persona.vigenciaLicenciaFisico)
+                                @(Html.Kendo().DatePickerFor(t => t.Persona.vigenciaLicencia)
                                     .DateInput()
                                     )
 
@@ -1064,9 +1064,9 @@
                                 </button>
                             </div>
                             <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-                                <div class="controlButton" onClick="submitCreatePersonaFisica()" data-bs-dismiss="modal" aria-label="Close">
+                                <div class="controlButton" onClick="submitCreatePersonaFisica()">
                                     @(Html.Kendo().Button()
-                                        .Name("AddFisico")
+                                        .Name("AddFisico11")
                                         .HtmlAttributes(new { @class = "btnPrimary px-3" })
                                         .Content("<h5 class=\"m-0\"><b>Guardar ajustes</b></h5>"))
                                 </div>
@@ -1179,7 +1179,9 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
+                    sitteg_success('Elemento guardado correctamente')
                 var grid = $("#personasFisicasAcc").html(result);
+                                $('#addFisico').modal('hide');
 
             }
         });
@@ -1200,7 +1202,7 @@
             console.log("Id vehiculo: ", idVeh)
             console.log(formData);
             $.ajax({
-                url: '@Url.Action("ajax_CrearVehiculo")',
+                url: '@Url.Action("ajax_CrearVehiculo_Ejemplo")',
                 type: 'POST',
                 data: formData,
                 dataType: "json",
@@ -1208,7 +1210,9 @@
                     sitteg_success('Elemento guardado correctamente')
                     $('#VehiculoServiceModal').modal('hide'); 
                     $('#anexo2Modal').modal('hide');
-
+                    var grid = $("#gridPrevioVehiculo").data("kendoGrid");
+                    grid.dataSource.data(result.data);
+                    grid.refresh();*/
 
                 },
                 error: function (xhr, status) {
@@ -1225,7 +1229,7 @@
 
     }
     $(document).ready(function () {
-        var datePicker = $("#Persona_vigenciaLicenciaFisico").data("kendoDatePicker");
+        var datePicker = $("#Persona_vigenciaLicencia").data("kendoDatePicker");
         datePicker.value(null);
     });
     $(document).ready(function () {
