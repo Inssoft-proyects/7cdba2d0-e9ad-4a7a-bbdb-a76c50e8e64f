@@ -77,14 +77,12 @@
     function eliminarFactor() {
 
         var Mydata = $("#eliminarFactorForm").serialize();
-        console.log(Mydata);
 
         $.ajax({
             url: '@Url.Action("EliminarValorFactorYOpcion")',
             type: 'POST',
             data: Mydata,
             success: function (data) {
-                console.log("Data", data)
 
                 $("#gridFactoresA").data("kendoGrid").dataSource.data(data);
                 sitteg_success("Se ha modificado la información");

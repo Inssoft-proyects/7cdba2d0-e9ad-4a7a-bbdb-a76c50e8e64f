@@ -55,13 +55,11 @@
     function buscarInvolucrado() {
 
         var Mydata = $("#buscarInvolucradoForm").serialize();
-        console.log(Mydata);
         $.ajax({
             url: '/CapturaAccidentes/BuscarInvolucrado',
             type: 'POST',
             data: Mydata,
                     success: function (response) {
-                        console.log("Response:", response);
                 $('#ListadoInvolucrados').show();
                 var grid = $("#gridInvolucrados").data("kendoGrid");
                         grid.dataSource.data(response);
@@ -93,8 +91,7 @@
             }
         }
     function dirigirParteC() {
-        var descripcionCausa = document.getElementById("descripcionCausaTextArea").value;       
-        console.log(descripcionCausa);
+        var descripcionCausa = document.getElementById("descripcionCausaTextArea").value;   
 
         $.ajax({
             url: '/CapturaAccidentes/CapturaAccidenteC',

@@ -103,7 +103,6 @@
 <script>
     function crearInfraccion() {
         var Mydata = $("#nuevaInfraccionForm").serialize();
-        console.log("DD",Mydata)
         $.ajax({
             url: '@Url.Action("ajax_CrearInfraccion", "CapturaAccidentes")',
             type: 'POST',

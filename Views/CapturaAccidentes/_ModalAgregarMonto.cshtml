@@ -76,7 +76,6 @@
  function agregarMonto() {
         event.preventDefault();
         var Mydata = $("#montoVehiculoForm").serialize();
-        console.log(Mydata);
         $('#agregarMontoModal').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
@@ -90,8 +89,7 @@
 
             },
             error: function (error) {
-                sitteg_warning("!Sucedio un error, intente mas tarde...");
-                console.log("EEROR",error);
+                sitteg_warning("!Sucedió un error, intente mas tarde...");
             }
         });
     }

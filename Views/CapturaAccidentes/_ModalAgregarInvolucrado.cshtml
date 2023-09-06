@@ -3,15 +3,14 @@
  <script>
     function buscarInvolucrado() {
         var Mydata = $("#buscarInvolucradoForm").serialize();
-        console.log(Mydata);
         $.ajax({
             url: '/CapturaAccidentes/BuscarInvolucrado',
             type: 'POST',
             data: Mydata,
             success: function (response) {
-                console.log("Response:", response);
                 if (response.length === 0) {
-                    sitteg_success("La búsqueda no arrojó resultados.");
+                    callback(folio, id_delegacion);
+                    sitteg_warning("La búsqueda no arrojó resultados.");
                 } else {
                     var grid = $("#gridInvolucradosPrevio").data("kendoGrid");
                     grid.dataSource.data(response);
@@ -23,6 +22,34 @@
             }
         });
     }
+
+    //function buscarConductor() {
+    //    var Mydata = $("#buscarInvolucradoForm").serialize();
+    //    $.ajax({
+    //        url: '/CapturaAccidentes/BuscarPorParametro',
+    //        type: 'POST',
+    //        data: Mydata,
+    //        success: function (response) {
+    //            if (response.tipo == "success") {
+    //                // Crear instancia del modelo con los datos recibidos
+    //                mostrarModal(response.datos);
+
+    //            } else {
+    //                // Mostrar los resultados de personas encontradas en la búsqueda
+    //                var personasList = response.data;
+    //                var grid = $("#gridPersonas").data("kendoGrid");
+    //                grid.dataSource.data(personasList);
+
+    //                if (personasList.length === 0) {
+    //                    sitteg_warning("La búsqueda no arrojó resultados.");
+    //                }
+    //            }
+    //        },
+    //        error: function (error) {
+    //            sitteg_warning('Ocurrió un error en la búsqueda.');
+    //        }
+    //    });
+    //}
 
 </script>
             <!--SECCION INVOLUCRADOS-->

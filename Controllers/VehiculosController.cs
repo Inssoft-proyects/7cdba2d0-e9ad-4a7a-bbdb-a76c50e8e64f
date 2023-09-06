@@ -348,21 +348,6 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
             return 0; // Valor predeterminado en caso de no encontrar el guión
         }
-        private bool ConvertirBool(string carga)
-        {
-            bool cargaBool = false;
-
-            if (carga.Trim() == "1.00")
-            {
-                cargaBool = true;
-            }
-            else if (carga.Trim() == "0.00")
-            {
-                cargaBool = false;
-            }
-            return (cargaBool);
-        }
-
 
             private int ObtenerIdSubmarca(string submarca)
         {

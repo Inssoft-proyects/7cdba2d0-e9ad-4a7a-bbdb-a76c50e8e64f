@@ -67,7 +67,6 @@
         var IdCausaAccidente = dataItem.IdCausaAccidente;
                 var IdCausaAccidente = dataItem.IdCausaAccidente;
 
-        console.log(IdCausaAccidente);
 
         $.ajax({
             url: '@Url.Action("ModalEditarCausaAccidente", "CapturaAccidentes")',
@@ -85,7 +84,6 @@
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         var IdCausaAccidente = dataItem.IdCausaAccidente;
         var CausaAccidente = dataItem.CausaAccidente
-        console.log("AEQ", dataItem)
         $.ajax({
             url: '@Url.Action("ModalEliminarCausas", "CapturaAccidentes")',
             type: 'POST',

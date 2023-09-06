@@ -9,7 +9,6 @@ function onRowSelect(e) {
         var idPersona = $('#gridVehiculosInvolucrados').data('idPersona');
                          $('#idPersonaHidden').val(idPersona); 
                          $('#idVehiculoHidden').val(IdVehiculoInvolucrado); 
-        console.log("idPersona desde el otro Kendo Grid:", idPersona, IdVehiculoInvolucrado);
         $.ajax({
             url: '/CapturaAccidentes/GuardarRelacionPersonaVehiculo',
             type: 'POST',

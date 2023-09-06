@@ -76,7 +76,6 @@
         var IdFactorOpcionAccidente = dataItem.IdFactorOpcionAccidente;
 
 
-        console.log(FactorAccidente);
 
         $.ajax({
             url: '@Url.Action("ModalEditarFactorAccidente", "CapturaAccidentes")',
@@ -93,7 +92,6 @@
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         var FactorAccidente = dataItem.FactorAccidente;
         var FactorOpcionAccidente = dataItem.FactorOpcionAccidente;
-        console.log(dataItem);
 
         $.ajax({
             url: '@Url.Action("ModalEliminarFactorAccidente", "CapturaAccidentes")',

@@ -286,6 +286,7 @@
                                         <label>El propietario del vehículo es el conductor: </label>&nbsp;&nbsp;
                                         @(Html.Kendo().SwitchFor(m => m.isPropietarioConductor)
                                             .Messages(c => c.Checked("SI").Unchecked("NO"))
+
                                             .Events(ev => ev.Change("isPropietarioOnChange"))
                                             )
                                     </div>

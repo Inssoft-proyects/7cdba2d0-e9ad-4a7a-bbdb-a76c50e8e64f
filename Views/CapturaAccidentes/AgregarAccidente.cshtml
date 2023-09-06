@@ -32,7 +32,7 @@
         </div>
     </div>
     <div class="col-12 col-md-auto mt-4 mb-2">
-        <h5 class="px-4"><b>Capturar de accidentes</b></h5>
+        <h5 class="px-4"><b>Captura de accidentes</b></h5>
             <h6 class="px-4 text-muted">Registra el accidente en <b class="colorPrimary">Registro Estatal de Infracciones y Accidentes</b></h6>
     </div>
         <form id="nuevoAccidente1Form" class="row px-4 mb-4 align-items-end">
@@ -181,7 +181,6 @@
     function guardarAccidente() {
 
         var Mydata = $("#nuevoAccidente1Form").serialize();
-        console.log(Mydata);
         $.ajax({
             url: '/CapturaAccidentes/GuardarUbicacionAccidente',
             type: 'POST',

@@ -1116,7 +1116,6 @@
 
     $("#ddlCatTipoServicio").on("change", function () {
         var value = $(this).val();
-        console.log(value);
         $('#hdnIdCatTipoPersona').val(value);
 
     });
@@ -1143,7 +1142,6 @@
                 },
                 error: function (xhr, status) {
                     var errmsg = xhr.responseText;
-                    console.log(errmsg)
                     sitteg_warning('Lo sentimos, ha ocurrido un error.');
                 }
             });
@@ -1156,7 +1154,6 @@
 
     function submitSearchPersonaMoral() {
         var Mydata = $("#frmSearchPersonaMoral").serialize();
-        console.log(Mydata);
         $.ajax({
             url: '@Url.Action("ajax_BuscarPersonaMoral")',
             type: 'POST',
@@ -1173,7 +1170,6 @@
 
     function submitCreatePersonaFisica() {
         var Mydata = $("#personaFisicaForm").serialize();
-        console.log(Mydata);
         $.ajax({
             url: '@Url.Action("ajax_CrearPersonaFisica")',
             type: 'POST',
@@ -1196,9 +1192,6 @@
 
         if (validator.validate()) {
             var formData = $("#frmCreateVehiculo").serialize();
-            var idVeh = $('#hdnIdVehiculo').val();
-            console.log("Id vehiculo: ", idVeh)
-            console.log(formData);
             $.ajax({
                 url: '@Url.Action("ajax_CrearVehiculo")',
                 type: 'POST',
@@ -1213,7 +1206,6 @@
                 },
                 error: function (xhr, status) {
                     var errmsg = xhr.responseText;
-                    console.log(errmsg)
                     sitteg_warning('Lo sentimos, ha ocurrido un error.');
                 }
             });

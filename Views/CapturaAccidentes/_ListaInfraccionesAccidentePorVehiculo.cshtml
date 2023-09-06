@@ -8,7 +8,6 @@
             IdVehiculo = dataItem.IdVehiculo;
             IdInfraccion = dataItem.IdInfraccion;
 
-            console.log(dataItem);
 
             $.ajax({
                 url: '@Url.Action("VincularInfraccionAccidente", "CapturaAccidentes")',
@@ -80,7 +79,7 @@
 
         })
         
-        )
+        
 
         .Selectable(selectable => selectable.Mode(GridSelectionMode.Single)
         .Type(GridSelectionType.Row)

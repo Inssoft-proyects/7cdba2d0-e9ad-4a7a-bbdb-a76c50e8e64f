@@ -203,7 +203,7 @@
                     </div>
                             <form id="propietarioConductorForm">
                                 @Html.HiddenFor(m=> m.IdPersona)
-                                @Html.HiddenFor(m=> m.IdVehiculo)
+                            @Html.HiddenFor(m => m.IdVehiculo, new { @id = "IdVehiculoH" })
                             </form>
                 <div class="row justify-content-center mb-3">
                     <div class="col-11 col-md-auto">
@@ -398,7 +398,6 @@
     }
     function guardarVehiculoConductor() {
         var formData = $("#propietarioConductorForm").serialize();
-        console.log(formData)
         $.ajax({
             url: '@Url.Action("ActualizarConConductor")',
             type: 'POST',
@@ -411,7 +410,6 @@
                
             },
             error: function (error) {
-                console.log("ER",error)
                 var errorMessage = error.responseText || "Ocurrió un error, inténtelo nuevamente más tarde.";
                 sitteg_warning(errorMessage);
             }
@@ -420,7 +418,6 @@
      function sinConductor() {
 
         var formData = $("#sinConductorForm").serialize();
-        console.log(formData)
         $.ajax({
             url: '@Url.Action("ActualizarConConductor")',
             type: 'POST',
@@ -433,7 +430,6 @@
 
             },
             error: function (error) {
-                console.log("ER", error)
                 var errorMessage = error.responseText || "Ocurrió un error, inténtelo nuevamente más tarde.";
                 sitteg_warning(errorMessage);
             }
@@ -483,7 +479,6 @@
             type: 'POST',
             data: { IdPersona: IdPersona },
             success: function (data) {
-                console.log("SUCCESS", data);
                 $('#modalAgregarConductor').modal('hide');
                 $('.modal-backdrop').remove();
                 $('#modalAgregarConductor').modal('show');
@@ -498,25 +493,33 @@
 
 
     function buscarConductor() {
-        var Mydata = $("#otroConductorForm").serialize();
+        var Mydata = $("#otroConductorForm").serialize(); 
         $.ajax({
-            url: '/Personas/BuscarPorParametro',
+            url: '/CapturaAccidentes/BuscarPorParametro',
             type: 'POST',
             data: Mydata,
-            success: function (response) {
+            success: function (response) { 
                 if (response.tipo == "success") {
                     // Crear instancia del modelo con los datos recibidos
                     mostrarModal(response.datos);
 
                 } else {
                     // Mostrar los resultados de personas encontradas en la búsqueda
-                    var personasList = response.data;
-                    var grid = $("#gridPersonas").data("kendoGrid");
-                    grid.dataSource.data(personasList);
-
-                    if (personasList.length === 0) {
+                    if(response.encontrada == false){
                         sitteg_warning("La búsqueda no arrojó resultados.");
-                    }
+                    }else{ 
+                        if(response.data != null || response.data != undefined){
+                            var personasList = response.data;
+                            var grid = $("#gridConductores").data("kendoGrid");
+                            grid.dataSource.data(personasList);
+
+                            if (personasList.length === 0) {
+                                sitteg_warning("La búsqueda no arrojó resultados.");
+                            }
+                        }else{
+                            sitteg_warning("La búsqueda no arrojó resultados.");
+                        }  
+                    } 
                 }
             },
             error: function (error) {
@@ -583,16 +586,17 @@
             };
             const tipoLicenciaNumero = tipoLicenciaMapping[jsonData.tipolicencia] || 0; // 0 o valor predeterminado si no hay coincidencia
             jsonData.id_tipo_licencia = tipoLicenciaNumero;
-
+            var idVehiculo = $("#IdVehiculoH").val();
             $.ajax({
                 type: 'POST',
-                url: '/Personas/guardaDesdeServicio', // Reemplaza con la URL correcta
-                data: jsonData,
-                success: function (response) {
+                url: '/CapturaAccidentes/guardaDesdeServicio', // Reemplaza con la URL correcta
+                data:  jsonData ,
+                success: function (response) { 
                     $('#modalLicencias').modal('hide');
                     var personasList = [response]; // Convierte el objeto en un arreglo
-                    var grid = $("#gridPersonas").data("kendoGrid");
+                    var grid = $("#gridConductores").data("kendoGrid");
                     grid.dataSource.data(personasList);
+
                 },
                 error: function (error) {
                     sitteg_warning('Error al guardar en la base de datos:');

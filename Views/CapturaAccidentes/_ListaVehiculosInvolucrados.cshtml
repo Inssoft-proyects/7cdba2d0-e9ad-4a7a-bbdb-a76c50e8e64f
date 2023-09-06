@@ -56,7 +56,6 @@
         var IdVehiculoInvolucrado = dataItem.IdVehiculoInvolucrado
         var IdPropietarioInvolucrado = dataItem.IdPropietarioInvolucrado
             
-            console.log("Data clas", dataItem);
             $.ajax({
                 url: '@Url.Action("ModalDetallesVehiculo", "CapturaAccidentes")',
                 type: 'POST',

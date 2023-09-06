@@ -10,16 +10,14 @@
             IdPersona = dataItem.IdPersona;
             Placa = dataItem.Placa;
             Serie = dataItem.Serie;
-
-
-            console.log(dataItem);
+             
 
             $.ajax({
               url: '@Url.Action("ActualizarAccidenteConVehiculo", "CapturaAccidentes")',
                 type: 'POST',
                 data: { IdVehiculo: IdVehiculo, IdPersona: IdPersona, Placa : Placa, Serie :Serie },
-                success: function (result) {
-                    abrirModalConductor(IdPersona);
+                success: function (result) { 
+                    abrirModalConductor(IdPersona, result.IdVehiculoH);
 
                 },
                 error: function (error) {
@@ -29,13 +27,12 @@
         }
     }
 
-    function abrirModalConductor(IdPersona) {
+    function abrirModalConductor(IdPersona, IdVehiculo) { 
         $.ajax({
             url: '@Url.Action("MostrarModalConductor", "CapturaAccidentes")',
             type: 'POST',
-            data: { IdPersona: IdPersona },
+            data: { IdPersona: IdPersona, IdVehiculo : IdVehiculo},
             success: function (data) {
-                console.log("SUCCESS", data);
                // $('#agregarVehiculoModal').modal('hide');
                 $('.modal-backdrop').remove();
                 $('#modalAgregarConductor').modal('show');
@@ -51,6 +48,7 @@
 </script>
 
 <div class="col-12 mb-4 px-4 rounded gridCustom">
+    
     @(
         Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel>()
         .Name("gridPrevioVehiculo")

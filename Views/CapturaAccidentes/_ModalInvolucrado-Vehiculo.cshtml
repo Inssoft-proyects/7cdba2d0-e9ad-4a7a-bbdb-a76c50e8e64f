@@ -317,7 +317,6 @@
     function agregarComplementos() {
 
         var Mydata = $("#complementoInvolucradoForm").serialize();
-        console.log(Mydata);
        
         $.ajax({
             url: '@Url.Action("ActualizarInfoInvolucrado")',
@@ -342,7 +341,7 @@
     }
     function involucardoNoVehiculo() {
         var idPersona = $("#idPersonaInput").val();
-        var IdVehiculoInvolucrado = 0;
+        var IdVehiculoInvolucrado = $("#idVehiculoHidden").val();
 
         $.ajax({
             url: '/CapturaAccidentes/GuardarRelacionPersonaVehiculo',

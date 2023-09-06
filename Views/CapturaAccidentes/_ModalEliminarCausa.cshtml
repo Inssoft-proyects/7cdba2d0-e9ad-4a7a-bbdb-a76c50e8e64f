@@ -72,14 +72,12 @@
     function EliminarCausaBD() {
 
         var Mydata = $("#eliminaCausaForm").serialize();
-        console.log(Mydata);
 
         $.ajax({
             url: '@Url.Action("EliminarCausaAccidente")',
             type: 'POST',
             data: Mydata,
             success: function (data) {
-                console.log("Data", data)
 
                 $("#gridCausasA").data("kendoGrid").dataSource.data(data);
                 sitteg_success("Se ha modificado la información");

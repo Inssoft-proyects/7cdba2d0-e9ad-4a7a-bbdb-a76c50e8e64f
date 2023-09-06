@@ -655,8 +655,6 @@
         var prendasValue = $("#prendasSwitch").prop("checked") ? 1 : 0;
         var otrosValue = $("#otrosSwitch").prop("checked") ? 1 : 0;
 
-        console.log("AA", datosFormulario);
-        console.log("armaas", armasValue);
 
         $.ajax({
             url: '@Url.Action("InsertarDatos")',

@@ -28,6 +28,7 @@ using System.Numerics;
 using static GuanajuatoAdminUsuarios.Utils.CatalogosEnums;
 using Microsoft.Extensions.Options;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
@@ -236,8 +237,9 @@ namespace GuanajuatoAdminUsuarios.Controllers
             return PartialView("_ModalEliminarInvolucrado");
         }
 
-        public ActionResult MostrarModalConductor(int IdPersona)
+        public ActionResult MostrarModalConductor(int IdPersona, int IdVehiculo)
         {
+            ViewBag.IdVehiculo = IdVehiculo;
             var ListConductor = _capturaAccidentesService.ObtenerConductorPorId(IdPersona);
             return PartialView("_ModalConductor", ListConductor);
         }
@@ -562,7 +564,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             int idAccidente = HttpContext.Session.GetInt32("LastInsertedId") ?? 0;
             var idVehiculoInsertado = _capturaAccidentesService.ActualizarConVehiculo(IdVehiculo, idAccidente, IdPersona, Placa, Serie);
             HttpContext.Session.SetInt32("idVehiculoInsertado", idVehiculoInsertado);
-            return Json(IdPersona);
+            //return Json(IdPersona);
+            return Json(new { IdPersona = IdPersona, IdVehiculoH = IdVehiculo });
         }
         public IActionResult RegresarModalVehiculo()
         {
@@ -583,14 +586,15 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
         public IActionResult GuardarConductorVehiculo(int IdPersona)
         {
-            int IdVehiculo = HttpContext.Session.GetInt32("idVehiculoInsertado") ?? 0; // Obtener el valor de idVehiculoInsertado desde la variable de sesión
+            int IdVehiculoI = HttpContext.Session.GetInt32("idVehiculoInsertado") ?? 0; // Obtener el valor de idVehiculoInsertado desde la variable de sesión
             int idAccidente = HttpContext.Session.GetInt32("LastInsertedId") ?? 0;
-            var RegistroSeleccionado = _capturaAccidentesService.InsertarConductor(IdVehiculo, idAccidente, IdPersona);
+            var RegistroSeleccionado = _capturaAccidentesService.InsertarConductor(IdVehiculoI, idAccidente, IdPersona);
 
             return Json(RegistroSeleccionado);
         }
         public ActionResult BuscarConductor(BusquedaInvolucradoModel model)
         {
+
             var ListInvolucradoModel = _capturaAccidentesService.BusquedaPersonaInvolucrada(model);
             return Json(ListInvolucradoModel);
         }
@@ -1131,6 +1135,107 @@ namespace GuanajuatoAdminUsuarios.Controllers
             else
             {
                 return null;
+            }
+        }
+
+        public async Task<IActionResult> BuscarPorParametro(CapturaAccidentesModel model)
+        {
+            List<CapturaAccidentesModel> ListaInvolucrados = new List<CapturaAccidentesModel>();
+            string parametros = "";
+            parametros += string.IsNullOrEmpty(model.licencia) ? "" : "licencia=" + model.licencia;
+            parametros += string.IsNullOrEmpty(model.curp) ? "" : "curp=" + model.curp + "&";
+            parametros += string.IsNullOrEmpty(model.rfc) ? "" : "rfc=" + model.rfc + "&";
+            parametros += string.IsNullOrEmpty(model.nombre) ? "" : "nombre=" + model.nombre + "&";
+            parametros += string.IsNullOrEmpty(model.apellidoPaterno) ? "" : "primer_apellido=" + model.apellidoPaterno + "&";
+            parametros += string.IsNullOrEmpty(model.apellidoMaterno) ? "" : "segundo_apellido=" + model.apellidoMaterno + "";
+
+            string ultimo = parametros.Substring(parametros.Length - 1);
+            if (ultimo.Equals("&"))
+                parametros = parametros.Substring(0, parametros.Length - 1);
+            
+            
+            // realiza la búsqueda de personas y devuelve los resultados en formato JSON
+            
+            PersonaModel persona = new PersonaModel();
+            persona.numeroLicenciaBusqueda = model.licencia;
+            persona.CURPBusqueda = model.curp;
+            persona.RFCBusqueda = model.rfc;
+            persona.nombreBusqueda = model.nombre;
+            persona.apellidoPaternoBusqueda = model.apellidoPaterno;
+            persona.apellidoMaternoBusqueda = model.apellidoMaterno; 
+            List<PersonaModel> personasList = _personasService.BusquedaPersona(persona);
+            if (personasList != null && personasList.Count>0)
+            {
+                foreach (PersonaModel p in personasList)
+                {
+                    CapturaAccidentesModel involucrado = new CapturaAccidentesModel();
+                    involucrado.idPersonaInvolucrado = (int)p.idPersona;
+                    involucrado.nombre = p.nombre;
+                    involucrado.apellidoPaterno = p.apellidoPaterno;
+                    involucrado.apellidoMaterno = p.apellidoMaterno;
+                    involucrado.rfc = p.RFC;
+                    involucrado.curp = p.CURP;
+                    involucrado.licencia = p.numeroLicencia;
+                    ListaInvolucrados.Add(involucrado);
+                } 
+                return Json(new { encontrada = true, data = ListaInvolucrados });
+            }
+
+            try
+            {
+                string urlServ = Request.GetDisplayUrl();
+                Uri uri = new Uri(urlServ);
+                string requested = uri.Scheme + Uri.SchemeDelimiter + uri.Host + ":" + uri.Port;
+
+                var url = requested + $"/api/Licencias/datos_generales?" + parametros;
+
+                var httpClient = _httpClientFactory.CreateClient();
+                var response = await httpClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    LicenciaRespuestaPersona respuesta = JsonConvert.DeserializeObject<LicenciaRespuestaPersona>(content);
+
+                    return Json(respuesta);
+                }
+                else
+                {
+                    
+                    return Json(new { encontrada = false, message = "No se pudieron obtener los datos. " });
+                }
+            }
+            catch (Exception ex)
+            {
+                // En caso de errores, devolver una respuesta JSON con licencia no encontrada
+                return Json(new { encontrada = false, message = "Ocurrió un error al obtener los datos. " + ex.Message + "; " + ex.InnerException });
+            }
+             
+        }
+
+        [HttpPost] 
+        public ActionResult GuardaDesdeServicio(LicenciaPersonaDatos personaDatos)
+        {
+            try
+            { 
+                _personasService.InsertarDesdeServicio(personaDatos);
+                var datosTabla = _personasService.BuscarPersonaSoloLicencia(personaDatos.NUM_LICENCIA);
+
+                CapturaAccidentesModel involucrado = new CapturaAccidentesModel();
+                involucrado.idPersonaInvolucrado = (int)datosTabla.idPersona;
+                involucrado.nombre = datosTabla.nombre;
+                involucrado.apellidoPaterno = datosTabla.apellidoPaterno;
+                involucrado.apellidoMaterno = datosTabla.apellidoMaterno;
+                involucrado.rfc = datosTabla.RFC;
+                involucrado.curp = datosTabla.CURP;
+                involucrado.licencia = datosTabla.numeroLicencia; 
+                
+                return Json(involucrado);
+            }
+            catch (Exception ex)
+            {
+                // Maneja el error de manera adecuada
+                return Json(new { error = "Error al guardar en la base de datos: " + ex.Message });
             }
         }
     }

@@ -11,6 +11,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Reflection;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Net.Http;
+using System.Threading.Tasks;
+using GuanajuatoAdminUsuarios.Controllers;
+using System.Windows.Input;
 
 namespace GuanajuatoAdminUsuarios.Services
 {
@@ -33,12 +39,12 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT acc.*, mun.Municipio, car.Carretera, tra.Tramo, er.estatusReporte FROM accidentes AS acc " +
-                        "LEFT JOIN catMunicipios AS mun ON acc.idMunicipio = mun.idMunicipio " +
-                        "LEFT JOIN catCarreteras AS car ON acc.idCarretera = car.idCarretera " +
-                        "LEFT JOIN catTramos AS tra ON acc.idTramo = tra.idTramo " +
-                        "LEFT JOIN catEstatusReporteAccidente AS er ON acc.idEstatusReporte = er.idEstatusReporte " +
-                        "WHERE acc.estatus = 1 AND acc.idOficinaDelegacion = @idOficina and acc.idEstatusReporte != 3;", connection);
+                    SqlCommand command = new SqlCommand(@"SELECT acc.*, mun.Municipio, car.Carretera, tra.Tramo, er.estatusReporte FROM accidentes AS acc  
+                        LEFT JOIN catMunicipios AS mun ON acc.idMunicipio = mun.idMunicipio 
+                        LEFT JOIN catCarreteras AS car ON acc.idCarretera = car.idCarretera  
+                        LEFT JOIN catTramos AS tra ON acc.idTramo = tra.idTramo  
+                        LEFT JOIN catEstatusReporteAccidente AS er ON acc.idEstatusReporte = er.idEstatusReporte 
+                        WHERE acc.estatus = 1 AND acc.idOficinaDelegacion = @idOficina and acc.idEstatusReporte != 3;", connection);
                     command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = idOficina;
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
@@ -961,28 +967,45 @@ namespace GuanajuatoAdminUsuarios.Services
 
 
         }
-        public List<CapturaAccidentesModel> BusquedaPersonaInvolucrada(BusquedaInvolucradoModel model)
+        public List<CapturaAccidentesModel> BusquedaPersonaInvolucrada(BusquedaInvolucradoModel model, string server = null)
         {
             //
             List<CapturaAccidentesModel> ListaInvolucrados = new List<CapturaAccidentesModel>();
 
+            string condiciones = "";
+            condiciones += string.IsNullOrEmpty(model.licencia) ? "" : " AND numeroLicencia LIKE '%' + @numeroLicencia + '%' ";
+            condiciones += string.IsNullOrEmpty(model.curpBusqueda) ? "" : " AND curp LIKE '%' + @curp + '%'";
+            condiciones += string.IsNullOrEmpty(model.rfcBusqueda) ? "" : " AND rfc LIKE '%' + @rfc + '%'";
+            condiciones += string.IsNullOrEmpty(model.nombre) ? "" : " AND nombre LIKE '%' + @nombre + '%' ";
+            condiciones += string.IsNullOrEmpty(model.apellidoPaterno) ? "" : " AND apellidoPaterno LIKE '%' + @apellidoPaterno + '%' ";
+            condiciones += string.IsNullOrEmpty(model.apellidoMaterno) ? "" : " AND apellidoMaterno LIKE '%' + @apellidoMaterno + '%' ";
+
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
                 try
                 {
-                    connection.Open();
+                    connection.Open(); 
 
-
-                    const string SqlTransact = @"SELECT * FROM personas WHERE (numeroLicencia LIKE '%' + @numeroLicencia + '%' OR curp LIKE '%' + @curp " +
-                                                "OR rfc LIKE '%' + @rfc + '%' OR nombre LIKE '%' + @nombre OR apellidoPaterno LIKE '%' + @apellidoPaterno + '%' OR apellidoMaterno LIKE '%' + @apellidoMaterno) " +
-                                                "AND estatus = 1;";
+                    string SqlTransact = @"SELECT * FROM personas WHERE estatus = 1 "+ condiciones+ " ORDER BY nombre";
 
                     SqlCommand command = new SqlCommand(SqlTransact, connection);
-                    command.Parameters.Add(new SqlParameter("@numeroLicencia", SqlDbType.NVarChar)).Value = (object)model.licencia ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@curp", SqlDbType.NVarChar)).Value = (object)model.curpBusqueda ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@rfc", SqlDbType.NVarChar)).Value = (object)model.rfcBusqueda ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@nombre", SqlDbType.NVarChar)).Value = (object)model.nombre ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@apellidoPaterno", SqlDbType.NVarChar)).Value = (object)model.apellidoPaterno ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@apellidoMaterno", SqlDbType.NVarChar)).Value = (object)model.apellidoMaterno ?? DBNull.Value;
+                    if (!string.IsNullOrEmpty(model.licencia))
+                        command.Parameters.Add(new SqlParameter("@numeroLicencia", SqlDbType.NVarChar)).Value = (object)model.licencia ?? DBNull.Value;
+
+                    if (!string.IsNullOrEmpty(model.curpBusqueda))
+                        command.Parameters.Add(new SqlParameter("@curp", SqlDbType.NVarChar)).Value = (object)model.curpBusqueda ?? DBNull.Value;
+
+                    if (!string.IsNullOrEmpty(model.rfcBusqueda))
+                        command.Parameters.Add(new SqlParameter("@rfc", SqlDbType.NVarChar)).Value = (object)model.rfcBusqueda ?? DBNull.Value;
+
+                    if (!string.IsNullOrEmpty(model.nombre))
+                        command.Parameters.Add(new SqlParameter("@nombre", SqlDbType.NVarChar)).Value = (object)model.nombre ?? DBNull.Value;
+
+                    if (!string.IsNullOrEmpty(model.apellidoPaterno))
+                        command.Parameters.Add(new SqlParameter("@apellidoPaterno", SqlDbType.NVarChar)).Value = (object)model.apellidoPaterno ?? DBNull.Value;
+
+                    if (!string.IsNullOrEmpty(model.apellidoMaterno))
+                        command.Parameters.Add(new SqlParameter("@apellidoMaterno", SqlDbType.NVarChar)).Value = (object)model.apellidoMaterno ?? DBNull.Value;
+                     
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
@@ -997,12 +1020,9 @@ namespace GuanajuatoAdminUsuarios.Services
                             involucrado.curp = reader["curp"].ToString();
                             involucrado.licencia = reader["numeroLicencia"].ToString();
 
-                            ListaInvolucrados.Add(involucrado);
-
-                        }
-
-                    }
-
+                            ListaInvolucrados.Add(involucrado); 
+                        } 
+                    } 
                 }
                 catch (SqlException ex)
                 {
@@ -1013,9 +1033,8 @@ namespace GuanajuatoAdminUsuarios.Services
                 {
                     connection.Close();
                 }
+
             return ListaInvolucrados;
-
-
         }
         public int AgregarPersonaInvolucrada(int idPersonaInvolucrado, int idAccidente)
         {
@@ -1837,16 +1856,18 @@ namespace GuanajuatoAdminUsuarios.Services
                     {
                         if (reader.Read())
                         {
-                        descripcionCausa = reader["descripcionCausas"].ToString();
+                            descripcionCausa = reader["descripcionCausas"].ToString();
+                        }
+
+                        reader.Close();
                     }
-
-                    reader.Close();
                 }
-            }
 
-            return descripcionCausa;
+                return descripcionCausa;
+            }
         }
-    }
+
+        
 
     }
 }
