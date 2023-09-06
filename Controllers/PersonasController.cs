@@ -55,6 +55,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             bool licenciaNoSITTEG = true;
 
             if (!string.IsNullOrEmpty(model.numeroLicenciaBusqueda))
+
+
             {
                 // Verificar si el número de licencia no está en la base de datos
                 licenciaNoSITTEG = _personasService.VerificarLicenciaSitteg(model.numeroLicenciaBusqueda);
@@ -124,7 +126,6 @@ namespace GuanajuatoAdminUsuarios.Controllers
             int idDireccion = _personasService.CreatePersonaDireccion(model.PersonaDireccion);
 
             var modelList = _personasService.GetAllPersonas();
-            //var listPadronGruas = _concesionariosService.GetAllConcesionarios();
             return PartialView("_ListadoPersonas", modelList);
             //}
             //return RedirectToAction("Index");

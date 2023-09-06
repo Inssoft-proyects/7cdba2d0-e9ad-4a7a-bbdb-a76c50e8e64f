@@ -1049,7 +1049,7 @@
                         <div class="controlForm my-3">
                             <label>Fecha de vencimiento:</label>
                             <span>
-                                @(Html.Kendo().DatePickerFor(t => t.Persona.vigenciaLicenciaFisico)
+                                @(Html.Kendo().DatePickerFor(t => t.Persona.vigenciaLicencia)
                                     .DateInput()
                                     )
 
@@ -1228,7 +1228,7 @@
 
     }
        $(document).ready(function() {
-        var datePicker = $("#Persona_vigenciaLicenciaFisico").data("kendoDatePicker");
+        var datePicker = $("#Persona_vigenciaLicencia").data("kendoDatePicker");
         datePicker.value(null);
     });
      $(document).ready(function() {

@@ -312,22 +312,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
             return "NA"; // Valor predeterminado en caso de no encontrar el guión
         }
-        private bool ConvertirBool(string carga)
-        {
-            bool cargaBool = false;
-
-            if (carga.Trim() == "1.00")
-            {
-                cargaBool = true;
-            }
-            else if (carga.Trim() == "0.00")
-            {
-                cargaBool = false;
-            }
-            return (cargaBool);
-        }
-
-
+       
         private int ObtenerIdColor(string color)
         {
             string colorLimpio = Regex.Replace(color, "[0-9-]", "").Trim();

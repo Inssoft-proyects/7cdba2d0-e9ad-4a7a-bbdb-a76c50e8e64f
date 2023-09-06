@@ -872,6 +872,39 @@ namespace GuanajuatoAdminUsuarios.Controllers
             var personasMoralesModel = _personasService.GetAllPersonasMorales();
             return PartialView("_ListPersonasMorales", personasMoralesModel);
         }
+        [HttpGet]
+        public IActionResult ajax_ModalCrearPersona()
+        {
+            var catTipoPersona = _catDictionary.GetCatalog("CatTipoPersona", "0");
+            var catTipoLicencia = _catDictionary.GetCatalog("CatTipoLicencia", "0");
+            var catEntidades = _catDictionary.GetCatalog("CatEntidades", "0");
+            var catGeneros = _catDictionary.GetCatalog("CatGeneros", "0");
+            var catMunicipios = _catDictionary.GetCatalog("CatMunicipios", "0");
+
+            ViewBag.CatMunicipios = new SelectList(catMunicipios.CatalogList, "Id", "Text");
+            ViewBag.CatGeneros = new SelectList(catGeneros.CatalogList, "Id", "Text");
+            ViewBag.CatEntidades = new SelectList(catEntidades.CatalogList, "Id", "Text");
+            ViewBag.CatTipoPersona = new SelectList(catTipoPersona.CatalogList, "Id", "Text");
+            ViewBag.CatTipoLicencia = new SelectList(catTipoLicencia.CatalogList, "Id", "Text");
+            return PartialView("_CrearPersona", new PersonaModel());
+        }
+        [HttpPost]
+        public IActionResult ajax_CrearPersona(PersonaModel model)
+        {
+            //var model = json.ToObject<Gruas2Model>();
+            //var errors = ModelState.Values.Select(s => s.Errors);
+            //if (ModelState.IsValid)
+            //{
+            int id = _personasService.CreatePersona(model);
+            model.PersonaDireccion.idPersona = id;
+            int idDireccion = _personasService.CreatePersonaDireccion(model.PersonaDireccion);
+
+            var modelList = _personasService.GetAllPersonas();
+            return PartialView("_ListadoPersonas", modelList);
+            //}
+            //return RedirectToAction("Index");
+        }
+
         [HttpPost]
         public ActionResult ajax_CrearPersonaFisica(PersonaModel Persona)
         {
