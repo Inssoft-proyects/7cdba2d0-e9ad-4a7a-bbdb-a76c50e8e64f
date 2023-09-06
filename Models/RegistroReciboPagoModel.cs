@@ -27,6 +27,7 @@ namespace GuanajuatoAdminUsuarios.Models
         public int InfraccionCortesia { get; set; }
         public int IdGarantia { get; set; }
         public int EstatusProceso { get; set; }
+        public string EstatusInfraccion { get; set; }
 
         public DateTime? FechaActualizacion { get; set; }
         public int ActualizadoPor { get; set; }
@@ -37,6 +38,7 @@ namespace GuanajuatoAdminUsuarios.Models
         public DateTime? FechaPago { get; set; }
         public string LugarPago { get; set; }
 
+        public int Calificacion { get; set; }
 
 
 

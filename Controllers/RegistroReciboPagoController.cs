@@ -25,6 +25,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         private readonly IRegistroReciboPagoService _registroReciboPagoService;
         private readonly IConsultarDocumentoService _consultarDocumentoService;
+        
         private readonly AppSettings _appSettings;
 
 
@@ -32,7 +33,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             IOptions<AppSettings> appSettings)
         {
             _registroReciboPagoService = registroReciboPagoService;
-            _consultarDocumentoService = consultarDocumentoService;
+            _consultarDocumentoService = consultarDocumentoService; 
             _appSettings = appSettings.Value;
 
         }
@@ -65,6 +66,9 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public ActionResult Detalleinfraccion(RegistroReciboPagoModel model, int Id)
         {
             var ListInfraccionesModel = _registroReciboPagoService.ObtenerDetallePorId(Id);
+
+           
+
             return PartialView("_DetalleRegistroDePago", ListInfraccionesModel);
 
         }
