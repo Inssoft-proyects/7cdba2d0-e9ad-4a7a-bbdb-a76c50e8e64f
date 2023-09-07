@@ -377,6 +377,22 @@ namespace GuanajuatoAdminUsuarios.Controllers
             return (idTipo);
 
         }
+
+        private bool ConvertirBool(string carga)
+        {
+            bool cargaBool = false;
+
+            if (carga.Trim() == "1.00")
+            {
+                cargaBool = true;
+            }
+            else if (carga.Trim() == "0.00")
+            {
+                cargaBool = false;
+            }
+            return (cargaBool);
+        }
+        
         private bool ConvertirGeneroBool(string sexo)
         {
             if (sexo == "2")
