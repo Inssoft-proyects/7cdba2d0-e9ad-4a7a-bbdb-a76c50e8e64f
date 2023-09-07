@@ -708,7 +708,7 @@ namespace GuanajuatoAdminUsuarios.Services
 
                     command.Parameters.Add(new SqlParameter("@fechaNacimiento", SqlDbType.DateTime)).Value = (object)model.fechaNacimiento ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@vigenciaLicencia", SqlDbType.DateTime)).Value = (object)model.vigenciaLicencia ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@idGenero", SqlDbType.Int)).Value = 1;
+                    command.Parameters.Add(new SqlParameter("@idGenero", SqlDbType.Int)).Value = (object)model.idGenero ?? DBNull.Value;
                     command.CommandType = CommandType.Text;
                     result = Convert.ToInt32(command.ExecuteScalar());
                     model.PersonaDireccion.idPersona = result;
@@ -878,7 +878,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.Add(new SqlParameter("@numero", SqlDbType.NVarChar)).Value = (object)model.numeroFisico;
                     command.Parameters.Add(new SqlParameter("@telefono", SqlDbType.BigInt)).Value = (object)model.telefonoFisico ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@correo", SqlDbType.NVarChar)).Value = (object)model.correoFisico ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@idPersona", SqlDbType.Int)).Value = 1;
+                    command.Parameters.Add(new SqlParameter("@idPersona", SqlDbType.Int)).Value = (object)model.idPersona ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@fechaActualizacion", SqlDbType.DateTime)).Value = (object)DateTime.Now;
                     command.Parameters.Add(new SqlParameter("@actualizadoPor", SqlDbType.Int)).Value = (object)1;
                     command.Parameters.Add(new SqlParameter("@estatus", SqlDbType.Int)).Value = (object)1;

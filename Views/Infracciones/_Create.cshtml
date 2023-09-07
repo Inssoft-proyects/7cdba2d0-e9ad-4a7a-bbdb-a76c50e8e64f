@@ -359,9 +359,10 @@
         <div class="col-12 col-md-6 col-lg-3">
             <div class="controlForm my-3">
                 <label>Carga:</label>
+               @Html.HiddenFor(m => m.cargaInt, new { id = "idCarga" })
                @(Html.Kendo().SwitchFor(m => m.carga)
                     .Messages(c => c.Checked("SI").Unchecked("NO"))
-                    .HtmlAttributes(new { style = "transform: scale(1.2);" })
+                    .HtmlAttributes(new { style = "transform: scale(1.2);",  id = "cargaSwitch" })
 
                     )
             </div>
@@ -896,10 +897,10 @@
                         <div class="controlForm">
                             <label>Sexo <b>(obligatorio)</b></label>
                         </div>
+                        @Html.HiddenFor(m => m.Persona.idGenero, new { id = "idGenero" })
                         @(Html.Kendo().SwitchFor(m => m.Persona.generoBool)
                             .Messages(c => c.Checked("<span style='font-size: 6px;'>Hombre</span>").Unchecked("<span style='font-size: 6px;'>Mujer</span>"))
-                            .HtmlAttributes(new { style = "transform: scale(1.6);" })
-
+                            .HtmlAttributes(new { style = "transform: scale(1.6);", id = "generoSwitch" })
                             )
                     </div>
 
@@ -1175,8 +1176,10 @@
     }
 
     function submitCreatePersonaFisica() {
+        var generoBool = $("#generoSwitch").prop("checked");
+        $("#idGenero").val(generoBool ? 1 : 0);
         var Mydata = $("#personaFisicaForm").serialize();
-        
+        console.log("SS",Mydata)
         $.ajax({
             url: '@Url.Action("ajax_CrearPersonaFisica")',
             type: 'POST',
@@ -1191,6 +1194,9 @@
     }
 
     function submitCreateVehiculo() {
+        var carga = $("#cargaSwitch").prop("checked");
+        $("#idCarga").val(carga ? 1 : 0);
+       
         var validator = $("#frmCreateVehiculo").kendoValidator().data('kendoValidator');
         validator.validate();
 
@@ -1200,10 +1206,10 @@
         }
 
         if (validator.validate()) {
+
             var formData = $("#frmCreateVehiculo").serialize();
             var idVeh = $('#hdnIdVehiculo').val();
             console.log("Id vehiculo: ", idVeh)
-            console.log(formData);
             $.ajax({
                 url: '@Url.Action("ajax_CrearVehiculo_Ejemplo")',
                 type: 'POST',

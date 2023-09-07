@@ -141,6 +141,7 @@
                                         <label>Fecha infracción:</label>
                                         @(Html.Kendo().DateTimePickerFor(t => t.fechaInfraccion)
                                             .Label(l => l.Content("Fecha: <b>(obligatorio)</b>:"))
+                                            .Format("dd-MM-yyyy")
                                             .HtmlAttributes(new { style = "width: 100%", required = "required" })
                                             )
                                     </div>

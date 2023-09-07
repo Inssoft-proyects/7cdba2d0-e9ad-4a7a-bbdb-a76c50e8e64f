@@ -1,9 +1,9 @@
 ﻿@model InfraccionesBusquedaModel
 
-@{
+@*{
     DateTime endDate = DateTime.Now;
     endDate = endDate.AddDays(1);
-}
+}*@
 
 
 <div class="mainContainer bg-light">
@@ -44,9 +44,9 @@
                 <div class="controlForm my-3">
                     <label>Inicio:</label>
                     @(Html.Kendo().DatePickerFor(t => t.FechaInicio)
-                        .Value(DateTime.Now)
-                        .Events(e => e.Change("startChange"))
-                        .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "start" })
+                        .Format("dd-MM-yyyy")
+                        .HtmlAttributes(new { style = "width: 100%", title = "startDate" })
+                        .DateInput()
                         )
                 </div>
             </div>
@@ -54,9 +54,9 @@
                 <div class="controlForm my-3">
                     <label>Fin:</label>
                     @(Html.Kendo().DatePickerFor(t => t.FechaFin)
-                        .Value(endDate)
-                        .Events(e => e.Change("endChange"))
-                        .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "end" })
+                        .Format("dd-MM-yyyy")
+                        .HtmlAttributes(new { style = "width: 100%", title = "endDate" })
+                        .DateInput()
                         )
                 </div>
             </div>
@@ -112,16 +112,15 @@
                         @(Html.Kendo().DropDownListFor(d => d.IdTipoCortesia)
                             .DataTextField("Text")
                             .DataValueField("Value")
-                            .OptionLabel("Seleccione Cortesía...")
                             .HtmlAttributes(new { style = "width:100%;", Id = "ddlCortesia" })
-                            .Filter(FilterType.Contains)
-                            .DataSource(source =>
-                            {
-                                source.Read(read =>
-                                {
-                                    read.Action("Cortesias_Read", "Infracciones");
-                                });
-                            }))
+                            .OptionLabel("Seleccione una opción...")
+                            .BindTo(new List<SelectListItem>
+                        {
+                        new SelectListItem { Text = "No aplica cortesía", Value = "0" },
+                        new SelectListItem { Text = "Sí aplica cortesía", Value = "1" }
+                        })
+                            )
+
                     </span>
                 </div>
             </div>
@@ -285,5 +284,13 @@
             startPicker.max(endDate);
         }
     }
+    $(document).ready(function () {
+        var datePicker = $("#FechaInicio").data("kendoDatePicker");
+        datePicker.value(null);
+    });
+    $(document).ready(function () {
+        var datePicker = $("#FechaFin").data("kendoDatePicker");
+        datePicker.value(null);
+    });
 </script>
 

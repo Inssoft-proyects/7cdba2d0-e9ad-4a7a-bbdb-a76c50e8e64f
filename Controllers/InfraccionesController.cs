@@ -832,7 +832,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             }
             return Json(new { success = false, message = "Registro actualizado en SITTEG", id = idInfraccion });
 
-        }
+        } 
 
         public ActionResult ModalAgregarConductor()
         {
