@@ -901,7 +901,10 @@ namespace GuanajuatoAdminUsuarios.Controllers
         {
             int idAccidente = HttpContext.Session.GetInt32("LastInsertedId") ?? 0;
             _capturaAccidentesService.GuardarDescripcion(idAccidente, descripcionCausa);
-            return View("CapturaCAccidente");
+            DatosAccidenteModel datosAccidente = _capturaAccidentesService.ObtenerDatosFinales(idAccidente);
+
+
+            return View("CapturaCAccidente",datosAccidente);
         }
         public ActionResult CapturaCr(int IdVehiculo, int IdInfraccion)
         {

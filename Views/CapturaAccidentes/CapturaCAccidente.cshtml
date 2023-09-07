@@ -272,33 +272,28 @@
                 <div class="controlForm mt-4 mb-3">
                   <label class="label">Seleccione uno o varios elementos que se encontraron en el accidente:</label>
                        <label>Armas</label> @(Html.Kendo().SwitchFor(t => t.ArmasBool)
-                            .Name("armasSwitch")
-                        .Checked(false)
+                            .Name("armasSwitch") 
                             .Messages(c => c.Checked("Si").Unchecked("No"))
                             .HtmlAttributes(new { data_valor = 1 }))
 
                         <label>Drogas</label> @(Html.Kendo().SwitchFor(t => t.DrogasBool)
-                            .Name("drogasSwitch")
-                            .Checked(false)
+                            .Name("drogasSwitch") 
                             .Messages(c => c.Checked("Si").Unchecked("No"))
                             .HtmlAttributes(new { data_valor = 1 }))
 
                         <label>Valores</label> @(Html.Kendo().SwitchFor(t => t.ValoresBool)
-                            .Name("valoresSwitch")
-                            .Checked(false)
+                            .Name("valoresSwitch") 
                             .Messages(c => c.Checked("Si").Unchecked("No"))
                             .HtmlAttributes(new { data_valor = 1 }))
 
                            
                          <label>Prendas</label> @(Html.Kendo().SwitchFor(t => t.PrendasBool)
-                            .Name("prendasSwitch")
-                            .Checked(false)
+                            .Name("prendasSwitch") 
                             .Messages(c => c.Checked("Si").Unchecked("No"))
                             .HtmlAttributes(new { data_valor = 1 }))
 
                         <label>Otros</label> @(Html.Kendo().SwitchFor(t => t.OtrosBool)
-                            .Name("otrosSwitch")
-                            .Checked(false)
+                            .Name("otrosSwitch") 
                             .Messages(c => c.Checked("Si").Unchecked("No"))
                             .HtmlAttributes(new { data_valor = 1 }))
                  </div>

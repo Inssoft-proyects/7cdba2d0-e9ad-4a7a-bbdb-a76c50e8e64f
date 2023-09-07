@@ -1708,13 +1708,39 @@ namespace GuanajuatoAdminUsuarios.Services
         public int AgregarDatosFinales(DatosAccidenteModel datosAccidente, int armasValue, int drogasValue, int valoresValue, int prendasValue, int otrosValue, int idAccidente)
         {
             int result = 0;
+            string qryUpdate = "";
+            qryUpdate += !datosAccidente.montoCamino.Equals(null) ? " , montoCamino = @MontoCamino " : "";
+            qryUpdate += !datosAccidente.montoCarga.Equals(null) ? " , montoCarga = @MontoCarga " : "";
+            qryUpdate += !datosAccidente.montoPropietarios.Equals(null) ? " , montoPropietarios = @MontoPropietarios " : "";
+            qryUpdate += !datosAccidente.montoOtros.Equals(null) ? " , montoOtros = @MontoOtros " : "";
+            qryUpdate += !datosAccidente.Latitud.Equals(null) ? " , latitud = @Latitud " : "";
+            qryUpdate += !datosAccidente.Longitud.Equals(null) ? " , longitud = @Longitud " : "";
+            qryUpdate += !datosAccidente.IdCertificado.Equals(null) ? " , idCertificado = @IdCertificado " : "";
+            qryUpdate += !armasValue.Equals(null) ? " , armas = @armasValue " : "";
+            qryUpdate += !drogasValue.Equals(null) ? " , drogas = @drogasValue " : "";
+            qryUpdate += !valoresValue.Equals(null) ? " , valores = @valoresValue " : "";
+            qryUpdate += !prendasValue.Equals(null) ? " , prendas = @prendasValue " : "";
+            qryUpdate += !otrosValue.Equals(null) ? " , otros = @otrosValue " : ""; 
+            qryUpdate += !string.IsNullOrEmpty(datosAccidente.entregaObjetos) ? " , entregaObjetos = @entregaObjetos " : ""; 
+            qryUpdate += !string.IsNullOrEmpty(datosAccidente.entregaOtros) ? " , entregaOtros = @entregaOtros " : "";
+            qryUpdate += !string.IsNullOrEmpty(datosAccidente.consignacionHechos) ? " , consignacionHechos = @consignacionHechos " : "";
+            qryUpdate += !datosAccidente.IdCiudad.Equals(null) ? " , idCiudad = @idCiudad " : "";
+            qryUpdate += !datosAccidente.IdAutoridadEntrega.Equals(null) ? " , idAutoridadEntrega = @IdAutoridadEntrega " : "";
+            qryUpdate += !datosAccidente.IdAutoridadDisposicion.Equals(null) ? " , idAutoridadDisposicion = @IdAutoridadDisposicion " : "";
+            qryUpdate += !datosAccidente.IdElaboraConsignacion.Equals(null) ? " , idElaboraConsignacion = @IdElaboraConsignacion " : "";
+            qryUpdate += !string.IsNullOrEmpty(datosAccidente.numeroOficio) ? " , numeroOficio = @numeroOficio " : "";
+            qryUpdate += !datosAccidente.IdAgenciaMinisterio.Equals(null) ? " , idAgenciaMinisterio = @IdAgenciaMinisterio " : "";
+            qryUpdate += !string.IsNullOrEmpty(datosAccidente.RecibeMinisterio) ? " , recibeMinisterio = @RecibeMinisterio " : "";
+            qryUpdate += !datosAccidente.IdElabora.Equals(null) ? " , idElabora = @IdElabora " : "";
+            qryUpdate += !datosAccidente.IdAutoriza.Equals(null) ? " , idAutoriza = @IdAutoriza " : "";
+            qryUpdate += !datosAccidente.IdSupervisa.Equals(null) ? " , idSupervisa = @IdSupervisa " : "";
 
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
             {
                 try
                 {
                     connection.Open();
-                    string query = "UPDATE accidentes SET idEstatusReporte = @idEstatusReporte, montoCamino = @MontoCamino, montoCarga = @MontoCarga, montoPropietarios = @MontoPropietarios, montoOtros = @MontoOtros, latitud = @Latitud, longitud = @Longitud, idCertificado = @IdCertificado, armas = @armasValue, drogas = @drogasValue, valores = @valoresValue, prendas = @prendasValue, otros = @otrosValue, entregaObjetos = @entregaObjetos, entregaOtros = @entregaOtros, idAutoridadEntrega = @IdAutoridadEntrega, idAutoridadDisposicion = @IdAutoridadDisposicion, idElaboraConsignacion = @IdElaboraConsignacion, numeroOficio = @numeroOficio, idAgenciaMinisterio = @IdAgenciaMinisterio, recibeMinisterio = @RecibeMinisterio, idElabora = @IdElabora, idAutoriza = @IdAutoriza, idSupervisa = @IdSupervisa WHERE idAccidente = @IdAccidente";
+                    string query = @"UPDATE accidentes SET idEstatusReporte = @idEstatusReporte "+qryUpdate+" WHERE idAccidente = @IdAccidente";
 
                     SqlCommand command = new SqlCommand(query, connection);
 
@@ -1731,14 +1757,30 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.AddWithValue("@valoresValue", valoresValue);
                     command.Parameters.AddWithValue("@prendasValue", prendasValue);
                     command.Parameters.AddWithValue("@otrosValue", otrosValue);
-                    command.Parameters.AddWithValue("@entregaObjetos", datosAccidente.entregaObjetos);
-                    command.Parameters.AddWithValue("@entregaOtros", datosAccidente.entregaOtros);
+                    if (!string.IsNullOrEmpty(datosAccidente.entregaObjetos))
+                        command.Parameters.Add(new SqlParameter("@entregaObjetos", SqlDbType.NVarChar)).Value = (object)datosAccidente.entregaObjetos ?? DBNull.Value;
+
+                    if (!string.IsNullOrEmpty(datosAccidente.entregaObjetos))
+                        command.Parameters.Add(new SqlParameter("@entregaOtros", SqlDbType.NVarChar)).Value = (object)datosAccidente.entregaOtros ?? DBNull.Value;
+                    
+                    if (!string.IsNullOrEmpty(datosAccidente.consignacionHechos))
+                        command.Parameters.Add(new SqlParameter("@consignacionHechos", SqlDbType.NVarChar)).Value = (object)datosAccidente.consignacionHechos ?? DBNull.Value;
+                    
+                    if(datosAccidente.IdCiudad > 0)
+                        command.Parameters.AddWithValue("@idCiudad", datosAccidente.IdCiudad);
+                    
                     command.Parameters.AddWithValue("@IdAutoridadEntrega", datosAccidente.IdAutoridadEntrega);
                     command.Parameters.AddWithValue("@IdAutoridadDisposicion", datosAccidente.IdAutoridadDisposicion);
-                    command.Parameters.AddWithValue("@IdElaboraConsignacion", datosAccidente.IdElaboraConsignacion);
-                    command.Parameters.AddWithValue("@numeroOficio", datosAccidente.numeroOficio);
+                    command.Parameters.AddWithValue("@IdElaboraConsignacion", datosAccidente.IdElaboraConsignacion); 
+
+                    if (!string.IsNullOrEmpty(datosAccidente.numeroOficio))
+                        command.Parameters.Add(new SqlParameter("@numeroOficio", SqlDbType.NVarChar)).Value = (object)datosAccidente.numeroOficio ?? DBNull.Value;
+
                     command.Parameters.AddWithValue("@IdAgenciaMinisterio", datosAccidente.IdAgenciaMinisterio);
-                    command.Parameters.AddWithValue("@RecibeMinisterio", datosAccidente.RecibeMinisterio);
+
+                    if (!string.IsNullOrEmpty(datosAccidente.RecibeMinisterio))
+                        command.Parameters.Add(new SqlParameter("@RecibeMinisterio", SqlDbType.NVarChar)).Value = (object)datosAccidente.RecibeMinisterio ?? DBNull.Value;
+
                     command.Parameters.AddWithValue("@IdElabora", datosAccidente.IdElabora);
                     command.Parameters.AddWithValue("@IdAutoriza", datosAccidente.IdAutoriza);
                     command.Parameters.AddWithValue("@IdSupervisa", datosAccidente.IdSupervisa);
@@ -1746,7 +1788,7 @@ namespace GuanajuatoAdminUsuarios.Services
 
 
 
-                    command.ExecuteNonQuery();
+                    result = command.ExecuteNonQuery();
                 }
                 catch (SqlException ex)
                 {
@@ -1867,8 +1909,69 @@ namespace GuanajuatoAdminUsuarios.Services
             }
         }
 
-        
 
+        public DatosAccidenteModel ObtenerDatosFinales(int idAccidente)
+        {
+
+            DatosAccidenteModel datosFinales = new DatosAccidenteModel();
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                string query = @"SELECT idEstatusReporte,
+                                    montoCamino, montoCarga, montoPropietarios, montoOtros,
+                                    latitud ,longitud ,idCertificado ,
+                                    armas ,drogas ,valores ,prendas ,otros ,entregaObjetos, entregaOtros ,
+                                    consignacionHechos, idCiudad ,
+                                    idAutoridadEntrega , idAutoridadDisposicion , idElaboraConsignacion , 
+                                    numeroOficio , idAgenciaMinisterio ,recibeMinisterio , 
+                                    idElabora , idAutoriza , idSupervisa 
+                                    FROM accidentes a 
+                                    WHERE idAccidente = @IdAccidente
+                                    ";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.AddWithValue("@idAccidente", idAccidente);
+
+                    connection.Open();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            datosFinales.montoCamino = reader["montoCamino"] == DBNull.Value ? 0 : float.Parse(reader["montoCamino"].ToString());
+                            datosFinales.montoCarga = reader["montoCarga"] == DBNull.Value ? 0 : float.Parse(reader["montoCarga"].ToString());
+                            datosFinales.montoPropietarios = reader["montoPropietarios"] == DBNull.Value ? 0 : float.Parse(reader["montoPropietarios"].ToString());
+                            datosFinales.montoOtros = reader["montoOtros"] == DBNull.Value ? 0 : float.Parse(reader["montoOtros"].ToString());
+                            datosFinales.Latitud = reader["latitud"] == DBNull.Value ? 0 : float.Parse(reader["latitud"].ToString());
+                            datosFinales.Longitud = reader["longitud"] == DBNull.Value ? 0 : float.Parse(reader["longitud"].ToString());
+                            datosFinales.IdCertificado = reader["idCertificado"] == DBNull.Value ? 0 : int.Parse(reader["idCertificado"].ToString());
+                            datosFinales.EstadoArmas = reader["armas"] == DBNull.Value ? 0 : int.Parse(reader["armas"].ToString()); 
+                            datosFinales.EstadoDrogas = reader["drogas"] == DBNull.Value ? 0 : int.Parse(reader["drogas"].ToString());
+                            datosFinales.EstadoValores = reader["valores"] == DBNull.Value ? 0 : int.Parse(reader["valores"].ToString());
+                            datosFinales.EstadoPrendas = reader["prendas"] == DBNull.Value ? 0 : int.Parse(reader["prendas"].ToString());
+                            datosFinales.EstadoOtros = reader["otros"] == DBNull.Value ? 0 : int.Parse(reader["otros"].ToString());
+                            datosFinales.consignacionHechos = reader["consignacionHechos"] == DBNull.Value ? "" : reader["consignacionHechos"].ToString();
+                            datosFinales.IdCiudad = reader["idCiudad"] == DBNull.Value ? 0 : int.Parse(reader["idCiudad"].ToString());
+                            datosFinales.entregaObjetos = reader["entregaObjetos"] == DBNull.Value ? "" : reader["entregaObjetos"].ToString();
+                            datosFinales.entregaOtros = reader["entregaOtros"] == DBNull.Value ? "" : reader["entregaOtros"].ToString();
+                            datosFinales.IdAutoridadEntrega = reader["idAutoridadEntrega"] == DBNull.Value ? 0 : int.Parse(reader["idAutoridadEntrega"].ToString());
+                            datosFinales.IdAutoridadDisposicion = reader["idAutoridadDisposicion"] == DBNull.Value ? 0 : int.Parse(reader["idAutoridadDisposicion"].ToString());
+                            datosFinales.IdElaboraConsignacion = reader["idElaboraConsignacion"] == DBNull.Value ? 0 : int.Parse(reader["idElaboraConsignacion"].ToString());
+                            datosFinales.numeroOficio = reader["numeroOficio"] == DBNull.Value ?"" : reader["numeroOficio"].ToString();
+                            datosFinales.IdAgenciaMinisterio = reader["idAgenciaMinisterio"] == DBNull.Value ? 0 : int.Parse(reader["idAgenciaMinisterio"].ToString());
+                            datosFinales.RecibeMinisterio = reader["recibeMinisterio"] == DBNull.Value ? "" : reader["recibeMinisterio"].ToString();
+                            datosFinales.IdElabora = reader["idElabora"] == DBNull.Value ? 0 : int.Parse(reader["idElabora"].ToString());
+                            datosFinales.IdAutoriza = reader["idAutoriza"] == DBNull.Value ? 0 : int.Parse(reader["idAutoriza"].ToString());
+                            datosFinales.IdSupervisa = reader["idSupervisa"] == DBNull.Value ? 0 : int.Parse(reader["idSupervisa"].ToString()); 
+                        }
+
+                        reader.Close();
+                    }
+                }
+
+                return datosFinales;
+            } 
+        }  
     }
 }
 
