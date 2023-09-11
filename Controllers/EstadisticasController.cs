@@ -22,6 +22,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         private readonly ICatDictionary _catDictionary;
         private readonly IVehiculosService _vehiculosService;
         private readonly IPersonasService _personasService;
+        private readonly IEstadisticasService _estadisticasService;
 
         public EstadisticasController(
             IEstatusInfraccionService estatusInfraccionService, IDelegacionesService delegacionesService,
@@ -29,7 +30,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             IInfraccionesService infraccionesService, IPdfGenerator<InfraccionesModel> pdfService,
             ICatDictionary catDictionary,
             IVehiculosService vehiculosService,
-            IPersonasService personasService
+            IPersonasService personasService, 
+            IEstadisticasService estadisticasService
            )
         {
             _catDictionary = catDictionary;
@@ -42,6 +44,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             _pdfService = pdfService;
             _vehiculosService = vehiculosService;
             _personasService = personasService;
+            _estadisticasService = estadisticasService;
         }
         public IActionResult Index()
         {
@@ -91,20 +94,28 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public IActionResult ajax_BusquedaIncidenciasInfracciones(IncidenciasBusquedaModel model)
         {
-            var modelList = _infraccionesService.GetAllInfracciones2()
-                                                .Where(w => w.idDelegacion == (model.idDelegacion > 0 ? model.idDelegacion : w.idDelegacion)
-                                                         && w.idOficial == (model.idOficial > 0 ? model.idOficial : w.idOficial)
-                                                         && w.idCarretera == (model.idCarretera > 0 ? model.idCarretera : w.idCarretera)
-                                                         && w.idTramo == (model.idTramo > 0 ? model.idTramo : w.idTramo)
-                                                         && w.Vehiculo.idTipoVehiculo == (model.idTipoVehiculo > 0 ? model.idTipoVehiculo : w.Vehiculo.idTipoVehiculo)
-                                                         && w.Vehiculo.idCatTipoServicio == (model.idTipoServicio > 0 ? model.idTipoServicio : w.Vehiculo.idCatTipoServicio)
-                                                         && w.Persona.idTipoLicencia == (model.idTipoLicencia > 0 ? model.idTipoLicencia : w.Persona.idTipoLicencia)
-                                                         && w.idMunicipio == (model.idMunicipio > 0 ? model.idMunicipio : w.idMunicipio)
-                                                         && (w.fechaInfraccion >= model.fechaInicio && w.fechaInfraccion <= model.fechaFin))
-                                                .SelectMany(s => s.MotivosInfraccion.
-                                                Where(w => w.idCatMotivoInfraccion == (model.idTipoMotivo > 0 ? model.idTipoMotivo : w.idCatMotivoInfraccion)))
-                                                .GroupBy(g => g.Nombre)
-                                                .Select(s => new EstadisticaInfraccionMotivosModel() { Motivo = s.Key, Contador = s.Count() }).ToList();
+            var modelList = _estadisticasService.GetAllInfraccionesEstadisticas(model)
+                .SelectMany(s => s.MotivosInfraccion
+                .Where(w => w.idCatMotivoInfraccion == (model.idTipoMotivo > 0 ? model.idTipoMotivo : w.idCatMotivoInfraccion)))
+                .GroupBy(g => g.Nombre)
+                .Select(s => new EstadisticaInfraccionMotivosModel() { Motivo = s.Key, Contador = s.Count() }).ToList();
+
+
+
+            //var modelList = _infraccionesService.GetAllInfracciones2()
+            //                                    .Where(w => w.idDelegacion == (model.idDelegacion > 0 ? model.idDelegacion : w.idDelegacion)
+            //                                             && w.idOficial == (model.idOficial > 0 ? model.idOficial : w.idOficial)
+            //                                             && w.idCarretera == (model.idCarretera > 0 ? model.idCarretera : w.idCarretera)
+            //                                             && w.idTramo == (model.idTramo > 0 ? model.idTramo : w.idTramo)
+            //                                             && w.Vehiculo.idTipoVehiculo == (model.idTipoVehiculo > 0 ? model.idTipoVehiculo : w.Vehiculo.idTipoVehiculo)
+            //                                             && w.Vehiculo.idCatTipoServicio == (model.idTipoServicio > 0 ? model.idTipoServicio : w.Vehiculo.idCatTipoServicio)
+            //                                             && (int)w.Garantia.idTipoLicencia == (model.idTipoLicencia > 0 ? model.idTipoLicencia : (int)w.Garantia.idTipoLicencia)
+            //                                             && w.idMunicipio == (model.idMunicipio > 0 ? model.idMunicipio : w.idMunicipio)
+            //                                             && (w.fechaInfraccion >= model.fechaInicio && w.fechaInfraccion <= model.fechaFin))
+            //                                    .SelectMany(s => s.MotivosInfraccion.
+            //                                    Where(w => w.idCatMotivoInfraccion == (model.idTipoMotivo > 0 ? model.idTipoMotivo : w.idCatMotivoInfraccion)))
+            //                                    .GroupBy(g => g.Nombre)
+            //                                    .Select(s => new EstadisticaInfraccionMotivosModel() { Motivo = s.Key, Contador = s.Count() }).ToList();
 
             return PartialView("_EstadisticaInfraccionesMotivos", modelList);
 

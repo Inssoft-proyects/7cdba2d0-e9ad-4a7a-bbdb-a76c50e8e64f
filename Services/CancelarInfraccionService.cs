@@ -29,7 +29,15 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT i.*, v.serie, e.estatusInfraccion, CONCAT( p.nombre,' ', p.apellidoPaterno,' ', p.apellidoMaterno)AS nombrePropietario,CONCAT(pi.nombre,' ',pi.apellidoPaterno,' ', pi.apellidoMaterno)AS nombreConductor FROM infracciones AS i LEFT JOIN vehiculos AS v ON i.idVehiculo = v.idVehiculo LEFT JOIN catEstatusInfraccion AS e ON i.idEstatusInfraccion = e.idEstatusInfraccion LEFT JOIN personas AS p ON i.IdPersona = p.IdPersona LEFT JOIN personasInfracciones  AS pi ON i.idPersonaInfraccion = pi.idPersonaInfraccion WHERE i.folioInfraccion LIKE '%' + @FolioInfraccion + '%';", connection);
+                    SqlCommand command = new SqlCommand(@"SELECT i.*, v.serie, e.estatusInfraccion, 
+                                                            CONCAT( pV.nombre,' ', pV.apellidoPaterno,' ', pV.apellidoMaterno)AS nombrePropietario,
+                                                            CONCAT(pI.nombre,' ',pI.apellidoPaterno,' ', pI.apellidoMaterno)AS nombreConductor 
+                                                            FROM infracciones AS i 
+                                                            LEFT JOIN vehiculos AS v ON i.idVehiculo = v.idVehiculo 
+                                                            LEFT JOIN catEstatusInfraccion AS e ON i.idEstatusInfraccion = e.idEstatusInfraccion 
+                                                            LEFT JOIN personas AS pI ON pI.IdPersona = i.IdPersona 
+                                                            LEFT JOIN personas AS pV ON pV.IdPersona = v.idPersona  
+                                                            WHERE i.folioInfraccion LIKE '%' + @FolioInfraccion + '%';", connection);
                     command.Parameters.Add(new SqlParameter("@FolioInfraccion", SqlDbType.NVarChar)).Value = FolioInfraccion;
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
@@ -81,14 +89,16 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT i.IdInfraccion,i.idDelegacion, i.FolioInfraccion, i.FechaInfraccion," +
-                   " i.placasVehiculo, i.idPersona, i.idEstatusInfraccion, v.Serie, e.estatusInfraccion, CONCAT(p.nombre, ' ', p.apellidoPaterno, ' ', p.apellidoMaterno) AS nombrePropietario, CONCAT(pi.nombre, ' ', pi.apellidoPaterno, ' ', pi.apellidoMaterno) AS nombreConductor" +
-                   " FROM infracciones i" +
-                   " JOIN vehiculos v ON i.idVehiculo = v.idVehiculo" +
-                   " JOIN catEstatusInfraccion AS e ON i.idEstatusInfraccion = e.idEstatusInfraccion" +
-                   " JOIN personas AS p ON i.idPersona = p.idPersona" +
-                   " JOIN personasInfracciones AS pi ON i.idPersonaInfraccion = pi.idPersonaInfraccion" +
-                   " WHERE i.IdInfraccion = @Id", connection);
+                    SqlCommand command = new SqlCommand(@"SELECT i.IdInfraccion,i.idDelegacion, i.FolioInfraccion, i.FechaInfraccion, 
+                    i.placasVehiculo, i.idPersona, i.idEstatusInfraccion, v.Serie, e.estatusInfraccion, 
+                    CONCAT(pV.nombre, ' ', pV.apellidoPaterno, ' ', pV.apellidoMaterno) AS nombrePropietario, 
+                    CONCAT(pI.nombre, ' ', pI.apellidoPaterno, ' ', pI.apellidoMaterno) AS nombreConductor 
+                    FROM infracciones i 
+                    JOIN vehiculos v ON i.idVehiculo = v.idVehiculo 
+                    JOIN catEstatusInfraccion AS e ON i.idEstatusInfraccion = e.idEstatusInfraccion 
+                    LEFT JOIN personas AS pI ON pI.IdPersona = i.IdPersona 
+                    LEFT JOIN personas AS pV ON pV.IdPersona = v.idPersona 
+                    WHERE i.IdInfraccion = @Id", connection);
                     command.Parameters.Add(new SqlParameter("@Id", SqlDbType.Int)).Value = Id;
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
