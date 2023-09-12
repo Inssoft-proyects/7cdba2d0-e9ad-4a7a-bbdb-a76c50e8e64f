@@ -206,12 +206,12 @@ namespace GuanajuatoAdminUsuarios.Framework
                     if (int.TryParse(parameter, out intId))
                     {
                         catalogModel.CatalogName = catalog;
-                        campos = new string[] { "idMotivoInfraccion", "catMotivo" };
+                        campos = new string[] { "idCatMotivoInfraccion", "nombre" };
                         catalogModel.CatalogList = _catalogosService.GetGenericCatalogos("catMotivosInfraccion", campos)
                                 .Select(s => new SystemCatalogListModel()
                                 {
-                                    Id = Convert.ToInt32(s["idMotivoInfraccion"]),
-                                    Text = Convert.ToString(s["catMotivo"])
+                                    Id = Convert.ToInt32(s["idCatMotivoInfraccion"]),
+                                    Text = Convert.ToString(s["nombre"])
                                 }).ToList();
                     }
                     break;
@@ -219,12 +219,12 @@ namespace GuanajuatoAdminUsuarios.Framework
                     if (int.TryParse(parameter, out intId))
                     {
                         catalogModel.CatalogName = catalog;
-                        campos = new string[] { "idMotivoInfraccion", "catMotivo" };
+                        campos = new string[] { "idCatMotivoInfraccion", "nombre" };
                         catalogModel.CatalogList = _catalogosService.GetGenericCatalogosByFilter("catMotivosInfraccion", campos, "IdSubConcepto", intId)
                                 .Select(s => new SystemCatalogListModel()
                                 {
-                                    Id = Convert.ToInt32(s["idMotivoInfraccion"]),
-                                    Text = Convert.ToString(s["catMotivo"])
+                                    Id = Convert.ToInt32(s["idCatMotivoInfraccion"]),
+                                    Text = Convert.ToString(s["nombre"])
                                 }).ToList();
                     }
                     break;
@@ -250,7 +250,7 @@ namespace GuanajuatoAdminUsuarios.Framework
                                     Text = Convert.ToString(s["subConcepto"])
                                 }).ToList();
                     }
-                    break;
+                    break; 
                 case "CatConcesionariosByIdDelegacion":
                     if (int.TryParse(parameter, out intId))
                     {
@@ -416,6 +416,53 @@ namespace GuanajuatoAdminUsuarios.Framework
                                 Id = Convert.ToInt32(s["idDependencia"]),
                                 Text = Convert.ToString(s["nombreDependencia"])
                             }).ToList();
+                    break;
+                case "CatClasificacionAccidentes":
+                    catalogModel.CatalogName = catalog;
+                    campos = new string[] { "idClasificacionAccidente", "nombreClasificacion" };
+                    catalogModel.CatalogList = _catalogosService.GetGenericCatalogos("catClasificacionAccidentes", campos)
+                            .Select(s =>
+                            new SystemCatalogListModel()
+                            {
+                                Id = Convert.ToInt32(s["idClasificacionAccidente"]),
+                                Text = Convert.ToString(s["nombreClasificacion"])
+                            }).ToList();
+                    break;
+                case "CatCausasAccidentes":
+                    catalogModel.CatalogName = catalog;  
+                    campos = new string[] { "idCausaAccidente", "causaAccidente" };
+                    catalogModel.CatalogList = _catalogosService.GetGenericCatalogos("catCausasAccidentes", campos)
+                            .Select(s =>
+                            new SystemCatalogListModel()
+                            {
+                                Id = Convert.ToInt32(s["idCausaAccidente"]),
+                                Text = Convert.ToString(s["causaAccidente"])
+                            }).ToList();
+                    break;
+                case "CatFactoresAccidentes":
+                    catalogModel.CatalogName = catalog;  
+                    campos = new string[] { "idFactorAccidente", "factorAccidente" };
+                    catalogModel.CatalogList = _catalogosService.GetGenericCatalogos("catFactoresAccidentes", campos)
+                            .Select(s =>
+                            new SystemCatalogListModel()
+                            {
+                                Id = Convert.ToInt32(s["idFactorAccidente"]),
+                                Text = Convert.ToString(s["factorAccidente"])
+                            }).ToList();
+                    break;
+
+                case "CatFactoresOpcionesAccidentesByFilter":
+                    if (int.TryParse(parameter, out intId))
+                    {
+                        catalogModel.CatalogName = catalog;
+                        campos = new string[] { "idFactorOpcionAccidente", "factorOpcionAccidente" };
+                        catalogModel.CatalogList = _catalogosService.GetGenericCatalogosByFilter("catFactoresOpcionesAccidentes", campos, "idFactorAccidente", intId)
+                                .Select(s => new SystemCatalogListModel()
+                                {
+                                    Id = Convert.ToInt32(s["idFactorOpcionAccidente"]),
+                                    Text = Convert.ToString(s["factorOpcionAccidente"])
+                                }).ToList();
+                    }
                     break;
 
                 default:

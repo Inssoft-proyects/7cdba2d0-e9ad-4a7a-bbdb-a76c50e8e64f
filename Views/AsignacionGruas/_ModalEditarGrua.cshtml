@@ -1,0 +1,231 @@
+﻿@model GuanajuatoAdminUsuarios.Models.SeleccionGruaModel
+
+<div class="modal-dialog modal-xl boxShadow modal-dialog-centered">
+    <div class="modal-content">
+        <section class=" bg-white rounded">
+            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                <div class="col-12 col-md-auto">
+                    <div class="row align-items-center justify-content-center justify-content-md-start">
+                        <div class="col-auto p-0">
+                            <i class="icon-car h1 colorPrimary"></i>
+                        </div>
+                        <div class="col-auto my-3">
+                            <h2 class="m-0 h3"><b>Datos de Grúa Asignada</b></h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
+                    <div class="row">
+                        <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0" onclick="goBack()">
+                            @(Html.Kendo().Button()
+                                .Name("backVehiculo")
+                                .HtmlAttributes(new { @class = "px-5" })
+                                .Content("<h6 class=\"m-0\"><i class=\"icon-back me-2\" data-bs-dismiss=\"modal\" aria - label = \"Close\" ></i><b>Regresar</b></h6>"))
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-5 pe-0">
+                    <div class="bgSuccess py-1"></div>
+                </div>
+                <div class="col-7 ps-0">
+                    <div class="bg-light py-1"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 my-4">
+                    <h5 class="px-4"><b>Datos de grúa asignada</b></h5>
+                    <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
+                </div>
+            </div>
+            <div class="row justify-content-start align-items-center py-2">
+                <div class="col-auto">
+                    <h5 class="px-4 m-0 d-flex align-items-center colorPrimary"><i class="icon-placa h4 m-0 me-2"></i> <b>Número económico</b></h5>
+                </div>
+            </div>
+            <form id="datosGruaForm">
+                <div class="row px-4" id="contenedor">
+                    <div class="col-12">
+                        <div class="controlForm my-3">
+                            <label for="ddgrua">Número económico<b>(obligatorio)</b>:</label>
+                            @(Html.Kendo().DropDownListFor(m => m.idGrua)
+                                .Label(label => label.Content("No. Económico:"))
+                                .DataTextField("Text")
+                                .DataValueField("Value")
+                                .OptionLabel("Selecciona una opcion")
+                                .HtmlAttributes(new { style = "max-width: 340px;width: 100%", required = "required" })
+                                )
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="controlForm my-3">
+                            <label for="datetimepicker1">Fecha de arribo <b>(obligatorio)</b>:</label>
+                            @(Html.Kendo().DateTimePickerFor(t => t.fechaArribo)
+                                .HtmlAttributes(new { style = "width: 100%" })
+                                )
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="controlForm my-3">
+                            <label for="datetimepicker2">Fecha de inicio <b>(obligatorio)</b>:</label>
+                            @(Html.Kendo().DateTimePickerFor(t => t.fechaInicio)
+                                .HtmlAttributes(new { style = "width: 100%" })
+                                )
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="controlForm my-3">
+                            <label for="datetimepicker3">Fecha de término <b>(obligatorio)</b>:</label>
+                            @(Html.Kendo().DateTimePickerFor(t => t.fechaFinal)
+                                .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                                )
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="controlForm my-3">
+                            <label for="timeDifference">Diferencia en minutos <b>(obligatorio)</b>:</label>
+                            @(Html.Kendo().TextBoxFor(t => t.tiempoManiobras)
+                                .HtmlAttributes(new { style = "width: 100%", @readonly = "readonly" }) // Marcar como solo lectura
+                                )
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="controlForm row justify-content-center btnToggleActive my-3">
+                            <label>Abanderamiento:</label>
+                            @(Html.Kendo().SwitchFor(t => t.AbanderamientoBool)
+                                .Name("abanderamientoSwitch")
+                                .Checked(false)
+                                .Messages(c => c.Checked("Si").Unchecked("No"))
+                                .HtmlAttributes(new { data_checked = "true" })
+                                )
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="controlForm row justify-content-center btnToggleActive my-3">
+                            <label for="switch2">Salvamento:</label>
+                            @(Html.Kendo().SwitchFor(t => t.SalvamentoBool)
+                                .Name("salvamentoSwitch")
+                                .Checked(false)
+                                .Messages(c => c.Checked("Si").Unchecked("No"))
+                                .HtmlAttributes(new { data_valor = 1 })
+                                )
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="controlForm row justify-content-center btnToggleActive my-3">
+                            <label for="switch3">Arrastre:</label>
+                            @(Html.Kendo().SwitchFor(t => t.ArrastreBool)
+                                .Name("arrastreSwitch")
+                                .Checked(false)
+                                .Messages(c => c.Checked("Si").Unchecked("No"))
+                                .HtmlAttributes(new { data_checked = "true" })
+                                )
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="controlForm my-3">
+                            @(Html.Kendo().TextBoxFor(t => t.operadorGrua)
+                                .Label(label => label.Content("Operador de la grúa <b>(obligatorio)</b>:"))
+                                .Placeholder("Escribe el operador de la grúa")
+                                .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                                )
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <!-- Botones -->
+            <div class="row my-4">
+                <div class="col-12 col-md-6 mx-md-auto">
+                    <div class="row justify-content-around">
+                        <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
+                            <button type="button" data-bs-dismiss="modal" aria-label="Close">
+                                <h6 class="m-0 px-3"><b>Cerrar</b></h6>
+                            </button>
+                        </div>
+                        <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                            <div class="controlButton" onclick="enviarDatos()">
+                                @(Html.Kendo().Button()
+                                    .Name("AddFactor")
+                                    .HtmlAttributes(new { @class = "btnPrimary px-3" })
+                                    .Content("<h5 class=\"m-0\"><b>Guardar</b></h5>"))
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<script>
+    function enviarDatos() {
+        var validator = $("#datosGruaForm").kendoValidator().data('kendoValidator');
+   
+        validator.validate();
+        if (validator.validate()) {
+        
+            var formData = new FormData($("#datosGruaForm")[0]);
+
+            var abanderamientoValue = $("#abanderamientoSwitch").prop("checked") ? 1 : 0;
+            var arrastreValue = $("#arrastreSwitch").prop("checked") ? 1 : 0;
+            var salvamentoValue = $("#salvamentoSwitch").prop("checked") ? 1 : 0;
+
+            formData.append("abanderamiento", abanderamientoValue);
+            formData.append("arrastre", arrastreValue);
+            formData.append("salvamento", salvamentoValue);
+
+            console.log("formData:", formData);
+
+            $.ajax({
+                url: '/AsignacionGruas/InsertarDatos',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    sitteg_success("Se ha actualizado la información");
+                    $('#modalAgregarGrua').modal('hide');
+                    var grid = $("#gridGruas").data("kendoGrid");
+                    grid.dataSource.data(data);
+                    grid.refresh();
+                },
+                error: function (error) {
+                    sitteg_warning("!Sucedió un error, inténtalo de nuevo más tarde...");
+                }
+            });
+        } else {
+            sitteg_info('Debe llenar los campos requeridos');
+            return;
+        }
+    }
+    function updateDifference() {
+        var fechaInicio = $("#fechaInicio").data("kendoDateTimePicker").value();
+        var fechaFinal = $("#fechaFinal").data("kendoDateTimePicker").value();
+        var timeDifferenceMinutes = Math.abs((fechaFinal - fechaInicio) / 60000); // Diferencia en minutos
+
+        // Redondear y convertir a entero
+        timeDifferenceMinutes = Math.round(timeDifferenceMinutes);
+        if (isNaN(timeDifferenceMinutes)) {
+            timeDifferenceMinutes = 0;
+        }
+
+        $("#tiempoManiobras").val(timeDifferenceMinutes);
+    }
+
+    // Llamar a la función cuando cambie alguna de las fechas
+    $("input[name='fechaInicio'], input[name='fechaFinal']").on("change", function () {
+        updateDifference();
+    });
+
+    // Inicializar la diferencia al cargar la página
+    $(document).ready(function () {
+        updateDifference();
+    });
+
+        function goBack() {
+
+        $('#editarGruaModal').modal('hide');
+
+    }
+</script>
+

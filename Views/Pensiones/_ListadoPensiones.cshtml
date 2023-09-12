@@ -16,7 +16,13 @@
 <br />
 <br />
 
-<div class="row">   
+<div class="row">
+    @if (ViewBag.NoResultsMessage != null)
+    {
+        <div class="alert alert-info">
+            @ViewBag.NoResultsMessage
+        </div>
+    }
     <div class="col-12 mb-4 px-4 rounded gridCustom">
         @(
             Html.Kendo().Grid(Model)

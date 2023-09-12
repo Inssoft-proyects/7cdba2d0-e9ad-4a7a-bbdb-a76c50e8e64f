@@ -11,6 +11,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Reflection;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Net.Http;
+using System.Threading.Tasks;
+using GuanajuatoAdminUsuarios.Controllers;
+using System.Windows.Input;
 
 namespace GuanajuatoAdminUsuarios.Services
 {
@@ -23,7 +29,7 @@ namespace GuanajuatoAdminUsuarios.Services
             _sqlClientConnectionBD = sqlClientConnectionBD;
         }
 
-        public List<CapturaAccidentesModel> ObtenerAccidentes()
+        public List<CapturaAccidentesModel> ObtenerAccidentes(int idOficina)
         {
             //
             List<CapturaAccidentesModel> ListaAccidentes = new List<CapturaAccidentesModel>();
@@ -33,12 +39,13 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT acc.*, mun.Municipio, car.Carretera, tra.Tramo, er.estatusReporte FROM accidentes AS acc " +
-                        "INNER JOIN catMunicipios AS mun ON acc.idMunicipio = mun.idMunicipio " + 
-                        "INNER JOIN catCarreteras AS car ON acc.idCarretera = car.idCarretera " + 
-                        "INNER JOIN catTramos AS tra ON acc.idTramo = tra.idTramo " +
-                        "INNER JOIN catEstatusReporteAccidente AS er ON acc.idEstatusReporte = er.idEstatusReporte " +
-                        "WHERE acc.estatus = 1;", connection);
+                    SqlCommand command = new SqlCommand(@"SELECT acc.*, mun.Municipio, car.Carretera, tra.Tramo, er.estatusReporte FROM accidentes AS acc  
+                        LEFT JOIN catMunicipios AS mun ON acc.idMunicipio = mun.idMunicipio 
+                        LEFT JOIN catCarreteras AS car ON acc.idCarretera = car.idCarretera  
+                        LEFT JOIN catTramos AS tra ON acc.idTramo = tra.idTramo  
+                        LEFT JOIN catEstatusReporteAccidente AS er ON acc.idEstatusReporte = er.idEstatusReporte 
+                        WHERE acc.estatus = 1 AND acc.idOficinaDelegacion = @idOficina and acc.idEstatusReporte != 3;", connection);
+                    command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = idOficina;
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
@@ -79,21 +86,17 @@ namespace GuanajuatoAdminUsuarios.Services
 
         }
 
-        public CapturaAccidentesModel ObtenerAccidentePorId(int idAccidente)
+        public CapturaAccidentesModel ObtenerAccidentePorId(int idAccidente, int idOficina)
         {
             CapturaAccidentesModel accidente = new CapturaAccidentesModel();
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT a.idAccidente, a.numeroReporte, a.fecha, a.hora, a.idMunicipio, a.idCarretera, a.idTramo, a.kilometro,a.idClasificacionAccidente, " +
-                        "                                a.idFactorAccidente, a.IdFactorOpcionAccidente,m.municipio, c.carretera, t.tramo, e.estatusDesc " +
-                                                        "FROM accidentes AS a JOIN catMunicipios AS m ON a.idMunicipio = m.idMunicipio " +
-                                                        "JOIN catCarreteras AS c ON a.idCarretera = c.idCarretera " +
-                                                        "JOIN catTramos AS t ON a.idTramo = t.idTramo " +
-                                                        "JOIN estatus AS e ON a.estatus = e.estatus " +
-                                                        "WHERE a.idAccidente = @idAccidente AND a.estatus = 1", connection);
+                    SqlCommand command = new SqlCommand("SELECT \r\n    a.idAccidente, a.numeroReporte, a.fecha, a.hora, a.idMunicipio, a.idCarretera, a.idTramo, a.kilometro, a.idClasificacionAccidente,\r\n    a.idFactorAccidente, a.IdFactorOpcionAccidente, a.idOficinaDelegacion, a.descripcionCausas, m.municipio, c.carretera, t.tramo, e.estatusDesc,\r\n    ac.idCausaAccidente\r\nFROM \r\n    accidentes AS a\r\nJOIN \r\n    catMunicipios AS m ON a.idMunicipio = m.idMunicipio\r\nJOIN \r\n    catCarreteras AS c ON a.idCarretera = c.idCarretera\r\nJOIN \r\n    catTramos AS t ON a.idTramo = t.idTramo\r\nJOIN \r\n    estatus AS e ON a.estatus = e.estatus\r\nLEFT JOIN \r\n    accidenteCausas AS ac ON ac.idAccidente = a.idAccidente\r\nWHERE \r\n    a.idAccidente = @idAccidente AND a.estatus = 1 AND a.idOficinaDelegacion = @idOficina;\r\n", connection);
                     command.Parameters.Add(new SqlParameter("@idAccidente", SqlDbType.Int)).Value = idAccidente;
+                    command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = idOficina;
+
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
@@ -108,8 +111,10 @@ namespace GuanajuatoAdminUsuarios.Services
                             accidente.IdClasificacionAccidente = reader["IdClasificacionAccidente"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["IdClasificacionAccidente"].ToString());
                             accidente.IdFactorAccidente = reader["IdFactorAccidente"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["IdFactorAccidente"].ToString());
                             accidente.IdFactorOpcionAccidente = reader["IdFactorOpcionAccidente"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["IdFactorOpcionAccidente"].ToString());
+                            accidente.IdCausaAccidente = reader["idCausaAccidente"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idCausaAccidente"].ToString());
                             accidente.Municipio = reader["Municipio"].ToString();
                             accidente.Tramo = reader["Tramo"].ToString();
+                            accidente.DescripcionCausa = reader["descripcionCausas"].ToString();
                             accidente.Carretera = reader["Carretera"].ToString();
                             accidente.Kilometro = reader["Kilometro"].ToString();
                             accidente.IdTramo = Convert.ToInt32(reader["IdTramo"].ToString());
@@ -131,13 +136,14 @@ namespace GuanajuatoAdminUsuarios.Services
             return accidente;
         }
 
-        public int GuardarParte1(CapturaAccidentesModel model)
+        public int GuardarParte1(CapturaAccidentesModel model,int idOficina)
         
         {
             int result = 0;
             int lastInsertedId = 0;
             string strQuery = @"INSERT INTO accidentes( 
                                          [Hora]
+                                        ,[idOficinaDelegacion]
                                         ,[idMunicipio]
                                         ,[idTramo]
                                         ,[Fecha]
@@ -148,6 +154,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                         ,[estatus])
                                 VALUES (
                                          @Hora
+                                        ,@idOficina
                                         ,@idMunicipio
                                         ,@idTramo
                                         ,@Fecha
@@ -165,6 +172,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     SqlCommand command = new SqlCommand(strQuery, connection);
                     command.CommandType = CommandType.Text;
                     command.Parameters.Add(new SqlParameter("@Hora", SqlDbType.Time)).Value = (object)model.Hora ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = (object)idOficina ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@kilometro", SqlDbType.NVarChar)).Value = (object)model.Kilometro ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idMunicipio", SqlDbType.Int)).Value = (object)model.IdMunicipio ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idEstatusReporte", SqlDbType.Int)).Value = 1;
@@ -912,6 +920,7 @@ namespace GuanajuatoAdminUsuarios.Services
             }
         }
         public List<CapturaAccidentesModel> ObtenerDatosGridCausa(int idAccidente)
+        
         {
             //
             List<CapturaAccidentesModel> ListaGridCausa = new List<CapturaAccidentesModel>();
@@ -921,7 +930,10 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT ac.*, c.causaAccidente FROM accidenteCausas ac JOIN catCausasAccidentes c ON ac.idCausaAccidente = c.idCausaAccidente WHERE ac.idAccidente = @idAccidente AND ac.idCausaAccidente > 0;", connection);
+                    SqlCommand command = new SqlCommand("SELECT ac.*,a.descripcionCausas, c.causaAccidente FROM accidenteCausas ac " +
+                                                        "JOIN catCausasAccidentes c ON ac.idCausaAccidente = c.idCausaAccidente " +
+                                                        "LEFT JOIN accidentes AS a ON ac.idAccidente = a.idAccidente " +
+                                                        "WHERE ac.idAccidente = @idAccidente AND ac.idCausaAccidente > 0;", connection);
                     command.CommandType = CommandType.Text;
                     command.Parameters.AddWithValue("@idAccidente", idAccidente);
 
@@ -933,6 +945,8 @@ namespace GuanajuatoAdminUsuarios.Services
                             causa.IdAccidente = Convert.ToInt32(reader["IdAccidente"].ToString());
                             causa.IdCausaAccidente = Convert.ToInt32(reader["IdCausaAccidente"].ToString());
                             causa.CausaAccidente = reader["causaAccidente"].ToString();
+                            causa.DescripcionCausa = reader["descripcionCausas"].ToString();
+
 
                             ListaGridCausa.Add(causa);
 
@@ -953,28 +967,45 @@ namespace GuanajuatoAdminUsuarios.Services
 
 
         }
-        public List<CapturaAccidentesModel> BusquedaPersonaInvolucrada(BusquedaInvolucradoModel model)
+        public List<CapturaAccidentesModel> BusquedaPersonaInvolucrada(BusquedaInvolucradoModel model, string server = null)
         {
             //
             List<CapturaAccidentesModel> ListaInvolucrados = new List<CapturaAccidentesModel>();
 
+            string condiciones = "";
+            condiciones += string.IsNullOrEmpty(model.licencia) ? "" : " AND numeroLicencia LIKE '%' + @numeroLicencia + '%' ";
+            condiciones += string.IsNullOrEmpty(model.curpBusqueda) ? "" : " AND curp LIKE '%' + @curp + '%'";
+            condiciones += string.IsNullOrEmpty(model.rfcBusqueda) ? "" : " AND rfc LIKE '%' + @rfc + '%'";
+            condiciones += string.IsNullOrEmpty(model.nombre) ? "" : " AND nombre LIKE '%' + @nombre + '%' ";
+            condiciones += string.IsNullOrEmpty(model.apellidoPaterno) ? "" : " AND apellidoPaterno LIKE '%' + @apellidoPaterno + '%' ";
+            condiciones += string.IsNullOrEmpty(model.apellidoMaterno) ? "" : " AND apellidoMaterno LIKE '%' + @apellidoMaterno + '%' ";
+
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
                 try
                 {
-                    connection.Open();
+                    connection.Open(); 
 
-
-                    const string SqlTransact = @"SELECT * FROM personas WHERE (numeroLicencia LIKE '%' + @numeroLicencia + '%' OR curp LIKE '%' + @curp " +
-                                                "OR rfc LIKE '%' + @rfc + '%' OR nombre LIKE '%' + @nombre OR apellidoPaterno LIKE '%' + @apellidoPaterno + '%' OR apellidoMaterno LIKE '%' + @apellidoMaterno) " +
-                                                "AND estatus = 1;";
+                    string SqlTransact = @"SELECT * FROM personas WHERE estatus = 1 "+ condiciones+ " ORDER BY nombre";
 
                     SqlCommand command = new SqlCommand(SqlTransact, connection);
-                    command.Parameters.Add(new SqlParameter("@numeroLicencia", SqlDbType.NVarChar)).Value = (object)model.licencia ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@curp", SqlDbType.NVarChar)).Value = (object)model.curp ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@rfc", SqlDbType.NVarChar)).Value = (object)model.rfc ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@nombre", SqlDbType.NVarChar)).Value = (object)model.nombre ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@apellidoPaterno", SqlDbType.NVarChar)).Value = (object)model.apellidoPaterno ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@apellidoMaterno", SqlDbType.NVarChar)).Value = (object)model.apellidoMaterno ?? DBNull.Value;
+                    if (!string.IsNullOrEmpty(model.licencia))
+                        command.Parameters.Add(new SqlParameter("@numeroLicencia", SqlDbType.NVarChar)).Value = (object)model.licencia ?? DBNull.Value;
+
+                    if (!string.IsNullOrEmpty(model.curpBusqueda))
+                        command.Parameters.Add(new SqlParameter("@curp", SqlDbType.NVarChar)).Value = (object)model.curpBusqueda ?? DBNull.Value;
+
+                    if (!string.IsNullOrEmpty(model.rfcBusqueda))
+                        command.Parameters.Add(new SqlParameter("@rfc", SqlDbType.NVarChar)).Value = (object)model.rfcBusqueda ?? DBNull.Value;
+
+                    if (!string.IsNullOrEmpty(model.nombre))
+                        command.Parameters.Add(new SqlParameter("@nombre", SqlDbType.NVarChar)).Value = (object)model.nombre ?? DBNull.Value;
+
+                    if (!string.IsNullOrEmpty(model.apellidoPaterno))
+                        command.Parameters.Add(new SqlParameter("@apellidoPaterno", SqlDbType.NVarChar)).Value = (object)model.apellidoPaterno ?? DBNull.Value;
+
+                    if (!string.IsNullOrEmpty(model.apellidoMaterno))
+                        command.Parameters.Add(new SqlParameter("@apellidoMaterno", SqlDbType.NVarChar)).Value = (object)model.apellidoMaterno ?? DBNull.Value;
+                     
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
@@ -989,12 +1020,9 @@ namespace GuanajuatoAdminUsuarios.Services
                             involucrado.curp = reader["curp"].ToString();
                             involucrado.licencia = reader["numeroLicencia"].ToString();
 
-                            ListaInvolucrados.Add(involucrado);
-
-                        }
-
-                    }
-
+                            ListaInvolucrados.Add(involucrado); 
+                        } 
+                    } 
                 }
                 catch (SqlException ex)
                 {
@@ -1005,9 +1033,8 @@ namespace GuanajuatoAdminUsuarios.Services
                 {
                     connection.Close();
                 }
+
             return ListaInvolucrados;
-
-
         }
         public int AgregarPersonaInvolucrada(int idPersonaInvolucrado, int idAccidente)
         {
@@ -1681,13 +1708,39 @@ namespace GuanajuatoAdminUsuarios.Services
         public int AgregarDatosFinales(DatosAccidenteModel datosAccidente, int armasValue, int drogasValue, int valoresValue, int prendasValue, int otrosValue, int idAccidente)
         {
             int result = 0;
+            string qryUpdate = "";
+            qryUpdate += !datosAccidente.montoCamino.Equals(null) ? " , montoCamino = @MontoCamino " : "";
+            qryUpdate += !datosAccidente.montoCarga.Equals(null) ? " , montoCarga = @MontoCarga " : "";
+            qryUpdate += !datosAccidente.montoPropietarios.Equals(null) ? " , montoPropietarios = @MontoPropietarios " : "";
+            qryUpdate += !datosAccidente.montoOtros.Equals(null) ? " , montoOtros = @MontoOtros " : "";
+            qryUpdate += !datosAccidente.Latitud.Equals(null) ? " , latitud = @Latitud " : "";
+            qryUpdate += !datosAccidente.Longitud.Equals(null) ? " , longitud = @Longitud " : "";
+            qryUpdate += !datosAccidente.IdCertificado.Equals(null) ? " , idCertificado = @IdCertificado " : "";
+            qryUpdate += !armasValue.Equals(null) ? " , armas = @armasValue " : "";
+            qryUpdate += !drogasValue.Equals(null) ? " , drogas = @drogasValue " : "";
+            qryUpdate += !valoresValue.Equals(null) ? " , valores = @valoresValue " : "";
+            qryUpdate += !prendasValue.Equals(null) ? " , prendas = @prendasValue " : "";
+            qryUpdate += !otrosValue.Equals(null) ? " , otros = @otrosValue " : ""; 
+            qryUpdate += !string.IsNullOrEmpty(datosAccidente.entregaObjetos) ? " , entregaObjetos = @entregaObjetos " : ""; 
+            qryUpdate += !string.IsNullOrEmpty(datosAccidente.entregaOtros) ? " , entregaOtros = @entregaOtros " : "";
+            qryUpdate += !string.IsNullOrEmpty(datosAccidente.consignacionHechos) ? " , consignacionHechos = @consignacionHechos " : "";
+            qryUpdate += !datosAccidente.IdCiudad.Equals(null) ? " , idCiudad = @idCiudad " : "";
+            qryUpdate += !datosAccidente.IdAutoridadEntrega.Equals(null) ? " , idAutoridadEntrega = @IdAutoridadEntrega " : "";
+            qryUpdate += !datosAccidente.IdAutoridadDisposicion.Equals(null) ? " , idAutoridadDisposicion = @IdAutoridadDisposicion " : "";
+            qryUpdate += !datosAccidente.IdElaboraConsignacion.Equals(null) ? " , idElaboraConsignacion = @IdElaboraConsignacion " : "";
+            qryUpdate += !string.IsNullOrEmpty(datosAccidente.numeroOficio) ? " , numeroOficio = @numeroOficio " : "";
+            qryUpdate += !datosAccidente.IdAgenciaMinisterio.Equals(null) ? " , idAgenciaMinisterio = @IdAgenciaMinisterio " : "";
+            qryUpdate += !string.IsNullOrEmpty(datosAccidente.RecibeMinisterio) ? " , recibeMinisterio = @RecibeMinisterio " : "";
+            qryUpdate += !datosAccidente.IdElabora.Equals(null) ? " , idElabora = @IdElabora " : "";
+            qryUpdate += !datosAccidente.IdAutoriza.Equals(null) ? " , idAutoriza = @IdAutoriza " : "";
+            qryUpdate += !datosAccidente.IdSupervisa.Equals(null) ? " , idSupervisa = @IdSupervisa " : "";
 
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
             {
                 try
                 {
                     connection.Open();
-                    string query = "UPDATE accidentes SET idEstatusReporte = @idEstatusReporte, montoCamino = @MontoCamino, montoCarga = @MontoCarga, montoPropietarios = @MontoPropietarios, montoOtros = @MontoOtros, latitud = @Latitud, longitud = @Longitud, idCertificado = @IdCertificado, armas = @armasValue, drogas = @drogasValue, valores = @valoresValue, prendas = @prendasValue, otros = @otrosValue, entregaObjetos = @entregaObjetos, entregaOtros = @entregaOtros, idAutoridadEntrega = @IdAutoridadEntrega, idAutoridadDisposicion = @IdAutoridadDisposicion, idElaboraConsignacion = @IdElaboraConsignacion, numeroOficio = @numeroOficio, idAgenciaMinisterio = @IdAgenciaMinisterio, recibeMinisterio = @RecibeMinisterio, idElabora = @IdElabora, idAutoriza = @IdAutoriza, idSupervisa = @IdSupervisa WHERE idAccidente = @IdAccidente";
+                    string query = @"UPDATE accidentes SET idEstatusReporte = @idEstatusReporte "+qryUpdate+" WHERE idAccidente = @IdAccidente";
 
                     SqlCommand command = new SqlCommand(query, connection);
 
@@ -1704,14 +1757,30 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.AddWithValue("@valoresValue", valoresValue);
                     command.Parameters.AddWithValue("@prendasValue", prendasValue);
                     command.Parameters.AddWithValue("@otrosValue", otrosValue);
-                    command.Parameters.AddWithValue("@entregaObjetos", datosAccidente.entregaObjetos);
-                    command.Parameters.AddWithValue("@entregaOtros", datosAccidente.entregaOtros);
+                    if (!string.IsNullOrEmpty(datosAccidente.entregaObjetos))
+                        command.Parameters.Add(new SqlParameter("@entregaObjetos", SqlDbType.NVarChar)).Value = (object)datosAccidente.entregaObjetos ?? DBNull.Value;
+
+                    if (!string.IsNullOrEmpty(datosAccidente.entregaObjetos))
+                        command.Parameters.Add(new SqlParameter("@entregaOtros", SqlDbType.NVarChar)).Value = (object)datosAccidente.entregaOtros ?? DBNull.Value;
+                    
+                    if (!string.IsNullOrEmpty(datosAccidente.consignacionHechos))
+                        command.Parameters.Add(new SqlParameter("@consignacionHechos", SqlDbType.NVarChar)).Value = (object)datosAccidente.consignacionHechos ?? DBNull.Value;
+                    
+                    if(datosAccidente.IdCiudad > 0)
+                        command.Parameters.AddWithValue("@idCiudad", datosAccidente.IdCiudad);
+                    
                     command.Parameters.AddWithValue("@IdAutoridadEntrega", datosAccidente.IdAutoridadEntrega);
                     command.Parameters.AddWithValue("@IdAutoridadDisposicion", datosAccidente.IdAutoridadDisposicion);
-                    command.Parameters.AddWithValue("@IdElaboraConsignacion", datosAccidente.IdElaboraConsignacion);
-                    command.Parameters.AddWithValue("@numeroOficio", datosAccidente.numeroOficio);
+                    command.Parameters.AddWithValue("@IdElaboraConsignacion", datosAccidente.IdElaboraConsignacion); 
+
+                    if (!string.IsNullOrEmpty(datosAccidente.numeroOficio))
+                        command.Parameters.Add(new SqlParameter("@numeroOficio", SqlDbType.NVarChar)).Value = (object)datosAccidente.numeroOficio ?? DBNull.Value;
+
                     command.Parameters.AddWithValue("@IdAgenciaMinisterio", datosAccidente.IdAgenciaMinisterio);
-                    command.Parameters.AddWithValue("@RecibeMinisterio", datosAccidente.RecibeMinisterio);
+
+                    if (!string.IsNullOrEmpty(datosAccidente.RecibeMinisterio))
+                        command.Parameters.Add(new SqlParameter("@RecibeMinisterio", SqlDbType.NVarChar)).Value = (object)datosAccidente.RecibeMinisterio ?? DBNull.Value;
+
                     command.Parameters.AddWithValue("@IdElabora", datosAccidente.IdElabora);
                     command.Parameters.AddWithValue("@IdAutoriza", datosAccidente.IdAutoriza);
                     command.Parameters.AddWithValue("@IdSupervisa", datosAccidente.IdSupervisa);
@@ -1719,7 +1788,7 @@ namespace GuanajuatoAdminUsuarios.Services
 
 
 
-                    command.ExecuteNonQuery();
+                    result = command.ExecuteNonQuery();
                 }
                 catch (SqlException ex)
                 {
@@ -1811,7 +1880,98 @@ namespace GuanajuatoAdminUsuarios.Services
             return result;
         }
 
+        public string ObtenerDescripcionCausaDesdeBD(int idAccidente)
+        {
+            string descripcionCausa = null;
 
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                string query = "SELECT descripcionCausas FROM accidentes WHERE idAccidente = @idAccidente"; // Reemplaza esto con tu consulta
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.AddWithValue("@idAccidente", idAccidente);
+
+                    connection.Open();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            descripcionCausa = reader["descripcionCausas"].ToString();
+                        }
+
+                        reader.Close();
+                    }
+                }
+
+                return descripcionCausa;
+            }
+        }
+
+
+        public DatosAccidenteModel ObtenerDatosFinales(int idAccidente)
+        {
+
+            DatosAccidenteModel datosFinales = new DatosAccidenteModel();
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                string query = @"SELECT idEstatusReporte,
+                                    montoCamino, montoCarga, montoPropietarios, montoOtros,
+                                    latitud ,longitud ,idCertificado ,
+                                    armas ,drogas ,valores ,prendas ,otros ,entregaObjetos, entregaOtros ,
+                                    consignacionHechos, idCiudad ,
+                                    idAutoridadEntrega , idAutoridadDisposicion , idElaboraConsignacion , 
+                                    numeroOficio , idAgenciaMinisterio ,recibeMinisterio , 
+                                    idElabora , idAutoriza , idSupervisa 
+                                    FROM accidentes a 
+                                    WHERE idAccidente = @IdAccidente
+                                    ";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.AddWithValue("@idAccidente", idAccidente);
+
+                    connection.Open();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            datosFinales.montoCamino = reader["montoCamino"] == DBNull.Value ? 0 : float.Parse(reader["montoCamino"].ToString());
+                            datosFinales.montoCarga = reader["montoCarga"] == DBNull.Value ? 0 : float.Parse(reader["montoCarga"].ToString());
+                            datosFinales.montoPropietarios = reader["montoPropietarios"] == DBNull.Value ? 0 : float.Parse(reader["montoPropietarios"].ToString());
+                            datosFinales.montoOtros = reader["montoOtros"] == DBNull.Value ? 0 : float.Parse(reader["montoOtros"].ToString());
+                            datosFinales.Latitud = reader["latitud"] == DBNull.Value ? 0 : float.Parse(reader["latitud"].ToString());
+                            datosFinales.Longitud = reader["longitud"] == DBNull.Value ? 0 : float.Parse(reader["longitud"].ToString());
+                            datosFinales.IdCertificado = reader["idCertificado"] == DBNull.Value ? 0 : int.Parse(reader["idCertificado"].ToString());
+                            datosFinales.EstadoArmas = reader["armas"] == DBNull.Value ? 0 : int.Parse(reader["armas"].ToString()); 
+                            datosFinales.EstadoDrogas = reader["drogas"] == DBNull.Value ? 0 : int.Parse(reader["drogas"].ToString());
+                            datosFinales.EstadoValores = reader["valores"] == DBNull.Value ? 0 : int.Parse(reader["valores"].ToString());
+                            datosFinales.EstadoPrendas = reader["prendas"] == DBNull.Value ? 0 : int.Parse(reader["prendas"].ToString());
+                            datosFinales.EstadoOtros = reader["otros"] == DBNull.Value ? 0 : int.Parse(reader["otros"].ToString());
+                            datosFinales.consignacionHechos = reader["consignacionHechos"] == DBNull.Value ? "" : reader["consignacionHechos"].ToString();
+                            datosFinales.IdCiudad = reader["idCiudad"] == DBNull.Value ? 0 : int.Parse(reader["idCiudad"].ToString());
+                            datosFinales.entregaObjetos = reader["entregaObjetos"] == DBNull.Value ? "" : reader["entregaObjetos"].ToString();
+                            datosFinales.entregaOtros = reader["entregaOtros"] == DBNull.Value ? "" : reader["entregaOtros"].ToString();
+                            datosFinales.IdAutoridadEntrega = reader["idAutoridadEntrega"] == DBNull.Value ? 0 : int.Parse(reader["idAutoridadEntrega"].ToString());
+                            datosFinales.IdAutoridadDisposicion = reader["idAutoridadDisposicion"] == DBNull.Value ? 0 : int.Parse(reader["idAutoridadDisposicion"].ToString());
+                            datosFinales.IdElaboraConsignacion = reader["idElaboraConsignacion"] == DBNull.Value ? 0 : int.Parse(reader["idElaboraConsignacion"].ToString());
+                            datosFinales.numeroOficio = reader["numeroOficio"] == DBNull.Value ?"" : reader["numeroOficio"].ToString();
+                            datosFinales.IdAgenciaMinisterio = reader["idAgenciaMinisterio"] == DBNull.Value ? 0 : int.Parse(reader["idAgenciaMinisterio"].ToString());
+                            datosFinales.RecibeMinisterio = reader["recibeMinisterio"] == DBNull.Value ? "" : reader["recibeMinisterio"].ToString();
+                            datosFinales.IdElabora = reader["idElabora"] == DBNull.Value ? 0 : int.Parse(reader["idElabora"].ToString());
+                            datosFinales.IdAutoriza = reader["idAutoriza"] == DBNull.Value ? 0 : int.Parse(reader["idAutoriza"].ToString());
+                            datosFinales.IdSupervisa = reader["idSupervisa"] == DBNull.Value ? 0 : int.Parse(reader["idSupervisa"].ToString()); 
+                        }
+
+                        reader.Close();
+                    }
+                }
+
+                return datosFinales;
+            } 
+        }  
     }
 }
 

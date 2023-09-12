@@ -1,12 +1,11 @@
 ﻿<script>
     function onRowSelectC(e) {
         var selectedRow = this.select();
+
         var IdPersona; 
-
+        
         if (selectedRow.length > 0) {
-            var dataItem = this.dataItem(selectedRow);
-            console.log(dataItem);
-
+            var dataItem = this.dataItem(selectedRow); 
             IdPersona = dataItem.idPersonaInvolucrado;
         }
 

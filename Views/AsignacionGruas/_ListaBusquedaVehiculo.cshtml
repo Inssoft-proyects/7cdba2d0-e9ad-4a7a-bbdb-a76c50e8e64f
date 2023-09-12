@@ -1,0 +1,77 @@
+﻿<script>
+    function onRowSelect() {
+        var grid = $("#gridVehiculosDeposito").data("kendoGrid");
+        var selectedRowData = grid.dataItem(grid.select());
+
+        console.log("EE", selectedRowData);
+        document.getElementById("datosVehiculo").style.display = "block";
+        $('#modalVehiculos').modal('hide');
+
+        var jsonData = JSON.stringify(selectedRowData);
+
+        $.ajax({
+            type: 'POST',
+            url: '/AsignacionGruas/ActualizarDatosVehiculo',
+            contentType: 'application/json', 
+            data: jsonData,
+            success: function (result) {
+                console.log("Actualización exitosa", result);
+                document.getElementById("PlacaSpan").textContent = selectedRowData.Placa;
+                document.getElementById("SerieSpan").textContent = selectedRowData.Serie;
+                document.getElementById("MarcaSpan").textContent = selectedRowData.Marca;
+                document.getElementById("SubmarcaSpan").textContent = selectedRowData.Submarca;
+                document.getElementById("ModeloSpan").textContent = selectedRowData.Modelo;
+                document.getElementById("PropietarioSpan").textContent = selectedRowData.Propietario;
+                document.getElementById("CurpSpan").textContent = selectedRowData.CURP;
+                document.getElementById("RfcSpan").textContent = selectedRowData.RFC;
+
+                
+            },
+            error: function (error) {
+                // Ocurrió un error al procesar la solicitud
+                console.error("Error en la actualización", error);
+            }
+        });
+    }
+
+
+</script>
+
+<div class="col-12 mb-4 px-4 rounded gridCustom">
+    @(
+        Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.AsignacionGruaModel>()
+        .Name("gridVehiculosDeposito")
+        .Events(events => events.Change("onRowSelect"))
+
+        .Columns(columns =>
+        {
+            columns.Select().Width(50).ClientHeaderTemplate(" ");
+            columns.Bound(c => c.IdPersona).Hidden();
+            columns.Bound(c => c.IdVehiculo).Hidden();
+            columns.Bound(c => c.Color).Hidden();
+            columns.Bound(c => c.Marca).Title("Marca").Width(100);
+            columns.Bound(c => c.Submarca).Title("Submarca").Width(100);
+            columns.Bound(c => c.Placa).Title("Placa").Width(100);
+            columns.Bound(c => c.Modelo).Title("Modelo").Width(100);
+            columns.Bound(c => c.Serie).Title("Serie").Width(100);
+            columns.Bound(c => c.Motor).Title("Motor").Width(100);
+            columns.Bound(c => c.NumeroEconomico).Title("Numero Económico").Width(100);
+            columns.Bound(c => c.Propietario).Title("Propietario").Width(100);
+
+
+        })
+        .HtmlAttributes(new { style = "height:400px" })
+        .Sortable()
+        .Groupable()
+        .Scrollable()
+        .Pageable()
+        .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(read => read.Action("BuscarVehiculo", "AsignarGruas"))
+        .PageSize(5).Model(model => model.Id(p => p.IdMarcaVehiculo))
+        )
+        .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple).Type(GridSelectionType.Row))
+        )
+</div>
+
+

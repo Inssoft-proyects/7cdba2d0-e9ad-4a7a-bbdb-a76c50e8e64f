@@ -8,6 +8,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
     public interface ICatTiposVehiculosService
     {
         List<TiposVehiculosModel> GetTiposVehiculos();
+        public int obtenerIdPorTipo(string categoria);
 
     }
 }

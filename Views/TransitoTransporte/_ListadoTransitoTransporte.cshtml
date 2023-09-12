@@ -59,6 +59,14 @@
 <br />
 
 <div class="row">
+    @if (ViewBag.NoResultsMessage != null)
+    {
+        <div class="alert alert-info">
+            @ViewBag.NoResultsMessage
+        </div>
+    }
+
+    <!-- Aquí continúa el contenido del listado de tránsito y transporte -->
     @*<column template="<button data-bs-toggle=modal data-bs-target=\#editVehiculo class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>" width="100" />*@
     <div class="col-12 mb-4 px-4 rounded gridCustom">
         @(

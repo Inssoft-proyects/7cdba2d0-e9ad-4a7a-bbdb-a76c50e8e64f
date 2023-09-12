@@ -60,6 +60,10 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public ActionResult ajax_BuscarReporte(ReporteAsignacionBusquedaModel model)
         {
             var listReporteAsignacion = _reporteAsignacionService.GetAllReporteAsignaciones(model);
+            if (listReporteAsignacion.Count == 0)
+            {
+                ViewBag.NoResultsMessage = "No se encontraron registros que cumplan con los criterios de búsqueda.";
+            }
             return PartialView("_ListadoReporteAsignacion", listReporteAsignacion);
         }
 

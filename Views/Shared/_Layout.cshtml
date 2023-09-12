@@ -28,7 +28,7 @@
     
         $(document).ready(function () {
             $.ajax({
-                url: '@Url.Action("GetIdsPermitidos", "Login")', // Reemplaza "Controlador" con el nombre de tu controlador
+                url: '@Url.Action("GetIdsPermitidos", "Login")', 
                 type: 'GET',
                 success: function (data) {
                     var idsPermitidos = data;
@@ -52,290 +52,319 @@
 <body>
     <main class="container-fluid">
         <div class="row minH100">
-            <nav class="navPrincipal">
+            <nav id="nav" class="navPrincipal">
                 <div class="row h-100">
                     <div class="col-auto mx-0 px-0 pt-1 pt-md-5 navPrincipal-content">
+                        <button class="iconMenu mt-3" id="toggle">
+                            <div class="line line1"></div>
+                            <div class="line line2"></div>
+                        </button>
                         <div class="nav nav-tabs border-0 col-auto d-flex flex-column mt-5" id="nav-tab" role="tablist">
-                            <button class="nav-link active d-flex justify-content-center align-items-center" id="nav-vehiculo-tab" data-bs-toggle="tab" data-bs-target="#nav-vehiculo" type="button" role="tab" aria-controls="nav-vehiculo" aria-selected="true"><i class="icon icon-car h4 m-0"></i></button>
+                            <button class="nav-link active d-flex justify-content-center align-items-center" id="nav-vehiculo-tab" data-bs-toggle="tab" data-bs-target="#nav-vehiculo" type="button" role="tab" aria-controls="nav-vehiculo" aria-selected="true"><i class="icon icon-car h5 m-0"></i></button>
+                            <button class="nav-link d-flex justify-content-center align-items-center" id="nav-infraccion-tab" data-bs-toggle="tab" data-bs-target="#nav-infraccion" type="button" role="tab" aria-controls="nav-infraccion" aria-selected="false"><i class="icon icon-infracion h3 m-0"></i></button>
+                            <button class="nav-link d-flex justify-content-center align-items-center" id="nav-accidentes-tab" data-bs-toggle="tab" data-bs-target="#nav-accidentes" type="button" role="tab" aria-controls="nav-accidentes" aria-selected="false"><i class="icon icon-accidente h4 m-0"></i></button>
                             <button class="nav-link d-flex justify-content-center align-items-center" id="nav-catalogo-tab" data-bs-toggle="tab" data-bs-target="#nav-catalogo" type="button" role="tab" aria-controls="nav-catalogo" aria-selected="false"><i class="icon icon-data h4 m-0"></i></button>
+                            <button class="nav-link d-flex justify-content-center align-items-center" id="nav-admin-tab" data-bs-toggle="tab" data-bs-target="#nav-admin" type="button" role="tab" aria-controls="nav-admin" aria-selected="false"><i class="icon icon-fisica h4 m-0"></i></button>
                         </div>
                     </div>
                     <!-- CATALGOS -->
-                    <div class="col text-center pt-3 pt-md-5">
+                    <div class="col text-center pt-3 pt-md-5 pb-3">
                         <img width="90%" src="~/img/logo-gto.png" />
                         <div class="tab-content col" id="nav-tabContent">
+                            <!-- ***************** -->
                             <div class="tab-pane fade show active" id="nav-vehiculo" role="tabpanel" aria-labelledby="nav-vehiculo-tab">
                                 <ul class="navbar-nav mt-4">
                                     
                                     <li class="nav-item" data-id="303">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/LiberacionVehiculo/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Liberación de Vehículo</p>
+                                            <i class="icon icon-entrega h5 m-0 mt-1 me-2"></i>
+                                            <p class="m-0 text-start text-break">Liberación de Vehículo</p>
                                         </a>
                                     </li>
 
                                     <li data-id="200" class="nav-item @Html.IsSelected(controller: "TransitoTransporte,Index")">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="@Url.Action("Index", "TransitoTransporte")">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Búsqueda Transito/Transporte</p>
+                                            <i class="icon icon-research h5 m-0 mt-1 me-2"></i>
+                                            <p class="m-0 text-start text-break">Búsqueda Transito/Transporte</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item" data-id="301">
+                                        <a class="nav-link d-flex justify-content-start align-items-start" href="/Depositos/Depositos">
+                                            <i class="icon icon-addDeposito h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Solicitud de depósito</p>
+                                        </a>
+                                    </li>
+                                     <li class="nav-item" data-id="302">
+                                        <a class="nav-link d-flex justify-content-start align-items-center" href="/AsignacionGruas/Index">
+                                            <i class="icon icon-addGrua h4 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Captura Gruas</p>
                                         </a>
                                     </li>
                                     <li class="nav-item" data-id="500">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/PadronGruas/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Padrón de grúas</p>
+                                            <i class="icon icon-grua h4 m-0 mt-1 me-2"></i>
+                                            <p class="m-0 text-start text-break">Padrón de grúas</p>
                                         </a>
                                     </li>
                                     <li class="nav-item active" data-id="300">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/PadronDepositosGruas/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Padrón de depósitos y grúas</p>
+                                            <i class="icon icon-inventario h5 m-0 mt-1 me-2"></i>
+                                            <p class="m-0 text-start text-break">Padrón de depósitos y grúas</p>
                                         </a>
                                     </li>
                                     <li class="nav-item active" data-id= "304">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/ReporteAsignacionServicios/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Reporte de asignación de servicios</p>
+                                            <i class="icon icon-deposito h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Reporte de asignación de servicios</p>
                                         </a>
                                     </li>
 
                                     <li class="nav-item active" data-id="400">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/Pensiones/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Pensiones</p>
+                                            <i class="icon icon-pension h4 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Pensiones</p>
                                         </a>
                                     </li>
                                     <li class="nav-item active" data-id="600">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/Concesionarios/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Concesionarios</p>
+                                            <i class="icon icon-concesonaria h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Concesionarios</p>
                                         </a>
                                     </li>
 
+                                    
+                                    <li class="nav-item active" data-id="500">
+                                        <a class="nav-link d-flex justify-content-start align-items-center" href="/Vehiculos/Index">
+                                            <i class="icon icon-transito h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Vehículos</p>
+                                        </a>
+                                    </li>
+                                    <!--Falta id-->
+                                    <li class="nav-item active" data-id="303">
+                                        <a class="nav-link d-flex justify-content-start align-items-center" href="/Vehiculos/Editar">
+                                            <i class="icon icon-edit-car h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Modificar Vehículos</p>
+                                        </a>
+                                    </li>
+                                    <!--falta id-->
+                                    <li class="nav-item active" data-id="500">
+                                        <a class="nav-link d-flex justify-content-start align-items-center" href="/Personas/Index">
+                                            <i class="icon icon-fisica h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Personas</p>
+                                        </a>
+                                    </li>
+                                    
+                                    
+                                    
+                                    
+                                </ul>
+                            </div>
+
+                            <!-- ***************** -->
+                            <div class="tab-pane fade " id="nav-infraccion" role="tabpanel" aria-labelledby="nav-infraccion-tab">
+                                <ul class="navbar-nav mt-4">
+
                                     <li class="nav-item active" data-id="700">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/Infracciones/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Infracciones</p>
+                                            <i class="icon icon-infracion h4 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Infracciones</p>
                                         </a>
                                     </li>
 
 
                                     <li class="nav-item active" data-id="704">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/CancelarInfraccion/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Cancelar Infraccion</p>
+                                            <i class="icon icon-cancelInfracion h4 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Cancelar Infraccion</p>
                                         </a>
                                     </li>
                                     <li class="nav-item active" data-id="705">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/RegistroReciboPago/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Registro de Recibo de Pago</p>
+                                            <i class="icon icon-editRecibo h4 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Registro de Recibo de Pago</p>
                                         </a>
                                     </li>
                                      <li class="nav-item active" data-id="708">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/EnvioInfracciones/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Envío de Infracciones</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item active" data-id="500">
-                                        <a class="nav-link d-flex justify-content-start align-items-center" href="/Vehiculos/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Vehículos</p>
-                                        </a>
-                                    </li>
-                                    <!--Falta id-->
-                                    <li class="nav-item active">
-                                        <a class="nav-link d-flex justify-content-start align-items-center" href="/Vehiculos/Editar">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Modificar Vehículos</p>
-                                        </a>
-                                    </li>
-                                    <!--falta id-->
-                                    <li class="nav-item active" data-id="500">
-                                        <a class="nav-link d-flex justify-content-start align-items-center" href="/Personas/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Personas</p>
+                                            <i class="icon icon-enviar h6 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Envío de Infracciones</p>
                                         </a>
                                     </li>
                                     <li class="nav-item active" data-id="707">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/Estadisticas/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Estadísticas de Infracciones</p>
+                                            <i class="icon icon-estadisticas h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Estadísticas de Infracciones</p>
                                         </a>
                                     </li>
+                                    
+                                </ul>
+                            </div>
+                            
+                            <!-- ***************** -->
+                            <div class="tab-pane fade " id="nav-accidentes" role="tabpanel" aria-labelledby="nav-accidentes-tab">
+                                <ul class="navbar-nav mt-4">
                                     <li class="nav-item active" data-id="801">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/CapturaAccidentes/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Captura de Accidentes</p>
+                                            <i class="icon icon-accidentes h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Captura de Accidentes</p>
                                         </a>
                                     </li>
-                                    <li class="nav-item active" data-id="705">
-                                        <a class="nav-link d-flex justify-content-start align-items-center" href="/RegistroReciboPago/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Recibo de Pago</p>
-                                            </a>
-                                    </li>
+
+
                                     <li data-id="800">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/BusquedaAccidentes/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Busqueda de Accidentes</p>
+                                            <i class="icon icon-research h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Busqueda de Accidentes</p>
                                         </a>
                                     </li>
-                                    <li class="nav-item active">
+
+                                    <li class="nav-item active" data-id="303">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/EstadisticasAccidentes/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Estadisticas de Accidentes</p>
+                                            <i class="icon icon-estadisticas h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Estadísticas de Accidentes</p>
                                             </a>
-                                    </li>
-                                    <li class="nav-item active">
-                                        
-                                    </li>
-                                    <li class="nav-item active">
-                                        <a class="nav-link d-flex justify-content-start align-items-center" href="/">
-                                            
-                                            <p class="m-0 text-start">Cerrar Sesión</p>
-                                        </a>
                                     </li>
                                 </ul>
                             </div>
+
+                            <!-- ***************** -->
                             <div class="tab-pane fade" id="nav-catalogo" role="tabpanel" aria-labelledby="nav-catalogo-tab">
                                 <ul class="navbar-nav mt-4">
                                     <li class="nav-item active" data-id="956">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/CatAgenciasMinisterio/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Agencias Ministerio</p>
+                                            <i class="icon icon-ministerio h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Agencias Ministerio</p>
                                         </a>
                                     </li>
                                     <li class="nav-item active" data-id="964">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/CatAutoridadesDisposicion/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Autoridades Disposición</p>
+                                            <i class="icon icon-autoridad h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Autoridades Disposición</p>
                                         </a>
                                     </li>
                                     <li class="nav-item active" data-id="968">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/CatAutoridadesEntrega/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Autoridades Entrega</p>
+                                            <i class="icon icon-entrega h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Autoridades Entrega</p>
                                         </a>
                                     </li>
                                     <li class="nav-item active" data-id="900">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/CatCarreteras/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Carreteras</p>
+                                            <i class="icon icon-carretera h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Carreteras</p>
                                         </a>
                                     </li>
                                     <li class="nav-item active" data-id="984">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/CatCausasAccidentes/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Causas Accidentes</p>
+                                            <i class="icon icon-causas h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Causas Accidentes</p>
                                         </a>
                                     </li>
                                     <li class="nav-item active" data-id="976">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/CatClasificacionAccidentes/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Clasificación Accidentes</p>
+                                            <i class="icon icon-clasificacionAccidente h4 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Clasificación Accidentes</p>
                                         </a>
                                     </li>
                                     <li class="nav-item active" data-id="936">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/Colores/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Colores</p>
+                                            <i class="icon icon-color h4 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Colores</p>
                                         </a>
                                     </li>
                                     <li class="nav-item active" data-id="988">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/CatDelegacionesOficinasTransporte/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start"> Delegaciones / Oficinas-Transporte</p>
+                                            <i class="icon icon-oficinas h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break"> Delegaciones / Oficinas-Transporte</p>
                                         </a>
                                     </li>
                                     <li class="nav-item active" data-id="908">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/Dependencias/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Dependencias</p>
+                                            <i class="icon icon-dependencia h4 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Dependencias</p>
                                         </a>
                                     </li>
                                     <li class="nav-item active" data-id="948">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/DiasInhabiles/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Días Inhabiles</p>
+                                            <i class="icon icon-date h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Días Inhabiles</p>
                                         </a>
                                     </li>
                                     <li class="nav-item active" data-id="916">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/CatEntidades/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Entidades</p>
+                                            <i class="icon icon-entidad h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Entidades</p>
                                         </a>
                                     </li>
                                     <li class="nav-item active" data-id="980">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/CatFactoresAccidentes/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Factores Accidentes</p>
+                                            <i class="icon icon-factores h4 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Factores Accidentes</p>
                                         </a>
                                     </li>
                                     <li class="nav-item active" data-id="996">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/CatFactoresOpcionesAccidentes/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Factores Opciones Accidentes</p>
+                                            <i class="icon icon-opciones h4 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Factores Opciones Accidentes</p>
                                         </a>
                                     </li>
                                     <li class="nav-item active" data-id="992">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/CatHospitales/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Hospitales</p>
+                                            <i class="icon icon-hospital h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Hospitales</p>
                                         </a>
                                     </li>
                                     
                                     <li class="nav-item active" data-id="972">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/CatInstitucionesTraslado/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Instituciones Traslado</p>
+                                            <i class="icon icon-traslado h4 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Instituciones Traslado</p>
                                         </a>
                                     </li>
 
                                     <li class="nav-item active" data-id="924">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/CatMarcasVehiculos/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Marcas Vehículos</p>
+                                            <i class="icon icon-marca h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Marcas Vehículos</p>
                                         </a>
                                     </li>
                                     <li class="nav-item active" data-id="944">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/MotivosInfraccion/IndexModal">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Motivos Infracción</p>
+                                            <i class="icon icon-infracion h4 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Motivos Infracción</p>
                                         </a>
                                     </li>
                                     <li class="nav-item active">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/CatMunicipios/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Municipios</p>
+                                            <i class="icon icon-municipio h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Municipios</p>
                                         </a>
                                     </li>
                                     <li class="nav-item active" data-id="920">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/Oficiales/IndexModal">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Oficiales</p>
+                                            <i class="icon icon-oficial h4 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Oficiales</p>
                                         </a>
                                     </li>
 
                                     <li class="nav-item active" data-id="952">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/CatOficinasRenta/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Oficinas Renta</p>
+                                            <i class="icon icon-oficina h6 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Oficinas Renta</p>
                                         </a>
                                     </li>
 
                                     <li class="nav-item active" data-id="940">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/SalariosMinimos/IndexModal">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">UMAS</p>
+                                            <i class="icon icon-udi h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">UMAS</p>
                                         </a>
                                     </li>
                                     
                                     <li class="nav-item active" data-id="928">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/CatSubmarcasVehiculos/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Submarcas Vehículos</p>
+                                            <i class="icon icon-subMarcar h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Submarcas Vehículos</p>
                                         </a>
                                     </li>
 
@@ -343,24 +372,37 @@
 
                                     <li class="nav-item active" data-id="960">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/TiposCarga/IndexModal">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Tipo de Carga</p>
+                                            <i class="icon icon-carga h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Tipo de Carga</p>
                                         </a>
                                     </li>
 
                                     <li class="nav-item active" data-id="932">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/TiposVehiculos/IndexModal">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Tipo Vehículo</p>
+                                            <i class="icon icon-tipoVehiculo h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Tipo Vehículo</p>
                                         </a>
                                     </li>
                                     <li class="nav-item active" data-id="904">
                                         <a class="nav-link d-flex justify-content-start align-items-center" href="/CatTramos/Index">
-                                            <i class="icon icon-data h6 m-0 me-2"></i>
-                                            <p class="m-0 text-start">Tramos</p>
+                                            <i class="icon icon-tramo h5 m-0 me-2"></i>
+                                            <p class="m-0 text-start text-break">Tramos</p>
                                         </a>
                                     </li>
 
+                                </ul>
+                            </div>
+
+                            <!-- ***************** -->
+                            <div class="tab-pane fade " id="nav-admin" role="tabpanel" aria-labelledby="nav-admin-tab">
+                                <ul class="navbar-nav mt-4">
+
+                                    <li class="nav-item active" data-id="303">
+                                        <a class="nav-link d-flex justify-content-start align-items-center" href="/">
+                                            <i class="icon icon-salir h5 m-0 mt-1 me-2"></i>
+                                            <p class="m-0 text-start text-break">Cerrar Sesión</p>
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
 
@@ -370,6 +412,19 @@
 
 
             </nav>
+            <script>
+                const toggle = document.getElementById('toggle')
+                const nav = document.getElementById('nav')
+
+                toggle.addEventListener('click', () => nav.classList.toggle('active'))
+            </script>
+            <script>
+                const toggle = document.getElementById('toggle')
+                const nav = document.getElementById('nav')
+
+                toggle.addEventListener('click', () => nav.classList.toggle('active'))
+            </script>
+
             @RenderBody()
             <script src="~/js/genericcomponents.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

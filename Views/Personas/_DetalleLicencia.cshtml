@@ -1,17 +1,2 @@
-﻿@model LicenciaViewModel
-
-<!-- Resto del contenido de la vista -->
-<!-- Kendo Dropdown para seleccionar el tipo de licencia -->
-@(Html.Kendo().DropDownList()
-      .Name("ddlTiposLicencia")
-      .DataTextField("Nombre")
-      .DataValueField("Nombre")
-      .BindTo(Model.TiposLicencia)
-)
-
-<!-- Etiquetas para mostrar las fechas de expedición y vigencia -->
-<p>Fecha de Expedición: <span id="expedicion"></span></p>
-<p>Fecha de Vigencia: <span id="vigencia"></span></p>
-
-<!-- Script para actualizar las fechas según la selección del Kendo Dropdown -->
+﻿
 

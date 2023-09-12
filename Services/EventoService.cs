@@ -23,15 +23,15 @@ namespace GuanajuatoAdminUsuarios.Services
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("Select * from catEvento where Estatus=1 order by Evento asc", connection);
+                    SqlCommand command = new SqlCommand("Select * from catDescripcionesEvento where Estatus=1 order by descripcionEvento asc", connection);
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
                         while (reader.Read())
                         {
                             EventoModel eventoModel = new EventoModel();
-                            eventoModel.IdEvento = Convert.ToInt32(reader["IdEvento"].ToString());
-                            eventoModel.Evento = reader["Evento"].ToString();
+                            eventoModel.IdEvento = Convert.ToInt32(reader["idDescripcion"].ToString());
+                            eventoModel.Evento = reader["descripcionEvento"].ToString();
                             ListEvento.Add(eventoModel);
 
                         }

@@ -1,0 +1,519 @@
+﻿@model GuanajuatoAdminUsuarios.Models.AsignacionGruaModel
+
+        <div class="mainContainer bg-light">
+
+            <!--1 GRUA -->
+            <section id="grua1" class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded" style="display:block">
+                <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                    <div class="col-12 col-md-6 col-lg-5 col-xl-auto pe-0">
+                        <div class="row align-items-center justify-content-center justify-content-md-start">
+                            <div class="col-auto">
+                                <div class="border border-2 border-dark rounded-circle">
+                                    <h5 class="m-0 numberCard d-flex align-items-center justify-content-center">
+                                        <b>1</b>
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="col-auto p-0">
+                                <i class="icon-grua h1 colorPrimary"></i>
+                            </div>
+                            <div class="col-auto my-3">
+                                <h2 class="m-0 h3"><b>Registro de Grúa</b></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
+                        <div class="row">
+
+                            <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0" onclick="SolictudDeposito()">
+                                @(Html.Kendo().Button()
+                                  .Name("backDeposito")
+                                  .HtmlAttributes(new { @class = "btnPrimary" })
+                                  .Content("<h6 class=\"m-0\"><i class=\"icon-back me-2\"></i><b>Regresar a captura de solicitud de depósito</b></h6>"))
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8 pe-0">
+                        <div class="bgSuccess py-1"></div>
+                    </div>
+                    <div class="col-4 ps-0">
+                        <div class="bg-light py-1"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 my-4">
+                        <h5 class="px-4 colorSuccess d-flex align-items-center"><b class="d-flex align-items-center justify-content-center bgSuccess mb-1 me-2 rounded-circle px-1"><i style="font-size: 10px; padding: 7px 2px;" class="icon-correct text-white"></i></b><b>Alta de servicio para grúa</b></h5>
+                        <h6 class="px-4 text-muted">El vehículo ya cuenta con una solicitud de depósito en la plataforma. Completa los datos solicitados.</h6>
+                    </div>
+                </div>
+                <div class="row px-4 mb-2 align-items-start">
+                    <div class="col-12 col-sm-6 col-md-auto">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">Folio de servicio de grúa:</label>
+                    <label>@(Model.FolioSolicitud != null ? Model.FolioSolicitud : "-")</label>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-auto">
+                            <div class="controlForm">
+                                <label>Se realizo Infracción</label>
+                            </div>
+                        <div class="col-12">
+                            <div class="controlButton mb-5" onclick="modalInfraccion()">
+                                @(Html.Kendo().Button()
+                                    .Name("infraccion")
+                                    .HtmlAttributes(new { @class = "btnPrimary" })
+                                    .Content("<h5 class=\"m-0\"><b>SI</b></h5>"))
+                            </div>
+                        </div>
+
+                         <div class="col-12">
+                        <div class="controlButton mb-5" onclick="modalVehiculos()">
+                            @(Html.Kendo().Button()
+                              .Name("noInfraccion")
+                              .HtmlAttributes(new { @class = "btnPrimary" })
+                              .Content("<h5 class=\"m-0\"><b>No</b></h5>"))
+                        </div>
+                    </div>
+                </div>
+
+               </div>
+
+        <div class="row px-4 mb-2 align-items-start" style="display:none" id="datosVehiculo">
+
+                    <div class="col-12 col-sm-6 col-md-auto">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">Placa de vehículo:</label>
+                            <span id="PlacaSpan"></span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-auto">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">Serie de vehículo:</label>
+                            <span id="SerieSpan"></span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-auto">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">Marca de vehículo</label>
+                             <span id="MarcaSpan"></span>
+                         </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-auto">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">Sub-Marca de vehículo</label>
+                             <span id="SubmarcaSpan"></span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-auto">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">Modelo de vehículo</label>
+                            <span id="ModeloSpan"></span>
+                        </div>
+                    </div>
+  
+                    <div class="col-12 col-sm-6 col-md-auto">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">Nombre del propietario</label>
+                            <span id="PropietarioSpan"></span>
+                        </div>   
+                     </div>   
+                    <div class="col-12 col-sm-6 col-md-auto">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">CURP del propietario</label>
+                            <span id="CurpSpan"></span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-auto">
+                        <div class="controlForm mb-3 mt-1">
+                            <label class="text-muted">RFC del propietario</label>
+                    <span id="RfcSpan"></span>
+                </div>
+                    </div>
+                </div>
+                <div class="row justify-content-between mb-1">
+                    <div class="col-12 col-md-auto mt-4 mb-2">
+                        <h5 class="px-4"><b>Listado de Grúas utilizadas</b></h5>
+                        <h6 class="px-4 text-muted">Registra las grúas utlizadas y sus servicios</h6>
+                    </div>
+                    <div class="col">
+                        <div class="row justify-content-around justify-content-md-end  align-items-center my-2">
+                            <div class="col-auto btnOutline btnOutlinePrimary">
+                            </div>
+
+                            <div class="col-auto btnOutline btnOutlinePrimary mx-4">
+                                <button onclick="agregarGrua()">
+                                    <h6 class="m-0"><i class="icon-addGrua me-2"></i><b>Agregar grúa</b></h6>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="tablaGruas">
+                         <partial name="_ListaGruas" model="Model" />
+                    </div>
+
+                </div>
+               <form id="observacionesForm">
+                <div class="row px-4">
+                    <div class="col-12 mb-4">
+                        <div class="controlForm my-3">
+                            @(Html.Kendo().TextAreaFor(t=>t.observaciones)
+                            .Label(label => label.Content("Observaciones:"))
+                            .Placeholder("Puede agregar o no observaciones referentes al servicio.")
+                            .Rows(3)
+                            .MaxLength(200)
+                            .HtmlAttributes(new { style = "width: 100%", required = true, data_required_msg = "Please enter a text.", data_max_msg= "Enter value between 1 and 200" })
+                        )
+                        </div>
+                    </div>
+                </div>
+              </form>
+                <div class="row">
+                    <div class="col-12 col-md-8 mx-md-auto col-lg-5 ">
+                        <div class="controlButton mb-5" onclick="finalizar()">
+                            @(Html.Kendo().Button()
+                              .Name("registroGruaBtn")
+                              .HtmlAttributes(new { @class = "btnPrimary" })
+                              .Content("<h5 class=\"m-0\"><b>Finalizar registro</b></h5>"))
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!--section class="opacity-50 mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
+                <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                    <div class="col-12 col-md-auto">
+                        <div class="row align-items-center justify-content-center justify-content-md-start">
+                            <div class="col-auto">
+                                <div class="border border-2 border-dark rounded-circle">
+                                    <h5 class="m-0 numberCard d-flex align-items-center justify-content-center">
+                                        <b>2</b>
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="col-auto p-0">
+                                <i class="icon-inventario h1 colorPrimary"></i>
+                            </div>
+                            <div class="col-auto my-3">
+                                <h2 class="m-0 h3"><b>Inventario de vehículo</b></h2>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section-->
+
+            <!--INVENTARIO -->
+            <section id="grua2" class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded" style="display:block">
+                <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                    <div class="col-12 col-md-auto">
+                        <div class="row align-items-center justify-content-center justify-content-md-start
+">
+                            <div class="col-auto">
+                                <div class="border border-2 border-dark rounded-circle">
+                                    <h5 class="m-0 numberCard d-flex align-items-center justify-content-center">
+                                        <b>2</b>
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="col-auto p-0">
+                                <i class="icon-inventario h1 colorPrimary"></i>
+                            </div>
+                            <div class="col-auto my-3">
+                                <h2 class="m-0 h3"><b>Inventario de vehículo</b></h2>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-8 pe-0">
+                        <div class="bgSuccess py-1"></div>
+                    </div>
+                    <div class="col-4 ps-0">
+                        <div class="bg-light py-1"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 my-4">
+                        <h5 class="px-4"><b>Anexar inventario</b></h5>
+                        <h6 class="px-4 text-muted">Completa los datos solicitados como ingresar un archivo de inventario.</h6>
+                    </div>
+                </div>
+                <div>
+                    <div class="row justify-content-center px-4">
+                        <div class="col-12 col-md-6 col-lg-4 mb-2">
+                            <div class="controlForm">
+                                @(Html.Kendo().TextBoxFor(t=>t.numeroInventario)
+                                .Label(l => l.Content("Número de inventario:"))
+                                .Placeholder("Ingresa el número del inventario del vehículo")
+                                .HtmlAttributes(new { style = "width: 100%", id="numeroInventario" })
+                            )
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row px-4 mt-4 pb-5 align-items-end">
+                        <div class="col-12 col-md-10 mx-md-auto text-center">
+                            <h3><b>Adjunta una imagen del inventario del vehículo</b></h3>
+                            <div class="row justify-content-center">
+                                <div class="drop-zone">
+                                    <div class="drop-zone__prompt">
+                                        <svg id="" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="106.791" height="87.148" viewBox="0 0 106.791 87.148">
+                                            <defs>
+                                                <clipPath id="clip-path">
+                                                    <rect id="Rectángulo_2602" data-name="Rectángulo 2602" width="106.791" height="87.148" fill="none" />
+                                                </clipPath>
+                                            </defs>
+                                            <g id="Grupo_1206" data-name="Grupo 1206" clip-path="url(#clip-path)">
+                                                <path id="Trazado_720" data-name="Trazado 720" d="M44.9,0C28.864,0,17.567,13.843,18.165,28.177A20.889,20.889,0,0,0,0,48.541C0,61.113,9.68,70.385,20.63,70.385H35.192a2.427,2.427,0,1,0,0-4.854H20.63c-8.224,0-15.776-6.878-15.776-16.99,0-8.142,7.119-15.776,15.776-15.776A2.427,2.427,0,0,0,23.018,30C21.3,17.739,30.906,4.856,44.9,4.856A21.8,21.8,0,0,1,58.022,9.065,2.427,2.427,0,1,0,60.9,5.159,26.783,26.783,0,0,0,44.9,0ZM73.419,11.718a18.018,18.018,0,0,0-7.774,1.859,2.442,2.442,0,0,0,2.2,4.361,13.4,13.4,0,0,1,12.817.493c3.844,2.306,6.713,6.581,6.713,13.121a2.426,2.426,0,0,0,2.01,2.389c7.292,1.224,12.553,8.5,12.553,15.814,0,8.781-6.924,15.776-18.2,15.776H71.6a2.427,2.427,0,1,0,0,4.854H83.734c13.4,0,23.057-9.195,23.057-20.63,0-8.993-5.879-17.7-14.79-20.137-.58-7.025-4.028-12.436-8.835-15.32a18.263,18.263,0,0,0-8.609-2.579c-.377-.016-.758-.006-1.138,0ZM53.112,41.42a2.587,2.587,0,0,0-1.539.729L41.2,52.521a2.593,2.593,0,1,0,3.646,3.687L50.8,50.252V84.518a2.593,2.593,0,1,0,5.186,0V50.252l5.956,5.956a2.593,2.593,0,1,0,3.647-3.687L55.219,42.149a2.592,2.592,0,0,0-2.107-.729Z" />
+                                            </g>
+                                        </svg>
+
+                                        <h5>Arrastra o adjunta la</h5>
+                                        <h5 class="fw-bold">Imagen ( Jpg / Png )</h5>
+                                    </div>
+                                    <input type="file" id="myFile" name="myFile" class="drop-zone__input">
+                                </div>
+
+                            </div>
+                            <div class="row ">
+                                <div class="col-12 col-md-8 mx-md-auto col-lg-5 ">
+                            <div class="controlButton my-3" onclick="enviarImagen()">
+                                        @(Html.Kendo().Button()
+                                                .Name("vehiculoBtn")
+                                                .HtmlAttributes(new { @class = "btnPrimary" })
+                                                .Content("<h5 class=\"m-0\"><b>Finalizar registro</b></h5>"))
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+              <div class="modal fade modalCustom" id="modalInfracciones" tabindex="-1" aria-labelledby="infraccionLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                     <div class="modal-body" id="ModalBodyInfracciones">
+                                     </div>
+                            </div>
+                        </div>
+               </div>
+
+    <div class="modal fade modalCustom" id="modalVehiculos" tabindex="-1" aria-labelledby="vehiculosLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body" id="ModalBodyVehiculos">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade modalCustom" id="modalAgregarGrua" tabindex="-1" aria-labelledby="AgregarGruaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-body" id="ModalBodyAgregarGrua">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+        </div>
+
+
+<script>
+
+ function finalizar() {
+   var Mydata = $("#observacionesForm").serialize();
+            console.log(Mydata);
+            $.ajax({
+                url: '/AsignacionGruas/AgregarObservaciones',
+                type: 'GET',
+                data: Mydata,
+                success: function (data) {
+                sitteg_success("Información guardada con éxito");
+                document.getElementById("grua2").style.display = "block";
+            },
+            error: function (error) {
+                sitteg_warning("!Sucedió un error, inténtalo de nuevo más tarde...");
+            }
+        });
+    }
+
+
+            function finalizar2() {
+                console.log("finalizar2");
+
+                document.getElementById("sec1").style.display = "none";
+                document.getElementById("sec2").style.display = "none";
+                document.getElementById("sec3").style.display = "none";
+                document.getElementById("grua1").style.display = "block";
+            }
+
+            function finalizar3() {
+                console.log("finalizar3");
+
+                document.getElementById("sec1").style.display = "none";
+                document.getElementById("sec2").style.display = "none";
+                document.getElementById("sec3").style.display = "none";
+                document.getElementById("grua1").style.display = "none";
+                document.getElementById("grua2").style.display = "block";
+            }
+                
+        document.querySelectorAll(".drop-zone__input").forEach((inputElement) => {
+        const dropZoneElement = inputElement.closest(".drop-zone");
+
+        dropZoneElement.addEventListener("click", (e) => {
+            inputElement.click();
+        });
+
+        inputElement.addEventListener("change", (e) => {
+            if (inputElement.files.length) {
+                updateThumbnail(dropZoneElement, inputElement.files[0]);
+            }
+        });
+
+        dropZoneElement.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            dropZoneElement.classList.add("drop-zone--over");
+        });
+
+        ["dragleave", "dragend"].forEach((type) => {
+            dropZoneElement.addEventListener(type, (e) => {
+                dropZoneElement.classList.remove("drop-zone--over");
+            });
+        });
+
+        dropZoneElement.addEventListener("drop", (e) => {
+            e.preventDefault();
+
+            if (e.dataTransfer.files.length) {
+                inputElement.files = e.dataTransfer.files;
+                updateThumbnail(dropZoneElement, e.dataTransfer.files[0]);
+            }
+
+            dropZoneElement.classList.remove("drop-zone--over");
+        });
+    });
+
+    function updateThumbnail(dropZoneElement, file) {
+        let thumbnailElement = dropZoneElement.querySelector(".drop-zone__thumb");
+
+        // First time - remove the prompt
+        if (dropZoneElement.querySelector(".drop-zone__prompt")) {
+            dropZoneElement.querySelector(".drop-zone__prompt").remove();
+        }
+
+        // First time - there is no thumbnail element, so lets create it
+        if (!thumbnailElement) {
+            thumbnailElement = document.createElement("div");
+            thumbnailElement.classList.add("drop-zone__thumb");
+            dropZoneElement.appendChild(thumbnailElement);
+        }
+
+        thumbnailElement.dataset.label = file.name;
+
+        // Show thumbnail for image files
+        if (file.type.startsWith("image/")) {
+            const reader = new FileReader();
+
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                thumbnailElement.style.backgroundImage = `url('${reader.result}')`;
+            };
+        } else {
+            thumbnailElement.style.backgroundImage = null;
+        }
+    }
+    
+    function modalInfraccion(){
+
+        $.ajax({
+            url: '@Url.Action("ModalInfracciones", "AsignacionGruas")',
+            type: 'POST',
+            success: function (result) {
+                $('#ModalBodyInfracciones').html(result);
+                $('#modalInfracciones').modal('show');
+
+            },
+        })
+    }
+    function modalVehiculos() {
+
+        $.ajax({
+            url: '@Url.Action("ModalVehiculos", "AsignacionGruas")',
+            type: 'POST',
+            success: function (result) {
+                $('#ModalBodyVehiculos').html(result);
+                $('#modalVehiculos').modal('show');
+
+            },
+        })
+    }
+     function agregarGrua(){
+
+        $.ajax({
+            url: '@Url.Action("ModalAgregarGrua", "AsignacionGruas")',
+            type: 'POST',
+            success: function (result) {
+                $('#ModalBodyAgregarGrua').html(result);
+                $('#modalAgregarGrua').modal('show');
+
+            },
+        })
+    }
+
+    function enviarImagen() {
+        var inputFile = document.getElementById("myFile");
+        var numeroInventario = $("#numeroInventario").val();
+
+        if (inputFile.files.length === 0) {
+            // No se seleccionó ningún archivo
+            sitteg_warning("Selecciona una imagen antes de continuar.");
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append("myFile", inputFile.files[0]);
+        formData.append("numeroInventario", numeroInventario); // Agregar el contenido del TextBox
+
+        $.ajax({
+            url: '/AsignacionGruas/AgregarInventario',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                if (data.success) {
+                    // Mostrar mensaje de éxito
+                    sitteg_success(data.message);
+                } else {
+                    // Mostrar mensaje de error
+                    sitteg_warning(data.message);
+                }
+            },
+            error: function (error) {
+                // Tu código de error aquí
+                console.error("Error al enviar la imagen:", error);
+            }
+        });
+    }
+
+    function SolictudDeposito(){
+        window.location.href = '@Url.Action("Depositos", "Depositos")';
+
+    }
+
+</script>
+
+
+
+    

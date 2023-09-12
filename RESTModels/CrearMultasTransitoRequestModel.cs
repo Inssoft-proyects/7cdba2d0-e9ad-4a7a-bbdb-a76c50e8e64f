@@ -34,6 +34,8 @@ namespace GuanajuatoAdminUsuarios.RESTModels
         public string IMPORTE_MULTA { get; set; }
         public string FEC_IMPOSICION { get; set; }
         public string FEC_VENCIMIENTO { get; set; }
+
+
         public string INF_PROP { get; set; }
         public string NOM_INFRACTOR { get; set; }
         public string DOM_INFRACTOR { get; set; }

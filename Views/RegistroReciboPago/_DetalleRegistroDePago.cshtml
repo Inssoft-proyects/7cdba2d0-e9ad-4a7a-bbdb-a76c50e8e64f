@@ -5,16 +5,17 @@
 
     @if (Model != null)
     {
-        
-        <p>Folio:@Model.FolioInfraccion</p>
-        <p>Monto Calificacion:$343.87</p>
 
-       
+        <p>Folio: @(Model.FolioInfraccion ?? "-")</p>
+        <p>Monto Calificacion: @(Model.Monto.HasValue ? Model.Monto.ToString() : "-")</p>
+
 
     }
 </div>
+
   <form id ="reciboPagoForm"class="row px-4 mb-4 align-items-end">
       @Html.HiddenFor(m=>m.IdInfraccion)
+
     <div class="col-12 col-md-6 col-lg-3">
         <div class="controlForm my-3">
             @(Html.Kendo().TextBoxFor(m=>m.ReciboPago)
@@ -25,12 +26,24 @@
 
         </div>
     </div>
+    <div id="mensajeServicio" class="error-message" style="color:green"></div>
+    <div id="mensajeError" class="success-message" style="color:red"></div>
+
+
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="controlButton my-3">
+            <button type="button" onclick="comprobarRecibo($('#ReciboPago').val())" class='btnPrimary'>
+                <h5 class="m-0"><i class='icon-data m-0'></i>&nbsp;&nbsp; <b>Comprobar Recibo</b></h5>
+            </button>
+        </div>
+    </div>
+
     <div class="col-12 col-md-4 col-lg-3 col-xl-2">
         <div class="controlForm my-3">
             @(Html.Kendo().TextBoxFor(m=>m.Monto)
                 .Label(l => l.Content("Monto:"))
                 .Placeholder("monto Pagado")
-                .HtmlAttributes(new { style = "width: 100%" })
+                .HtmlAttributes(new { style = "width: 100%", @readonly = "readonly" })
                 )
 
         </div>
@@ -40,7 +53,7 @@
             <label>Fecha:</label>
             @(Html.Kendo().DatePickerFor(t => t.FechaPago)
                 .Label(l => l.Content("Fecha de pago:"))
-                .HtmlAttributes(new { style = "width: 100%", title = "Introduce fecha de Pago" })
+                .HtmlAttributes(new { style = "width: 100%", @readonly = "readonly" })
                 )
         </div>
     </div>
@@ -50,18 +63,18 @@
             @(Html.Kendo().TextBoxFor(m=>m.LugarPago)
                 .Label(l => l.Content("Lugar de pago"))
                 .Placeholder("Lugar de pago")
-                .HtmlAttributes(new { style = "width: 100%" })
+                .HtmlAttributes(new { style = "width: 100%", @readonly = "readonly" })
                 )
         </div>
     </div>
 </form>
 
     <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-        <div class="controlButton my-3" onclick="guardarReciboPago()">
+    <div class="controlButton my-3" id="botnGuardar" style="display: block;" onclick="guardarReciboPago()">
             @(Html.Kendo().Button()
                 .Name("GuardarPago")
-                .HtmlAttributes(new { @class = "btnPrimary" })
-                .Content("<h5 class=\"m-0\"><b>Guardar</b></h5>"))
+            .HtmlAttributes(new { @class = "btnPrimary"}) // Establece el atributo disabled
+            .Content("<h5 class=\"m-0\"><b>Guardar</b></h5>"))
         </div>
 
     </div>
@@ -88,6 +101,49 @@
         });
     }
 
+    function comprobarRecibo(reciboValue) {
+        $.ajax({
+            url: '/RegistroReciboPago/ConsultarDocumento',
+            type: 'POST',
+            data: { recibo: reciboValue },
+            success: function (response) {
+                console.log("RES", response);
+                if(response === null){
+                    $('#mensajeError').text("Ha ocurrido un error en el servicio intente mas tarde");
+                }
+                else if (response.hasError) {
+                    $('#mensajeError').text(response.message);
+                } else {
+                    var wType = response.MT_ConsultarDocumento_res.result.WTYPE;
+                    var wMessage = response.MT_ConsultarDocumento_res.result.WMESSAGE;
+                    if (wType === "E") {
+                        if(wMessage!= undefined || wMessage != null || wMessage != ""){
+                            $('#mensajeError').text(wMessage);
+                        }else{
+                            $('#mensajeError').text("No se pudo verificar el recibo de pago, revise que el número este completo y sea correcto");
+                        }
+                        
+                    } else if (wType === "S") {
+                        $('#mensajeError').text("");
+                        $('#mensajeServicio').text(wMessage);
+                        document.getElementById("botnGuardar").style.display = "block";
+                        var fechaPago = response.result.MT_ConsultarDocumento_res.result.FECHA_PAGO;
+                        var importe = response.result.MT_ConsultarDocumento_res.result.IMPORTE;
 
+                        $('#FechaPago').data("kendoDatePicker").value(new Date(fechaPago));
+                        $('#Monto').data("kendoTextBox").value(importe);
+                    } else {
+                        // Mostrar mensaje específico cuando el servicio no responda
+                        $('#mensajeError').text("El servicio no está respondiendo en este momento. Por favor, intenta más tarde.");
+                    }
+                }
+            },
+            error: function (response) {
+                console.error('Error en la llamada AJAX:', response);
+                // Mostrar mensaje específico en caso de error en la llamada AJAX
+                $('#mensajeError').text("Ha ocurrido un error en la comunicación con el servidor. Por favor, verifica tu conexión y vuelve a intentar.");
+            }
+        });
+    }
 
 </script>

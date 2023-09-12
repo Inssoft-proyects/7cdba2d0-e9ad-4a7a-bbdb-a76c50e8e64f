@@ -1,0 +1,54 @@
+﻿<div class="row">
+    <div class="col-12 mb-4 px-4 rounded gridCustom">
+        @(
+            Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.AsignacionGruaModel>()
+            .Name("gridBusquedaSolicitudes")
+            .Columns(columns =>
+            {
+                columns.Select().Width(50).ClientHeaderTemplate(" ");
+                columns.Bound(c => c.idSolicitud).Hidden();
+                columns.Bound(c => c.idPropietarioGrua).Hidden();
+                columns.Bound(c => c.FolioSolicitud).Title("Folio").Width(100);
+                columns.Bound(c => c.fechaSolicitud).Title("Fecha Solicitud").Width(100);
+                columns.Bound(c => c.Ubicacion).Title("Ubicación").Width(100);
+                columns.Bound(c => c.Grua).Title("Grúa").Width(100);
+                columns.Bound(c => c.Oficial).Title("Oficial").Width(100);
+                columns.Bound(c => c.tipoUsuario).Title("Solicitante").Width(100);
+            })
+            .HtmlAttributes(new { style = "height:400px" })
+            .Sortable()
+            .Groupable()
+            .Scrollable()
+            .Pageable()
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("Index", "AsignacionGruas"))
+            .PageSize(5).Model(model => model.Id(p => p.FolioSolicitud))
+            )
+            .ToolBar(t => t.Search())
+            .Search(s =>
+            {
+                s.Field(c => c.FolioSolicitud);
+                s.Field(c => c.Grua);
+                s.Field(c => c.Ubicacion);
+                s.Field(c => c.Oficial);
+                s.Field(c => c.tipoUsuario);
+            })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single)
+            .Type(GridSelectionType.Row)
+            )
+            .Events(events => events.Change("onRowSelect"))
+            )
+    </div>
+</div>
+
+<script>
+    function onRowSelect(e) {
+        var selectedRow = e.sender.select(); 
+        var dataItem = e.sender.dataItem(selectedRow); 
+        var idSolicitud = dataItem.idSolicitud; 
+        var idPropietarioGrua = dataItem.idPropietarioGrua;
+        console.log("D",dataItem)
+        window.location.href = '@Url.Action("DatosGruas", "AsignacionGruas")?iSo=' + idSolicitud + '&iPg=' + idPropietarioGrua;
+    }
+</script>

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Data;
 using System;
 using System.Data.SqlClient;
+using static GuanajuatoAdminUsuarios.RESTModels.ConsultarDocumentoResponseModel;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace GuanajuatoAdminUsuarios.Services
 {
@@ -32,16 +34,17 @@ namespace GuanajuatoAdminUsuarios.Services
                         while (reader.Read())
                         {
                             CatMunicipiosModel municipio = new CatMunicipiosModel();
-                            municipio.IdMunicipio = Convert.ToInt32(reader["IdMunicipio"].ToString());
-                            municipio.IdOficinaTransporte = Convert.ToInt32(reader["IdOficinaTransporte"].ToString());
-                            municipio.IdEntidad = Convert.ToInt32(reader["IdEntidad"].ToString());
-                            municipio.Municipio = reader["Municipio"].ToString();
-                            municipio.nombreOficina = reader["nombreOficina"].ToString();
-                            municipio.nombreEntidad = reader["nombreEntidad"].ToString();
-                            municipio.estatusDesc = reader["estatusDesc"].ToString();
-                            municipio.FechaActualizacion = Convert.ToDateTime(reader["FechaActualizacion"].ToString());
-                            municipio.Estatus = Convert.ToInt32(reader["estatus"].ToString());
-                            municipio.ActualizadoPor = Convert.ToInt32(reader["ActualizadoPor"].ToString());
+                            municipio.IdMunicipio = reader["IdMunicipio"] is DBNull ? 0 : Convert.ToInt32(reader["IdMunicipio"]);
+                            municipio.IdOficinaTransporte = reader["IdOficinaTransporte"] is DBNull ? 0 : Convert.ToInt32(reader["IdOficinaTransporte"]);
+                            municipio.IdEntidad = reader["IdEntidad"] is DBNull ? 0 : Convert.ToInt32(reader["IdEntidad"]);
+                            municipio.Municipio = reader["Municipio"] is DBNull ? string.Empty : reader["Municipio"].ToString();
+                            municipio.nombreOficina = reader["nombreOficina"] is DBNull ? string.Empty : reader["nombreOficina"].ToString();
+                            municipio.nombreEntidad = reader["nombreEntidad"] is DBNull ? string.Empty : reader["nombreEntidad"].ToString();
+                            municipio.estatusDesc = reader["estatusDesc"] is DBNull ? string.Empty : reader["estatusDesc"].ToString();
+                            municipio.FechaActualizacion = reader["FechaActualizacion"] is DBNull ? DateTime.MinValue : Convert.ToDateTime(reader["FechaActualizacion"]);
+                            municipio.Estatus = reader["estatus"] is DBNull ? 0 : Convert.ToInt32(reader["estatus"]);
+                            municipio.ActualizadoPor = reader["ActualizadoPor"] is DBNull ? 0 : Convert.ToInt32(reader["ActualizadoPor"]);
+
                             ListaMunicipios.Add(municipio);
 
                         }
@@ -204,6 +207,39 @@ namespace GuanajuatoAdminUsuarios.Services
             return ListaMunicipios;
 
 
+        }
+        public int obtenerIdPorNombre(string municipio)
+        { 
+            int result = 0;
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand sqlCommand = new SqlCommand("SELECT idMunicipio FROM catMunicipios WHERE municipio = @municipio", connection);
+                    sqlCommand.Parameters.Add(new SqlParameter("@municipio", SqlDbType.NVarChar)).Value = municipio;
+                    sqlCommand.CommandType = CommandType.Text;
+
+                    using (SqlDataReader reader = sqlCommand.ExecuteReader())
+                    {
+                        if (reader.Read()) // Intenta leer un registro del resultado
+                        {
+                            // Obtiene el valor de la columna "idMunicipio"
+                            result = Convert.ToInt32(reader["idMunicipio"]);
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    // Manejo de errores y log
+                    return result;
+                }
+finally
+{
+    connection.Close();
+}
+            }
+            return result;
         }
 
     }

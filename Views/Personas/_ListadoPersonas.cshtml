@@ -15,6 +15,7 @@
             columns.Bound(p => p.CURP).Title("CURP");
             columns.Bound(p => p.RFC).Title("RFC");
             columns.Bound(p => p.numeroLicencia).Title("No. Licencia");
+           columns.Bound(p => p.tipoLicencia).Title("Tipo de Licencia");
             columns.Bound(c => c.tipoPersona).Title("Tipo persona");
             columns.Bound(p => p.idPersona).ClientTemplate(
             "<button onclick=\"btnModalEditarPersona('#= idPersona #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>"

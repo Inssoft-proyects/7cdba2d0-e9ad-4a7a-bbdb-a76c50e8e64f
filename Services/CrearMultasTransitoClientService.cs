@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Data;
 using System;
 using System.Data.SqlClient;
+using GuanajuatoAdminUsuarios.Models;
 
 namespace GuanajuatoAdminUsuarios.Services
 {
@@ -21,7 +22,7 @@ namespace GuanajuatoAdminUsuarios.Services
             var bodyRequest = json;
             string result = string.Empty;
             CrearMultasTransitoResponseModel responseModel = new CrearMultasTransitoResponseModel();
-            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection2()))
             {
                 try
                 {
@@ -36,7 +37,7 @@ namespace GuanajuatoAdminUsuarios.Services
                 }
                 catch (SqlException ex)
                 {
-                    return null;
+                    responseModel.MensajeError = "Hubo un problema al intentar crear la multa de tránsito. Por favor, inténtalo nuevamente más tarde.";
                 }
                 finally
                 {

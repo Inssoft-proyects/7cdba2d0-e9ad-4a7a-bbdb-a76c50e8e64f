@@ -35,7 +35,14 @@
     <div class="form-group col-md-3">
         <div class="controlForm">
             <label>Fecha nacimiento:</label>
-            <p>@Model.fechaNacimiento.ToString("yyyy-MM-dd")</p>
+            @if (Model.fechaNacimiento.HasValue)
+            {
+                <p>@Model.fechaNacimiento.Value.ToString("dd-MM-yyyy")</p>
+            }
+            else
+            {
+                <p>-</p>
+            }
         </div>
     </div>
 </div>
@@ -101,8 +108,11 @@
     </div>
     <div class="form-group col-md-4">
         <div class="controlForm">
-            <label>Vegencia licencia:</label>
-            <p>@Model.vigenciaLicencia.ToShortDateString()</p>
+            <label>Vigencia licencia:</label>
+            <p>
+                @(Model.vigenciaLicencia != DateTime.MinValue ? Model.vigenciaLicencia.ToShortDateString() : "-")
+            </p>
+
         </div>
     </div>
 </div>

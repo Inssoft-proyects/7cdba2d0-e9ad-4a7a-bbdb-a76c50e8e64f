@@ -71,15 +71,15 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT del.*, e.estatusDesc FROM catDelegaciones AS del INNER JOIN estatus AS e ON del.estatus = e.estatus WHERE del.estatus = 1;", connection);
+                    SqlCommand command = new SqlCommand("SELECT del.*, e.estatusDesc FROM catDelegacionesOficinasTransporte AS del INNER JOIN estatus AS e ON del.estatus = e.estatus WHERE del.estatus = 1;", connection);
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
                         while (reader.Read())
                         {
                             CatDelegacionesOficinasTransporteModel delegacionOficina = new CatDelegacionesOficinasTransporteModel();
-                            delegacionOficina.IdDelegacion = Convert.ToInt32(reader["IdDelegacion"].ToString());
-                            delegacionOficina.Delegacion = reader["Delegacion"].ToString();
+                            delegacionOficina.IdDelegacion = Convert.ToInt32(reader["idOficinaTransporte"].ToString());
+                            delegacionOficina.Delegacion = reader["nombreOficina"].ToString();
                             delegacionOficina.FechaActualizacion = (reader["FechaActualizacion"] as DateTime?) ?? DateTime.MinValue;
                             delegacionOficina.estatusDesc = reader["estatusDesc"].ToString();
                             delegacionOficina.Estatus = Convert.ToInt32(reader["estatus"].ToString());

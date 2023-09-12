@@ -87,9 +87,15 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public ActionResult ajax_BuscarTransito(TransitoTransporteBusquedaModel model)
         {
             var ListTransitoModel = _transitoTransporteService.GetTransitoTransportes(model);
-            return PartialView("_ListadoTransitoTransporte", ListTransitoModel);
 
+            if (ListTransitoModel.Count == 0)
+            {
+                ViewBag.NoResultsMessage = "No se encontraron registros que cumplan con los criterios de búsqueda.";
+            }
+
+            return PartialView("_ListadoTransitoTransporte", ListTransitoModel);
         }
+
 
         public JsonResult Delegacion_Read()
         {

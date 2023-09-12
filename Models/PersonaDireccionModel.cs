@@ -6,15 +6,29 @@ namespace GuanajuatoAdminUsuarios.Models
     {
         public int idPersonasDirecciones { get; set; }
         public int? idEntidad { get; set; }
+        public int? idEntidadFisico { get; set; }
+
         public string entidad { get; set; }
         public int? idMunicipio { get; set; }
+        public int? idMunicipioFisico { get; set; }
+
         public string municipio { get; set; }
         public string codigoPostal { get; set; }
         public string colonia { get; set; }
+        public string coloniaFisico { get; set; }
+
         public string calle { get; set; }
+        public string calleFisico { get; set; }
+
         public string numero { get; set; }
+        public string numeroFisico { get; set; }
+
         public long telefono { get; set; }
+        public long telefonoFisico { get; set; }
+
         public string correo { get; set; }
+        public string correoFisico { get; set; }
+
         public int? idPersona { get; set; }
 
     }

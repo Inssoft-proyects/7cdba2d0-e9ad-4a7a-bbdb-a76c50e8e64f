@@ -89,7 +89,7 @@ namespace Example.WebUI.Controllers
 
         public JsonResult Categories_Read()
         {
-            var result = new SelectList(dbContext.SalariosMinimos.ToList(), "IdSalario", "Salario");
+            var result = new SelectList(dbContext.CatSalariosMinimos.ToList(), "IdSalario", "Salario");
             return Json(result);
         }
 
@@ -167,20 +167,20 @@ namespace Example.WebUI.Controllers
 
         public void CreateSalario(SalariosMinimosModel model)
         {
-            SalariosMinimos salario = new SalariosMinimos();
+            CatSalariosMinimos salario = new CatSalariosMinimos();
             salario.IdSalario = model.IdSalario;
             salario.Area = model.Area;
             salario.Salario = model.Salario;
             salario.Fecha = model.Fecha;
             salario.Estatus = 1;
             salario.FechaActualizacion = DateTime.Now;
-            dbContext.SalariosMinimos.Add(salario);
+            dbContext.CatSalariosMinimos.Add(salario);
             dbContext.SaveChanges();
         }
 
         public void UpdateSalario(SalariosMinimosModel model)
         {
-            SalariosMinimos salario = new SalariosMinimos();
+            CatSalariosMinimos salario = new CatSalariosMinimos();
             salario.IdSalario = model.IdSalario;
             salario.Area = model.Area;
             salario.Salario = model.Salario;
@@ -194,7 +194,7 @@ namespace Example.WebUI.Controllers
 
         public void DeleteSalario(SalariosMinimosModel model)
         {
-            SalariosMinimos salario = new SalariosMinimos();
+            CatSalariosMinimos salario = new CatSalariosMinimos();
             salario.IdSalario = model.IdSalario;
             salario.Area = model.Area;
             salario.Salario = model.Salario;
@@ -209,16 +209,16 @@ namespace Example.WebUI.Controllers
         private void SetDDLSalarios()
         {
             ///Espacio en memoria de manera temporal que solo existe en la petición bool, list, string ,clases , selectlist
-            ViewBag.Salarios = new SelectList(dbContext.SalariosMinimos.ToList(), "IdSalario", "Salario");
+            ViewBag.Salarios = new SelectList(dbContext.CatSalariosMinimos.ToList(), "IdSalario", "Salario");
         }
 
 
         public SalariosMinimosModel GetSalarioByID(int IdSalario)
         {
 
-            var productEnitity = dbContext.SalariosMinimos.Find(IdSalario);
+            var productEnitity = dbContext.CatSalariosMinimos.Find(IdSalario);
 
-            var SalarioModel = (from salariosMinimos in dbContext.SalariosMinimos.ToList()
+            var SalarioModel = (from salariosMinimos in dbContext.CatSalariosMinimos.ToList()
                                 select new SalariosMinimosModel
 
                                 {
@@ -242,7 +242,7 @@ namespace Example.WebUI.Controllers
         /// <returns></returns>
         public List<SalariosMinimosModel> GetSalarios()
         {
-            var ListSalariosModel = (from salariosMinimos in dbContext.SalariosMinimos.ToList()
+            var ListSalariosModel = (from salariosMinimos in dbContext.CatSalariosMinimos.ToList()
                                      join estatus in dbContext.Estatus.ToList()
                                     on salariosMinimos.Estatus equals estatus.estatus
                                      where salariosMinimos.Estatus == 1

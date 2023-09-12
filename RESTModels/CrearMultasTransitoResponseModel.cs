@@ -6,6 +6,7 @@ namespace GuanajuatoAdminUsuarios.RESTModels
     public class CrearMultasTransitoResponseModel
     {
         public CrearMultasTransitoChild MT_CrearMultasTransito_res { get; set; }
+        public string MensajeError { get; internal set; }
     }
     public class CrearMultasTransitoChild
     {
@@ -15,5 +16,7 @@ namespace GuanajuatoAdminUsuarios.RESTModels
         public string CUENTAnmbb { get; set; }
         public string OBJETO { get; set; }
         public string DOCUMENTNUMBER { get; set; }
+        public string MensajeError { get; set; }
+
     }
 }

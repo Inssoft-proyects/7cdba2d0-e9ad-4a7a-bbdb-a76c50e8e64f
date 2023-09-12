@@ -15,6 +15,7 @@
                 data: Mydata,
                 success: function (result) {
                     $("#listadoTransitoTransporte").html(result);
+                   // $("#frmSearch")[0].reset();
                 }
             });
         }
@@ -138,8 +139,8 @@
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="controlForm my-3">
                     @(Html.Kendo().TextBoxFor(t => t.NumeroEconomico)
-                        .Label(l => l.Content("No_Económico"))
-                        .Placeholder("Ingresa No_Económico")
+                        .Label(l => l.Content("No Económico"))
+                        .Placeholder("Ingresa No Económico")
                         .HtmlAttributes(new { style = "width: 100%", Id = "txtNumeroEconomico" })
                         )
                 </div>

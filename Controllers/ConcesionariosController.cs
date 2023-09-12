@@ -25,9 +25,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
             int IdModulo = 600;
             string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
             List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
+            int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+
             if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
             {
-                var modelList = _concesionariosService.GetAllConcesionarios();
+                var modelList = _concesionariosService.GetAllConcesionarios(idOficina);
                 return View(modelList);
             }
             else
@@ -66,7 +68,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 if (ModelState.IsValid)
                 {
                     int index = _concesionariosService.CrearConcesionario(model);
-                    var listPadronGruas = _concesionariosService.GetAllConcesionarios();
+                int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+                var listPadronGruas = _concesionariosService.GetAllConcesionarios(idOficina);
                     return PartialView("_ListadoConcesionarios", listPadronGruas);
                 }
                 return RedirectToAction("Index");
@@ -101,7 +104,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 if (ModelState.IsValid)
                 {
                     int index = _concesionariosService.EditarConcesionario(model);
-                    var listPadronGruas = _concesionariosService.GetAllConcesionarios();
+                int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+                var listPadronGruas = _concesionariosService.GetAllConcesionarios(idOficina);
                     return PartialView("_ListadoConcesionarios", listPadronGruas);
                 }
                 return RedirectToAction("Index");

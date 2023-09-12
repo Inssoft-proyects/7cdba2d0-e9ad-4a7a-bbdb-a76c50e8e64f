@@ -11,9 +11,9 @@
                 url: '@Url.Action("ajax_BuscarVehiculo")',
                 type: 'POST',
                 data: Mydata,
-                success: function (result) {
+                success: function (result) {              
                     $("#listadoLiberacionVehiculos").html(result);
-                }
+                    }               
             });
         }
 
@@ -130,6 +130,9 @@
         </form>
         @*//Aqui*@
 
+      
+
+        <!-- Aquí continúa el contenido de la lista de vehículos -->
 
         <div id="listadoLiberacionVehiculos">
             <partial name="_ListadoVehiculos" model="Model.ListDepositosLiberacion" />

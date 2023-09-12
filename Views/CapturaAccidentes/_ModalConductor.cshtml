@@ -203,7 +203,7 @@
                     </div>
                             <form id="propietarioConductorForm">
                                 @Html.HiddenFor(m=> m.IdPersona)
-                                @Html.HiddenFor(m=> m.IdVehiculo)
+                            @Html.HiddenFor(m => m.IdVehiculo, new { @id = "IdVehiculoH" })
                             </form>
                 <div class="row justify-content-center mb-3">
                     <div class="col-11 col-md-auto">
@@ -250,7 +250,7 @@
                                 </div>
                             <div class="col-12 col-md-6 col-lg-3">
                                 <div class="controlForm my-3">
-                                        @(Html.Kendo().TextBoxFor(t => t.curp)
+                                        @(Html.Kendo().TextBoxFor(t => t.curpBusqueda)
                                         .Label(l => l.Content("CURP:"))
                                         .Placeholder("Ingresa el CURP del propietario")
                                         .HtmlAttributes(new { style = "width: 100%" })
@@ -259,7 +259,7 @@
                             </div>
                             <div class="col-12 col-md-6 col-lg-3">
                                 <div class="controlForm my-3">
-                                        @(Html.Kendo().TextBoxFor(t => t.rfc)
+                                        @(Html.Kendo().TextBoxFor(t => t.rfcBusqueda)
                                         .Label(l => l.Content("RFC:"))
                                         .Placeholder("Ingresa el RFC del propietario")
                                         .HtmlAttributes(new { style = "width: 100%" })
@@ -367,14 +367,21 @@
  </div>
   <!--MODAL CAPTURAR CONDUCTOR EN SITTEG-->
      <div class="modal fade modalCustom" id="capturarConductorModal" tabindex="-1" aria-labelledby="capturarConductorLabel" aria-hidden="true">
-                <div class="modal-dialog modal-xl" role="document"">
-                    <div class="modal-content">
-                        <div class="modal-body" id="ModalBodyCapturarConductor">
-                        </div>
-                    </div>
+        <div class="modal-dialog modal-xl" role="document"">
+            <div class="modal-content">
+                <div class="modal-body" id="ModalBodyCapturarConductor">
                 </div>
             </div>
+        </div>
+    </div>
 
+    <div id="modalLicencias" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Contenido del modal se llenará con la función mostrarModal -->
+            </div>
+        </div>
+    </div>
     <script>
          function mostrarModalCapturarConductor() {
 
@@ -391,7 +398,6 @@
     }
     function guardarVehiculoConductor() {
         var formData = $("#propietarioConductorForm").serialize();
-        console.log(formData)
         $.ajax({
             url: '@Url.Action("ActualizarConConductor")',
             type: 'POST',
@@ -404,7 +410,6 @@
                
             },
             error: function (error) {
-                console.log("ER",error)
                 var errorMessage = error.responseText || "Ocurrió un error, inténtelo nuevamente más tarde.";
                 sitteg_warning(errorMessage);
             }
@@ -413,7 +418,6 @@
      function sinConductor() {
 
         var formData = $("#sinConductorForm").serialize();
-        console.log(formData)
         $.ajax({
             url: '@Url.Action("ActualizarConConductor")',
             type: 'POST',
@@ -426,7 +430,6 @@
 
             },
             error: function (error) {
-                console.log("ER", error)
                 var errorMessage = error.responseText || "Ocurrió un error, inténtelo nuevamente más tarde.";
                 sitteg_warning(errorMessage);
             }
@@ -445,29 +448,29 @@
             });
         }
 
-    function buscarConductor() {
-        var Mydata = $("#otroConductorForm").serialize();
-        console.log(Mydata);
-        $.ajax({
-            url: '/CapturaAccidentes/BuscarConductor',
-            type: 'POST',
-            data: Mydata,
-            success: function (response) {
-                console.log("Response:", response);
-                if (response.length === 0) {
-                    sitteg_warning("La búsqueda no arrojó resultados.");
-                } else {
-                    var grid = $("#gridConductores").data("kendoGrid");
-                    grid.dataSource.data(response);
+    //function buscarConductor() {
+    //    var Mydata = $("#otroConductorForm").serialize();
+    //    console.log(Mydata);
+    //    $.ajax({
+    //        url: '/CapturaAccidentes/BuscarConductor',
+    //        type: 'POST',
+    //        data: Mydata,
+    //        success: function (response) {
+    //            console.log("Response:", response);
+    //            if (response.length === 0) {
+    //                sitteg_warning("La búsqueda no arrojó resultados.");
+    //            } else {
+    //                var grid = $("#gridConductores").data("kendoGrid");
+    //                grid.dataSource.data(response);
 
-                }
-            },
-            error: function (error) {
-                sitteg_warning('Ocurrió un error en la búsqueda.');
-                console.log(error);
-            }
-        });
-    }
+    //            }
+    //        },
+    //        error: function (error) {
+    //            sitteg_warning('Ocurrió un error en la búsqueda.');
+    //            console.log(error);
+    //        }
+    //    });
+    //}
 
     function regresarModalVehiculo(IdPersona){
 
@@ -476,7 +479,6 @@
             type: 'POST',
             data: { IdPersona: IdPersona },
             success: function (data) {
-                console.log("SUCCESS", data);
                 $('#modalAgregarConductor').modal('hide');
                 $('.modal-backdrop').remove();
                 $('#modalAgregarConductor').modal('show');
@@ -486,6 +488,123 @@
                 console.log("ERROR", error);
             }
         });
+    }
+
+
+
+    function buscarConductor() {
+        var Mydata = $("#otroConductorForm").serialize(); 
+        $.ajax({
+            url: '/CapturaAccidentes/BuscarPorParametro',
+            type: 'POST',
+            data: Mydata,
+            success: function (response) { 
+                if (response.tipo == "success") {
+                    // Crear instancia del modelo con los datos recibidos
+                    mostrarModal(response.datos);
+
+                } else {
+                    // Mostrar los resultados de personas encontradas en la búsqueda
+                    if(response.encontrada == false){
+                        sitteg_warning("La búsqueda no arrojó resultados.");
+                    }else{ 
+                        if(response.data != null || response.data != undefined){
+                            var personasList = response.data;
+                            var grid = $("#gridConductores").data("kendoGrid");
+                            grid.dataSource.data(personasList);
+
+                            if (personasList.length === 0) {
+                                sitteg_warning("La búsqueda no arrojó resultados.");
+                            }
+                        }else{
+                            sitteg_warning("La búsqueda no arrojó resultados.");
+                        }  
+                    } 
+                }
+            },
+            error: function (error) {
+                sitteg_warning('Ocurrió un error en la búsqueda.');
+            }
+        });
+    }
+
+    function mostrarModal(jsonData) {
+        const modal = document.getElementById('modalLicencias');
+
+        const modalContent = `
+                <div class="modal-header">
+                    <h5 class="modal-title">Datos encontrados en el sistema de licencias</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Nombre:</strong> ${jsonData.nombre}</p>
+                    <p><strong>Apellido Paterno:</strong> ${jsonData.primer_apellido}</p>
+                    <p><strong>Apellido Materno:</strong> ${jsonData.segundo_apellido}</p>
+                    <p><strong>Tipo de Licencia:</strong> ${jsonData.tipolicencia}</p>
+                    <p><strong>Número de Licencia:</strong> ${jsonData.num_licencia}</p>
+                    <p><strong>Fecha de Expedición:</strong> ${jsonData.fecha_inicio_vigencia}</p>
+                    <p><strong>Fecha de Vigencia:</strong> ${jsonData.fecha_termino_vigencia}</p>
+                </div>
+              <div class="modal-footer">
+                <button type="button" id="cerrarModalBtn" class="btn btn-secondary controlButton" data-dismiss="modal">Cerrar</button>
+                <button type="button" id="guardarEnBaseDeDatosBtn" class="btn btn-primary controlButton">Guardar en Base de Datos</button>
+              </div>
+            `;
+
+        modal.querySelector('.modal-content').innerHTML = modalContent;
+        const cerrarModalBtn = document.getElementById('cerrarModalBtn');
+        cerrarModalBtn.addEventListener('click', () => {
+            $('#modalLicencias').modal('hide');
+        });
+
+        const guardarEnBaseDeDatosBtn = document.getElementById('guardarEnBaseDeDatosBtn');
+        guardarEnBaseDeDatosBtn.addEventListener('click', () => {
+            const tipoLicenciaMapping = {
+                "TIPO A  CHOFER AUTOMOVILISTA": 1,
+                "TIPO B CHOFER SERVICIO PÚBLICO": 2,
+                "TIPO C  Chofer Servicio de Carga": 3,
+                "TIPO D -MOTOCICLISTA": 4,
+                "PERMISO A -AUTOMOVIL-": 6,
+                "PERMISO D -MOTOCICLETA-": 7,
+                "NO APLICA": 8,
+                "TIPO A": 1,
+                "TIPO B": 2,
+                "TIPO C": 3,
+                "TIPO D": 4,
+                "PERMISO A": 6,
+                "PERMISO D": 7,
+                "A-AUTOMOVILISTA": 1,
+                "B-CHOFER DE SERVICIO PÚBLICO": 2,
+                "C-CHOFER DE SERVICIO DE CARGA": 3,
+                "D-MOTOCICLISTA": 4,
+                "PA-PERMISO AUTOMOVILISTA": 6,
+                "PD-PERMISO MOTOCICLISTA": 7,
+
+                // Puedes agregar más mapeos aquí si es necesario
+            };
+            const tipoLicenciaNumero = tipoLicenciaMapping[jsonData.tipolicencia] || 0; // 0 o valor predeterminado si no hay coincidencia
+            jsonData.id_tipo_licencia = tipoLicenciaNumero;
+            var idVehiculo = $("#IdVehiculoH").val();
+            $.ajax({
+                type: 'POST',
+                url: '/CapturaAccidentes/guardaDesdeServicio', // Reemplaza con la URL correcta
+                data:  jsonData ,
+                success: function (response) { 
+                    $('#modalLicencias').modal('hide');
+                    var personasList = [response]; // Convierte el objeto en un arreglo
+                    var grid = $("#gridConductores").data("kendoGrid");
+                    grid.dataSource.data(personasList);
+
+                },
+                error: function (error) {
+                    sitteg_warning('Error al guardar en la base de datos:');
+                }
+            });
+        });
+
+        $('#modalLicencias').modal('show');
     }
 
 </script>

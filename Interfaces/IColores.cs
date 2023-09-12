@@ -5,15 +5,8 @@ namespace GuanajuatoAdminUsuarios.Interfaces
 {
     public interface IColores
     {
-        List<CatColores> Getcoloress();
+        public int obtenerIdPorColor(string colorLimpio);
 
-        CatColores GetColorById(int IdColor);
-
-        int SaveColor(CatColores color);
-
-        int UpdateColor(CatColores color);
-
-        int DeleteColor(int color);
 
     }
 }

@@ -58,24 +58,24 @@
     </div>
     <div class="form-group col-md-3">
         <div class="controlForm">
-            <label>Capacidad:</label>&nbsp;
+            <label>Capacidad:</label>&nbsp;@(Model.capacidad != null ? Model.capacidad.ToString() : "-")
         </div>
     </div>
     <div class="form-group col-md-3">
         <div class="controlForm">
-            <label>Póliza:</label>&nbsp;
+            <label>Póliza:</label>&nbsp;@(Model.poliza != null ? Model.poliza.ToString() : "-")
         </div>
     </div>
 </div>
 <div class="row my-4 px-4">
     <div class="form-group col-md-4">
         <div class="controlForm">
-            <label>Carga:</label>&nbsp;
+            <label>Carga:</label>&nbsp;@(Model.carga.HasValue ? (Model.carga.Value ? "Si" : "No") : "-")
         </div>
     </div>
     <div class="form-group col-md-4">
         <div class="controlForm">
-            <label>Otros:</label>&nbsp;
+            <label>Otros:</label>&nbsp;@(Model.otros != null ? Model.otros.ToString() : "-")
         </div>
     </div>
     <div class="form-group col-md-4">

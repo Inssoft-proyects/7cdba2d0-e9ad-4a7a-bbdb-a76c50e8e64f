@@ -5,7 +5,6 @@
         var IdAccidente = dataItem.IdAccidente;
         var IdVehiculoInvolucrado = dataItem.IdVehiculoInvolucrado;
         var IdPropietarioInvolucrado = dataItem.IdPropietarioInvolucrado;
-        console.log("TODO", dataItem);
         $.ajax({
             url: '@Url.Action("MostrarModalAgregarMonto", "CapturaAccidentes")',
             type: 'POST',

@@ -178,7 +178,7 @@ namespace Example.WebUI.Controllers
             oficial.ApellidoMaterno = model.ApellidoMaterno;
             oficial.Estatus = 1;
             oficial.FechaActualizacion = DateTime.Now;
-            oficial.IdDelegacion = model.IdDelegacion;
+            //oficial.IdDelegacion = model.IdDelegacion;
 
             dbContext.Oficiales.Add(oficial);
             dbContext.SaveChanges();
@@ -193,7 +193,7 @@ namespace Example.WebUI.Controllers
             oficial.ApellidoMaterno = model.ApellidoMaterno;
             oficial.Estatus = model.Estatus;
             oficial.FechaActualizacion = DateTime.Now;
-            oficial.IdDelegacion = model.IdDelegacion;
+            //oficial.IdDelegacion = model.IdDelegacion;
 
             dbContext.Entry(oficial).State = EntityState.Modified;
             dbContext.SaveChanges();
@@ -209,7 +209,7 @@ namespace Example.WebUI.Controllers
             oficial.ApellidoMaterno = model.ApellidoMaterno;
             oficial.Estatus = 0;
             oficial.FechaActualizacion = DateTime.Now;
-            oficial.IdDelegacion = model.IdDelegacion;
+            //oficial.IdDelegacion = model.IdDelegacion;
 
             dbContext.Entry(oficial).State = EntityState.Modified;
             dbContext.SaveChanges();
@@ -233,8 +233,7 @@ namespace Example.WebUI.Controllers
                                 select new OficialesModel
 
                                 {
-                                    IdOficial = oficiales.IdOficial,
-                                    IdDelegacion = oficiales.IdDelegacion,
+                                    IdOficial = oficiales.IdOficial, 
                                     Rango = oficiales.Rango,
                                     Nombre = oficiales.Nombre,
                                     ApellidoPaterno = oficiales.ApellidoPaterno,
@@ -254,9 +253,7 @@ namespace Example.WebUI.Controllers
         /// <returns></returns>
         public List<OficialesModel> GetOficiales()
         {
-            var ListOficialessModel = (from oficiales in dbContext.Oficiales.ToList()
-                                       join delegaciones in dbContext.Delegaciones.ToList()
-                                       on oficiales.IdDelegacion equals delegaciones.IdDelegacion
+            var ListOficialessModel = (from oficiales in dbContext.Oficiales.ToList() 
                                        join estatus in dbContext.Estatus.ToList()
                                        on oficiales.Estatus equals estatus.estatus
                                        where oficiales.Estatus == 1
@@ -266,9 +263,7 @@ namespace Example.WebUI.Controllers
                                            Nombre = oficiales.Nombre,
                                            ApellidoPaterno = oficiales.ApellidoPaterno,
                                            ApellidoMaterno = oficiales.ApellidoMaterno,
-                                           estatusDesc = estatus.estatusDesc,
-                                           Delegacion = delegaciones.Delegacion,
-
+                                           estatusDesc = estatus.estatusDesc
 
                                        }).ToList();
             return ListOficialessModel;

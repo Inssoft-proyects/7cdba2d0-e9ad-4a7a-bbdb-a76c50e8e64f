@@ -54,7 +54,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             ReporteAsignacion.vehiculoCarretera = reader["vehiculoCarretera"].ToString();
                             ReporteAsignacion.vehiculoTramo = reader["vehiculoTramo"].ToString();
                             ReporteAsignacion.vehiculoKm = reader["vehiculoKm"].ToString();
-                            ReporteAsignacion.fechaSolicitud = Convert.ToDateTime(reader["fechaSolicitud"].ToString());
+                            ReporteAsignacion.fechaSolicitud = reader["fechaLiberacion"] != DBNull.Value ? Convert.ToDateTime(reader["fechaSolicitud"].ToString()): DateTime.MinValue;
                             ReporteAsignacion.evento = reader["evento"].ToString();
                             ReporteAsignacion.solicitanteNombre = reader["solicitanteNombre"].ToString();
                             ReporteAsignacion.solicitanteAp = reader["solicitanteAp"].ToString();
@@ -67,7 +67,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             ReporteAsignacion.oficial = reader["oficial"].ToString();
                             ReporteAsignacion.folio = reader["folio"].ToString();
                             ReporteAsignacion.vehiculoPension = reader["pension"].ToString();
-                            ReporteAsignacion.fechaLiberacion = Convert.ToDateTime(reader["fechaLiberacion"].ToString());
+                            ReporteAsignacion.fechaLiberacion = reader["fechaLiberacion"] != DBNull.Value ? Convert.ToDateTime(reader["fechaLiberacion"].ToString()) : DateTime.MinValue ;
                             ReporteAsignacion.IdGrua = Convert.ToInt32(reader["IdGrua"].ToString());
                             ReporteAsignacion.noEconomico = reader["folio"].ToString();
                             ReporteAsignacion.Delegacion = reader["Delegacion"].ToString();

@@ -4,6 +4,7 @@ using GuanajuatoAdminUsuarios.Models;
 using GuanajuatoAdminUsuarios.Services;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -28,10 +29,12 @@ namespace Example.WebUI.Controllers
         private readonly ICatCarreterasService _catCarreterasService;
         private readonly ICatTramosService _catTramosService;
         private readonly IPensionesService _pensionesService;
+        private readonly IConcesionariosService _concesionariosService;
 
 
         public DepositosController(IDepositosService catDepositosService, ICatTiposVehiculosService catTiposVehiculoService, ICatResponsablesPensiones catResponsablesPensiones, IOficiales oficialesService,ICatEntidadesService catEntidadesService, ICatMunicipiosService catMunicipiosService,
-            ICatDescripcionesEventoService descripcionesEventoService, ICatTipoMotivoAsignacionService catTipoMotivoAsignacionService, ICatTipoUsuarioService catTipoUsuarioService, ICatCarreterasService catCarreterasService, ICatTramosService catTramosService, IPensionesService pensionesService)
+            ICatDescripcionesEventoService descripcionesEventoService, ICatTipoMotivoAsignacionService catTipoMotivoAsignacionService, ICatTipoUsuarioService catTipoUsuarioService, ICatCarreterasService catCarreterasService, ICatTramosService catTramosService, IPensionesService pensionesService,
+            IConcesionariosService concesionariosService)
         {
             _catDepositosService = catDepositosService;
             _catTiposVehiculoService = catTiposVehiculoService;
@@ -45,6 +48,7 @@ namespace Example.WebUI.Controllers
             _catCarreterasService = catCarreterasService;
             _catTramosService = catTramosService;
             _pensionesService = pensionesService;
+            _concesionariosService = concesionariosService;
         }
     
         public IActionResult Depositos(int? Isol)
@@ -81,9 +85,10 @@ namespace Example.WebUI.Controllers
             return Json(result);
         }
 
-        public JsonResult Propietarios_Drop()
+        public JsonResult Concecionarios_Drop()
         {
-            var result = new SelectList(_catResponsablesPensiones.ObtenerResponsables(), "IdResponsable", "Responsable");
+            int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+            var result = new SelectList(_concesionariosService.GetConcesionarios(idOficina), "IdConcesionario", "Concesionario");
             return Json(result);
         }
         public JsonResult Oficiales_Drop()

@@ -1,5 +1,4 @@
 ﻿@model InfraccionesModel
-
 <div class="mainContainer bg-light">
     <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
         <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
@@ -124,6 +123,7 @@
                                         <label>Fecha infracción:</label>
                                         @(Html.Kendo().DateTimePickerFor(t => t.fechaInfraccion)
                                             .Label(l => l.Content("Fecha: <b>(obligatorio)</b>:"))
+                                            .Format("dd-MM-yyyy")
                                             .HtmlAttributes(new { style = "width: 100%", required = "required" })
                                             )
                                     </div>
@@ -206,7 +206,7 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <div class="controlForm">
-                                        @(Html.Kendo().IntegerTextBoxFor(t => t.kmCarretera)
+                                        @(Html.Kendo().TextBoxFor(t => t.kmCarretera)
                                             .Label(l => l.Content("Kilómetro: <b>(obligatorio)</b>:"))
                                             .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
                                             )
@@ -217,36 +217,36 @@
                                 <div class="form-group col-md-3">
                                     <div class="controlForm">
                                         @(Html.Kendo().TextBoxFor(t => t.lugarCalle)
-                                            .Label(l => l.Content("Calle: <b>(obligatorio)</b>:"))
+                                            .Label(l => l.Content("Calle:"))
                                             .Placeholder("Ingresa calle")
-                                            .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                                            .HtmlAttributes(new { style = "width: 100%" })
                                             )
                                     </div>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <div class="controlForm">
                                         @(Html.Kendo().TextBoxFor(t => t.lugarNumero)
-                                            .Label(l => l.Content("Número: <b>(obligatorio)</b>:"))
+                                            .Label(l => l.Content("Número:"))
                                             .Placeholder("Ingresa número")
-                                            .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                                            .HtmlAttributes(new { style = "width: 100%" })
                                             )
                                     </div>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <div class="controlForm">
                                         @(Html.Kendo().TextBoxFor(t => t.lugarColonia)
-                                            .Label(l => l.Content("Colonia: <b>(obligatorio)</b>:"))
+                                            .Label(l => l.Content("Colonia:"))
                                             .Placeholder("Ingresa colonia")
-                                            .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                                            .HtmlAttributes(new { style = "width: 100%" })
                                             )
                                     </div>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <div class="controlForm">
                                         @(Html.Kendo().TextBoxFor(t => t.lugarEntreCalle)
-                                            .Label(l => l.Content("Entre calle: <b>(obligatorio)</b>:"))
+                                            .Label(l => l.Content("Entre calle: "))
                                             .Placeholder("Ingresa entre calle")
-                                            .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                                            .HtmlAttributes(new { style = "width: 100%" })
                                             )
                                     </div>
                                 </div>
@@ -273,7 +273,7 @@
                                 <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
                                     <div class="row">
                                         <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-                                            <button href="#" id="btnNuevoVehiculo" onclick="window.location.href = '@Url.Action("Index","Vehiculos")'">
+                                            <button id="btnNuevoVehiculo" onclick="mostrarModalAgregarVehiculo()" type="button">
                                                 <h6 class="m-0 d-flex align-items-center"><i class="icon-addCar h5 mb-0 me-2"></i><b>Agregar nuevo vehículo</b></h6>
                                             </button>
                                         </div>
@@ -287,6 +287,7 @@
                                         <label>El propietario del vehículo es el conductor: </label>&nbsp;&nbsp;
                                         @(Html.Kendo().SwitchFor(m => m.isPropietarioConductor)
                                             .Messages(c => c.Checked("SI").Unchecked("NO"))
+
                                             .Events(ev => ev.Change("isPropietarioOnChange"))
                                             )
                                     </div>
@@ -323,7 +324,7 @@
                                 <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
                                     <div class="row">
                                         <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-                                            <button href="#" id="btnNuevoConductor" onclick="window.location.href = '@Url.Action("Index","Personas")'">
+                                            <button type="button" href="#" id="btnNuevoConductor" onclick="mostrarModalAgregarConductor()">
                                                 <h6 class="m-0 d-flex align-items-center"><i class="icon-addConductor h5 mb-0 me-2"></i><b>Agregar nuevo conductor</b></h6>
                                             </button>
                                         </div>
@@ -351,6 +352,25 @@
                     </div>
 
                 </form>
+            </div>
+        </div>
+        <!--Modal agregar conductor-->
+        <div class="modal fade modalCustom" id="agregarConductorModal" tabindex="-1" aria-labelledby="agregarVehiculoLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-body" id="ModalBodyAgregarConductor">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade modalCustom" id="agregarVehiculoModal" tabindex="-1" aria-labelledby="agregarVehiculoLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-body" id="ModalBodyAgregarVehiculo">
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -479,6 +499,31 @@
             //    var errmsg = msg_err_gral;
             //    semg_error(errmsg);
             //}
+        });
+    }
+
+    function mostrarModalAgregarConductor() {
+        $.ajax({
+            url: '@Url.Action("ModalAgregarConductor")',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                $('#ModalBodyAgregarConductor').html(data);
+                $('#agregarConductorModal').modal('show');
+                }
+        });
+    }
+
+    function mostrarModalAgregarVehiculo() {
+
+        $.ajax({
+            url: '@Url.Action("ModalAgregarVehiculo")',
+            type: 'POST',
+            success: function (data) {
+                $('#ModalBodyAgregarVehiculo').html(data);
+                $('#agregarVehiculoModal').modal('show');
+            }
         });
     }
 </script>

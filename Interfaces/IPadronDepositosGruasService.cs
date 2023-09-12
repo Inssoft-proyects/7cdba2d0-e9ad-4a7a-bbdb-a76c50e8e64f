@@ -8,6 +8,6 @@ namespace GuanajuatoAdminUsuarios.Interfaces
 
         List<PadronDepositosGruasModel> GetAllPadronDepositosGruas();
         List<PadronDepositosGruasModel> GetPadronDepositosGruas(PadronDepositosGruasBusquedaModel model);
-        List<PensionModel> GetPensiones();
+        List<PensionModel> GetPensiones(int idOficina);
     }
 }

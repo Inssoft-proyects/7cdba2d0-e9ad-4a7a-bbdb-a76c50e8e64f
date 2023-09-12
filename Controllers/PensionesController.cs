@@ -53,6 +53,10 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public ActionResult ajax_BuscarPensiones(string pension, int? idDelegacion)
         {
             var ListPensionesModel = _pensionesService.GetPensionesToGrid(pension, idDelegacion);
+            if (ListPensionesModel.Count == 0)
+            {
+                ViewBag.NoResultsMessage = "No se encontraron registros que cumplan con los criterios de búsqueda.";
+            }
             return PartialView("_ListadoPensiones", ListPensionesModel);
 
         }

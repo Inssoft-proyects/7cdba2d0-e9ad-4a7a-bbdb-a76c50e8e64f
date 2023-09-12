@@ -9,6 +9,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
         public CatMarcasVehiculosModel GetMarcaByID(int IdMarcaVehiculo);
        public int GuardarMarca(CatMarcasVehiculosModel model);
         public int UpdateMarca(CatMarcasVehiculosModel marca);
-
+        public int obtenerIdPorMarca( string marcaLimpio);
+        
     }
 }

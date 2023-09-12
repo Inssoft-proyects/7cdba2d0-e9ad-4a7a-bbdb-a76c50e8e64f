@@ -13,6 +13,9 @@ using Kendo.Mvc.Extensions;
 using GuanajuatoAdminUsuarios.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using static GuanajuatoAdminUsuarios.RESTModels.AnulacionDocumentoRequestModel;
+using GuanajuatoAdminUsuarios.RESTModels;
+using GuanajuatoAdminUsuarios.Services;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
@@ -21,10 +24,12 @@ namespace GuanajuatoAdminUsuarios.Controllers
     {
 
         private readonly ICancelarInfraccionService _cancelarInfraccionService;
+        private readonly IAnulacionDocumentoService _anulacionDocumentoService;
 
-        public CancelarInfraccionController(ICancelarInfraccionService cancelarInfraccionService)
+        public CancelarInfraccionController(ICancelarInfraccionService cancelarInfraccionService, IAnulacionDocumentoService anulacionDocumentoService)
         {
             _cancelarInfraccionService = cancelarInfraccionService;
+            _anulacionDocumentoService = anulacionDocumentoService;
         }
 
         public IActionResult Index(CancelarInfraccionModel cancelarInfraccionService)
@@ -69,10 +74,28 @@ namespace GuanajuatoAdminUsuarios.Controllers
         [HttpPost]
         public IActionResult IniciarCancelacion(CancelarInfraccionModel model, int IdInfraccion, string OficioRevocacion)
         {
-           
-                var ListInfraccionesModel = _cancelarInfraccionService.CancelarInfraccionBD(IdInfraccion, OficioRevocacion);
-                return View("CancelarInfraccion");
+
+            var ListInfraccionesModel = _cancelarInfraccionService.CancelarInfraccionBD(IdInfraccion, OficioRevocacion);
+            return View("CancelarInfraccion");
         }
+
+        public IActionResult AnulacionDocumento(string folio_infraccion, int idOficina)
+        {
+            string prefijo = (idOficina == 1) ? "TTO-PEC" : (idOficina == 2) ? "TTE-M" : "";
+            RootAnulacionDocumentoRequest rootRequest = new RootAnulacionDocumentoRequest();
+
+            MT_Consulta_documento mTConsultaDocumento = new MT_Consulta_documento(); 
+            mTConsultaDocumento.DOCUMENTO = prefijo+folio_infraccion;
+            mTConsultaDocumento.USUARIO = "INNSJACOB";
+            mTConsultaDocumento.PASSWORD = "123456";
+
+            rootRequest.MT_Consulta_documento = mTConsultaDocumento;
+             
+            var result = _anulacionDocumentoService.CancelarMultasTransitoFinanzas(rootRequest);
+            ViewBag.Pension = result;
+            return Json(result);
+        }
+
     }
 
 }

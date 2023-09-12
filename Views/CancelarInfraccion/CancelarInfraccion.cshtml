@@ -68,15 +68,13 @@
 <script>
     function buscarInfraccion() {
 
-        var Data = $("#BusquedaCancelacionInfraccion").serialize();
-        console.log(Data);
+        var Data = $("#BusquedaCancelacionInfraccion").serialize(); 
 
         $.ajax({
             url: '@Url.Action("ObtenerInfracciones")',
             type: 'POST',
             data: Data,
-            success: function (result) {
-                console.log("AB", result)
+            success: function (result) { 
 
                 $('#listadoCancelacionInfracciones').html(result);
             },

@@ -1,17 +1,7 @@
 ﻿@model MotivoInfraccionModel
 
 <form id="frmCrearMotivos" class="row px-4 mb-4 align-items-end justify-content-center">
-    @Html.HiddenFor(m=> m.idInfraccion, new { id = "hndIdInfraccion"})
-    <div class="row">
-        <div class="col-12 col-md-6">
-            <div class="controlForm">
-                @(Html.Kendo().TextBoxFor(t => t.fundamento)
-                    .Label(l => l.Content("Fundamento legal: <b>(obligatorio)</b>:"))
-                    .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
-                    )
-            </div>
-        </div>
-    </div>
+    @Html.HiddenFor(m=> m.idInfraccion, new { id = "hndIdInfraccion"}) 
     <div class="row my-4">
         <div class="col-12 col-md-4">
             <div class="controlForm">
@@ -28,7 +18,7 @@
                 <div id="divSubConcepto">
                     @(Html.Kendo().DropDownListFor(m => m.IdSubConcepto)
                         .OptionLabel("-- Seleccione --")
-                        .HtmlAttributes(new { style = "width:100%;" }))
+                        .HtmlAttributes(new { style = "width:100%;", required = "required" }))
                 </div>
             </div>
         </div>
@@ -36,7 +26,7 @@
             <div class="controlForm">
                 <label>Motivo:</label>
                 <div id="divCatMotivo">
-                    @(Html.Kendo().DropDownListFor(m => m.idCatMotivosInfraccion)
+                    @(Html.Kendo().DropDownListFor(m => m.idCatMotivoInfraccion)
                         .OptionLabel("-- Seleccione --")
                         .HtmlAttributes(new { style = "width:100%;" }))
                 </div>
@@ -47,16 +37,16 @@
         <div class="form-group col-md-4">
             <div class="controlForm">
                 @(Html.Kendo().IntegerTextBoxFor(t => t.calificacionMinima)
-                    .Label(l => l.Content("Calificación mínima: <b>(obligatorio)</b>:"))
-                    .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
+                    .Label(l => l.Content("Calificación mínima:"))
+                    .HtmlAttributes(new { style = "width: 100%; height:58px;", id = "calificacionMinima", required = "required", disabled="disabled" })
                     )
             </div>
         </div>
         <div class="form-group col-md-4">
             <div class="controlForm">
                 @(Html.Kendo().IntegerTextBoxFor(t => t.calificacionMaxima)
-                    .Label(l => l.Content("Calificación máxima: <b>(obligatorio)</b>:"))
-                    .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
+                    .Label(l => l.Content("Calificación máxima:"))
+                    .HtmlAttributes(new { style = "width: 100%; height:58px;", id = "calificacionMaxima", required = "required", disabled = "disabled" })
                     )
             </div>
         </div>
@@ -102,11 +92,12 @@
             var idInfraccion = $("#idInfraccion").val();
             $("#hndIdInfraccion").val(idInfraccion);
             var formData = $("#frmCrearMotivos").serialize();
+            formData = formData + '&calificacionMinima=' + $("#calificacionMinima").val() + '&calificacionMaxima=' + $("#calificacionMaxima").val();
+            console.log(formData);
             $.ajax({
                 url: '@Url.Action("ajax_CrearMotivos")',
                 type: 'POST',
                 data: formData,
-                //data: formData,
                 success: function (result) {
                     $("#listadoMotivos").html(result);
                     $('#modalCrearMotivo').modal('hide');
@@ -129,22 +120,57 @@
     $("#ddlConcepto").on("change", function () {
         var value = $(this).val();
         var ddlIdSubConcepto = $("#IdSubConcepto").data("kendoDropDownList");
-        var ddlidCatMotivosInfraccion = $("#idCatMotivosInfraccion").data("kendoDropDownList");
-        ddlIdSubConcepto.dataSource.data([]);
-        ddlidCatMotivosInfraccion.dataSource.data([]);
+        var ddlidCatMotivoInfraccion = $("#idCatMotivoInfraccion").data("kendoDropDownList");
+        if (ddlIdSubConcepto != undefined){
+            ddlIdSubConcepto.dataSource.data([]);
+        }
+            
+        if (ddlidCatMotivoInfraccion != undefined) {
+            ddlidCatMotivoInfraccion.dataSource.data([]);
+        }
 
         var functionName = "_on_change_SubConcepto";
         _set_combo_catalog("CatSubConceptoInfraccion", value, "IdSubConcepto", "false", "divSubConcepto", functionName);
     });
-    function _on_change_SubConcepto() {
-        var value = $("#IdSubConcepto").val();
-        if (value == "") {
-            $("#idCatMotivosInfraccion option[value!='']").remove();
-        }
-        else {
-            _set_combo_catalog("CatMotivosInfraccion", value, "idCatMotivosInfraccion", "false", "divCatMotivo", "");
-            $('#idCatMotivosInfraccion').kendoDropDownList();
 
+    function _on_change_SubConcepto() {
+        var value = $("#IdSubConcepto").val(); 
+        if (value == "") {
+            $("#idCatMotivoInfraccion option[value!='']").remove();
+        }
+        else { 
+            var functionName = "_on_change_Motivo";
+            _set_combo_catalog("CatMotivosInfraccion", value, "idCatMotivoInfraccion", "false", "divCatMotivo", functionName);
+            $('#idCatMotivoInfraccion').kendoDropDownList();
         }
     }
+    
+    function _on_change_Motivo() {
+        var min = 0;
+        var max = 0;
+        var value = $("#idCatMotivoInfraccion").val();
+        var txtMin = $("#calificacionMinima").data("kendoNumericTextBox");
+        var txtMax = $("#calificacionMaxima").data("kendoNumericTextBox");
+         
+        $.ajax({
+            url: '@Url.Action("BuscarMotivoByID","MotivosInfraccion")',
+            type: 'GET',
+            data: { idCatMotivoInfraccion: value }, 
+            success: function (result) {
+                min = result.CalificacionMinima;
+                max = result.CalificacionMaxima; 
+                 
+                txtMin.value(min);
+                txtMax.value(max);
+                 
+            },
+            error: function (xhr, status) {
+                var errmsg = xhr.responseText;
+                console.log(errmsg)
+                sitteg_warning('Lo sentimos, ha ocurrido un error.'+errmsg);
+            }
+        });
+    }
+     
+
 </script>

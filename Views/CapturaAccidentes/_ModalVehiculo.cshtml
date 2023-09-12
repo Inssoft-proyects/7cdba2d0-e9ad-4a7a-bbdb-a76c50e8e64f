@@ -101,6 +101,7 @@
                                 .HtmlAttributes(new { style = "width: 100%" })
                                 )
                         </div>
+                            <div id="ErrorMessage" class="error-container"></div>
                     </div>
                 </div>
                 <div class="row">
@@ -160,32 +161,105 @@
      <div id="listadoDetalleVehiculo">
         <partial name="_ListaDetalleVehiculo" model="Model" />
      </div>
+            <div class="modal fade modalCustom" id="VehiculoServiceModal" tabindex="-1" aria-labelledby="VehiculoServiceLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body" id="ModalBodyVehiculoService">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal genérico para mostrar mensajes de error -->
+            <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="errorModalLabel">Vehículo no registrado en SITTEG</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cierraModal()">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="errorMessage"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="cierraModal()">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 </section>
 </div>
 </div>
 
 <script>
+    function abrirModalVehiculo(placa) {
+        $.ajax({
+            url: '/CapturaAccidentes/AbrirModalVehiculo',
+            type: 'GET',
+            data: { placa: placa },
+            success: function (data) {
+                if (data.success) {
+                    $('#errorMessage').text("Se han encontrado datos en el Registo Estatal, complete o corrija para importar los datos a SITTEG");
+                    $('#errorModal').modal('show'); 
+                    $('#ModalBodyVehiculoService').html(data);
+                    $('#VehiculoServiceModal').modal('show');
+                } else {
+                    $('#errorMessage').text("Complete o ingrese la información necesaria para agregar este vehículo a SITTEG");
+                    $('#errorModal').modal('show');
+
+                    $('#ModalBodyVehiculoService').html(data);
+                    $('#VehiculoServiceModal').modal('show');
+                }
+            },
+            error: function () {
+                // Manejar error de la llamada AJAX
+                console.log("Error en la llamada AJAX para abrir el modal.");
+            }
+        });
+    }
+
+
     function busquedaVehiculo() {
         var formData = $("#buscarVehiculoForm").serialize();
-
         $.ajax({
             url: '@Url.Action("BuscarVehiculo")',
             type: 'POST',
             data: formData,
             success: function (response) {
-                console.log("Response:", response);
-                var grid = $("#gridPrevioVehiculo").data("kendoGrid");
-                grid.dataSource.data(response);
+
+                // Comprobar si es una respuesta de error debido a problemas de conexión
+                if (response.success === false) {
+                    sitteg_warning(response.errorMessage);
+                    return; 
+                }
+
+                if (response.noResults) {
+                    abrirModalVehiculo(response.placaValue);
+                } else {
+                    var grid = $("#gridPrevioVehiculo").data("kendoGrid");
+                    grid.dataSource.data(response.data);
+                    grid.refresh();
+                }
             },
-            error: function (error) {
-                var errorMessage = error.responseText || "Ocurrió un error, inténtelo nuevamente más tarde.";
-                sitteg_warning(errorMessage);
+            error: function () {
+                sitteg_warning("Sucedio un error intente de nuevo mas tarde");
             }
         });
     }
+
+
     function goBack(){
 
         $('#agregarVehiculoModal').modal('hide');
 
         }
+
+    function cierraModal() {
+
+        $('#errorModal').modal('hide');
+
+    }
 </script>

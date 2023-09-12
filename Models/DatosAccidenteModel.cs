@@ -1,7 +1,7 @@
 ﻿namespace GuanajuatoAdminUsuarios.Models
 {
     public class DatosAccidenteModel
-    {
+    { 
         public float montoCamino { get; set; }
         public float montoCarga { get; set; }
         public float montoPropietarios { get; set; }
@@ -27,7 +27,7 @@
         public int EstadoValores { get; set; }
         public int EstadoPrendas { get; set; }
         public int EstadoOtros { get; set; }
-        public bool ArmasBool => EstadoArmas == 1;
+        public bool ArmasBool =>EstadoArmas == 1;
         public bool DrogasBool => EstadoDrogas == 1;
         public bool ValoresBool => EstadoValores == 1;
         public bool PrendasBool => EstadoPrendas == 1;

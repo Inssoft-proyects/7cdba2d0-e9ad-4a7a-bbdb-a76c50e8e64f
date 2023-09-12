@@ -5,15 +5,18 @@ using System.Data;
 using System;
 using GuanajuatoAdminUsuarios.Models;
 using System.Data.SqlClient;
+using System.Globalization;
 
 namespace GuanajuatoAdminUsuarios.Services
 {
     public class RegistroReciboPagoService : IRegistroReciboPagoService
     {
         private readonly ISqlClientConnectionBD _sqlClientConnectionBD;
-        public RegistroReciboPagoService(ISqlClientConnectionBD sqlClientConnectionBD)
+        private readonly IInfraccionesService _infraccionesService;
+        public RegistroReciboPagoService(ISqlClientConnectionBD sqlClientConnectionBD, IInfraccionesService infraccionesService)
         {
             _sqlClientConnectionBD = sqlClientConnectionBD;
+            _infraccionesService = infraccionesService;
         }
 
         public List<RegistroReciboPagoModel> ObtInfracciones(string FolioInfraccion)
@@ -26,10 +29,16 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT i.*, p1.nombre AS nombre1, p1.apellidoPaterno AS apellidoPaterno1, p1.apellidoMaterno AS apellidoMaterno1, " +
-                        "p2.nombre AS nombre2, p2.apellidoPaterno AS apellidoPaterno2, p2.apellidoMaterno AS apellidoMaterno2 " +
-                        "FROM infracciones AS i INNER JOIN personas AS p1 ON i.idPersonaInfraccion = p1.idPersona " +
-                        "INNER JOIN personas AS p2 ON i.idPersona = p2.idPersona  where FolioInfraccion = @FolioInfraccion", connection);
+                    SqlCommand command = new SqlCommand(@"SELECT i.*, pveh.nombre AS nombre1, pveh.apellidoPaterno AS apellidoPaterno1,
+                                                            pveh.apellidoMaterno AS apellidoMaterno1, pinf.nombre AS nombre2, 
+                                                            pinf.apellidoPaterno AS apellidoPaterno2, pinf.apellidoMaterno AS apellidoMaterno2,
+                                                            e.estatusInfraccion
+                                                        FROM infracciones AS i 
+                                                        JOIN catEstatusInfraccion AS e ON i.idEstatusInfraccion = e.idEstatusInfraccion
+                                                        JOIN vehiculos AS v ON v.idVehiculo = i.idVehiculo
+                                                        LEFT JOIN personas AS pveh ON pveh.idPersona = v.idPersona
+                                                        LEFT JOIN personas AS pinf ON i.idPersona = pinf.idPersona  
+                                                        WHERE folioInfraccion = @FolioInfraccion", connection);
 
                     command.Parameters.Add(new SqlParameter("@FolioInfraccion", SqlDbType.NVarChar)).Value = FolioInfraccion;
                     command.CommandType = CommandType.Text;
@@ -39,13 +48,13 @@ namespace GuanajuatoAdminUsuarios.Services
                         {
                             RegistroReciboPagoModel infraccion = new RegistroReciboPagoModel();
                             infraccion.IdInfraccion = Convert.ToInt32(reader["IdInfraccion"].ToString());
-                            infraccion.FolioInfraccion = reader["FolioInfraccion"].ToString();
+                            infraccion.FolioInfraccion = reader["folioInfraccion"].ToString();
                             infraccion.Placas = reader["placasVehiculo"].ToString();
                             infraccion.FechaInfraccion = Convert.ToDateTime(reader["FechaInfraccion"].ToString());
-                            infraccion.Conductor = $"{reader["nombre1"]} {reader["apellidoPaterno1"]} {reader["apellidoMaterno1"]}";
+                            infraccion.Propietario = $"{reader["nombre1"]} {reader["apellidoPaterno1"]} {reader["apellidoMaterno1"]}";
                             //infraccion.Serie = reader["Serie"].ToString();
-                            infraccion.Propietario = $"{reader["nombre2"]} {reader["apellidoPaterno2"]} {reader["apellidoMaterno2"]}";
-                            infraccion.EstatusProceso = Convert.IsDBNull(reader["EstatusProceso"]) ? 0 : Convert.ToInt32(reader["EstatusProceso"]);
+                            infraccion.Conductor = $"{reader["nombre2"]} {reader["apellidoPaterno2"]} {reader["apellidoMaterno2"]}";
+                            infraccion.EstatusInfraccion = reader["estatusInfraccion"].ToString();
 
                             ListaInfracciones.Add(infraccion);
 
@@ -77,10 +86,30 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT i.*, p1.nombre AS nombre1, p1.apellidoPaterno AS apellidoPaterno1, p1.apellidoMaterno AS apellidoMaterno1, " +
-                        "p2.nombre AS nombre2, p2.apellidoPaterno AS apellidoPaterno2, p2.apellidoMaterno AS apellidoMaterno2 " +
-                        "FROM infracciones AS i INNER JOIN personas AS p1 ON i.idPersonaInfraccion = p1.idPersona " +
-                        "INNER JOIN personas AS p2 ON i.idPersona = p2.idPersona WHERE i.IdInfraccion = @Id;", connection);
+                    SqlCommand command = new SqlCommand(@"SELECT i.*, pveh.nombre AS nombre1, pveh.apellidoPaterno AS apellidoPaterno1,
+                                                            pveh.apellidoMaterno AS apellidoMaterno1, pinf.nombre AS nombre2, 
+                                                            pinf.apellidoPaterno AS apellidoPaterno2, pinf.apellidoMaterno AS apellidoMaterno2,
+                                                            e.estatusInfraccion, sum(mi.calificacion ) calificacion 
+                                                        FROM infracciones AS i 
+                                                        JOIN catEstatusInfraccion AS e ON i.idEstatusInfraccion = e.idEstatusInfraccion
+                                                        JOIN vehiculos AS v ON v.idVehiculo = i.idVehiculo
+                                                        LEFT JOIN motivosInfraccion mi ON mi.idInfraccion = i.idInfraccion
+                                                        LEFT JOIN personas AS pveh ON pveh.idPersona = v.idPersona
+                                                        LEFT JOIN personas AS pinf ON i.idPersona = pinf.idPersona  
+                                                        WHERE i.IdInfraccion = @Id 
+                                                        group by i.idInfraccion, i.idOficial,i.idDependencia, i.idDelegacion, i.idVehiculo,
+                                                        i.idAplicacion, i.idGarantia, i.idEstatusInfraccion, i.idMunicipio, i.idTramo,
+                                                        i.idCarretera, i.idPersona, i.idPersonaInfraccion, i.placasVehiculo, i.folioInfraccion,
+                                                        i.fechaInfraccion, i.kmCarretera, i.observaciones, i.lugarCalle, i.lugarNumero,
+                                                        i.lugarColonia, i.lugarEntreCalle, infraccionCortesia,i.NumTarjetaCirculacion,
+                                                        i.oficioRevocacion,i.estatusProceso,i.fechaActualizacion,i.actualizadoPor,
+                                                        i.estatus,i.reciboPago,i.monto,i.fechaPago,i.lugarPago,i.idEstatusEnvio,
+                                                        i.oficioEnvio,i.fechaEnvio,i.idOficinaRenta,i.inventario,i.partner,
+                                                        i.cuenta,i.objeto,i.documento,pveh.nombre , pveh.apellidoPaterno,
+                                                        pveh.apellidoMaterno , pinf.nombre , 
+                                                        pinf.apellidoPaterno, pinf.apellidoMaterno,
+                                                        e.estatusInfraccion
+                                                        ;", connection);
                     command.Parameters.Add(new SqlParameter("@Id", SqlDbType.Int)).Value = Id;
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
@@ -92,10 +121,11 @@ namespace GuanajuatoAdminUsuarios.Services
                             infraccion.FechaInfraccion = Convert.ToDateTime(reader["FechaInfraccion"].ToString());
                             infraccion.Conductor = $"{reader["nombre1"]} {reader["apellidoPaterno1"]} {reader["apellidoMaterno1"]}";
                             infraccion.Placas = reader["placasVehiculo"].ToString();
-                            //infraccion.Serie = reader["Serie"].ToString();
+                            
                             infraccion.Propietario = $"{reader["nombre2"]} {reader["apellidoPaterno2"]} {reader["apellidoMaterno2"]}";
                             infraccion.EstatusProceso = Convert.IsDBNull(reader["EstatusProceso"]) ? 0 : Convert.ToInt32(reader["EstatusProceso"]);
-
+                            infraccion.Calificacion = Convert.ToInt32(reader["calificacion"].ToString());
+                            infraccion.Monto = (float?) infraccion.Calificacion *  (float?)_infraccionesService.GetUmas(); ;
                         }
 
                     }
@@ -130,7 +160,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.AddWithValue("@reciboPago", ReciboPago);
                     command.Parameters.AddWithValue("@monto", Monto);
                     command.Parameters.AddWithValue("@fechaPago", FechaPago);
-                    command.Parameters.AddWithValue("@lugarPago", LugarPago);
+                    command.Parameters.AddWithValue("@lugarPago", LugarPago != null ? LugarPago : DBNull.Value);
                     command.Parameters.AddWithValue("@idInfraccion", IdInfraccion);
                     command.ExecuteNonQuery();
                 }

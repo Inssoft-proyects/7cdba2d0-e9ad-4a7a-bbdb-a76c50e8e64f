@@ -71,9 +71,15 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public ActionResult ajax_BuscarVehiculo(LiberacionVehiculoBusquedaModel model)
         {
             var ListVehiculosModel = _liberacionVehiculoService.GetDepositos(model);
-            return PartialView("_ListadoVehiculos", ListVehiculosModel);
 
+            if (ListVehiculosModel.Count == 0)
+            {
+                ViewBag.NoResultsMessage = "No se encontraron resultados que cumplan con los criterios de búsqueda.";
+            }
+
+            return PartialView("_ListadoVehiculos", ListVehiculosModel);
         }
+
 
         [HttpGet]
         public ActionResult ajax_UpdateLiberacion(int Id)

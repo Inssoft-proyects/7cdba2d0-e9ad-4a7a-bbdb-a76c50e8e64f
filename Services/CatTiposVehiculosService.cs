@@ -62,5 +62,37 @@ namespace GuanajuatoAdminUsuarios.Services
 
 
         }
+        public int obtenerIdPorTipo(string categoria)
+        {
+            int result = 0;
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand sqlCommand = new SqlCommand("SELECT idTipoVehiculo FROM catTiposVehiculo WHERE tipoVehiculo = @tipoVehiculo", connection);
+                    sqlCommand.Parameters.Add(new SqlParameter("@tipoVehiculo", SqlDbType.NVarChar)).Value = categoria;
+                    sqlCommand.CommandType = CommandType.Text;
+
+                    using (SqlDataReader reader = sqlCommand.ExecuteReader())
+                    {
+                        if (reader.Read()) // Intenta leer un registro del resultado
+                        {
+                            // Obtiene el valor de la columna "idMunicipio"
+                            result = Convert.ToInt32(reader["idTipoVehiculo"]);
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    return result;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return result;
+        }
     }
 }

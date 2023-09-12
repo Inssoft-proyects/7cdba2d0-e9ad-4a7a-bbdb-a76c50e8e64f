@@ -65,8 +65,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             "LEFT JOIN catEstatusInfraccion  estIn on inf.IdEstatusInfraccion = estIn.idEstatusInfraccion " +
                             "LEFT JOIN personas AS prop ON inf.idPersona = prop.idPersona " +
                             "LEFT JOIN personas AS cond ON inf.idPersonaInfraccion = cond.idPersona " +
-                            "WHERE CONVERT(DATETIME, fechaInfraccion, 120) BETWEEN CONVERT(DATETIME, @fechaInicio, 101) AND CONVERT(DATETIME, @fechaFin, 101) AND DATEDIFF(day, inf.fechaInfraccion, GETDATE()) > 10 " +
-                            "AND inf.idEstatusEnvio != 1 OR inf.idEstatusEnvio IS NULL;", connection); 
+                            "WHERE CONVERT(DATETIME, fechaInfraccion, 120) BETWEEN CONVERT(DATETIME, @fechaInicio, 101) AND CONVERT(DATETIME, @fechaFin, 101) AND DATEDIFF(day, inf.fechaInfraccion, GETDATE()) > 10", connection); 
 
 
 
@@ -80,7 +79,11 @@ namespace GuanajuatoAdminUsuarios.Services
                         {
                             EnvioInfraccionesModel infraccion = new EnvioInfraccionesModel();
                             infraccion.IdInfraccion = reader["idInfraccion"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idInfraccion"].ToString());
-                            infraccion.idEstatusInfraccion = (int)(reader["idEstatusInfraccion"] == DBNull.Value ? default(int?) : Convert.ToInt32(reader["idEstatusInfraccion"].ToString()));
+                            object idEstatusInfraccionValue = reader["idEstatusInfraccion"];
+                            if (idEstatusInfraccionValue != DBNull.Value)
+                            {
+                                infraccion.idEstatusInfraccion = Convert.ToInt32(idEstatusInfraccionValue);
+                            }
                             infraccion.estatusInfraccion = reader["estatusInfraccion"].ToString();
                             infraccion.placas = reader["placasVehiculo"].ToString();
                             infraccion.folioInfraccion = reader["folioInfraccion"].ToString();

@@ -147,7 +147,7 @@ namespace GuanajuatoAdminUsuarios.Services
             return ListItems;
         }
 
-        public List<PensionModel> GetPensiones()
+        public List<PensionModel> GetPensiones(int idOficina)
         {
             List<PensionModel> ListPensiones = new List<PensionModel>();
 
@@ -155,8 +155,10 @@ namespace GuanajuatoAdminUsuarios.Services
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("Select * from pensiones where estatus=1 ", connection);
+                    SqlCommand command = new SqlCommand("Select * from pensiones where estatus=1 AND pensiones.idDelegacion = @idOficina ", connection);
                     command.CommandType = CommandType.Text;
+                    command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = idOficina;
+
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
                         while (reader.Read())

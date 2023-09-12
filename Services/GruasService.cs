@@ -272,7 +272,7 @@ namespace GuanajuatoAdminUsuarios.Services
             return result;
         }
 
-        public IEnumerable<Gruas2Model> GetAllGruas()
+        public IEnumerable<Gruas2Model> GetAllGruas(int idOficina)
         {
             List<Gruas2Model> ListGruas = new List<Gruas2Model>();
             string strQuery = @"SELECT
@@ -290,6 +290,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                 ,g.estatus
 								,cm.municipio
 								,c.concesionario
+                                ,c.idDelegacion
 								,ccg.clasificacion
 								,ctg.TipoGrua
 								,csg.situacion
@@ -304,13 +305,14 @@ namespace GuanajuatoAdminUsuarios.Services
 								on g.idConcesionario = c.idConcesionario AND c.estatus = 1
 								INNER JOIN catMunicipios cm
 								on c.idMunicipio = cm.idMunicipio AND c.estatus = 1
-                                WHERE g.estatus = 1";
+                                WHERE g.estatus = 1 AND  c.idDelegacion = @idOficina";
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
                 try
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand(strQuery, connection);
                     command.CommandType = CommandType.Text;
+                    command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = idOficina;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
                         while (reader.Read())
@@ -400,7 +402,62 @@ namespace GuanajuatoAdminUsuarios.Services
                 }
             return ListGruas.FirstOrDefault();
         }
+        public List<Gruas2Model> GetGruaByPension(int iPg)
 
+        {
+            //
+            List<Gruas2Model> ListGruas = new List<Gruas2Model>();
+            string strQuery = @"SELECT
+                                 idGrua
+                                ,idConcesionario
+                                ,idClasificacion
+                                ,idTipoGrua
+                                ,idSituacion
+                                ,noEconomico
+                                ,placas
+                                ,modelo
+                                ,capacidad
+                                ,fechaActualizacion
+                                ,actualizadoPor
+                                ,estatus
+                                FROM gruas
+                                WHERE idConcesionario = @idPropietarioGrua AND estatus = 1";
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(strQuery, connection);
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.Add(new SqlParameter("@idPropietarioGrua", SqlDbType.Int)).Value = (object)iPg ?? DBNull.Value;
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            Gruas2Model gruasModel = new Gruas2Model();
+                            gruasModel.idGrua = Convert.ToInt32(reader["idGrua"].ToString());
+                            gruasModel.idConcesionario = Convert.ToInt32(reader["idConcesionario"].ToString());
+                            gruasModel.idClasificacion = Convert.ToInt32(reader["idClasificacion"].ToString());
+                            gruasModel.idTipoGrua = Convert.ToInt32(reader["idTipoGrua"].ToString());
+                            gruasModel.idSituacion = Convert.ToInt32(reader["idSituacion"].ToString());
+                            gruasModel.noEconomico = reader["noEconomico"].ToString();
+                            gruasModel.placas = reader["placas"].ToString();
+                            gruasModel.modelo = reader["modelo"].ToString();
+                            gruasModel.capacidad = reader["capacidad"].ToString();
+                            ListGruas.Add(gruasModel);
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    //Guardar la excepcion en algun log de errores
+                    //ex
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            return ListGruas;
+        }
         public IEnumerable<Gruas2Model> GetGruasByIdConcesionario(int idConcesionario)
         {
             List<Gruas2Model> ListGruas = new List<Gruas2Model>();
@@ -452,11 +509,12 @@ namespace GuanajuatoAdminUsuarios.Services
                 finally
                 {
                     connection.Close();
+
                 }
             return ListGruas;
         }
 
-        public IEnumerable<Gruas2Model> GetGruasToGrid(string placas, string noEconomico, int? idTipoGrua)
+        public IEnumerable<Gruas2Model> GetGruasToGrid(string placas, string noEconomico, int? idTipoGrua,int idOficina)
         {
             List<Gruas2Model> ListGruas = new List<Gruas2Model>();
             string strQuery = @"SELECT
@@ -474,6 +532,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                 ,g.estatus
 								,cm.municipio
 								,c.concesionario
+                                ,c.idDelegacion
 								,ccg.clasificacion
 								,ctg.TipoGrua
 								,csg.situacion
@@ -490,6 +549,7 @@ namespace GuanajuatoAdminUsuarios.Services
 								on c.idMunicipio = cm.idMunicipio AND c.estatus = 1
                                 WHERE g.estatus = 1
                                 AND g.placas = {0}
+                                AND c.idDelegacion = @idOficina
                                 AND g.noEconomico = {1}
                                 AND g.idTipoGrua = {2}";
 
@@ -504,6 +564,8 @@ namespace GuanajuatoAdminUsuarios.Services
                     connection.Open();
                     SqlCommand command = new SqlCommand(strQuery, connection);
                     command.CommandType = CommandType.Text;
+                    command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = idOficina;
+
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
                         while (reader.Read())

@@ -6,10 +6,10 @@ namespace GuanajuatoAdminUsuarios.Interfaces
 {
     public interface ICapturaAccidentesService
     {
-         List<CapturaAccidentesModel> ObtenerAccidentes();
+         List<CapturaAccidentesModel> ObtenerAccidentes(int idOficina);
 
-        public int GuardarParte1(CapturaAccidentesModel model);
-        public CapturaAccidentesModel ObtenerAccidentePorId(int idAccidente);
+        public int GuardarParte1(CapturaAccidentesModel model, int idOficina);
+        public CapturaAccidentesModel ObtenerAccidentePorId(int idAccidente, int idOficina);
 
         List<CapturaAccidentesModel> BuscarPorParametro(string Placa, string Serie, string Folio);
 
@@ -35,7 +35,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
         public int EliminarValorFactorYOpcion(int idAccidente);
         public int EliminarCausaBD(int IdCausaAccidente,int idAccidente);
         public int GuardarDescripcion(int idAccidente,string descripcionCausa);
-        List<CapturaAccidentesModel> BusquedaPersonaInvolucrada(BusquedaInvolucradoModel model);
+        List<CapturaAccidentesModel> BusquedaPersonaInvolucrada(BusquedaInvolucradoModel model, string server= null);
         public int AgregarPersonaInvolucrada(int idPersonaInvolucrado, int idAccidente);
         List<CapturaAccidentesModel> VehiculosInvolucrados(int IdAccidente);
         CapturaAccidentesModel InvolucradoSeleccionado(int idAccidente,int IdVehiculoInvolucrado,int IdPropietarioInvolucrado);
@@ -53,8 +53,10 @@ namespace GuanajuatoAdminUsuarios.Interfaces
         int AgregarDatosFinales(DatosAccidenteModel datosAccidente, int armasValue, int drogasValue, int valoresValue, int prendasValue, int otrosValue, int idAccidente);
         int EliminarInvolucradoAcc(int IdVehiculoInvolucrado,int IdPropietarioInvolucrado,int IdAccidente);
         public int RegistrarInfraccion(NuevaInfraccionModel model);
+        public string ObtenerDescripcionCausaDesdeBD(int idAccidente);
+        public DatosAccidenteModel ObtenerDatosFinales(int idAccidente);
 
-       
+
     }
 
 }

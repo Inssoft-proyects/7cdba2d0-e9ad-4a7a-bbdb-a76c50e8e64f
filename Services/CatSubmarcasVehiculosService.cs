@@ -160,7 +160,38 @@ namespace GuanajuatoAdminUsuarios.Services
                 }
                 return result;
             }
+        public int obtenerIdPorSubmarca(string submarcaLimpio)
+        {
+            int result = 0;
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand sqlCommand = new SqlCommand("SELECT idSubmarca FROM catSubmarcasVehiculos WHERE nombreSubmarca = @submarca", connection);
+                    sqlCommand.Parameters.Add(new SqlParameter("@submarca", SqlDbType.NVarChar)).Value = submarcaLimpio;
+                    sqlCommand.CommandType = CommandType.Text;
 
+                    using (SqlDataReader reader = sqlCommand.ExecuteReader())
+                    {
+                        if (reader.Read()) // Intenta leer un registro del resultado
+                        {
+                            result = Convert.ToInt32(reader["idSubmarca"]);
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    // Manejo de errores y log
+                    return result;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return result;
         }
+    }
     }
 

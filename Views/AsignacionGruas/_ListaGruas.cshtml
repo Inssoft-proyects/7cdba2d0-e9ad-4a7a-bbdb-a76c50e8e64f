@@ -1,0 +1,93 @@
+﻿<script>
+     function eliminarGruaModal(event) {
+        var grid = $("#gridGruas").data("kendoGrid");
+        var row = $(event.target).closest("tr");
+        var dataItem = grid.dataItem(row);
+        var idAsignacion = dataItem.idAsignacion
+        console.log("Data clas", idAsignacion);
+        $.ajax({
+            url: "/AsignacionGruas/ModalEliminarGrua",
+            type: 'POST',
+            data: {
+                idAsignacion: idAsignacion
+            },
+            success: (data) =>{
+                $('#ModalBodyEliminarGrua').html(data);
+                $('#eliminarGruaModal').modal('show');
+            }
+        });
+    }
+
+    function editarGrua(idAsignacion) {
+        $.ajax({
+            url: '/AsignacionGruas/ModalEditarGrua',
+            type: 'POST',
+            data: { idAsignacion: idAsignacion },
+            success: function (data) {
+                $('#ModalBodyEditarGrua').html(data);
+                $('#editarGruaModal').modal('show');
+
+            },
+
+        });
+    }
+</script>
+<div class="row">
+    <div class="col-12 mb-4 px-4 rounded gridCustom">
+        @(
+            Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.SeleccionGruaModel>()
+            .Name("gridGruas")
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.idAsignacion).Hidden();
+                columns.Bound(c => c.fullGrua).Title("Grúa").Width(100);
+                columns.Bound(c => c.servicios).Title("Servicios").Width(100);
+                columns.Bound(c => c.tiempoServicio).Title("Tiempode servicio").Width(100);
+                columns.Bound(p => p.idAsignacion).ClientTemplate(
+            "<button onclick=\"editarGrua('#= idAsignacion #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>"
+            ).Title("").Sortable(false).Width(90);
+                columns.Template("<button data-bs-toggle='modal' class='w-100 btn'><h6 class='m-0 colorDanger' onclick='eliminarGruaModal(event)'><i class='h5 icon-delete me-2'></i><b>Eliminar</b></h6></button>").Width(50);
+
+            
+            })
+            .HtmlAttributes(new { style = "height:400px" })
+            .Sortable()
+            .Groupable()
+            .Scrollable()
+            .Pageable()
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("GruasAsignadasTabla", "AsignacionGruas"))
+            .PageSize(5).Model(model => model.Id(p => p.fullGrua))
+            )
+            .ToolBar(t => t.Search())
+            .Search(s =>
+            {
+                s.Field(c => c.fullGrua);
+             
+            })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single)
+            .Type(GridSelectionType.Row)
+            )
+            )
+    </div>
+
+    <div class="modal fade modalCustom" id="eliminarGruaModal" tabindex="-1" aria-labelledby="eliminarGruaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body" id="ModalBodyEliminarGrua">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade modalCustom" id="editarGruaModal" tabindex="-1" aria-labelledby="editarGruaLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-body" id="ModalBodyEditarGrua">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -12,5 +12,6 @@ namespace GuanajuatoAdminUsuarios.Interfaces
         public CatMunicipiosModel GetMunicipioByID(int IdMunicipio);
         public int AgregarMunicipio(CatMunicipiosModel model);
         public int EditarMunicipio(CatMunicipiosModel model);
+        public int obtenerIdPorNombre(string municipio);
     }
 }

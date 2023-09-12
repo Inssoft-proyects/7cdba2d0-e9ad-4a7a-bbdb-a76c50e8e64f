@@ -10,6 +10,8 @@ namespace GuanajuatoAdminUsuarios.Models
         public string ApellidoMaterno { get; set; }
 
         public string TipoLicencia { get; set; }
+        public int tipoLicenciaVal { get; set; }
+        
         public string NumeroLicencia { get; set; }
 
         public DateTime FechaExpedicion { get; set; }

@@ -653,43 +653,66 @@
         }
     });
 
-    function btnEditarInfraccion() {
+       function btnEditarInfraccion() {
         var validator = $("#frmEditarInfraccion").kendoValidator().data('kendoValidator');
-        validator.validate();
-        if ($("#IdVehiculo").val() == '') {
+        var idVehiculo = $("#IdVehiculo").val();
+        var idPersona = $("#IdPersona").val();
+
+        if (!idVehiculo) {
             sitteg_info('Debe seleccionar un vehículo');
             return;
         }
 
-        if ($("#IdConductor").val() == '') {
+        if (!idPersona) {
             sitteg_info('Debe seleccionar un conductor');
             return;
         }
 
         if (validator.validate()) {
             var formData = $("#frmEditarInfraccion").serialize();
-            console.log("TODO", formData)
-            var IdInfraccion = formData.idInfraccion;
-            console.log("ID", IdInfraccion)
-
+            //var formData = new FormData();
+            //formData.delete('idDelegacion');
+            //alert(json);
             $.ajax({
                 url: '@Url.Action("ajax_editarInfraccion")',
                 type: 'POST',
                 data: formData,
-                success: function (result) {
-
-                    window.location.href = '/CapturaAccidentes/CapturaCr?IdInfraccion=' + result.id + '&IdVehiculo=' + $("#IdVehiculo").val();
+                success: function (response) {
+                    if (response.success) {
+        var idInfraccion = response.idInfraccion; 
+        sitteg_success("Informacion Actualizada");
+        serviceCrearInfraccion(idInfraccion);
+                } else {
+                    sitteg_warning(response.message);
+                }
                 },
-                error: function (xhr, status) {
-                    var errmsg = xhr.responseText;
-                    console.log(errmsg)
+                error: function (error) {
                     sitteg_warning('Lo sentimos, ha ocurrido un error.');
                 }
             });
         } else {
             sitteg_info('Debe llenar los campos requeridos');
-            return;
         }
+    }
+
+    function serviceCrearInfraccion(idInfraccion) {
+        $.ajax({
+            url: '@Url.Action("ServiceCrearInfraccion", "Infracciones")',
+            type: 'POST',
+            data: { idInfraccion: idInfraccion },
+            success: function (response) {
+                if (response.success) {
+                    sitteg_success("Informacion actualizada correctamente.");
+                } else if (response.success === false && response.message === "Registro actualizado en SITTEG") {
+                    sitteg_info("El registro fue actualizado en SITTEG.");
+                } else {
+                    sitteg_warning("Ha ocurrido un error: " + response.message);
+                }
+            },
+            error: function (error) {
+                sitteg_warning('Lo sentimos, ha ocurrido un error.');
+            }
+        });
     }
 
     function isPropietarioOnChange(e) {
@@ -705,7 +728,7 @@
             getListadoPersonasInfracciones();
             $("#listadoPersonas").show();
             $("#detallePersonas").hide();
-            $("#idPersona").val('');
+            $("#IdPersona").val('');
         }
     }
     function buscarVehiculo(pidVehiculo) {
@@ -717,7 +740,7 @@
             },
             success: function (data) {
                 $("#detalleVehiculo").html(data);
-                $("#idVehiculo").val(pidVehiculo);
+                $("#IdVehiculo").val(pidVehiculo);
             }
             //,
             //error: function (xhr, status) {
@@ -736,7 +759,7 @@
             },
             success: function (data) {
                 $("#detallePersonas").html(data);
-                $("#idPersona").val(pidPersona);
+                $("#IdPersona").val(pidPersona);
                 $("#detallePersonas").show();
             }
             //,

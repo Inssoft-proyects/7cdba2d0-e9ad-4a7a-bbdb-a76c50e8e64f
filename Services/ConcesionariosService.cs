@@ -18,7 +18,7 @@ namespace GuanajuatoAdminUsuarios.Services
         }
 
 
-        public List<ConcesionariosModel> GetConcesionarios()
+        public List<ConcesionariosModel> GetConcesionarios(int idOficina)
         {
             List<ConcesionariosModel> ListConcesionarios = new List<ConcesionariosModel>();
 
@@ -26,8 +26,10 @@ namespace GuanajuatoAdminUsuarios.Services
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("Select * from Concesionarios where estatus = 1", connection);
+                    SqlCommand command = new SqlCommand("Select * from concesionarios where estatus = 1 and concesionarios.idDelegacion = @idOficina", connection);
                     command.CommandType = CommandType.Text;
+                    command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = idOficina;
+
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
                         while (reader.Read())
@@ -238,7 +240,7 @@ namespace GuanajuatoAdminUsuarios.Services
             return result;
         }
 
-        public IEnumerable<Concesionarios2Model> GetAllConcesionarios()
+        public IEnumerable<Concesionarios2Model> GetAllConcesionarios(int idOficina)
         {
             List<Concesionarios2Model> ListConcesionarios = new List<Concesionarios2Model>();
             string strQuery = @"SELECT 
@@ -260,13 +262,16 @@ namespace GuanajuatoAdminUsuarios.Services
                                 INNER JOIN catMunicipios m
                                 on c.idMunicipio = m.idMunicipio 
                                 AND m.estatus = 1
-                                WHERE c.estatus = 1";
+                                WHERE c.estatus = 1 AND c.idDelegacion = @idOficina";
+
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
                 try
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand(strQuery, connection);
                     command.CommandType = CommandType.Text;
+                    command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = idOficina;
+
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
                         while (reader.Read())

@@ -2,7 +2,6 @@
         
 <div class="mainContainer bg-light">
     <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
-        <form id="solicitudForm">
             @if (Model?.idSolicitud > 0)
             {
                 <input type="hidden" name="Isol" value="@Model.idSolicitud" />
@@ -46,39 +45,19 @@
             <div class="col-12 col-sm-12 col-md-4 col-lg-auto">
                 <div class="controlForm mb-3 my-3">
                     <label class="text-muted">Folio de depósito:</label>
-                    <label>GU-G00001/15-TTO</label>
+                    <label>-</label>
                 </div>
             </div>
-            <div class="col border bg-light rounded">
-                <div class="row align-items-end justify-content-center">
-                    <div class="col-12 col-md-12 col-lg-12 col-xl-4 align-self-center mt-4 mb-1">
-                        <h5><b>Importa datos iniciales desde una infracción ya existente</b></h5>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-6 col-xl-4">
-                        <div class="controlForm my-3">
-                            @(Html.Kendo().TextBoxFor(t => t.folioBusquedaInfraccion)
-                            .Label(l => l.Content("Folio de infracción:"))
-                            .Placeholder("Ingrese el folio de la ingracción")
-                            .HtmlAttributes(new { style = "width: 100%" })
-                            )
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-6 col-xl-4 btnOutline btnOutlinePrimary my-3 text-center">
-                        <button  data-bs-toggle="modal" data-bs-target="#">
-                            <h6 class="m-0"><i class="icon-infracion me-2"></i><b>Importar datos de infración</b></h6>
-                        </button>
-                    </div>
-                </div>
-                
+          <!--Inf-->
             </div>
-        </div>
+      <form id="solicitudForm">
         <div class="row px-4 mt-3 mb-2 align-items-end">
-            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+            <div class="col-12 col-md-6 col-lg-6 col-xl-3">
                 <div class="controlForm my-3">
                     <label>Fecha<b>(obligatorio)</b>:</label>
                     @(Html.Kendo().DateTimePickerFor(t=>t.fechaSolicitud)
                         .Value(DateTime.Now)
-                        .HtmlAttributes(new { style = "width: 100%", title = "datepicker" })
+                            .HtmlAttributes(new { style = "width: 100%", title = "datepicker", required = "required" })
                         .DateInput()
                     )
                 </div>
@@ -100,7 +79,7 @@
                                     read.Action("TiposVehiculos_Drop", "Depositos");
                                 });
                             })
-                            .HtmlAttributes(new { style = "width:100%;", Id = "ddlDelegaciones" })
+                                .HtmlAttributes(new { style = "width:100%;", Id = "ddlDelegaciones", required = "required" })
                             )
                     </span>
 
@@ -108,10 +87,10 @@
             </div>
             <div class="col-12 col-md-6 col-lg-4 col-xl-3">
                 <div class="controlForm my-3">
-                    <label>Propietario de grua:</label>
+                    <label>Propietario de grúa:</label>
                     <span>
-                        @(Html.Kendo().DropDownListFor(t=>t.idPropietaroGrua)
-                                    .Label(l => l.Content("Propietario Grua:"))
+                        @(Html.Kendo().DropDownListFor(t=>t.idConcecionario)
+                                    .Label(l => l.Content("Propietario Grúa:"))
                                     .DataTextField("Text")
                                     .DataValueField("Value")
                                     .OptionLabel("Selecciona un propietario")
@@ -119,7 +98,7 @@
                                     {
                                         source.Read(read =>
                                         {
-                                    read.Action("Propietarios_Drop", "Depositos");
+                                        read.Action("Concecionarios_Drop", "Depositos");
                                         });
                                     })
                                     .HtmlAttributes(new { style = "width:100%;", Id = "ddlPropietarios" })
@@ -143,7 +122,7 @@
                                     read.Action("Oficiales_Drop", "Depositos");
                                 });
                             })
-                            .HtmlAttributes(new { style = "width:100%;" })
+                                .HtmlAttributes(new { style = "width:100%;", required = "required" })
                             )
                     </span>
 
@@ -151,16 +130,13 @@
             </div>
 
         </div>
-
-        <div class="row px-4 mt-4 mb-4 align-items-center justify-content-around">
+     <div class="row px-4 mt-3 mb-2 align-items-end">
             <div class="col-6">
                 <div class="controlForm">
                     <label>Descripción del evento <b>(obligatorio)</b></label>
-                </div>
-            </div>
-             <span>
-                        @(Html.Kendo().DropDownListFor(m => m.idDescripcionEvento)
-                            .DataTextField("Text")
+                        <span>
+                            @(Html.Kendo().DropDownListFor(t => t.idDescripcionEvento)
+                                .DataTextField("Text")
                             .DataValueField("Value")
                             .OptionLabel("Selecciona una opción")
                             .DataSource(source =>
@@ -170,47 +146,38 @@
                             read.Action("Descripcion_Drop", "Depositos");
                                 });
                             })
-                            .HtmlAttributes(new { style = "width:40%;" })
+                        .HtmlAttributes(new { style = "width:40%;", required = "required" })
                             )
-                    </span>
-          
+                        </span>
 
-        </div>
-
-        <div class="col-12 mt-2 mb-4">
-            <div class="bg-light pt-1 mx-2"></div>
-        </div>
-
-        <div class="row px-4 mb-4 align-items-center justify-content-around">
+                 </div>
+             </div>                   
             <div class="col-6">
-                <div class="controlForm">
+                <div class="controlForm my-3">
                     <label>Tipo de usuario <b>(obligatorio)</b></label>
-                </div>
+                        <span>
+                            @(Html.Kendo().DropDownListFor(m => m.idTipoUsuario)
+                                .DataTextField("Text")
+                                .DataValueField("Value")
+                                .OptionLabel("Selecciona una opción")
+                                .DataSource(source =>
+                                {
+                                    source.Read(read =>
+                                    {
+                                        read.Action("TiposUsuario_Drop", "Depositos");
+                                    });
+                                })
+                                .HtmlAttributes(new { style = "width:40%;", required = "required" })
+                                )
+                        </span>
+                </div>   
             </div>
-            <span>
-                @(Html.Kendo().DropDownListFor(m => m.idTipoUsuario)
-                    .DataTextField("Text")
-                    .DataValueField("Value")
-                    .OptionLabel("Selecciona una opción")
-                    .DataSource(source =>
-                    {
-                        source.Read(read =>
-                        {
-                            read.Action("TiposUsuario_Drop", "Depositos");
-                        });
-                    })
-                    .HtmlAttributes(new { style = "width:40%;" })
-                    )
-            </span>
-           
         </div>
-
         <div class="row px-4 align-items-end">
             <div class="col-12 mt-4 controlForm">
                 <label>Solicita:</label>
             </div>
         </div>
-        <div>
             <nav class="tabCustom">
                 <div class="nav nav-tabs row mx-0" id="nav-tab" role="tablist">
                     <button class="nav-link active col" id="usuario-tab" data-bs-toggle="tab" data-bs-target="#usuario" type="button" role="tab" aria-controls="usuario-moral" aria-selected="true">
@@ -358,9 +325,8 @@
                                 </div>
                                 
                             </div>
-
+                          </div>
                         </div>
-                    </div>
                     <div class="row">
                         <div class="col-12">
                             <div class="tabCustomEnd"></div>
@@ -406,8 +372,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-        </form>
+    </form>
 <div class="row ">
     <div class="col-12 col-md-8 mx-md-auto col-lg-5 ">
         <div class="controlButton my-3" onclick="enviarSolicitud()">
@@ -443,20 +408,29 @@
     }
 
     function enviarSolicitud(){
-        var Mydata = $("#solicitudForm").serialize();
-        console.log(Mydata);
+        var validator = $("#solicitudForm").kendoValidator().data('kendoValidator');
+        validator.validate();
 
-        $.ajax({
-            url: '/Depositos/ajax_EnviarSolicitudDeposito',
-            type: 'GET',
-            data: Mydata,
-            success: function (data) {
-                sitteg_success("Solicitud creada correctamente");
-                window.location.href = "/Depositos/Ubicacion?Isol=" + data;
-            },
-            error: function () {
-                sitteg_warning("Ocurrioun error intente mas tarde");
-            }
-        });
-    }
+        if (validator.validate()) {
+            var Mydata = $("#solicitudForm").serialize();
+            console.log(Mydata);
+
+            $.ajax({
+                url: '/Depositos/ajax_EnviarSolicitudDeposito',
+                type: 'GET',
+                data: Mydata,
+                success: function (data) {
+                    sitteg_success("Solicitud creada correctamente");
+                    window.location.href = "/Depositos/Ubicacion?Isol=" + data;
+                },
+                error: function () {
+                    sitteg_warning("Ocurrió un error, inténtelo de nuevo más tarde");
+                }
+            });
+        } else {
+            sitteg_info('Debe llenar los campos requeridos');
+            return;
+
+        }
+     }
   </script>

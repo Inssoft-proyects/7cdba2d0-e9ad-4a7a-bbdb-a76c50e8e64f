@@ -22,12 +22,10 @@ namespace GuanajuatoAdminUsuarios.Services
             int result = 0;
             int idSolicitudInsert = 0;
 
-            string folio = $"FSD{result}";
 
 
             string strQuery = @"INSERT INTO solicitudes( 
-                                         [folio]
-                                        ,[fechaSolicitud]
+                                        [fechaSolicitud]
                                         ,[idTipoVehiculo]
                                         ,[idPropietarioGrua]
                                         ,[idOficial]
@@ -47,8 +45,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                         ,[actualizadoPor]
                                         ,[estatus])
                                 VALUES (
-                                         @folio
-                                        ,@fechaSolicitud
+                                        @fechaSolicitud
                                         ,@idTipoVehiculo
                                         ,@idPropietaroGrua
                                         ,@idOficial
@@ -75,10 +72,9 @@ namespace GuanajuatoAdminUsuarios.Services
                     connection.Open();
                     SqlCommand command = new SqlCommand(strQuery, connection);
                     command.CommandType = CommandType.Text;
-                    command.Parameters.Add(new SqlParameter("@folio", SqlDbType.NVarChar)).Value = folio;
                     command.Parameters.Add(new SqlParameter("@fechaSolicitud", SqlDbType.DateTime)).Value = (object)model.fechaSolicitud ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idTipoVehiculo", SqlDbType.Int)).Value = (object)model.idTipoVehiculo ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@idPropietaroGrua", SqlDbType.Int)).Value = (object)model.idPropietaroGrua ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@idPropietaroGrua", SqlDbType.Int)).Value = (object)model.idConcecionario ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idOficial", SqlDbType.Int)).Value = (object)model.idOficial ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idDescripcionEvento", SqlDbType.Int)).Value = (object)model.idDescripcionEvento ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idTipoUsuario", SqlDbType.Int)).Value = (object)model.idTipoUsuario ?? DBNull.Value;
@@ -97,7 +93,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.Add(new SqlParameter("@estatus", SqlDbType.Int)).Value = 1;
                     result = Convert.ToInt32(command.ExecuteScalar()); // Valor de Id de este mismo registro
                     idSolicitudInsert = result; // Almacena el valor en la variable idSolicitudInsert
-
+               
                 }
                 catch (SqlException ex)
                 {
@@ -150,8 +146,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.CommandType = CommandType.Text;
                     command.Parameters.Add(new SqlParameter("@fechaSolicitud", SqlDbType.DateTime)).Value = (object)model.fechaSolicitud ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idTipoVehiculo", SqlDbType.Int)).Value = (object)model.idTipoVehiculo ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@idPropietarioGrua", SqlDbType.Int)).Value = (object)model.idPropietaroGrua ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@idPropietaroGrua", SqlDbType.Int)).Value = (object)model.idPropietaroGrua ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@idPropietarioGrua", SqlDbType.Int)).Value = (object)model.idConcecionario ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idOficial", SqlDbType.Int)).Value = (object)model.idOficial ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idDescripcionEvento", SqlDbType.Int)).Value = (object)model.idDescripcionEvento ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idTipoUsuario", SqlDbType.Int)).Value = (object)model.idTipoUsuario ?? DBNull.Value;
@@ -220,7 +215,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             solicitud.fechaSolicitud = Convert.ToDateTime(reader["fechaSolicitud"].ToString());
                             solicitud.idTipoVehiculo = reader["idTipoVehiculo"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idTipoVehiculo"].ToString());
                             solicitud.tipoVehiculo = reader["tipoVehiculo"].ToString();
-                            solicitud.idPropietaroGrua = reader["idPropietarioGrua"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idPropietarioGrua"].ToString());
+                            solicitud.idConcecionario = reader["idPropietarioGrua"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idPropietarioGrua"].ToString());
                             solicitud.propietarioGrua = reader["responsable"].ToString();
                             solicitud.idOficial = reader["idOficial"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idOficial"].ToString());
                             solicitud.oficial = String.Concat(reader["nombre"].ToString(), " ", reader["apellidoPaterno"].ToString(), " ", reader["apellidoMaterno"].ToString());

@@ -14,6 +14,8 @@ namespace GuanajuatoAdminUsuarios.Models
 
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime vigenciaTarjeta { get; set; }
+        public DateTime fechaVencimientoFisico { get; set; }
+        
         public int idMarcaVehiculo { get; set; }
         public int idSubmarca { get; set; }
         public int idSubmarcaUpdated { get; set; }
@@ -26,7 +28,8 @@ namespace GuanajuatoAdminUsuarios.Models
         public string numeroEconomico { get; set; }
         public string paisManufactura { get; set; }
         public int? idPersona { get; set; }
-
+        public DateTime fechaNacimiento { get; set; }
+        
         public string marca { get; set; }
         public string submarca { get; set; }
         public string tipoVehiculo { get; set; }
@@ -39,8 +42,13 @@ namespace GuanajuatoAdminUsuarios.Models
         public int? capacidad { get; set; }
         public string poliza { get; set; }
         public bool? carga { get; set; }
+        public int cargaInt { get; set; }
+        
         public string otros { get; set; }
-
+        public string RFCMoral { get; set; }
+        public string PersonaMoralNombre { get; set; }
+        public string mensaje { get; set; }
+        
         /// <summary>
         /// Estatus para saber si se encontro en Sitteg, Registro Estatal o no 
         /// </summary>

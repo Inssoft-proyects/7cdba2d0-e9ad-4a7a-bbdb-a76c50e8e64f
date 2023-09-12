@@ -34,14 +34,15 @@ namespace GuanajuatoAdminUsuarios.Services
                         while (reader.Read())
                         {
                             CatCarreterasModel carretera = new CatCarreterasModel();
-                            carretera.IdCarretera = Convert.ToInt32(reader["IdCarretera"].ToString());
-                            carretera.idOficinaTransporte = Convert.ToInt32(reader["idOficinaTransporte"].ToString());
-                            carretera.Carretera = reader["Carretera"].ToString();
-                            carretera.nombreOficina = reader["nombreOficina"].ToString();
-                            carretera.estatusDesc = reader["estatusDesc"].ToString();
-                           // carretera.FechaActualizacion = Convert.ToDateTime(reader["FechaActualizacion"].ToString());
-                            carretera.Estatus = Convert.ToInt32(reader["estatus"].ToString());
-                            carretera.ActualizadoPor = Convert.ToInt32(reader["ActualizadoPor"].ToString());
+                            carretera.IdCarretera = reader["IdCarretera"] != DBNull.Value ? Convert.ToInt32(reader["IdCarretera"]) : 0;
+                            carretera.idOficinaTransporte = reader["idOficinaTransporte"] != DBNull.Value ? Convert.ToInt32(reader["idOficinaTransporte"]) : 0;
+                            carretera.Carretera = reader["Carretera"] != DBNull.Value ? reader["Carretera"].ToString() : string.Empty;
+                            carretera.nombreOficina = reader["nombreOficina"] != DBNull.Value ? reader["nombreOficina"].ToString() : string.Empty;
+                            carretera.estatusDesc = reader["estatusDesc"] != DBNull.Value ? reader["estatusDesc"].ToString() : string.Empty;
+                            carretera.FechaActualizacion = reader["FechaActualizacion"] != DBNull.Value ? Convert.ToDateTime(reader["FechaActualizacion"]) : DateTime.MinValue;
+                            carretera.Estatus = reader["estatus"] != DBNull.Value ? Convert.ToInt32(reader["estatus"]) : 0;
+                            carretera.ActualizadoPor = reader["ActualizadoPor"] != DBNull.Value ? Convert.ToInt32(reader["ActualizadoPor"]) : 0;
+
                             ListaCarreteras.Add(carretera);
 
                         }

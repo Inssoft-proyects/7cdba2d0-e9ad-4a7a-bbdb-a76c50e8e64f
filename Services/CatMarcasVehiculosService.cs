@@ -152,6 +152,37 @@ namespace GuanajuatoAdminUsuarios.Services
             }
             return result;
         }
+        public int obtenerIdPorMarca(string marcaLimpio)
+        {
+            int result = 0;
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand sqlCommand = new SqlCommand("SELECT idMarcaVehiculo FROM catMarcasVehiculos WHERE marcaVehiculo = @marca", connection);
+                    sqlCommand.Parameters.Add(new SqlParameter("@marca", SqlDbType.NVarChar)).Value = marcaLimpio;
+                    sqlCommand.CommandType = CommandType.Text;
 
+                    using (SqlDataReader reader = sqlCommand.ExecuteReader())
+                    {
+                        if (reader.Read()) // Intenta leer un registro del resultado
+                        {
+                            result = Convert.ToInt32(reader["idMarcaVehiculo"]);
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    // Manejo de errores y log
+                    return result;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return result;
+        }
     }
 }

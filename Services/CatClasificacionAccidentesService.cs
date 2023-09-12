@@ -70,18 +70,19 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT c.*, e.estatus FROM catClasificacionAccidentes AS c INNER JOIN estatus AS e ON c.estatus = e.estatus WHERE c.estatus = 1;", connection);
+                    SqlCommand command = new SqlCommand("SELECT c.*, e.estatus,e.estatusDesc FROM catClasificacionAccidentes AS c LEFT JOIN estatus AS e ON c.estatus = e.estatus WHERE c.estatus = 1;", connection);
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
                         while (reader.Read())
                         {
                             CatClasificacionAccidentesModel clasificacion = new CatClasificacionAccidentesModel();
-                            clasificacion.IdClasificacionAccidente = Convert.ToInt32(reader["IdClasificacionAccidente"].ToString());
-                            clasificacion.NombreClasificacion = reader["NombreClasificacion"].ToString();
-                            clasificacion.estatusDesc = reader["estatus"].ToString();
-                            clasificacion.FechaActualizacion = Convert.ToDateTime(reader["FechaActualizacion"].ToString());
-                            clasificacion.Estatus = Convert.ToInt32(reader["estatus"].ToString());
+                            clasificacion.IdClasificacionAccidente = reader.GetFieldValue<int?>("IdClasificacionAccidente") ?? 0;
+                            clasificacion.NombreClasificacion = reader.GetFieldValue<string>("NombreClasificacion");
+                            clasificacion.estatusDesc = reader.GetFieldValue<string>("estatusDesc") ?? string.Empty;
+                            clasificacion.FechaActualizacion = reader.GetFieldValue<DateTime?>("FechaActualizacion") ?? DateTime.MinValue;
+                            clasificacion.Estatus = reader.GetFieldValue<int?>("estatus") ?? 0;
+
                             ListaClasificaciones.Add(clasificacion);
 
                         }

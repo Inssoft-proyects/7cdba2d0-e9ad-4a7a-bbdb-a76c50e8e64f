@@ -26,20 +26,21 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT ent.*, e.estatusDesc FROM catEntidades AS ent INNER JOIN estatus AS e ON ent.estatus = e.estatus;", connection);
+                    SqlCommand command = new SqlCommand("SELECT ent.*, e.estatusDesc FROM catEntidades AS ent LEFT JOIN estatus AS e ON ent.estatus = e.estatus;", connection);
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
                         while (reader.Read())
                         {
                             CatEntidadesModel entidad = new CatEntidadesModel();
-                            entidad.idEntidad = Convert.ToInt32(reader["idEntidad"].ToString());
-                            entidad.nombreEntidad = reader["nombreEntidad"].ToString();
-                            entidad.estatusDesc = reader["estatusDesc"].ToString();
+                            entidad.idEntidad = reader["idEntidad"] != DBNull.Value ? Convert.ToInt32(reader["idEntidad"]) : 0;
+                            entidad.nombreEntidad = reader["nombreEntidad"] != DBNull.Value ? reader["nombreEntidad"].ToString() : string.Empty;
+                            entidad.estatusDesc = reader["estatusDesc"] != DBNull.Value ? reader["estatusDesc"].ToString() : string.Empty;
 
-                            entidad.fechaActualizacion = String.IsNullOrEmpty(reader["fechaActualizacion"].ToString()) ? null : Convert.ToDateTime( reader["fechaActualizacion"].ToString());
-                            entidad.estatus = Convert.ToInt32(reader["estatus"].ToString());
-                            entidad.actualizadoPor = Convert.ToInt32(reader["actualizadoPor"].ToString());
+                            entidad.fechaActualizacion = reader["fechaActualizacion"] != DBNull.Value ? Convert.ToDateTime(reader["fechaActualizacion"]) : (DateTime?)null;
+                            entidad.estatus = reader["estatus"] != DBNull.Value ? Convert.ToInt32(reader["estatus"]) : 0;
+                            entidad.actualizadoPor = reader["actualizadoPor"] != DBNull.Value ? Convert.ToInt32(reader["actualizadoPor"]) : 0;
+
                             ListaEntidades.Add(entidad);
 
                         }
@@ -90,6 +91,37 @@ namespace GuanajuatoAdminUsuarios.Services
 
             return entidad;
         }
+
+        public CatEntidadesModel ObtenerEntidadesByNombre(string nombre)
+        {
+            CatEntidadesModel entidad = new CatEntidadesModel();
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("Select * from catEntidades where nombreEntidad LIKE '%' + @entidad + '%'", connection);
+                    command.Parameters.AddWithValue("@entidad", nombre); 
+                    command.CommandType = CommandType.Text;
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            entidad.idEntidad = Convert.ToInt32(reader["idEntidad"].ToString());
+                            entidad.nombreEntidad = reader["nombreEntidad"].ToString();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                }
+                finally
+                {
+                    connection.Close();
+                }
+
+            return entidad;
+        }
+
         public int CrearEntidad(CatEntidadesModel model)
         {
             int result = 0;
@@ -150,7 +182,39 @@ namespace GuanajuatoAdminUsuarios.Services
             }
             return result;
         }
+        public int obtenerIdPorEntidad(string entidad)
+        {
+            int result = 0;
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand sqlCommand = new SqlCommand("SELECT idEntidad FROM catEntidades WHERE nombreEntidad = @entidad", connection);
+                    sqlCommand.Parameters.Add(new SqlParameter("@entidad", SqlDbType.NVarChar)).Value = entidad;
+                    sqlCommand.CommandType = CommandType.Text;
 
+                    using (SqlDataReader reader = sqlCommand.ExecuteReader())
+                    {
+                        if (reader.Read()) // Intenta leer un registro del resultado
+                        {
+                            // Obtiene el valor de la columna "idMunicipio"
+                            result = Convert.ToInt32(reader["idEntidad"]);
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    // Manejo de errores y log
+                    return result;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return result;
+        }
     }
 }
 

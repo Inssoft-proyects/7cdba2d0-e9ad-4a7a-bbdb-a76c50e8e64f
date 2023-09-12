@@ -26,7 +26,7 @@ namespace GuanajuatoAdminUsuarios.Services
             var bodyRequest = json;
             string result = string.Empty;
             RootConsultarDocumentoResponse responseModel = new RootConsultarDocumentoResponse();
-            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection2()))
             {
                 try
                 {

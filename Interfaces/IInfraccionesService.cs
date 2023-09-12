@@ -1,4 +1,5 @@
 ﻿using GuanajuatoAdminUsuarios.Models;
+using GuanajuatoAdminUsuarios.RESTModels;
 using System.Collections.Generic;
 
 namespace GuanajuatoAdminUsuarios.Interfaces
@@ -7,11 +8,10 @@ namespace GuanajuatoAdminUsuarios.Interfaces
     {
         public decimal GetUmas();
         public List<InfraccionesModel> GetAllInfracciones2();
-        public List<InfraccionesModel> GetAllAccidentes2();
-        List<InfraccionesModel> GetAllInfracciones();
-        List<InfraccionesModel> GetAllInfracciones(InfraccionesBusquedaModel model);
+        List<InfraccionesModel> GetAllInfracciones(int idOficina);
+        List<InfraccionesModel> GetAllInfracciones(InfraccionesBusquedaModel model,int idOficina);
         InfraccionesModel GetInfraccionById(int IdInfraccion);
-        public List<MotivoInfraccionModel> GetMotivosInfraccionByIdInfraccion(int idInfraccion);
+        public List<MotivosInfraccionVistaModel> GetMotivosInfraccionByIdInfraccion(int idInfraccion);
         public GarantiaInfraccionModel GetGarantiaById(int idGarantia);
         public PersonaInfraccionModel GetPersonaInfraccionById(int idPersonaInfraccion);
         public int CrearPersonaInfraccion(int idPersona);
@@ -26,5 +26,13 @@ namespace GuanajuatoAdminUsuarios.Interfaces
         int ModificarInfraccionPorCortesia(InfraccionesModel model);
 
         public int InsertarImagenEnInfraccion( byte[] imageData, int idInfraccion);
+        public List<InfraccionesResumen> GetInfraccionesLicencia(string numLicencia, string CURP);
+        public List<InfraccionesModel> GetAllAccidentes2();
+
+        public int  GuardarReponse(CrearMultasTransitoChild MT_CrearMultasTransito_res, int idInfraccion);
+        public int ModificarEstatusInfraccion(int idInfraccion, int idEstatusInfraccion);
+
+
+
     }
 }

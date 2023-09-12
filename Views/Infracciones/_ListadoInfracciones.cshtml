@@ -19,12 +19,18 @@
     </div>
 </div>
 <div class="row">
+    @if (ViewBag.NoResultsMessage != null)
+    {
+        <div class="alert alert-info">
+            @ViewBag.NoResultsMessage
+        </div>
+    }
     <div class="col-12 mb-4 px-4 rounded">
 
         @*<div class="col-12 mb-4 px-4 rounded gridCustom">*@
         @(
             Html.Kendo().Grid(Model)
-            .Name("Grid")
+            .Name("GridInf")
             .Columns(columns =>
             {
                 columns.Bound(p => p.folioInfraccion).Title("Folio").Width(90);
@@ -71,7 +77,9 @@
             ).Title("Exportar").Sortable(false).Width(90);
 
             }).HtmlAttributes(new { style = "height:450" })
-            .Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }).Position(GridPagerPosition.Top))
+            .Pageable(p => p.Enabled(true).PageSizes(new[] { 10, 20, 30 }))
+            .DataSource(dataSource => dataSource
+            .Ajax())            
             .Sortable()
             .Scrollable(scr => scr.Height(350))
             .DataSource(dataSource => dataSource
@@ -82,7 +90,7 @@
         @*</div>*@
 
         @(Html.Kendo().Tooltip()
-            .For("#Grid")
+            .For("#GridInf")
             .Filter("th")
             .Position(TooltipPosition.Top)
             .ContentHandler("tooltipContent")

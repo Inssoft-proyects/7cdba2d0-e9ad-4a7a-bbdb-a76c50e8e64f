@@ -11,7 +11,11 @@ namespace GuanajuatoAdminUsuarios.Models
         public string tipoLicencia { get; set; }
 
         public string curp { get; set; }
+        public string curpBusqueda { get; set; }
+
         public string rfc { get; set; }
+        public string rfcBusqueda { get; set; }
+
         public string nombre { get; set; }
         public string apellidoPaterno { get; set; }
         public string apellidoMaterno { get; set; }

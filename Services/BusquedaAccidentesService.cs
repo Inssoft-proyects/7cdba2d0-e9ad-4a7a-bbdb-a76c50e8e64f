@@ -17,7 +17,7 @@ namespace GuanajuatoAdminUsuarios.Services
         {
             _sqlClientConnectionBD = sqlClientConnectionBD;
         }
-        public List<BusquedaAccidentesModel> BusquedaAccidentes(BusquedaAccidentesModel model)
+        public List<BusquedaAccidentesModel> BusquedaAccidentes(BusquedaAccidentesModel model,int idOficina)
         {
             //
             List<BusquedaAccidentesModel> ListaAccidentes = new List<BusquedaAccidentesModel>();
@@ -27,7 +27,7 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT a.idAccidente, a.numeroReporte, a.fecha, a.hora, a.idMunicipio, a.idTramo, a.idCarretera, a.idElabora, a.idSupervisa, a.idAutoriza, a.kilometro, " +    
+                    SqlCommand command = new SqlCommand("SELECT a.idAccidente, a.numeroReporte, a.fecha, a.hora, a.idMunicipio, a.idTramo, a.idCarretera, a.idElabora, a.idSupervisa, a.idAutoriza, a.kilometro, a.idOficinaDelegacion, " +    
                         "mun.municipio, " +    
                         "car.carretera, " +    
                         "tra.tramo, " +
@@ -64,13 +64,15 @@ namespace GuanajuatoAdminUsuarios.Services
                         "OR cond.nombre = @conductorBusqueda " +
                         "OR UPPER(cond.apellidoPaterno) = @conductorBusqueda " +
                         "OR UPPER(cond.apellidoMaterno) = @conductorBusqueda " +
-                        "OR vea.serie = @serieBusqueda) " +
-                        "GROUP BY a.idAccidente, a.numeroReporte, a.fecha, a.hora, a.idMunicipio, a.idTramo, a.idCarretera, a.idElabora, a.idSupervisa,a. idAutoriza,a.kilometro, " +
-                        "mun.municipio, car.carretera, tra.tramo, er.estatusReporte,er.idEstatusReporte, ela.idOficial, sup.idOficial, aut.idOficial;", connection);
+                        "OR vea.serie = @serieBusqueda)" +
+                        "AND a.idOficinaDelegacion = @idOficina " +
+                        "GROUP BY a.idAccidente, a.numeroReporte, a.fecha, a.hora, a.idMunicipio, a.idTramo, a.idCarretera, a.idElabora, a.idSupervisa,a. idAutoriza,a.kilometro,a.idOficinaDelegacion, " +
+                        "mun.municipio, car.carretera, tra.tramo, er.estatusReporte,er.idEstatusReporte, ela.idOficial, sup.idOficial, aut.idOficial; ", connection);
 
 
                     command.CommandType = CommandType.Text;
                     command.Parameters.Add(new SqlParameter("@fechaInicio", SqlDbType.DateTime)).Value = (object)model.FechaInicio ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = (object) idOficina ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@fechaFin", SqlDbType.DateTime)).Value = (object)model.FechaFin ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@oficioBusqueda", SqlDbType.NVarChar)).Value = (object)model.folioBusqueda != null ? model.folioBusqueda.ToUpper() : DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idDelegacionBusqueda", SqlDbType.Int)).Value = (object)model.IdDelegacionBusqueda ?? DBNull.Value;

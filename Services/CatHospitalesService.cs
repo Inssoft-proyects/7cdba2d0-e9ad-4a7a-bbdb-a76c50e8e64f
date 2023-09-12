@@ -34,14 +34,14 @@ namespace GuanajuatoAdminUsuarios.Services
                             while (reader.Read())
                             {
                             CatHospitalesModel hospital = new CatHospitalesModel();
-                            hospital.IdHospital = Convert.ToInt32(reader["IdHospital"].ToString());
-                            hospital.IdMunicipio = Convert.ToInt32(reader["IdMunicipio"].ToString());
-                            hospital.NombreHospital = reader["NombreHospital"].ToString();
-                            hospital.Estatus = Convert.ToInt32(reader["Estatus"].ToString());
-                            hospital.Municipio = reader["Municipio"].ToString();
-                            hospital.estatusDesc = reader["estatusDesc"].ToString();
-                            hospital.FechaActualizacion = Convert.ToDateTime(reader["FechaActualizacion"].ToString());
-                            //hospital.ActualizadoPor = Convert.ToInt32(reader["ActualizadoPor"].ToString());
+                            hospital.IdHospital = reader["IdHospital"] != DBNull.Value ? Convert.ToInt32(reader["IdHospital"]) : 0;
+                            hospital.IdMunicipio = reader["IdMunicipio"] != DBNull.Value ? Convert.ToInt32(reader["IdMunicipio"]) : 0;
+                            hospital.NombreHospital = reader["NombreHospital"] != DBNull.Value ? reader["NombreHospital"].ToString() : "";
+                            hospital.Estatus = reader["Estatus"] != DBNull.Value ? Convert.ToInt32(reader["Estatus"]) : 0;
+                            hospital.Municipio = reader["Municipio"] != DBNull.Value ? reader["Municipio"].ToString() : "";
+                            hospital.estatusDesc = reader["estatusDesc"] != DBNull.Value ? reader["estatusDesc"].ToString() : "";
+                            hospital.FechaActualizacion = reader["FechaActualizacion"] != DBNull.Value ? Convert.ToDateTime(reader["FechaActualizacion"]) : DateTime.MinValue;
+                            hospital.ActualizadoPor = reader["ActualizadoPor"] != DBNull.Value ? Convert.ToInt32(reader["ActualizadoPor"]) : 0;
 
 
                             ListaHospitales.Add(hospital);

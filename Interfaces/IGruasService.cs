@@ -12,9 +12,11 @@ namespace GuanajuatoAdminUsuarios.Interfaces
         public int EditarGrua(Gruas2Model model);
         public int EliminarGrua(Gruas2Model model);
         public Gruas2Model GetGruaById(int idGrua);
-        public IEnumerable<Gruas2Model> GetAllGruas();
+        List<Gruas2Model> GetGruaByPension(int iPg);
+
+        public IEnumerable<Gruas2Model> GetAllGruas(int idOficina);
         public IEnumerable<Gruas2Model> GetGruasByIdConcesionario(int idConcesionario);
-        public IEnumerable<Gruas2Model> GetGruasToGrid(string placas, string noEconomico, int? idTipoGrua);
+        public IEnumerable<Gruas2Model> GetGruasToGrid(string placas, string noEconomico, int? idTipoGrua,int idOficina);
 
     }
 }

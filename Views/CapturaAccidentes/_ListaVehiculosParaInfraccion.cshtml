@@ -8,7 +8,6 @@
         var IdPropietario = dataItem.IdPropietarioInvolucrado
         var Placa = dataItem.Placa
         var Tarjeta = dataItem.Tarjeta
-        console.log(dataItem);
         $.ajax({
             url: '@Url.Action("MostrarModalCrearInfraccion", "CapturaAccidentes")',
             type: 'POST', 

@@ -13,8 +13,8 @@
             .Name("grid")
             .Columns(columns =>
             {
-                columns.Bound(c => c.FolioInfraccion).Width(90);
-                columns.Bound(c => c.FechaInfraccion).Format("{0:dd/MM/yyyy}").Width(90);
+                columns.Bound(c => c.FolioInfraccion).Title("Folio Infracción").Width(90);
+                columns.Bound(c => c.FechaInfraccion).Title("Fecha Infracción").Format("{0:dd/MM/yyyy}").Width(90);
                 columns.Bound(c => c.Conductor).Width(110);
                 columns.Bound(c => c.Placas).Width(90);
                 columns.Bound(c => c.Propietario).Width(140);
@@ -55,14 +55,13 @@
     function mostrarDetalle(e) {
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         var Id = dataItem.IdInfraccion;
-        console.log(Id);
+        //console.log(Id);
     
         $.ajax({
             url: '@Url.Action("MostrarDetalle", "CancelarInfraccion")',
             type: 'POST',
             data: { Id: Id },
             success: function (result) {
-                console.log("DTALLE",result)
                 $("#detalle").html(result);
             $("#detalle").show();
 

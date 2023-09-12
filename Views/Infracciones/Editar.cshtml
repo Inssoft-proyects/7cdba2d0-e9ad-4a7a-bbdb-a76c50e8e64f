@@ -48,6 +48,12 @@
                                 <div class="col-auto radioCustom p-0">
                                     <div class="rounded-circle m-1"></div>
                                 </div>
+                                @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                                {
+                                    <div class="alert alert-danger">
+                                        @ViewBag.ErrorMessage
+                                    </div>
+                                }
                                 <div class="col-auto p-0">
                                     <h6 class="m-0"><b>Información</b></h6>
                                 </div>
@@ -135,6 +141,7 @@
                                         <label>Fecha infracción:</label>
                                         @(Html.Kendo().DateTimePickerFor(t => t.fechaInfraccion)
                                             .Label(l => l.Content("Fecha: <b>(obligatorio)</b>:"))
+                                            .Format("dd-MM-yyyy")
                                             .HtmlAttributes(new { style = "width: 100%", required = "required" })
                                             )
                                     </div>
@@ -237,7 +244,7 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <div class="controlForm">
-                                        @(Html.Kendo().IntegerTextBoxFor(t => t.kmCarretera)
+                                        @(Html.Kendo().TextBoxFor(t => t.kmCarretera)
                                             .Label(l => l.Content("Kilómetro: <b>(obligatorio)</b>:"))
                                             .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
                                             )
@@ -248,36 +255,36 @@
                                 <div class="form-group col-md-3">
                                     <div class="controlForm">
                                         @(Html.Kendo().TextBoxFor(t => t.lugarCalle)
-                                            .Label(l => l.Content("Calle: <b>(obligatorio)</b>:"))
+                                            .Label(l => l.Content("Calle: "))
                                             .Placeholder("Ingresa calle")
-                                            .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                                            .HtmlAttributes(new { style = "width: 100%" })
                                             )
                                     </div>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <div class="controlForm">
                                         @(Html.Kendo().TextBoxFor(t => t.lugarNumero)
-                                            .Label(l => l.Content("Número: <b>(obligatorio)</b>:"))
+                                            .Label(l => l.Content("Número:"))
                                             .Placeholder("Ingresa número")
-                                            .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                                            .HtmlAttributes(new { style = "width: 100%" })
                                             )
                                     </div>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <div class="controlForm">
                                         @(Html.Kendo().TextBoxFor(t => t.lugarColonia)
-                                            .Label(l => l.Content("Colonia: <b>(obligatorio)</b>:"))
+                                            .Label(l => l.Content("Colonia:"))
                                             .Placeholder("Ingresa colonia")
-                                            .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                                            .HtmlAttributes(new { style = "width: 100%" })
                                             )
                                     </div>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <div class="controlForm">
                                         @(Html.Kendo().TextBoxFor(t => t.lugarEntreCalle)
-                                            .Label(l => l.Content("Entre calle: <b>(obligatorio)</b>:"))
+                                            .Label(l => l.Content("Entre calle: "))
                                             .Placeholder("Ingresa entre calle")
-                                            .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                                            .HtmlAttributes(new { style = "width: 100%"})
                                             )
                                     </div>
                                 </div>
@@ -654,13 +661,15 @@
 
     function btnEditarInfraccion() {
         var validator = $("#frmEditarInfraccion").kendoValidator().data('kendoValidator');
-        validator.validate();
-        if ($("#idVehiculo").val() == '') {
+        var idVehiculo = $("#idVehiculo").val();
+        var idPersona = $("#idPersona").val();
+
+        if (!idVehiculo) {
             sitteg_info('Debe seleccionar un vehículo');
             return;
         }
 
-        if ($("#idPersona").val() == '') {
+        if (!idPersona) {
             sitteg_info('Debe seleccionar un conductor');
             return;
         }
@@ -674,25 +683,45 @@
                 url: '@Url.Action("ajax_editarInfraccion")',
                 type: 'POST',
                 data: formData,
-                success: function (result) {
-                    sitteg_success('Elemento guardado correctamente')
-                    window.setTimeout(function () {
-                        window.location.href = '/Infracciones/Index'
-                    }, 500);
+                success: function (response) {
+                    if (response.success) {
+                        var idInfraccion = response.idInfraccion; 
+                        sitteg_success("Informacion Actualizada");
+                        serviceCrearInfraccion(idInfraccion);
+                } else {
+                        sitteg_warning(response.message);
+                }
                 },
-                error: function (xhr, status) {
-                    var errmsg = xhr.responseText;
-                    console.log(errmsg)
+                error: function (error) {
                     sitteg_warning('Lo sentimos, ha ocurrido un error.');
                 }
             });
-        }
-        else {
+        } else {
             sitteg_info('Debe llenar los campos requeridos');
-            return;
         }
-
     }
+
+    function serviceCrearInfraccion(idInfraccion) {
+        $.ajax({
+            url: '@Url.Action("ServiceCrearInfraccion", "Infracciones")',
+            type: 'POST',
+            data: { idInfraccion: idInfraccion },
+            success: function (response) {
+                if (response.success) {
+                    sitteg_success("Informacion actualizada correctamente.");
+                } else if (response.success === false && response.message === "Registro actualizado en SITTEG") {
+                    sitteg_info("El registro fue actualizado en SITTEG.");
+                } else {
+                    sitteg_warning("Ha ocurrido un error: " + response.message);
+                }
+            },
+            error: function (error) {
+                sitteg_warning('Lo sentimos, ha ocurrido un error.');
+            }
+        });
+    }
+
+
 
     function isPropietarioOnChange(e) {
         var isPropietario = e.checked;

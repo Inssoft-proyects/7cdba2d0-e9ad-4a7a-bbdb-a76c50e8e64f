@@ -31,7 +31,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
             if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
             {
-                IEnumerable<Gruas2Model> listGruas = _gruasService.GetAllGruas();
+                int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+                IEnumerable<Gruas2Model> listGruas = _gruasService.GetAllGruas(idOficina);
                 var catTipoGruas = _catDictionary.GetCatalog("CatTiposGrua", "0");
                 ViewBag.CatTipoGruas = new SelectList(catTipoGruas.CatalogList, "Id", "Text");
                 return View(listGruas);
@@ -46,10 +47,12 @@ namespace GuanajuatoAdminUsuarios.Controllers
         [HttpGet]
         public ActionResult ajax_BuscarGruas(string placas, string noEconomico, int? idTipoGrua)
         {
-            var listPadronGruas = _gruasService.GetGruasToGrid(placas, noEconomico, idTipoGrua);
-            return PartialView("_ListadoGruas", listPadronGruas);
+            int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+            var listPadronGruas = _gruasService.GetGruasToGrid(placas, noEconomico, idTipoGrua, idOficina);
 
+            return PartialView("_ListadoGruas", listPadronGruas);
         }
+
 
         /// <summary>
         /// Accion que redirige a la vista
@@ -88,7 +91,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             if (ModelState.IsValid)
             {
                 int index = _gruasService.CrearGrua(model);
-                var listPadronGruas = _gruasService.GetAllGruas();
+                int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+                var listPadronGruas = _gruasService.GetAllGruas(idOficina);
                 return PartialView("_ListadoGruas", listPadronGruas);
             }
             return RedirectToAction("Index");
@@ -105,8 +109,9 @@ namespace GuanajuatoAdminUsuarios.Controllers
             List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
             if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
             {
+                int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
                 var model = _gruasService.GetGruaById(idGrua);
-                var catConcesionarios = _concesionariosService.GetConcesionarios().Where(w => w.IdConcesionario == model.idConcesionario);
+                var catConcesionarios = _concesionariosService.GetConcesionarios(idOficina).Where(w => w.IdConcesionario == model.idConcesionario);
                 var catDelegacione = _catDictionary.GetCatalog("CatDelegaciones", "0");
                 var catClasificacionGruas = _catDictionary.GetCatalog("CatClasificacionGruas", "0");
                 var catTipoGruas = _catDictionary.GetCatalog("CatTiposGrua", "0");
@@ -133,7 +138,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             if (ModelState.IsValid)
             {
                 int index = _gruasService.EditarGrua(model);
-                var listPadronGruas = _gruasService.GetAllGruas();
+                int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+                var listPadronGruas = _gruasService.GetAllGruas(idOficina);
                 return PartialView("_ListadoGruas", listPadronGruas);
             }
             return RedirectToAction("Index");

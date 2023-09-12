@@ -107,6 +107,26 @@
                 <div class="bg-light py-1"></div>
             </div>
         </div>
+        <div id="resultadoLicencia" style="display: none;">
+            <p>Nombre: <span id="nombreSpan"></span></p>
+            <label for="tipoLicenciaDropdown">Tipo de Licencia:</label>
+            <select id="tipoLicenciaDropdown">
+                <!-- Aquí se agregarán las opciones del dropdown -->
+            </select>
+            <br>
+            <p>Fecha de Expedición: <span id="fechaExpedicionSpan"></span></p>
+            <p>Fecha de Vigencia: <span id="fechaVigenciaSpan"></span></p>
+            <div class="col-12 col-md-6 mx-md-auto col-lg-3 mx-lg-0">
+                <div class="controlButton my-3">
+                    <div class="controlButton my-3" onclick="guardarRegistro()">
+                        @(Html.Kendo().Button()
+                            .Name("seleccionarLicencia")
+                            .HtmlAttributes(new { @class = "btnPrimary" })
+                            .Content("<h5 class=\"m-0\"><b>Seleccionar</b></h5>"))
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row justify-content-between mb-1 titleCustom">
             <div class="col-12 col-md-auto mt-4 mb-2">
                 <h5 class="px-4"><b>Listado de Personas</b></h5>
@@ -119,7 +139,8 @@
         <div id="listadoPersonas">
             <partial name="_ListadoPersonas" model="Model" />
         </div>
-     
+  
+
     </section>
 </div>
 
@@ -162,7 +183,13 @@
         </div>
     </div>
 </div>
-
+<div id="modalLicencias" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Contenido del modal se llenará con la función mostrarModal -->
+        </div>
+    </div>
+</div>
 <div class="modal fade modalCustom" id="modalEditarPersona" aria-labelledby="modalEditarPersona" aria-hidden="true">
     <div class="modal-dialog modal-xl boxShadow modal-dialog-centered">
         <div class="modal-content">
@@ -194,7 +221,17 @@
             </div>
         </div>
     </div>
-  
+    <div class="modal fade modalCustom" id="detalleLicencias" tabindex="-1" aria-labelledby="detalleLicenciasLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body" id="ModalBodyDetalleLicencias">
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+
 </div>
 
 
@@ -245,27 +282,119 @@
         });
     }
 
-     function buscarConductor() {
-        var Mydata = $("#buscarConductorForm").serialize();
-        console.log(Mydata);
-        $.ajax({
-            url: '/Personas/BuscarPorParametro',
-            type: 'POST',
-            data: Mydata,
-            success: function (response) {
-                console.log("Response:", response);
-                if (response.length === 0) {
-                    sitteg_warning("La búsqueda no arrojó resultados.");
-                } else {
-                    window.location.href = "/Personas/DetalleLicencia";
 
+
+function buscarConductor() {
+    var Mydata = $("#buscarConductorForm").serialize(); 
+    $.ajax({
+        url: '/Personas/BuscarPorParametro',
+        type: 'POST',
+        data: Mydata,
+        success: function (response) {
+            if (response.tipo == "success") {
+                // Crear instancia del modelo con los datos recibidos
+                mostrarModal(response.datos);
+
+            } else {
+                // Mostrar los resultados de personas encontradas en la búsqueda
+                if(response.encontrada != undefined)
+                {
+                    if(response.encontrada == false){
+                        sitteg_warning("No se pudieron obtener resultados.");
+                    }
                 }
-            },
-            error: function (error) {
-                sitteg_warning('Ocurrió un error en la búsqueda.');
-                console.log(error);
+                var personasList = response.data;
+                var grid = $("#gridPersonas").data("kendoGrid");
+                grid.dataSource.data(personasList);
+
+                if (personasList.length === 0) {
+                    sitteg_warning("La búsqueda no arrojó resultados.");
+                }
             }
+        },
+        error: function (error) {
+            sitteg_warning('Ocurrió un error en la búsqueda.'); 
+        }
         });
     }
 
+    function mostrarModal(jsonData) { 
+        const modal = document.getElementById('modalLicencias');
+         
+        const modalContent = `
+            <div class="modal-header">
+                <h5 class="modal-title">Datos encontrados en el sistema de licencias</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Nombre:</strong> ${jsonData.nombre}</p>
+                <p><strong>Apellido Paterno:</strong> ${jsonData.primer_apellido}</p>
+                <p><strong>Apellido Materno:</strong> ${jsonData.segundo_apellido}</p>
+                <p><strong>Tipo de Licencia:</strong> ${jsonData.tipolicencia}</p>
+                <p><strong>Número de Licencia:</strong> ${jsonData.num_licencia}</p>
+                <p><strong>Fecha de Expedición:</strong> ${jsonData.fecha_inicio_vigencia}</p>
+                <p><strong>Fecha de Vigencia:</strong> ${jsonData.fecha_termino_vigencia}</p>
+            </div>
+          <div class="modal-footer">
+            <button type="button" id="cerrarModalBtn" class="btn btn-secondary controlButton" data-dismiss="modal">Cerrar</button>
+            <button type="button" id="guardarEnBaseDeDatosBtn" class="btn btn-primary controlButton">Guardar en Base de Datos</button>
+          </div>
+        `;
+
+        modal.querySelector('.modal-content').innerHTML = modalContent; 
+        const cerrarModalBtn = document.getElementById('cerrarModalBtn');
+        cerrarModalBtn.addEventListener('click', () => {
+            $('#modalLicencias').modal('hide');
+        });
+
+        const guardarEnBaseDeDatosBtn = document.getElementById('guardarEnBaseDeDatosBtn');
+        guardarEnBaseDeDatosBtn.addEventListener('click', () => {
+            const tipoLicenciaMapping = {
+                "TIPO A  CHOFER AUTOMOVILISTA": 1,
+                "TIPO B CHOFER SERVICIO PÚBLICO": 2,
+                "TIPO C  Chofer Servicio de Carga": 3,
+                "TIPO D -MOTOCICLISTA": 4,
+                "PERMISO A -AUTOMOVIL-": 6,
+                "PERMISO D -MOTOCICLETA-": 7,
+                "NO APLICA": 8,
+                "TIPO A": 1,
+                "TIPO B": 2,
+                "TIPO C": 3,
+                "TIPO D": 4,
+                "PERMISO A": 6,
+                "PERMISO D": 7,
+                "A-AUTOMOVILISTA": 1,
+                "B-CHOFER DE SERVICIO PÚBLICO": 2,
+                "C-CHOFER DE SERVICIO DE CARGA": 3,
+                "D-MOTOCICLISTA": 4,
+                "PA-PERMISO AUTOMOVILISTA": 6,
+                "PD-PERMISO MOTOCICLISTA": 7,
+
+                // Puedes agregar más mapeos aquí si es necesario
+            }; 
+            const tipoLicenciaNumero = tipoLicenciaMapping[jsonData.tipolicencia] || 0; // 0 o valor predeterminado si no hay coincidencia
+            jsonData.id_tipo_licencia = tipoLicenciaNumero; 
+
+            $.ajax({
+                type: 'POST',
+                url: '/Personas/guardaDesdeServicio', // Reemplaza con la URL correcta
+                data: jsonData,
+                success: function (response) {
+                    $('#modalLicencias').modal('hide');
+                    var personasList = [response]; // Convierte el objeto en un arreglo 
+                    var grid = $("#gridPersonas").data("kendoGrid");
+                    grid.dataSource.data(personasList);
+                },
+                error: function (error) {
+                    sitteg_warning('Error al guardar en la base de datos:');
+                }
+            });
+        });
+
+        $('#modalLicencias').modal('show');
+    }
+
+  
 </script>

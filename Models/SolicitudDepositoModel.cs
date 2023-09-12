@@ -13,7 +13,7 @@ namespace GuanajuatoAdminUsuarios.Models
         public int? idTipoVehiculo { get; set; }
         public string tipoVehiculo { get; set; }
 
-        public int? idPropietaroGrua { get; set; }
+        public int? idConcecionario { get; set; }
         public string propietarioGrua { get; set; }
 
         public int? idOficial { get; set; }

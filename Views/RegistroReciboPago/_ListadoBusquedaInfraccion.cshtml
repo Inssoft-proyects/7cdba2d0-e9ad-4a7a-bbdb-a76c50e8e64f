@@ -1,11 +1,12 @@
 ﻿@model List<RegistroReciboPagoModel>
 
 <div class="row">
+  
     <div class="col-12 mb-4 px-4 rounded gridCustom">
 
         @(
             Html.Kendo().Grid(Model)
-            .Name("grid")
+            .Name("gridRegistro")
             .Columns(columns =>
             {
                 columns.Bound(c => c.FolioInfraccion).Title("Folio infracción").Width(90);
@@ -13,7 +14,7 @@
                 columns.Bound(c => c.Conductor).Width(110);
                 columns.Bound(c => c.Placas).Width(90);
                // columns.Bound(c => c.Serie).Width(190);
-                columns.Bound(c => c.EstatusProceso).Width(90);
+                columns.Bound(c => c.EstatusInfraccion).Title("Estatus infracción").Width(90);
                 columns.Bound(c => c.Propietario).Width(90);
                // columns.Bound(c => c.IdDelegacion).Width(90);
                 columns.Command(c => c.Custom("Seleccionar").Click("modalComprobacion")).Width(80);
@@ -41,7 +42,7 @@
             )
 
         @(Html.Kendo().Tooltip()
-            .For("#grid")
+            .For("#gridRegistro")
             .Filter("th")
             .Position(TooltipPosition.Top)
             .ContentHandler("tooltipContent")

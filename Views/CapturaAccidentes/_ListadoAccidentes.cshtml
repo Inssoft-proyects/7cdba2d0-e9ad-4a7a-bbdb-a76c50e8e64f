@@ -8,13 +8,13 @@
         .Name("gridAciidentesIncompletos")
             .Columns(columns =>
              {
-                 columns.Bound(c => c.IdAccidente).Width(90);
+                 columns.Bound(c => c.NumeroReporte).Width(90);
                  columns.Bound(c => c.Fecha).Format("{0:dd/MM/yyyy}").Width(90);
                  columns.Bound(c => c.Hora).Width(90);
                  columns.Bound(c => c.Municipio).Width(90);
                  columns.Bound(c => c.Carretera).Width(90);
                  columns.Bound(c => c.Tramo).Title("Tramo").Width(60);
-                 columns.Bound(c => c.EstatusReporte).Title("Estatus de Reporte").Width(80);
+                 columns.Bound(c => c.EstatusReporte).Title("Estatus de Reporte").Width(120);
                 // columns.Template("<button onclick='completarAccidente(e)'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Continuar</b></h6></button>").Width(90);
             columns.Bound(p => p.IdAccidente).ClientTemplate(
             "<button onclick=\"editarAccidente('#= IdAccidente #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Continuar</b></h6></button>"
@@ -55,7 +55,6 @@
 
 <script>
     function editarAccidente(idAccidente) {
-        console.log("SI", idAccidente)
         $.ajax({
             url: '/CapturaAccidentes/SetLastInsertedIdEdit',
             type: 'POST',

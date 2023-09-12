@@ -1,14 +1,17 @@
 ﻿using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
 using GuanajuatoAdminUsuarios.Services;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Routing;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
@@ -33,68 +36,65 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public IActionResult DetallesLicencia()
         {
 
-            return View("_DetallesLicencia");
+            return View("_DetalleLicencia");
         }
-        public async Task<ActionResult> BuscarPorParametroAsync(PersonaModel model)
+        public async Task<IActionResult> BuscarPorParametro(PersonaModel model)
         {
+            string parametros = "";
+            parametros += string.IsNullOrEmpty(model.numeroLicenciaBusqueda) ? "" : "licencia="+ model.numeroLicenciaBusqueda;
+            parametros += string.IsNullOrEmpty(model.CURPBusqueda) ? "" : "curp="+ model.CURPBusqueda + "&";
+            parametros += string.IsNullOrEmpty(model.RFCBusqueda) ? "" : "rfc="+ model.RFCBusqueda + "&";
+            parametros += string.IsNullOrEmpty(model.nombreBusqueda) ? "" : "nombre="+ model.nombreBusqueda + "&";
+            parametros += string.IsNullOrEmpty(model.apellidoPaternoBusqueda) ? "" : "primer_apellido="+ model.apellidoPaternoBusqueda + "&";
+            parametros += string.IsNullOrEmpty(model.apellidoMaternoBusqueda) ? "" : "segundo_apellido="+ model.apellidoMaternoBusqueda + "";
+
+            string ultimo = parametros.Substring(parametros.Length - 1);
+            if(ultimo.Equals("&"))
+                parametros= parametros.Substring(0, parametros.Length - 1);
+
+            bool licenciaNoSITTEG = true;
+
             if (!string.IsNullOrEmpty(model.numeroLicenciaBusqueda))
+
+
             {
                 // Verificar si el número de licencia no está en la base de datos
-                bool licenciaNoSITTEG = _personasService.VerificarLicenciaSitteg(model.numeroLicenciaBusqueda);
-
-                if (licenciaNoSITTEG) {
-                    try
-                    {
-                        var url = $"https://virtual.zeitek.net:9094/serviciosinfracciones/getdatoslicencia?userWS=1&claveWS=1&folioLicencia={model.numeroLicenciaBusqueda}";
-
-                        var httpClient = _httpClientFactory.CreateClient();
-                        var response = await httpClient.GetAsync(url);
-
-                        if (response.IsSuccessStatusCode)
-                        {
-                            var content = await response.Content.ReadAsStringAsync();
-                            
-                            List<ResultadoLicenciaModel> licencias = JsonConvert.DeserializeObject<List<ResultadoLicenciaModel>>(content);
-                            LicenciaViewModel licenciaViewModel = new LicenciaViewModel
-                            {
-                                Nombre = licencias[0].Nombre, // Asignar el nombre (suponiendo que es el mismo en todas las licencias)
-                                TiposLicencia = licencias.Select(l => l.TipoLicencia).ToList(),
-                                Licencias = licencias.Select(l => new LicenciaInfo
-                                {
-                                    TipoLicencia = l.TipoLicencia,
-                                    FechaExpedicion = l.FechaExpedicion,
-                                    FechaVigencia = l.FechaVigencia
-                                }).ToList()
-                            };
-
-
-                            return View("_DetalleLicencia",licenciaViewModel);
-                        }
-                        else
-                        {
-                            // En caso de respuesta no exitosa, manejar el error y devolver una vista de error o redireccionar a otra página.
-                            return View("Error");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        // En caso de errores, manejar el error y devolver una vista de error o redireccionar a otra página.
-                        return View("Error");
-                    }
-                }
-            
-                else
+                licenciaNoSITTEG = _personasService.VerificarLicenciaSitteg(model.numeroLicenciaBusqueda);
+            }
+            if (licenciaNoSITTEG)
             {
-                    var personasList = _personasService.BusquedaPersona(model);
+                try
+                { 
+                    string urlServ = Request.GetDisplayUrl();
+                    Uri uri = new Uri(urlServ);
+                    string requested = uri.Scheme + Uri.SchemeDelimiter + uri.Host + ":" + uri.Port;
 
-                    return Json(personasList);
+                    var url = requested+$"/api/Licencias/datos_generales?"+ parametros;
+
+                    var httpClient = _httpClientFactory.CreateClient();
+                    var response = await httpClient.GetAsync(url);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var content = await response.Content.ReadAsStringAsync();
+                        LicenciaRespuestaPersona respuesta = JsonConvert.DeserializeObject<LicenciaRespuestaPersona>(content);
+                             
+                        return Json(respuesta); 
+                    } 
                 }
-        }else{
+                catch (Exception ex)
+                {
+                    // En caso de errores, devolver una respuesta JSON con licencia no encontrada
+                    return Json(new { encontrada = false, message = "Ocurrió un error al obtener los datos. " + ex.Message + "; " +ex.InnerException});
+                }
+            }
+            
+            // Si no se cumple la condición anterior, realizar la búsqueda de personas y devolver los resultados en formato JSON
             var personasList = _personasService.BusquedaPersona(model);
-
-            return Json(personasList);
+            return Json(new { encontrada = false, data = personasList });
         }
-    }
+
+
 
 
         [HttpGet]
@@ -126,7 +126,6 @@ namespace GuanajuatoAdminUsuarios.Controllers
             int idDireccion = _personasService.CreatePersonaDireccion(model.PersonaDireccion);
 
             var modelList = _personasService.GetAllPersonas();
-            //var listPadronGruas = _concesionariosService.GetAllConcesionarios();
             return PartialView("_ListadoPersonas", modelList);
             //}
             //return RedirectToAction("Index");
@@ -174,61 +173,28 @@ namespace GuanajuatoAdminUsuarios.Controllers
             }
             return RedirectToAction("Index");
         }
+
+
+
         [HttpPost]
 
-        public async Task<IActionResult> BusquedaPorLicencia(string numeroLicencia)
+        public ActionResult GuardaDesdeServicio(LicenciaPersonaDatos personaDatos)
         {
             try
             {
-                var url = $"https://virtual.zeitek.net:9094/serviciosinfracciones/getdatoslicencia?userWS=1&claveWS=1&folioLicencia={numeroLicencia}";
+                 _personasService.InsertarDesdeServicio(personaDatos);
+                var datosTabla = _personasService.BuscarPersonaSoloLicencia(personaDatos.NUM_LICENCIA);
 
-                var httpClient = _httpClientFactory.CreateClient();
-                var response = await httpClient.GetAsync(url);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    List<ResultadoLicenciaModel> licencias = JsonConvert.DeserializeObject<List<ResultadoLicenciaModel>>(content);
-
-                    foreach (var licenciaInfo in licencias)
-                    {
-                        string nombreCompleto = licenciaInfo.Nombre;
-                        string[] partesNombre = nombreCompleto.Split(' ');
-
-                        string nombre = partesNombre[0]; 
-                        string apellidoPaterno = partesNombre.Length > 1 ? partesNombre[1] : string.Empty; 
-                        string apellidoMaterno = partesNombre.Length > 2 ? partesNombre[2] : string.Empty; 
-                        string tipoLicencia = licenciaInfo.TipoLicencia;
-                        DateTime fechaExpedicion = licenciaInfo.FechaExpedicion;
-                        DateTime fechaVigencia = licenciaInfo.FechaVigencia;
-
-                        ResultadoLicenciaModel persona = new ResultadoLicenciaModel
-                        {
-                            NumeroLicencia = numeroLicencia,
-                            Nombre = nombre,
-                            ApellidoPaterno = apellidoPaterno,
-                            ApellidoMaterno = apellidoMaterno,
-                            TipoLicencia = tipoLicencia,
-                            FechaExpedicion = fechaExpedicion,
-                            FechaVigencia = fechaVigencia,
-                        };
-
-                        _personasService.InsertarDesdeServicio(persona);
-                    }
-                    return Ok();
-
-                }
-                else
-                {
-                    // En caso de respuesta no exitosa, manejar el error y devolver una vista de error o redireccionar a otra página.
-                    return View("Error");
-                }
+                return Json(datosTabla);
             }
             catch (Exception ex)
             {
-                // En caso de errores, manejar el error y devolver una vista de error o redireccionar a otra página.
-                return View("Error");
+                // Maneja el error de manera adecuada
+                return Json(new { error = "Error al guardar en la base de datos: " + ex.Message });
             }
         }
     }
 }
+
+
+

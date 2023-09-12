@@ -47,7 +47,6 @@
         var row = $(event.target).closest("tr");
         var dataItem = grid.dataItem(row);
         var IdAccidente = dataItem.IdAccidente
-        console.log("Data clas", IdAccidente);
         $.ajax({
             url: '@Url.Action("ModalEliminarClasificacion", "CapturaAccidentes")',
             type: 'POST',           

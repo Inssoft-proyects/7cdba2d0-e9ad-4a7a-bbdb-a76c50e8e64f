@@ -26,6 +26,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
         private readonly IPdfGenerator<BusquedaAccidentesModel> _pdfService;
         private readonly ICatDictionary _catDictionary;
 
+        private int idOficina = 0;
+
         public BusquedaAccidentesController(IBusquedaAccidentesService busquedaAccidentesService, ICatCarreterasService catCarreterasService, ICatTramosService catTramosService,
             ICatDelegacionesOficinasTransporteService catDelegacionesOficinasTransporteService, IOficiales oficialesService, IPdfGenerator<BusquedaAccidentesModel> pdfService,
             ICapturaAccidentesService capturaAccidentesService,ICatDictionary catDictionary)
@@ -88,7 +90,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public ActionResult ajax_BuscarAccidente(BusquedaAccidentesModel model)
         {
-          var resultadoBusqueda = _busquedaAccidentesService.BusquedaAccidentes(model);
+            int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+            var resultadoBusqueda = _busquedaAccidentesService.BusquedaAccidentes(model,idOficina);
           return Json(resultadoBusqueda);
 
             
@@ -140,7 +143,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {"hora","Hora" },
            
             };
-            var ListTransitoModel = _busquedaAccidentesService.BusquedaAccidentes(model);
+            int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+            var ListTransitoModel = _busquedaAccidentesService.BusquedaAccidentes(model, idOficina);
             var result = _pdfService.CreatePdf("ReporteAccidentes", "Accidentes", 6, ColumnsNames, ListTransitoModel);
             return File(result.Item1, "application/pdf", result.Item2);
         }

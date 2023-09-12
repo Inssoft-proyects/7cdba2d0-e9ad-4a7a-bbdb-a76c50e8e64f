@@ -4,24 +4,26 @@ using Newtonsoft.Json;
 using System.Data;
 using System;
 using System.Data.SqlClient;
+using static GuanajuatoAdminUsuarios.RESTModels.ConsultarDocumentoResponseModel;
+using static GuanajuatoAdminUsuarios.RESTModels.AnulacionDocumentoRequestModel;
 
 namespace GuanajuatoAdminUsuarios.Services
 {
-    public class AnulacionDocumentoClientService
+    public class AnulacionDocumentoClientService : IAnulacionDocumentoService
     {
         private readonly ISqlClientConnectionBD _sqlClientConnectionBD;
         public AnulacionDocumentoClientService(ISqlClientConnectionBD sqlClientConnectionBD)
         {
             _sqlClientConnectionBD = sqlClientConnectionBD;
         }
-        public AnulacionDocumentoResponseModel CrearMultasTransitoCall(AnulacionDocumentoRequestModel requestModel)
+        public RootAnulacionDocumentoResponse CancelarMultasTransitoFinanzas(RootAnulacionDocumentoRequest requestModel)
         {
             string endPointName = "AnulacionDocumento";
             var json = JsonConvert.SerializeObject(requestModel, Formatting.Indented);
             var bodyRequest = json;
             string result = string.Empty;
-            AnulacionDocumentoResponseModel responseModel = new AnulacionDocumentoResponseModel();
-            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            RootAnulacionDocumentoResponse responseModel = new RootAnulacionDocumentoResponse();
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection2()))
             {
                 try
                 {
@@ -32,7 +34,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.Add(new SqlParameter("@Body", SqlDbType.NVarChar)).Value = bodyRequest;
                     command.CommandType = CommandType.StoredProcedure;
                     result = Convert.ToString(command.ExecuteScalar());
-                    responseModel = JsonConvert.DeserializeObject<AnulacionDocumentoResponseModel>(result);
+                    responseModel = JsonConvert.DeserializeObject<RootAnulacionDocumentoResponse>(result);
                 }
                 catch (SqlException ex)
                 {
