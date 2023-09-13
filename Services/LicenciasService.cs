@@ -73,7 +73,7 @@ namespace GuanajuatoAdminUsuarios.Services
 			                                        AND g.ID_GENERO = p.ID_GENERO
 			                                        AND ctl.ID_TIPO_LICENCIA = L.ID_TIPO_LICENCIA 
 			                                        AND d.ID_MUNICIPIO = m.ID_MUNICIPIO
-			                                        AND d.ID_COLONIA = c.ID_COLONIA " + condiciones + " ORDER BY l.ID_LICENCIA DESC ";
+			                                        AND d.ID_COLONIA = c.ID_COLONIA " + condiciones + " ORDER BY l.ID_LICENCIA DESC, d.ID_DOMICILIO DESC  ";
 
             LicenciaPersonaDatos persona = _contextLicencias.personaDatos.FromSqlRaw(queryDatosPersona, parametros.ToArray()).FirstOrDefault();
             return persona;
@@ -130,7 +130,7 @@ namespace GuanajuatoAdminUsuarios.Services
 	                                        LEFT OUTER JOIN DOMICILIOS_BD1 d ON l.ID_DOMICILIO = d.ID_DOMICILIO
 	                                        JOIN PERSONAS_BD1 p ON p.ID_PERSONA = l.ID_PERSONA 
 	                                        JOIN DOMICILIOS_BD1 db ON db.ID_PERSONA = d.ID_PERSONA 
-	                                        WHERE l.FOLIO_LICENCIA is not NULL  " + condiciones + " ORDER BY l.ID_LICENCIA DESC ";
+	                                        WHERE l.FOLIO_LICENCIA is not NULL  " + condiciones + " ORDER BY l.ID_LICENCIA DESC, d.ID_DOMICILIO DESC ";
 
             LicenciaPersonaDatos persona = _contextIncidencias.personaDatos.FromSqlRaw(queryDatosPersona, parametros.ToArray()).FirstOrDefault();
             return persona;
@@ -186,7 +186,7 @@ namespace GuanajuatoAdminUsuarios.Services
 	                                        LEFT OUTER JOIN DOMICILIOS_BD2 d ON l.ID_DOMICILIO = d.ID_DOMICILIO
 	                                        JOIN PERSONAS_BD2 p ON p.ID_PERSONA = l.ID_PERSONA 
 	                                        JOIN DOMICILIOS_BD2 db ON db.ID_PERSONA = d.ID_PERSONA 
-	                                        WHERE l.FOLIO_LICENCIA is not NULL   " + condiciones + " ORDER BY l.ID_LICENCIA DESC ";
+	                                        WHERE l.FOLIO_LICENCIA is not NULL   " + condiciones + " ORDER BY l.ID_LICENCIA DESC, d.ID_DOMICILIO DESC ";
 
 
             LicenciaPersonaDatos persona = _contextIncidencias.personaDatos.FromSqlRaw(queryDatosPersona, parametros.ToArray()).FirstOrDefault();
@@ -240,7 +240,7 @@ namespace GuanajuatoAdminUsuarios.Services
 	                                        LEFT OUTER JOIN DOMICILIOS_BD3 d ON l.ID_DOMICILIO = d.ID_DOMICILIO
 	                                        JOIN PERSONAS_BD3 p ON p.ID_PERSONA = l.ID_PERSONA 
 	                                        JOIN DOMICILIOS_BD3 db ON db.ID_PERSONA = d.ID_PERSONA 
-	                                        WHERE p.ID_PERSONA > 0   " + condiciones + " ORDER BY l.ID_LICENCIA DESC  ";
+	                                        WHERE p.ID_PERSONA > 0   " + condiciones + " ORDER BY l.ID_LICENCIA DESC, d.ID_DOMICILIO DESC  ";
 
 
             LicenciaPersonaDatos persona = _contextIncidencias.personaDatos.FromSqlRaw(queryDatosPersona, parametros.ToArray()).FirstOrDefault();

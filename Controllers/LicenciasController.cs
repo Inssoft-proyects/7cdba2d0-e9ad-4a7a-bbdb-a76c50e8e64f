@@ -37,10 +37,10 @@ namespace GuanajuatoAdminUsuarios.Controllers
                     persona = licenciasService.ObtenerDatosPersonaBD3(licencia, curp, rfc, nombre, primer_apellido, segundo_apellido);
                     if (persona == null)
                     {
-                        persona = licenciasService.ObtenerDatosPersonaBD2(licencia, curp, rfc, nombre, primer_apellido, segundo_apellido);
+                        persona = licenciasService.ObtenerDatosPersonaBD1(licencia, curp, rfc, nombre, primer_apellido, segundo_apellido);
                         if (persona == null)
                         {
-                            persona = licenciasService.ObtenerDatosPersonaBD1(licencia, curp, rfc, nombre, primer_apellido, segundo_apellido);
+                            persona = licenciasService.ObtenerDatosPersonaBD2(licencia, curp, rfc, nombre, primer_apellido, segundo_apellido);
                             if (persona == null)
                             {
                                 return Ok(new LicenciaRespuestaPersona
