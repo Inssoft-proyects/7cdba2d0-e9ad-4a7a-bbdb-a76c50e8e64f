@@ -13,6 +13,7 @@
             var apellidoMaterno = dataItem.apellidoMaterno
             var curp = dataItem.curp
             var fechaNacimiento = convertDate(dataItem.fechaNacimiento);
+            fechaNacimiento = fechaNacimiento == "01/01/0001" ? "" : fechaNacimiento;
             var rfc = dataItem.rfc
 
             var nombreCompleto = nombre+" "+apellidoPaterno+" "+apellidoMaterno;
@@ -37,7 +38,7 @@
     @{
 	    try
 		{
-             @(Html.Kendo().Grid(Model)
+                 @(Html.Kendo().Grid(Model)
             .Name("gridInvolucradosPrevio")
             .Events(events => events.Change("onRowSelect"))
             .Columns(columns =>
@@ -71,12 +72,12 @@
 
             }).Selectable(selectable => selectable.Mode(GridSelectionMode.Single).Type(GridSelectionType.Row)
             )
-            )
+                )
 
         }
         catch (Exception ex)
         {
-        < div >< h1 > @ex.Message </ h1 > </ div >
+            < div >< h1 > @ex.Message </ h1 > </ div >
         } 
     }
         

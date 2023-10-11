@@ -1,4 +1,13 @@
-﻿    <div class="col-12 mb-4 px-4 rounded gridCustom">
+﻿    
+<script>
+    function FormatDate(date) {
+        var cdate = convertDate(date);
+        cdate = cdate == "01/01/0001" ? "" : cdate;
+        return cdate;
+    }
+</script>
+
+<div class="col-12 mb-4 px-4 rounded gridCustom">
 
         @(
             Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel>()
@@ -12,7 +21,7 @@
                 columns.Bound(c => c.rfc).Title("RFC").Width(100);
                 columns.Bound(c => c.curp).Title("CURP").Width(100);
                 columns.Bound(c => c.TipoLicencia).Title("Tipo de No Licencia").Width(100);
-                columns.Bound(c => c.fechaNacimiento).Title("Fecha Nacimineto").Format("{0:dd/MM/yyyy}").Width(100);
+                columns.Bound(c => c.fechaNacimiento).Title("Fecha Nacimineto").ClientTemplate("#= FormatDate(fechaNacimiento) #").Format("{0:dd/MM/yyyy}").Width(100);
                 columns.Bound(c => c.TipoVehiculo).Title("Tipo de Vehículo").Width(100);
                 columns.Bound(c => c.EstadoVictima).Title("Estado de involucrado").Width(100);
                 columns.Bound(c => c.NombreHospital).Title("LLevado a:").Width(100);

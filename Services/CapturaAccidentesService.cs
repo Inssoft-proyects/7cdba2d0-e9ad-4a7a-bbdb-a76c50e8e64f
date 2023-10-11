@@ -1596,7 +1596,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                              "p.rfc, " +
                                              "p.curp, " +
                                              "p.idTipoLicencia, " +
-                                             "p.fechaNacimiento, " +
+											 "p.fechaNacimiento, " +
                                              "tl.tipoLicencia, " +
                                              "ia.idAccidente," +
                                              "ia.idPersona, " +

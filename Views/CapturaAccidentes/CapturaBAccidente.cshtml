@@ -76,6 +76,7 @@
 
                             [].forEach.call(personasList, function (persona) {
                                 persona.fechaNacimiento = convertDate(persona.fechaNacimiento);
+                                persona.fechaNacimiento = persona.fechaNacimiento == "01/01/0001" ? "" : fechaNacimiento;
                             });
 
                             grid.dataSource.data(personasList);

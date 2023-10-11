@@ -158,6 +158,7 @@
 		var apellidoMaterno = dataItem.apellidoMaterno
 		var curp = dataItem.curp
 		var fechaNacimiento = convertDate(dataItem.fechaNacimiento);
+		fechaNacimiento = fechaNacimiento == "01/01/0001" ? "" : fechaNacimiento;
 		var rfc = dataItem.rfc
 
 		var nombreCompleto = nombre + " " + apellidoPaterno + " " + apellidoMaterno;
