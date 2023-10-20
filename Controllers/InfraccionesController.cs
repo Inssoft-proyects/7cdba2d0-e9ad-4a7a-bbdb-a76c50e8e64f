@@ -236,7 +236,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             return View(new InfraccionesModel());
         }
 
-    
+
 
 
 
@@ -315,8 +315,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
             model.idDelegacion = HttpContext.Session.GetInt32("IdOficina") ?? 0;
             var idInfraccion = _infraccionesService.ModificarInfraccion(model);
-            var idVehiculo = model.idVehiculo; 
-            return Json(new { success = true, idInfraccion = idInfraccion,idVehiculo = idVehiculo });
+            var idVehiculo = model.idVehiculo;
+            return Json(new { success = true, idInfraccion = idInfraccion, idVehiculo = idVehiculo });
         }
 
         [HttpPost]
@@ -578,30 +578,13 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
         private int ObtenerIdTipoVehiculo(string categoria)
         {
+
             int idTipo = 0;
 
-            if (!string.IsNullOrEmpty(categoria))
-            {
-                string lowerTexto = categoria.ToLower();
+            var tipoVehiculo = _catDictionary.GetCatalog("CatTiposVehiculo", "0");
 
-                if (lowerTexto.Contains("sedan"))
-                {
-                    idTipo = 1;
-                }
-                else if (lowerTexto.Contains("coupe"))
-                {
-                    idTipo = 37;
-                }
-                else if (lowerTexto.Contains("hatchback"))
-                {
-                    idTipo = 57;
-                }
-                else if (lowerTexto.Contains("minivan"))
-                {
-                    idTipo = 31;
-                }
+            idTipo = tipoVehiculo.CatalogList.Where(w => categoria.ToLower().Contains(w.Text.ToLower())).Select(s => s.Id).FirstOrDefault();
 
-            }
             return (idTipo);
 
         }
@@ -752,7 +735,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         [HttpPost]
         public ActionResult ajax_UpdateCortesiaInfraccion(InfraccionesModel model)
         {
-          
+
             var modelInf = _infraccionesService.ModificarInfraccionPorCortesia(model);
             if (modelInf == 1)
             {
@@ -875,7 +858,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             }
             return Json(new { success = false, message = "Registro actualizado en SITTEG", id = idInfraccion });
 
-        } 
+        }
 
         public ActionResult ModalAgregarConductor()
         {
@@ -991,7 +974,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             if (IdVehiculo != 0)
             {
                 var resultados = _vehiculosService.GetAllVehiculos();
-                return PartialView( "_ListadoVehiculos", resultados );
+                return PartialView("_ListadoVehiculos", resultados);
             }
             else
             {
