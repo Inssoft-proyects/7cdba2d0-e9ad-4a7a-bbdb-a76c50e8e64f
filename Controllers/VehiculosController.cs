@@ -411,37 +411,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
         private int ObtenerIdTipoVehiculo(string categoria)
         {
 
-
             int idTipo = 0;
 
             var tipoVehiculo = _catDictionary.GetCatalog("CatTiposVehiculo", "0");
 
             idTipo = tipoVehiculo.CatalogList.Where(w => categoria.ToLower().Contains(w.Text.ToLower())).Select(s => s.Id).FirstOrDefault();
-
-            //int idTipo = 0;
-
-            //if (!string.IsNullOrEmpty(categoria))
-            //{
-            //    string lowerTexto = categoria.ToLower();
-
-            //    if (lowerTexto.Contains("sedan"))
-            //    {
-            //        idTipo = 1;
-            //    }
-            //    else if (lowerTexto.Contains("coupe"))
-            //    {
-            //        idTipo = 37;
-            //    }
-            //    else if (lowerTexto.Contains("hatchback"))
-            //    {
-            //        idTipo = 57;
-            //    }
-            //    else if (lowerTexto.Contains("minivan"))
-            //    {
-            //        idTipo = 31;
-            //    }
-
-            //}
             
             return (idTipo);
 
