@@ -31,12 +31,14 @@ namespace GuanajuatoAdminUsuarios.Services
                     connection.Open();
                     SqlCommand command = new SqlCommand(@"SELECT i.*, v.serie, e.estatusInfraccion, 
                                                             CONCAT( pV.nombre,' ', pV.apellidoPaterno,' ', pV.apellidoMaterno)AS nombrePropietario,
-                                                            CONCAT(pI.nombre,' ',pI.apellidoPaterno,' ', pI.apellidoMaterno)AS nombreConductor 
+                                                            CONCAT(pI.nombre,' ',pI.apellidoPaterno,' ', pI.apellidoMaterno)AS nombreConductor,
+                                                            cde.delegacion
                                                             FROM infracciones AS i 
                                                             LEFT JOIN vehiculos AS v ON i.idVehiculo = v.idVehiculo 
                                                             LEFT JOIN catEstatusInfraccion AS e ON i.idEstatusInfraccion = e.idEstatusInfraccion 
                                                             LEFT JOIN personas AS pI ON pI.IdPersona = i.IdPersona 
-                                                            LEFT JOIN personas AS pV ON pV.IdPersona = v.idPersona  
+                                                            LEFT JOIN personas AS pV ON pV.IdPersona = v.idPersona 
+                                                            LEFT JOIN catDelegaciones AS cde ON cde.idDelegacion = i.idDelegacion 
                                                             WHERE i.folioInfraccion LIKE '%' + @FolioInfraccion + '%';", connection);
                     command.Parameters.Add(new SqlParameter("@FolioInfraccion", SqlDbType.NVarChar)).Value = FolioInfraccion;
                     command.CommandType = CommandType.Text;
@@ -52,6 +54,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             infraccion.Placas = reader["placasVehiculo"] is DBNull ? string.Empty : reader["placasVehiculo"].ToString();
                             infraccion.Serie = reader["Serie"] is DBNull ? string.Empty : reader["Serie"].ToString();
                             infraccion.Propietario = reader["nombrePropietario"] is DBNull ? string.Empty : reader["nombrePropietario"].ToString();
+                            infraccion.Delegacion = reader["delegacion"] is DBNull ? string.Empty : reader["delegacion"].ToString();
                             infraccion.EstatusProceso = reader["idEstatusInfraccion"] is DBNull ? 0 : Convert.ToInt32(reader["idEstatusInfraccion"]);
                             infraccion.descEstatusProceso = reader["estatusInfraccion"] is DBNull ? string.Empty : reader["estatusInfraccion"].ToString();
 

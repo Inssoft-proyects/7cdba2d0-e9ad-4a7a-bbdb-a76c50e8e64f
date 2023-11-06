@@ -41,6 +41,8 @@ namespace GuanajuatoAdminUsuarios.Models
 
         public int Calificacion { get; set; }
 
+        public string Serie { get; set; }
+        public string Delegacion { get; set; }
 
 
 

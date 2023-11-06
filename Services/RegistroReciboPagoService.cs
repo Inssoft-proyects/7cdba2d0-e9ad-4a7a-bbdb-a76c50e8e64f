@@ -29,15 +29,16 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand(@"SELECT i.*, pveh.nombre AS nombre1, pveh.apellidoPaterno AS apellidoPaterno1,
+                    SqlCommand command = new SqlCommand(@"SELECT i.*, v.serie, pveh.nombre AS nombre1, pveh.apellidoPaterno AS apellidoPaterno1,
                                                             pveh.apellidoMaterno AS apellidoMaterno1, pinf.nombre AS nombre2, 
                                                             pinf.apellidoPaterno AS apellidoPaterno2, pinf.apellidoMaterno AS apellidoMaterno2,
-                                                            e.estatusInfraccion
+                                                            e.estatusInfraccion, cde.delegacion
                                                         FROM infracciones AS i 
                                                         JOIN catEstatusInfraccion AS e ON i.idEstatusInfraccion = e.idEstatusInfraccion
                                                         JOIN vehiculos AS v ON v.idVehiculo = i.idVehiculo
                                                         LEFT JOIN personas AS pveh ON pveh.idPersona = v.idPersona
-                                                        LEFT JOIN personas AS pinf ON i.idPersona = pinf.idPersona  
+                                                        LEFT JOIN personas AS pinf ON i.idPersona = pinf.idPersona
+                                                        LEFT JOIN catDelegaciones AS cde ON cde.idDelegacion = i.idDelegacion 
                                                         WHERE folioInfraccion = @FolioInfraccion", connection);
 
                     command.Parameters.Add(new SqlParameter("@FolioInfraccion", SqlDbType.NVarChar)).Value = FolioInfraccion;
@@ -52,8 +53,9 @@ namespace GuanajuatoAdminUsuarios.Services
                             infraccion.Placas = reader["placasVehiculo"].ToString();
                             infraccion.FechaInfraccion = Convert.ToDateTime(reader["FechaInfraccion"].ToString());
                             infraccion.Propietario = $"{reader["nombre1"]} {reader["apellidoPaterno1"]} {reader["apellidoMaterno1"]}";
-                            //infraccion.Serie = reader["Serie"].ToString();
+                            infraccion.Serie = reader["Serie"] is DBNull ? string.Empty : reader["Serie"].ToString();
                             infraccion.Conductor = $"{reader["nombre2"]} {reader["apellidoPaterno2"]} {reader["apellidoMaterno2"]}";
+                            infraccion.Delegacion = reader["delegacion"].ToString();
                             infraccion.EstatusInfraccion = reader["estatusInfraccion"].ToString();
 
                             ListaInfracciones.Add(infraccion);

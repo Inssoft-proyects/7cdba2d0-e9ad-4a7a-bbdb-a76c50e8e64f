@@ -13,11 +13,11 @@
                 columns.Bound(c => c.FechaInfraccion).Title("Fecha infracción").Format("{0:dd/MM/yyyy}").Width(90);
                 columns.Bound(c => c.Conductor).Width(110);
                 columns.Bound(c => c.Placas).Width(90);
-               // columns.Bound(c => c.Serie).Width(190);
+                columns.Bound(c => c.Serie).Width(120);
                 columns.Bound(c => c.EstatusInfraccion).Title("Estatus infracción").Width(90);
                 columns.Bound(c => c.Propietario).Width(90);
-               // columns.Bound(c => c.IdDelegacion).Width(90);
-                columns.Command(c => c.Custom("Seleccionar").Click("modalComprobacion")).Width(80);
+                columns.Bound(c => c.Delegacion).Title("Delegación").Width(100);
+                columns.Command(c => c.Custom("Seleccionar").Click("modalComprobacion")).Width(90);
 
 
             }).HtmlAttributes(new { style = "height:550px" })

@@ -41,6 +41,7 @@ namespace GuanajuatoAdminUsuarios.Models
 
         [Required(ErrorMessage = "El campo Folio de infracción es obligatorio.")]
         public string OficioRevocacion { get; set; }
+        public string Delegacion { get; set; }
 
     }
 }
