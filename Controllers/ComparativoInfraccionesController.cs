@@ -22,7 +22,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         // GET: ComparativoInfraccionesController
         public ActionResult Index()
         {
-            int IdModulo = 1000;
+            int IdModulo = 709;
             string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
             List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
             if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))

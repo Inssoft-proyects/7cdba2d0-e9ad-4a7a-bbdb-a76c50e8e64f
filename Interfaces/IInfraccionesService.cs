@@ -1,4 +1,5 @@
-﻿using GuanajuatoAdminUsuarios.Models;
+﻿using GuanajuatoAdminUsuarios.Entity;
+using GuanajuatoAdminUsuarios.Models;
 using GuanajuatoAdminUsuarios.RESTModels;
 using System.Collections.Generic;
 
@@ -8,7 +9,12 @@ namespace GuanajuatoAdminUsuarios.Interfaces
     {
         public decimal GetUmas();
         public List<InfraccionesModel> GetAllInfracciones2();
+
+        public List<EstadisticaInfraccionMotivosModel> GetAllEstadisticasInfracciones();
+        public List<InfoInfraccion> GetAllInfraccionesEstadisticasGrid();
         List<InfraccionesModel> GetAllInfracciones(int idOficina);
+        public List<InfraccionesModel> GetAllInfraccionesByFolioInfraccion(string FolioInfraccion);
+        public List<InfraccionesModel> GetAllInfraccionesByReciboPago(string ReciboPago);
         List<InfraccionesModel> GetAllInfracciones(InfraccionesBusquedaModel model,int idOficina);
         InfraccionesModel GetInfraccionById(int IdInfraccion);
         public List<MotivosInfraccionVistaModel> GetMotivosInfraccionByIdInfraccion(int idInfraccion);

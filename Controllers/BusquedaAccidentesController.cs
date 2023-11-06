@@ -90,6 +90,16 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public ActionResult ajax_BuscarAccidente(BusquedaAccidentesModel model)
         {
+            if (model.FechaInicio == null)
+            {
+                model.FechaInicio = DateTime.MinValue;
+            }
+
+            if (model.FechaFin == null)
+            {
+                model.FechaFin = DateTime.MinValue;
+            }
+
             int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
             var resultadoBusqueda = _busquedaAccidentesService.BusquedaAccidentes(model,idOficina);
           return Json(resultadoBusqueda);
@@ -120,8 +130,16 @@ namespace GuanajuatoAdminUsuarios.Controllers
         {
             var model = JsonConvert.DeserializeObject<BusquedaAccidentesPDFModel>(data);
 
-            model.FechaInicio = model.FechaInicio;
-            model.FechaFin = model.FechaFin;
+            if (model.FechaInicio == null)
+            {
+                model.FechaInicio = DateTime.MinValue;
+            }
+
+            if (model.FechaFin == null)
+            {
+                model.FechaFin = DateTime.MinValue;
+            }
+      
 
             model.placa = model.placa == string.Empty ? null : model.placa;
             model.serie = model.serie == string.Empty ? null : model.serie;

@@ -89,7 +89,7 @@ namespace GuanajuatoAdminUsuarios.Services
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand(@"SELECT i.*, pveh.nombre AS nombre1, pveh.apellidoPaterno AS apellidoPaterno1,
-                                                            pveh.apellidoMaterno AS apellidoMaterno1, pinf.nombre AS nombre2, 
+                                                            pveh.apellidoMaterno AS apellidoMaterno1, pinf.nombre AS nombre2,i.lugarPago, 
                                                             pinf.apellidoPaterno AS apellidoPaterno2, pinf.apellidoMaterno AS apellidoMaterno2,
                                                             e.estatusInfraccion, sum(mi.calificacion ) calificacion 
                                                         FROM infracciones AS i 
@@ -123,6 +123,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             infraccion.FechaInfraccion = Convert.ToDateTime(reader["FechaInfraccion"].ToString());
                             infraccion.Conductor = $"{reader["nombre1"]} {reader["apellidoPaterno1"]} {reader["apellidoMaterno1"]}";
                             infraccion.Placas = reader["placasVehiculo"].ToString();
+                            infraccion.LugarPago = reader["lugarPago"].ToString();
                             
                             infraccion.Propietario = $"{reader["nombre2"]} {reader["apellidoPaterno2"]} {reader["apellidoMaterno2"]}";
                             infraccion.EstatusProceso = Convert.IsDBNull(reader["EstatusProceso"]) ? 0 : Convert.ToInt32(reader["EstatusProceso"]);

@@ -5,10 +5,10 @@
             <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
                 <div class="row align-items-center justify-content-center justify-content-md-start">
                     <div class="col-auto">
-                        <i class="icon-accidentes h1 colorPrimary"></i>
+                        <i class="icon-clasificacionAccidente h1 colorPrimary"></i>
                     </div>
                     <div class="col-auto my-3">
-                        <h2 class="m-0 h3"><b>Catálogo de Clasificación de Accidentes</b></h2>
+                        <h2 class="m-0 h3"><b>Catálogo de clasificación de accidentes</b></h2>
                     </div>
                 </div>
             </div>
@@ -16,7 +16,7 @@
                 <div class="row">
                     <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
                         <button href="#" id="btnNuevaClas" onclick="mostrarModal()">
-                            <h6 class="m-0 d-flex align-items-center"><i class="icon-addClasificacion h5 mb-0 me-2"></i><b>Agregar nueva Clasificación de accidente</b></h6>
+                            <h6 class="m-0 d-flex align-items-center"><i class="me-2 icon-addClasificacionAccidente h5 mb-0 me-2"></i><b>Agregar nueva Clasificación de accidente</b></h6>
                         </button>
                     </div>
                 </div>
@@ -27,14 +27,14 @@
                 <div class="bg-light py-1"></div>
             </div>
         </div>
-        <div class="row justify-content-between mb-1 titleCustom">
-            <div class="col-12 col-md-auto mt-4 mb-2">
-                <h5 class="px-4"><b>Clasificación de accidentes</b></h5>
-                <h6 class="px-4 text-muted">Edita o inactiva las clasificaciones de accidentes.</h6>
-            </div>
-        </div>
         <div class="row">
             <div class="col-12 mb-4 px-4 rounded gridCustom">
+                <div class="row justify-content-between mb-1 titleCustom">
+                    <div class="col-12 col-md-auto mt-4 mb-2">
+                        <h5 class="px-4"><b>Clasificación de accidentes</b></h5>
+                        <h6 class="px-4 text-muted">Edita o inactiva las clasificaciones de accidentes.</h6>
+                    </div>
+                </div>
                 <div id="tablaClasificacionAccidentes">
                     <partial name="_ListaClasificacionAccidentes" model="Model" />
 

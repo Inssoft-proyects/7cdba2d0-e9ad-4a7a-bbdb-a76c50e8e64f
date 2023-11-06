@@ -6,7 +6,7 @@
         .Name("grid")
         .Columns(columns =>
         {
-            columns.Bound(c => c.IdOficial).Width(80);
+                columns.Bound(c => c.IdOficial).Width(80).Title("Id");
             columns.Bound(c => c.Nombre).Width(100);
             columns.Bound(c => c.ApellidoPaterno).Width(190);
             columns.Bound(c => c.ApellidoMaterno).Width(190);

@@ -168,8 +168,12 @@ namespace GuanajuatoAdminUsuarios.Controllers
 		{
 			return View("AgregarAccidente");
 		}
-
-		public JsonResult Municipios_Drop()
+        public JsonResult Entidades_Drop()
+        {
+            var result = new SelectList(_catEntidadesService.ObtenerEntidades(), "idEntidad", "nombreEntidad");
+            return Json(result);
+        }
+        public JsonResult Municipios_Drop()
 		{
 			var result = new SelectList(_catMunicipiosService.GetMunicipios(), "IdMunicipio", "Municipio");
 			return Json(result);
@@ -915,8 +919,23 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 			return Json(result);
 		}
+        public JsonResult CambiosDDLOficiales()
+        {
+            var oficiales = _oficialesService.GetOficialesActivos()
+                .Select(o => new
+                {
+                    IdOficial = o.IdOficial,
+                    NombreCompleto = (CultureInfo.InvariantCulture.TextInfo.ToTitleCase($"{o.Nombre} {o.ApellidoPaterno} {o.ApellidoMaterno}".ToLower()))
+                });
+            oficiales = oficiales.Skip(1);
+            var result = new SelectList(oficiales, "IdOficial", "NombreCompleto");
 
-		public ActionResult CapturaAccidenteC(string descripcionCausa)
+            return Json(result);
+        }
+
+        
+
+        public ActionResult CapturaAccidenteC(string descripcionCausa)
 		{
 			int idAccidente = HttpContext.Session.GetInt32("LastInsertedId") ?? 0;
 			_capturaAccidentesService.GuardarDescripcion(idAccidente, descripcionCausa);
@@ -1072,10 +1091,10 @@ namespace GuanajuatoAdminUsuarios.Controllers
 		}
 		[HttpPost]
 
-		public IActionResult InsertarDatos(DatosAccidenteModel datosAccidente, int armasValue, int drogasValue, int valoresValue, int prendasValue, int otrosValue)
+		public IActionResult InsertarDatos(DatosAccidenteModel datosAccidente, int armasValue, int drogasValue, int valoresValue, int prendasValue, int otrosValue, int convenioValue)
 		{
 			int idAccidente = HttpContext.Session.GetInt32("LastInsertedId") ?? 0;
-			_capturaAccidentesService.AgregarDatosFinales(datosAccidente, armasValue, drogasValue, valoresValue, prendasValue, otrosValue, idAccidente);
+			_capturaAccidentesService.AgregarDatosFinales(datosAccidente, armasValue, drogasValue, valoresValue, prendasValue, otrosValue, idAccidente,convenioValue);
 
 			return Json(datosAccidente);
 		}

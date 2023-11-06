@@ -46,13 +46,13 @@
 					<label>@Model.Fecha - @Model.Hora</label>
 				</div>
 			</div>
-			<div class="col">
+			<div class="col-auto">
 				<div class="controlForm mb-3 mt-1">
 					<label class="text-muted">Municipio:</label>
 					<label>@Model.Municipio</label>
 				</div>
 			</div>
-			<div class="col">
+			<div class="col-auto">
 				<div class="controlForm mb-3 mt-1">
 					<label class="text-muted">Carretera:</label>
 					<label>@Model.Carretera</label>
@@ -71,6 +71,8 @@
 				</div>
 			</div>
 		</form>
+	</section>
+	<section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded pb-1">
 		<div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
 			<div class="col-12 col-md-auto">
 				<div class="row align-items-center justify-content-center justify-content-md-start">
@@ -89,6 +91,13 @@
 					</div>
 				</div>
 			</div>
+			<div class="col-12 col-lg-auto text-center">
+				<div class="btnOutline btnOutlinePrimary px-4 my-3">
+					<button onclick="mostrarModalAgregarVehiculo()">
+						<h6 class="m-0"><i class="me-2 icon-research"></i><b>Buscar vehículo</b></h6>
+					</button>
+				</div>
+			</div>
 
 		</div>
 		<div class="row">
@@ -101,13 +110,6 @@
 				<h5 class="px-4"><b>Listado de búsqueda</b></h5>
 				<h6 class="px-4 text-muted">Selecciona un vehículo para continuar.</h6>
 			</div>
-			<div class="col-12 col-lg-auto text-center">
-				<div class="btnOutline btnOutlinePrimary px-4 my-3">
-					<button onclick="mostrarModalAgregarVehiculo()">
-						<h5 class="m-0"><i class="me-2 icon-addCar"></i><b>Buscar vehículo</b></h5>
-					</button>
-				</div>
-			</div>
 		</div>
 		<div class="row">
 			<div class="col-12 px-4 rounded mb-4">
@@ -115,13 +117,13 @@
 			<partial name="_ListaVehiculosInvolucrados" model="Model" />
 		</div>
 		<div class="row mt-1 mb-3">
-			<div class="col-12 col-md-6 mx-md-auto">
+			<div class="col-12">
 				<div class="row justify-content-around">
-					<div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0" onclick="mostrarModalAgregarVehiculo()">
+					<div class="col-auto btnOutline my-2 mx-auto p-0 text-center" onclick="mostrarModalAgregarVehiculo()">
 						@(Html.Kendo().Button()
 							.Name("editInvolucrados")
 							.HtmlAttributes(new { @class = "px-5" })
-							.Content("<h5 class=\"m-0\"><b>Capturar Nuevo Vehículo</b></h5>"))
+							.Content("<h6 class=\"m-0\"><b>Capturar nuevo vehículo</b></h6>"))
 					</div>
 				</div>
 			</div>
@@ -129,7 +131,7 @@
 
 		<!--MODAL AGREGAR VEHICULO INVOLUCRADO-->
 		<div class="modal fade modalCustom" id="agregarVehiculoModal" tabindex="-1" aria-labelledby="agregarVehiculoLabel" aria-hidden="true">
-			<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-body" id="ModalBodyAgregarVehiculo">
 					</div>
@@ -220,7 +222,7 @@
 							@(Html.Kendo().Button()
 								.Name("editConductor")
 								.HtmlAttributes(new { @class = "px-5" })
-								.Content("<h5 class=\"m-0\"><b>Editar búsqueda</b></h5>"))
+								.Content("<h6 class=\"m-0\"><b>Editar búsqueda</b></h6>"))
 
 						</div>
 
@@ -250,7 +252,17 @@
 			</div>
 		</div>
 		<!--CLASIFICACION DE ACCIDENTE-->
-		<div id="ClasificacionAccidente" style="display:none;">
+		
+		<div class="modal fade modalCustom" id="clasificacionAccidenteModal" tabindex="-1" aria-labelledby="clasificacionAccidenteLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-body" id="ModalBodyClasificacionAccidente">
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<div id="ClasificacionAccidente" style="display:none;">
 			<section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
 				<div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
 					<div class="col-12 col-md-6 col-lg-5 col-xl-auto">
@@ -270,6 +282,13 @@
 							</div>
 						</div>
 					</div>
+					<div class="col-12 col-lg-auto text-center">
+						<div class="btnOutline btnOutlinePrimary px-4 my-3">
+							<button onclick="mostrarModalCalsificacionAccidente()">
+								<h6 class="m-0"><i class="me-2 icon-addClasificacionAccidente"></i><b>Agregar clasificación</b></h6>
+							</button>
+						</div>
+					</div>
 				</div>
 				<div class="row">
 					<div class="col-8 pe-0">
@@ -279,32 +298,20 @@
 						<div class="bg-light py-1"></div>
 					</div>
 				</div>
-				<div class="row justify-content-between align-items-end mb-1">
+				<div class="row justify-content-between align-items-end mb-1 titleCustom">
 					<div class="col-12 col-md-auto mt-4 mb-2">
 						<h5 class="px-4"><b>Listado de clasificación del accidente</b></h5>
 						<h6 class="px-4 text-muted">Da de alta las clasificación del accidente.</h6>
 					</div>
-					<div class="col-12 col-lg-auto text-center">
-						<div class="btnOutline btnOutlinePrimary px-4 my-3">
-							<button onclick="mostrarModalCalsificacionAccidente()">
-								<h5 class="m-0"><i class="me-2 icon-addClasificacionAccidente"></i><b>Agregar clasificación</b></h5>
-							</button>
-						</div>
-					</div>
 				</div>
+				<partial name="_ListaClasificacion" model="Model" />
 				<div class="row ">
-					<div class="col-12 col-lg-11 col-xl-10 mx-lg-auto my-4 px-4 rounded">
-					</div>
-
 					<!--TABLA-->
-					<partial name="_ListaClasificacion" model="Model" />
 					<div class="col-12 col-md-6 mx-md-auto">
 						<div class="row justify-content-around">
 							<div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
 								<div class="controlButton my-3">
-									<button>
-										<a href="@Url.Action("CapturaBAccidente", "CapturaAccidentes")">Siguiente</a>
-									</button>
+									<a class="text-decoration-none d-flex px-5" href="@Url.Action("CapturaBAccidente", "CapturaAccidentes")"><h6 class="m-0"><b>Siguiente</b></h6></a>
 								</div>
 							</div>
 						</div>
@@ -312,15 +319,6 @@
 				</div>
 			</section>
 		</div>
-		<div class="modal fade modalCustom" id="clasificacionAccidenteModal" tabindex="-1" aria-labelledby="clasificacionAccidenteLabel" aria-hidden="true">
-			<div class="modal-dialog modal-lg" role="document">
-				<div class="modal-content">
-					<div class="modal-body" id="ModalBodyClasificacionAccidente">
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
 </div>
 
 <script>

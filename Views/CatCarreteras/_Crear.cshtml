@@ -41,6 +41,7 @@
                         .DataTextField("Text")
                         .DataValueField("Value")
                         .OptionLabel("Selecciona una Delegacion")
+                        .HtmlAttributes(new { style = "width: 100%" })
                         .DataSource(source =>
                         {
                             source.Read(read =>

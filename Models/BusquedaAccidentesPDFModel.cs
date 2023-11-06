@@ -5,8 +5,8 @@ namespace GuanajuatoAdminUsuarios.Models
 {
     public class BusquedaAccidentesPDFModel
     {
-        public DateTime FechaInicio { get; set; }
-        public DateTime FechaFin { get; set; }
+        public DateTime? FechaInicio { get; set; }
+        public DateTime? FechaFin { get; set; }
 
         public int IdAccidente { get; set; }
         public int idPropietario { get; set; }

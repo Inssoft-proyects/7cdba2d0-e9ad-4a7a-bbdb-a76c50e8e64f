@@ -14,6 +14,9 @@ namespace GuanajuatoAdminUsuarios.Models
         public int IdMunicipio { get; set; }
         public string Direccion { get; set; }
         public string Telefono { get; set; }
+        public string estatusDesc { get; set; }
+
+        
 
         [EmailAddress(ErrorMessage = "Ingresa un correo electrónico válido.")]
         [RegularExpression(@"^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$", ErrorMessage = "Ingresa un correo electrónico válido.")]
@@ -28,5 +31,8 @@ namespace GuanajuatoAdminUsuarios.Models
         public string concesionario { get; set; }
         public string placas { get; set; }
         public string strIdGruas { get; set; }
+        public string descripcionEstatus { get; set; }
+
+        
     }
 }

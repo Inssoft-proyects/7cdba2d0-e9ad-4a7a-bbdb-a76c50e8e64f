@@ -10,7 +10,7 @@
                             <i class="icon-udi h1 colorPrimary"></i>
                         </div>
                         <div class="col-auto my-3">
-                        <h2 class="m-0 h3"><b>Catálogo de Unidades Administrativas (UMA)</b></h2>
+                        <h2 class="m-0 h3"><b>Catálogo de unidades administrativas (UMA)</b></h2>
                         </div>
                     </div>
                 </div>
@@ -29,54 +29,54 @@
                     <div class="bg-light py-1"></div>
                 </div>
             </div>
-            <div class="row justify-content-between mb-1 titleCustom">
-                <div class="col-12 col-md-auto mt-4 mb-2">
-                    <h5 class="px-4"><b>Listado de UMAS</b></h5>
-                <h6 class="px-4 text-muted">Edita o elimina las Unidades Administrativas (UMA).</h6>
-                </div>
-            </div>
+            
             <div class="row">
                 <div class="col-12 mb-4 px-4 rounded gridCustom">
+                    <div class="row justify-content-between mb-1 titleCustom">
+                        <div class="col-12 col-md-auto mt-4 mb-2">
+                            <h5 class="px-4"><b>Listado de UMAS</b></h5>
+                            <h6 class="px-4 text-muted">Edita o elimina las Unidades Administrativas (UMA).</h6>
+                        </div>
+                    </div>
                     <div id="tablaSalarios">
-                        <partial name="_ListaSalariosMinimos" model="Model" />     
+                        <partial name="_ListaSalariosMinimos" model="Model" />
 
-    <div class="modal fade modalCustom" id="addUdiSalario" tabindex="-1" aria-labelledby="addSalarioLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-body" id="ModalBodyCreate">
+                        <div class="modal fade modalCustom" id="addUdiSalario" tabindex="-1" aria-labelledby="addSalarioLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body" id="ModalBodyCreate">
 
-                </div>
-            </div>
-        </div>
-    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-<!--///////////////////////////////////////////////////////////UPDATE////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--->
+                        <!--///////////////////////////////////////////////////////////UPDATE////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        -->
+                        <!--UPDATE MODAL-->
+                        <div class="modal fade modalCustom" id="editUdiSalario" tabindex="-1" aria-labelledby="editUdiSalarioLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-body" id="ModalBodyUpdateSalario">
 
-<!--UPDATE MODAL-->
-<div class="modal fade modalCustom" id="editUdiSalario" tabindex="-1" aria-labelledby="editUdiSalarioLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body" id="ModalBodyUpdateSalario">
-
-            </div>
-        </div>
-    </div>
-</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
 
-    <!--///////////////////////////////////////////////////////////DELETE////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    -->
-    <div class="modal fade modalCustom" id="eliminarUdiSalario" tabindex="-1" aria-labelledby="editUdiSalarioLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body" id="ModalBodyEliminarSalario">
-                </div>
-            </div>
-        </div>
-    </div>
+                        <!--///////////////////////////////////////////////////////////DELETE////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        -->
+                        <div class="modal fade modalCustom" id="eliminarUdiSalario" tabindex="-1" aria-labelledby="editUdiSalarioLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-body" id="ModalBodyEliminarSalario">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

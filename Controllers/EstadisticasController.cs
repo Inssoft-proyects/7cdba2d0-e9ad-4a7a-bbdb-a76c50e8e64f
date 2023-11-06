@@ -53,37 +53,38 @@ namespace GuanajuatoAdminUsuarios.Controllers
             List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
             if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
             {
-                var modelList = _infraccionesService.GetAllInfracciones2()
-                                            .SelectMany(s => s.MotivosInfraccion)
-                                            .GroupBy(g => g.Nombre)
-                                            .Select(s => new EstadisticaInfraccionMotivosModel() { Motivo = s.Key, Contador = s.Count() }).ToList();
+                var modelList = _infraccionesService.GetAllEstadisticasInfracciones();
 
                 var catMotivosInfraccion = _catDictionary.GetCatalog("CatAllMotivosInfraccion", "0");
-            var catTipoServicio = _catDictionary.GetCatalog("CatTipoServicio", "0");
-            var catTiposVehiculo = _catDictionary.GetCatalog("CatTiposVehiculo", "0");
-            var catDelegaciones = _catDictionary.GetCatalog("CatDelegaciones", "0");
-            var catTramos = _catDictionary.GetCatalog("CatTramos", "0");
-            var catOficiales = _catDictionary.GetCatalog("CatOficiales", "0");
-            var catMunicipios = _catDictionary.GetCatalog("CatMunicipios", "0");
-            var catCarreteras = _catDictionary.GetCatalog("CatCarreteras", "0");
-            var catGarantias = _catDictionary.GetCatalog("CatGarantias", "0");
-            var catTipoLicencia = _catDictionary.GetCatalog("CatTipoLicencia", "0");
-            var catTipoPlaca = _catDictionary.GetCatalog("CatTipoPlaca", "0");
+                var catTipoServicio = _catDictionary.GetCatalog("CatTipoServicio", "0");
+                var catTiposVehiculo = _catDictionary.GetCatalog("CatTiposVehiculo", "0");
+                var catDelegaciones = _catDictionary.GetCatalog("CatDelegaciones", "0");
+                var catTramos = _catDictionary.GetCatalog("CatTramos", "0");
+                var catOficiales = _catDictionary.GetCatalog("CatOficiales", "0");
+                var catMunicipios = _catDictionary.GetCatalog("CatMunicipios", "0");
+                var catCarreteras = _catDictionary.GetCatalog("CatCarreteras", "0");
+                var catGarantias = _catDictionary.GetCatalog("CatGarantias", "0"); 
+                var catTipoLicencia = _catDictionary.GetCatalog("CatTipoLicencia", "0");
+                var catTipoPlaca = _catDictionary.GetCatalog("CatTipoPlaca", "0");
 
-            ViewBag.CatMotivosInfraccion = new SelectList(catMotivosInfraccion.CatalogList, "Id", "Text");
-            ViewBag.CatTipoServicio = new SelectList(catTipoServicio.CatalogList, "Id", "Text");
-            ViewBag.CatTiposVehiculo = new SelectList(catTiposVehiculo.CatalogList, "Id", "Text");
-            ViewBag.CatDelegaciones = new SelectList(catDelegaciones.CatalogList, "Id", "Text");
-            ViewBag.CatTipoLicencia = new SelectList(catTipoLicencia.CatalogList, "Id", "Text");
-            ViewBag.CatTipoPlaca = new SelectList(catTipoPlaca.CatalogList, "Id", "Text");
-            ViewBag.CatTramos = new SelectList(catTramos.CatalogList, "Id", "Text");
-            ViewBag.CatOficiales = new SelectList(catOficiales.CatalogList, "Id", "Text");
-            ViewBag.CatMunicipios = new SelectList(catMunicipios.CatalogList, "Id", "Text");
-            ViewBag.CatCarreteras = new SelectList(catCarreteras.CatalogList, "Id", "Text");
-            ViewBag.CatGarantias = new SelectList(catGarantias.CatalogList, "Id", "Text");
-            ViewBag.Estadisticas = modelList;
+                ViewBag.CatMotivosInfraccion = new SelectList(catMotivosInfraccion.CatalogList, "Id", "Text");
+                ViewBag.CatTipoServicio = new SelectList(catTipoServicio.CatalogList, "Id", "Text");
+                ViewBag.CatTiposVehiculo = new SelectList(catTiposVehiculo.CatalogList, "Id", "Text");
+                ViewBag.CatDelegaciones = new SelectList(catDelegaciones.CatalogList, "Id", "Text");
+                ViewBag.CatTipoLicencia = new SelectList(catTipoLicencia.CatalogList, "Id", "Text");
+                ViewBag.CatTipoPlaca = new SelectList(catTipoPlaca.CatalogList, "Id", "Text");
+                ViewBag.CatTramos = new SelectList(catTramos.CatalogList, "Id", "Text");
+                ViewBag.CatOficiales = new SelectList(catOficiales.CatalogList, "Id", "Text");
+                ViewBag.CatMunicipios = new SelectList(catMunicipios.CatalogList, "Id", "Text");
+                ViewBag.CatCarreteras = new SelectList(catCarreteras.CatalogList, "Id", "Text");
+                ViewBag.CatGarantias = new SelectList(catGarantias.CatalogList, "Id", "Text");
+                ViewBag.Estadisticas = modelList;
 
-            return View();
+                var modelGridInfracciones = _infraccionesService.GetAllInfraccionesEstadisticasGrid();
+
+                ViewBag.GridInfracciones = modelGridInfracciones;
+
+                return View();
             }
             else
             {

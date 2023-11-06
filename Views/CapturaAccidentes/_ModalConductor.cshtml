@@ -1,8 +1,6 @@
 ﻿@model GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel
-<div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
-    <div class="modal-content">
-        <section class=" bg-white rounded">
-            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+<section class=" bg-white rounded">
+    <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
         <div class="col-12 col-md-auto">
             <div class="row align-items-center justify-content-center justify-content-md-start">
                 <div class="col-auto">
@@ -20,11 +18,11 @@
                 </div>
             </div>
         </div>
-               
+
         <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
             <div class="row">
                 <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0" onclick="regresarModalVehiculo()">
-                @(Html.Kendo().Button()
+                    @(Html.Kendo().Button()
                         .Name("backSearchConductor")
                         .HtmlAttributes(new { @class = "px-5" })
                         .Content("<h6 class=\"m-0\"><i class=\"icon-back me-2\"></i><b>Regresar</b></h6>"))
@@ -90,7 +88,7 @@
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane tabCustomConteiner fade show active" id="propietario-conductor" role="tabpanel" aria-labelledby="propietario-conductor-tab">
                 <div class="row px-4 mt-3 pb-2 align-items-end">
-                    <div class="col-12 mb-4">
+                    <div class="col-12 mt-4">
                         <h5 class="px-4"><b>Datos de conductor</b></h5>
                         <h6 class="px-4 text-muted">Selecciona entre el propietario o búsqueda / nuevo conductor </h6>
                     </div>
@@ -105,7 +103,7 @@
                     <div class="col-auto">
                         <div class="controlForm mb-3 mt-1">
                             <label class="text-muted">Nombre:</label>
-                                                        <label>@Model.IdAccidente </label>
+                            <label>@Model.IdAccidente </label>
 
                             <label>@Model.Propietario </label>
                         </div>
@@ -185,7 +183,7 @@
                     <div class="col-auto">
                         <div class="controlForm mb-3 mt-1">
                             <label class="text-muted">Vigencia:</label>
-                                    <label>@Model.vigenciaLicencia</label>
+                            <label>@Model.vigenciaLicencia</label>
                         </div>
                     </div>
                     <div class="col-auto">
@@ -200,33 +198,18 @@
                             <label>@Model.vigenciaLicencia</label>
                         </div>
                     </div>
-                    </div>
-                            <form id="propietarioConductorForm">
-                                @Html.HiddenFor(m=> m.IdPersona)
-                            @Html.HiddenFor(m => m.IdVehiculo, new { @id = "IdVehiculoH" })
-                            </form>
+                </div>
+                <form id="propietarioConductorForm">
+                    @Html.HiddenFor(m => m.IdPersona)
+                    @Html.HiddenFor(m => m.IdVehiculo, new { @id = "IdVehiculoH" })
+                </form>
                 <div class="row justify-content-center mb-3">
                     <div class="col-11 col-md-auto">
                         <div class="controlButton my-3" onclick="guardarVehiculoConductor()">
-                        @(Html.Kendo().Button()
+                            @(Html.Kendo().Button()
                                 .Name("PropietarioConductor")
                                 .HtmlAttributes(new { @class = "btnPrimary" })
                                 .Content("<h5 class=\"m-0\"><b>Seleccionar al propietario como conductor</b></h5>"))
-                        </div>
-                    </div>
-                </div>
-                <div class="row px-4 py-5 align-items-end">
-                    <div class="col-12 col-md-10 mx-md-auto text-center">
-                                <h3><b>Aún no se carga propietario al vehículo en la plataforma del Registro Estatal de Infracciones y Accidentes</b></h3>
-                        <h4 class="fw-normal">Registra un propietario o busca un conductor</h4>
-                        <div class="row ">
-                            <div class="col-12 col-md-8 mx-md-auto col-lg-5 ">
-                                <div class="btnOutline btnOutlinePrimary my-3">
-                                            <button onclick="mostrarModalCapturarConductor()">
-                                        <h5 class="m-0"><i class="me-2 icon-addConductor"></i><b>Agregar un conductor nuevo</b></h5>
-                                    </button>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -235,94 +218,10 @@
                         <div class="tabCustomEnd"></div>
                     </div>
                 </div>
-            </div>
-                      <div class="tab-pane tabCustomConteiner fade" id="busqueda-conductor" role="tabpanel" aria-labelledby="busqueda-conductor-tab">
-                        <form id="otroConductorForm">
-                          <div class="row px-4 mt-4 pb-4 align-items-end">
-                                <div class="col-12 col-md-6 col-lg-3">
-                                    <div class="controlForm my-3">
-                                        @(Html.Kendo().TextBoxFor(t=>t.licencia)
-                                            .Label(l => l.Content("No. de licencia:"))
-                                            .Placeholder("Ingresa el número de licencia valido")
-                                            .HtmlAttributes(new { style = "width: 100%" })
-                                            )
-                                    </div>
-                                </div>
-                            <div class="col-12 col-md-6 col-lg-3">
-                                <div class="controlForm my-3">
-                                        @(Html.Kendo().TextBoxFor(t => t.curpBusqueda)
-                                        .Label(l => l.Content("CURP:"))
-                                        .Placeholder("Ingresa el CURP del propietario")
-                                        .HtmlAttributes(new { style = "width: 100%" })
-                                        )
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-3">
-                                <div class="controlForm my-3">
-                                        @(Html.Kendo().TextBoxFor(t => t.rfcBusqueda)
-                                        .Label(l => l.Content("RFC:"))
-                                        .Placeholder("Ingresa el RFC del propietario")
-                                        .HtmlAttributes(new { style = "width: 100%" })
-                                        )
-
-                                </div>
-                            </div>
-                            
-                            <div class="col-12 col-md-6 col-lg-3">
-                                <div class="controlForm my-3">
-                                    @(Html.Kendo().TextBoxFor(t=>t.nombre)
-                                        .Label(l => l.Content("Nombre(s):"))
-                                        .Placeholder("Ingresa el nombre(s) del propietario")
-                                        .HtmlAttributes(new { style = "width: 100%" })
-                                        )
-
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-3">
-                                <div class="controlForm my-3">
-                                    @(Html.Kendo().TextBoxFor(t=>t.apellidoPaterno)
-                                        .Label(l => l.Content("Apellido paterno:"))
-                                        .Placeholder("Ingresa el apellido paterno")
-                                        .HtmlAttributes(new { style = "width: 100%" })
-                                        )
-
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-3">
-                                <div class="controlForm my-3">
-                                    @(Html.Kendo().TextBoxFor(t=>t.apellidoMaterno)
-                                        .Label(l => l.Content("Apellido materno:"))
-                                        .Placeholder("Ingresa el apellido materno")
-                                        .HtmlAttributes(new { style = "width: 100%" })
-                                        )
-
-                                </div>
-                            </div>
-                        </div>
-                     </form>
-                 <div class="col-12 col-md-6 mx-md-auto col-lg-3 mx-lg-0">
-                        <div class="controlButton my-3">
-                            <div class="controlButton my-3" onclick="buscarConductor()">
-                                @(Html.Kendo().Button()
-                                    .Name("buscarOtroConductor")
-                                    .HtmlAttributes(new { @class = "btnPrimary" })
-                                    .Content("<h5 class=\"m-0\"><b>Buscar</b></h5>"))
-                            </div>
-                        </div>
-                    </div>
-              </div>
-                        <div id="ListadoConducutores">
-                            <partial name="_ListdoConductores" model="Model" />
-                        </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="tabCustomEnd"></div>
-                        </div>
-                    </div>
                 <div class="row px-4 py-5 align-items-end bg-light">
                     <div class="col-12 col-md-10 mx-md-auto text-center">
-                        <h3><b>Aún no has realizado ninguna búsqueda</b></h3>
-                        <h4 class="fw-normal">Realiza la búsqueda del conductor</h4>
+                        <h3><b>Aún no se carga propietario al vehículo en la plataforma del Registro Estatal de Infracciones y Accidentes</b></h3>
+                        <h4 class="fw-normal">Registra un propietario o busca un conductor</h4>
                         <div class="row ">
                             <div class="col-12 col-md-8 mx-md-auto col-lg-5 ">
                                 <div class="btnOutline btnOutlinePrimary my-3">
@@ -334,6 +233,88 @@
                         </div>
                     </div>
                 </div>
+                
+            </div>
+            <div class="tab-pane tabCustomConteiner fade" id="busqueda-conductor" role="tabpanel" aria-labelledby="busqueda-conductor-tab">
+                <form id="otroConductorForm">
+                    <div class="row px-4 mt-4 align-items-end">
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="controlForm my-3">
+                                @(Html.Kendo().TextBoxFor(t=>t.licencia)
+                                            .Label(l => l.Content("No. de licencia:"))
+                                            .Placeholder("Ingresa el número de licencia valido")
+                                            .HtmlAttributes(new { style = "width: 100%" })
+                                            )
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="controlForm my-3">
+                                @(Html.Kendo().TextBoxFor(t => t.curpBusqueda)
+                                        .Label(l => l.Content("CURP:"))
+                                        .Placeholder("Ingresa el CURP del propietario")
+                                        .HtmlAttributes(new { style = "width: 100%" })
+                                        )
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="controlForm my-3">
+                                @(Html.Kendo().TextBoxFor(t => t.rfcBusqueda)
+                                        .Label(l => l.Content("RFC:"))
+                                        .Placeholder("Ingresa el RFC del propietario")
+                                        .HtmlAttributes(new { style = "width: 100%" })
+                                        )
+
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="controlForm my-3">
+                                @(Html.Kendo().TextBoxFor(t=>t.nombre)
+                                        .Label(l => l.Content("Nombre(s):"))
+                                        .Placeholder("Ingresa el nombre(s) del propietario")
+                                        .HtmlAttributes(new { style = "width: 100%" })
+                                        )
+
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="controlForm my-3">
+                                @(Html.Kendo().TextBoxFor(t=>t.apellidoPaterno)
+                                        .Label(l => l.Content("Apellido paterno:"))
+                                        .Placeholder("Ingresa el apellido paterno")
+                                        .HtmlAttributes(new { style = "width: 100%" })
+                                        )
+
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="controlForm my-3">
+                                @(Html.Kendo().TextBoxFor(t=>t.apellidoMaterno)
+                                        .Label(l => l.Content("Apellido materno:"))
+                                        .Placeholder("Ingresa el apellido materno")
+                                        .HtmlAttributes(new { style = "width: 100%" })
+                                        )
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="col-12 col-md-6 mx-md-auto col-lg-3 mx-lg-0">
+                    <div class="px-4 row">
+                        <div class="controlButton my-3" onclick="buscarConductor()">
+                            @(Html.Kendo().Button()
+                                    .Name("buscarOtroConductor")
+                                    .HtmlAttributes(new { @class = "btnPrimary" })
+                                    .Content("<h5 class=\"m-0\"><b>Buscar</b></h5>"))
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="tabCustomEnd"></div>
+                    </div>
+                </div>
             </div>
             <div class="tab-pane tabCustomConteiner fade" id="none-person" role="tabpanel" aria-labelledby="none-person-tab">
                 <div class="row px-4 my-4 py-5 align-items-end">
@@ -343,13 +324,13 @@
                         <div class="row ">
                             <div class="col-12 col-md-8 mx-md-auto col-lg-5 ">
                                 <form id="sinConductorForm">
-                                 @Html.HiddenFor(m=> m.IdVehiculo)
+                                    @Html.HiddenFor(m => m.IdVehiculo)
                                 </form>
                                 <div class="controlButton my-3" onclick="sinConductor()">
-                                @(Html.Kendo().Button()
-                                        .Name("conductorNone")
-                                        .HtmlAttributes(new { @class = "btnPrimary" })
-                                        .Content("<h5 class=\"m-0\"><b>Finalizar captura</b></h5>"))
+                                    @(Html.Kendo().Button()
+                                            .Name("conductorNone")
+                                            .HtmlAttributes(new { @class = "btnPrimary" })
+                                            .Content("<h5 class=\"m-0\"><b>Finalizar captura</b></h5>"))
                                 </div>
                             </div>
                         </div>
@@ -361,10 +342,30 @@
                     </div>
                 </div>
             </div>
-          </div>
-      </section>
-     </div>
- </div>
+        </div>
+            <div id="ListadoConducutores">
+                <partial name="_ListdoConductores" model="Model" />
+            </div>
+            
+            <div class="row px-4 py-5 align-items-end bg-light">
+                <div class="col-12 col-md-10 mx-md-auto text-center">
+                    <h3><b>Aún no has realizado ninguna búsqueda</b></h3>
+                    <h4 class="fw-normal">Realiza la búsqueda del conductor</h4>
+                    <div class="row ">
+                        <div class="col-12 col-md-8 mx-md-auto col-lg-5 ">
+                            <div class="btnOutline btnOutlinePrimary my-3">
+                                <button onclick="mostrarModalCapturarConductor()">
+                                    <h5 class="m-0"><i class="me-2 icon-addConductor"></i><b>Agregar un conductor nuevo</b></h5>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</section>
   <!--MODAL CAPTURAR CONDUCTOR EN SITTEG-->
      <div class="modal fade modalCustom" id="capturarConductorModal" tabindex="-1" aria-labelledby="capturarConductorLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document"">

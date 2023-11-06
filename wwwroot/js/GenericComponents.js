@@ -56,6 +56,8 @@ function convertDate(inputFormat) {
     var d = new Date(inputFormat)
 
     var date = [pad(d.getDate()), pad(d.getMonth() + 1), (d.getFullYear() == '1' ? '0001' : d.getFullYear())].join('/')
-        
-    return date == "01/01/0001" ? '' : date; 
+
+    date = date == "01/01/0001" ? '' : date
+    date = date == "NaN/NaN/NaN" ? "" : date;
+    return date; 
 }

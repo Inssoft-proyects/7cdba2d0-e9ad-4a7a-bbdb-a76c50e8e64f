@@ -28,19 +28,24 @@
         <div class="mb-4 px-4">
           <form form id="busquedaAccidenteForm">
             <div class="row">
-                <div class="col-12 col-md-7">
+                <div class="col-12 col-md-6 col-lg-3">
                     <div class="controlForm my-3 selecciondeFecha">
                             <label>Fecha Inicio:</label>
                             @(Html.Kendo().DateTimePickerFor(t => t.FechaInicio)
                                 .Label(l => l.Content("Fecha Inicio:"))
                                 .Value(DateTime.Today) 
-                                .HtmlAttributes(new { style = "width: 40%", id="dateInicio" })
+                                .HtmlAttributes(new { style = "width: 100%", id="dateInicio" })
                                 )
-                            <label>Fecha Fin:</label>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3">
+
+                    <div class="controlForm my-3 selecciondeFecha">
+                        <label>Fecha Fin:</label>
                             @(Html.Kendo().DateTimePickerFor(t => t.FechaFin)
                                 .Label(l => l.Content("Fecha Fin:"))
                                 .Value(DateTime.Today.AddHours(23).AddMinutes(59).AddSeconds(59))
-                                .HtmlAttributes(new { style = "width: 40%",id="dateFinal" })
+                                .HtmlAttributes(new { style = "width: 100%",id="dateFinal" })
                                 )
                     </div>
                 </div>
@@ -86,11 +91,12 @@
                                 .DataTextField("Text")
                                 .DataValueField("Value")
                                 .OptionLabel("Selecciona una Carretera")
+                                .Events(e => e.Change("carreteraDropDownChange"))
                                 .DataSource(source =>
                                 {
                                     source.Read(read =>
                                     {
-                                        read.Action("Carreteras_Drop", "CapturaAccidentes");
+                                        read.Action("Carreteras_Drop", "BusquedaAccidentes");
                                     });
                                 })
                                 .HtmlAttributes(new { style = "width:100%;", Id="ddlCarreteras" })
@@ -112,7 +118,7 @@
                                 {
                                     source.Read(read =>
                                     {
-                                        read.Action("Tramos_Drop", "CapturaAccidentes");
+                                        read.Action("Tramos_Drop", "BusquedaAccidentes");
                                     });
                                 })
                                 .HtmlAttributes(new { style = "width:100%;", Id="ddlTramos" })
@@ -257,7 +263,23 @@
         var json = JSON.stringify(data);
         window.location = '/BusquedaAccidentes/CreatePdf?data=' + json;
     }
+    function carreteraDropDownChange() {
+        var carreteraDDValue = $("#ddlCarreteras").data("kendoDropDownList").value();
+        console.log("IDK", carreteraDDValue)
 
+        $.ajax({
+            url: "/BusquedaAccidentes/Tramos_Drop",
+            type: "POST",
+            data: { carreteraDDValue: carreteraDDValue },
+            success: function (data) {
+                var TramosDropDown = $("#ddlTramos").data("kendoDropDownList");
+                TramosDropDown.dataSource.data(data);
+            },
+            error: function (xhr, status, error) {
+                console.log("EE",error)
+            }
+        });
+    }
  </script>
 
 

@@ -1,0 +1,76 @@
+﻿<div class="row">
+    <div class="col-12 mb-4 px-4 rounded gridCustom">
+
+        @(
+            Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.BusquedaDepositoModel>()
+            .Name("gridBusquedaServicioDepositos")
+            //.Events(events => events.Change("onRowSelect"))
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.idDeposito).Hidden();
+               // columns.Bound(c => c.numero).Title("Número").Width(150);
+                columns.Bound(c => c.FechaEventoFormateada).Title("Fecha del evento").Width(150).Format("{0:dd/MM/yyyy}");
+                columns.Bound(c => c.folioInfraccion).Title("Número de infracción").Width(150);
+                columns.Bound(c => c.placa).Title("Placas").Width(100);
+                columns.Bound(c => c.propietarioCompleto).Title("Propietario").Width(120);
+                columns.Bound(c => c.FechaIngresoFormateada).Title("Fecha de ingreso").Width(150).Format("{0:dd/MM/yyyy}");
+                columns.Bound(c => c.FechaSalidaFormateada).Title("Fecha de salida").Width(150).Format("{0:dd/MM/yyyy}");
+                columns.Bound(c => c.pension).Title("Pensión").Width(100);
+                columns.Bound(c => c.grua).Title("Grua").Width(100);
+                columns.Template("<button data-bs-toggle='modal' class='w-100 btn'><h6 class='m-0 colorPrimary' onclick='detalleGrua(event)'><i class='h5 icon-edit me-2'></i><b>Detalle Grua(s)</b></h6></button>").Width(80);
+
+            }).HtmlAttributes(new { style = "height:550px" })
+            .Sortable()
+            .Groupable()
+            .Scrollable()
+            .Pageable()
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("GetAllDepositos", "BusquedaDeposito"))
+            .PageSize(5).Model(model => model.Id(p => p.grua))
+            )
+            .ToolBar(t => t.Search())
+            .Search(s =>
+            {
+                s.Field(c => c.grua);
+                s.Field(c => c.fechaSalida);
+
+            })
+
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single)
+            .Type(GridSelectionType.Row)
+            )
+            )
+
+
+
+    </div>
+</div>
+<div class="modal fade modalCustom" id="detallesGruaModal" tabindex="-1" aria-labelledby="agregarVehiculoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body" id="ModalBodyDetallesGrua">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function detalleGrua(event) {
+        event.preventDefault();
+        var grid = $("#gridBusquedaServicioDepositos").data("kendoGrid");
+        var row = $(event.target).closest("tr");
+        var dataItem = grid.dataItem(row);
+        var Id = dataItem.idDeposito;
+
+        $.ajax({
+            url: '@Url.Action("ModalDetalleGrua", "BusquedaDeposito")',
+            type: 'POST',
+            data: { Id: Id },
+            success: function (result) {
+                $('#ModalBodyDetallesGrua').html(result);
+                $('#detallesGruaModal').modal('show');
+
+            },
+        })
+    }
+</script>

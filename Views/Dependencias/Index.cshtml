@@ -31,63 +31,64 @@
                     <div class="bg-light py-1"></div>
                 </div>
             </div>
-            <div class="row justify-content-between mb-1 titleCustom">
-                <div class="col-12 col-md-auto mt-4 mb-2">
-                    <h5 class="px-4"><b>Listado de dependencias</b></h5>
-                    <h6 class="px-4 text-muted">Edita o elimina las dependencias.</h6>
-                </div>
-            </div>
+            
             <div class="row">
                 <div class="col-12 mb-4 px-4 rounded gridCustom">
-    <div id="tablaDependencias">
-        <partial name="_ListaDependencias" model="Model" />
- 
-
-<div class="modal fade modalCustom" id="addDependencia" tabindex="-1" aria-labelledby="addDependenciaLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            
-            <div class="modal-body" id="ModalBodyCreate">
-            </div>
-            @*  <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>*@
-        </div>
-
-    </div>
-</div>
-</>
-
-<!---------------------------------------------------------------UPDATE---------------------------------------------------------------------------------------->
+                    <div class="row justify-content-between mb-1 titleCustom">
+                        <div class="col-12 col-md-auto mt-4 mb-2">
+                            <h5 class="px-4"><b>Listado de dependencias</b></h5>
+                            <h6 class="px-4 text-muted">Edita o elimina las dependencias.</h6>
+                        </div>
+                    </div>
+                    <div id="tablaDependencias">
+                        <partial name="_ListaDependencias" model="Model" />
 
 
-<div class="modal fade modalCustom" id="editDependencia" tabindex="-1" aria-labelledby="editDependenciaLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">              
-            <div class="modal-body" id="ModalBodyUpdateDep">
+                        <div class="modal fade modalCustom" id="addDependencia" tabindex="-1" aria-labelledby="addDependenciaLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
 
-            </div>
-        </div>
+                                <!-- Modal content-->
+                                <div class="modal-content">
 
-    </div>
-</div>
-
-                    <!---------------------------------------------------------------ELIMINAR---------------------------------------------------------------------------------------->
-
-
-                    <div class="modal fade modalCustom" id="eliminarDependencia" tabindex="-1" aria-labelledby="eliminarDependenciaLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-body" id="ModalBodyEliminarDep">
+                                    <div class="modal-body" id="ModalBodyCreate">
+                                    </div>
+                                    @*  <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>*@
                                 </div>
-                            </div>
 
+                            </div>
+                        </div>
+                        </>
+
+                        <!---------------------------------------------------------------UPDATE---------------------------------------------------------------------------------------->
+
+
+                        <div class="modal fade modalCustom" id="editDependencia" tabindex="-1" aria-labelledby="editDependenciaLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body" id="ModalBodyUpdateDep">
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!---------------------------------------------------------------ELIMINAR---------------------------------------------------------------------------------------->
+
+
+                        <div class="modal fade modalCustom" id="eliminarDependencia" tabindex="-1" aria-labelledby="eliminarDependenciaLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body" id="ModalBodyEliminarDep">
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </div>
     </section>
 

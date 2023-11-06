@@ -23,6 +23,7 @@ using SITTEG.APIClientInfrastructure.Client;
 using System.ComponentModel;
 using GuanajuatoAdminUsuarios.Entity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
 
 namespace GuanajuatoAdminUsuarios
 {
@@ -35,13 +36,18 @@ namespace GuanajuatoAdminUsuarios
 
         public IConfiguration Configuration { get; }
 
-        
+
 
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
 
+            var mvcBuilder = services.AddControllersWithViews();
+
+#if DEBUG
+            mvcBuilder.AddRazorRuntimeCompilation();
+#endif
             //Connection Strings
             string connStringLicencias = Configuration.GetConnectionString("GUANAJUATO_ADMIN_USUARIOS_DEV");
             string connStringIncidencias = Configuration.GetConnectionString("GUANAJUATO_INCIDENCIAS_MIG_DEV");
@@ -151,6 +157,7 @@ namespace GuanajuatoAdminUsuarios
             services.AddScoped<ICatCiudadesService, CatCiudadesService>();
             services.AddScoped<ICatAgenciasMinisterioService, CatAgenciasMinisterioService>();
             services.AddScoped<IBusquedaAccidentesService, BusquedaAccidentesService>();
+            services.AddScoped<IBusquedaEspecialAccidentesService, BusquedaEspecialAccidentesService>();
             services.AddScoped<IEnvioInfraccionesService, EnvioInfraccionesService>();
             services.AddScoped<ICatOficinasRentaService, CatOficinasRentaService>();
             services.AddScoped<ICatTiposVehiculosService, CatTiposVehiculosService>();
@@ -167,10 +174,13 @@ namespace GuanajuatoAdminUsuarios
             services.AddScoped<IAnulacionDocumentoService, AnulacionDocumentoClientService>();
             services.AddScoped<IAsignacionGruasService, AsignacionGruasService>();
             services.AddScoped<IEstadisticasAccidentesService, EstadisticasAccidentesService>();
-            services.AddScoped<ICrearMultasTransitoClientService, CrearMultasTransitoClientService>(); 
-            services.AddScoped<ILicenciasService, LicenciasService>(); 
-            services.AddScoped<IMotivoInfraccionService, MotivoInfraccionService>(); 
+            services.AddScoped<ICrearMultasTransitoClientService, CrearMultasTransitoClientService>();
+            services.AddScoped<ILicenciasService, LicenciasService>();
+            services.AddScoped<IMotivoInfraccionService, MotivoInfraccionService>();
             services.AddScoped<ISalidaVehiculosService, SalidaVehiculosService>();
+            services.AddScoped<IIngresarVehiculosService, IngresoVehiculosService>();
+            services.AddScoped<IBusquedaDepositoService, BusquedaDepositoService>();
+
 
             services.AddScoped<IColores, CatColoresService>();
 
@@ -182,11 +192,13 @@ namespace GuanajuatoAdminUsuarios
 
             services.AddScoped<IComparativoInfraccionesService, ComparativoInfraccionesService>();
 
+            services.AddScoped<IPagosInfraccionesService, PagosInfraccionesService>();
+            services.AddScoped<ILogTraficoService, LogTraficoService>();
+
             services.AddScoped(typeof(IApiClient), typeof(ApiClient));
             services.AddScoped<IAccountClient, AccountClient>();
             services.AddScoped<IGenericClient, GenericClient>();
 
-            
 
             services
                .AddControllersWithViews()
@@ -194,8 +206,6 @@ namespace GuanajuatoAdminUsuarios
             services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
             services.AddKendo();
             services.AddHttpContextAccessor();
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

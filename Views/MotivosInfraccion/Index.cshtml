@@ -3,7 +3,6 @@
 
 <div class="mainContainer bg-light">
 
-    <div class="row minH100">
 
         <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
             <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
@@ -32,62 +31,63 @@
                     <div class="bg-light py-1"></div>
                 </div>
             </div>
-            <div class="row justify-content-between mb-1 titleCustom">
-                <div class="col-12 col-md-auto mt-4 mb-2">
-                    <h5 class="px-4"><b>Listado de motivos infracción</b></h5>
-                    <h6 class="px-4 text-muted">Edita o inactiva los motivos de infracción.</h6>
-                </div>
-            </div>
+            
             <div class="row">
                 <div class="col-12 mb-4 px-4 rounded gridCustom">
+                    <div class="row justify-content-between mb-1 titleCustom">
+                        <div class="col-12 col-md-auto mt-4 mb-2">
+                            <h5 class="px-4"><b>Listado de motivos infracción</b></h5>
+                            <h6 class="px-4 text-muted">Edita o inactiva los motivos de infracción.</h6>
+                        </div>
+                    </div>
 
-                            <div class="row">
-                                <div id="tablaMotivosInfraccion">
+                    <div class="row">
+                        <div id="tablaMotivosInfraccion">
                             <partial name="_ListaMotivosInfraccion" model="Model" />
-                 
-    <div class="modal fade modalCustom" id="addMotivo" tabindex="-1" aria-labelledby="addMotivoLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
-            <div class="modal-content">
-               <div class="modal-body" id="addMotivoBody">
 
-                </div>
-            </div>
-        </div>
-    </div>
+                            <div class="modal fade modalCustom" id="addMotivo" tabindex="-1" aria-labelledby="addMotivoLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-body" id="addMotivoBody">
 
-<!--////////////////////////////////////////////////////////////////////////////////////EDITAAR/////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-    <div class="modal fade modalCustom" id="editMotivoInfracion" tabindex="-1" aria-labelledby="addMotivoLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body" id="editarMotivoBody">
+                            <!--////////////////////////////////////////////////////////////////////////////////////EDITAAR/////////////////////////////////////////////////////////////////////////////////////
+                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                -->
 
-                </div>
-            </div>
-        </div>
-    </div>
+                            <div class="modal fade modalCustom" id="editMotivoInfracion" tabindex="-1" aria-labelledby="addMotivoLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-body" id="editarMotivoBody">
 
-<!--////////////////////////////////////////////////////////////////////////////////////ELIMINAR/////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-    <div class="modal fade modalCustom" id="eliminarMotivoInfraccion" tabindex="-1" aria-labelledby="addMotivoLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
-            <div class="modal-content">
-                 <div class="modal-body" id="ModalBodyEliminarMotivo">
+                            <!--////////////////////////////////////////////////////////////////////////////////////ELIMINAR/////////////////////////////////////////////////////////////////////////////////////
+                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                -->
 
-                 </div>
-            </div>
-        </div>
-    </div>
+                            <div class="modal fade modalCustom" id="eliminarMotivoInfraccion" tabindex="-1" aria-labelledby="addMotivoLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-body" id="ModalBodyEliminarMotivo">
+
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-            </section>
-        </div>
-    </div>
+                </div>
+            </div>
+      </section>
+</div>
 
 @*<script src="~/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.min.js"></script>*@
 <script>

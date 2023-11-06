@@ -32,44 +32,46 @@
         </div>
 
     </div>
-    <div class="row">
-        <div class="col-12 my-4">
-            <h5 class="px-4"><b>Datos del oficial de tránsito</b></h5>
-            <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
-        </div>
-    </div>
-    <form id="EditarOficialForm" class="px-4 mb-4">
-        <div class="col-12 col-lg-6 my-4 btnToggleActive">
-            @(Html.Kendo().SwitchFor(t => t.ValorEstatusOficiales)
+    <form id="EditarOficialForm" class="row justify-content-center">
+        <div class="row">
+            <div class="col-12 col-lg-6 my-4">
+                <h5 class="px-4"><b>Datos del oficial de tránsito</b></h5>
+                <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
+            </div>
+
+
+            <div class="col-12 col-lg-6 my-4 btnToggleActive">
+                @(Html.Kendo().SwitchFor(t => t.ValorEstatusOficiales)
                 .Name("oficialesSwitch")
                 .Checked(true)
                 .Messages(c => c.Checked("Activo").Unchecked("Inactivo"))
                 .HtmlAttributes(new { data_valor = 1 })
 
                 )
-        </div>
-       @* <div class="row align-items-end">
-            <div class="col-12 col-md-4">
-                <div class="controlForm my-3">
-                    <label>Delegación<b>(obligatorio)</b>:</label>
-                    <span>
-                        @Html.HiddenFor(m=>m.IdOficial)
-                        @(Html.Kendo().DropDownListFor(t => t.IdDelegacion)
-                            .DataTextField("Text")
-                            .DataValueField("Value")
-                            .OptionLabel("Selecciona una Delegación")
-                            .HtmlAttributes(new { @class = "CentradoList", style = "width:100%;" })
-                            .DataSource(source =>
-                            {
-                                source.Read(read =>
-                                {
-                                    read.Action("Delegaciones_Drop", "Oficiales");
-                                });
-                            }))
-                    </span>
-                </div>
             </div>
-        </div>*@
+        </div>
+        @* <div class="row align-items-end">
+                <div class="col-12 col-md-4">
+                    <div class="controlForm my-3">
+                        <label>Delegación<b>(obligatorio)</b>:</label>
+                        <span>
+                            @Html.HiddenFor(m=>m.IdOficial)
+                            @(Html.Kendo().DropDownListFor(t => t.IdDelegacion)
+                                .DataTextField("Text")
+                                .DataValueField("Value")
+                                .OptionLabel("Selecciona una Delegación")
+                                .HtmlAttributes(new { @class = "CentradoList", style = "width:100%;" })
+                                .DataSource(source =>
+                                {
+                                    source.Read(read =>
+                                    {
+                                        read.Action("Delegaciones_Drop", "Oficiales");
+                                    });
+                                }))
+                        </span>
+                    </div>
+                </div>
+            </div>*@
         <div class="row align-items-end">
             <div class="col-12 col-md-4">
                 <div class="controlForm my-3">

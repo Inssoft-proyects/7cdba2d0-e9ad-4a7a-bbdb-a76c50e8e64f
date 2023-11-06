@@ -62,12 +62,12 @@ namespace GuanajuatoAdminUsuarios.Models
         /// <summary>
         /// tblDepositos
         /// </summary>
-        public DateTime FechaIngreso { get; set; }
+        public DateTime? FechaIngreso { get; set; }
 
         /// <summary>
         /// tblDepositos
         /// </summary>
-        public DateTime FechaIngresoFin { get; set; }  public string FolioSolicitud { get; set; }
+        public DateTime? FechaIngresoFin { get; set; }  public string FolioSolicitud { get; set; }
 
 
         public List<TransitoTransporteModel> ListTransitoTransporte { get; set; }

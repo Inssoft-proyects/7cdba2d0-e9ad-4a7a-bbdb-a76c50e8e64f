@@ -282,8 +282,8 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.Add(new SqlParameter("@IdDependenciaTransito", SqlDbType.Int)).Value = (object)model.IdDependenciaTransito ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@IdDependenciaNoTransito", SqlDbType.Int)).Value = (object)model.IdDependenciaNoTransito ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@Estatus", SqlDbType.Int)).Value = (object)model.IdEstatus ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@FechaIngreso", SqlDbType.DateTime)).Value = (model.FechaIngreso == DateTime.MinValue) ? DBNull.Value : (object)model.FechaIngreso;
-                    command.Parameters.Add(new SqlParameter("@FechaIngresoFin", SqlDbType.DateTime)).Value = (model.FechaIngresoFin == DateTime.MinValue) ? DBNull.Value : (object)model.FechaIngresoFin;
+                    command.Parameters.Add(new SqlParameter("@FechaInico", SqlDbType.DateTime)).Value = (model.FechaIngreso == DateTime.MinValue) ? DBNull.Value : (object)model.FechaIngreso;
+                    command.Parameters.Add(new SqlParameter("@FechaFin", SqlDbType.DateTime)).Value = (model.FechaIngresoFin == DateTime.MinValue) ? DBNull.Value : (object)model.FechaIngresoFin;
 
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
@@ -366,27 +366,42 @@ namespace GuanajuatoAdminUsuarios.Services
                  
 
                     const string SqlTransact =
-                                       @"select d.iddeposito,d.idsolicitud,d.idDelegacion,d.idmarca,d.idsubmarca,d.idpension,d.idtramo,
-                                        d.idcolor,d.serie,d.placa,d.fechaingreso,d.folio,d.km,d.liberado,d.autoriza,d.fechaactualizacion,
-                                        del.delegacion, d.actualizadopor, d.estatus, m.marcavehiculo,subm.nombresubmarca,sol.solicitantenombre,
-                                        sol.solicitanteap,sol.solicitanteam, col.color,pen.pension,ctra.tramo,                       
-                                        sol.fechasolicitud, sol.folio as FolioSolicitud, inf.idinfraccion,inf.folioinfraccion,
-                                        veh.idvehiculo,veh.propietario,veh.numeroeconomico,veh.modelo,
-                                        con.IdConcesionario, con.concesionario,d.FechaLiberacion
-                                        ,d.IdDependenciaGenera,d.IdDependenciaTransito,d.IdDependenciaNoTransito
-                                        ,dep.idDependencia,dep.nombreDependencia
-                                        from depositos d inner join catDelegaciones del on d.idDelegacion= del.idDelegacion
-                                        inner join catMarcasVehiculos m on d.idMarca=m.idMarcaVehiculo
-                                        inner join catColores col on d.idcolor = col.idcolor
-                                        inner join pensiones pen on d.idpension	= pen.idpension
-                                        inner join catTramos ctra  on d.idtramo=ctra.idtramo
-                                        inner join catSubmarcasVehiculos  subm on d.idSubmarca=subm.idSubmarca
-                                        inner join solicitudes sol on d.idsolicitud = sol.idsolicitud
-                                        inner join infracciones inf on sol.idinfraccion = inf.idinfraccion
-                                        inner join	vehiculos  veh on sol.idvehiculo =veh.idvehiculo 
-                                        inner join concesionarios con on con.IdConcesionario =d.IdConcesionario
-                                        left join catDependencias dep on ((dep.idDependencia=d.IdDependenciaTransito)OR (dep.idDependencia=d.IdDependenciaNoTransito))
-                                        where  sol.estatus !=0 and d.estatus!=0 and	d.idDeposito=@idDeposito ";
+                                       @"SELECT d.idDeposito,d.placa,d.idInfraccion,d.fechaIngreso,d.idVehiculo,
+                                                    sol.idSolicitud,sol.fechaSolicitud,sol.idEvento,sol.idTipoUsuario,
+                                                    sol.solicitanteNombre,sol.solicitanteAp,sol.solicitanteAm,sol.folio,
+													sol.vehiculoCalle,sol.vehiculoNumero,sol.vehiculoColonia,sol.idCarreteraUbicacion,
+													sol.idTramoUbicacion,sol.idPension,sol.vehiculoInterseccion,sol.vehiculoKm,
+                                                    tas.tipoAsignacion,
+                                                    te.descripcionEvento,tu.tipoUsuario,tve.tipoVehiculo,c.concesionario,
+                                                    ga.abanderamiento,ga.arrastre,ga.salvamento,ofi.nombre,ofi.apellidoPaterno,ofi.apellidoMaterno,
+                                                    ga.fechaArribo,ga.fechaInicio,ga.fechaFinal,ga.minutosManiobra,ga.operadorGrua,
+													ent.nombreEntidad,mun.municipio,v.idPersona,v.serie,per.nombre AS nombrePropietario,per.apellidoPaterno AS propietarioAP,
+                                                    per.apellidoMaterno AS propietarioAM,v.modelo,mv.marcaVehiculo,sbv.nombreSubmarca,
+                                                    inf.folioInfraccion,sde.fechaSalida,car.carretera AS carreteraUbicacion,tra.tramo AS tramoUbicacion,
+													pen.pension,g.noEconomico,g.idTipoGrua,g.placas AS placasGrua,ctg.TipoGrua
+                                                    FROM depositos AS d
+                                                    LEFT JOIN solicitudes AS sol ON sol.idSolicitud = d.idSolicitud
+                                                    LEFT JOIN catDescripcionesEvento AS te ON te.idDescripcion = sol.idEvento
+                                                    LEFT JOIN catTiposUsuario AS tu ON tu.idTipoUsuario = sol.idTipoUsuario
+                                                    LEFT JOIN catTiposVehiculo AS tve ON tve.idTipoVehiculo = sol.idTipoVehiculo
+                                                    LEFT JOIN concesionarios AS c ON c.idConcesionario = sol.idPropietarioGrua
+                                                    LEFT JOIN gruasAsignadas AS ga ON ga.idDeposito = d.idDeposito
+                                                    LEFT JOIN gruas AS g ON ga.idGrua = g.idGrua 
+				                                    LEFT JOIN catTipoGrua AS ctg ON ctg.IdTipoGrua = g.idTipoGrua 
+													LEFT JOIN catOficiales AS ofi ON ofi.idOficial = sol.idOficial
+                                                    LEFT JOIN tipoMotivoAsignacion AS tas ON tas.idTipoAsignacion = sol.idMotivoAsignacion
+                                                    LEFT JOIN catEntidades AS ent ON ent.idEntidad = sol.idEntidadUbicacion
+                                                    LEFT JOIN catMunicipios AS mun ON mun.idMunicipio = sol.idmunicipioUbicacion
+										            LEFT JOIN catCarreteras AS car ON car.idCarretera = sol.idCarreteraUbicacion
+                                                    LEFT JOIN catTramos AS tra ON tra.idTramo = sol.idTramoUbicacion
+													LEFT JOIN vehiculos AS v ON v.placas = d.placa
+                                                    LEFT JOIN catMarcasVehiculos AS mv ON mv.idMarcaVehiculo = v.idMarcaVehiculo
+                                                    LEFT JOIN catSubmarcasVehiculos AS sbv ON sbv.idSubmarca = v.idSubmarca
+                                                    LEFT JOIN personas AS per ON per.idPersona = v.idPersona
+                                                    LEFT JOIN serviciosDepositos AS sde ON sde.idDeposito = d.idDeposito
+                                                    LEFT JOIN infracciones AS inf ON inf.idInfraccion = d.idInfraccion
+                                                    LEFT JOIN pensiones AS pen ON pen.idPension = d.idPension
+                                                 where  sol.estatus !=0 and d.estatus!=0 and	d.idDeposito=@idDeposito ";
 
                     SqlCommand command = new SqlCommand(SqlTransact, connection);
                     command.Parameters.Add(new SqlParameter("@idDeposito", SqlDbType.Int)).Value = (object)IdDeposito ?? DBNull.Value;
@@ -397,51 +412,110 @@ namespace GuanajuatoAdminUsuarios.Services
                     {
                         while (reader.Read())
                         {
-                            transito.IdDeposito = Convert.ToInt32(reader["IdDeposito"].ToString());
-                            transito.IdSolicitud = Convert.ToInt32(reader["IdSolicitud"].ToString());
-                            transito.IdDelegacion = Convert.ToInt32(reader["IdDelegacion"].ToString());
-                            transito.IdMarca = Convert.ToInt32(reader["IdMarca"].ToString());
-                            transito.IdSubmarca = Convert.ToInt32(reader["IdSubmarca"].ToString());
-                            transito.IdPension = Convert.ToInt32(reader["IdPension"].ToString());
-                            transito.IdTramo = Convert.ToInt32(reader["IdTramo"].ToString());
-                            transito.IdColor = Convert.ToInt32(reader["IdColor"].ToString());
-                            transito.Serie = reader["Serie"].ToString();
-                            transito.Placa = reader["Placa"].ToString();
-                            transito.FechaIngreso = Convert.ToDateTime(reader["FechaIngreso"].ToString());
-                            transito.FechaLiberacion = Convert.ToDateTime(reader["FechaLiberacion"].ToString());
-                            transito.Folio = reader["Folio"].ToString();
-                            transito.Km = reader["Km"].ToString();
-                            transito.Liberado = Convert.ToInt32(reader["Liberado"].ToString());
-                            transito.Autoriza = reader["Autoriza"].ToString();
-                            transito.FechaActualizacion = Convert.ToDateTime(reader["FechaActualizacion"].ToString());
-                            transito.ActualizadoPor = Convert.ToInt32(reader["ActualizadoPor"].ToString());
-                            transito.DepositoEstatus = Convert.ToInt32(reader["Estatus"].ToString());
+                            transito.IdDeposito = reader["idDeposito"] != DBNull.Value && int.TryParse(reader["idDeposito"].ToString(), out int idDeposito) ? idDeposito : 0;
+                            transito.IdSolicitud = reader["idSolicitud"] != DBNull.Value && int.TryParse(reader["idSolicitud"].ToString(), out int idSolicitud) ? idSolicitud : 0;
+                            transito.salvamento = reader["salvamento"] != DBNull.Value && int.TryParse(reader["salvamento"].ToString(), out int salvamento) ? salvamento : 0;
+                            transito.arrastre = reader["arrastre"] != DBNull.Value && int.TryParse(reader["arrastre"].ToString(), out int arrastre) ? arrastre : 0;
+                            transito.abanderamiento = reader["abanderamiento"] != DBNull.Value && int.TryParse(reader["abanderamiento"].ToString(), out int abanderamiento) ? abanderamiento : 0;
+                            transito.minutosManiobra = reader["minutosManiobra"] != DBNull.Value && int.TryParse(reader["minutosManiobra"].ToString(), out int minutosManiobra) ? minutosManiobra : 0;
+                            transito.Serie = reader["serie"].ToString();
+                            transito.Placa = reader["placa"].ToString();
+                            string fechaIngresoStr = reader["fechaIngreso"].ToString();
+                            if (DateTime.TryParse(fechaIngresoStr, out DateTime fechaIngreso) && fechaIngreso != DateTime.MinValue)
+                            {
+                                transito.FechaSolicitud = fechaIngreso;
+                            }
+                            else
+                            {
+                        
+                            }
+                            string fechaLiberacionStr = reader["fechaSolicitud"].ToString();
+                            if (DateTime.TryParse(fechaLiberacionStr, out DateTime fechaLiberacion) && fechaLiberacion != DateTime.MinValue)
+                            {
+                                transito.FechaSolicitud = fechaLiberacion;
+                            }
+                            else
+                            {
+
+                            }
+                            transito.Folio = reader["folio"].ToString();
+                            transito.evento = reader["descripcionEvento"].ToString();
+                            transito.tipoVehiculo = reader["tipoVehiculo"].ToString();
+
+                            transito.Km = reader["vehiculoKm"].ToString();
+                             transito.tipoUsuario = reader["tipoUsuario"].ToString();
                             transito.marcaVehiculo = reader["marcaVehiculo"].ToString();
                             transito.nombreSubmarca = reader["nombreSubmarca"].ToString();
-                            transito.delegacion = reader["delegacion"].ToString();
+                            transito.motivoAsignacion = reader["tipoAsignacion"].ToString();
                             transito.modelo = reader["modelo"].ToString();
+
                             transito.solicitanteNombre = reader["solicitanteNombre"].ToString();
                             transito.solicitanteAp = reader["solicitanteAp"].ToString();
                             transito.solicitanteAm = reader["solicitanteAm"].ToString();
-                            transito.Color = reader["Color"].ToString();
                             transito.pension = reader["pension"].ToString();
-                            transito.tramo = reader["tramo"].ToString();
+                            transito.tramo = reader["tramoUbicacion"].ToString();
+                            transito.calle = reader["vehiculoCalle"].ToString();
+                            transito.carretera = reader["carreteraUbicacion"].ToString();
+                            transito.numero = reader["vehiculoNumero"].ToString();
+                            transito.colonia = reader["vehiculoColonia"].ToString();
+                            transito.interseccion = reader["vehiculoInterseccion"].ToString();
+                            transito.municipio = reader["municipio"].ToString();
 
                             //nuevos
-                            transito.FechaSolicitud = Convert.ToDateTime(reader["FechaSolicitud"].ToString());
-                            transito.IdDependencia = Convert.ToInt32(reader["IdDependencia"].ToString());
-                            transito.NombreDependencia = reader["NombreDependencia"].ToString();
-                            transito.IdInfraccion = Convert.ToInt32(reader["IdInfraccion"].ToString());
+                            string fechaSolicitudStr = reader["fechaSolicitud"].ToString();
+
+                            if (DateTime.TryParse(fechaSolicitudStr, out DateTime fechaSolicitud) && fechaSolicitud != DateTime.MinValue)
+                            {
+                                // La conversión fue exitosa y la fecha no es igual a DateTime.MinValue, puedes utilizar 'fechaSolicitud' aquí
+                                transito.FechaSolicitud = fechaSolicitud;
+                            }
+                            else
+                            {
+                           
+                            }
                             transito.FolioInfraccion = reader["folioInfraccion"].ToString();
-                            transito.IdVehiculo = Convert.ToInt32(reader["IdVehiculo"].ToString());
-                            transito.propietario = reader["propietario"].ToString();
-                            transito.numeroEconomico = reader["propietario"].ToString();
-                            transito.FolioSolicitud = reader["FolioSolicitud"].ToString();
-                            transito.IdConcesionario = Convert.ToInt32(reader["IdConcesionario"].ToString());
+                           // transito.IdVehiculo = Convert.ToInt32(reader["idVehiculo"].ToString());
+                            transito.propietarioNombre = reader["nombrePropietario"].ToString();
+                            transito.propietarioApellidoPaterno = reader["propietarioAP"].ToString();
+                            transito.propietarioApellidoMaterno = reader["propietarioAM"].ToString();
+                            transito.oficialNombre = reader["nombre"].ToString();
+                            transito.oficialApellidoPaterno = reader["apellidoPaterno"].ToString();
+                            transito.oficialApellidoMaterno = reader["apellidoMaterno"].ToString();
+
+                            transito.numeroEconomico = reader["noEconomico"].ToString();
+                            transito.FolioSolicitud = reader["folio"].ToString();
+                            transito.tipoGrua = reader["TipoGrua"].ToString();
+                            transito.placasGrua = reader["placasGrua"].ToString();
                             transito.Concesionario = reader["concesionario"].ToString();
-                            transito.IdDependenciaGenera = reader["IdDependenciaGenera"] as int? ?? default(int);
-                            transito.IdDependenciaTransito = reader["IdDependenciaTransito"] as int? ?? default(int);
-                            transito.IdDependenciaNoTransito = reader["IdDependenciaNoTransito"] as int? ?? default(int);
+                            transito.operador  = reader["operadorGrua"].ToString();
+                            string fechaArriboStr = reader["fechaArribo"].ToString();
+                            if (DateTime.TryParse(fechaArriboStr, out DateTime fechaArribo) && fechaArribo != DateTime.MinValue)
+                            {
+                                transito.FechaArribo = fechaArribo;
+                            }
+                            else
+                            {
+
+                            }
+                            string fechaInicioStr = reader["fechaInicio"].ToString();
+                            if (DateTime.TryParse(fechaInicioStr, out DateTime fechaInicio) && fechaInicio != DateTime.MinValue)
+                            {
+                                transito.FechaInicio = fechaInicio;
+                            }
+                            else
+                            {
+
+                            }
+                            string fechaFinalStr = reader["fechaFinal"].ToString();
+                            if (DateTime.TryParse(fechaFinalStr, out DateTime fechaFinal) && fechaFinal != DateTime.MinValue)
+                            {
+                                transito.FechaFinal = fechaFinal;
+                            }
+                            else
+                            {
+
+                            }
+
 
                         }
 

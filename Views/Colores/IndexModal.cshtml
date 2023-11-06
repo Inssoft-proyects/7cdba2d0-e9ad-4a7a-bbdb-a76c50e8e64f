@@ -32,55 +32,56 @@
             <div class="bg-light py-1"></div>
         </div>
     </div>
-    <div class="row justify-content-between mb-1 titleCustom">
-        <div class="col-12 col-md-auto mt-4 mb-2">
-            <h5 class="px-4"><b>Listado de colores</b></h5>
-            <h6 class="px-4 text-muted">Edita o elimina los colores.</h6>
-        </div>
-    </div>
+    
     <div class="row">
         <div class="col-12 mb-4 px-4 rounded gridCustom">
+            <div class="row justify-content-between mb-1 titleCustom">
+                <div class="col-12 col-md-auto mt-4 mb-2">
+                    <h5 class="px-4"><b>Listado de colores</b></h5>
+                    <h6 class="px-4 text-muted">Edita o elimina los colores.</h6>
+                </div>
+            </div>
             <div id="tablaColores">
-        <partial name="_ListaColores" model="Model" />
-      
+                <partial name="_ListaColores" model="Model" />
 
 
-<div class="modal fade modalCustom" id="addColor" tabindex="-1" aria-labelledby="addColorLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-               <div class="modal-body" id="ModalBodyCreate">
 
-               </div>
-         </div>
-     </div>
-</div>
+                <div class="modal fade modalCustom" id="addColor" tabindex="-1" aria-labelledby="addColorLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body" id="ModalBodyCreate">
 
- 
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<!-----------------------------------------------------------UPDATE--------------------------------------------------------------------------------------------->
- <div class="modal fade modalCustom" id="editColor" tabindex="-1" aria-labelledby="addColorLabel" aria-hidden="true">
-     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-             <div class="modal-body" id="ModalBodyUpdate">
 
-             </div>
-         </div>
-     </div>
- </div>
 
-<!-----------------------------------------------------------DELETE--------------------------------------------------------------------------------------------->
-<div class="modal fade modalCustom" id="eliminarColor" tabindex="-1" aria-labelledby="elColorLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body" id="ModalBodyEliminarColor">
+                <!-----------------------------------------------------------UPDATE--------------------------------------------------------------------------------------------->
+                <div class="modal fade modalCustom" id="editColor" tabindex="-1" aria-labelledby="addColorLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body" id="ModalBodyUpdate">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-----------------------------------------------------------DELETE--------------------------------------------------------------------------------------------->
+                <div class="modal fade modalCustom" id="eliminarColor" tabindex="-1" aria-labelledby="elColorLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body" id="ModalBodyEliminarColor">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>
-    </div>
-</div>
-
-</div>
-</div>
 </div>
 </section>
 

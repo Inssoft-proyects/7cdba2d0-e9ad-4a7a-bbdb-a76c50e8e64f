@@ -6,7 +6,7 @@
             .Name("grid")
             .Columns(columns =>
             {
-                columns.Bound(c => c.IdTipoCarga).Width(20);
+                columns.Bound(c => c.IdTipoCarga).Width(20).Title("Id");
                 columns.Bound(c => c.TipoCarga).Title("Tipo de carga").Width(100);
                 columns.Bound(c => c.EstatusDesc).Title("Estatus").Width(90);
                 columns.Command(c => c.Custom("Editar").Click("getId")).Width(80);

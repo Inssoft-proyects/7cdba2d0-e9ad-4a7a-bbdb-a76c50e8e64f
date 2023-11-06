@@ -84,6 +84,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             ViewBag.CatFactoresAccidentes = new SelectList(catFactoresAccidentes.CatalogList, "Id", "Text");
             ViewBag.CatFactoresOpcionesAccidentes = new SelectList(catFactoresOpcionesAccidentes.CatalogList, "Id", "Text");
             ViewBag.Estadisticas = modelList;
+            ViewBag.ListadoAccidentesPorAccidente = _estadisticasAccidentesService.AccidentesPorAccidente();
+            ViewBag.ListadoAccidentesPorVehiculo = _estadisticasAccidentesService.AccidentesPorVehiculo();
 
             return View();
         }

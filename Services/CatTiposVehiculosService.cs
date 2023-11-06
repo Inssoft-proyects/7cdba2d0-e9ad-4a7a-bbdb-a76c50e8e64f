@@ -62,6 +62,102 @@ namespace GuanajuatoAdminUsuarios.Services
 
 
         }
+        public TiposVehiculosModel GetTipoVehiculoByID(int IdTipoVehiculo)
+        {
+            TiposVehiculosModel tipoVehiculo = new TiposVehiculosModel();
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("SELECT tv.*, e.estatusdesc FROM catTiposVehiculo AS tv LEFT JOIN estatus AS e ON tv.estatus = e.estatus WHERE IdTipoVehiculo = @IdTipoVehiculo ", connection);
+                    command.Parameters.Add(new SqlParameter("@IdTipoVehiculo", SqlDbType.Int)).Value = IdTipoVehiculo;
+                    command.CommandType = CommandType.Text;
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            tipoVehiculo.IdTipoVehiculo = Convert.ToInt32(reader["IdTipoVehiculo"] is DBNull ? 0 : reader["IdTipoVehiculo"]);
+                            tipoVehiculo.TipoVehiculo = reader["TipoVehiculo"] is DBNull ? string.Empty : reader["TipoVehiculo"].ToString();
+                            tipoVehiculo.Estatus = Convert.ToInt32(reader["estatus"] is DBNull ? 0 : reader["estatus"]);
+                            tipoVehiculo.EstatusDesc = reader["estatusDesc"] is DBNull ? string.Empty : reader["estatusDesc"].ToString();
+                            tipoVehiculo.FechaActualizacion = Convert.ToDateTime(reader["FechaActualizacion"] is DBNull ? DateTime.MinValue : reader["FechaActualizacion"]);
+                            tipoVehiculo.Estatus = Convert.ToInt32(reader["estatus"] is DBNull ? 0 : reader["estatus"]);
+                            tipoVehiculo.ActualizadoPor = Convert.ToInt32(reader["ActualizadoPor"] is DBNull ? 0 : reader["ActualizadoPor"]);
+
+
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                }
+                finally
+                {
+                    connection.Close();
+                }
+
+            return tipoVehiculo;
+        }
+        public int CreateTipoVehiculo(TiposVehiculosModel model)
+        {
+            int result = 0;
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand sqlCommand = new SqlCommand("Insert into catTiposVehiculo(TipoVehiculo,estatus,fechaActualizacion,actualizadoPor) values(@TipoVehiculo,@estatus,@fechaActualizacion,@actualizadoPor)", connection);
+                    sqlCommand.Parameters.Add(new SqlParameter("@TipoVehiculo", SqlDbType.VarChar)).Value = model.TipoVehiculo;
+                    sqlCommand.Parameters.Add(new SqlParameter("@estatus", SqlDbType.Int)).Value = 1;
+                    sqlCommand.Parameters.Add(new SqlParameter("@fechaActualizacion", SqlDbType.DateTime)).Value = DateTime.Now;
+                    sqlCommand.Parameters.Add(new SqlParameter("@actualizadoPor", SqlDbType.Int)).Value = 1;
+
+                    sqlCommand.CommandType = CommandType.Text;
+                    result = sqlCommand.ExecuteNonQuery();
+                }
+                catch (SqlException ex)
+                {
+                    return result;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return result;
+
+        }
+        public int UpdateTipoVehiculo(TiposVehiculosModel model)
+        {
+            int result = 0;
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand sqlCommand = new
+                        SqlCommand("Update catTiposVehiculo set TipoVehiculo=@TipoVehiculo, estatus = @estatus,fechaActualizacion = @fechaActualizacion, actualizadoPor =@actualizadoPor where IdTipoVehiculo=@IdTipoVehiculo",
+                        connection);
+                    sqlCommand.Parameters.Add(new SqlParameter("@IdTipoVehiculo", SqlDbType.Int)).Value = model.IdTipoVehiculo;
+                    sqlCommand.Parameters.Add(new SqlParameter("@TipoVehiculo", SqlDbType.NVarChar)).Value = model.TipoVehiculo;
+                    sqlCommand.Parameters.Add(new SqlParameter("@estatus", SqlDbType.VarChar)).Value = model.Estatus;
+                    sqlCommand.Parameters.Add(new SqlParameter("@fechaActualizacion", SqlDbType.DateTime)).Value = DateTime.Now;
+                    sqlCommand.Parameters.Add(new SqlParameter("@actualizadoPor", SqlDbType.Int)).Value = 1;
+                    sqlCommand.CommandType = CommandType.Text;
+                    result = sqlCommand.ExecuteNonQuery();
+                }
+                catch (SqlException ex)
+                {
+                    //---Log
+                    return result;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return result;
+        }
         public int obtenerIdPorTipo(string categoria)
         {
             int result = 0;

@@ -11,6 +11,8 @@
                             columns.Bound(c => c.fecha).Title("Fecha").ClientTemplate("#= new Date(fecha).toLocaleDateString('en-GB') #").Width(100);
                             columns.Bound(c => c.hora).Title("Hora").Width(70);
                             columns.Bound(c => c.municipio).Title("Municipio").Width(100);
+                            columns.Bound(c => c.carretera).Title("Carretera").Width(100);
+                            columns.Bound(c => c.tramo).Title("Tramo").Width(100);
                             columns.Bound(c => c.estatusReporte).Title("Estatus").Width(100);
                             columns.Bound(p => p.IdAccidente).ClientTemplate(
                             "<button onclick=\"downLoadPdf('#= IdAccidente #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='h5 icon-pdf me-2'></i><b>Descargar</b></h6></button>"

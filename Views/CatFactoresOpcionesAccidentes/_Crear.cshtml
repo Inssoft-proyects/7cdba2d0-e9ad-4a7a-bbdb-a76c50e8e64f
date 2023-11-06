@@ -11,7 +11,9 @@
                                 <i class="icon-addOpciones h1 colorPrimary"></i>
                             </div>
                             <div class="col-auto my-3">
-                                <h2 class="m-0 h3"><b>Agregar institución de traslado</b></h2>
+                    <h2 class="m-0 h3">
+                        <b> Agregar factor opción accidente</b>
+                    </h2>
                             </div>
                         </div>
                     </div>
@@ -30,15 +32,15 @@
 
                 </div>
                 <div class="row">
-                    <div class="col-12 col-lg-6 my-4">
-                        <h5 class="px-4"><b>Datos de institución de traslado</b></h5>
+                    <div class="col-12 my-4">
+            <h5 class="px-4"><b>Datos de Factor opción accidente</b></h5>
                         <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
                     </div>
                 </div>
                  <form id="agregarFactorOpcion" class="row px-4 mb-4 align-items-end justify-content-center">
                     <div class="col-12 col-md-6">
                         <div class="controlForm my-3">
-                            <label>Factor<b>(obligatorio)</b>:</label>
+                            <label>Factor <b>(obligatorio)</b>:</label>
                             <span>
                     @(Html.Kendo().DropDownListFor(t => t.IdFactorAccidente)
                         .DataTextField("Text")
@@ -58,7 +60,7 @@
                     <div class="col-12 col-md-6">
                         <div class="controlForm my-3">
                             @(Html.Kendo().TextBoxFor(t=>t.FactorOpcionAccidente)
-                                .Label(l => l.Content("Factor opcion de accidente <b>(obligatorio)</b>:"))
+                                .Label(l => l.Content("Factor opción de accidente <b>(obligatorio)</b>:"))
                                 .Placeholder("Ingresa un nuevo factor opcion de accidente")
                                 .HtmlAttributes(new { style = "width: 100%" })
                                 )

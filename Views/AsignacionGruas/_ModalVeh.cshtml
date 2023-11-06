@@ -1,8 +1,6 @@
 ﻿@model GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel
 
-<div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
-    <div class="modal-content">
-        <section class=" bg-white rounded">
+<section class=" bg-white rounded">
             <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
                 <div class="col-12 col-md-auto">
                     <div class="row align-items-center justify-content-center justify-content-md-start">
@@ -41,7 +39,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-12 my-4">
+                <div class="col-12 mt-4">
                     <h5 class="px-4"><b>Datos del vehículo</b></h5>
                     <h6 class="px-4 text-muted">Selecciona el vehículo que requirió el servicio.</h6>
                 </div>
@@ -90,14 +88,15 @@
                                         )
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
-                            <div class="row">
-                                <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0" onclick="dirigir()">
-                                    @(Html.Kendo().Button()
-                                        .Name("backVehiculo")
-                                        .HtmlAttributes(new { @class = "px-5" })
-                                        .Content("<h6 class=\"m-0\"><i class=\"icon-back me-2\" data-bs-dismiss=\"modal\" aria - label = \"Close\" ></i><b>Capturar nuevo vehículo</b></h6>"))
+                        
+                            <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
+                                <div class="row">
+                                    <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0" onclick="dirigir()">
+                                        @(Html.Kendo().Button()
+                                            .Name("backVehiculo")
+                                            .HtmlAttributes(new { @class = "px-5" })
+                                            .Content("<h6 class=\"m-0\"><i class=\"icon-back me-2\" data-bs-dismiss=\"modal\" aria - label = \"Close\" ></i><b>Capturar nuevo vehículo</b></h6>"))
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -120,34 +119,28 @@
                             </div>
 
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="tabCustomEnd"></div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="tabCustomEnd"></div>
+                            </div>
                         </div>
-                    </div>
-                   
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="tabCustomEnd"></div>
                     </div>
                 </div>
             </form>
-            <div class="col-12 col-md-6 mx-md-auto col-lg-4 mx-lg-0 ">
-                <div class="controlButton my-3" onclick="busquedaVehiculo()">
-                    @(Html.Kendo().Button()
-                        .Name("buscar")
-                        .HtmlAttributes(new { @class = "btnPrimary" })
-                        .Content("<h5 class=\"m-0\"><b>Buscar</b></h5>"))
+            <div class="row justify-content-center align-items-center">
+                <div class="col-12 col-md-6 col-lg-4 text-center">
+                    <div class="controlButton my-3" onclick="busquedaVehiculo()">
+                        @(Html.Kendo().Button()
+                            .Name("buscar")
+                            .HtmlAttributes(new { @class = "btnPrimary" })
+                            .Content("<h5 class=\"m-0\"><b>Buscar</b></h5>"))
+                    </div>
                 </div>
             </div>
             <div id="listadoDetalleVehiculo">
                 <partial name="_ListaBusquedaVehiculo" model="Model" />
             </div>
-        </section>
-    </div>
-</div>
+</section>
 
 <script>
     function busquedaVehiculo() {

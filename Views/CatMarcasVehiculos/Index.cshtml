@@ -17,7 +17,7 @@
                     <div class="row">
                         <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
                             <button href ="#" id="btnNuevaMarca" onclick="mostrarModal()">
-                                <h6 class="m-0 d-flex align-items-center"><i class="icon-addMarca h5 mb-0 me-2"></i><b>Agregar nueva marca</b></h6>
+                            <h6 class="m-0 d-flex align-items-center"><i class="icon-addMarca h5 mb-0 me-2"></i><b> Agregar nueva marca de vehículo</b></h6>
                             </button>
                         </div>
                     </div>
@@ -28,58 +28,59 @@
                     <div class="bg-light py-1"></div>
                 </div>
             </div>
-            <div class="row justify-content-between mb-1 titleCustom">
-                <div class="col-12 col-md-auto mt-4 mb-2">
-                    <h5 class="px-4"><b>Listado de marcas de vehículos</b></h5>
-                    <h6 class="px-4 text-muted">Edita o elimina las marcas de vehículos.</h6>
-                </div>
-            </div>
+            
             <div class="row">
                 <div class="col-12 mb-4 px-4 rounded gridCustom">
-            <div id="tablaMarcas">
-                <partial name="_ListaMarcasVehiculos" model="Model" />
-        
-    <div class="modal fade modalCustom" id="addMarca" tabindex="-1" aria-labelledby="addMarcaLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
+                    <div class="row justify-content-between mb-1 titleCustom">
+                        <div class="col-12 col-md-auto mt-4 mb-2">
+                            <h5 class="px-4"><b>Listado de marcas de vehículos</b></h5>
+                            <h6 class="px-4 text-muted">Edita o elimina las marcas de vehículos.</h6>
+                        </div>
+                    </div>
+                    <div id="tablaMarcas">
+                        <partial name="_ListaMarcasVehiculos" model="Model" />
 
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-body" id="ModalBodyCreate">
+                        <div class="modal fade modalCustom" id="addMarca" tabindex="-1" aria-labelledby="addMarcaLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-body" id="ModalBodyCreate">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!--UPDATE MODAL-->
+
+                        <div class="modal fade modalCustom" id="editarMarca" tabindex="-1" aria-labelledby="editMarcaLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
+
+                                <!-- Modal content-->
+                                <div class="modal-content">
+
+                                    <div class="modal-body" id="ModalBodyUpdate">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!--/////////////////////////////////////////////////////////////////////****ELIMINAR****/////////////////////////////////////////////////////////////////////////-->
+                        <div class="modal fade modalCustom" id="eliminarMarca" tabindex="-1" aria-labelledby="editMarcaLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-body" id="ModalBodyEliminarMarca">
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
-            </div>
-
-        </div>
-    </div>
-
-<!--UPDATE MODAL-->
-
-<div class="modal fade modalCustom" id="editarMarca" tabindex="-1" aria-labelledby="editMarcaLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-        
-            <div class="modal-body" id="ModalBodyUpdate">
-            </div>
-        </div>
-
-    </div>
-</div>
-
-<!--/////////////////////////////////////////////////////////////////////****ELIMINAR****/////////////////////////////////////////////////////////////////////////-->
-<div class="modal fade modalCustom" id="eliminarMarca" tabindex="-1" aria-labelledby="editMarcaLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body" id="ModalBodyEliminarMarca">
-
-            </div>
-        </div>
-
-    </div>
-</div>
-
-</div>
-</div>
 </div>
 </section>
 </div>

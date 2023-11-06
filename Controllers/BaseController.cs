@@ -374,6 +374,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             HttpContext.Session.SetString("SelectedSubModulo", "SubModuloTest");
 
             await base.OnActionExecutionAsync(context, next);
+                       
         }
     }
 

@@ -234,6 +234,13 @@
                     </div>
                 </div>
             </div>
+            <div class="col-12 col-lg-auto text-center">
+                <div class="btnOutline btnOutlinePrimary px-4 my-3">
+                    <button data-bs-toggle="modal" onclick="mostrarModalAgregarFactor()">
+                        <h6 class="m-0"><i class="me-2 icon-addFactorAccidente"></i><b>Agregar factor</b></h6>
+                    </button>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-8 pe-0">
@@ -243,25 +250,16 @@
                 <div class="bg-light py-1"></div>
             </div>
         </div>
-        <div class="row justify-content-between align-items-end mb-1">
+        <div class="row justify-content-between align-items-end mb-1 titleCustom">
             <div class="col-12 col-md-auto mt-4 mb-2">
                 <h5 class="px-4"><b>Listado de factores del accidente</b></h5>
                 <h6 class="px-4 text-muted">Da de alta los factores del accidente.</h6>
             </div>
-            <div class="col-12 col-lg-auto text-center">
-                <div class="btnOutline btnOutlinePrimary px-4 my-3">
-                    <button data-bs-toggle="modal" onclick="mostrarModalAgregarFactor()">
-                        <h5 class="m-0"><i class="me-2 icon-addFactorAccidente"></i><b>Agregar factor</b></h5>
-                    </button>
-                </div>
-            </div>
         </div>
-        <div class="row">
-            <div class="col-12 my-4 px-4 rounded">
-                <partial name="_ListaFactores" model="Model" />
-            </div>
-        </div>
+        <partial name="_ListaFactores" model="Model" />
       <!--SECCION CAUSAS-->
+    </section>
+    <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
             <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
                 <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
                     <div class="row align-items-center justify-content-center justify-content-md-start">
@@ -280,6 +278,13 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-12 col-lg-auto text-center">
+                    <div class="btnOutline btnOutlinePrimary px-4 my-3">
+                    <button data-bs-toggle="modal" onclick="mostrarModalAgregarCausa()">
+                            <h6 class="m-0"><i class="me-2 icon-addOpciones"></i><b>Agregar causas</b></h6>
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-8 pe-0">
@@ -289,26 +294,15 @@
                     <div class="bg-light py-1"></div>
                 </div>
             </div>
-            <div class="row justify-content-between align-items-end mb-1">
+            <div class="row justify-content-between align-items-end mb-1 titleCustom">
                 <div class="col-12 col-md-auto mt-4 mb-2">
                     <h5 class="px-4"><b>Listado de causas del accidente</b></h5>
                     <h6 class="px-4 text-muted">Da de alta las causas del accidente.</h6>
                 </div>
-                <div class="col-12 col-lg-auto text-center">
-                    <div class="btnOutline btnOutlinePrimary px-4 my-3">
-                    <button data-bs-toggle="modal" onclick="mostrarModalAgregarCausa()">
-                            <h5 class="m-0"><i class="me-2 icon-addOpciones"></i><b>Agregar causas</b></h5>
-                        </button>
-                    </div>
-                </div>
             </div>
-            <div class="row ">
-                <div class="col-12 my-4 px-4 rounded">
-                    <partial name="_ListaCausas" model="Model" />
-                </div>
-            </div>
-            <form id="descripcionForm">
-                    <div class="col-12 px-4 mb-4">
+            <partial name="_ListaCausas" model="Model" />
+            <form class="row justify-content-between align-items-end mb-2" id="descripcionForm">
+                    <div class="col-12 px-4">
                         <div class="controlForm my-3">
                             <label>Descripción de causas determinantes</label>
                             <span>
@@ -320,6 +314,7 @@
                         </div>
                     </div>
               </form>
+    </section>  
 <div id="personasInvolucrados">
 
     <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded pb-1">
@@ -341,6 +336,13 @@
                     </div>
                 </div>
             </div>
+            <div class="col-12 col-lg-auto text-center">
+                <div class="btnOutline btnOutlinePrimary px-4 my-3">
+                    <button onclick="mostrarModalAgregarInvolucrados()">
+                        <h6 class="m-0"><i class="me-2 icon-addInvolucrado"></i><b>Agregar un nuevo involucrado</b></h6>
+                    </button>
+                </div>
+            </div>
 
         </div>
         <div class="row">
@@ -351,26 +353,12 @@
                 <div class="bg-light py-1"></div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-12 my-4">
-                <h5 class="px-4"><b>Datos de los involucrados</b></h5>
-                <h6 class="px-4 text-muted">
-                    Da de alta a los involucrados en el accidente
-                </h6>
-            </div>
-        </div>
-        <div class="row justify-content-between mb-1">
-            <div class="col-12 col-lg-6 mt-4 mb-2">
+        <div class="row justify-content-between mb-1 titleCustom">
+            <div class="col-12 col-md-auto mt-4 mb-2">
                 <h5 class="px-4"><b>Listado de involucrados</b></h5>
                 <h6 class="px-4 text-muted">Involucrados en el accidente.</h6>
             </div>
-            <div class="col-12 col-lg-auto text-center">
-                <div class="btnOutline btnOutlinePrimary px-4 my-3">
-                    <button onclick="mostrarModalAgregarInvolucrados()">
-                        <h5 class="m-0"><i class="me-2 icon-addInvolucrado"></i><b>Agregar un nuevo involucrado</b></h5>
-                    </button>
-                </div>
-            </div>
+            
         </div>
         <div id="tablaInvolucrados">
                 <partial name="_ListadoInvolucrados" model="Model" />
@@ -535,11 +523,7 @@
                                 <h6 class="px-4 text-muted">Selecciona un vehículo involucrado para continuar.</h6>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-12 px-4 rounded mb-4">
-                                <partial name="_ListaVehiculosInvolucrados" model="Model"/>
-                            </div>
-                        </div>
+                        <partial name="_ListaVehiculosInvolucrados" model="Model"/>
                         <div class="row align-items-end mt-4">
                             <div class="col-12 col-md-6 col-lg-3">
                                 <div class="controlForm my-3">

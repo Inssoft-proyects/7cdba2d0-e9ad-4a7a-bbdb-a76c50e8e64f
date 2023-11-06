@@ -6,6 +6,7 @@
             .Name("gridTramos")
             .Columns(columns =>
             {
+                columns.Bound(c => c.IdTramo).Width(40).Title("Id");
                 columns.Bound(c => c.Tramo).Width(80);
                 columns.Bound(c => c.Carretera).Width(100);
                 columns.Bound(c => c.estatusDesc).Title("Estatus en sistema").Width(100);

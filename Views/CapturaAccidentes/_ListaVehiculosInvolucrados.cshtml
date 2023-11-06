@@ -1,4 +1,4 @@
-﻿
+﻿<div class="row">
 <div class="col-12 mb-4 px-4 rounded gridCustom">
     @(
         Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel>()
@@ -27,6 +27,7 @@
         )
         .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple).Type(GridSelectionType.Row))
         )
+</div>
 </div>
 
 <div class="modal fade modalCustom" id="mostrarDetalleModal" tabindex="-1" aria-labelledby="mostrarDetalleLabel" aria-hidden="true">

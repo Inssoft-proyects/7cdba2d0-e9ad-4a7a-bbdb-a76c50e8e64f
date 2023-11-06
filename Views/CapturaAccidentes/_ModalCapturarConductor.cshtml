@@ -1,202 +1,200 @@
 ﻿@model PersonaModel
-
-<div class="modal-dialog modal-xl boxShadow modal-dialog-centered">
-        <div class="modal-content">
-        <form id="frmCrearPersonaV" class="row px-4 mb-4 align-items-end justify-content-center">
-            @Html.HiddenFor(m=> m.idPersona)
-            <div class="row my-2">
-                <div class="col-md-4">
-                    <div class="controlForm">
-                        @(Html.Kendo().TextBoxFor(t => t.nombreFisico)
+<form id="frmCrearPersonaV" class="row px-4 mb-4 align-items-end justify-content-center">
+    @Html.HiddenFor(m => m.idPersona)
+    <div class="row my-2">
+        <div class="col-md-4">
+            <div class="controlForm">
+                @(Html.Kendo().TextBoxFor(t => t.nombreFisico)
                             .Label(l => l.Content("Nombre <b>(obligatorio)</b>:"))
                             .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
                             )
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="controlForm">
-                        @(Html.Kendo().TextBoxFor(t => t.apellidoPaternoFisico)
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="controlForm">
+                @(Html.Kendo().TextBoxFor(t => t.apellidoPaternoFisico)
                             .Label(l => l.Content("Apellido paterno <b>(obligatorio)</b>:"))
                             .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
                             )
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="controlForm">
-                        @(Html.Kendo().TextBoxFor(t => t.apellidoMaternoFisico)
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="controlForm">
+                @(Html.Kendo().TextBoxFor(t => t.apellidoMaternoFisico)
                             .Label(l => l.Content("Apellido materno <b>(obligatorio)</b>:"))
                             .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
                             )
-                    </div>
-                </div>
-
-            </div>
-            <div class="row my-2">
-                <div class="col-md-4">
-                    <div class="controlForm">
-                        <label>Fecha de nacimiento:</label>
-                        @(Html.Kendo().DatePickerFor(t => t.fechaNacimiento)
-                            .HtmlAttributes(new { style = "width: 100%;", required = "required" })
-                            )
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="controlForm">
-                        @(Html.Kendo().TextBoxFor(t => t.CURPFisico)
-                            .Label(l => l.Content("CURP: <b>(obligatorio)</b>:"))
-                            .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
-                            )
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="controlForm">
-                        @(Html.Kendo().TextBoxFor(t => t.RFCFisico)
-                            .Label(l => l.Content("RFC: <b>(obligatorio)</b>:"))
-                            .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
-                            )
-                    </div>
-                </div>
-            </div>
-            <div class="row my-2">
-                <div class="col-md-6">
-                    <div class="controlForm">
-                        <label>Género:</label>
-                        @(Html.Kendo().DropDownListFor(m => m.idGenero)
-                            .BindTo((SelectList)ViewBag.CatGeneros)
-                            .OptionLabel("-- Seleccione --")
-                            .HtmlAttributes(new { style = "width:100%;", required = "required" }))
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="controlForm">
-                        <label>Tipo persona:</label>
-                        @(Html.Kendo().DropDownListFor(m => m.idCatTipoPersona)
-                            .BindTo((SelectList)ViewBag.CatTipoPersona)
-                            .OptionLabel("-- Seleccione --")
-                            .HtmlAttributes(new { style = "width:100%;", required = "required" }))
-                    </div>
-                </div>
-            </div>
-            <div class="row my-2">
-                <div class="col-md-4">
-                    <div class="controlForm">
-                        @(Html.Kendo().TextBoxFor(t => t.numeroLicenciaFisico)
-                            .Label(l => l.Content("Número licencia: <b>(obligatorio)</b>:"))
-                            .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
-                            )
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="controlForm">
-                        <label>Tipo licencia:</label>
-                        @(Html.Kendo().DropDownListFor(m => m.idTipoLicencia)
-                            .BindTo((SelectList)ViewBag.CatTipoLicencia)
-                            .OptionLabel("-- Seleccione --")
-                            .HtmlAttributes(new { style = "width:100%;", required = "required" }))
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="controlForm">
-                        <label>Vigencia licencia:</label>
-                        @(Html.Kendo().DatePickerFor(t => t.vigenciaLicencia)
-                            .HtmlAttributes(new { style = "width: 100%;", required = "required" })
-                            )
-                    </div>
-                </div>
-            </div>
-            <div class="row my-2">
-                <div class="col-md-4">
-                    <div class="controlForm">
-                        <label>Entidad:</label>
-                        @(Html.Kendo().DropDownListFor(m => m.PersonaDireccion.idEntidadFisico)
-                            .BindTo((SelectList)ViewBag.CatEntidades)
-                            .OptionLabel("-- Seleccione --")
-                            .HtmlAttributes(new { style = "width:100%;", required = "required" }))
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="controlForm">
-                        <label>Municipio:</label>
-                        @(Html.Kendo().DropDownListFor(m => m.PersonaDireccion.idMunicipioFisico)
-                            .BindTo((SelectList)ViewBag.CatMunicipios)
-                            .OptionLabel("-- Seleccione --")
-                            .HtmlAttributes(new { style = "width:100%;", id = "ddlConcepto", required = "required" }))
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="controlForm">
-                        @(Html.Kendo().TextBoxFor(t => t.PersonaDireccion.codigoPostal)
-                            .Label(l => l.Content("Codigo postal: <b>(obligatorio)</b>:"))
-                            .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
-                            )
-                    </div>
-                </div>
-            </div>
-            <div class="row my-2">
-                <div class="col-md-4">
-                    <div class="controlForm">
-                        @(Html.Kendo().TextBoxFor(t => t.PersonaDireccion.coloniaFisico)
-                            .Label(l => l.Content("Colonia: <b>(obligatorio)</b>:"))
-                            .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
-                            )
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="controlForm">
-                        @(Html.Kendo().TextBoxFor(t => t.PersonaDireccion.calleFisico)
-                            .Label(l => l.Content("Calle: <b>(obligatorio)</b>:"))
-                            .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
-                            )
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="controlForm">
-                        @(Html.Kendo().TextBoxFor(t => t.PersonaDireccion.numeroFisico)
-                            .Label(l => l.Content("Número: <b>(obligatorio)</b>:"))
-                            .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
-                            )
-                    </div>
-                </div>
-            </div>
-            <div class="row my-2">
-                <div class="col-md-6">
-                    <div class="controlForm">
-                        @(Html.Kendo().TextBoxFor(t => t.PersonaDireccion.telefonoFisico)
-                            .Label(l => l.Content("Teléfono: <b>(obligatorio)</b>:"))
-                            .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
-                            )
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="controlForm">
-                        @(Html.Kendo().TextBoxFor(t => t.PersonaDireccion.correoFisico)
-                            .Label(l => l.Content("Correo: <b>(obligatorio)</b>:"))
-                            .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
-                            )
-                    </div>
-                </div>
-            </div>
-        </form>
-        <div class="row my-4">
-            <div class="col-12 col-md-6 mx-md-auto">
-                <div class="row justify-content-around">
-                    <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
-                        <button type="button" data-bs-dismiss="modal" aria-label="Close">
-                            <h6 class="m-0 px-3"><b>Cerrar</b></h6>
-                        </button>
-                    </div>
-                    <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-                        <div class="controlButton">
-                            <button class="btnPrimary px-3" onclick="btnCrearPersona()">
-                                <h5 class="m-0"><b>Guardar</b></h5>
-                            </button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
-        <script>
+    </div>
+    <div class="row my-2">
+        <div class="col-md-4">
+            <div class="controlForm">
+                <label>Fecha de nacimiento:</label>
+                @(Html.Kendo().DatePickerFor(t => t.fechaNacimiento)
+                            .HtmlAttributes(new { style = "width: 100%;", required = "required" })
+                            )
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="controlForm">
+                @(Html.Kendo().TextBoxFor(t => t.CURPFisico)
+                            .Label(l => l.Content("CURP: <b>(obligatorio)</b>:"))
+                            .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
+                            )
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="controlForm">
+                @(Html.Kendo().TextBoxFor(t => t.RFCFisico)
+                            .Label(l => l.Content("RFC: <b>(obligatorio)</b>:"))
+                            .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
+                            )
+            </div>
+        </div>
+    </div>
+    <div class="row my-2">
+        <div class="col-md-6">
+            <div class="controlForm">
+                <label>Género:</label>
+                @(Html.Kendo().DropDownListFor(m => m.idGenero)
+                            .BindTo((SelectList)ViewBag.CatGeneros)
+                            .OptionLabel("-- Seleccione --")
+                            .HtmlAttributes(new { style = "width:100%;", required = "required" }))
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="controlForm">
+                <label>Tipo persona:</label>
+                @(Html.Kendo().DropDownListFor(m => m.idCatTipoPersona)
+                            .BindTo((SelectList)ViewBag.CatTipoPersona)
+                            .OptionLabel("-- Seleccione --")
+                            .HtmlAttributes(new { style = "width:100%;", required = "required" }))
+            </div>
+        </div>
+    </div>
+    <div class="row my-2">
+        <div class="col-md-4">
+            <div class="controlForm">
+                @(Html.Kendo().TextBoxFor(t => t.numeroLicenciaFisico)
+                            .Label(l => l.Content("Número licencia: <b>(obligatorio)</b>:"))
+                            .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
+                            )
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="controlForm">
+                <label>Tipo licencia:</label>
+                @(Html.Kendo().DropDownListFor(m => m.idTipoLicencia)
+                            .BindTo((SelectList)ViewBag.CatTipoLicencia)
+                            .OptionLabel("-- Seleccione --")
+                            .HtmlAttributes(new { style = "width:100%;", required = "required" }))
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="controlForm">
+                <label>Vigencia licencia:</label>
+                @(Html.Kendo().DatePickerFor(t => t.vigenciaLicencia)
+                            .HtmlAttributes(new { style = "width: 100%;", required = "required" })
+                            )
+            </div>
+        </div>
+    </div>
+    <div class="row my-2">
+        <div class="col-md-4">
+            <div class="controlForm">
+                <label>Entidad:</label>
+                @(Html.Kendo().DropDownListFor(m => m.PersonaDireccion.idEntidadFisico)
+                            .BindTo((SelectList)ViewBag.CatEntidades)
+                            .OptionLabel("-- Seleccione --")
+                            .HtmlAttributes(new { style = "width:100%;", required = "required" }))
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="controlForm">
+                <label>Municipio:</label>
+                @(Html.Kendo().DropDownListFor(m => m.PersonaDireccion.idMunicipioFisico)
+                            .BindTo((SelectList)ViewBag.CatMunicipios)
+                            .OptionLabel("-- Seleccione --")
+                            .HtmlAttributes(new { style = "width:100%;", id = "ddlConcepto", required = "required" }))
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="controlForm">
+                @(Html.Kendo().TextBoxFor(t => t.PersonaDireccion.codigoPostal)
+                            .Label(l => l.Content("Codigo postal: <b>(obligatorio)</b>:"))
+                            .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
+                            )
+            </div>
+        </div>
+    </div>
+    <div class="row my-2">
+        <div class="col-md-4">
+            <div class="controlForm">
+                @(Html.Kendo().TextBoxFor(t => t.PersonaDireccion.coloniaFisico)
+                            .Label(l => l.Content("Colonia: <b>(obligatorio)</b>:"))
+                            .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
+                            )
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="controlForm">
+                @(Html.Kendo().TextBoxFor(t => t.PersonaDireccion.calleFisico)
+                            .Label(l => l.Content("Calle: <b>(obligatorio)</b>:"))
+                            .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
+                            )
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="controlForm">
+                @(Html.Kendo().TextBoxFor(t => t.PersonaDireccion.numeroFisico)
+                            .Label(l => l.Content("Número: <b>(obligatorio)</b>:"))
+                            .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
+                            )
+            </div>
+        </div>
+    </div>
+    <div class="row my-2">
+        <div class="col-md-6">
+            <div class="controlForm">
+                @(Html.Kendo().TextBoxFor(t => t.PersonaDireccion.telefonoFisico)
+                            .Label(l => l.Content("Teléfono: <b>(obligatorio)</b>:"))
+                            .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
+                            )
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="controlForm">
+                @(Html.Kendo().TextBoxFor(t => t.PersonaDireccion.correoFisico)
+                            .Label(l => l.Content("Correo: <b>(obligatorio)</b>:"))
+                            .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
+                            )
+            </div>
+        </div>
+    </div>
+</form>
+<div class="row my-4">
+    <div class="col-12 col-md-6 mx-md-auto">
+        <div class="row justify-content-around">
+            <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
+                <button type="button" data-bs-dismiss="modal" aria-label="Close">
+                    <h6 class="m-0 px-3"><b>Cerrar</b></h6>
+                </button>
+            </div>
+            <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                <div class="controlButton">
+                    <button class="btnPrimary px-3" onclick="btnCrearPersona()">
+                        <h5 class="m-0"><b>Guardar</b></h5>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
             function btnCrearPersona() {
                 var validator = $("#frmCrearPersonaV").kendoValidator().data('kendoValidator');
                 validator.validate();
@@ -231,6 +229,4 @@
                     return;
                 }
             }
-        </script>
-        </div>
-    </div>
+</script>

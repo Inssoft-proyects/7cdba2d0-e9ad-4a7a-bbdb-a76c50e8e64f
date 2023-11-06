@@ -266,7 +266,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     connection.Open();
 
                     // Consulta para buscar si el idSolicitud ya existe en la tabla depositos
-                    SqlCommand searchCommand = new SqlCommand("SELECT idSolicitud,folio,observaciones,numeroInventario,inventario FROM depositos WHERE idSolicitud = @idSolicitud", connection);
+                    SqlCommand searchCommand = new SqlCommand("SELECT idSolicitud,idDeposito,folio,observaciones,numeroInventario,inventario FROM depositos WHERE idSolicitud = @idSolicitud", connection);
                     searchCommand.Parameters.Add(new SqlParameter("@idSolicitud", SqlDbType.Int)).Value = iSo;
 
                     // Ejecutar la consulta de búsqueda
@@ -300,7 +300,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             }
 
                             solicitud.observaciones = searchReader["observaciones"].ToString();
-                            solicitud.IdDeposito = -1;
+                            solicitud.IdDeposito = int.Parse(searchReader["idDeposito"].ToString());
                             return solicitud;
                         }
                     }
@@ -333,8 +333,8 @@ namespace GuanajuatoAdminUsuarios.Services
                     {
                         insertConnection.Open();
                         SqlCommand insertCommand = new SqlCommand("INSERT INTO depositos " +
-                                                                "(idSolicitud,folio,idTramo,idPension,km,liberado,IdConcesionario,idDelegacion,FechaIngreso,estatus) " +
-                                                                "VALUES (@idSolicitud,@folio,@idTramo,@idPension,@km,@liberado,@idPropietarioGruas,@idDelegacion,@fechaSolicitud,@estatus);" +
+                                                                "(idSolicitud,folio,idTramo,idPension,km,liberado,IdConcesionario,idDelegacion,estatus) " +
+                                                                "VALUES (@idSolicitud,@folio,@idTramo,@idPension,@km,@liberado,@idPropietarioGruas,@idDelegacion,@estatus);" +
                                                                 "SELECT SCOPE_IDENTITY()", insertConnection);
                         insertCommand.Parameters.Add(new SqlParameter("@idSolicitud", SqlDbType.Int)).Value = solicitud.idSolicitud;
                         insertCommand.Parameters.Add(new SqlParameter("@idDelegacion", SqlDbType.Int)).Value = idOficina;
@@ -345,11 +345,8 @@ namespace GuanajuatoAdminUsuarios.Services
                         insertCommand.Parameters.Add(new SqlParameter("@km", SqlDbType.NVarChar)).Value = solicitud.kilometro;
                         insertCommand.Parameters.Add(new SqlParameter("@liberado", SqlDbType.Int)).Value = 0;
                         insertCommand.Parameters.Add(new SqlParameter("@estatus", SqlDbType.Int)).Value = 1;
-                        insertCommand.Parameters.Add(new SqlParameter("@fechaSolicitud", SqlDbType.DateTime)).Value = solicitud.fechaSolicitud;
-
                         idDeposito = Convert.ToInt32(insertCommand.ExecuteScalar());
                         solicitud.IdDeposito = idDeposito;
-
                     }
 
                 }
@@ -367,7 +364,7 @@ namespace GuanajuatoAdminUsuarios.Services
         }
 
 
-        public int ActualizarDatos(AsignacionGruaModel selectedRowData, int iSo)
+        public int ActualizarDatos(AsignacionGruaModel selectedRowData, int iDep)
         {
             int result = 0;
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
@@ -376,13 +373,16 @@ namespace GuanajuatoAdminUsuarios.Services
                 {
                     connection.Open();
                     SqlCommand sqlCommand = new
-                        SqlCommand("Update depositos set idMarca = @idMarca,idSubmarca =@idSubmarca, idColor = @idColor,serie = @Serie,placa = @Placa where idSolicitud=@idSolicitud", connection);
+                        SqlCommand("Update depositos set idVehiculo = @idVehiculo,idMarca = @idMarca,idSubmarca =@idSubmarca, idColor = @idColor,serie = @Serie,placa = @Placa, idInfraccion=@idInfraccion where idDeposito=@idDeposito", connection);
+                    sqlCommand.Parameters.Add(new SqlParameter("@idVehiculo", SqlDbType.Int)).Value = selectedRowData.IdVehiculo;
                     sqlCommand.Parameters.Add(new SqlParameter("@idMarca", SqlDbType.Int)).Value = selectedRowData.IdMarcaVehiculo;
                     sqlCommand.Parameters.Add(new SqlParameter("@idSubmarca", SqlDbType.Int)).Value = selectedRowData.IdSubmarca;
                     sqlCommand.Parameters.Add(new SqlParameter("@idColor", SqlDbType.Int)).Value = selectedRowData.IdColor;
                     sqlCommand.Parameters.Add(new SqlParameter("@Serie", SqlDbType.NVarChar)).Value = selectedRowData.Serie;
                     sqlCommand.Parameters.Add(new SqlParameter("@Placa", SqlDbType.NVarChar)).Value = selectedRowData.Placa;
-                    sqlCommand.Parameters.Add(new SqlParameter("@idSolicitud", SqlDbType.Int)).Value = iSo;
+                    sqlCommand.Parameters.Add(new SqlParameter("@idInfraccion", SqlDbType.Int)).Value = selectedRowData.idInfraccion;
+
+                    sqlCommand.Parameters.Add(new SqlParameter("@idDeposito", SqlDbType.Int)).Value = iDep;
 
                     sqlCommand.CommandType = CommandType.Text;
                     result = sqlCommand.ExecuteNonQuery();
@@ -432,7 +432,7 @@ namespace GuanajuatoAdminUsuarios.Services
                         {
                             AsignacionGruaModel model = new AsignacionGruaModel();
                             model.idInfraccion = reader["idInfraccion"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idInfraccion"].ToString());
-                            model.idVehiculo = reader["idVehiculo"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idVehiculo"].ToString());
+                            model.IdVehiculo = (int)(reader["idVehiculo"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idVehiculo"].ToString()));
                             model.folioInfraccion = reader["folioInfraccion"].ToString();
                             model.fechaInfraccion = reader["fechaInfraccion"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["fechaInfraccion"].ToString());
                             model.IdMarcaVehiculo = Convert.IsDBNull(reader["IdMarcaVehiculo"]) ? 0 : Convert.ToInt32(reader["IdMarcaVehiculo"]);
@@ -464,7 +464,7 @@ namespace GuanajuatoAdminUsuarios.Services
 
             return modelList;
         }
-        public int UpdateDatosGrua(IFormCollection formData, int abanderamiento, int arrastre, int salvamento, int iSo)
+        public int UpdateDatosGrua(IFormCollection formData, int abanderamiento, int arrastre, int salvamento, int iDep, int iSo)
         {
             int result = 0;
 
@@ -473,8 +473,8 @@ namespace GuanajuatoAdminUsuarios.Services
                 try
                 {
                     connection.Open();
-                    string query = "INSERT INTO gruasAsignadas (fechaArribo,fechaInicio,fechaFinal,operadorGrua,abanderamiento,arrastre,salvamento,idGrua,minutosManiobra,idSolicitud,actualizadoPor,fechaActualizacion,estatus)" +
-                                    "VALUES(@fechaArribo,@fechaInicio,@fechaFinal,@operadorGrua,@abanderamiento,@arrastre,@salvamento,@idGrua,@minutosManiobra,@idSolicitud,@actualizadoPor,@fechaActualizacion,@estatus)";
+                    string query = "INSERT INTO gruasAsignadas (fechaArribo,fechaInicio,fechaFinal,operadorGrua,abanderamiento,arrastre,salvamento,idGrua,minutosManiobra,idSolicitud,idDeposito,actualizadoPor,fechaActualizacion,estatus)" +
+                                    "VALUES(@fechaArribo,@fechaInicio,@fechaFinal,@operadorGrua,@abanderamiento,@arrastre,@salvamento,@idGrua,@minutosManiobra,@idSolicitud,@idDeposito,@actualizadoPor,@fechaActualizacion,@estatus)";
 
 
                     SqlCommand command = new SqlCommand(query, connection);
@@ -487,7 +487,9 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.AddWithValue("@arrastre", arrastre);
                     command.Parameters.AddWithValue("@salvamento", salvamento);
                     command.Parameters.AddWithValue("@minutosManiobra", int.Parse(formData["tiempoManiobras"].ToString()));
+                    command.Parameters.AddWithValue("@idDeposito", iDep);
                     command.Parameters.AddWithValue("@idSolicitud", iSo);
+
                     command.Parameters.AddWithValue("@fechaActualizacion", DateTime.Now);
                     command.Parameters.AddWithValue("@actualizadoPor", 1);
                     command.Parameters.AddWithValue("@estatus", 1);
@@ -499,6 +501,8 @@ namespace GuanajuatoAdminUsuarios.Services
                     else
                     {
                       
+
+
                         command.Parameters.AddWithValue("@idGrua", DBNull.Value); 
                     }
 
@@ -516,7 +520,7 @@ namespace GuanajuatoAdminUsuarios.Services
                 return result;
             }
         }
-        public List<SeleccionGruaModel> BusquedaGruaTabla(int iSo)
+        public List<SeleccionGruaModel> BusquedaGruaTabla(int iDep)
         {
             List<SeleccionGruaModel> ListaSolicitudes = new List<SeleccionGruaModel>();
 
@@ -531,12 +535,12 @@ namespace GuanajuatoAdminUsuarios.Services
                                                           "FROM gruasAsignadas AS ga " +
                                                           "LEFT JOIN gruas AS g ON ga.idGrua = g.idGrua " +
                                                           "LEFT JOIN catTipoGrua AS ctg ON g.idTipoGrua = ctg.IdTipoGrua " +
-                                                          "WHERE ga.idSolicitud = @idSolicitud AND ga.estatus = 1", connection);
+                                                          "WHERE ga.idDeposito = @idDeposito AND ga.estatus = 1", connection);
 
 
 
                     command.CommandType = System.Data.CommandType.Text;
-                    command.Parameters.Add(new SqlParameter("@idSolicitud", SqlDbType.Int)).Value = iSo;
+                    command.Parameters.Add(new SqlParameter("@idDeposito", SqlDbType.Int)).Value = iDep;
 
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
@@ -575,7 +579,7 @@ namespace GuanajuatoAdminUsuarios.Services
 
 
         }
-        public int AgregarObs(AsignacionGruaModel formData, int iSo)
+        public int AgregarObs(AsignacionGruaModel formData, int iDep)
         {
             int result = 0;
 
@@ -586,14 +590,14 @@ namespace GuanajuatoAdminUsuarios.Services
                     connection.Open();
                     string query = "UPDATE depositos SET " +
                                     "observaciones=@observaciones " +
-                                    "Where depositos.idSolicitud = @idsolicitud";
+                                    "Where depositos.idDeposito = @idDeposito";
 
 
                     SqlCommand command = new SqlCommand(query, connection);
 
 
                     command.Parameters.AddWithValue("@observaciones", formData.observaciones);
-                    command.Parameters.AddWithValue("@idSolicitud", iSo);
+                    command.Parameters.AddWithValue("@idDeposito", iDep);
 
 
                     command.ExecuteNonQuery();
@@ -610,13 +614,13 @@ namespace GuanajuatoAdminUsuarios.Services
                 return result;
             }
         }
-        public int InsertarInventario(byte[] imageData, int iSo, string numeroInventario)
+        public int InsertarInventario(byte[] imageData, int iDep, string numeroInventario)
         {
             int result = 0;
             string strQuery = @"UPDATE depositos
                    SET inventario = @inventario,
                        numeroInventario = @numeroInventario
-                   WHERE idSolicitud = @idSolicitud";
+                   WHERE idDeposito = @idDeposito";
 
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
             {
@@ -625,7 +629,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     connection.Open();
                     SqlCommand command = new SqlCommand(strQuery, connection);
                     command.CommandType = CommandType.Text;
-                    command.Parameters.Add(new SqlParameter("@idSolicitud", SqlDbType.Int)).Value = iSo;
+                    command.Parameters.Add(new SqlParameter("@idSolicitud", SqlDbType.Int)).Value = iDep;
                     command.Parameters.Add(new SqlParameter("@numeroInventario", SqlDbType.NVarChar)).Value = numeroInventario;
                     command.Parameters.Add(new SqlParameter("@inventario", SqlDbType.VarBinary)).Value = imageData;
 

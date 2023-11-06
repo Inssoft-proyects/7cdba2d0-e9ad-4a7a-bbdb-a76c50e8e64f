@@ -4,7 +4,8 @@
             Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.DiasInhabilesModel>()
             .Name("grid")
             .Columns(columns =>
-            {
+            {              
+                columns.Bound(c => c.idDiaInhabil).Title("Id").Width(20);
                 columns.Bound(c => c.fecha).Width(70).Title("Fecha").Format("{0: dd/MM/yyyy}");
                 columns.Bound(c => c.todosMunicipiosDesc).Title("Aplica a todos los Municipios").Width(100);
                 columns.Bound(c => c.Municipio).Width(100);

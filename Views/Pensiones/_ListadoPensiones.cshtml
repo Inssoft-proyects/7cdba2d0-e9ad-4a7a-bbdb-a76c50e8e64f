@@ -29,6 +29,7 @@
             .Name("GridP")
             .Columns(columns =>
             {
+                columns.Bound(c => c.estatusDesc).Title("Estatus").Width(90);
                 columns.Bound(c => c.IdPension).Width(20).Hidden();
                 columns.Bound(p => p.Pension).Hidden().ClientGroupHeaderTemplate("<label>Pensión: #=value#</label><button onclick='editarPensionByGrid()' class='btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i></h6></button>").Title("Pension").Width(150);
                 columns.Bound(p => p.Permiso).Title("Permiso").Width(100);
@@ -38,7 +39,8 @@
                 columns.Bound(c => c.Correo).Title("Correo electrónico").Width(150);
                 columns.Bound(c => c.responsable).Title("Responsable").Width(90);
                 columns.Bound(c => c.concesionario).Title("Asociados").Width(90);
-                columns.Bound(c => c.placas).Title("Grúa (Placas)").Width(90);
+
+               // columns.Bound(c => c.placas).Title("Grúa (Placas)").Width(90);
 
                 @*columns.Bound(p => p.IdPension).ClientTemplate(
                 "<button onclick=\"ShowUpdatePopUp('#=IdPension#')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i></h6></button>"

@@ -8,7 +8,7 @@
                     <i class="icon-editFactores h1 colorPrimary"></i>
                 </div>
                 <div class="col-auto my-3">
-                    <h2 class="m-0 h3"><b>Editar Factor de accidente</b></h2>
+                    <h2 class="m-0 h3"><b>Editar factor de accidente</b></h2>
                 </div>
             </div>
         </div>
@@ -20,29 +20,32 @@
             </div>
         </div>
     </div>
-    <form id="editarFactorForm" class="row px-4 mb-4 align-items-end justify-content-center">
+<form id="editarFactorForm" class="row px-4 mb-4 align-items-end justify-content-center">
     <div class="row">
         <div class="col-12">
             <div class="bg-light py-1"></div>
         </div>
 
     </div>
-        <div class="row align-items-end btnToggleActive">
+    <div class="row align-items-end btnToggleActive">
         <div class="col-12 col-lg-6 my-4">
             <h5 class="px-4"><b>Datos de factor de accidente</b></h5>
             <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
         </div>
-        @(Html.Kendo().SwitchFor(t => t.ValorEstatusFactores)
+        <div class="col-12 col-lg-6 my-4">
+            @(Html.Kendo().SwitchFor(t => t.ValorEstatusFactores)
             .Name("factoresSwitch")
             .Checked(true)
             .Messages(c => c.Checked("Activo").Unchecked("Inactivo"))
             .HtmlAttributes(new { data_valor = 1 })
 
             )
+        </div>
+
     </div>
         <div class="col-12 col-md-6">
             <div class="controlForm my-3">
-                @Html.HiddenFor(m=>m.IdFactorAccidente)
+                @Html.HiddenFor(m => m.IdFactorAccidente)
                 @(Html.Kendo().TextBoxFor(t => t.FactorAccidente)
                     .Label(l => l.Content("Nombre <b>(obligatorio)</b>:"))
                     .Placeholder("Ingresa el nombre del factor")
@@ -53,7 +56,7 @@
         </div>
 
 
-    </form>
+</form>
     <div class="row my-4">
         <div class="col-12 col-md-6 mx-md-auto">
             <div class="row justify-content-around">

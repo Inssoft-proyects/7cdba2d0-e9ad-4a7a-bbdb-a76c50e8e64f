@@ -1,59 +1,57 @@
 ﻿@model FechaHoraIngresoModel
 
-<div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
-    <div class="modal-content">
-        <section class=" bg-white rounded">
-            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+<section class=" bg-white rounded">
+    <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+        <div class="col-auto pe-0">
+            <div class="row align-items-center justify-content-center justify-content-md-start">
                 <div class="col-auto pe-0">
-                    <div class="row align-items-center justify-content-center justify-content-md-start">
-                        <div class="col-auto pe-0">
-                            <i class="icon-addInvolucrado h1 colorPrimary"></i>
-                        </div>
-                        <div class="col-auto my-3">
-                            <h2 class="m-0 h3"><b>Agregar ingreso al involucrado</b></h2>
-                        </div>
-                    </div>
+                    <i class="icon-addInvolucrado h1 colorPrimary"></i>
                 </div>
-                <div class="col-auto">
-                    <div class="row">
-                        <div class="col-auto my-3">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                    </div>
+                <div class="col-auto my-3">
+                    <h2 class="m-0 h3"><b>Agregar ingreso al involucrado</b></h2>
                 </div>
             </div>
+        </div>
+        <div class="col-auto">
             <div class="row">
-                <div class="col-12">
-                    <div class="bg-light py-1"></div>
+                <div class="col-auto my-3">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="bg-light py-1"></div>
+        </div>
 
-            </div>
-            <div class="row">
-                <div class="col-12 my-4">
-                    <h5 class="px-4"><b>Datos para ingreso del involucrado</b></h5>
-                    <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
-                </div>
-            </div>
-            <form id="fechaHoraForm" class="row justify-content-center px-4 mb-4 align-items-end">
-                <div class="col-12 col-md-6">
-                    <div class="controlForm my-3">
-                        <label>Fecha:</label>
-                        <span>
-                            @Html.HiddenFor(model => model.IdPersona)
-                            @(Html.Kendo().DatePickerFor(model => model.FechaIngreso)
+    </div>
+    <div class="row">
+        <div class="col-12 my-4">
+            <h5 class="px-4"><b>Datos para ingreso del involucrado</b></h5>
+            <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
+        </div>
+    </div>
+    <form id="fechaHoraForm" class="row justify-content-center px-4 mb-4 align-items-end">
+        <div class="col-12 col-md-6">
+            <div class="controlForm my-3">
+                <label>Fecha:</label>
+                <span>
+                    @Html.HiddenFor(model => model.IdPersona)
+                    @(Html.Kendo().DatePickerFor(model => model.FechaIngreso)
                                 .Label(l => l.Content("Fecha:"))
                                 .HtmlAttributes(new { style = "width: 100%", title = "timepicker" })
                                 .DateInput()
                                 )
-                        </span>
-                    </div>
-                </div>
+                </span>
+            </div>
+        </div>
 
-                <div class="col-12 col-md-6">
-                    <div class="controlForm my-3">
-                        <label>Hora:</label>
-                        <span>
-                            @(Html.Kendo().TimePickerFor(model => model.HoraIngreso)
+        <div class="col-12 col-md-6">
+            <div class="controlForm my-3">
+                <label>Hora:</label>
+                <span>
+                    @(Html.Kendo().TimePickerFor(model => model.HoraIngreso)
                                 .Label(l => l.Content("Hora:"))
                                 .Format("HH:mm")
                                 .Value("10:00 AM")
@@ -61,32 +59,30 @@
                                 .HtmlAttributes(new { style = "width: 100%", title = "timepicker" })
                                 .DateInput()
                                 )
-                        </span>
-                    </div>
+                </span>
+            </div>
+        </div>
+    </form>
+    <div class="row my-4">
+        <div class="col-12 col-md-6 mx-md-auto">
+            <div class="row justify-content-around">
+                <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close">
+                        <h6 class="m-0 px-3"><b>Cerrar</b></h6>
+                    </button>
                 </div>
-            </form>
-            <div class="row my-4">
-                <div class="col-12 col-md-6 mx-md-auto">
-                    <div class="row justify-content-around">
-                        <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
-                            <button type="button" data-bs-dismiss="modal" aria-label="Close">
-                                <h6 class="m-0 px-3"><b>Cerrar</b></h6>
-                            </button>
-                        </div>
-                        <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-                            <div class="controlButton" onclick="agregarFechaHoraIngreso()">
-                                @(Html.Kendo().Button()
+                <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                    <div class="controlButton" onclick="agregarFechaHoraIngreso()">
+                        @(Html.Kendo().Button()
                                     .Name("AddFechaHora")
                                     .HtmlAttributes(new { @class = "btnPrimary px-3" })
                                     .Content("<h5 class=\"m-0\"><b>Guardar</b></h5>"))
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
     </div>
-</div>
+</section>
 <script>
     function agregarFechaHoraIngreso() {
         event.preventDefault();

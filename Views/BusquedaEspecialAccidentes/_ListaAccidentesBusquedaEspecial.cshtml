@@ -1,0 +1,123 @@
+﻿<div class="row">
+    <div class="col-12 mb-4 px-4 rounded gridCustom">
+
+        @(
+            Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.BusquedaEspecialAccidentesModel>()
+            .Name("gridBusquedaEspecialAccidentes")
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.IdAccidente).Title("Número").Width(60);
+                columns.Bound(c => c.numeroReporte)
+                    .Title("Folio")
+                    .Width(100)
+                    .ClientTemplate(
+                        "<div style='display:flex; align-items:center;'>" +
+                        "<div>#= numeroReporte #</div>" +
+                "<button onclick=\"ModalEditarFolio('#= IdAccidente #', '#= numeroReporte #')\" class='w-100 btn'>" +
+                        "<h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b></b></h6>" +
+                        "</button>" +
+                        "</div>"
+                    );
+                columns.Bound(c => c.fecha).Title("Fecha").ClientTemplate("#= new Date(fecha).toLocaleDateString('en-GB') #").Width(100);
+                columns.Bound(c => c.hora).Title("Hora").Width(70);
+                columns.Bound(c => c.municipio).Title("Municipio").Width(100);
+                columns.Bound(c => c.carretera).Title("Carretera").Width(100);
+                columns.Bound(c => c.tramo).Title("Tramo").Width(100);
+                columns.Bound(c => c.estatusReporte).Title("Estatus").Width(100);
+                columns.Bound(p => p.IdAccidente).ClientTemplate(
+                "<button onclick=\"editarAccidente('#= IdAccidente #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-research me-2'></i><b>Mostrar</b></h6></button>"
+                ).Title("Mostrar").Sortable(false).Width(90);
+                columns.Bound(p => p.IdAccidente).ClientTemplate(
+                "<button onclick=\"downLoadPdf('#= IdAccidente #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='h5 icon-pdf me-2'></i><b>Descargar</b></h6></button>"
+                ).Title("Exportar").Sortable(false).Width(90);
+                 columns.Bound(p => p.IdAccidente).ClientTemplate(
+                "<button onclick=\"eliminarAccidente('#= IdAccidente #', '#= numeroReporte #')\" class='w-100 btn'><h6 class='m-0 colorDanger'><i class='icon-delete me-2'></i><b>Eliminar</b></h6></button>"
+                ).Title("Eliminar").Sortable(false).Width(90);
+               
+
+
+            }).HtmlAttributes(new { style = "height:550px" })
+            .Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }).Position(GridPagerPosition.Top))
+            .Sortable()
+            .Scrollable(scr => scr.Height(350))
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .ServerOperation(false)
+            )
+            )
+
+
+    </div>
+    <div class="modal fade modalCustom" id="editarFolioModal" tabindex="-1" aria-labelledby="editarCarreteraLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body" id="ModalBodyEditarFolio">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade modalCustom" id="eliminarAccidenteModal" tabindex="-1" aria-labelledby="editarCarreteraLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body" id="ModalBodyEliminarAccidente">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<script>
+    function downLoadPdf(Id) {
+        console.log("SI", Id)
+        window.location = '/BusquedaAccidentes/CreatePdfUnRegistro?IdAccidente=' + Id;
+    }
+    function editarAccidente(idAccidente) {
+        console.log("SI", idAccidente)
+        $.ajax({
+            url: '/CapturaAccidentes/SetLastInsertedIdEdit',
+            type: 'POST',
+            data: { idAccidente: idAccidente },
+            success: function (result) {
+
+                window.location.href = '/CapturaAccidentes/CapturaAaccidente/?showE=true'
+
+            },
+
+        });
+    }
+
+        function eliminarAccidente(idAccidente, numeroReporte) {
+            $.ajax({
+                url: '/BusquedaEspecialAccidentes/ModalEliminarAccidente',
+                type: 'POST',
+                data: {
+                    idAccidente: idAccidente,
+                    numeroReporte: numeroReporte
+                }, success: function (result) {
+                    $('#ModalBodyEliminarAccidente').html(result);
+                    $('#eliminarAccidenteModal').modal('show');;
+                },
+
+            });
+        }
+
+    function ModalEditarFolio(idAccidente, numeroReporte) {
+        $.ajax({
+            url: '/BusquedaEspecialAccidentes/ModalEditarFolio', 
+            type: 'POST',
+            data: {
+                idAccidente: idAccidente,
+                numeroReporte: numeroReporte
+            },
+            success: function (result) {
+                    $('#ModalBodyEditarFolio').html(result);
+                    $('#editarFolioModal').modal('show');
+            },
+            error: function (xhr, status, error) {
+                console.log("Error al realizar la solicitud AJAX: " + error);
+            }
+        });
+    }
+
+    
+</script>

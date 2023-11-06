@@ -31,56 +31,57 @@
             <div class="bg-light py-1"></div>
         </div>
     </div>
-    <div class="row justify-content-between mb-1 titleCustom">
-        <div class="col-12 col-md-auto mt-4 mb-2">
-            <h5 class="px-4"><b>Listado de tipo de carga</b></h5>
-            <h6 class="px-4 text-muted">Edita o inactiva los tipo de carga.</h6>
-        </div>
-    </div>
+    
             <div class="row">
                 <div class="col-12 mb-4 px-4 rounded gridCustom">
+                    <div class="row justify-content-between mb-1 titleCustom">
+                        <div class="col-12 col-md-auto mt-4 mb-2">
+                            <h5 class="px-4"><b>Listado de tipo de carga</b></h5>
+                            <h6 class="px-4 text-muted">Edita o inactiva los tipo de carga.</h6>
+                        </div>
+                    </div>
                     <div id="tablaTiposCarga">
                         <partial name="_ListaTiposCarga" model="Model" />
-       
-<div class="modal fade modalCustom" id="addTipoCarga" tabindex="-1" aria-labelledby="addTipoCargaLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-body" id="ModalBodyCreateTipo">
-                        
+
+                        <div class="modal fade modalCustom" id="addTipoCarga" tabindex="-1" aria-labelledby="addTipoCargaLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-body" id="ModalBodyCreateTipo">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--////////////////////////////////////////////////////////////////////////////////////////////////////////////////EDITAR//////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        -->
+
+                        <div class="modal fade modalCustom" id="editTipoCarga" tabindex="-1" aria-labelledby="editTipoCargaLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-body" id="ModalTiposCargaUpdate">
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!--////////////////////////////////////////////////////////////////////////////////////////////////////////////////ELIMINAR//////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        -->
+
+                        <div class="modal fade modalCustom" id="eliminarTipoCarga" tabindex="-1" aria-labelledby="delTipoCargaLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-body" id="ModalBodyEliminarTipoCarga">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-            </div>
-        </div>
- <!--////////////////////////////////////////////////////////////////////////////////////////////////////////////////EDITAR//////////////////////////////////////////////////////////////////////////
-     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- -->
-
-<div class="modal fade modalCustom" id="editTipoCarga" tabindex="-1" aria-labelledby="editTipoCargaLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body" id="ModalTiposCargaUpdate">
-
-            </div>
-        </div>
-
-    </div>
- </div>
-<!--////////////////////////////////////////////////////////////////////////////////////////////////////////////////ELIMINAR//////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--->
-
-<div class="modal fade modalCustom" id="eliminarTipoCarga" tabindex="-1" aria-labelledby="delTipoCargaLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg boxShadow modal-dialog-centered">
-        <div class="modal-content">       
-            <div class="modal-body" id="ModalBodyEliminarTipoCarga">
-
-            </div>
-        </div>
-    </div>
-</div>
-
-</div>
-</div>
 </div>
 </section>
 

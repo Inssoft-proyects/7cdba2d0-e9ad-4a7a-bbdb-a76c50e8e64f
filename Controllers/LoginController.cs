@@ -13,7 +13,9 @@ using System.IO.Pipelines;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
+using System.Net.Security;
 using System.Runtime.ConstrainedExecution;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
@@ -30,7 +32,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         {
             _httpClientFactory = httpClientFactory;
         }
-        [HttpPost]
+       /* [HttpPost]
         public async Task<IActionResult> ConsumirServicio(string usuario, string contrasena)
         {
             try
@@ -89,7 +91,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                     return Json(JsonConvert.SerializeObject(listaIdsPermitidos));
                 }
-                var url = $"https://virtual.zeitek.net:9094/serviciosinfracciones/getlogin?userWS=1&claveWS=1&usuario={usuario}&contraseña={contrasena}";
+                var url = $"https://10.16.157.142:9096/serviciosinfracciones/getlogin?userWS=1&claveWS=18&usuario={usuario}&contraseña={contrasena}";
 
                 var httpClient = _httpClientFactory.CreateClient();
                 var response = await httpClient.GetAsync(url);
@@ -148,27 +150,106 @@ namespace GuanajuatoAdminUsuarios.Controllers
             }
         }
 
-
-        /* public async Task<IActionResult> Button1_Click(string usuario, string contrasena)
+        /* protected void Page_Load(object sender, EventArgs e)
          {
-             Reply oReply = new Reply();
-             string baseUrl = "https://10.16.157.142:9096/serviciosinfracciones/getlogin";
-             string url = $"{baseUrl}?userWS=1&claveWS=18&usuario={usuario}&contraseña={contrasena}";
 
-             oReply = await Consumer.Execute<List<Post>>(url, methodHttp.GET, null);
-
-             /*if (oReply.StatusCode == "OK")
-             {
-                 List<Post> listPost = (List<Post>)oReply.Data;
-
-                 // Procesa la respuesta exitosa, por ejemplo, devuelve una vista
-                 return View("NombreDeVista", listPost);
-             }
-
-             // Manejo de errores, devuelve una vista o mensaje de error
-             return View("ErrorView", oReply);
          }
-             */
+         public async Task<IActionResult> Button1_Click(string usuario, string contrasena)
+          {
+              Reply oReply = new Reply();
+             oReply = await Consumer.Execute<List<Post>>(
+                 "https://10.16.157.142:9096/serviciosinfracciones/getlogin?userWS=1&claveWS=18&usuario="+usuario+"&contraseña="+contrasena,
+                 methodHttp.GET, 
+                 null);
+              if (oReply.StatusCode == "OK")
+              {
+                  List<Post> listPost = (List<Post>)oReply.Data;
+
+                  return View("NombreDeVista", listPost);
+              }
+
+              return View("ErrorView", oReply);
+          }*/
+        [HttpPost]
+        public async Task<IActionResult> IniciarSesion(string usuario, string contrasena)
+        {
+            try
+            {
+                var handler = new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = (request, cert, chain, errors) =>
+                    {
+                        Console.WriteLine("SSL error skipped");
+                        return true;
+                    }
+                };
+
+                using (HttpClient client = new HttpClient(handler))
+                {
+                    string url = $"https://10.16.157.142:9096/serviciosinfracciones/getlogin?userWS=1&claveWS=18&usuario={usuario}&contraseña={contrasena}";
+
+                    HttpResponseMessage response = await client.GetAsync(url);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string content = await response.Content.ReadAsStringAsync();
+                        dynamic json = JsonConvert.DeserializeObject(content);
+
+                        if (json != null && json.Count > 0)
+                        {
+                            string nombre = json[0].nombre;
+                            string oficina = json[0].oficina;
+                            string idOficinaStr = Regex.Match(oficina, @"\d+").Value;
+                            string entidad = Regex.Match(oficina, @"\d+(.+?)\|").Groups[1].Value.Trim();
+                            if (int.TryParse(idOficinaStr, out int idOficina))
+                            {
+                                HttpContext.Session.SetInt32("IdOficina", idOficina);
+
+                            }
+                            else
+                            {
+
+                            }
+                            string delegacion = Regex.Match(oficina, @"\|(.+)").Groups[1].Value.Trim();
+
+                            List<RespuestaServicio> listaRespuestas = JsonConvert.DeserializeObject<List<RespuestaServicio>>(content);
+                            string vectorString = listaRespuestas.FirstOrDefault()?.Vector;
+                            if (!string.IsNullOrEmpty(vectorString))
+                            {
+                                List<int> listaIdsPermitidos = vectorString.Split(',').Select(int.Parse).ToList();
+                                string listaIdsPermitidosJson = JsonConvert.SerializeObject(listaIdsPermitidos);
+
+                                // Guardar la lista en la variable de sesión
+                                HttpContext.Session.SetString("IdsPermitidos", listaIdsPermitidosJson);
+                                HttpContext.Session.SetString("Nombre", nombre);
+                                HttpContext.Session.SetString("Oficina", oficina);
+
+                                return Json(listaIdsPermitidosJson);
+                            }
+                        }
+                    }
+
+                    // En caso de respuestas inválidas o vacías, limpiar la variable de sesión
+                    HttpContext.Session.Remove("IdsPermitidos");
+                    HttpContext.Session.Remove("Nombre");
+                    HttpContext.Session.Remove("Oficina");
+
+                    return BadRequest("Error en la respuesta del servicio");
+                }
+            }
+            catch (Exception ex)
+            {
+                // En caso de errores, limpiar la variable de sesión y manejar el error
+                HttpContext.Session.Clear();
+                return StatusCode(500, $"Error en el servidor: {ex.Message}");
+            }
+        }
+
+        private static bool CertCheck(object sender, X509Certificate cert, X509Chain chain, SslPolicyErrors error)
+        {
+            return true;
+        }
+
 
         [HttpGet]
         public IActionResult GetIdsPermitidos()

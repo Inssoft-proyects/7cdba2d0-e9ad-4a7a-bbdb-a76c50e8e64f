@@ -7,7 +7,7 @@
                 <div class="col-12 col-md-auto">
                     <div class="row align-items-center justify-content-center justify-content-md-start">
                         <div class="col-auto p-0">
-                            <i class="icon-car h1 colorPrimary"></i>
+                            <i class="icon-addGrua me-2  h1 colorPrimary"></i>
                         </div>
                         <div class="col-auto my-3">
                             <h2 class="m-0 h3"><b>Datos de Grúa Asignada</b></h2>
@@ -40,15 +40,13 @@
                 </div>
             </div>
             <div class="row justify-content-start align-items-center py-2">
-                <div class="col-auto">
-                    <h5 class="px-4 m-0 d-flex align-items-center colorPrimary"><i class="icon-placa h4 m-0 me-2"></i> <b>Número económico</b></h5>
-                </div>
+              
             </div>
             <form id="datosGruaForm">
                 <div class="row px-4" id="contenedor">
                     <div class="col-12">
                         <div class="controlForm my-3">
-                            <label for="ddgrua">Número económico<b>(obligatorio)</b>:</label>
+                            <label for="ddgrua">Número económico <b>(obligatorio)</b>:</label>
                             @(Html.Kendo().DropDownListFor(m => m.idGrua)
                                 .Label(label => label.Content("No. Económico:"))
                                 .DataTextField("Text")

@@ -272,30 +272,60 @@
                 <div class="controlForm mt-4 mb-3">
                   <label class="label">Seleccione uno o varios elementos que se encontraron en el accidente:</label>
                        <label>Armas</label> @(Html.Kendo().SwitchFor(t => t.ArmasBool)
-                            .Name("armasSwitch") 
+                            .Name("armasSwitch")
+                        .Checked(false)
                             .Messages(c => c.Checked("Si").Unchecked("No"))
                             .HtmlAttributes(new { data_valor = 1 }))
-
+                      <div id="campoArmasTexto" style="display:none">
+                            <label for="ArmasTextBox">Descripción de armas</label>
+                            @(Html.Kendo().TextBoxFor(t => t.ArmasTexto)
+                                .HtmlAttributes(new { style = "width: 40%", id = "ArmasTexto" }) // Inicialmente oculto
+                                )
+                        </div>
                         <label>Drogas</label> @(Html.Kendo().SwitchFor(t => t.DrogasBool)
-                            .Name("drogasSwitch") 
+                            .Name("drogasSwitch")
+                            .Checked(false)
                             .Messages(c => c.Checked("Si").Unchecked("No"))
                             .HtmlAttributes(new { data_valor = 1 }))
-
+                         <div id="campoDrogasTexto" style="display:none">
+                             <label for="DrogasTextBox">Descripción de drogas</label>
+                        @(Html.Kendo().TextBoxFor(t => t.DrogasTexto)
+                                .HtmlAttributes(new { style = "width: 40%", id = "DrogasTexto" }) // Inicialmente oculto
+                                )
+                          </div>
                         <label>Valores</label> @(Html.Kendo().SwitchFor(t => t.ValoresBool)
-                            .Name("valoresSwitch") 
+                            .Name("valoresSwitch")
+                            .Checked(false)
                             .Messages(c => c.Checked("Si").Unchecked("No"))
                             .HtmlAttributes(new { data_valor = 1 }))
-
-                           
+                         <div id="campoValoresTexto" style="display:none">
+                             <label for="ValoresTextBox">Descripción de valores</label>
+                        @(Html.Kendo().TextBoxFor(t => t.ValoresTexto)
+                            .HtmlAttributes(new { style = "width: 40%", id = "ValoresTexto" }) // Inicialmente oculto
+                                )
+                           </div>
                          <label>Prendas</label> @(Html.Kendo().SwitchFor(t => t.PrendasBool)
-                            .Name("prendasSwitch") 
+                            .Name("prendasSwitch")
+                            .Checked(false)
                             .Messages(c => c.Checked("Si").Unchecked("No"))
                             .HtmlAttributes(new { data_valor = 1 }))
-
+                          <div id="campoPrendasTexto" style="display:none">
+                            <label for="PrendasTextBox">Descripción de prendas</label>
+                        @(Html.Kendo().TextBoxFor(t => t.PrendasTexto)
+                            .HtmlAttributes(new { style = "width: 40%", id = "PrendasTexto" }) // Inicialmente oculto
+                                )
+                                </div>
                         <label>Otros</label> @(Html.Kendo().SwitchFor(t => t.OtrosBool)
-                            .Name("otrosSwitch") 
+                            .Name("otrosSwitch")
+                            .Checked(false)
                             .Messages(c => c.Checked("Si").Unchecked("No"))
                             .HtmlAttributes(new { data_valor = 1 }))
+                            <div id="campoTexto" style="display:none">
+                        <label for="OtrosTextBox">Descripción de prendas</label>
+                        @(Html.Kendo().TextBoxFor(t => t.OtrosTexto)
+                            .HtmlAttributes(new { style ="width: 40%", id = "OtrosTexto" }) // Inicialmente oculto
+                            )
+                            </div>
                  </div>
             </div>
             <div class="col-12 col-md-6 col-lg-3">
@@ -363,6 +393,23 @@
                         </div>
                     </div>
                 </div>
+                <div>
+                     <label>Convenio</label> @(Html.Kendo().SwitchFor(t => t.convenioBool)
+                            .Name("convenioSwitch")
+                            .Checked(false)
+                            .Messages(c => c.Checked("Si").Unchecked("No"))
+                            .HtmlAttributes(new { data_valor = 1 }))
+                </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="controlForm my-3">
+                    @(Html.Kendo().TextBoxFor(t => t.observacionesConvenio)
+                        .Label(l => l.Content("Observaciones de convenio:"))
+                        .Placeholder("Ingresa las observaciones")
+                        .HtmlAttributes(new { style = "width: 100%" })
+                        )
+                </div>
+            </div>
+
                 <div class="row px-4 my-4">
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm mb-3">
@@ -432,9 +479,9 @@
             </div>
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="controlForm mb-3">
-                    <label>Ciudad de:</label>
+                    <label>Entidad:</label>
                     <span>
-                        @(Html.Kendo().DropDownListFor(t=>t.IdCiudad)
+                        @(Html.Kendo().DropDownListFor(t=>t.IdEntidadCompetencia)
                                 .DataTextField("Text")
                                 .DataValueField("Value")
                                 .OptionLabel("Selecciona una opción")
@@ -442,13 +489,34 @@
                                 {
                                     source.Read(read =>
                                     {
-                                        read.Action("Municipios_Drop", "CapturaAccidentes");
+                                    read.Action("Entidades_Drop", "CapturaAccidentes");
                                     });
                                 })
                                 .HtmlAttributes(new { style = "width:100%;" })
                                 )
                     </span>
                 </div>
+            
+            </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="controlForm mb-3">
+                <label>Ciudad de:</label>
+                <span>
+                    @(Html.Kendo().DropDownListFor(t => t.IdCiudad)
+                        .DataTextField("Text")
+                        .DataValueField("Value")
+                        .OptionLabel("Selecciona una opción")
+                        .DataSource(source =>
+                        {
+                            source.Read(read =>
+                            {
+                                read.Action("Municipios_Drop", "CapturaAccidentes");
+                            });
+                        })
+                        .HtmlAttributes(new { style = "width:100%;" })
+                        )
+                </span>
+            </div>
             </div>
         </div>
         <div class="row justify-content-center">
@@ -536,6 +604,15 @@
             </div>
         </div>
         <div class="row px-4 mb-4 align-items-end">
+            <div class="row my-3 mb-4">
+            <div class="col-12 col-md-6 mx-md-auto">
+                <div class="row justify-content-around">
+                    <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                         <button class="controlButton" type="button" id="cambiarContenidoButton">Listar Todos</button>
+                    </div>
+                </div>
+            </div>
+        </div>
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="controlForm mb-3">
                     <label>Elabora:</label>
@@ -649,12 +726,12 @@
         var valoresValue = $("#valoresSwitch").prop("checked") ? 1 : 0;
         var prendasValue = $("#prendasSwitch").prop("checked") ? 1 : 0;
         var otrosValue = $("#otrosSwitch").prop("checked") ? 1 : 0;
-
-
+        var convenioValue =$("#convenioSwitch").prop("checked") ? 1 : 0;
+     
         $.ajax({
             url: '@Url.Action("InsertarDatos")',
             type: 'POST',
-            data: datosFormulario + '&armasValue=' + armasValue + '&drogasValue=' + drogasValue + '&valoresValue=' + valoresValue + '&prendasValue=' + prendasValue + '&otrosValue=' + otrosValue,
+            data: datosFormulario + '&armasValue=' + armasValue + '&drogasValue=' + drogasValue + '&valoresValue=' + valoresValue + '&prendasValue=' + prendasValue + '&otrosValue=' + otrosValue + '&convenioValue=' + convenioValue,
             success: function (result) {
                 sitteg_success("Se ha concluido el registro del accidente");
                 window.location.href = "/CapturaAccidentes/Index";
@@ -666,10 +743,252 @@
         });
     }
 
+  
+
+    $("#cambiarContenidoButton").click(function (event) {
+        event.preventDefault(); 
+        $.ajax({
+            url: '@Url.Action("CambiosDDLOficiales", "CapturaAccidentes")',
+            type: 'GET',
+            success: function (data) {
+                $("#IdElabora").data("kendoDropDownList").dataSource.data(data);
+                $("#IdSupervisa").data("kendoDropDownList").dataSource.data(data);
+                $("#IdAutoriza").data("kendoDropDownList").dataSource.data(data);
+            }
+        });
+    });
 
 
+               $(document).ready(function () {
+            var switchElementA = $("#armasSwitch").data("kendoSwitch");
+            var campoArmasTexto = $("#campoArmasTexto");
 
+            switchElementA.bind("change", function () {
+                if (switchElementA.check()) {
+                    campoArmasTexto.show();
+                } else {
+                campoArmasTexto.hide();
+                }
+            });
+        });
 
+           $(document).ready(function () {
+            var switchElementD = $("#drogasSwitch").data("kendoSwitch");
+            var campoDrogasTexto = $("#campoDrogasTexto");
 
+            switchElementD.bind("change", function () {
+                if (switchElementD.check()) {
+                    campoDrogasTexto.show();
+                } else {
+                campoDrogasTexto.hide();
+                }
+            });
+        });
+
+       $(document).ready(function () {
+            var switchElementV = $("#valoresSwitch").data("kendoSwitch");
+            var campoValoresTexto = $("#campoValoresTexto");
+
+            switchElementV.bind("change", function () {
+                if (switchElementV.check()) {
+                    campoValoresTexto.show();
+                } else {
+                campoValoresTexto.hide();
+                }
+            });
+        });
+
+     $(document).ready(function () {
+            var switchElementP = $("#prendasSwitch").data("kendoSwitch");
+            var campoPrendasTexto = $("#campoPrendasTexto");
+
+            switchElementP.bind("change", function () {
+                if (switchElementP.check()) {
+                    campoPrendasTexto.show();
+                } else {
+                    campoPrendasTexto.hide();
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            var switchElementO = $("#otrosSwitch").data("kendoSwitch");
+            var campoTexto = $("#campoTexto");
+
+            switchElementO.bind("change", function () {
+                if (switchElementO.check()) {
+                    campoTexto.show();
+                } else {
+                    campoTexto.hide();
+                }
+            });
+        });
+
+    $(document).ready(function () {
+        verificarCamposDeTexto();
+
+        $("#armasSwitch").change(function () {
+            verificarCamposDeTexto();
+        });
+
+        function verificarCamposDeTexto() {
+            var $campoArmasTexto = $("#campoArmasTexto");
+            var $armasTexto = $("#ArmasTexto");
+
+            var switchEstado = $("#armasSwitch").is(":checked");
+
+            var textoNoVacio = $armasTexto.val().trim() !== "";
+
+            if (textoNoVacio || switchEstado) {
+                $campoArmasTexto.show();
+            } else {
+                $campoArmasTexto.hide();
+            }
+        }
+    });
+
+    $(document).ready(function () {
+        verificarCamposDeTexto();
+
+        $("#drogasSwitch").change(function () {
+            verificarCamposDeTexto();
+        });
+
+        function verificarCamposDeTexto() {
+            var $campoDrogasTexto = $("#campoDrogasTexto");
+            var $drogasTexto = $("#DrogasTexto");
+
+            var switchEstadoD = $("#drogasSwitch").is(":checked");
+
+            var textoNoVacioD = $drogasTexto.val().trim() !== "";
+
+            if (textoNoVacioD || switchEstadoD) {
+                $campoDrogasTexto.show();
+            } else {
+                $campoDrogasTexto.hide();
+            }
+        }
+    });
+
+     $(document).ready(function () {
+        verificarCamposDeTexto();
+
+        $("#valoresSwitch").change(function () {
+            verificarCamposDeTexto();
+        });
+
+        function verificarCamposDeTexto() {
+            var $campoValoresTexto = $("#campoValoresTexto");
+            var $valoresTexto = $("#ValoresTexto");
+
+            var switchEstadoV = $("#valoresSwitch").is(":checked");
+
+            var textoNoVacioV = $valoresTexto.val().trim() !== "";
+
+            if (textoNoVacioV || switchEstadoV) {
+                $campoValoresTexto.show();
+            } else {
+                $campoValoresTexto.hide();
+            }
+        }
+    });
+
+     $(document).ready(function () {
+        verificarCamposDeTexto();
+
+        $("#prendasSwitch").change(function () {
+            verificarCamposDeTexto();
+        });
+
+        function verificarCamposDeTexto() {
+            var $campoPrendasTexto = $("#campoPrendasTexto");
+            var $prendasTexto = $("#PrendasTexto");
+
+            var switchEstadoP = $("#prendasSwitch").is(":checked");
+
+            var textoNoVacioP = $prendasTexto.val().trim() !== "";
+
+            if (textoNoVacioP || switchEstadoP) {
+                $campoPrendasTexto.show();
+            } else {
+                $campoPrendasTexto.hide();
+            }
+        }
+    });
+
+    $(document).ready(function () {
+        verificarCamposDeTexto();
+
+        $("#otrosSwitch").change(function () {
+            verificarCamposDeTexto();
+        });
+
+        function verificarCamposDeTexto() {
+            var $campoOtrosTexto = $("#campoTexto");
+            var $otrosTexto = $("#OtrosTexto");
+
+            var switchEstadoO = $("#otrosSwitch").is(":checked");
+
+            var textoNoVacioO = $otrosTexto.val().trim() !== "";
+
+            if (textoNoVacioO || switchEstadoO) {
+                $campoOtrosTexto.show();
+            } else {
+                $campoOtrosTexto.hide();
+            }
+        }
+    });
+
+            switchElementD.bind("change", function () {
+                if (switchElementD.check()) {
+                    campoDrogasTexto.show();
+                } else {
+                campoDrogasTexto.hide();
+                }
+            });
+        });
+
+       $(document).ready(function () {
+            var switchElementV = $("#valoresSwitch").data("kendoSwitch");
+            var campoValoresTexto = $("#campoValoresTexto");
+
+            switchElementV.bind("change", function () {
+                if (switchElementV.check()) {
+                    campoValoresTexto.show();
+                } else {
+                campoValoresTexto.hide();
+                }
+            });
+        });
+
+     $(document).ready(function () {
+            var switchElementP = $("#prendasSwitch").data("kendoSwitch");
+            var campoPrendasTexto = $("#campoPrendasTexto");
+
+            switchElementP.bind("change", function () {
+                if (switchElementP.check()) {
+                    campoPrendasTexto.show();
+                } else {
+                    campoPrendasTexto.hide();
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            var switchElementO = $("#otrosSwitch").data("kendoSwitch");
+            var campoTexto = $("#campoTexto");
+
+            switchElementO.bind("change", function () {
+                if (switchElementO.check()) {
+                    campoTexto.show();
+                } else {
+                    campoTexto.hide();
+                }
+            });
+        });
 </script>
+
+
+
+
 

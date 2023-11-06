@@ -16,7 +16,7 @@
                 <div class="row">
                     <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
                         <button href="#" id="btnNuevoFact" onclick="mostrarModal()">
-                            <h6 class="m-0 d-flex align-items-center"><i class="icon-addOpciones h5 mb-0 me-2"></i><b>Agregar nuevo factor opción</b></h6>
+                            <h6 class="m-0 d-flex align-items-center"><i class="icon-addOpciones h5 mb-0 me-2"></i><b>Agregar nuevo factor opción accidente</b></h6>
                         </button>
                     </div>
                 </div>
@@ -27,14 +27,15 @@
                 <div class="bg-light py-1"></div>
             </div>
         </div>
-        <div class="row justify-content-between mb-1 titleCustom">
-            <div class="col-12 col-md-auto mt-4 mb-2">
-                <h5 class="px-4"><b>Listado de factores opciones</b></h5>
-                <h6 class="px-4 text-muted">Edita o inactiva los factores opciones.</h6>
-            </div>
-        </div>
+        
         <div class="row">
             <div class="col-12 mb-4 px-4 rounded gridCustom">
+                <div class="row justify-content-between mb-1 titleCustom">
+                    <div class="col-12 col-md-auto mt-4 mb-2">
+                        <h5 class="px-4"><b>Listado de factores opciones</b></h5>
+                        <h6 class="px-4 text-muted">Edita o inactiva los factores opciones.</h6>
+                    </div>
+                </div>
                 <div id="tablaFactoresOpcionesAccidentes">
                     <partial name="_ListaFactoresOpcionesAccidentes" model="Model" />
 

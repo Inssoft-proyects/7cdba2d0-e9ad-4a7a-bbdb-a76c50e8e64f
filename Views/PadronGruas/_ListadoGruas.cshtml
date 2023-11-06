@@ -29,6 +29,7 @@
                 columns.Bound(c => c.modelo).Title("Modelo").Width(90);
                 columns.Bound(c => c.placas).Title("Placas").Width(90);
                 columns.Bound(c => c.tipoGrua).Title("Tipo Grúa").Width(90);
+                columns.Bound(c => c.capacidad).Title("Capacidad").Width(90);
                 columns.Command(c => c.Custom("Editar").Click("editar")).Width(100);
             }).HtmlAttributes(new { style = "height:350" })
             .Pageable(pager => pager.AlwaysVisible(true).Position(GridPagerPosition.Top).PageSizes(true))

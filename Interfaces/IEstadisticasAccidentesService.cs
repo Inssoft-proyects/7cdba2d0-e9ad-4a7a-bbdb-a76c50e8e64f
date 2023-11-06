@@ -7,5 +7,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
     {
         public List<InfraccionesModel> GetAllInfracciones2();
         public List<BusquedaAccidentesModel> ObtenerAccidentes();
+        public List<ListadoAccidentesPorAccidenteModel> AccidentesPorAccidente();
+        public List<ListadoAccidentesPorVehiculoModel> AccidentesPorVehiculo();
     }
 }

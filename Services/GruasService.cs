@@ -24,31 +24,43 @@ namespace GuanajuatoAdminUsuarios.Services
                 {
                     connection.Open();
                     const string SqlTransact =
-                        @"select g.IdGrua,  c.IdConcesionario,g.noEconomico,g.placas,g.modelo,g.capacidad,
-                            c.Concesionario,catg.IdTipoGrua, catg.TipoGrua
-                            from concesionarios c
-                            inner join Gruas g on g.idConcesionario= c.idConcesionario
-                            inner join catTipoGrua catg ON catg.IdTipoGrua=g.IdTipoGrua
-                            where c.IdConcesionario=@IdConcesionario";
+                        @"SELECT ga.idGrua,ga.operadorGrua,ga.fechaArribo,
+                                ga.fechaInicio,ga.fechaFinal,ga.abanderamiento,ga.costoArrastre,ga.costoBanderazo,ga.costoSalvamento,ga.minutosManiobra,
+                                ga.costoAbanderamiento,ga.costoTotal,
+                                g.placas,g.capacidad,g.idTipoGrua,tg.tipoGrua,d.idDeposito
+                                FROM gruasAsignadas AS ga
+                                LEFT JOIN gruas AS g on g.idGrua = ga.idGrua
+                                LEFT JOIN catTipoGrua tg on g.idTipoGrua = tg.idTipoGrua
+                                LEFT JOIN depositos d on d.idDeposito = ga.idDeposito
+                                WHERE ga.idDeposito = @idDeposito";
 
                     SqlCommand command = new SqlCommand(SqlTransact, connection);
-                    command.Parameters.Add(new SqlParameter("@IdConcesionario", SqlDbType.Int)).Value = (object)Id ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@idDeposito", SqlDbType.Int)).Value = (object)Id ?? DBNull.Value;
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
                         while (reader.Read())
                         {
                             GruasConcesionariosModel gruasConcesionario = new GruasConcesionariosModel();
-                            gruasConcesionario.IdGrua = Convert.ToInt32(reader["IdGrua"].ToString());
-                            gruasConcesionario.IdConcesionario = Convert.ToInt32(reader["IdConcesionario"].ToString());
-                            gruasConcesionario.IdTipoGrua = Convert.ToInt32(reader["IdTipoGrua"].ToString());
-                            gruasConcesionario.noEconomico = reader["noEconomico"].ToString();
-                            gruasConcesionario.placas = reader["placas"].ToString();
-                            gruasConcesionario.modelo = reader["modelo"].ToString();
-                            gruasConcesionario.capacidad = reader["capacidad"].ToString();
-                            //gruasConcesionario.clasificacion = reader["clasificacion"].ToString();
-                            gruasConcesionario.Concesionario = reader["Concesionario"].ToString();
-                            gruasConcesionario.TipoGrua = reader["TipoGrua"].ToString();
+                            gruasConcesionario.IdGrua = reader["IdGrua"] is DBNull ? 0 : Convert.ToInt32(reader["IdGrua"]);
+                            gruasConcesionario.IdDeposito = reader["idDeposito"] is DBNull ? 0 : Convert.ToInt32(reader["idDeposito"]);
+                            gruasConcesionario.abanderamiento = reader["abanderamiento"] is DBNull ? 0 : Convert.ToInt32(reader["abanderamiento"]);
+                            gruasConcesionario.minutosManiobra = reader["minutosManiobra"] is DBNull ? 0 : Convert.ToInt32(reader["minutosManiobra"]);
+                            gruasConcesionario.fechaArribo = reader["fechaArribo"] is DBNull ? DateTime.MinValue : (DateTime)reader["fechaArribo"];
+                            gruasConcesionario.fechaInicio = reader["fechaInicio"] is DBNull ? DateTime.MinValue : (DateTime)reader["fechaInicio"];
+                            gruasConcesionario.fechaFinal = reader["fechaFinal"] is DBNull ? DateTime.MinValue : (DateTime)reader["fechaFinal"];
+                            gruasConcesionario.costoAbanderamiento = reader["costoAbanderamiento"] is DBNull ? 0.0f : float.Parse(reader["costoAbanderamiento"].ToString());
+                            gruasConcesionario.costoArrastre = reader["costoArrastre"] is DBNull ? 0.0f : float.Parse(reader["costoArrastre"].ToString());
+                            gruasConcesionario.costoSalvamento = reader["costoSalvamento"] is DBNull ? 0.0f : float.Parse(reader["costoSalvamento"].ToString());
+                            gruasConcesionario.costoBanderazo = reader["costoBanderazo"] is DBNull ? 0.0f : float.Parse(reader["costoBanderazo"].ToString());
+                            gruasConcesionario.costoTotal = reader["costoTotal"] is DBNull ? 0.0f : float.Parse(reader["costoTotal"].ToString());
+                            gruasConcesionario.IdTipoGrua = reader["IdTipoGrua"] is DBNull ? 0 : Convert.ToInt32(reader["IdTipoGrua"]);
+                            gruasConcesionario.placas = reader["placas"] is DBNull ? string.Empty : reader["placas"].ToString();
+                            gruasConcesionario.capacidad = reader["capacidad"] is DBNull ? string.Empty : reader["capacidad"].ToString();
+                            gruasConcesionario.TipoGrua = reader["TipoGrua"] is DBNull ? string.Empty : reader["TipoGrua"].ToString();
+                            gruasConcesionario.operadorGrua = reader["operadorGrua"] is DBNull ? string.Empty : reader["operadorGrua"].ToString();
+                            
+
                             GruasConcesionariosList.Add(gruasConcesionario);
 
                         }
@@ -290,6 +302,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                 ,g.fechaActualizacion
                                 ,g.actualizadoPor
                                 ,g.estatus
+                                ,g.capacidad
 								,cm.municipio
 								,c.concesionario
                                 ,c.idDelegacion

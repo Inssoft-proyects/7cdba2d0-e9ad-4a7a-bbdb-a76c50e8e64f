@@ -7,6 +7,10 @@ namespace GuanajuatoAdminUsuarios.Interfaces
     {
         List<TiposVehiculosModel> GetTiposVehiculos();
         public int obtenerIdPorTipo(string categoria);
+        public TiposVehiculosModel GetTipoVehiculoByID(int IdTipoVehiculo);
+        public int CreateTipoVehiculo(TiposVehiculosModel model);
+        public int UpdateTipoVehiculo(TiposVehiculosModel model);
+
 
     }
 }

@@ -52,7 +52,7 @@
                         <label>Fecha de ingreso:</label>
                             <span>
                                 @(Html.Kendo().DatePickerFor(t => t.fechaIngreso)
-                                    .Label(l => l.Content("Fecha <b>(obligatorio)</b>:"))
+                                    .Label(l => l.Content("Fecha:"))
                                     .HtmlAttributes(new { style = "width: 100%", title = "please enter date" })
                                     )
                             </span>
@@ -85,7 +85,7 @@
                         {
                             source.Read(read =>
                             {
-                                read.Action("Carreteras_Drop", "CapturaAccidentes");
+                                    read.Action("Marcas_Read", "SalidaVehiculos");
                             });
                         })
                         .Filter(FilterType.Contains)
@@ -97,45 +97,49 @@
             <div class="controlForm mb-3">
                 <label>No. de Placa:</label>
                 <span>
-                    @(Html.Kendo().DropDownListFor(t => t.placa)
-                        .Label(l => l.Content("No. de Placa:"))
-                        .DataTextField("Text")
-                        .DataValueField("Value")
-                        .OptionLabel("Selecciona una Placa")
-                        .DataSource(source =>
-                        {
-                            source.Read(read =>
+                        @(Html.Kendo().DropDownListFor(t => t.placa)
+                            .DataTextField("Text")
+                            .DataValueField("Text")
+                            .OptionLabel("Seleccione Placa...")
+                            .HtmlAttributes(new { style = "width:100%;" })
+                            .Filter(FilterType.Contains)
+                            .DataSource(source =>
                             {
-                                read.Action("Tramos_Drop", "CapturaAccidentes");
-                            });
-                        })
-                        .HtmlAttributes(new { style = "width:100%;" })
-                        .Filter(FilterType.Contains)
-                        )
+                                source.Read(read =>
+                                {
+                                    read.Action("Placas_Read", "SalidaVehiculos");
+                                });
+                            }))
                 </span>
             </div>
         </div>
     </form>
     <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-            <div class="controlButton my-3" onclick="buscarVehiculo()">
+            <div class="controlButton my-3" onclick="buscarIngreso()">
             @(Html.Kendo().Button()
                 .Name("buscarVehiculo")
                 .HtmlAttributes(new { @class = "btnPrimary" })
-                .Content("<h5 class=\"m-0\"><b>Guardar</b></h5>"))
+                .Content("<h5 class=\"m-0\"><b>Buscar</b></h5>"))
         </div>
 
     </div>
-
+    <div>
+        <partial name="_ListadoServicios" model="Model" />
+        </div>
 </section>
 </div>
+
  <script>
-
-    function buscarVehiculo() {
-
+    function buscarIngreso() {
         var Mydata = $("#busquedaSalidaForm").serialize();
-        console.log(Mydata);
-       
+        $.ajax({
+            url: '@Url.Action("ajax_BusquedaIngresos", "SalidaVehiculos")',
+            type: 'POST',
+            data: Mydata,
+            success: (data) => {
+                var grid = $("#gridBusquedaServiciosDeposito").data("kendoGrid");
+                grid.dataSource.data(data);
+            }
+        });
     }
-
-
-   </script>
+ </script>

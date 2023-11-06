@@ -11,32 +11,31 @@
                     </div>
                 </div>
             </div>
+            <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
+                <div class="row">
+                    <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                        <a href="@Url.Action("NuevoAccidente", "CapturaAccidentes")" class="d-flex m-0 text-decoration-none"><h6 class="m-0 d-flex align-items-center"> <i class="me-2 icon-addAccidentes"></i> <b>Agregar nuevo accidente</b></h6></a>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-12">
                 <div class="bgDanger py-1"></div>
             </div>
         </div>
-<div class="row mb-1">
-    <div class="col-12 col-md-auto mt-4 mb-2">
-        <h5 class="px-4 colorDanger"><b class="text-white bgDanger mb-1 me-2 rounded-circle px-2 h6">i</b><b>Registro de accidentes incompletos</b></h5>
-        <h6 class="px-4 text-muted">Se encontraron capturas incompletas, para llevar la numeración correcta se recomienda que todas las capturas se completen en su totalidad.</h6>
-    </div>
-</div>
-<div class="row justify-content-between align-items-end mb-1">
-    <div class="col-12 col-md-auto mt-4 mb-2">
-        <h5 class="px-4"><b>Listado de accidentes incompletos</b></h5>
-        <h6 class="px-4 text-muted">Continúa la captura de los accidentes.</h6>
-    </div>
-    <div class="col-12 col-lg-auto text-center">
-        <div class="btnOutline btnOutlinePrimary px-4 my-3">
-           
-                        <a href="@Url.Action("NuevoAccidente", "CapturaAccidentes")" class="m-0"><i class="me-2 icon-addAccidentes"></i><b>Agregar nuevo accidente</b></a>
-
-            
+        <div class="row mb-1">
+            <div class="col-12 col-md-auto mt-4 mb-2">
+                <h5 class="px-4 colorDanger"><b class="text-white bgDanger mb-1 me-2 rounded-circle px-2 h6">i</b><b>Registro de accidentes incompletos</b></h5>
+                <h6 class="px-4 text-muted">Se encontraron capturas incompletas, para llevar la numeración correcta se recomienda que todas las capturas se completen en su totalidad.</h6>
+            </div>
         </div>
-    </div>
-</div>
+        <div class="row justify-content-between mb-1 titleCustom">
+            <div class="col-12 col-md-auto mt-4 mb-2">
+                <h5 class="px-4"><b>Listado de accidentes incompletos</b></h5>
+                <h6 class="px-4 text-muted">Continúa la captura de los accidentes.</h6>
+            </div>
+        </div>
         <div id="listadoAccidentes">
             <partial name="_ListadoAccidentes" model="Model" />
         </div>

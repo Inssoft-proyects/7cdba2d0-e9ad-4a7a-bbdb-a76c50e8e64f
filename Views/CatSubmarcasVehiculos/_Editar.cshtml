@@ -40,8 +40,7 @@
         </div>
 
         <div class="col-12 col-lg-6 my-4">
-                <div class="row justify-content-center btnToggleActive">
-                <div class="col-12 col-lg-6 my-4">
+                   <div class="col-12 col-lg-6 my-4 btnToggleActive">
                     @(Html.Kendo().SwitchFor(t => t.ValorEstatusSubmarcas)
                         .Name("submarcasSwitch")
                         .Checked(true)
@@ -52,10 +51,9 @@
                 </div>
             </div>
         </div>
-    </div>
         <div class="col-12 col-md-6">
             <div class="controlForm my-3">
-                <label>Marca<b>(obligatorio)</b>:</label>
+                <label>Marca <b>(obligatorio)</b>:</label>
                 <span>
                     @Html.HiddenFor(m=>m.IdSubmarca)
                     @(Html.Kendo().DropDownListFor(t => t.IdMarcaVehiculo)

@@ -16,7 +16,7 @@
     }
 }
 
-<section id="sectionCap" class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow mt-3 mb-5 rounded">
+<section id="sectionCap" class="bg-white boxShadow  mt-2 mb-3 rounded">
     <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
         <div class="col-12 col-md-auto pe-0">
             <div class="row align-items-center justify-content-center justify-content-md-start">
@@ -286,7 +286,7 @@
             </div>
         </div>
 
-        <div class="col-12 col-md-2 col-lg-1 col-xl-1">
+        <div class="col-12 col-md-6 col-lg-3">
             <div class="controlForm my-3">
                 <label>Modelo:</label>
                 @Html.CustomTextBoxFor(model => model.modelo,"Ingresa Modelo", disableInput)
@@ -359,7 +359,7 @@
                 <label>Carga:</label>
                 @Html.HiddenFor(m => m.cargaInt, new { id = "idCarga" })
                 @(Html.Kendo().SwitchFor(m => m.carga)
-                    .Messages(c => c.Checked("SI").Unchecked("NO"))
+                    .Messages(c => c.Checked("Si").Unchecked("No"))
                     .HtmlAttributes(new { style = "transform: scale(1.2);", id = "cargaSwitch" })
 
                     )
@@ -376,7 +376,7 @@
 
 </section>
 
-<section id="sec2" class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
+<section id="sec2" class=" bg-white boxShadow my-5 rounded">
     <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
         <div class="col-12 col-md-auto">
             <div class="row align-items-center justify-content-center justify-content-md-start">

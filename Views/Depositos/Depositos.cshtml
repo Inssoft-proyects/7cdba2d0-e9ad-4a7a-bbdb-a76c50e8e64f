@@ -779,7 +779,22 @@
             }
         });
     }
+    $(document).ready(function () {
+        $("#kilometroUbicacion").on("input", function () {
+            var value = this.value;
+            if (value !== "") {
+                this.value = value.replace(/[^\d.]/g, "");
+            }
+        });
 
+        $("#kilometroUbicacion").on("paste", function (e) {
+            e.preventDefault();
+            var clipboardData = e.originalEvent.clipboardData.getData('text/plain');
+            if (/^\d+$/.test(clipboardData)) {
+                document.execCommand('insertText', false, clipboardData);
+            }
+        });
+    });
 
 
   </script>

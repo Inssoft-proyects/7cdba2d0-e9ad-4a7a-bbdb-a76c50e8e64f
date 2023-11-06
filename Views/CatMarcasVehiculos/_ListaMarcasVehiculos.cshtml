@@ -6,7 +6,7 @@
         .Name("gridCatMarcas")
         .Columns(columns =>
         {
-            columns.Bound(c => c.IdMarcaVehiculo).Title("Id Marca vehículo").Width(40);
+            columns.Bound(c => c.IdMarcaVehiculo).Title("Id").Width(40);
             columns.Bound(c => c.MarcaVehiculo).Width(190);
             columns.Bound(c => c.estatusDesc).Title("Estatus en sistema").Width(90);
             columns.Command(c => c.Custom("Editar").Click("getId")).Width(80);

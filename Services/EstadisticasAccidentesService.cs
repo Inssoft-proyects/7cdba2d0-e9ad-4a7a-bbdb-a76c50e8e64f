@@ -205,36 +205,36 @@ namespace GuanajuatoAdminUsuarios.Services
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand(@" SELECT 
-    acc.idAccidente, 
-    MAX(acc.idMunicipio) AS idMunicipio,
-    MAX(mun.municipio) AS municipio,
-    MAX(acc.idOficinaDelegacion) AS idOficinaDelegacion,
-    MAX(acc.idElabora) AS idElabora,
-    MAX(acc.idCarretera) AS idCarretera, 
-    MAX(acc.idTramo) AS idTramo, 
-    MAX(acc.idClasificacionAccidente) AS idClasificacionAccidente,
-    MAX(cond.idTipoLicencia) AS idTipoLicencia,
-    MAX(acc.idFactorAccidente) AS idFactorAccidente,
-    MAX(acc.idFactorOpcionAccidente) AS idFactorOpcionAccidente,
-    MAX(acc.estatus) AS estatus,
-    MAX(acc.numeroReporte) AS numeroReporte,
-    MAX(acc.fecha) AS fecha,
-    MAX(acc.hora) AS hora,
-    MAX(veh.idVehiculo) AS idVehiculo,
-    MAX(veh.idCatTipoServicio) AS idCatTipoServicio,
-    MAX(veh.idTipoVehiculo) AS idTipoVehiculo,
-    MAX(accau.idAccidenteCausa) AS idAccidenteCausa
-FROM accidentes AS acc
-LEFT JOIN catMunicipios AS mun ON acc.idMunicipio = mun.idMunicipio 
-LEFT JOIN catCarreteras AS car ON acc.idCarretera = car.idCarretera 
-LEFT JOIN catTramos AS tra ON acc.idTramo = tra.idTramo 
-LEFT JOIN conductoresVehiculosAccidente AS cva ON acc.idAccidente = cva.idAccidente  
-LEFT JOIN personas AS cond ON cond.idPersona = cva.idPersona
-LEFT JOIN vehiculos AS veh ON cva.idVehiculo = veh.idVehiculo
-LEFT JOIN accidenteCausas AS accau ON acc.idAccidente = accau.idAccidente
-WHERE acc.estatus = 1
-GROUP BY acc.idAccidente;
-", connection);
+                                                                acc.idAccidente, 
+                                                                MAX(acc.idMunicipio) AS idMunicipio,
+                                                                MAX(mun.municipio) AS municipio,
+                                                                MAX(acc.idOficinaDelegacion) AS idOficinaDelegacion,
+                                                                MAX(acc.idElabora) AS idElabora,
+                                                                MAX(acc.idCarretera) AS idCarretera, 
+                                                                MAX(acc.idTramo) AS idTramo, 
+                                                                MAX(acc.idClasificacionAccidente) AS idClasificacionAccidente,
+                                                                MAX(cond.idTipoLicencia) AS idTipoLicencia,
+                                                                MAX(acc.idFactorAccidente) AS idFactorAccidente,
+                                                                MAX(acc.idFactorOpcionAccidente) AS idFactorOpcionAccidente,
+                                                                MAX(acc.estatus) AS estatus,
+                                                                MAX(acc.numeroReporte) AS numeroReporte,
+                                                                MAX(acc.fecha) AS fecha,
+                                                                MAX(acc.hora) AS hora,
+                                                                MAX(veh.idVehiculo) AS idVehiculo,
+                                                                MAX(veh.idCatTipoServicio) AS idCatTipoServicio,
+                                                                MAX(veh.idTipoVehiculo) AS idTipoVehiculo,
+                                                                MAX(accau.idAccidenteCausa) AS idAccidenteCausa
+                                                                FROM accidentes AS acc
+                                                                LEFT JOIN catMunicipios AS mun ON acc.idMunicipio = mun.idMunicipio 
+                                                                LEFT JOIN catCarreteras AS car ON acc.idCarretera = car.idCarretera 
+                                                                LEFT JOIN catTramos AS tra ON acc.idTramo = tra.idTramo 
+                                                                LEFT JOIN conductoresVehiculosAccidente AS cva ON acc.idAccidente = cva.idAccidente  
+                                                                LEFT JOIN personas AS cond ON cond.idPersona = cva.idPersona
+                                                                LEFT JOIN vehiculos AS veh ON cva.idVehiculo = veh.idVehiculo
+                                                                LEFT JOIN accidenteCausas AS accau ON acc.idAccidente = accau.idAccidente
+                                                                WHERE acc.estatus = 1
+                                                                GROUP BY acc.idAccidente;
+                                                                ", connection);
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
@@ -283,6 +283,223 @@ GROUP BY acc.idAccidente;
             return ListaAccidentes;
 
 
+        }
+
+        public List<ListadoAccidentesPorAccidenteModel> AccidentesPorAccidente()
+        {
+            List<ListadoAccidentesPorAccidenteModel> modelList = new List<ListadoAccidentesPorAccidenteModel>();
+            string strQuery = @"SELECT DISTINCT
+                ac.numeroReporte as Numreporteaccidente
+                ,ac.fecha as Fecha
+                ,ac.hora as Hora
+                ,del.delegacion as Delegacion
+                ,mun.municipio
+                ,tram.tramo
+                ,ac.kilometro
+                ,ac.latitud
+                ,ac.longitud
+                ,veh.vehiculos as Vehiculo
+                ,CONCAT(ofic.nombre, ' ',ofic.apellidoPaterno,' ',ofic.apellidoMaterno) as NombredelOficial
+                ,ac.montoCamino as Dañosalcamino
+                ,ac.montoCarga as Dañosacarga
+                ,ac.montoPropietarios as Dañosapropietario
+                ,ac.montoOtros as Otrosdaños
+                ,inv.Lesionados as Lesionados
+                ,inv.Muertos as Muertos
+                ,fac.factorAccidente as FactoresOpciones
+                ,cauac.causaAccidente as Causas
+                ,ac.descripcionCausas as CausasDescripcion
+                FROM accidentes ac
+                LEFT JOIN catDelegaciones del on del.idDelegacion = ac.idOficinaDelegacion
+                LEFT JOIN catMunicipios mun on mun.idMunicipio = ac.idMunicipio
+                LEFT JOIN catCarreteras car on car.idCarretera = ac.idCarretera
+                LEFT JOIN catTramos tram on tram.idTramo = ac.idTramo
+                LEFT JOIN catFactoresAccidentes fac on fac.idFactorAccidente = ac.idFactorAccidente
+                LEFT JOIN catOficiales ofic on ofic.idOficial = ac.idElabora
+                LEFT JOIN catCausasAccidentes cauac on cauac.idCausaAccidente = ac.idCausaAccidente
+                LEFT JOIN (SELECT idAccidente, STRING_AGG(Vehiculos,'; \r\n ') vehiculos FROM (
+                            SELECT ac.idAccidente
+                            ,CONCAT('Vehículo ',(ROW_NUMBER() OVER (PARTITION BY ac.idAccidente Order by ac.idAccidente)),': ',mv.marcaVehiculo,' ',sm.nombreSubmarca,' ',veh.modelo,', TIPO: ',tv.tipoVehiculo,', Servicio: ',ts.tipoServicio,', Placa: ',veh.placas,', Serie: ',veh.serie,'') AS Vehiculos
+                            FROM accidentes ac
+                            left join vehiculosAccidente vehacc on vehacc.idAccidente = ac.idAccidente
+                            left join vehiculos veh on veh.idVehiculo = vehacc.idVehiculo
+                            left join catMarcasVehiculos mv ON mv.idMarcaVehiculo = veh.idMarcaVehiculo
+                            left join catSubmarcasVehiculos sm ON sm.idSubmarca = veh.idSubmarca
+                            left join catEntidades e ON e.idEntidad = veh.idEntidad
+                            left join catColores cc ON cc.idColor = veh.idColor
+                            left join catTiposVehiculo tv ON tv.idTipoVehiculo = veh.idTipoVehiculo
+                            left join catTipoServicio ts ON ts.idCatTipoServicio = veh.idCatTipoServicio) as veh
+                            GROUP by idAccidente
+                ) veh on veh.idAccidente = ac.idAccidente
+                left join (SELECT acc.idAccidente ,count(CASE WHEN invacc.idEstadoVictima = 1 THEN invacc.idEstadoVictima END) AS Lesionados,  count(CASE WHEN invacc.idEstadoVictima = 2 THEN invacc.idEstadoVictima END) AS Muertos
+                FROM accidentes acc
+                inner join involucradosAccidente invacc on invacc.idAccidente = acc.idAccidente
+                GROUP by acc.idAccidente) inv on inv.idAccidente = ac.idAccidente";
+
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(strQuery, connection);
+                    command.CommandType = CommandType.Text;
+
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            ListadoAccidentesPorAccidenteModel model = new ListadoAccidentesPorAccidenteModel();
+                            model.Numreporteaccidente = reader["Numreporteaccidente"] == System.DBNull.Value ? default(string) : reader["Numreporteaccidente"].ToString();
+                            model.Fecha = reader["Fecha"] == System.DBNull.Value ? default(string) : reader["Fecha"].ToString();
+                            model.Hora = reader["Hora"] == System.DBNull.Value ? default(string) : reader["Hora"].ToString();
+                            model.Delegacion = reader["Delegacion"] == System.DBNull.Value ? default(string) : reader["Delegacion"].ToString();
+                            model.municipio = reader["municipio"] == System.DBNull.Value ? default(string) : reader["municipio"].ToString();
+                            model.tramo = reader["tramo"] == System.DBNull.Value ? default(string) : reader["tramo"].ToString();
+                            model.kilometro = reader["kilometro"] == System.DBNull.Value ? default(string) : reader["kilometro"].ToString();
+                            model.latitud = reader["latitud"] == System.DBNull.Value ? default(string) : reader["latitud"].ToString();
+                            model.longitud = reader["longitud"] == System.DBNull.Value ? default(string) : reader["longitud"].ToString();
+                            model.Vehiculo = reader["Vehiculo"] == System.DBNull.Value ? default(string) : reader["Vehiculo"].ToString();
+                            model.NombredelOficial = reader["NombredelOficial"] == System.DBNull.Value ? default(string) : reader["NombredelOficial"].ToString();
+                            model.Dañosalcamino = reader["Dañosalcamino"] == System.DBNull.Value ? default(string) : reader["Dañosalcamino"].ToString();
+                            model.Dañosacarga = reader["Dañosacarga"] == System.DBNull.Value ? default(string) : reader["Dañosacarga"].ToString();
+                            model.Dañosapropietario = reader["Dañosapropietario"] == System.DBNull.Value ? default(string) : reader["Dañosapropietario"].ToString();
+                            model.Otrosdaños = reader["Otrosdaños"] == System.DBNull.Value ? default(string) : reader["Otrosdaños"].ToString();
+                            model.Lesionados = reader["Lesionados"] == System.DBNull.Value ? default(string) : reader["Lesionados"].ToString();
+                            model.Muertos = reader["Muertos"] == System.DBNull.Value ? default(string) : reader["Muertos"].ToString();
+                            model.FactoresOpciones = reader["FactoresOpciones"] == System.DBNull.Value ? default(string) : reader["FactoresOpciones"].ToString();
+                            model.Causas = reader["Causas"] == System.DBNull.Value ? default(string) : reader["Causas"].ToString();
+                            model.CausasDescripcion = reader["CausasDescripcion"] == System.DBNull.Value ? default(string) : reader["CausasDescripcion"].ToString();
+                            modelList.Add(model);
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    //Guardar la excepcion en algun log de errores
+                    //ex
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+
+            return modelList;
+        }
+        public List<ListadoAccidentesPorVehiculoModel> AccidentesPorVehiculo()
+        {
+            List<ListadoAccidentesPorVehiculoModel> modelList = new List<ListadoAccidentesPorVehiculoModel>();
+            string strQuery = @"SELECT DISTINCT
+                ac.numeroReporte		as Numreporteaccidente
+                ,ac.fecha				as Fecha
+                ,ac.hora				as Hora
+                ,(ROW_NUMBER() OVER (PARTITION BY ac.idAccidente Order by ac.idAccidente))					as NumVeh							
+                ,veh.placas				as PlacasVeh
+                ,veh.serie				as SerieVeh
+                ,CONCAT(prop.nombre, ' ',prop.apellidoPaterno,' ',prop.apellidoMaterno)		as PropietarioVeh
+                ,tv.tipoVehiculo		as TipoVeh
+                ,ts.tipoServicio		as ServicioVeh
+                ,mv.marcaVehiculo		as Marca 
+                ,sm.nombreSubmarca		as Submarca
+                ,veh.modelo				as Modelo
+                ,CONCAT(cond.nombre, ' ',cond.apellidoPaterno,' ',cond.apellidoMaterno) 	as ConductorVeh
+                ,''						as DepositoVehículo
+                ,del.delegacion			as Delegacion
+                ,mun.municipio			as Municipio
+                ,car.carretera			as Carretera
+                ,tram.tramo				as Tramo
+                ,ac.kilometro			as Kilómetro
+                ,ac.latitud				as Latitud
+                ,ac.longitud			as Longitud
+                ,CONCAT(ofic.nombre, ' ',ofic.apellidoPaterno,' ',ofic.apellidoMaterno) 	as NombredelOficial
+                ,ac.montoCamino			as Dañosalcamino
+                ,ac.montoCarga			as Dañosacarga
+                ,ac.montoPropietarios	as Dañosapropietario
+                ,ac.montoOtros			as Otrosdaños
+                ,inv.Lesionados			as Lesionados
+                ,inv.Muertos			as Muertos
+                ,cauac.causaAccidente	as Causas
+                ,ac.descripcionCausas	as CausasDescripcion
+                FROM accidentes ac
+                LEFT JOIN catDelegaciones del on del.idDelegacion = ac.idOficinaDelegacion
+                LEFT JOIN catMunicipios mun on mun.idMunicipio = ac.idMunicipio
+                LEFT JOIN catCarreteras car on car.idCarretera = ac.idCarretera
+                LEFT JOIN catTramos tram on tram.idTramo = ac.idTramo
+                LEFT JOIN catFactoresAccidentes fac on fac.idFactorAccidente = ac.idFactorAccidente
+                LEFT JOIN catOficiales ofic on ofic.idOficial = ac.idElabora
+                LEFT JOIN catCausasAccidentes cauac on cauac.idCausaAccidente = ac.idCausaAccidente
+                left join vehiculosAccidente vehacc on vehacc.idAccidente = ac.idAccidente
+                left join vehiculos veh on veh.idVehiculo = vehacc.idVehiculo
+                left join catMarcasVehiculos mv ON mv.idMarcaVehiculo = veh.idMarcaVehiculo
+                left join catSubmarcasVehiculos sm ON sm.idSubmarca = veh.idSubmarca
+                left join catEntidades e ON e.idEntidad = veh.idEntidad
+                left join catColores cc ON cc.idColor = veh.idColor
+                left join catTiposVehiculo tv ON tv.idTipoVehiculo = veh.idTipoVehiculo
+                left join catTipoServicio ts ON ts.idCatTipoServicio = veh.idCatTipoServicio
+                left join (SELECT acc.idAccidente ,count(CASE WHEN invacc.idEstadoVictima = 1 THEN invacc.idEstadoVictima END) AS Lesionados,  count(CASE WHEN invacc.idEstadoVictima = 2 THEN invacc.idEstadoVictima END) AS Muertos
+                FROM accidentes acc
+                inner join involucradosAccidente invacc on invacc.idAccidente = acc.idAccidente
+                GROUP by acc.idAccidente) inv on inv.idAccidente = ac.idAccidente
+                LEFT JOIN conductoresVehiculosAccidente cva ON cva.idAccidente = ac.idAccidente 
+                LEFT JOIN personas cond ON cond.idPersona = cva.idPersona
+                LEFT JOIN personas prop on prop.idPersona = veh.propietario";
+
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(strQuery, connection);
+                    command.CommandType = CommandType.Text;
+
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            ListadoAccidentesPorVehiculoModel model = new ListadoAccidentesPorVehiculoModel();
+                            model.Numreporteaccidente = reader["Numreporteaccidente"] == System.DBNull.Value ? default(string) : reader["Numreporteaccidente"].ToString();
+                            model.NumVeh = reader["NumVeh"] == System.DBNull.Value ? default(string) : reader["NumVeh"].ToString();
+                            model.PlacasVeh = reader["PlacasVeh"] == System.DBNull.Value ? default(string) : reader["PlacasVeh"].ToString();
+                            model.SerieVeh = reader["SerieVeh"] == System.DBNull.Value ? default(string) : reader["SerieVeh"].ToString();
+                            model.PropietarioVeh = reader["PropietarioVeh"] == System.DBNull.Value ? default(string) : reader["PropietarioVeh"].ToString();
+                            model.TipoVeh = reader["TipoVeh"] == System.DBNull.Value ? default(string) : reader["TipoVeh"].ToString();
+                            model.ServicioVeh = reader["ServicioVeh"] == System.DBNull.Value ? default(string) : reader["ServicioVeh"].ToString();
+                            model.Marca = reader["Marca"] == System.DBNull.Value ? default(string) : reader["Marca"].ToString();
+                            model.Submarca = reader["Submarca"] == System.DBNull.Value ? default(string) : reader["Submarca"].ToString();
+                            model.Modelo = reader["Modelo"] == System.DBNull.Value ? default(string) : reader["Modelo"].ToString();
+                            model.ConductorVeh = reader["ConductorVeh"] == System.DBNull.Value ? default(string) : reader["ConductorVeh"].ToString();
+                            model.DepositoVehículo = reader["DepositoVehículo"] == System.DBNull.Value ? default(string) : reader["DepositoVehículo"].ToString();
+                            model.Delegacion = reader["Delegacion"] == System.DBNull.Value ? default(string) : reader["Delegacion"].ToString();
+                            model.Municipio = reader["Municipio"] == System.DBNull.Value ? default(string) : reader["Municipio"].ToString();
+                            model.Carretera = reader["Carretera"] == System.DBNull.Value ? default(string) : reader["Carretera"].ToString();
+                            model.Tramo = reader["Tramo"] == System.DBNull.Value ? default(string) : reader["Tramo"].ToString();
+                            model.Kilómetro = reader["Kilómetro"] == System.DBNull.Value ? default(string) : reader["Kilómetro"].ToString();
+                            model.Latitud = reader["Latitud"] == System.DBNull.Value ? default(string) : reader["Latitud"].ToString();
+                            model.Longitud = reader["Longitud"] == System.DBNull.Value ? default(string) : reader["Longitud"].ToString();
+                            model.NombredelOficial = reader["NombredelOficial"] == System.DBNull.Value ? default(string) : reader["NombredelOficial"].ToString();
+                            model.Dañosalcamino = reader["Dañosalcamino"] == System.DBNull.Value ? default(string) : reader["Dañosalcamino"].ToString();
+                            model.DañosaCarga = reader["DañosaCarga"] == System.DBNull.Value ? default(string) : reader["DañosaCarga"].ToString();
+                            model.Dañosapropietario = reader["Dañosapropietario"] == System.DBNull.Value ? default(string) : reader["Dañosapropietario"].ToString();
+                            model.Otrosdaños = reader["Otrosdaños"] == System.DBNull.Value ? default(string) : reader["Otrosdaños"].ToString();
+                            model.Lesionados = reader["Lesionados"] == System.DBNull.Value ? default(string) : reader["Lesionados"].ToString();
+                            model.Muertos = reader["Muertos"] == System.DBNull.Value ? default(string) : reader["Muertos"].ToString();
+                            model.Causas = reader["Causas"] == System.DBNull.Value ? default(string) : reader["Causas"].ToString();
+                            model.CausasDescripcion = reader["CausasDescripcion"] == System.DBNull.Value ? default(string) : reader["CausasDescripcion"].ToString();
+                            modelList.Add(model);
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    //Guardar la excepcion en algun log de errores
+                    //ex
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return modelList;
         }
 
     }

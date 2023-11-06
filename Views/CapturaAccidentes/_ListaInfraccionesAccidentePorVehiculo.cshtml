@@ -41,9 +41,9 @@
         actualizarGrid();
     }
 </script>
-
+<div class="row">
 <div class="col-12 mb-4 px-4 rounded gridCustom">
-    <button class="btnPrimary px-5" onclick="recargarGrid()">Actualizar</button>
+    
     @(
         Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel>()
         .Name("gridInfraccionesPorVehiculo")
@@ -92,4 +92,4 @@
         )
 
 </div>
-
+</div>

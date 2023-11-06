@@ -4,10 +4,10 @@
         <div class="col-auto pe-0">
             <div class="row align-items-center justify-content-center justify-content-md-start">
                 <div class="col-auto pe-0">
-                    <i class="icon-addOMinisterio h1 colorPrimary"></i>
+                    <i class="icon-addMinisterio h1 colorPrimary"></i>
                 </div>
                 <div class="col-auto my-3">
-                    <h2 class="m-0 h3"><b>Agregar nueva agencia del ministerio</b></h2>
+                    <h2 class="m-0 h3"><b>Agregar nueva agencia de ministerio</b></h2>
                 </div>
             </div>
         </div>
@@ -27,7 +27,7 @@
     </div>
     <div class="row">
         <div class="col-12 my-4">
-            <h5 class="px-4"><b>Datos de oficina en renta</b></h5>
+            <h5 class="px-4"><b> Datos de agencia de ministerio.</b></h5>
             <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
         </div>
     </div>
@@ -54,7 +54,7 @@
         <div class="col-12 col-md-6">
             <div class="controlForm my-3">
                 @(Html.Kendo().TextBoxFor(t=>t.NombreAgencia)
-                    .Label(l => l.Content("Agencia del ministerio <b>(obligatorio)</b>:"))
+                    .Label(l => l.Content("Agencia de ministerio <b>(obligatorio)</b>:"))
                     .Placeholder("Ingresa el nombre de la agencia del ministerio")
                     .HtmlAttributes(new { style = "width: 100%" })
                     )

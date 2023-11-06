@@ -1,0 +1,47 @@
+﻿<script>
+    function onRowSelect(e) {
+        var selectedRow = this.select();
+        console.log("SJS", selectedRow);
+        if (selectedRow.length > 0) {
+            var dataItem = this.dataItem(selectedRow);
+            var idDeposito = dataItem.idDeposito;
+            console.log("DAT", dataItem);
+            window.location.href = '@Url.Action("DatosDeposito", "SalidaVehiculos")' + '?iDp=' + idDeposito;
+        }
+    }
+
+</script>
+<div class="row">
+    <div class="col-12 mb-4 px-4 rounded gridCustom">
+
+        @(
+            Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.SalidaVehiculosModel>()
+            .Name("gridBusquedaServiciosDeposito")
+            .Events(events => events.Change("onRowSelect"))
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.idDeposito).Hidden();
+                columns.Select().Width(90).ClientHeaderTemplate("Seleccionar");
+                columns.Bound(c => c.placa).Title("Placas").Width(100);
+                columns.Bound(c => c.marca).Title("Marca").Width(100);
+                columns.Bound(c => c.submarca).Title("Submarca").Width(70);
+                columns.Bound(c => c.serie).Title("Serie").Width(100);
+                columns.Bound(c => c.color).Title("Color").Width(100);
+                columns.Bound(c => c.propietario).Title("Propietario").Width(100);
+                columns.Bound(c => c.pension).Title("Pension").Width(100);
+                columns.Bound(c => c.fechaIngresoFormateada).Title("Fecha de Ingreso").Width(150);
+
+            }).HtmlAttributes(new { style = "height:550px" })
+            .Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }).Position(GridPagerPosition.Top))
+            .Sortable()
+            .Scrollable(scr => scr.Height(350))
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .ServerOperation(false)
+            )
+            )
+
+
+    </div>
+</div>
+

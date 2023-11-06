@@ -28,7 +28,7 @@
     </div>
   <form id="editarCarreteraForm" class="row px-4 mb-4 align-items-end">
     <div class="row">
-        <div class="col-12 my-4">
+        <div class="col-12 col-lg-6 my-4">
             <h5 class="px-4"><b>Datos de carretera</b></h5>
             <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
         </div>
@@ -44,13 +44,14 @@
     </div>
         <div class="col-12 col-md-6">
             <div class="controlForm my-3">
-                <label>Delegación<b>(obligatorio)</b>:</label>
+                <label>Delegación <b>(obligatorio)</b>:</label>
                 <span>
                     @Html.HiddenFor(m=>m.IdCarretera)
                             @(Html.Kendo().DropDownListFor(t => t.idOficinaTransporte)
                             .DataTextField("Text")
                             .DataValueField("Value")
                             .OptionLabel("Selecciona una Delegacion")
+                            .HtmlAttributes(new { style = "width: 100%" })
                             .DataSource(source =>
                             {
                                 source.Read(read =>

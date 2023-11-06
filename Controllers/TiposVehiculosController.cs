@@ -79,7 +79,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
             if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
             {
-                var tiposVehiculosModel = GetTipoVehiculoByID(IdTipoVehiculo);
+                var tiposVehiculosModel = _catTiposVehiculoService.GetTipoVehiculoByID(IdTipoVehiculo);
             return View("_Editar", tiposVehiculosModel);
             }
             else
@@ -112,7 +112,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             ModelState.Remove("TipoVehiculo");
             if (ModelState.IsValid)
             {
-                CreateTipoVehiculo(model);
+                _catTiposVehiculoService.CreateTipoVehiculo(model);
                 var ListTiposVehiculosModel = _catTiposVehiculoService.GetTiposVehiculos();
                 return PartialView("_ListaTiposVehiculos", ListTiposVehiculosModel);
             }
@@ -129,8 +129,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             ModelState.Remove("TipoVehiculo");
             if (ModelState.IsValid)
             {
-               
-                UpdateTipoVehiculo(model);
+
+                _catTiposVehiculoService.UpdateTipoVehiculo(model);
                 var ListTiposVehiculosModel = _catTiposVehiculoService.GetTiposVehiculos();
                 return PartialView("_ListaTiposVehiculos", ListTiposVehiculosModel);
             }

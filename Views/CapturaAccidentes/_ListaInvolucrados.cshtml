@@ -27,7 +27,7 @@ function onRowSelect(e) {
 
     
 </script>
-
+<div class="row">
 <div class="col-12 mb-4 px-4 rounded gridCustom">
     @(
         Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel>()
@@ -64,4 +64,5 @@ function onRowSelect(e) {
             events.Change("onRowSelect");
         })
         )
+</div>
 </div>

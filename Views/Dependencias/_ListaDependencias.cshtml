@@ -5,7 +5,7 @@
                     .Name("grid")
                     .Columns(columns =>
                     {
-                        columns.Bound(c => c.IdDependencia).Width(40);
+                        columns.Bound(c => c.IdDependencia).Width(20).Title("Id");
                         columns.Bound(c => c.NombreDependencia).Width(100);
                         columns.Bound(c => c.Estatus).ClientTemplate("#=calculateField(data)#").Width(50);
                         //columns.Template(c => { }).ClientTemplate("#=calculateField(data)#");

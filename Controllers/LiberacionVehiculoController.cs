@@ -98,7 +98,6 @@ namespace GuanajuatoAdminUsuarios.Controllers
             int result = 0;
             try
             {
-                #region funciona
 
                 var model = JsonConvert.DeserializeObject<LiberacionVehiculoModel>(data);
                 if (ImageAcreditacionPropiedad != null)
@@ -129,7 +128,6 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 ////Prueba de que allmacena bien la imagen  
                 ////var imgByte = model.AcreditacionPropiedad;
                 ////return new FileContentResult(imgByte, "image/jpeg");
-                #endregion
                 result = _liberacionVehiculoService.UpdateDeposito(model);
 
             }

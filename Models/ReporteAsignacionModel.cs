@@ -7,10 +7,14 @@ namespace GuanajuatoAdminUsuarios.Models
     public class ReporteAsignacionModel
     {
         public int idSolicitud { get; set; }
+        public int pensionEstatus { get; set; }
+
         public string vehiculoCarretera { get; set; }
         public string vehiculoTramo { get; set; }
         public string vehiculoKm { get; set; }
+        public string descripcionEstatus { get; set; }
 
+        
         /// <summary>
         /// Filtro tbl solicitudes
         /// </summary>
@@ -109,6 +113,11 @@ namespace GuanajuatoAdminUsuarios.Models
         public string actualizadoPor { get; set; }
         public string estatus { get; set; }
         //public int IdDependencia { get; set; }
+        public int idMotivo { get; set; }
+        public string motivoAsignacion { get; set; }
+        public string numeroIventario { get; set; }
+
+        
 
     }
 }

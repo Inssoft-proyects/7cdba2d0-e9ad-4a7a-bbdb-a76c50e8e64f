@@ -50,7 +50,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
         List<CapturaAccidentesModel> InvolucradosAccidente(int idAccidente);
         int AgregarFechaHoraIngreso(FechaHoraIngresoModel model,int idAccidente);
 
-        int AgregarDatosFinales(DatosAccidenteModel datosAccidente, int armasValue, int drogasValue, int valoresValue, int prendasValue, int otrosValue, int idAccidente);
+        int AgregarDatosFinales(DatosAccidenteModel datosAccidente, int armasValue, int drogasValue, int valoresValue, int prendasValue, int otrosValue, int idAccidente, int convenioValue);
         int EliminarInvolucradoAcc(int IdVehiculoInvolucrado,int IdPropietarioInvolucrado,int IdAccidente);
         public int RegistrarInfraccion(NuevaInfraccionModel model);
         public string ObtenerDescripcionCausaDesdeBD(int idAccidente);

@@ -5,8 +5,8 @@
             .Name("grid")
             .Columns(columns =>
             {
-                columns.Bound(c => c.IdAutoridadDisposicion).Width(20);
-                columns.Bound(c => c.NombreAutoridadDisposicion).Title("Autoridad").Width(100);
+                columns.Bound(c => c.IdAutoridadDisposicion).Width(20).Title("Id");
+                columns.Bound(c => c.NombreAutoridadDisposicion).Title("Autoridad Disposición").Width(100);
                 columns.Bound(c => c.estatusDesc).Title("Estatus en sistema").Width(100);
                 columns.Command(c => c.Custom("Editar").Click("getId")).Width(100);
                // columns.Command(c => c.Custom("Eliminar").Click("eliminar")).Width(80);

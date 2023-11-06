@@ -6,7 +6,7 @@
             .Name("grid")
             .Columns(columns =>
             {
-                columns.Bound(c => c.IdCatMotivoInfraccion).Width(40);
+                columns.Bound(c => c.IdCatMotivoInfraccion).Width(40).Title("Id");
                 columns.Bound(c => c.Nombre).Width(100);
                 columns.Bound(c => c.Fundamento).Width(100);
                 columns.Bound(c => c.CalificacionMinima).Title("Calificación Minima").Width(100);

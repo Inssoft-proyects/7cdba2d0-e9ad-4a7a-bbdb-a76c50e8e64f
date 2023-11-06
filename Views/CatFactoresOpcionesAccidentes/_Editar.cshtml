@@ -7,7 +7,7 @@
                     <i class="icon-editOpciones h1 colorPrimary"></i>
                 </div>
                 <div class="col-auto my-3">
-                    <h2 class="m-0 h3"><b>Editar FactorOpcion accidente</b></h2>
+                    <h2 class="m-0 h3"><b>Editar factor opcion accidente</b></h2>
                 </div>
             </div>
         </div>
@@ -29,7 +29,7 @@
     </div>
     <div class="row align-items-end">
         <div class="col-12 col-lg-6 my-4">
-            <h5 class="px-4"><b>Datos de institución de traslado</b></h5>
+                <h5 class="px-4"><b>Datos de Factor Opción Accidente</b></h5>
             <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
         </div>
         <div class="col-12 col-lg-6 my-4 btnToggleActive">
@@ -44,7 +44,7 @@
     </div>
         <div class="col-12 col-md-6">
             <div class="controlForm my-3">
-                <label>Factor<b>(obligatorio)</b>:</label>
+                <label>Factor <b>(obligatorio)</b>:</label>
                 <span>
                     @Html.HiddenFor(m=>m.IdFactorOpcionAccidente)
                     @(Html.Kendo().DropDownListFor(t => t.IdFactorAccidente)
@@ -67,7 +67,7 @@
             <div class="controlForm my-3">
                 @(Html.Kendo().TextBoxFor(t=>t.FactorOpcionAccidente)
                     .Label(l => l.Content("Nombre <b>(obligatorio)</b>:"))
-                    .Placeholder("Ingresa un nuevo factor opcion de accidente")
+                    .Placeholder("Ingresa un nuevo factor opción de accidente")
                     .HtmlAttributes(new { style = "width: 100%" })
                     )
 
