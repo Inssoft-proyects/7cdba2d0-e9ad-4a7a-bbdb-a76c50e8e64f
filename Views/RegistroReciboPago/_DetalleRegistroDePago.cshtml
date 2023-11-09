@@ -51,7 +51,7 @@
     <div class="col-12 col-md-6 col-lg-3">
         <div class="controlForm my-3">
             <label>Fecha:</label>
-            @(Html.Kendo().DateTimePickerFor(t => t.FechaPago)
+            @(Html.Kendo().DatePickerFor(t => t.FechaPago)
                 .Label(l => l.Content("Fecha de pago:"))
                 .HtmlAttributes(new { style = "width: 100%", @readonly = "readonly" })
                 )
@@ -69,7 +69,7 @@
     </div>
 </form>
 
-    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+   <div class="col-12 col-md-6 col-lg-4 col-xl-3">
     <div class="controlButton my-3" id="botnGuardar" style="display: block;" onclick="guardarReciboPago()">
             @(Html.Kendo().Button()
                 .Name("GuardarPago")
@@ -78,6 +78,8 @@
         </div>
 
     </div>
+<div class="col-12 col-md-6 col-lg-4 col-xl-3">
+
 <div class="controlButton my-3" id="botnCancelar" style="display: block;" onclick="cerrarModal()">
     @(Html.Kendo().Button()
         .Name("Cerrar")
@@ -138,7 +140,7 @@
                         var fechaPago = response.result.MT_ConsultarDocumento_res.result.FECHA_PAGO;
                         var importe = response.result.MT_ConsultarDocumento_res.result.IMPORTE;
 
-                        $('#FechaPago').data("kendoDateTimePicker").value(new Date(fechaPago));
+                        $('#FechaPago').data("kendoDatePicker").value(new Date(fechaPago));
                         $('#Monto').data("kendoTextBox").value(importe);
                     } else {
                         // Mostrar mensaje específico cuando el servicio no responda

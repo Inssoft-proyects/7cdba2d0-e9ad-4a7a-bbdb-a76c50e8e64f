@@ -121,14 +121,29 @@ namespace GuanajuatoAdminUsuarios.Services
                             infraccion.IdInfraccion = Convert.ToInt32(reader["IdInfraccion"].ToString());
                             infraccion.FolioInfraccion = reader["FolioInfraccion"].ToString();
                             infraccion.FechaInfraccion = Convert.ToDateTime(reader["FechaInfraccion"].ToString());
-                            infraccion.Conductor = $"{reader["nombre1"]} {reader["apellidoPaterno1"]} {reader["apellidoMaterno1"]}";
+
+                            string nombre1 = reader["nombre1"].ToString();
+                            string apellidoPaterno1 = reader["apellidoPaterno1"].ToString();
+                            string apellidoMaterno1 = reader["apellidoMaterno1"].ToString();
+                            infraccion.Conductor = $"{nombre1} {apellidoPaterno1} {apellidoMaterno1}";
+
                             infraccion.Placas = reader["placasVehiculo"].ToString();
                             infraccion.LugarPago = reader["lugarPago"].ToString();
-                            
-                            infraccion.Propietario = $"{reader["nombre2"]} {reader["apellidoPaterno2"]} {reader["apellidoMaterno2"]}";
-                            infraccion.EstatusProceso = Convert.IsDBNull(reader["EstatusProceso"]) ? 0 : Convert.ToInt32(reader["EstatusProceso"]);
+
+                            object fechaPagoValue = reader["fechaPago"];
+                            infraccion.FechaPago = (fechaPagoValue != DBNull.Value) ? Convert.ToDateTime(fechaPagoValue) : DateTime.MinValue;
+
+                            string nombre2 = reader["nombre2"].ToString();
+                            string apellidoPaterno2 = reader["apellidoPaterno2"].ToString();
+                            string apellidoMaterno2 = reader["apellidoMaterno2"].ToString();
+                            infraccion.Propietario = $"{nombre2} {apellidoPaterno2} {apellidoMaterno2}";
+
+                            object estatusProcesoValue = reader["EstatusProceso"];
+                            infraccion.EstatusProceso = (estatusProcesoValue != DBNull.Value) ? Convert.ToInt32(estatusProcesoValue) : 0;
+
                             infraccion.Calificacion = Convert.ToInt32(reader["calificacion"].ToString());
-                            infraccion.Monto = (float?) infraccion.Calificacion *  (float?)_infraccionesService.GetUmas(); ;
+
+                            infraccion.Monto = (float?)infraccion.Calificacion * (float?)_infraccionesService.GetUmas(); ;
                         }
 
                     }
