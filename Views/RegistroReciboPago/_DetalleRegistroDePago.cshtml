@@ -51,7 +51,7 @@
     <div class="col-12 col-md-6 col-lg-3">
         <div class="controlForm my-3">
             <label>Fecha:</label>
-            @(Html.Kendo().DatePickerFor(t => t.FechaPago)
+            @(Html.Kendo().DateTimePickerFor(t => t.FechaPago)
                 .Label(l => l.Content("Fecha de pago:"))
                 .HtmlAttributes(new { style = "width: 100%", @readonly = "readonly" })
                 )
@@ -140,7 +140,7 @@
                         var fechaPago = response.result.MT_ConsultarDocumento_res.result.FECHA_PAGO;
                         var importe = response.result.MT_ConsultarDocumento_res.result.IMPORTE;
 
-                        $('#FechaPago').data("kendoDatePicker").value(new Date(fechaPago));
+                        $('#FechaPago').data("kendoDateTimePicker").value(new Date(fechaPago));
                         $('#Monto').data("kendoTextBox").value(importe);
                     } else {
                         // Mostrar mensaje específico cuando el servicio no responda
