@@ -139,7 +139,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 		public IActionResult Index(CapturaAccidentesModel capturaAccidentesService)
 		{
-			int IdModulo = 801;
+			int IdModulo = 800;
 			string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
 			List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
 			if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
