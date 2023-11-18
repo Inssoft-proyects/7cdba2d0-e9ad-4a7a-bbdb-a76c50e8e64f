@@ -1,18 +1,25 @@
 ﻿<div class="row">
     <div class="col-12 mb-4 px-4 rounded gridCustom">
+        @{
+            var count = 1;
+        }
 
         @(
+
             Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel>()
             .Name("gridCausasA")
             .Columns(columns =>
             {
-                columns.Bound(c => c.IdAccidente).Hidden();
-                columns.Bound(c => c.CausaAccidente).Title("Causa").Width(100);
+                //columns.Bound(c => c.IdAccidente).Title("Orden1").Width(30);
+
+                columns.Bound(c => c.idAccidenteCausa).Hidden();
+                columns.Bound(c => c.CausaAccidente).Title("Causa").Width(100);          
                // columns.Command(c => c.Custom("Editar").Click("editarCausa")).Width(100);
                // columns.Command(c => c.Custom("Eliminar").Click("eliminarCausa")).Width(100);
-                columns.Template("<button data-bs-toggle='modal' class='w-100 btn'><h6 class='m-0 colorPrimary' onclick='editarCausa(event)'><i class='h5 icon-edit me-2'></i><b>Editar</b></h6></button>").Width(150);
+                columns.Template("<button data-bs-toggle='modal' class='w-100 btn'><h6 class='m-0 colorPrimary' onclick='seleccionarCausaEditar(event)'><i class='h5 icon-edit me-2'></i><b>Editar</b></h6></button>").Width(150);
                 columns.Template("<button class='w-100 btn'><h6 class='m-0 colorDanger' onclick='eliminarCausa(event)'><i class='h5 icon-delete me-2'></i><b>Eliminar</b></h6></button>").Width(150);
-                columns.Template("<span class='orden-column'></span>").Title("Orden").Width(30);
+                //columns.Template("<span class='orden-column'>@(count)</span>").Title("Orden").Width(30);
+                columns.Bound(c => c.IdCausaAccidente).Title("Orden").Width(30);
                 columns.Command(command => command.Custom("Arriba").Text("").Click("arriba")).Width(60);
                 columns.Command(command => command.Custom("Abajo").Text("").Click("abajo")).Width(60);
             }).HtmlAttributes(new { style = "height:400px" })
@@ -58,19 +65,24 @@
 </div>
 </div>
 <script>
-    function editarCausa(event) {
+    function seleccionarCausaEditar(event) {
+        console.log("ABRIR MODAL")
+
         var grid = $("#gridCausasA").data("kendoGrid");
         var row = $(event.target).closest("tr");
         var dataItem = grid.dataItem(row);
             var CausaAccidente = dataItem.CausaAccidente;
             var IdCausaAccidente = dataItem.IdCausaAccidente;
+         var idAccidenteCausa = dataItem.idAccidenteCausa;
+
+
             $.ajax({
                 url: '@Url.Action("ModalEditarCausaAccidente", "CapturaAccidentes")',
                 type: 'POST',
-            data: { IdCausaAccidente: IdCausaAccidente, CausaAccidente: CausaAccidente },
+            data: { IdCausaAccidente: IdCausaAccidente, CausaAccidente: CausaAccidente, idAccidenteCausa: idAccidenteCausa },
                 success: function (result) {
-                    $('#ModalBodyEditarCausaAccidente').html(result);
-                    $('#editarCausaAccidenteModal').modal('show');
+                $('#ModalBodyCausaAccidente').html(result);
+                $('#causaAccidenteModal').modal('show');
                 },
             });
         }
@@ -87,8 +99,8 @@
             type: 'POST',
             data: { IdCausaAccidente: IdCausaAccidente, CausaAccidente : CausaAccidente },
             success: function (result) {
-                $('#ModalBodyEliminarCausa').html(result);
-                $('#eliminarCausaModal').modal('show');
+                $('#ModalBodyCausaAccidente').html(result);
+                $('#causaAccidenteModal').modal('show');
             }
         });
     }

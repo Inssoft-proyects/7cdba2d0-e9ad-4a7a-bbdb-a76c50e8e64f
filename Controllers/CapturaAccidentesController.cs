@@ -32,9 +32,12 @@ using Microsoft.AspNetCore.Http.Extensions;
 using System.Globalization;
 using GuanajuatoAdminUsuarios.Helpers;
 using static GuanajuatoAdminUsuarios.RESTModels.ConsultarDocumentoResponseModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+
+    [Authorize]
     public class CapturaAccidentesController : BaseController
     {
         private readonly IHttpClientFactory _httpClientFactory;
@@ -249,7 +252,9 @@ namespace GuanajuatoAdminUsuarios.Controllers
 		{
 			ViewBag.IdVehiculo = IdVehiculo;
 			var ListConductor = _capturaAccidentesService.ObtenerConductorPorId(IdPersona);
-			return PartialView("_ModalConductor", ListConductor);
+			HttpContext.Session.SetInt32("idVehiculoInsertado",IdVehiculo);
+
+            return PartialView("_ModalConductor", ListConductor);
 		}
 
 		public ActionResult ModalClasificacionAccidente()
@@ -603,7 +608,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 			return Json(idVehiculoInsertado);
 		}
-		public IActionResult GuardarConductorVehiculo(int IdPersona)
+		public IActionResult GuardarConductorVehiculo(int IdPersona,int idAuto)
 		{
 			int IdVehiculoI = HttpContext.Session.GetInt32("idVehiculoInsertado") ?? 0; // Obtener el valor de idVehiculoInsertado desde la variable de sesión
 			int idAccidente = HttpContext.Session.GetInt32("LastInsertedId") ?? 0;
@@ -617,6 +622,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
 			var ListInvolucradoModel = _capturaAccidentesService.BusquedaPersonaInvolucrada(model);
 			return Json(ListInvolucradoModel);
 		}
+
+
+
+
+
 
 		[HttpPost]
 
@@ -670,15 +680,21 @@ namespace GuanajuatoAdminUsuarios.Controllers
 		{
 			return PartialView("_ModalFactor");
 		}
-		public ActionResult ModalEditarFactorAccidente(int IdFactorAccidente, int IdFactorOpcionAccidente)
+		public ActionResult ModalEditarFactorAccidente(int IdFactorAccidente, int IdFactorOpcionAccidente, int IdAccidenteFactorOpcion)
 
 		{
-			return PartialView("_ModalEditarFactor");
+            EditarFactorOpcionModel modelo = new EditarFactorOpcionModel
+            {
+                IdFactorAccidente = IdFactorAccidente,
+                IdFactorOpcionAccidente = IdFactorOpcionAccidente,
+                IdAccidenteFactorOpcion = IdAccidenteFactorOpcion
+            };
+            return PartialView("_ModalEditarFactor",modelo);
 		}
 
-		public ActionResult ModalEliminarFactorAccidente(string FactorAccidente, string FactorOpcionAccidente)
+		public ActionResult ModalEliminarFactorAccidente(string FactorAccidente, string FactorOpcionAccidente, int IdAccidenteFactorOpcion)
 		{
-			ViewBag.FactorAccidente = FactorAccidente;
+            ViewBag.FactorAccidente = FactorAccidente;
 			ViewBag.FactorOpcionAccidente = FactorOpcionAccidente;
 			return PartialView("_ModalEliminarFactor");
 		}
@@ -706,7 +722,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 			ViewBag.CatTipoLicencia = new SelectList(catTipoLicencia.CatalogList, "Id", "Text");
 			return PartialView("_ModalCapturarConductor");
 		}
-		public ActionResult ModalEditarCausaAccidente(int IdCausaAccidente, string CausaAccidente)
+		public ActionResult ModalEditarCausaAccidente(int IdCausaAccidente, string CausaAccidente, int idAccidenteCausa )
 		{
 			EditarCausaAccidenteModel editCausa = new EditarCausaAccidenteModel();
             editCausa.IdAccidente = IdCausaAccidente;
@@ -777,11 +793,21 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 			return Json(ListFactores.ToDataSourceResult(request));
 		}
-		[HttpPost]
-		public IActionResult EliminarValorFactorYOpcion()
+        [HttpPost]
+        public IActionResult EditarValorFactorYOpcion(int IdFactorAccidente, int IdFactorOpcionAccidente,int IdAccidenteFactorOpcion)
+        {
+            int idAccidente = HttpContext.Session.GetInt32("LastInsertedId") ?? 0;
+            var RegistroSeleccionado = _capturaAccidentesService.EditarFactorOpcion(IdFactorAccidente, IdFactorOpcionAccidente, IdAccidenteFactorOpcion);
+
+            var datosGrid = _capturaAccidentesService.ObtenerDatosGridFactor(idAccidente);
+
+            return Json(datosGrid);
+        }
+        [HttpPost]
+		public IActionResult EliminarValorFactorYOpcion(int IdAccidenteFactorOpcion)
 		{
 			int idAccidente = HttpContext.Session.GetInt32("LastInsertedId") ?? 0;
-			var RegistroSeleccionado = _capturaAccidentesService.EliminarValorFactorYOpcion(idAccidente);
+			var RegistroSeleccionado = _capturaAccidentesService.EliminarValorFactorYOpcion(IdAccidenteFactorOpcion);
 
 			var datosGrid = _capturaAccidentesService.ObtenerDatosGridFactor(idAccidente);
 
@@ -796,10 +822,10 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 			return Json(datosGrid);
 		}
-		public IActionResult EditarCausa(int IdAccidente, int IdCausaAccidente, int IdCausaAccidenteEdit)
+		public IActionResult EditarCausa(int IdCausaAccidente, int IdCausaAccidenteEdit)
 		{
 			int idAccidente = HttpContext.Session.GetInt32("LastInsertedId") ?? 0;
-			var RegistroSeleccionado = _capturaAccidentesService.EditarValorCausa(IdCausaAccidente, idAccidente, IdCausaAccidenteEdit);
+			var RegistroSeleccionado = _capturaAccidentesService.EditarValorCausa(IdCausaAccidente, idAccidenteCausa);
 			var datosGrid = _capturaAccidentesService.ObtenerDatosGridCausa(idAccidente);
 
 			return Json(datosGrid);
@@ -1117,13 +1143,21 @@ namespace GuanajuatoAdminUsuarios.Controllers
 			HttpContext.Session.SetInt32("LastInsertedId", idAccidente);
 			return RedirectToAction("CapturaAaccidente");
 		}
-		[HttpPost]
+        public IActionResult ConsultaAccidente(bool modoSoloLectura,int idAccidente)
+        {
+            HttpContext.Session.SetInt32("LastInsertedId", idAccidente);
+            ViewBag.ModoSoloLectura = modoSoloLectura;
+            return Ok();
+        }
+        [HttpPost]
 		public ActionResult ajax_CrearPersonaMoral(PersonaModel Persona)
 		{
 			Persona.idCatTipoPersona = (int)TipoPersona.Moral;
 			var IdPersonaMoral = _personasService.CreatePersonaMoral(Persona);
-			var personasMoralesModel = _personasService.GetAllPersonasMorales();
-			return PartialView("_ListPersonasMorales", personasMoralesModel);
+            //var personasMoralesModel = _personasService.GetAllPersonasMorales();
+            var modelList = _personasService.ObterPersonaPorIDList(IdPersonaMoral); ;
+
+            return PartialView("_ListPersonasMorales", modelList);
 		}
 
 
@@ -1135,7 +1169,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 		public ActionResult ajax_BuscarPersonasFiscas()
 		{
 			var personasFisicas = _personasService.GetAllPersonas();
-			return PartialView("_PersonasFisicas", personasFisicas);
+			return PartialView("_PersonasFisicas");
 		}
 
 		[HttpPost]
@@ -1155,8 +1189,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
 			{
 				throw new Exception("Ocurrio un error al dar de alta la persona");
 			}
-			var personasFisicasModel = _personasService.GetAllPersonasFisicas();
-			return PartialView("_PersonasFisicas", personasFisicasModel);
+            var modelList = _personasService.ObterPersonaPorIDList(IdPersonaFisica); ;
+            return PartialView("_PersonasFisicas",modelList);
 		}
 		[HttpGet]
 		public ActionResult ajax_GetPersonaMoral(int id)
