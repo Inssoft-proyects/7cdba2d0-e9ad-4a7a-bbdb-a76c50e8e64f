@@ -12,6 +12,8 @@
             Html.Kendo().DropDownList()
                                 .DataValueField("Id")
                                 .DataTextField("Text")
+                                                    .Filter(FilterType.Contains)
+
                                 .Name(htmlName)
                                 .BindTo(modelList)
                                 .OptionLabel("-- Seleccione --")
@@ -27,6 +29,8 @@ else
                             .Name(htmlName)
                             .BindTo(modelList)
                             .OptionLabel("-- Seleccione --")
+                                                .Filter(FilterType.Contains)
+
                             .Events(e =>
                             {
                                 e.Change(functionName);

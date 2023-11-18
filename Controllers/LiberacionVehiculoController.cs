@@ -14,10 +14,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+
 using System.Net;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+    [Authorize]
     public class LiberacionVehiculoController : BaseController
     {
         #region DPIServices

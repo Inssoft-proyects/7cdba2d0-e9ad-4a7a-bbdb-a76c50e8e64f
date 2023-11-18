@@ -12,9 +12,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using static GuanajuatoAdminUsuarios.RESTModels.ConsultarDocumentoResponseModel;
+using Microsoft.AspNetCore.Authorization;
+
+
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+
+    [Authorize]
     public class MotivosInfraccionController : BaseController
     {
         //DBContextInssoft dbContext = new DBContextInssoft();

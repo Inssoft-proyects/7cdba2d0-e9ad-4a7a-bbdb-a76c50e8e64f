@@ -25,16 +25,17 @@
                 <h6 class="px-4 text-muted">Filtros de búsqueda para localizar la incidencia de las infracciones</h6>
             </div>
             <div class="row my-4 px-4">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-auto my-4">
                     <div class="controlForm">
                         <label>Año1:</label>
-                        @(Html.Kendo().TextBoxFor(m => m.año1).HtmlAttributes(new { @class = "number-only" }))
+                        @(Html.Kendo().TextBoxFor(m => m.año1).HtmlAttributes(new { @class = "number-only w-100" }))
+
                     </div>
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-auto my-4">
                     <div class="controlForm">
                         <label>Año2:</label>
-                        @(Html.Kendo().TextBoxFor(m => m.año2).HtmlAttributes(new { @class = "number-only" }))
+                        @(Html.Kendo().TextBoxFor(m => m.año2).HtmlAttributes(new { @class = "number-only w-100" }))
                     </div>
                 </div>               
             </div>
@@ -44,7 +45,7 @@
             </div>           
                
             <div class="row my-4 px-4">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-4 my-3">
                     <div class="controlForm">
                         <label>Tipo Motivo:</label>
                         @(Html.Kendo().DropDownListFor(m => m.idTipoMotivo)
@@ -54,7 +55,7 @@
                             )
                     </div>
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-4 my-3">
                     <div class="controlForm">
                         <label>Delegación:</label>
                         @(Html.Kendo().DropDownListFor(m => m.idDelegacion)
@@ -64,7 +65,7 @@
                             )
                     </div>
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-4 my-3">
                     <div class="controlForm">
                         <label>Oficial:</label>
                             @(Html.Kendo().DropDownListFor(f => f.idOficial)
@@ -74,9 +75,8 @@
                                 )
                     </div>
                 </div>
-            </div>
-            <div class="row my-4 px-4">
-                <div class="form-group col-md-4">
+            
+                <div class="form-group col-md-4 my-3">
                     <div class="controlForm">
                         <label>Carretera:</label>
                         @(Html.Kendo().DropDownListFor(m => m.idCarretera)
@@ -86,7 +86,7 @@
                             )
                     </div>
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-4 my-3">
                     <div class="controlForm">
                         <label>Tramo:</label>
                         @(Html.Kendo().DropDownListFor(m => m.idTramo)
@@ -96,7 +96,7 @@
                             )
                     </div>
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-4 my-3">
                     <div class="controlForm">
                         <label>Tipo vehículo:</label>
                         <div id="divTramo">
@@ -108,9 +108,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row my-4 px-4">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-4 my-3">
                     <div class="controlForm">
                         <label>Tipo servicio:</label>
                         @(Html.Kendo().DropDownListFor(m => m.idTipoServicio)
@@ -120,7 +118,7 @@
                             )
                     </div>
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-4 my-3">
                     <div class="controlForm">
                         <label>Tipo licencia:</label>
                         @(Html.Kendo().DropDownListFor(m => m.idTipoLicencia)
@@ -130,7 +128,7 @@
                             )
                     </div>
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-4 my-3">
                     <div class="controlForm">
                         <label>Municipio:</label>
                         <div id="divTramo">
@@ -141,12 +139,10 @@
                                 )
                         </div>
                     </div>
-                </div>
-            </div>
-             <div class="row my-4 px-4">                
-                <div class="form-group col-md-4">
+                </div>                
+                <div class="form-group col-md-4 my-3">
                     <div class="controlForm">
-                        <div class="controlButton my-3">
+                        <div class="controlButton">
                             <button class="btnPrimary" type="button" onclick="submitSearch()">  <h5 class="m-0"><b>Buscar</b></h5></button>
                         </div>
                     </div>

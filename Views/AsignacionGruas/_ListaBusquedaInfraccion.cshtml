@@ -18,6 +18,7 @@
                 console.log("Actualización exitosa", result);
                 document.getElementById("PlacaSpan").textContent = selectedRowData.Placa;
                 document.getElementById("SerieSpan").textContent = selectedRowData.Serie;
+                document.getElementById("TarjetaSpan").textContent = selectedRowData.Tarjeta;
                 document.getElementById("MarcaSpan").textContent = selectedRowData.Marca;
                 document.getElementById("SubmarcaSpan").textContent = selectedRowData.Submarca;
                 document.getElementById("ModeloSpan").textContent = selectedRowData.Modelo;
@@ -53,6 +54,7 @@
             columns.Bound(c => c.Placa).Hidden();
             columns.Bound(c => c.Modelo).Hidden();
             columns.Bound(c => c.Serie).Hidden();
+            columns.Bound(c => c.Tarjeta).Hidden();
             columns.Bound(c => c.Motor).Hidden();
             columns.Bound(c => c.NumeroEconomico).Hidden();
             columns.Bound(c => c.folioInfraccion).Title("Folio deInfraccion").Width(80);

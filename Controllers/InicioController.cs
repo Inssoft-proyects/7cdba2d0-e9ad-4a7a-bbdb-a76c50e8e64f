@@ -52,8 +52,9 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public IActionResult Index()
         {
 
-            if (User.Identity.IsAuthenticated)
-                return View("Inicio");
+            HttpContext.Session.Clear();
+            HttpContext.SignOutAsync().Wait();
+
             return View("Marca");
         }
 

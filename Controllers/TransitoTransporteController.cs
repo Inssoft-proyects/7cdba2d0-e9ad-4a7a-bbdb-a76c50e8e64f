@@ -14,9 +14,12 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+    [Authorize]
     public class TransitoTransporteController : BaseController
     {
         private readonly ITransitoTransporteService _transitoTransporteService;

@@ -12,9 +12,13 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using static GuanajuatoAdminUsuarios.RESTModels.ConsultarDocumentoRequestModel;
+using Microsoft.AspNetCore.Authorization;
+
+
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+    [Authorize]
     public class ServiceTestController : BaseController
     {
         private readonly IRequestDynamic<RecibosPagoWSRequestModel, RecibosPagoWSResponsetModel> _requestDynamic;

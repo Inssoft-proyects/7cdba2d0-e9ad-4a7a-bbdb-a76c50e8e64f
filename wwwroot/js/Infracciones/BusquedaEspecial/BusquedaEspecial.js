@@ -6,6 +6,12 @@ $(document).ready(() => {
     t.method = "POST"
     t.addEventListener("submit", Submmit)
 
+
+
+
+    AddLoading("listadoInfracciones")
+    var Mydata = $("#frmSearch").serialize();
+    GetDataGrid(Mydata, FinishGetData)
 })
 
 

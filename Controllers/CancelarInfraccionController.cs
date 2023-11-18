@@ -16,10 +16,13 @@ using Newtonsoft.Json;
 using static GuanajuatoAdminUsuarios.RESTModels.AnulacionDocumentoRequestModel;
 using GuanajuatoAdminUsuarios.RESTModels;
 using GuanajuatoAdminUsuarios.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
 
+
+    [Authorize]
     public class CancelarInfraccionController : BaseController
     {
 

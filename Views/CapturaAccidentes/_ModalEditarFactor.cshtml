@@ -1,4 +1,4 @@
-﻿@model GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel
+﻿@model GuanajuatoAdminUsuarios.Models.EditarFactorOpcionModel
 
 <section class=" bg-white rounded">
     <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
@@ -38,6 +38,8 @@
             <div class="controlForm my-3">
                 <label>Factor <b>(obligatorio)</b>:</label>
                 <span>
+                    @Html.HiddenFor(t => t.IdAccidenteFactorOpcion)
+
                     @(Html.Kendo().DropDownListFor(t => t.IdFactorAccidente)
                                 .DataTextField("Text")
                                 .DataValueField("Value")
@@ -97,21 +99,7 @@
     </div>
 </section>
 <script>
-    function factoresDropDownChangeEdit() {
-        var factorDDValue = $("#IdFactorAccidente").data("kendoDropDownList").value();
-        $.ajax({
-            url: "/CapturaAccidentes/FactoresOpciones_Drop",
-            type: "POST",
-            data: { factorDDValue: factorDDValue },
-            success: function (data) {
-                var FactorOpcionDropDown = $("#IdFactorOpcionAccidente").data("kendoDropDownList");
-                FactorOpcionDropDown.dataSource.data(data);
-           
-            },
-            error: function (xhr, status, error) {
-            }
-        });
-    }
+
 
    
     function editarFactor() {
@@ -119,7 +107,7 @@
         var Mydata = $("#editarFactorForm").serialize();
 
         $.ajax({
-            url: '@Url.Action("AgregarFactorNuevo")',
+            url: '@Url.Action("EditarValorFactorYOpcion")',
             type: 'POST',
             data: Mydata,
             success: function (data) {
@@ -127,7 +115,7 @@
                 $("#gridFactoresA").data("kendoGrid").dataSource.data(data);
                 $('modal-body').removeClass('model-open');
                 $('.modal-backdrop').remove();
-                $('#editarFactorAccidenteModal').modal('hide');
+                $('#factorAccidenteModal').modal('hide');
                 sitteg_success("Se ha modificado la información");
 
 
@@ -137,5 +125,38 @@
             }
         });
     }
-   
-</script>
+
+
+    var valorPreexistenteFactorAccidente = "@Html.Raw(Model.IdFactorAccidente)";
+
+    $("#IdFactorAccidente").data("kendoDropDownList").value(valorPreexistenteFactorAccidente);
+
+    factoresChangeEdit(function () {
+        var valorPreexistenteFactorOpcionAccidente = "@Html.Raw(Model.IdFactorOpcionAccidente)";
+        console.log("FACTORO", valorPreexistenteFactorOpcionAccidente);
+        $("#IdFactorOpcionAccidente").data("kendoDropDownList").value(valorPreexistenteFactorOpcionAccidente);
+    });
+
+    function factoresChangeEdit(callback) {
+        console.log("factoresChangeEdit called");
+        var factorDDValue = $("#IdFactorAccidente").data("kendoDropDownList").value();
+        $.ajax({
+            url: "/CapturaAccidentes/FactoresOpciones_Drop",
+            type: "POST",
+            data: { factorDDValue: factorDDValue },
+            success: function (data) {
+                var FactorOpcionDropDown = $("#IdFactorOpcionAccidente").data("kendoDropDownList");
+                FactorOpcionDropDown.dataSource.data(data);
+                if (typeof callback === 'function') {
+                    callback(); // Llama al callback después de completar la carga de datos
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error en la llamada AJAX:", error);
+            }
+        });
+    }
+
+ 
+
+</script>   

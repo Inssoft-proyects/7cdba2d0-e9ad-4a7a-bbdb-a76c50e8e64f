@@ -6,7 +6,7 @@
             <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
                 <div class="row align-items-center justify-content-center justify-content-md-start">
                     <div class="col-auto">
-                        <i class="icon icon-editRecibo h1 colorPrimary"></i>
+                        <i class="icon-editRecibo h1 colorPrimary"></i>
                     </div>
                     <div class="col-auto my-3">
                         <h2 class="m-0 h3"><b>Registro de Recibo de Pago</b></h2>
@@ -24,9 +24,8 @@
             <h5 class="px-4"><b>Registro de Recibo de pago</b></h5>
             <h6 class="px-4 text-muted">Realiza una búsqueda de infracciones y comprueba su pago.</h6>
         </div>
-        <form id="reciboPagoBusqueda" class="row px-4 mb-4 align-items-end">
-
-            <div class="col-12 col-md-6 col-lg-4">
+        <div class="row px-4 my-4 align-items-end">
+            <form id="reciboPagoBusqueda" class="col-12 col-md-6 col-lg-4">
                 <div class="controlForm mb-3">
                     <span>
                         @(Html.Kendo().TextBoxFor(t=>t.folioInfraccion)
@@ -36,10 +35,9 @@
                             )
                     </span>
                 </div>
-            </div>
-            <div id="mensajeSinResultados" class="px-4" style="color:red"></div>
+                <div id="mensajeSinResultados" class="px-4" style="color:red"></div>
 
-        </form>
+            </form>
 
 
             <div class="col-12 col-md-6 col-lg-3">
@@ -54,9 +52,19 @@
             </div>
 
 
-
-        <div id="listadoInfracciones">
-            <partial name="_ListadoBusquedaInfraccion" model="Model" />
+        </div>
+        <div class="row align-items-center justify-content-center">
+            <div class="col-12 mb-4 px-4 rounded gridCustom">
+                <div class="row justify-content-between mb-1 titleCustom">
+                    <div class="col-12 col-md-auto mt-4 mb-2">
+                        <h5 class="px-4"><b>Listado de infracción</b></h5>
+                        <h6 class="px-4 text-muted">Selecciona una infracción.</h6>
+                    </div>
+                </div>
+                <div id="listadoInfracciones">
+                    <partial name="_ListadoBusquedaInfraccion" model="Model" />
+                </div>
+            </div>
         </div>
     </section>
 

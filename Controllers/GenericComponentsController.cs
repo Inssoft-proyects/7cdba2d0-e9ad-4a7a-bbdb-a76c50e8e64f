@@ -1,6 +1,7 @@
 ﻿using GuanajuatoAdminUsuarios.Framework;
 using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+    [Authorize]
     public class GenericComponentsController : BaseController
     {
         private readonly ICatDictionary _catDictionary;

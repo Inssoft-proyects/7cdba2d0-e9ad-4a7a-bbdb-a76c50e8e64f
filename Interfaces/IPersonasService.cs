@@ -12,6 +12,8 @@ namespace GuanajuatoAdminUsuarios.Interfaces
         public void InsertarDesdeServicio(LicenciaPersonaDatos personaDatos);
         public PersonaDireccionModel GetPersonaDireccionByIdPersona(int idPersona);
         public PersonaModel GetPersonaById(int idPersona);
+        List<PersonaModel> ObterPersonaPorIDList(int idPersona);
+
         IEnumerable<PersonaModel> GetAllPersonasMorales();
         IEnumerable<PersonaModel> GetAllPersonasFisicas();
 

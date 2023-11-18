@@ -20,6 +20,8 @@
         });
 
        function submitSearch() {
+            var placasValue = $("#PlacasBusqueda").val().trim();
+            $("#PlacasBusqueda").val(placasValue);
     var Mydata = $("#frmSearch").serialize();
     console.log(Mydata);
     $.ajax({
@@ -268,7 +270,7 @@
                         <div class="controlForm mb-3">
                             @(Html.Kendo().TextBox()
                                 .Name("RFCEditFisico")
-                                .Label(l => l.Content("RFC <b>(obligatorio)</b>:"))
+                                .Label(l => l.Content("RFC :"))
                                 .Placeholder("Ingresa un RFC valido")
                                 .HtmlAttributes(new { style = "width: 100%" })
                                 )

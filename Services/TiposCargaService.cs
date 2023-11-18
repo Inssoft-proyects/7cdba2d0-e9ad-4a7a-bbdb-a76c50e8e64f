@@ -37,7 +37,9 @@ namespace GuanajuatoAdminUsuarios.Services
                             tipoCarga.EstatusDesc = reader["estatusDesc"].ToString();
                             //tipoCarga.FechaActualizacion = Convert.ToDateTime(reader["FechaActualizacion"].ToString());
                             tipoCarga.Estatus = Convert.ToInt32(reader["estatus"].ToString());
-                            tipoCarga.ActualizadoPor = Convert.ToInt32(reader["ActualizadoPor"].ToString());
+                            tipoCarga.ActualizadoPor = !Convert.IsDBNull(reader["ActualizadoPor"])
+                                ? Convert.ToInt32(reader["ActualizadoPor"])
+                                : 0; // O cualquier valor predeterminado que desees asignar en caso de que sea null
                             ListaTiposCarga.Add(tipoCarga);
 
                         }

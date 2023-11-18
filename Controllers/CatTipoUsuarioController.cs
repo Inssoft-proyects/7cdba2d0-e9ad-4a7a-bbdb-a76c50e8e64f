@@ -1,8 +1,11 @@
 ﻿using GuanajuatoAdminUsuarios.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+
+    [Authorize]
     public class CatTipoUsuarioController : BaseController
     {
         private readonly ICatTipoUsuarioService _catTipoUsuarioService;

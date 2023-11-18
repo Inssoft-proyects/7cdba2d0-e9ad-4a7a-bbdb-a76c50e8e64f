@@ -737,7 +737,8 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.Add(new SqlParameter("@idTipoLicencia", SqlDbType.Int)).Value = (object)model.idTipoLicencia ?? DBNull.Value;
 
                     command.Parameters.Add(new SqlParameter("@fechaNacimiento", SqlDbType.DateTime)).Value = (object)model.fechaNacimiento ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@vigenciaLicencia", SqlDbType.DateTime)).Value = (object)model.vigenciaLicencia ?? DBNull.Value;
+                    DateTime vigenciaLicenciaValue = (model.vigenciaLicencia != DateTime.MinValue) ? model.vigenciaLicencia : DateTime.MinValue;
+                    command.Parameters.Add(new SqlParameter("@vigenciaLicencia", SqlDbType.DateTime)).Value = (object)(vigenciaLicenciaValue != DateTime.MinValue ? (object)vigenciaLicenciaValue : DBNull.Value);
                     command.Parameters.Add(new SqlParameter("@idGenero", SqlDbType.Int)).Value = (object)model.idGenero ?? DBNull.Value;
                     command.CommandType = CommandType.Text;
                     result = Convert.ToInt32(command.ExecuteScalar());
@@ -1330,7 +1331,88 @@ namespace GuanajuatoAdminUsuarios.Services
 
             return personaEncontrada;
         }
+       public List<PersonaModel> ObterPersonaPorIDList(int idPersona)
+        {
+            //
+            List<PersonaModel> ListaPersonas = new List<PersonaModel>();
 
+            string strQuery = @"SELECT
+                                p.idPersona
+                               ,p.numeroLicencia
+                               ,p.CURP
+                               ,p.RFC
+                               ,p.nombre
+                               ,p.apellidoPaterno
+                               ,p.apellidoMaterno
+                               ,p.fechaActualizacion
+                               ,p.actualizadoPor
+                               ,p.estatus
+                               ,p.idCatTipoPersona
+							   ,p.idTipoLicencia
+							   ,p.fechaNacimiento
+							   ,p.idGenero
+							   ,p.vigenciaLicencia
+                               ,ctp.tipoPersona
+							   ,cl.tipoLicencia
+							   ,cg.genero
+                               FROM personas p
+                               LEFT JOIN catTipoPersona ctp
+                               on p.idCatTipoPersona = ctp.idCatTipoPersona AND ctp.estatus = 1
+							   LEFT JOIN catTipoLicencia cl
+							   on p.idTipoLicencia = cl.idTipoLicencia AND cl.estatus = 1
+							   LEFT JOIN catGeneros cg
+							   on p.idGenero = cg.idGenero
+                               WHERE p.estatus = 1
+                               AND p.idPersona = @idPersona";
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(strQuery, connection);
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.Add(new SqlParameter("@idPersona", SqlDbType.Int)).Value = (object)idPersona ?? DBNull.Value;
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            PersonaModel persona = new PersonaModel();
+                            persona.PersonaDireccion = new PersonaDireccionModel();
+                            persona.idPersona = reader["idPersona"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idPersona"].ToString());
+                            persona.numeroLicencia = reader["numeroLicencia"].ToString();
+                            persona.CURP = reader["CURP"].ToString();
+                            persona.RFC = reader["RFC"].ToString();
+                            persona.nombre = reader["nombre"].ToString();
+                            persona.apellidoPaterno = reader["apellidoPaterno"].ToString();
+                            persona.apellidoMaterno = reader["apellidoMaterno"].ToString();
+                            persona.fechaActualizacion = reader["fechaActualizacion"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["fechaActualizacion"].ToString());
+                            persona.actualizadoPor = reader["actualizadoPor"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["actualizadoPor"].ToString());
+                            persona.estatus = reader["estatus"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["estatus"].ToString());
+                            persona.idCatTipoPersona = reader["idCatTipoPersona"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idCatTipoPersona"].ToString());
+                            persona.tipoPersona = reader["tipoPersona"].ToString();
+                            persona.idGenero = reader["idGenero"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idGenero"].ToString());
+                            persona.genero = reader["genero"].ToString();
+                            persona.idTipoLicencia = reader["idTipoLicencia"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idTipoLicencia"].ToString());
+                            persona.tipoLicencia = reader["tipoLicencia"].ToString();
+                            persona.fechaNacimiento = reader["fechaNacimiento"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["fechaNacimiento"].ToString());
+                            persona.vigenciaLicencia = reader["vigenciaLicencia"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["vigenciaLicencia"].ToString());
+                            persona.PersonaDireccion = GetPersonaDireccionByIdPersona((int)persona.idPersona);
+                            ListaPersonas.Add(persona);
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    //Guardar la excepcion en algun log de errores
+                    //ex
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return ListaPersonas;
+        }
     }
 
 }

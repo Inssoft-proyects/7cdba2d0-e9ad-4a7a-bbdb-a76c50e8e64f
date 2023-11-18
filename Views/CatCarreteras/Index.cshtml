@@ -28,50 +28,29 @@
                 <div class="bg-light py-1"></div>
             </div>
         </div>
-        <div class="mt-5">
-            <nav class="tabCustom">
-                <div class="nav nav-tabs row mx-0" id="nav-tab" role="tablist">
-                    <button class="nav-link active col" id="person-moral-tab" data-bs-toggle="tab" data-bs-target="#person-moral" type="button" role="tab" aria-controls="person-moral" aria-selected="true">
-                        <div class="row justify-content-center align-items-center px-3 py-2">
-                            <div class="col-auto radioCustom p-0">
-                                <div class="rounded-circle m-2"></div>
-                            </div>
-                            <div class="col-auto p-0">
-                                <h5 class="m-0"><i class="icon-delegacion h4"></i> <b>Todas las delegaciones</b></h5>
-                            </div>
-                        </div>
-                    </button>
-                </div>
-            </nav>
-            <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane tabCustomConteiner fade show active" id="person-moral" role="tabpanel" aria-labelledby="person-moral-tab">
-                    <div class="row justify-content-between mb-1 titleCustom">
-                        <div class="col-12 col-md-auto mt-4 mb-2">
-                            <h5 class="px-4"><b>Listado de carreteras</b></h5>
-                            <h6 class="px-4 text-muted">Edita o elimina las carreteras.</h6>
-                        </div>
+        <div class="row">
+            <div class="col-12 mb-4 px-4 rounded gridCustom">
+                <div class="row justify-content-between mb-1 titleCustom">
+                    <div class="col-12 col-md-auto mt-4 mb-2">
+                        <h5 class="px-4"><b>Listado de delegaciones</b></h5>
+                        <h6 class="px-4 text-muted">Edita o elimina las carreteras.</h6>
                     </div>
-                    <div class="row">
-                        <div class="col-12 mb-4 px-4 rounded gridCustom">
-                            <div id="tablaCarreteras">
-                                <partial name="_ListaCarreteras" model="Model" />
-                            </div>
-                        </div>
+                </div>
+                <div id="tablaCarreteras">
+                    <partial name="_ListaCarreteras" model="Model" />
+                </div>
+            </div>
 
         </div>
-<div class="modal fade modalCustom" id="agregarCarretera" tabindex="-1" aria-labelledby="agregarCarreteraLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-body" id="ModalBodyCarretera">
+        <div class="modal fade modalCustom" id="agregarCarretera" tabindex="-1" aria-labelledby="agregarCarreteraLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-body" id="ModalBodyCarretera">
 
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 

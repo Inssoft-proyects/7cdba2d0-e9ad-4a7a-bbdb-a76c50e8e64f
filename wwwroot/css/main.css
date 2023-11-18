@@ -1445,7 +1445,7 @@ input[type="radio"].toggle {
 }
 
 .gridEnvio .k-pager-wrap {
-    bottom: -75px;
+    bottom: -100px;
 }
 
 .gridMotivo .footerGrid {
@@ -1453,7 +1453,7 @@ input[type="radio"].toggle {
 }
 
 .gridEnvio .footerGrid {
-    padding-left: 11px;
+    padding-left: 25px;
 }
 
 .gridMotivo .footerGrid div {
@@ -1462,7 +1462,7 @@ input[type="radio"].toggle {
 }
 
 .gridEnvio .footerGrid div {
-    max-width: calc(100% - 11px);
+    max-width: calc(100% - 1px);
     min-width: 180px;
     top: -46px;
     position: relative;

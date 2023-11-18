@@ -2,6 +2,7 @@
 using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
 using GuanajuatoAdminUsuarios.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,6 +13,7 @@ using System.Linq;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+    [Authorize]
     public class PensionesController : BaseController
     {
         #region DPIServices

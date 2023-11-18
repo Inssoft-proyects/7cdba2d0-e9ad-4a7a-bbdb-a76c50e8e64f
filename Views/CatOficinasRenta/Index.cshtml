@@ -31,31 +31,13 @@
                 <div class="bg-light py-1"></div>
             </div>
         </div>
-        <div class="mt-5">
-            <nav class="tabCustom">
-                <div class="nav nav-tabs row mx-0" id="nav-tab" role="tablist">
-                    <button class="nav-link active col" id="all-delegacion-tab" data-bs-toggle="tab" data-bs-target="#all-delegacion" type="button" role="tab" aria-controls="all-delegacion" aria-selected="true">
-                        <div class="row justify-content-center align-items-center px-3 py-2">
-                            <div class="col-auto radioCustom p-0">
-                                <div class="rounded-circle m-2"></div>
-                            </div>
-                            <div class="col-auto p-0">
-                                <h5 class="m-0"><i class="icon-delegacion h4"></i> <b> Todas las oficinas en renta.</b></h5>
-                            </div>
-                        </div>
-                    </button>
-
-                   <!-- <button class="nav-link col" id="filter-delegacion-tab" data-bs-toggle="tab" data-bs-target="#filter-delegacion" type="button" role="tab" aria-controls="filter-delegacion" aria-selected="false">
-                        <div class="row justify-content-center align-items-center px-3 py-2">
-                            <div class="col-auto radioCustom p-0">
-                                <div class="rounded-circle m-2"></div>
-                            </div>
-                            <div class="col-auto p-0">
-                                <h5 class="m-0"><i class="icon-filter h5"></i> <b>Filtrar por delegación</b></h5>
-                            </div>
-                        </div>
-                     </button>-->
-                     
+        <div class="row">
+            <div class="col-12 mb-4 px-4 rounded gridCustom">
+                <div class="row justify-content-between mb-1 titleCustom">
+                    <div class="col-12 col-md-auto mt-4 mb-2">
+                        <h5 class="px-4"><b>Listado oficinas rentas</b></h5>
+                        <h6 class="px-4 text-muted">Edita o inactiva las oficinas rentas.</h6>
+                    </div>
                 </div>
                 <div id="tablaOficinasRenta">
                     <partial name="_ListaOficinasRenta" model="Model" />
@@ -69,14 +51,24 @@
                         </div>
                     </div>
 
-</div>
+                    <!-----------------------------------------------------------DELETE--------------------------------------------------------------------------------------------->
+                    <div class="modal fade modalCustom" id="eliminarOficinasRenta" tabindex="-1" aria-labelledby="eliminarOficinasRentaLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body" id="ModalBodyEliminarOficinasRenta">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-
-            <div class="row">
-                <div class="col-12">
-                    <div class="tabCustomEnd"></div>
                 </div>
             </div>
+        </div>
+    
+                
+               
+
+         
 
                 <div class="modal fade modalCustom" id="agregarOficinasRenta" tabindex="-1" aria-labelledby="agregarOficinasRentaLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">

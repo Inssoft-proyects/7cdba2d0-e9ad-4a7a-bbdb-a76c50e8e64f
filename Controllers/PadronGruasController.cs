@@ -1,6 +1,7 @@
 ﻿using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
 using GuanajuatoAdminUsuarios.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,6 +12,7 @@ using System.Linq;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+    [Authorize]
     public class PadronGruasController : BaseController
     {
         private readonly ICatDictionary _catDictionary;
@@ -32,7 +34,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
             {
                 int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
-                IEnumerable<Gruas2Model> listGruas = _gruasService.GetAllGruas(idOficina);
+                //IEnumerable<Gruas2Model> listGruas = _gruasService.GetAllGruas(idOficina);
+                var listGruas = new List<Gruas2Model>();
                 var catTipoGruas = _catDictionary.GetCatalog("CatTiposGrua", "0");
                 ViewBag.CatTipoGruas = new SelectList(catTipoGruas.CatalogList, "Id", "Text");
                 return View(listGruas);

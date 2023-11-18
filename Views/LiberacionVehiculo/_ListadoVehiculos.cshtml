@@ -75,7 +75,7 @@
             .Name("Grid")
             .Columns(columns =>
             {
-                columns.Bound(p => p.IdDeposito).Title("Id").Width(90);
+                //columns.Bound(p => p.IdDeposito).Title("Id").Width(90);
                 columns.Bound(p => p.marcaVehiculo).Title("Marca").Width(90);
                 columns.Bound(p => p.Serie).Title("Serie").Width(90);
                 columns.Bound(c => c.FechaIngreso).Format("{0:dd/MM/yyyy}").Title("Fecha de ingreso").Width(90);
@@ -88,7 +88,7 @@
                 columns.Bound(c => c.tramo).Title("Tramo").Width(90);
                 columns.Bound(c => c.Km).Title("Kilómetro").Width(90);
                 columns.Bound(c => c.nombreSubmarca).Title("SubMarca").Width(90);
-                columns.Bound(c => c.delegacion).Title("Delegación").Width(90);
+                //columns.Bound(c => c.delegacion).Title("Delegación").Width(90);
                 columns.Bound(p => p.IdDeposito).ClientTemplate(
                 "<button onclick=\"ShowDetailPopUp('#= IdDeposito #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Detalle</b></h6></button>"
                 ).Title("Acciones").Sortable(false).Width(150);

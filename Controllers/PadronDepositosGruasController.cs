@@ -2,6 +2,7 @@ using GuanajuatoAdminUsuarios.Framework;
 using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
 using GuanajuatoAdminUsuarios.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,6 +12,7 @@ using static GuanajuatoAdminUsuarios.Models.PadronDepositosGruasModel;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+    [Authorize]
     public class PadronDepositosGruasController : BaseController
     {
 

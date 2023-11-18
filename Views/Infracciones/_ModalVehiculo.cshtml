@@ -185,6 +185,8 @@
 
 
     function busquedaVehiculo() {
+        var placasValue = $("#PlacasBusqueda").val().trim();
+        $("#PlacasBusqueda").val(placasValue);
         var formData = $("#buscarVehiculoForm").serialize();
         $.ajax({
             url: '@Url.Action("ajax_BuscarVehiculo")',

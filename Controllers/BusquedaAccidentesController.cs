@@ -2,6 +2,8 @@
 using GuanajuatoAdminUsuarios.Models;
 using GuanajuatoAdminUsuarios.Services;
 using GuanajuatoAdminUsuarios.Utils;
+using Kendo.Mvc.Infrastructure.Implementation;
+using Microsoft.AspNetCore.Authorization;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +16,9 @@ using System.Linq;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+
+
+    [Authorize]
     public class BusquedaAccidentesController : BaseController
     {
         private readonly IBusquedaAccidentesService _busquedaAccidentesService;
@@ -208,6 +213,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             var result = _pdfService.CreatePdf("ReporteAccidentes", "Accidentes", 6, ColumnsNames, ListTransitoModel);
             return File(result.Item1, "application/pdf", result.Item2);
         }
+       
 
     }
 }

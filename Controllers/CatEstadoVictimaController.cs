@@ -1,8 +1,12 @@
 ﻿using GuanajuatoAdminUsuarios.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+
+    [Authorize]
+
     public class CatEstadoVictimaController : BaseController
     {
         private readonly ICatEstadoVictimaService _catEstadoVictimaService;

@@ -1,9 +1,12 @@
 ﻿using GuanajuatoAdminUsuarios.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
-        public class CatCiudadesController : BaseController
+
+    [Authorize]
+    public class CatCiudadesController : BaseController
         {
 
             private readonly ICatCiudadesService _catCiudadesService;

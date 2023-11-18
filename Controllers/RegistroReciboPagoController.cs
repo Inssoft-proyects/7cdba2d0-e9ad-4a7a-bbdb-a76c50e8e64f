@@ -16,10 +16,11 @@ using Newtonsoft.Json;
 using GuanajuatoAdminUsuarios.Services;
 using static GuanajuatoAdminUsuarios.RESTModels.ConsultarDocumentoRequestModel;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
-
+    [Authorize]
     public class RegistroReciboPagoController : BaseController
     {
 

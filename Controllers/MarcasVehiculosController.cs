@@ -8,9 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+
+    [Authorize]
     public class MarcasVehiculosController : BaseController
     {
         DBContextInssoft dbContext = new DBContextInssoft();

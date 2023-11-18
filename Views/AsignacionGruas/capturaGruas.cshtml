@@ -78,62 +78,27 @@
                         </div>
                     </div>
                 </div>
-
                </div>
+  <div class="row px-4 mb-2 align-items-start" style="display:block" id="datosVehiculo">
+        <div style="width: 50%; float: left;">
+                <h4 class="colorPrimary"><b>Vehículo</b></h4>
+                <p><b>Placadel vehículo:</b> <span id="PlacaSpan">-</span></p>
+                <p><b>Serie:</b> <span id="SerieSpan">-</span></p>
+                <p><b>Tarjeta:</b> <span id="TarjetaSpan">-</span></p>
+                <p><b>Marca:</b> <span id="MarcaSpan">-</span></p>
+                <p><b>Submarca:</b> <span id="SubmarcaSpan">-</span></p>
+                <p><b>Modelo:</b> <span id="ModeloSpan">-</span></p>
 
-        <div class="row px-4 mb-2 align-items-start" style="display:none" id="datosVehiculo">
+        </div>
+         <div style="width: 50%; float: left;">
+                <h4 class="colorPrimary"><b>Propietario</b></h4>
+                <p><b>Nombre:</b> <span id="PropietarioSpan">-</span></p>
+                <p><b>CURP:</b> <span id="CurpSpan">-</span></p>
 
-                    <div class="col-12 col-sm-6 col-md-auto">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">Placa de vehículo:</label>
-                            <span id="PlacaSpan"></span>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-6 col-md-auto">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">Serie de vehículo:</label>
-                            <span id="SerieSpan"></span>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-6 col-md-auto">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">Marca de vehículo</label>
-                             <span id="MarcaSpan"></span>
-                         </div>
-                    </div>
+            </div>
+        <div style="clear: both;"></div>
+   </div>
 
-                    <div class="col-12 col-sm-6 col-md-auto">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">Sub-Marca de vehículo</label>
-                             <span id="SubmarcaSpan"></span>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-6 col-md-auto">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">Modelo de vehículo</label>
-                            <span id="ModeloSpan"></span>
-                        </div>
-                    </div>
-  
-                    <div class="col-12 col-sm-6 col-md-auto">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">Nombre del propietario</label>
-                            <span id="PropietarioSpan"></span>
-                        </div>   
-                     </div>   
-                    <div class="col-12 col-sm-6 col-md-auto">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">CURP del propietario</label>
-                            <span id="CurpSpan"></span>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-6 col-md-auto">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">RFC del propietario</label>
-                    <span id="RfcSpan"></span>
-                </div>
-                    </div>
-                </div>
                 <div class="row justify-content-between mb-1">
                     <div class="col-12 col-md-auto mt-4 mb-2">
                         <h5 class="px-4"><b>Listado de Grúas utilizadas</b></h5>
@@ -173,17 +138,7 @@
                         </div>
                     </div>
                 </div>
-              </form>
-                <div class="row">
-                    <div class="col-12 col-md-8 mx-md-auto col-lg-5 ">
-                        <div class="controlButton mb-5" onclick="finalizar()">
-                            @(Html.Kendo().Button()
-                              .Name("registroGruaBtn")
-                              .HtmlAttributes(new { @class = "btnPrimary" })
-                              .Content("<h5 class=\"m-0\"><b>Finalizar registro</b></h5>"))
-                        </div>
-                    </div>
-                </div>
+              </form>             
             </section>
 
 
@@ -290,13 +245,40 @@
                                         @(Html.Kendo().Button()
                                                 .Name("vehiculoBtn")
                                                 .HtmlAttributes(new { @class = "btnPrimary" })
-                                                .Content("<h5 class=\"m-0\"><b>Finalizar registro</b></h5>"))
+                                                .Content("<h5 class=\"m-0\"><b>Agregar Inventario</b></h5>"))
                                     </div>
                                 </div>
+                            </div>                      
+
+
+                    <br/>
+                     <br/>
+                    <section>
+                <div class="row">
+                    <div class="col-md-4 mx-md-auto col-lg-5">
+                        <div class="controlButton mb-5" onclick="finalizar()">
+                            @(Html.Kendo().Button()
+                                .Name("registroGruaBtn")
+                                .HtmlAttributes(new { @class = "btnPrimary" })
+                                .Content("<h5 class=\"m-0\"><b>Finalizar registro</b></h5>"))
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-lg-5 col-md-auto">
+                        <div class="row">
+                            <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0" onclick="backBusquedaSolicitud()">
+                                @(Html.Kendo().Button()
+                                    .Name("backDeposito")
+                                    .HtmlAttributes(new { @class = "btnPrimary" })
+                                    .Content("<h6 class=\"m-0\"><i class=\"icon-back me-2\"></i><b>Ir a busqueda de solicitudes</b></h6>"))
                             </div>
                         </div>
                     </div>
                 </div>
+                    </section>
+                </div>
+                  </div>
+             </div>
 
             </section>
               <div class="modal fade modalCustom" id="modalInfracciones" tabindex="-1" aria-labelledby="infraccionLabel" aria-hidden="true">
@@ -516,7 +498,10 @@
         window.location.href = '@Url.Action("Depositos", "Depositos")';
 
     }
+    function backBusquedaSolicitud(){
+        window.location.href = '@Url.Action("Index", "AsignacionGruas")';
 
+    }
 </script>
 <style>
     #svgImagent{

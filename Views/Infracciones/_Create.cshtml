@@ -109,7 +109,23 @@
         <div class="col-12 col-md-6 col-lg-3">
             <div class="controlForm my-3">
                 <label>Serie:</label>
-                @Html.CustomTextBoxFor(model => model.serie,"Ingresa Serie", disableInput)
+                
+                
+                <!--@Html.CustomTextBoxFor(model => model.serie,"Ingresa Serie", disableInput)-->
+                             @if(@disableInput){
+                     <span class="k-widget k-textbox" style="width:100%;">
+                 <input  type="text" style="width:100%;" value="@Model.serie" class="k-input k-state-disabled" />
+             </span>
+
+             }
+             else{
+                 <span class="k-widget k-textbox" style="width:100%;">
+                 <input  type="text" style="width:100%;" value="@Model.serie" class="k-input" />
+             </span>
+
+             }
+
+
             </div>
         </div>
 
@@ -149,6 +165,7 @@
                 {
                     @(Html.Kendo().DatePickerFor(t => t.vigenciaTarjeta)
                         .Value(dateVigencia)
+                        .DateInput()
                         .HtmlAttributes(new { style = "width: 100%", title = "datetimepicker" })
                         )
                 }
@@ -156,6 +173,7 @@
                 {
                     @(Html.Kendo().DatePickerFor(t => t.vigenciaTarjeta)
                         .Value(dateVigencia)
+                        .DateInput()
                         .HtmlAttributes(new { style = "width: 100%", title = "datetimepicker" })
                         )
                 }
@@ -612,7 +630,7 @@
                             @(Html.Kendo().TextBoxFor(t => t.Persona.RFC)
                                 .Label(l => l.Content("RFC <b>(obligatorio)</b>:"))
                                 .Placeholder("Ingresa RFC")
-                                .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                                .HtmlAttributes(new { style = "width: 100%" })
                                 )
                         </div>
                     </div>
@@ -840,6 +858,7 @@
                                 )
 
                         </div>
+                         <div id="errorContainerPersona_nombreFisico" class="error-container"></div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="controlForm my-3">
@@ -864,12 +883,13 @@
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm mb-3">
                             @(Html.Kendo().TextBoxFor(t => t.Persona.RFCFisico)
-                                .Label(l => l.Content("RFC <b>(obligatorio)</b>:"))
+                                .Label(l => l.Content("RFC:"))
                                 .Placeholder("Ingresa un RFC valido")
                                 .HtmlAttributes(new { style = "width: 100%" })
                                 )
 
                         </div>
+                          <div id="errorContainerPersona_RFCFisico" class="error-container"></div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm mb-3">
@@ -890,6 +910,7 @@
                                     )
                             </span>
                         </div>
+                         <div id="errorContainerPersona_fechaNacimiento" class="error-container"></div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm">
@@ -960,6 +981,7 @@
                                 )
 
                         </div>
+                       <div id="errorContainerPersona_PersonaDireccion_coloniaFisico" class="error-container"></div>
                     </div>
 
                     <div class="col-12 col-md-6 col-lg-6">
@@ -971,6 +993,7 @@
                                 )
 
                         </div>
+                        <div id="errorContainerPersona_calleFisico" class="error-container"></div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-2">
                         <div class="controlForm my-3">
@@ -981,6 +1004,7 @@
                                 )
 
                         </div>
+                         <div id="errorContainerPersona_PersonaDireccion_numeroFisico" class="error-container"></div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="controlForm my-3">
@@ -1146,38 +1170,47 @@
 
     });
 
-    function submitCreateMoral() {
-        var validator = $("#frmCreateMoral").kendoValidator().data('kendoValidator');
-        validator.validate();
-        if (validator.validate()) {
-            var formData = $("#frmCreateMoral").serialize();
+   function submitCreateMoral() {
+    var validator = $("#frmCreateMoral").kendoValidator().data('kendoValidator');
+    
+    var idTelefono = $("#Persona_PersonaDireccion_telefono");
+    var idTelefonoValue = idTelefono.val();
+    
+    if (idTelefonoValue === null || idTelefonoValue === "") {
+        idTelefono.prop("disabled", true);
+    }
 
-            $.ajax({
-                url: '@Url.Action("ajax_CrearPersonaMoral")',
-                type: 'POST',
-                data: formData,
-                success: function (result) {
-                    sitteg_success('Elemento guardado correctamente')
-                    window.setTimeout(function () {
-                        document.getElementById("sec3").style.display = "none";
-                        document.getElementById("PersonaMoralLocalizada").style.display = "block";
-                        $("#PersonaMoralLocalizada").html(result);
+    idTelefono.off('blur');
+
+    if (validator.validate()) {
+        var formData = $("#frmCreateMoral").serialize();
+
+        $.ajax({
+            url: '@Url.Action("ajax_CrearPersonaMoral")',
+            type: 'POST',
+            data: formData,
+            success: function (result) {
+                sitteg_success('Elemento guardado correctamente');
+                window.setTimeout(function () {
+                    document.getElementById("sec3").style.display = "none";
+                    document.getElementById("PersonaMoralLocalizada").style.display = "block";
+                    $("#PersonaMoralLocalizada").html(result);
                         $('#addMoral').modal('hide');
                         sitteg_success('Elemento guardado correctamente')
-                    }, 500);
-                },
-                error: function (xhr, status) {
-                    var errmsg = xhr.responseText;
-                    console.log(errmsg)
-                    sitteg_warning('Lo sentimos, ha ocurrido un error.');
-                }
-            });
-        }
-        else {
-            sitteg_info('Debe llenar los campos requeridos');
-            return;
-        }
+                }, 500);
+            },
+            error: function (xhr, status) {
+                var errmsg = xhr.responseText;
+                console.log(errmsg);
+                sitteg_warning('Lo sentimos, ha ocurrido un error.');
+            }
+        });
+    } else {
+        idTelefono.prop("disabled", false);
+        sitteg_info('Debe llenar los campos requeridos');
+        return;
     }
+}
 
     function submitSearchPersonaMoral() {
         var Mydata = $("#frmSearchPersonaMoral").serialize();
@@ -1191,28 +1224,68 @@
                 document.getElementById("PersonaMoralLocalizada").style.display = "block";
                 $("#PersonaMoralLocalizada").html(result);
                 var grid = $("#gridPersonasMoralesAC").data("kendoGrid");
+                  sitteg_success('Elemento guardado correctamente')
                 grid.refresh();
             }
         });
     }
 
-    function submitCreatePersonaFisica() {
-        var generoBool = $("#generoSwitch").prop("checked");
-        $("#idGenero").val(generoBool ? 1 : 0);
-        var Mydata = $("#personaFisicaForm").serialize();
-        console.log("SS",Mydata)
-        $.ajax({
-            url: '@Url.Action("ajax_CrearPersonaFisica")',
-            type: 'POST',
-            data: Mydata,
-            success: function (result) {
-                console.log(result);
-                var grid = $("#personasFisicasInf").html(result);
-              
-                $('#addFisico').modal('hide');
-            }
-        });
+ function submitCreatePersonaFisica() {
+    var nombreValue = $("#Persona_nombreFisico").val();
+    var RFCValue = $("#Persona_RFCFisico").val();
+    var coloniaValue = $("#Persona_PersonaDireccion_coloniaFisico").val();           
+    var calleValue = $("#Persona_PersonaDireccion_calleFisico").val();            
+     var numeroValue = $("#Persona_PersonaDireccion_numeroFisico").val();
+    var fechaNacimientoValue = $("#Persona_fechaNacimiento").data("kendoDatePicker").value();
+     $('.error-container').empty();
+
+    if (!nombreValue || !RFCValue || !coloniaValue || !calleValue || !numeroValue || !fechaNacimientoValue) {
+        if (!nombreValue) {
+            asignarMensajeError("errorContainerPersona_nombreFisico", "Este campo es obligatorio.");
+        }
+        if (!RFCValue) {
+            asignarMensajeError("errorContainerPersona_RFCFisico", "Este campo es obligatorio.");
+        }
+        if (!coloniaValue) {
+            asignarMensajeError("errorContainerPersona_PersonaDireccion_coloniaFisico", "Este campo es obligatorio.");
+        }
+        if (!calleValue) {
+            asignarMensajeError("errorContainerPersona_calleFisico", "Este campo es obligatorio.");
+        }
+        if (!numeroValue) {
+            asignarMensajeError("errorContainerPersona_PersonaDireccion_numeroFisico", "Este campo es obligatorio.");
+        }
+        if (!fechaNacimientoValue) {
+            asignarMensajeError("errorContainerPersona_fechaNacimiento", "Este campo es obligatorio.");
+        }
+
+        return;
     }
+
+    var generoBool = $("#generoSwitch").prop("checked");
+    $("#idGenero").val(generoBool ? 1 : 0);
+
+    var Mydata = $("#personaFisicaForm").serialize();
+
+    $.ajax({
+        url: '@Url.Action("ajax_CrearPersonaFisica")',
+        type: 'POST',
+        data: Mydata,
+        success: function (result) {
+            console.log(result);
+            $("#personasFisicasInf").html(result);
+
+            $('#addFisico').modal('hide');
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            console.error("Error en la solicitud AJAX:", textStatus, errorThrown);
+        }
+    });
+}
+function asignarMensajeError(contenedorErrorId, mensaje) {
+    $('<div class="error-message">' + mensaje + '</div>').appendTo("#" + contenedorErrorId).css('color', 'red');
+}
+
 
     function submitCreateVehiculo() {
         var carga = $("#cargaSwitch").prop("checked");

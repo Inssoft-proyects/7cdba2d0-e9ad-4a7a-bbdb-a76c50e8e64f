@@ -77,7 +77,7 @@
                     .DataTextField("Text")
                     .DataValueField("Value")
                     .OptionLabel("Selecciona la Delegación")
-                    .Events(e => e.Change("pensionDropDownChange"))
+                    .Events(e => e.Change("pensionDropDownChange"))                    
                     .DataSource(source =>
                     {
                         source.Read(read =>
@@ -114,6 +114,7 @@
         <div class="col-12 col-md-6 col-lg-4 col-xl-3">
             <div class="controlForm my-3">
                 <label>Forma de traslado:</label>
+                <label>Forma de traslado:</label>
                 <span>
                     @(Html.Kendo().DropDownListFor(t => t.IdFormaTraslado)
                                 .Label(l => l.Content("Forma de traslado:"))
@@ -127,7 +128,7 @@
                                         read.Action("Traslados_Drop", "CapturaAccidentes");
                                     });
                                 })
-                                .HtmlAttributes(new { style = "width:100%;"})
+                                .HtmlAttributes(new { style = "width:100%;" })
                                 )
                 </span>
             </div>
@@ -147,7 +148,13 @@
    
 <script>
     function guardarComplementoVehiculo() {
-        var validator = $("#complementoVehiculoForm").kendoValidator({
+        var validator = $("#complementoVehiculoForm").kendoValidator().data('kendoValidator');
+        
+        
+        $("#IdDelegacion").prop("disabled",true)
+        $("#IdPension").prop("disabled", true)
+        $("#IdFormaTraslado").prop("disabled", true)
+    /*    var validator = $("#complementoVehiculoForm").kendoValidator({
             validateOnBlur: false,
             rules: {
                 customRule: function (input) {
@@ -168,9 +175,11 @@
                     error.insertAfter(element);
                 }
             }
-        }).data('kendoValidator');
+        }).data('kendoValidator');*/
 
         var isValid = validator.validate();
+
+
 
         if (isValid) {
             var Mydata = $("#complementoVehiculoForm").serialize();
@@ -197,6 +206,12 @@
                 }
             });
         } else {
+
+            $("#IdDelegacion").prop("disabled", false)
+            $("#IdPension").prop("disabled", false)
+            $("#IdFormaTraslado").prop("disabled", false)
+
+
             sitteg_info('Debe llenar los campos requeridos');
             return;
         }

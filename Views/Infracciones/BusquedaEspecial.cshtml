@@ -65,6 +65,8 @@
                         .Name("oficinas")
                         .DataTextField("Text")
                         .DataValueField("Value")
+                        .Filter(FilterType.Contains)
+                        .OptionLabel("Selecciona Oficina")
                         .DataSource(source =>
                         {
                             source.Read(read =>
@@ -105,6 +107,8 @@
                         .Name("estatus")
                         .DataTextField("text")
                         .DataValueField("value")
+                        .Filter(FilterType.Contains)
+                        .OptionLabel("Selecciona")
                         .DataSource(source =>
                         {
                             source.Read(read =>
@@ -125,7 +129,6 @@
                             <label>Inicio:</label>
                             @(Html.Kendo().DatePicker()
                                 .Name("FechaInicio")
-                                .Value(DateTime.Now)
                                 .HtmlAttributes(new { style = "width: 100%", title = "startDate" })
                                 )
                         </div>
@@ -135,7 +138,7 @@
                             <label>Fin:</label>
                             @(Html.Kendo().DatePicker()
                                 .Name("FechaFin")
-                                .Value(DateTime.Now)
+                                
                                 .HtmlAttributes(new { style = "width: 100%", title = "startDate" })
                                 )
                         </div>

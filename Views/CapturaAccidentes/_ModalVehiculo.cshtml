@@ -204,33 +204,34 @@
 	}
 
 
-	function busquedaVehiculo() {
-		var formData = $("#buscarVehiculoForm").serialize();
-		$.ajax({
-			url: '@Url.Action("BuscarVehiculo")',
-			type: 'POST',
-			data: formData,
-			success: function (response) {
+    function busquedaVehiculo() {
+        var placasValue = $("#Placa").val().trim();
+        $("#Placa").val(placasValue);
 
-				// Comprobar si es una respuesta de error debido a problemas de conexión
-				if (response.success === false) {
-					sitteg_warning(response.errorMessage);
-					return;
-				}
+        var formData = $("#buscarVehiculoForm").serialize();
+        $.ajax({
+            url: '@Url.Action("BuscarVehiculo")',
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                if (response.success === false) {
+                    sitteg_warning(response.errorMessage);
+                    return;
+                }
 
-				if (response.noResults) {
-					abrirModalVehiculo(response.data);
-				} else {
-					var grid = $("#gridPrevioVehiculo").data("kendoGrid");
-					grid.dataSource.data(response.data);
-					grid.refresh();
-				}
-			},
-			error: function () {
-				sitteg_warning("Sucedio un error intente de nuevo mas tarde");
-			}
-		});
-	}
+                if (response.noResults) {
+                    abrirModalVehiculo(response.data);
+                } else {
+                    var grid = $("#gridPrevioVehiculo").data("kendoGrid");
+                    grid.dataSource.data(response.data);
+                    grid.refresh();
+                }
+            },
+            error: function () {
+                sitteg_warning("Sucedio un error intente de nuevo mas tarde");
+            }
+        });
+    }
 
 
 	function goBack() {

@@ -6,6 +6,9 @@ using System;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+
+
+
     [Route("api/[controller]")]
     [ApiController]
     public class LicenciasController : BaseController

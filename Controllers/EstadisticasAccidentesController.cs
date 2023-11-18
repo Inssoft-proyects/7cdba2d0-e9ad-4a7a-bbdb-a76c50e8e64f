@@ -2,6 +2,7 @@
 using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
 using GuanajuatoAdminUsuarios.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -9,6 +10,7 @@ using System.Linq;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+    [Authorize]
     public class EstadisticasAccidentesController : BaseController
     {
         private readonly IEstatusInfraccionService _estatusInfraccionService;

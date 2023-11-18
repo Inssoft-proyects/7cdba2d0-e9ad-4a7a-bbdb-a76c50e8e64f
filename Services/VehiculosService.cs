@@ -79,9 +79,9 @@ namespace GuanajuatoAdminUsuarios.Services
                     connection.Open();
                     SqlCommand command = new SqlCommand(strQuery, connection);
                     command.CommandType = CommandType.Text;
-					int numeroSecuencial = 1; 
+                    int numeroSecuencial = 1;
 
-					using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
                         while (reader.Read())
                         {
@@ -91,7 +91,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.placas = reader["placas"].ToString();
                             model.serie = reader["serie"].ToString();
                             model.tarjeta = reader["tarjeta"].ToString();
-                            model.vigenciaTarjeta = Convert.ToDateTime(reader["vigenciaTarjeta"].ToString());
+                            model.vigenciaTarjeta = reader["vigenciaTarjeta"].GetType() == typeof(DBNull) ? null : Convert.ToDateTime(reader["vigenciaTarjeta"].ToString());
                             model.idMarcaVehiculo = Convert.ToInt32(reader["idMarcaVehiculo"].ToString());
                             model.idSubmarca = Convert.ToInt32(reader["idSubmarca"].ToString());
                             model.idTipoVehiculo = Convert.ToInt32(reader["idTipoVehiculo"].ToString());
@@ -121,13 +121,13 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.entidadRegistro = reader["nombreEntidad"].ToString();
                             model.color = reader["color"].ToString();
                             model.propietario = model.Persona.nombre + " " + model.Persona.apellidoPaterno + " " + model.Persona.apellidoMaterno;
-							model.NumeroSecuencial = numeroSecuencial;
+                            model.NumeroSecuencial = numeroSecuencial;
 
-							modelList.Add(model);
-							numeroSecuencial++;
+                            modelList.Add(model);
+                            numeroSecuencial++;
 
-						}
-					}
+                        }
+                    }
                 }
                 catch (SqlException ex)
                 {
@@ -393,14 +393,14 @@ namespace GuanajuatoAdminUsuarios.Services
             sqlCondiciones += (object)modelSearch.idTipoVehiculo == null ? "" : " v.idTipoVehiculo = @idTipoVehiculo AND \n";
             sqlCondiciones += (object)modelSearch.idTipoServicio == null ? "" : " v.idCatTipoServicio = @idTipoServicio AND \n";
             sqlCondiciones += (object)modelSearch.idColor == null ? "" : " v.idColor = @idColor AND \n";
-            
+
             if (sqlCondiciones.Length > 0)
             {
                 sqlCondiciones = sqlCondiciones.Remove(sqlCondiciones.Length - 5);
                 sqlCondiciones = "AND( " + sqlCondiciones + " )";
-                
+
             }
-             
+
             string strQuery = string.Format(@"SELECT
                                 v.idVehiculo, v.placas, v.serie, v.tarjeta, v.vigenciaTarjeta, v.idMarcaVehiculo
                                 ,v.idSubmarca, v.idTipoVehiculo, v.modelo, v.idColor, v.idEntidad, v.idCatTipoServicio
@@ -417,7 +417,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                 INNER JOIN catColores catC on v.idColor = catC.idColor  
                                 WHERE v.estatus = 1
                                     {0}
-                                ",sqlCondiciones);
+                                ", sqlCondiciones);
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
             {
                 try
@@ -551,13 +551,16 @@ namespace GuanajuatoAdminUsuarios.Services
             {
                 try
                 {
+
+                    DateTime? t = model.vigenciaTarjeta.Value.Year > 1 ? model.vigenciaTarjeta : null;
+
                     connection.Open();
                     SqlCommand command = new SqlCommand(strQuery, connection);
 
                     command.Parameters.Add(new SqlParameter("@placas", SqlDbType.NVarChar)).Value = (object)model.placas ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@serie", SqlDbType.NVarChar)).Value = (object)model.serie ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@tarjeta", SqlDbType.NVarChar)).Value = (object)model.tarjeta ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@vigenciaTarjeta", SqlDbType.DateTime)).Value = (object)model.vigenciaTarjeta ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@vigenciaTarjeta", SqlDbType.DateTime)).Value = (object)t ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idMarcaVehiculo", SqlDbType.Int)).Value = (object)model.idMarcaVehiculo ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idSubmarca", SqlDbType.Int)).Value = (object)model.idSubmarca ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idTipoVehiculo", SqlDbType.Int)).Value = (object)model.idTipoVehiculo ?? DBNull.Value;

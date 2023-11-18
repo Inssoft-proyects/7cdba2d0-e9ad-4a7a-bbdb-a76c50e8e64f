@@ -13,7 +13,7 @@ namespace GuanajuatoAdminUsuarios.Models
         public string tarjeta { get; set; }
 
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
-        public DateTime vigenciaTarjeta { get; set; }
+        public DateTime? vigenciaTarjeta { get; set; }
         public DateTime fechaVencimientoFisico { get; set; }
         
         public int idMarcaVehiculo { get; set; }

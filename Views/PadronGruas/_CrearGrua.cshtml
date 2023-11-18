@@ -20,6 +20,8 @@
                                         .Name("idDelegacion")
                                         .BindTo((SelectList)ViewBag.CatDelegaciones)
                                         .OptionLabel("-- Seleccione --")
+                                        .Filter(FilterType.Contains)
+
                                         .HtmlAttributes(new { style = "width:100%;", id = "ddlDelegaciones" })
                                         )
                                 </div>
@@ -82,6 +84,8 @@
                                         .Name("idClasificacion")
                                         .BindTo((SelectList)ViewBag.CatClasificacionGruas)
                                         .OptionLabel("-- Seleccione --")
+                                        .Filter(FilterType.Contains)
+
                                         .HtmlAttributes(new { style = "width:100%;", id = "idClasificacion" })
                                         )
                                 </div>
@@ -93,6 +97,8 @@
                                         .Name("idTipoGrua")
                                         .BindTo((SelectList)ViewBag.CatTipoGruas)
                                         .OptionLabel("-- Seleccione --")
+                                        .Filter(FilterType.Contains)
+
                                         .HtmlAttributes(new { style = "width:100%;", id = "idTipoGrua" })
                                         )
                                 </div>
@@ -104,6 +110,8 @@
                                         .Name("idSituacion")
                                         .BindTo((SelectList)ViewBag.CatSituacionGruas)
                                         .OptionLabel("-- Seleccione --")
+                                        .Filter(FilterType.Contains)
+
                                         .HtmlAttributes(new { style = "width:100%;", id = "idSituacion" })
                                         )
                                 </div>

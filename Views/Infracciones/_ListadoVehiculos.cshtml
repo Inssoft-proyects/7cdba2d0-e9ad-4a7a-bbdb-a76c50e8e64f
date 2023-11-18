@@ -22,6 +22,8 @@
             columns.Bound(c => c.modelo).Title("Modelo").Width(90);
             columns.Bound(p => p.propietario).Title("Propietario").Width(90);
             columns.Bound(c => c.numeroEconomico).Title("Número Económico").Width(90);
+            columns.Bound(c => c.entidadRegistro).Title("Entidad Registro").Width(90);
+            columns.Bound(c => c.tipoVehiculo).Title("Tipo").Width(90);
         }).HtmlAttributes(new { style = "height:auto" })
         .Pageable(pager => pager.AlwaysVisible(true).Position(GridPagerPosition.Bottom).PageSizes(true))
         .Sortable()

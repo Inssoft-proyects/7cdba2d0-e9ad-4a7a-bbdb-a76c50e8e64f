@@ -3,12 +3,16 @@ using GuanajuatoAdminUsuarios.Models;
 using GuanajuatoAdminUsuarios.Services;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+
+
+    [Authorize]
     public class BusquedaDepositoController : BaseController
     {
         private readonly IBusquedaDepositoService _busquedaDepositoService;

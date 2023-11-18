@@ -10,9 +10,13 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+
+
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+    [Authorize]
     public class EnvioInfraccionesController : BaseController
     {
         private readonly IEnvioInfraccionesService _envioInfraccionesService;

@@ -9,9 +9,12 @@ using System;
 using iText = iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.CodeAnalysis;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+    [Authorize]
     public class PDFExampleController : BaseController
     {
         public IActionResult Index()

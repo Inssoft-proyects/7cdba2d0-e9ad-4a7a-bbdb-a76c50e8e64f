@@ -22,6 +22,7 @@
                 .Name("idDelegacion")
                 .BindTo((SelectList)ViewBag.CatDelegaciones)
                 .OptionLabel("-- Seleccione --")
+                .Filter(FilterType.Contains)
                 .HtmlAttributes(new { style = "width:100%;", id = "ddlDelegaciones" }))
         </div>
     </div>
@@ -32,6 +33,8 @@
                 .Name("idMunicipio")
                 .BindTo((SelectList)ViewBag.CatMunicipios)
                 .OptionLabel("-- Seleccione --")
+                .Filter(FilterType.Contains)
+
                 .HtmlAttributes(new { style = "width:100%;", id = "ddlMunicipio" }))
         </div>
     </div>

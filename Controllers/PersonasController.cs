@@ -12,9 +12,13 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.AspNetCore.Authorization;
+
+
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+    [Authorize]
     public class PersonasController : BaseController
     {
         private readonly ICatDictionary _catDictionary;

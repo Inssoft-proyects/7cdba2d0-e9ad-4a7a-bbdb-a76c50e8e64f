@@ -9,9 +9,13 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
+
+
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+    [Authorize]
     public class ReporteAsignacionServiciosController : BaseController
     {
         private readonly IPadronDepositosGruasService _padronDepositosGruasService;

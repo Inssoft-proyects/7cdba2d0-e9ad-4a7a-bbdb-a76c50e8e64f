@@ -63,6 +63,8 @@
                     .Name("idTipoGruas")
                     .BindTo((SelectList)ViewBag.CatTipoGruas)
                     .OptionLabel("-- Seleccione --")
+                    .Filter(FilterType.Contains)
+
                     .HtmlAttributes(new { style = "width:100%;", id = "ddlTipoGrua" })
                     .Filter(FilterType.Contains))
             </div>

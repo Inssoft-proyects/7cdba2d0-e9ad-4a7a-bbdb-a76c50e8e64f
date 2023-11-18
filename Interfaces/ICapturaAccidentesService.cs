@@ -26,13 +26,13 @@ namespace GuanajuatoAdminUsuarios.Interfaces
         List<CapturaAccidentesModel> AccidentePorID(int idAccidente);
 
         public int AgregarValorFactorYOpcion(int IdFactorAccidente,int IdFactorOpcionAccidente,int idAccidente);
-
+        int EditarFactorOpcion(int IdFactorAccidente, int IdFactorOpcionAccidente, int IdAccidenteFactorOpcion);
         List<CapturaAccidentesModel> ObtenerDatosGridFactor(int idAccidente);
         public int AgregarValorCausa(int IdCausaAccidente,int idAccidente);
-        public int EditarValorCausa(int IdCausaAccidente,int idAccidente, int IdCausaAccidenteEdit);
+        public int EditarValorCausa(int IdCausaAccidente,int idAccidenteCausa);
 
         List<CapturaAccidentesModel> ObtenerDatosGridCausa(int idAccidente);
-        public int EliminarValorFactorYOpcion(int idAccidente);
+        public int EliminarValorFactorYOpcion(int IdAccidenteFactorOpcion);
         public int EliminarCausaBD(int IdCausaAccidente,int idAccidente);
         public int GuardarDescripcion(int idAccidente,string descripcionCausa);
         List<CapturaAccidentesModel> BusquedaPersonaInvolucrada(BusquedaInvolucradoModel model, string server= null);

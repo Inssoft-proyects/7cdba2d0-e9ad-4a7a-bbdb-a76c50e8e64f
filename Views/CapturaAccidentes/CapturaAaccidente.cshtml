@@ -43,6 +43,7 @@
 			<div class="col-auto">
 				<div class="controlForm mb-3 mt-1">
 					<label class="text-muted">Fecha y hora:</label>
+				<!--	<label>@Model.Fecha.Value.ToString("dd/MM/yyyy") - @Model.Hora</label>-->
 					<label>@Model.FechaFormateada - @Model.Hora</label>
 				</div>
 			</div>
@@ -122,7 +123,7 @@
 					<div class="col-auto btnOutline my-2 mx-auto p-0 text-center" onclick="mostrarModalAgregarVehiculo()">
 						@(Html.Kendo().Button()
 							.Name("editInvolucrados")
-							.HtmlAttributes(new { @class = "px-5" })
+							.HtmlAttributes(new { @class = "px-5",@readonly =  ViewBag.ModoSoloLectura })
 							.Content("<h6 class=\"m-0\"><b>Capturar nuevo vehículo</b></h6>"))
 					</div>
 				</div>
@@ -262,7 +263,7 @@
 			</div>
 		</div>
 	</section>
-	<div id="ClasificacionAccidente" style="display:none;">
+	<div id="ClasificacionAccidente" style="display:block;">
 			<section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
 				<div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
 					<div class="col-12 col-md-6 col-lg-5 col-xl-auto">
@@ -284,7 +285,7 @@
 					</div>
 					<div class="col-12 col-lg-auto text-center">
 						<div class="btnOutline btnOutlinePrimary px-4 my-3">
-							<button onclick="mostrarModalCalsificacionAccidente()">
+							<button onclick="mostrarModalCalsificacionAccidente()">	
 								<h6 class="m-0"><i class="me-2 icon-addClasificacionAccidente"></i><b>Agregar clasificación</b></h6>
 							</button>
 						</div>

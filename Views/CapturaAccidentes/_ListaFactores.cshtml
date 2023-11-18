@@ -6,6 +6,7 @@
             .Name("gridFactoresA")
             .Columns(columns =>
             {
+                columns.Bound(c => c.IdAccidenteFactorOpcion).Hidden();
                 columns.Bound(c => c.FactorAccidente).Width(80);
                 columns.Bound(c => c.FactorOpcionAccidente).Width(100);
                 //columns.Command(c => c.Custom("Editar").Click("editarFactorA")).Width(100);
@@ -78,15 +79,17 @@
         var dataItem = grid.dataItem(row);
         var IdFactorAccidente = dataItem.IdFactorAccidente;
         var IdFactorOpcionAccidente = dataItem.IdFactorOpcionAccidente;
+        var IdAccidenteFactorOpcion = dataItem.IdAccidenteFactorOpcion;
+
 
 
         $.ajax({
             url: '@Url.Action("ModalEditarFactorAccidente", "CapturaAccidentes")',
             type: 'POST',
-            data: { IdFactorAccidente: IdFactorAccidente, IdFactorOpcionAccidente: IdFactorOpcionAccidente },
+            data: { IdFactorAccidente: IdFactorAccidente, IdFactorOpcionAccidente: IdFactorOpcionAccidente, IdAccidenteFactorOpcion : IdAccidenteFactorOpcion },
             success: function (result) {
-                $('#ModalBodyEditarFactorAccidente').html(result);
-                $('#editarFactorAccidenteModal').modal('show');
+                $('#ModalBodyFactorAccidente').html(result);
+                $('#factorAccidenteModal').modal('show');
 
             },
         })
@@ -97,14 +100,18 @@
         var dataItem = grid.dataItem(row);
         var FactorAccidente = dataItem.FactorAccidente;
         var FactorOpcionAccidente = dataItem.FactorOpcionAccidente;
+        var IdAccidenteFactorOpcion = dataItem.IdAccidenteFactorOpcion;
+
+
+        console.log("LIST",dataItem)
 
         $.ajax({
             url: '@Url.Action("ModalEliminarFactorAccidente", "CapturaAccidentes")',
             type: 'POST',
-            data: { FactorAccidente: FactorAccidente, FactorOpcionAccidente: FactorOpcionAccidente },
+            data: { FactorAccidente: FactorAccidente, FactorOpcionAccidente: FactorOpcionAccidente, IdAccidenteFactorOpcion : IdAccidenteFactorOpcion },
             success: function (data) {
-                $('#ModalBodyEliminarFactorAccidente').html(data);
-                $('#eliminarFactorAccidenteModal').modal('show');
+                $('#ModalBodyFactorAccidente').html(data);
+                $('#factorAccidenteModal').modal('show');
             },
         });
     }

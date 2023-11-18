@@ -44,6 +44,14 @@
                         .Ajax()
                         .ServerOperation(false)
                         )
+                        .ToolBar(t => t.Search())
+                        .Search(s =>
+                        {
+                            s.Field(c => c.RFC);
+                            s.Field(c => c.nombre);
+                            s.Field(c => c.PersonaDireccion.calle);
+                            s.Field(c => c.PersonaDireccion.municipio);
+                        })
                         )
                 </div>
             </div>

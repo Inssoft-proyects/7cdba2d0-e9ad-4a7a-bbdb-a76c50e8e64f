@@ -402,7 +402,7 @@ namespace GuanajuatoAdminUsuarios.Services
         {
             List<AsignacionGruaModel> modelList = new List<AsignacionGruaModel>();
             string strQuery = @"SELECT inf.idInfraccion, inf.idVehiculo,inf.idPersona,inf.folioInfraccion,inf.fechaInfraccion,
-                                        v.placas,v.serie,v.idMarcaVehiculo,v.idSubmarca,v.modelo,v.idPersona,
+                                        v.placas,v.serie,v.idMarcaVehiculo,v.idSubmarca,v.modelo,v.idPersona,v.tarjeta,
                                         p.nombre,p.apellidoPaterno,p.apellidoMaterno,p.CURP,p.RFC,
                                         cmv.marcaVehiculo,csv.nombreSubmarca,col.color
                                         FROM infracciones AS inf
@@ -441,6 +441,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.Color = reader["color"].ToString();
                             model.Placa = reader["placas"].ToString();
                             model.Serie = reader["serie"].ToString();
+                            model.Tarjeta = reader["tarjeta"].ToString();
                             model.Propietario = $"{reader["nombre"]} {reader["apellidoPaterno"]} {reader["apellidoMaterno"]}";
                             model.CURP = reader["CURP"].ToString();
                             model.RFC = reader["RFC"].ToString();

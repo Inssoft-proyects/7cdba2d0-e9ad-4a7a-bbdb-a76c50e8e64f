@@ -8,12 +8,13 @@
             var dataItem = this.dataItem(selectedRow); 
             console.log("DTI",dataItem)
             IdPersona = dataItem.IdPersona;
+            idAuto = parseInt(window.IdVehiculo)
         }
 
         $.ajax({
             url: '@Url.Action("GuardarConductorVehiculo", "CapturaAccidentes")',
             type: 'POST',
-            data: { IdPersona: IdPersona },
+            data: { IdPersona: IdPersona, idAuto: idAuto },
             success: function (result) {
             sitteg_success("Se ha agregado un conductor")
                 $('#modalAgregarConductor').modal('hide');

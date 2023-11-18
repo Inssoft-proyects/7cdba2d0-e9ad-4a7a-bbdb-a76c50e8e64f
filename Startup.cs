@@ -63,7 +63,7 @@ namespace GuanajuatoAdminUsuarios
                     .AddCookie(options =>
                     {
                         // Specify where to redirect un-authenticated users
-                        options.LoginPath = "/login";
+                        options.LoginPath = "/";
 
                         // Specify the name of the auth cookie.
                         // ASP.NET picks a dumb name by default.

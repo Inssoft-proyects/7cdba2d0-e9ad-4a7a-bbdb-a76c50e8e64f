@@ -3,6 +3,7 @@ using GuanajuatoAdminUsuarios.Models;
 using GuanajuatoAdminUsuarios.Services;
 using GuanajuatoAdminUsuarios.Utils;
 using Kendo.Mvc.Infrastructure.Implementation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,6 +16,10 @@ using System.Linq;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+
+
+
+    [Authorize]
     public class BusquedaEspecialAccidentesController : BaseController
     {
         private readonly IBusquedaEspecialAccidentesService _busquedaEspecialAccidentesService;

@@ -3,6 +3,7 @@ using GuanajuatoAdminUsuarios.Models;
 using GuanajuatoAdminUsuarios.Services;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,6 +13,7 @@ using System.Runtime.Intrinsics.Arm;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+    [Authorize]
     public class SalidaVehiculosController : BaseController
     {
         private readonly ISalidaVehiculosService _salidaVehiculosService;

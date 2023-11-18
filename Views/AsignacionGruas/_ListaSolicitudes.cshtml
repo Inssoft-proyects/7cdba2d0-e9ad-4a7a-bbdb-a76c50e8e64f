@@ -1,4 +1,13 @@
-﻿<div class="row">
+﻿<div class="row mb-1 titleCustom">
+    <div class="col-12 col-md-auto mt-4 mb-2">
+        <h5 class="px-4"><b>Resultados</b></h5>
+        @*<h6 class="px-4 text-muted">Edita los datos de vehículo.</h6>*@
+    </div>
+</div>
+<br />
+<br />
+
+<div class="row">
     <div class="col-12 mb-4 px-4 rounded gridCustom">
         @(
             Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.AsignacionGruaModel>()
@@ -9,7 +18,7 @@
                 columns.Bound(c => c.idSolicitud).Hidden();
                 columns.Bound(c => c.idPropietarioGrua).Hidden();
                 columns.Bound(c => c.FolioSolicitud).Title("Folio").Width(100);
-                columns.Bound(c => c.fechaSolicitud).Title("Fecha Solicitud").Format("{0:dd/MM/yyyy}").Width(100);
+                columns.Bound(c => c.fechaSolicitud).Title("Fecha").Format("{0:dd/MM/yyyy}").Width(100);
                 columns.Bound(c => c.Ubicacion).Title("Ubicación").Width(100);
                 columns.Bound(c => c.Grua).Title("Grúa").Width(100);
                 columns.Bound(c => c.Oficial).Title("Oficial").Width(100);
@@ -38,7 +47,7 @@
             .Type(GridSelectionType.Row)
             )
             .Events(events => events.Change("onRowSelect"))
-            )
+            .NoRecords(noRecords => noRecords.Template("No se encontrarón registros. Realice la búsqueda nuevamente.")))
     </div>
 </div>
 

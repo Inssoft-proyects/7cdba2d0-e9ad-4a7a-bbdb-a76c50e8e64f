@@ -1,5 +1,4 @@
 ﻿@model List<Gruas2Model>
-
 @*<div class="row justify-content-between mb-1 titleCustom">*@
 
 <div class="row mb-2 titleCustom">
@@ -10,12 +9,7 @@
 <br />
 <br />
 <div class="row">
-    @if (Model.Count == 0)
-    {
-        <div class="alert alert-info">
-            No se encontraron registros que cumplan con los criterios de búsqueda.
-        </div>
-    }
+ 
     @*<column template="<button data-bs-toggle=modal data-bs-target=\#editVehiculo class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>" width="100" />*@
     <div class="col-12 mb-4 px-4 rounded gridCustom">
         @(Html.Kendo().Grid(Model)
@@ -28,9 +22,9 @@
                 columns.Bound(p => p.noEconomico).Title("No. Económico").Width(90);
                 columns.Bound(c => c.modelo).Title("Modelo").Width(90);
                 columns.Bound(c => c.placas).Title("Placas").Width(90);
-                columns.Bound(c => c.tipoGrua).Title("Tipo Grúa").Width(90);
+                columns.Bound(c => c.tipoGrua).Title("Tipo").Width(90);
                 columns.Bound(c => c.capacidad).Title("Capacidad").Width(90);
-                columns.Command(c => c.Custom("Editar").Click("editar")).Width(100);
+                //columns.Command(c => c.Custom("Editar").Click("editar")).Width(100);
             }).HtmlAttributes(new { style = "height:350" })
             .Pageable(pager => pager.AlwaysVisible(true).Position(GridPagerPosition.Top).PageSizes(true))
             .Sortable()
@@ -39,6 +33,8 @@
             .Ajax()
             .ServerOperation(false)
             )
+            .NoRecords(noRecords => noRecords.Template("No se encontrarón registros. Realice la búsqueda nuevamente."))
+
             )
     </div>
 </div>

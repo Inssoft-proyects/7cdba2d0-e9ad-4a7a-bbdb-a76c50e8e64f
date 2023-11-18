@@ -225,7 +225,7 @@
         console.log(Mydata);
 
         $.ajax({
-            url: '/BusquedaAccidentes/ajax_BuscarAccidente',
+            url: '/BusquedaEspecialAccidentes/ajax_BuscarAccidente',
             type: 'GET',
             data: Mydata,
             success: function (data) {
@@ -234,7 +234,7 @@
                 grid.refresh();
             },
             error: function () {
-                sitteg_warning("Ocurrieron los siguientes errores");
+                sitteg_warning("Ocurrio un error en la busqueda,intente mas tarde");
             }
         });
     }

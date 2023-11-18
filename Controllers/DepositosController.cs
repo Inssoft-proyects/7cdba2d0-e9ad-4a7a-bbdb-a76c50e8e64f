@@ -12,9 +12,13 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+
+    [Authorize]
     public class DepositosController : BaseController
     {
         private readonly IDepositosService _catDepositosService;
