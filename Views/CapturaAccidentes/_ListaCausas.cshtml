@@ -64,7 +64,6 @@
         var dataItem = grid.dataItem(row);
             var CausaAccidente = dataItem.CausaAccidente;
             var IdCausaAccidente = dataItem.IdCausaAccidente;
-
             $.ajax({
                 url: '@Url.Action("ModalEditarCausaAccidente", "CapturaAccidentes")',
                 type: 'POST',

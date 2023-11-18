@@ -1,4 +1,4 @@
-﻿@model GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel
+﻿@model GuanajuatoAdminUsuarios.Models.EditarCausaAccidenteModel
 
 <section class=" bg-white rounded">
     <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
@@ -38,18 +38,15 @@
             <div class="controlForm my-3">
                 <label>Causa <b>(obligatorio)</b>:</label>
                 <span>
-                    @(Html.Kendo().DropDownListFor(t => t.IdCausaAccidente)
+                    @(Html.Kendo().DropDownList()
+                                .Name("ModalCausaAdd")
                                 .DataTextField("Text")
                                 .DataValueField("Value")
                                 .OptionLabel("Selecciona una Opción")
                                 .HtmlAttributes(new { style = "width:100%;" })
-                                .DataSource(source =>
-                                {
-                                    source.Read(read =>
-                                    {
-                                        read.Action("Causas_Drop", "CapturaAccidentes");
-                                    });
-                                }))
+                                .BindTo(Model.CausasAccidentes)
+                                )
+
                 </span>
             </div>
         </div>
@@ -63,7 +60,7 @@
                     </button>
                 </div>
                 <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-                    <div class="controlButton" onclick="agregarCausa()">
+                    <div class="controlButton" onclick="agregarCausaModal()">
                         @(Html.Kendo().Button()
                                     .Name("AddCausa")
                                     .HtmlAttributes(new { @class = "btnPrimary px-3" })
@@ -78,12 +75,12 @@
 </section>
 <script>
    
-    function agregarCausa() {
+    function agregarCausaModal() {
 
         var Mydata = $("#agregarCausaForm").serialize();
 
         $.ajax({
-            url: '@Url.Action("AgregarCausaNuevo")',
+            url: '@Url.Action("AgregarCausaNuevo", "CapturaAccidentes")',
             type: 'POST',
             data: Mydata,
             success: function (data) {

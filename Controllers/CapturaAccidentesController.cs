@@ -31,6 +31,7 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http.Extensions;
 using System.Globalization;
 using GuanajuatoAdminUsuarios.Helpers;
+using static GuanajuatoAdminUsuarios.RESTModels.ConsultarDocumentoResponseModel;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
@@ -683,7 +684,12 @@ namespace GuanajuatoAdminUsuarios.Controllers
 		}
 		public ActionResult ModalCausaAccidente()
 		{
-			return PartialView("_ModalCausa");
+            EditarCausaAccidenteModel editCausa = new EditarCausaAccidenteModel();
+            editCausa.IdAccidente = 0;
+            editCausa.IdCausaAccidente = 0;
+            editCausa.CausasAccidentes = new SelectList(_catCausasAccidentesService.ObtenerCausasActivas(), "IdCausaAccidente", "CausaAccidente");
+            ViewBag.IdCausaAccidente = 0;
+            return PartialView("_ModalCausa", editCausa);
 		}
 		public ActionResult ModalCapturaConductor()
 		{
@@ -702,9 +708,14 @@ namespace GuanajuatoAdminUsuarios.Controllers
 		}
 		public ActionResult ModalEditarCausaAccidente(int IdCausaAccidente, string CausaAccidente)
 		{
+			EditarCausaAccidenteModel editCausa = new EditarCausaAccidenteModel();
+            editCausa.IdAccidente = IdCausaAccidente;
+            editCausa.IdCausaAccidente = IdCausaAccidente;
+			editCausa.IdCausaAccidenteEdit = IdCausaAccidente;
+            editCausa.CausasAccidentes = new SelectList(_catCausasAccidentesService.ObtenerCausasActivas(), "IdCausaAccidente", "CausaAccidente");
             ViewBag.IdCausaAccidente = IdCausaAccidente;
             ViewBag.CausaAccidente = CausaAccidente;
-            return PartialView("_ModalEditarCausa");
+            return PartialView("_ModalEditarCausa", editCausa);
 		}
 		public ActionResult ModalEliminarCausas(int IdCausaAccidente, string CausaAccidente)
 		{
@@ -777,15 +788,15 @@ namespace GuanajuatoAdminUsuarios.Controllers
 			return Json(datosGrid);
 		}
 
-		public IActionResult AgregarCausaNuevo(int IdCausaAccidente)
+		public IActionResult AgregarCausaNuevo(int ModalCausaAdd)
 		{
 			int idAccidente = HttpContext.Session.GetInt32("LastInsertedId") ?? 0;
-			var RegistroSeleccionado = _capturaAccidentesService.AgregarValorCausa(IdCausaAccidente, idAccidente);
+			var RegistroSeleccionado = _capturaAccidentesService.AgregarValorCausa(ModalCausaAdd, idAccidente);
 			var datosGrid = _capturaAccidentesService.ObtenerDatosGridCausa(idAccidente);
 
 			return Json(datosGrid);
 		}
-		public IActionResult EditarCausa(int IdCausaAccidente, int IdCausaAccidenteEdit)
+		public IActionResult EditarCausa(int IdAccidente, int IdCausaAccidente, int IdCausaAccidenteEdit)
 		{
 			int idAccidente = HttpContext.Session.GetInt32("LastInsertedId") ?? 0;
 			var RegistroSeleccionado = _capturaAccidentesService.EditarValorCausa(IdCausaAccidente, idAccidente, IdCausaAccidenteEdit);

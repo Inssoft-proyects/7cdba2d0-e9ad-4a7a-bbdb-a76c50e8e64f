@@ -29,7 +29,7 @@
 
     function mostrarModalAgregarCausa() {
         $.ajax({
-            url: '@Url.Action("ModalCausaAccidente")',
+            url: '@Url.Action("ModalCausaAccidente", "CapturaAccidentes")',
             type: 'POST',
             contentType: "application/json; charset=utf-8",
             dataType: "html",

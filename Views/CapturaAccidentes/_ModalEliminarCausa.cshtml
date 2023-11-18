@@ -49,7 +49,7 @@
                     </button>
                 </div>
                 <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-                    <div class="controlButton" onclick="EliminarCausaBD()">
+                    <div class="controlButton" onclick="EliminarCausaBDModal()">
                         @(Html.Kendo().Button()
                                         .Name("deletCausa")
                                         .HtmlAttributes(new { @class = "btnPrimary px-3" })
@@ -64,7 +64,7 @@
 </section>
    <script>
 
-    function EliminarCausaBD() {
+    function EliminarCausaBDModal() {
 
         var Mydata = $("#eliminaCausaForm").serialize();
 
