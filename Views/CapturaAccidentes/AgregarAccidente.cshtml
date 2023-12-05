@@ -42,7 +42,7 @@
                         <div class="controlForm my-3">
                             <label>Fecha <b>(obligatorio)</b>:</label>
                             <span>
-                                @(Html.Kendo().DatePickerFor(t => t.Fecha)
+                                @(Html.Kendo().DatePickerFor(t => t.Fecha).Max(DateTime.Now)
                                     .Label(l => l.Content("Fecha <b>(obligatorio)</b>:"))
                                     .HtmlAttributes(new { style = "width: 100%", title = "please enter date" })
                                     .Events(e => e
@@ -55,14 +55,12 @@
                         <div class="controlForm my-3">
                             <label>Hora <b>(obligatorio)</b>:</label>
                             <span>
-                                @(Html.Kendo().TimePickerFor(t => t.Hora)
+                                @(Html.Kendo().TimePickerFor(t => t.Hora).Max(DateTime.Now)
                                     .Format("HH:mm")
                                     .Interval(1)
                                     .Label(l => l.Content("Hora <b>(obligatorio)</b>:"))
-                                    .HtmlAttributes(new { style = "width: 100%", title = "please enter date" })
                                     .Value((DateTime?)null)
                                     .HtmlAttributes(new { style = "width: 100%", title = "timepicker" })
-                                    .DateInput()
                                     )
                             </span>
                         </div>
@@ -217,5 +215,10 @@
             // Puedes ajustar la lógica aquí según tus necesidades
             datePicker.value(null); // Limpia la selección
         }
+
+        $(document).ready(function () {
+            var datePicker = $("#Hora").data("TimePickerFor");
+            datePicker.value(null);
+        });
     }
    </script>

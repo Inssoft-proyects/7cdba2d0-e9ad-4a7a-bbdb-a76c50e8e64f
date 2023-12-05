@@ -108,7 +108,7 @@
 				@*Datos*@
 				<tr>
 					<td colspan="3"><p class="s2">@item.Tarjeta</p></td>
-					<td><p class="s2">@item.vigenciaLicencia.ToString("dd-MM-yyyy")</p></td>
+					<td><p class="s2">@item.vigenciaLicencia.ToString("dd/MM/yyyy")</p></td>
 					<td><p class="s2">@item.Entidad</p></td>
 					<td><p class="s2">@item.Capacidad</p></td>
 					<td><p class="s2">@item.NumeroEconomico</p></td>
@@ -137,7 +137,7 @@
 				<tr>
 					<td colspan="3"><p class="s2">@item.ConductorInvolucrado</p></td>
 					<td colspan="3"><p class="s2">-------</p></td>
-					<td><p class="s2">@(DateTime.Now.Year - item.fechaNacimiento.Year)</p></td>
+					<td><p class="s2">@(DateTime.Now.Year - item.dateNacimiento.Year)</p></td>
 					<td><p class="s2">@item.Sexo</p></td>
 				</tr>
 				@*Columnas*@
@@ -149,10 +149,10 @@
 				</tr>
 				@*Datos*@
 				<tr>
-					<td colspan="2"><p class="s2">@item.fechaNacimiento.ToString("dd-MM-yyyy")</p></td>
+					<td colspan="2"><p class="s2">@item.FechaNacimientoFormateada</p></td>
 					<td colspan="2"><p class="s2">@item.TipoLicencia</p></td>
 					<td><p class="s2">@item.numeroLicencia</p></td>
-					<td colspan="3"><p class="s2">@item.vigenciaLicencia.ToString("dd-MM-yyyy")</p></td>
+					<td colspan="3"><p class="s2">@item.vigenciaLicencia.ToString("dd/MM/yyyy")</p></td>
 				</tr>
 			}
 		</table>
@@ -255,7 +255,7 @@
 					<td><p class="s2">@item.Tipo</p></td>
 					<td><p class="s2">@item.ConductorInvolucrado</p></td>
 					<td><p class="s2">@item.Sexo</p></td>
-					<td><p class="s2">@(DateTime.Now.Year - item.fechaNacimiento.Year)</p></td>
+					<td><p class="s2">@(DateTime.Now.Year - item.dateNacimiento.Year)</p></td>
 					<td><p class="s2">@item.Direccion</p></td>
 					<td><p class="s2">@item.Estado</p></td>
 					<td><p class="s2">@item.LLevadoA</p></td>

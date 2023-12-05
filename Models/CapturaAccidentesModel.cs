@@ -9,15 +9,15 @@ namespace GuanajuatoAdminUsuarios.Models
     {
         public int? IdAccidente { get; set; }
         public int? IdInfAcc { get; set; }
-        public int? idAccidenteCausa { get; set; }       
-        public int? IdAccidenteFactorOpcion { get; set; }        
+        public int? idAccidenteCausa { get; set; }
+        public int? IdAccidenteFactorOpcion { get; set; }
         public int? idEstatusReporte { get; set; }
         public string NumeroReporte { get; set; }
         [Required(ErrorMessage = "-El campo Fecha es obligatorio")]
-		public DateTime? Fecha { get; set; }
-		public string FechaFormateada => Fecha.HasValue ? Fecha.Value.ToString("dd/MM/yyyy") : string.Empty;
+        public DateTime? Fecha { get; set; }
+        public string FechaFormateada => Fecha.HasValue ? Fecha.Value.ToString("dd/MM/yyyy") : string.Empty;
 
-		[Required(ErrorMessage = "-El campo Hora  es obligatorio")]
+        [Required(ErrorMessage = "-El campo Hora  es obligatorio")]
         public TimeSpan? Hora { get; set; }
 
         [Required(ErrorMessage = "-Debe seleccionar una opción para Municipio")]
@@ -31,11 +31,11 @@ namespace GuanajuatoAdminUsuarios.Models
 
         [Required(ErrorMessage = "-El campo Kilómetro es obligatorio")]
         public string Kilometro { get; set; }
-		public string Colonia { get; set; }
-		public string Numero { get; set; }
-		public string Calle { get; set; }
+        public string Colonia { get; set; }
+        public string Numero { get; set; }
+        public string Calle { get; set; }
 
-		public string EstatusReporte { get; set; }
+        public string EstatusReporte { get; set; }
         public DateTime? FechaActualizacion { get; set; }
         public int ActualizadoPor { get; set; }
         public int estatus { get; set; }
@@ -75,11 +75,14 @@ namespace GuanajuatoAdminUsuarios.Models
         public string NumeroEconomico { get; set; }
         public int IdPersonaFisica { get; set; }
         public int IdPersonaMoral { get; set; }
-        
+
         public string DatoBusquedaVehiculo { get; set; }
         public int IdTipoLicencia { get; set; }
         public int IdCatTipoPersona { get; set; }
-        public DateTime fechaNacimiento { get; set; }
+        public DateTime? fechaNacimiento { get; set; }
+
+		public DateTime dateNacimiento { get; set; }
+		public string FechaNacimientoFormateada => fechaNacimiento.HasValue ? fechaNacimiento.Value.ToString("dd/MM/yyyy") : string.Empty;
 
         public DateTime vigenciaLicencia { get; set; }
         public string TipoPersona { get; set; }
@@ -108,15 +111,17 @@ namespace GuanajuatoAdminUsuarios.Models
         public string Motor { get; set; }
         public string Capacidad { get; set; }
         public string ConductorInvolucrado { get; set; }
+        public int NoAccidente { get; set; }
 
 
 
 
 
-        ///////////
-        /////////////////MODEL CLASIFICACION//////////
-        ///
-        public int? IdClasificacionAccidente { get; set; }
+
+		///////////
+		/////////////////MODEL CLASIFICACION//////////
+		///
+		public int? IdClasificacionAccidente { get; set; }
 
         public string NombreClasificacion { get; set; }
 

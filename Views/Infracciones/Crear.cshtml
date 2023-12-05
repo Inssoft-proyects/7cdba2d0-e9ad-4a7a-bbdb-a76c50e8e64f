@@ -121,9 +121,9 @@
                                 <div class="form-group col-md-4">
                                     <div class="controlForm">
                                         <label>Fecha infracción:</label>
-                                        @(Html.Kendo().DateTimePickerFor(t => t.fechaInfraccion)
+										@(Html.Kendo().DateTimePickerFor(t => t.fechaInfraccion).Max(DateTime.Now)
                                             .Label(l => l.Content("Fecha: <b>(obligatorio)</b>:"))
-                                            .Format("dd-MM-yyyy")
+                                            .Format("dd/MM/yyyy HH:mm")
                                             .HtmlAttributes(new { style = "width: 100%", required = "required" })
                                             )
                                     </div>

@@ -150,7 +150,7 @@
                                         <label>Fecha infracción:</label>
                                         @(Html.Kendo().DateTimePickerFor(t => t.fechaInfraccion)
                                             .Label(l => l.Content("Fecha: <b>(obligatorio)</b>:"))
-                                            .Format("dd-MM-yyyy")
+                                            .Format("dd/MM/yyyy")
                                             .HtmlAttributes(new { style = "width: 100%", required = "required" })
                                             )
                                     </div>
@@ -930,7 +930,7 @@
             processData: false,
             contentType: false,
             success: function (response) {
-                sitteg_success("Se ha anexado la imagen exitosamente");
+                sitteg_success("Se ha anexado el Archivo exitosamente");
                 console.log(response);
             },
             error: function (xhr, status, error) {

@@ -29,7 +29,7 @@
 				<div class="col-3 ">
 					<div class="controlForm my-3">
 						<label>Inicio:</label>
-						@(Html.Kendo().DatePickerFor(m => m.FechaInicio)
+						@(Html.Kendo().DatePickerFor(m => m.FechaInicio).Format("dd/MM/yyyy")
 							.HtmlAttributes(new { style = "width: 100%", title = "startDate" })
 							)
 					</div>
@@ -37,7 +37,7 @@
 				<div class="col-3 ">
 					<div class="controlForm my-3">
 						<label>Fin:</label>
-						@(Html.Kendo().DatePickerFor(m => m.FechaFin)
+						@(Html.Kendo().DatePickerFor(m => m.FechaFin).Format("dd/MM/yyyy")
 							.HtmlAttributes(new { style = "width: 100%", title = "endDate" })
 							)
 					</div>

@@ -80,7 +80,7 @@
                                 <pageable button-count="5" refresh="true" page-sizes="new int[] { 5, 10, 20 }">
                                 </pageable>
                                 <columns>
-                                    <column field="OrderDate" title="Nombre" format="{0:MM/dd/yyyy}" width="250" />
+                                    <column field="OrderDate" title="Nombre" format="{0:dd/MM/yyyy}" width="250" />
                                     <column field="ShipName" title="Delegación" width="150" />
                                     <column template="<button data-bs-toggle=modal data-bs-target=\#editMinisterio class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>" width="100" />
                                 </columns>
@@ -235,7 +235,7 @@
                                 <pageable button-count="5" refresh="true" page-sizes="new int[] { 5, 10, 20 }">
                                 </pageable>
                                 <columns>
-                                    <column field="OrderDate" title="Nombre" format="{0:MM/dd/yyyy}" width="250" />
+                                    <column field="OrderDate" title="Nombre" format="{0:dd/MM/yyyy}" width="250" />
                                     <column field="ShipName" title="Delegación" width="150" />
                                     <column template="<button data-bs-toggle=modal data-bs-target=\#editMinisterio class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>" width="100" />
                                 </columns>

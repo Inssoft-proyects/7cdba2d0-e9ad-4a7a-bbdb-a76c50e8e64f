@@ -68,7 +68,7 @@
                         <div class="controlForm my-3">
                             <label for="datetimepicker1">Fecha de arribo <b>(obligatorio)</b>:</label>
                             @(Html.Kendo().DateTimePickerFor(t => t.fechaArribo)
-                                .Format("dd-MM-yyyy hh:mm tt")
+                                .Format("dd/MM/yyyy hh:mm tt")
                                 .HtmlAttributes(new { style = "width: 100%" })
                                 )
                         </div>
@@ -77,7 +77,7 @@
                         <div class="controlForm my-3">
                             <label for="datetimepicker2">Fecha de inicio <b>(obligatorio)</b>:</label>
                             @(Html.Kendo().DateTimePickerFor(t => t.fechaInicio)
-                                .Format("dd-MM-yyyy hh:mm tt")
+                                .Format("dd/MM/yyyy hh:mm tt")
                                 .HtmlAttributes(new { style = "width: 100%" })
                                 )
                         </div>
@@ -86,7 +86,7 @@
                         <div class="controlForm my-3">
                             <label for="datetimepicker3">Fecha de término <b>(obligatorio)</b>:</label>
                             @(Html.Kendo().DateTimePickerFor(t => t.fechaFinal)
-                                .Format("dd-MM-yyyy hh:mm tt")
+                                .Format("dd/MM/yyyy hh:mm tt")
                                 .HtmlAttributes(new { style = "width: 100%" })
                                 )
                         </div>

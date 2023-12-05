@@ -24,7 +24,7 @@
                 columns.Bound(c => c.tipoVehiculo).Title("Tipo Vehículo").Width(90);
                 columns.Bound(c => c.propietario).Title("Propietario").Width(90);
                 columns.Bound(c => c.tarjeta).Title("Tarjeta").Width(90);
-                columns.Bound(c => c.vigenciaTarjeta).Title("Vigencia tarjeta").Width(90);
+                columns.Bound(c => c.vigenciaTarjeta).Title("Vigencia tarjeta").Format("{0:dd/MM/yyyy}").Width(90);
                 columns.Bound(c => c.motor).Title(" No. Motor").Width(90);
                 columns.Bound(c => c.modelo).Title("Modelo").Width(90);
                 columns.Bound(c => c.color).Title("Color").Width(90);

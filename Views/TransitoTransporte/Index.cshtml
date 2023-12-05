@@ -251,7 +251,7 @@
                 <div class="controlForm my-3">
                     <label>Fecha de Ingreso:</label>
                     @(Html.Kendo().DatePickerFor(t => t.FechaIngreso)
-                        .Format("dd-MM-yyyy")
+                        .Format("dd/MM/yyyy")
                         .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "start" })
                         )
 
@@ -270,7 +270,7 @@
                     <label>Fecha Hasta:</label>
 
                     @(Html.Kendo().DatePickerFor(t => t.FechaIngresoFin)
-                        .Format("dd-MM-yyyy")
+                        .Format("dd/MM/yyyy")
                         .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "end" })
                         )
 

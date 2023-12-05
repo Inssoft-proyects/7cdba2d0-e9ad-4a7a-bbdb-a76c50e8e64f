@@ -167,7 +167,14 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 Modulo = "Accidentes",
                 SubModulo = "BusquedaAccidentes"
             },
-            new Menu()
+			new Menu()
+			{
+				Controller = "BusquedaEspecialAccidentes",
+				Action = "Index",
+				Modulo = "Accidentes",
+				SubModulo = "BusquedaEspecialAccidentes"
+			},
+			new Menu()
             {
                 Controller = "EstadisticasAccidentes",
                 Action = "Index",

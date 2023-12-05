@@ -162,9 +162,9 @@
             <div class="controlForm my-3">
                 <label>Vigencia de tarjeta:</label>
 
-                    @(Html.Kendo().DatePickerFor(t => t.vigenciaTarjeta)
-                        .DateInput()
-                        .Value(dateVigencia)
+                    @(Html.Kendo().DatePickerFor(t => t.vigenciaTarjeta).Format("dd/MM/yyyy")
+                        //.DateInput()
+                        .Value("")
                         .HtmlAttributes(new { style = "width: 100%", title = "datetimepicker" })
                       
                         )
@@ -899,7 +899,7 @@
                             <label>Fecha de nacimiento <b>(obligatorio):</b></label>
                             <span>
                                 @(Html.Kendo().DatePickerFor(t => t.Persona.fechaNacimiento)
-                                    .Format("dd-MM-yyyy")
+                                    .Format("dd/MM/yyyy")
                                     )
                             </span>
                         </div>
@@ -1157,7 +1157,7 @@
     });
      $(document).ready(function() {
         var datePicker = $("#vigenciaTarjeta").data("kendoDatePicker");
-        datePicker.value(null);
+        //datePicker.value(null);
     });
 
 
@@ -1172,6 +1172,9 @@
     }
 
     idTelefono.off('blur');
+
+
+    $("#hdnIdCatTipoPersona").prop("disabled",true)
 
     if (validator.validate()) {
         var formData = $("#frmCreateMoral").serialize();
@@ -1198,6 +1201,7 @@
         });
     } else {
         idTelefono.prop("disabled", false);
+            $("#hdnIdCatTipoPersona").prop("disabled",false)
         sitteg_info('Debe llenar los campos requeridos');
         return;
     }

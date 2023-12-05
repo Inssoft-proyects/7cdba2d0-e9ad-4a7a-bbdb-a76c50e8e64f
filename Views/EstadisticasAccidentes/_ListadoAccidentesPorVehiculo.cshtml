@@ -15,7 +15,7 @@
 		{
 			columns.Bound(p => p.NumeroContinuo).Title("No.").Width(90);
 			columns.Bound(p => p.Numreporteaccidente).Title("Numreporteaccidente").Width(90);
-			columns.Bound(p => p.fecha).Title("Fecha").Width(90);
+			columns.Bound(p => p.fecha).Title("Fecha").Width(90).Format("{0: dd/MM/yyyy }");
 			columns.Bound(p => p.hora).Title("Hora").Width(90);
 			columns.Bound(p => p.NumVeh).Title("NumVeh").Width(90);
 			columns.Bound(p => p.PlacasVeh).Title("PlacasVeh").Width(90);

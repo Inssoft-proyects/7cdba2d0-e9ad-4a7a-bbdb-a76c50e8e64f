@@ -1,85 +1,85 @@
 ﻿@model List<CapturaAccidentesModel>
 
- <script>
-        function onRowSelect(e) {
-            var selectedRow = this.select();
-            var dataItem = this.dataItem(selectedRow);
-            var idPersona = dataItem.IdPersona;
-            $('#idPersonaInput').val(idPersona);
-            console.log("FEC",dataItem.fechaNacimiento)
-            var nombre = dataItem.nombre
-            var apellidoPaterno = dataItem.apellidoPaterno
-            var apellidoMaterno = dataItem.apellidoMaterno
-            var CURP = dataItem.CURP
-            var fechaNacimiento = dataItem.fechaNacimiento;
-            console.log("FEC",fechaNacimiento)
-            fechaNacimiento = fechaNacimiento == "01/01/0001" ? "" : fechaNacimiento;
-            var RFC = dataItem.RFC
+<script>
+	function onRowSelect(e) {
+		var selectedRow = this.select();
+		var dataItem = this.dataItem(selectedRow);
+		var idPersona = dataItem.IdPersona;
+		$('#idPersonaInput').val(idPersona);
+		console.log("FEC", dataItem.fechaNacimiento)
+		var nombre = dataItem.nombre
+		var apellidoPaterno = dataItem.apellidoPaterno
+		var apellidoMaterno = dataItem.apellidoMaterno
+		var CURP = dataItem.CURP
+		var FechaNacimientoFormateada = dataItem.FechaNacimientoFormateada;
+		console.log("FEC", FechaNacimientoFormateada)
+		FechaNacimientoFormateada = FechaNacimientoFormateada == "01/01/0001" ? "" : FechaNacimientoFormateada;
+		var RFC = dataItem.RFC
 
-            var nombreCompleto = nombre+" "+apellidoPaterno+" "+apellidoMaterno;
-            $('#gridVehiculosInvolucrados').data('idPersona', idPersona);
-       
-            document.getElementById("nombreModal").innerText = nombreCompleto;
-            document.getElementById("curpModal").innerText = CURP;
-            document.getElementById("fechaNacimientoModal").innerText = fechaNacimiento;
-            document.getElementById("rfcModal").innerText = RFC;
+		var nombreCompleto = nombre + " " + apellidoPaterno + " " + apellidoMaterno;
+		$('#gridVehiculosInvolucrados').data('idPersona', idPersona);
 
-             $('#buscarInvolucradoModal').modal('hide');
-             $('body').removeClass('model-open');
-             $('.modal-backdrop').remove();
-            $('#sinBuqueda').hide();
-            $('#involucradoSeleccionado').show();
+		document.getElementById("nombreModal").innerText = nombreCompleto;
+		document.getElementById("curpModal").innerText = CURP;
+		document.getElementById("fechaNacimientoModal").innerText = FechaNacimientoFormateada;
+		document.getElementById("rfcModal").innerText = RFC;
 
-        }
+		$('#buscarInvolucradoModal').modal('hide');
+		$('body').removeClass('model-open');
+		$('.modal-backdrop').remove();
+		$('#sinBuqueda').hide();
+		$('#involucradoSeleccionado').show();
+
+	}
 </script>
 
 <div class="col-12 mb-4 px-4 rounded gridCustom">
 
-    @{
-	    try
+	@{
+		try
 		{
-                 @(Html.Kendo().Grid(Model)
-            .Name("gridInvolucradosPrevio")
-            .Events(events => events.Change("onRowSelect"))
-            .Columns(columns =>
-            {
-                columns.Bound(c => c.IdPersona).Hidden();
-                columns.Select().Width(50).ClientHeaderTemplate(" ");
-                columns.Bound(c => c.nombre).Title("Nombre").Width(80);
-                columns.Bound(c => c.apellidoPaterno).Title("Apellido Paterno").Width(100);
-                columns.Bound(c => c.apellidoMaterno).Title("Apellido Materno").Width(100);
-                columns.Bound(c => c.RFC).Title("RFC").Width(80);
-                columns.Bound(c => c.CURP).Title("CURP").Width(100);
-                columns.Bound(c => c.fechaNacimiento).Title("Fecha Nacimiento").Format("{0:dd/MM/yyyy}").Width(100);
-                columns.Bound(c => c.numeroLicencia).Title("No Licencia").Width(100);
-                //columns.Command(c => c.Custom("Editar").Click("getId")).Width(100);
+			@(Html.Kendo().Grid(Model)
+			.Name("gridInvolucradosPrevio")
+			.Events(events => events.Change("onRowSelect"))
+			.Columns(columns =>
+			{
+				columns.Bound(c => c.IdPersona).Hidden();
+				columns.Select().Width(50).ClientHeaderTemplate(" ");
+				columns.Bound(c => c.nombre).Title("Nombre").Width(80);
+				columns.Bound(c => c.apellidoPaterno).Title("Apellido Paterno").Width(100);
+				columns.Bound(c => c.apellidoMaterno).Title("Apellido Materno").Width(100);
+				columns.Bound(c => c.RFC).Title("RFC").Width(80);
+				columns.Bound(c => c.CURP).Title("CURP").Width(100);
+				columns.Bound(c => c.fechaNacimiento).Title("Fecha Nacimiento").Format("{0:dd/MM/yyyy}").Width(100);
+				columns.Bound(c => c.numeroLicencia).Title("No Licencia").Width(100);
+				//columns.Command(c => c.Custom("Editar").Click("getId")).Width(100);
 
 
-            })
-            .Sortable()
-            .Groupable()
-            .Scrollable(scr => scr.Enabled(true))
-            .Pageable(pager => pager.AlwaysVisible(true).Position(GridPagerPosition.Bottom).PageSizes(true))
-            .DataSource(dataSource => dataSource
-            .Ajax()
-            .ServerOperation(false)
-            .PageSize(5).Model(model => model.Id(p => p.nombre))
-            )
-            .ToolBar(t => t.Search())
-            .Search(s =>
-            {
-                s.Field(c => c.nombre);
+			})
+			.Sortable()
+			.Groupable()
+			.Scrollable(scr => scr.Enabled(true))
+			.Pageable(pager => pager.AlwaysVisible(true).Position(GridPagerPosition.Bottom).PageSizes(true))
+			.DataSource(dataSource => dataSource
+			.Ajax()
+			.ServerOperation(false)
+			.PageSize(5).Model(model => model.Id(p => p.nombre))
+			)
+			.ToolBar(t => t.Search())
+			.Search(s =>
+			{
+				s.Field(c => c.nombre);
 
-            }).Selectable(selectable => selectable.Mode(GridSelectionMode.Single).Type(GridSelectionType.Row)
-            )
-                )
+			}).Selectable(selectable => selectable.Mode(GridSelectionMode.Single).Type(GridSelectionType.Row)
+			)
+				)
 
-        }
-        catch (Exception ex)
-        {
-            < div >< h1 > @ex.Message </ h1 > </ div >
-        } 
-    }
-        
+		}
+		catch (Exception ex)
+		{
+			< div >< h1 > @ex.Message </ h1 > </ div >
+		}
+	}
+
 </div>
 

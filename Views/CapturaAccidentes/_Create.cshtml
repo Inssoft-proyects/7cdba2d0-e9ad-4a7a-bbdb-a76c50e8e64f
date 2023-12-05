@@ -199,18 +199,20 @@
                 <label>Vigencia de tarjeta:</label>
                 @if (disableInput)
                 {
-                    @(Html.Kendo().DatePickerFor(t => t.vigenciaTarjeta)
+                    @(Html.Kendo().DatePickerFor(t => t.vigenciaTarjeta).Format("dd/MM/yyyy")
                         .Value(dateVigencia)
                         .DateInput()
                         .HtmlAttributes(new { style = "width: 100%", title = "datetimepicker" })
+                        .Value("")
                         )
                 }
                 else
                 {
-                    @(Html.Kendo().DatePickerFor(t => t.vigenciaTarjeta)
-                        .Value(dateVigencia)
+                    @(Html.Kendo().DatePickerFor(t => t.vigenciaTarjeta).Format("dd/MM/yyyy")
+                        //.Value(dateVigencia)
                         .DateInput()
                         .HtmlAttributes(new { style = "width: 100%", title = "datetimepicker" })
+                        .Value("")
                         )
                 }
 
@@ -961,7 +963,7 @@
                             <label>Fecha de nacimiento <b>(obligatorio)</b></label>
                             <span>
                                 @(Html.Kendo().DatePickerFor(t => t.Persona.fechaNacimiento)
-                                    .Format("dd-MM-yyyy")
+                                    .Format("dd/MM/yyyy")
                                    .HtmlAttributes(new { style = "width: 100%", required = "required" })
                                     )
                             </span>
@@ -1134,7 +1136,7 @@
                         <div class="controlForm my-3">
                             <label>Fecha de vencimiento:</label>
                             <span>
-                                @(Html.Kendo().DatePickerFor(t => t.Persona.vigenciaLicencia)
+                                @(Html.Kendo().DatePickerFor(t => t.Persona.vigenciaLicencia).Format("dd/MM/yyyy")
                                     .DateInput()
                                     )
 
@@ -1247,6 +1249,10 @@ function submitCreateMoral() {
 
     idTelefono.off('blur');
 
+
+    $("#idCatTipoServicio").prop("disabled",true)
+
+
     if (validator.validate()) {
         var formData = $("#frmCreateMoral").serialize();
 
@@ -1272,6 +1278,8 @@ function submitCreateMoral() {
         });
     } else {
         idTelefono.prop("disabled", false);
+        $("#idCatTipoServicio").prop("disabled",false)
+
         sitteg_info('Debe llenar los campos requeridos');
         return;
     }

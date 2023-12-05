@@ -78,10 +78,8 @@
                 <div class="controlForm my-3">
                     <label>Fecha <b>(obligatorio)</b>:</label>
                     @(Html.Kendo().DateTimePickerFor(t=>t.fechaSolicitud)
-                        .Value(DateTime.Now)
-                            .HtmlAttributes(new { style = "width: 100%", title = "datepicker", required = "required" })
-                        .DateInput()
-                    )
+                            .HtmlAttributes(new { style = "width: 100%", title = "datepicker", required = "required", id = "date" })
+                            )
                 </div>
             </div>
 
@@ -636,7 +634,13 @@
 
 
 <script>
-
+    $(document).ready(function () {
+        $("#date").kendoDateTimePicker({
+            format: "dd/MM/yyyy HH:mm",
+            parseFormats: ["dd/MM/yyyy", "HH:mm"], timeFormat: "HH:mm",
+            value: null
+        });
+    });
     function EntidadDropDownChange() {
         var entidadDDlValue = $("#idEntidad").data("kendoDropDownList").value();
 

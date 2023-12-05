@@ -266,7 +266,11 @@ namespace GuanajuatoAdminUsuarios.Services
                     connection.Close();
                 }
             }
-            return modelList.FirstOrDefault();
+
+            VehiculoModel model22 = new VehiculoModel();
+            model22.Persona = new PersonaModel();
+
+            return modelList.FirstOrDefault()??model22;
         }
 
         public VehiculoModel GetVehiculoToAnexo(VehiculoBusquedaModel modelSearch)
