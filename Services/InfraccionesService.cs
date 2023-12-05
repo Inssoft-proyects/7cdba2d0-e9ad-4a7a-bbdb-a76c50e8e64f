@@ -1034,6 +1034,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.delegacion = reader["nombreOficina"] == System.DBNull.Value ? string.Empty : reader["nombreOficina"].ToString();
                             model.umas = GetUmas();
 
+
                             if (model.MotivosInfraccion.Any(w => w.calificacion != null))
                             {
                                 model.totalInfraccion = (model.MotivosInfraccion.Sum(s => (int)s.calificacion) * model.umas);
@@ -1060,7 +1061,7 @@ namespace GuanajuatoAdminUsuarios.Services
                 catch (SqlException ex)
                 {
                     //Guardar la excepcion en algun log de errores
-                    //ex
+                    
                 }
                 finally
                 {
