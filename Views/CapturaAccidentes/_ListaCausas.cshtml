@@ -19,7 +19,7 @@
                 columns.Template("<button data-bs-toggle='modal' class='w-100 btn'><h6 class='m-0 colorPrimary' onclick='seleccionarCausaEditar(event)'><i class='h5 icon-edit me-2'></i><b>Editar</b></h6></button>").Width(150);
                 columns.Template("<button class='w-100 btn'><h6 class='m-0 colorDanger' onclick='eliminarCausa(event)'><i class='h5 icon-delete me-2'></i><b>Eliminar</b></h6></button>").Width(150);
                 //columns.Template("<span class='orden-column'>@(count)</span>").Title("Orden").Width(30);
-                columns.Bound(c => c.IdCausaAccidente).Title("Orden").Width(30);
+                columns.Bound(c => c.indice).Title("Orden").Width(30);
                 columns.Command(command => command.Custom("Arriba").Text("").Click("arriba")).Width(60);
                 columns.Command(command => command.Custom("Abajo").Text("").Click("abajo")).Width(60);
             }).HtmlAttributes(new { style = "height:400px" })
@@ -31,7 +31,7 @@
             .DataSource(dataSource => dataSource
             .Ajax()
             .Read(read => read.Action("ObtCausasAccidente", "CapturaAccidentes"))
-            .PageSize(5).Model(model => model.Id(p => p.idAccidenteCausa))
+            .PageSize(5).Model(model => model.Id(p => p.indice))
             )
             .ToolBar(t => t.Search())
             .Search(s =>

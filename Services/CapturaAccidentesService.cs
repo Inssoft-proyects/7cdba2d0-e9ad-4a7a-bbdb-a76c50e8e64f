@@ -1032,7 +1032,8 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT ac.*,a.descripcionCausas, c.causaAccidente, ac.idAccidenteCausa FROM accidenteCausas ac " +
+                    SqlCommand command = new SqlCommand("SELECT ac.idAccidenteCausa,ac.idAccidente, c.idCausaAccidente, c.causaAccidente, a.descripcionCausas, ac.indice " +
+                                                        "FROM accidenteCausas ac " +
                                                         "JOIN catCausasAccidentes c ON ac.idCausaAccidente = c.idCausaAccidente " +
                                                         "LEFT JOIN accidentes AS a ON ac.idAccidente = a.idAccidente " +
                                                         "WHERE ac.idAccidente = @idAccidente AND ac.idCausaAccidente > 0;", connection);
@@ -1050,9 +1051,9 @@ namespace GuanajuatoAdminUsuarios.Services
                             causa.IdCausaAccidente = Convert.ToInt32(reader["IdCausaAccidente"].ToString());
                             causa.CausaAccidente = reader["causaAccidente"].ToString();
                             causa.DescripcionCausa = reader["descripcionCausas"].ToString();
+                            causa.indice = Convert.ToInt32(reader["indice"].ToString());
 
-
-                            ListaGridCausa.Add(causa);
+							ListaGridCausa.Add(causa);
 
                         }
 
