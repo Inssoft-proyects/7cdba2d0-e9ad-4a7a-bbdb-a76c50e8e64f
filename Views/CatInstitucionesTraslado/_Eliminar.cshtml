@@ -79,7 +79,7 @@
 
         var Mydata = $("#eliminarInstitucionForm").serialize();
         console.log(Mydata);
-        $('#eliminarInstTraslado').modal('hide');
+        $('#agregarInstTraslado').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
         $.ajax({
@@ -87,7 +87,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaInstitucionesTraslado").html(result);
+                $("#gridCatInstitucionesTraslado").data("kendoGrid").dataSource.data(result);
             }
         });
     }

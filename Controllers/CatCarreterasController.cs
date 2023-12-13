@@ -92,7 +92,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 _catCarreterasService.CrearCarretera(model);
                 var CarreterasModel = _catCarreterasService.ObtenerCarreteras();
-                return PartialView("_ListaCarreteras", CarreterasModel);
+                return Json(CarreterasModel);
             }
 
             return PartialView("_Crear");
@@ -109,7 +109,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 _catCarreterasService.EditarCarretera(model);
                 var ListCarreterasModel = _catCarreterasService.ObtenerCarreteras();
-                return PartialView("_ListaCarreteras", ListCarreterasModel);
+                return Json(ListCarreterasModel);
             }
             return PartialView("_Editar");
         }

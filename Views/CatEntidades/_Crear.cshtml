@@ -81,7 +81,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaEntidades").html(result);
+                $("#gridCatEntidades").data("kendoGrid").dataSource.data(result);
             }
         });
     }

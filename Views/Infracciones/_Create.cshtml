@@ -195,17 +195,19 @@
                 <label>Vigencia de tarjeta:</label>
                 @if (disableInput)
                 {
-                    @(Html.Kendo().DatePickerFor(t => t.vigenciaTarjeta)
+                    @(Html.Kendo().DatePickerFor(t => t.vigenciaTarjeta).Format("dd/MM/yyyy")
                         .Value(dateVigencia)
                         .DateInput()
+                        .Culture("es-ES")
                         .HtmlAttributes(new { style = "width: 100%", title = "datetimepicker" })
                         )
                 }
                 else
                 {
-                    @(Html.Kendo().DatePickerFor(t => t.vigenciaTarjeta)
+                    @(Html.Kendo().DatePickerFor(t => t.vigenciaTarjeta).Format("dd/MM/yyyy")
                         .Value(dateVigencia)
                         .DateInput()
+                        .Culture("es-ES")
                         .HtmlAttributes(new { style = "width: 100%", title = "datetimepicker" })
                         )
                 }
@@ -337,7 +339,7 @@
             </div>
         </div>
 
-        <div class="col-12 col-md-2 col-lg-1 col-xl-1">
+        <div class="col-12 col-md-2 col-lg-3">
             <div class="controlForm my-3">
                 <label>Modelo:</label>
                 @Html.CustomTextBoxFor(model => model.modelo,"Ingresa Modelo", disableInput)
@@ -420,7 +422,11 @@
         @Html.HiddenFor(m=> m.idVehiculo, new { @id = "hdnIdVehiculo" })
         @Html.HiddenFor(m=> m.Persona.idPersona, new { @id = "ddlIdPersona" })
         @Html.HiddenFor(m=> m.Persona.idCatTipoPersona, new { @id = "ddlIdCatTipoPersona" })
-        @Html.HiddenFor(m=> m.idCatTipoServicio, new { @id = "hdnIdCatTipoPersona" })
+        
+        <input type="text" disabled class="d-none" value="@Model.idCatTipoServicio" name="idCatTipoServicio" id="hdnidCatTipoServicio">
+@*        @Html.HiddenFor(m=> m.idCatTipoServicio, new { @id = "hdnidCatTipoServicio" })
+*@        
+        
         @Html.HiddenFor(m=> m.encontradoEn, new { @id = "hdnEncontradoEn" })
 
     </form>
@@ -940,7 +946,8 @@
                             <label>Fecha de nacimiento <b>(obligatorio):</b></label>
                             <span>
                                 @(Html.Kendo().DatePickerFor(t => t.Persona.fechaNacimiento)
-                                    .Format("dd-MM-yyyy")
+                                .Culture("es-ES")
+                                    .Format("dd/MM/yyyy")
                                     )
                             </span>
                         </div>
@@ -1108,6 +1115,7 @@
                             <label>Fecha de vencimiento:</label>
                             <span>
                                 @(Html.Kendo().DatePickerFor(t => t.Persona.vigenciaLicencia)
+                                .Culture("es-ES")
                                     .DateInput()
                                     )
 
@@ -1201,7 +1209,7 @@
     $("#ddlCatTipoServicio").on("change", function () {
         var value = $(this).val();
         console.log(value);
-        $('#hdnIdCatTipoPersona').val(value);
+        $('#hdnidCatTipoServicio').val(value);
 
     });
 
@@ -1216,6 +1224,10 @@
     }
 
     idTelefono.off('blur');
+
+    $("#hdnidCatTipoServicio").prop("disabled",true)
+
+
 
     if (validator.validate()) {
         var formData = $("#frmCreateMoral").serialize();
@@ -1243,6 +1255,9 @@
     } else {
         idTelefono.prop("disabled", false);
         sitteg_info('Debe llenar los campos requeridos');
+    $("#hdnidCatTipoServicio").prop("disabled",false)
+
+
         return;
     }
 }
@@ -1258,7 +1273,7 @@
                 document.getElementById("sec3").style.display = "none";
                 document.getElementById("PersonaMoralLocalizada").style.display = "block";
                 $("#PersonaMoralLocalizada").html(result);
-                var grid = $("#gridPersonasMoralesAC").data("kendoGrid");
+                var grid = $("#gridPersonasMorales").data("kendoGrid");
                   sitteg_success('Elemento guardado correctamente')
                 grid.refresh();
             }

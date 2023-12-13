@@ -158,8 +158,9 @@
 				<div class="form-group col-md-4">
 					<div class="controlForm">
 						<label>Inicio:</label>
-						@(Html.Kendo().DatePickerFor(t => t.FechaInicio)
-							.Format("dd-MM-yyyy")
+						@(Html.Kendo().DatePickerFor(t => t.FechaInicio).Max(DateTime.Now)
+							.Format("dd/MM/yyyy")
+							.Culture("es-ES")
 							.HtmlAttributes(new { style = "width: 100%", title = "datepicker",id="start" })
 							.Events(e => e.Change("validarFecha")) 							)
 					</div>
@@ -169,7 +170,8 @@
 					<div class="controlForm">
 						<label>Fin:</label>
 						@(Html.Kendo().DatePickerFor(t => t.FechaFin)
-							.Format("dd-MM-yyyy")
+							.Format("dd/MM/yyyy")
+							.Culture("es-ES")
 							.HtmlAttributes(new { style = "width: 100%", title = "datepicker", id="end" }))
 					</div>
 				</div>
@@ -259,11 +261,11 @@
 		}
 	}
 
-	function mostrarMensajeError(mensaje) {
-		var mensajeError = $("#mensajeError1");
-		mensajeError.text(mensaje);
-		console.log("AK", mensaje);
-	}
+	// function mostrarMensajeError(mensaje) {
+	// 	var mensajeError = $("#mensajeError1");
+	// 	mensajeError.text(mensaje);
+	// 	console.log("AK", mensaje);
+	// }
 
 	function limpiarMensajeError() {
 		console.log("LIMPIAR");

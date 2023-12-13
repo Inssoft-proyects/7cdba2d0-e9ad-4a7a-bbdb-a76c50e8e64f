@@ -9,7 +9,7 @@
             <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
                 <div class="row align-items-center justify-content-center justify-content-md-start">
                     <div class="col-auto">
-                        <i class="icon-Concecionario h1 colorPrimary"></i>
+                        <i class="icon-concesonaria h1 colorPrimary"></i>
                     </div>
                     <div class="col-auto my-3">
                         <h2 class="m-0 h3"><b>Concesionarios</b></h2>
@@ -20,7 +20,7 @@
                 <div class="row">
                     <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
                         <button href="#" id="btnCrearConcesionario" onclick="btnModalCrearConcesionario()">
-                            <h6 class="m-0 d-flex align-items-center"><i class="icon-addConcecionario h2 mb-0 me-2"></i><b> Agregar nuevo concesionario</b></h6>
+                            <h6 class="m-0 d-flex align-items-center"><i class="icon-addConcesonaria h2 mb-0 me-2"></i><b> Agregar nuevo concesionario</b></h6>
                         </button>
                     </div>
                 </div>
@@ -48,36 +48,6 @@
 <div class="modal fade modalCustom" id="modalCrearConcesionario" aria-labelledby="modalCrearConcesionario" aria-hidden="true">
     <div class="modal-dialog modal-xl boxShadow modal-dialog-centered">
         <div class="modal-content">
-            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
-                <div class="col-auto pe-0">
-                    <div class="row align-items-center justify-content-center justify-content-md-start">
-                        <div class="col-auto pe-0">
-                            <i class="icon-addConcecionario h1 colorPrimary"></i>
-                        </div>
-                        <div class="col-auto my-3">
-                            <h2 class="m-0 h3"><b>Agregar concesionario</b></h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-auto">
-                    <div class="row">
-                        <div class="col-auto my-3">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="bg-light py-1"></div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 my-4">
-                    <h5 class="px-4"><b>Datos de nuevo concesionario</b></h5>
-                    <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
-                </div>
-            </div>
             <div class="modal-body" id="modalBodyCrearConcesionario">
             </div>
         </div>
@@ -87,36 +57,6 @@
 <div class="modal fade modalCustom" id="modalEditarConcesionario" aria-labelledby="modalEditarConcesionario" aria-hidden="true">
     <div class="modal-dialog modal-xl boxShadow modal-dialog-centered">
         <div class="modal-content">
-            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
-                <div class="col-auto pe-0">
-                    <div class="row align-items-center justify-content-center justify-content-md-start">
-                        <div class="col-auto pe-0">
-                            <i class="icon-addConcecionario h1 colorPrimary"></i>
-                        </div>
-                        <div class="col-auto my-3">
-                            <h2 class="m-0 h3"><b>Editar concesionario</b></h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-auto">
-                    <div class="row">
-                        <div class="col-auto my-3">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="bg-light py-1"></div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 my-4">
-                    <h5 class="px-4"><b>Datos de concesionario</b></h5>
-                    <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
-                </div>
-            </div>
             <div class="modal-body" id="modalBodyEditarConcesionario">
             </div>
         </div>
@@ -131,14 +71,14 @@
             $("body").removeClass("modal-open").find(".modal-backdrop").remove();
         });
         $("#modalCrearConcesionario").on('hide.bs.modal', function () {
-            $('#modalBodyEditarConcesionario').html('');
+            $('#modalBodyCrearConcesionario').html('');
         });
 
         $("#modalEditarConcesionario").on("show.bs.modal shown.bs.modal", function (e) {
             $("body").removeClass("modal-open").find(".modal-backdrop").remove();
         });
         $("#modalEditarConcesionario").on('hide.bs.modal', function () {
-            $('#modalBodyEditarConcesionario').html('');
+            $('#modalBodyCrearConcesionario').html('');
         });
     });
 
@@ -169,13 +109,11 @@
                 if (response.includes("ErrorPartial")) {
                     sitteg_warning("El usuario no tienen los permisos para esta acción");
                 } else {
-                    // Si no hay error, abre el modal con la vista modal devuelta por el controlador
-                    $('#modalBodyEditarConcesionario').html(response);
-                    $('#modalEditarConcesionario').modal('show');
+                    $('#modalBodyCrearConcesionario').html(response);
+                    $('#modalCrearConcesionario').modal('show');
                 }
             },
             error: function () {
-                // Manejo de errores de la solicitud AJAX
                 alert('Ocurrió un error en la solicitud AJAX.');
             }
         });

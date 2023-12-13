@@ -25,10 +25,18 @@
     <script src="https://cdn.kendostatic.com/2021.3.914/js/kendo.aspnetmvc.min.js"></script>
     <script src="~/js/toastr.min.js"></script>
     <globalization culture="es-MX" uiCulture="es" />
-    <script>kendo.culture("es-ES");
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/kendo-ui-core/2014.1.416/js/cultures/kendo.culture.es-ES.min.js"></script>
+
+    @using System.Globalization
+
+    <script type="text/javascript">
+        //set culture of the Kendo UI
+        kendo.culture("es-ES");
+    </script>
 
 
-    
+  <script>   
+
         $(document).ready(function () {
             $.ajax({
                 url: '@Url.Action("GetIdsPermitidos", "Login")', 
@@ -522,5 +530,9 @@
             @await RenderSectionAsync("Scripts", required: false)
         </div>
     </main>
+
+
 </body>
+
+
 </html>

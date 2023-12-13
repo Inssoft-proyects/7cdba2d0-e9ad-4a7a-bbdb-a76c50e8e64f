@@ -78,9 +78,7 @@
                 <div class="controlForm my-3">
                     <label>Fecha <b>(obligatorio)</b>:</label>
                     @(Html.Kendo().DateTimePickerFor(t=>t.fechaSolicitud)
-                        .Value(DateTime.Now)
-                            .HtmlAttributes(new { style = "width: 100%", title = "datepicker", required = "required" })
-                        .DateInput()
+                            .HtmlAttributes(new { style = "width: 100%", title = "datepicker", required = "required", id = "date" })
                     )
                 </div>
             </div>
@@ -154,7 +152,7 @@
         </div>
      <div class="row px-4 mt-3 mb-2 align-items-end">
             <div class="col-6">
-                <div class="controlForm">
+                <div class="controlForm my-3">
                     <label>Descripción del evento <b>(obligatorio)</b>:</label>
                         <span>
                             @(Html.Kendo().DropDownListFor(t => t.idDescripcionEvento).Filter(FilterType.Contains)
@@ -168,7 +166,7 @@
                             read.Action("Descripcion_Drop", "Depositos");
                                 });
                             })
-                        .HtmlAttributes(new { style = "width:40%;", required = "required" })
+                        .HtmlAttributes(new { style = "width:100%;", required = "required" })
                             )
                         </span>
 
@@ -189,7 +187,7 @@
                                         read.Action("TiposUsuario_Drop", "Depositos");
                                     });
                                 })
-                                .HtmlAttributes(new { style = "width:40%;", required = "required" })
+                                .HtmlAttributes(new { style = "width:100%;", required = "required" })
                                 )
                         </span>
                 </div>   
@@ -483,6 +481,7 @@
                                 .DataValueField("Value")
                                 .OptionLabel("Selecciona una Carretera")
                                 .Events(e => e.Change("carreteraDropDownChange"))
+                                .HtmlAttributes(new { style = "width: 100%" })
                                 .DataSource(source =>
                                 {
                                     source.Read(read =>
@@ -636,7 +635,13 @@
 
 
 <script>
-
+    $(document).ready(function () {
+        $("#date").kendoDateTimePicker({
+            format: "dd/MM/yyyy HH:mm",
+            parseFormats: ["dd/MM/yyyy", "HH:mm"], timeFormat: "HH:mm",
+            interval: 1
+        });
+    });
     function EntidadDropDownChange() {
         var entidadDDlValue = $("#idEntidad").data("kendoDropDownList").value();
 

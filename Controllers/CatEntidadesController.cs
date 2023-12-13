@@ -90,10 +90,12 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 _catEntidadesService.CrearEntidad(model);
                 var ListEntidadesModel = _catEntidadesService.ObtenerEntidades();
-                return PartialView("_ListaEntidades", ListEntidadesModel);
+                return Json(ListEntidadesModel);
             }
 
             return PartialView("_Crear");
+        
+        
         }
 
         public ActionResult EditarEntidadBD(CatEntidadesModel model)
@@ -107,7 +109,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 _catEntidadesService.EditarEntidad(model);
                 var ListEntidadesModel = _catEntidadesService.ObtenerEntidades();
-                return PartialView("_ListaEntidades", ListEntidadesModel);
+                return Json(ListEntidadesModel);
             }
             return PartialView("_Editar");
         }

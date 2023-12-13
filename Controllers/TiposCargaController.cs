@@ -116,7 +116,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 CreateTipoCarga(model);
                 var ListTiposCargaModel = GetTiposCarga();
-                return PartialView("_ListaTiposCarga", ListTiposCargaModel);
+                return Json(ListTiposCargaModel);
             }
             //SetDDLCategories();
             //return View("Create");
@@ -136,7 +136,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 UpdateTipoCarga(model);
                 var ListTiposCargaModel = GetTiposCarga();
-                return PartialView("_ListaTiposCarga", ListTiposCargaModel);
+                return Json(ListTiposCargaModel);
             }
 
             return PartialView("_Editar");
@@ -153,7 +153,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 DeleteTipoCarga(model);
                 var ListTiposCargaModel = GetTiposCarga();
-                return PartialView("_ListaTiposCarga", ListTiposCargaModel);
+                return Json(ListTiposCargaModel);
             }
             return PartialView("_Eliminar");
         }

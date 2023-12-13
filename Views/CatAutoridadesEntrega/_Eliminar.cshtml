@@ -79,9 +79,8 @@
 
         var Mydata = $("#eliminarAutEntregaForm").serialize();
         console.log(Mydata);
-        $('#eliminarAutEntrega').modal('hide');
-        $('body').removeClass('model-open');
-        $('.modal-backdrop').remove();
+        $('#agregarAutEntrega').modal('hide');
+    
         $.ajax({
             url: '@Url.Action("EliminarAutoridadEntregaMod")',
             type: 'POST',

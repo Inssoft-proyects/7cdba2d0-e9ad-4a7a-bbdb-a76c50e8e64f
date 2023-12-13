@@ -79,8 +79,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
             {
                 Delegaciones_Drop();
-            var oficialesModel = GetOficialByID(IdOficial);
-            return View("_Editar", oficialesModel);
+            var oficialesModel = _oficialesService.GetOficialById(IdOficial);
+            return PartialView("_Editar", oficialesModel);
             }
             else
             {
@@ -93,7 +93,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public ActionResult EliminarOficialParcial(int IdOficial)
         {
             Delegaciones_Drop();
-            var oficialesModel = GetOficialByID(IdOficial);
+            var oficialesModel = _oficialesService.GetOficialById(IdOficial);
             return View("_Eliminar", oficialesModel);
         }
 
@@ -106,23 +106,23 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 
         [HttpPost]
-        public ActionResult AgregarOficialModal(OficialesModel model)
+        public ActionResult AgregarOficialModal(CatOficialesModel model)
         {
             var errors = ModelState.Values.Select(s => s.Errors);
             ModelState.Remove("Nombre");
             if (ModelState.IsValid)
             {
 
-                CreateOficial(model);
+                _oficialesService.SaveOficial(model);
                 var ListOficialesModel = GetOficiales();
-                return PartialView("_ListaOficiales", ListOficialesModel);
+                return Json(ListOficialesModel);
             }
 
             return PartialView("_Crear");
         }
 
         [HttpPost]
-        public ActionResult EditarOficial(OficialesModel model)
+        public ActionResult EditarOficial(CatOficialesModel model)
         {
             bool switchOficiales = Request.Form["oficialesSwitch"].Contains("true");
             model.Estatus = switchOficiales ? 1 : 0;
@@ -131,9 +131,9 @@ namespace GuanajuatoAdminUsuarios.Controllers
             if (ModelState.IsValid)
             {
 
-                UpdateOficial(model);
+                _oficialesService.UpdateOficial(model);
                 var ListOficialesModel = GetOficiales();
-                return PartialView("_ListaOficiales", ListOficialesModel);
+                return Json(ListOficialesModel);
             }
 
             return PartialView("_Editar");
@@ -149,7 +149,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 DeleteOficial(model);
                 var ListOficialesModel = GetOficiales();
-                return PartialView("_ListaOficiales", ListOficialesModel);
+                return Json(ListOficialesModel);
             }
 
             return PartialView("_Eliminar");
@@ -253,13 +253,12 @@ namespace GuanajuatoAdminUsuarios.Controllers
         /// para la gestion un mejor control de la info
         /// </summary>
         /// <returns></returns>
-        public List<OficialesModel> GetOficiales()
+        public List<CatOficialesModel> GetOficiales()
         {
             var ListOficialessModel = (from oficiales in dbContext.Oficiales.ToList() 
                                        join estatus in dbContext.Estatus.ToList()
                                        on oficiales.Estatus equals estatus.estatus
-                                       where oficiales.Estatus == 1
-                                       select new OficialesModel
+                                       select new CatOficialesModel
                                        {
                                            IdOficial = oficiales.IdOficial,
                                            Nombre = oficiales.Nombre,

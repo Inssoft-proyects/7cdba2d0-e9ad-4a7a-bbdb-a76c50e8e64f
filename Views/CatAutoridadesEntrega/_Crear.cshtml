@@ -79,7 +79,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaAutoridadesEntrega").html(result);
+                $("#gridAutoridadesEntrega").data("kendoGrid").dataSource.data(result);
             }
         });
     }

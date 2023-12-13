@@ -99,7 +99,9 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaAgenciasMinisterio").html(result);
+                $("#gridAgenciasMinisterio").data("kendoGrid").dataSource.data(result);
+
+               // $("#tablaAgenciasMinisterio").html(result);
             }
         });
     }

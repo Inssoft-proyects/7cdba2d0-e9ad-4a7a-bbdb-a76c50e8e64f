@@ -72,7 +72,7 @@
 
         var Mydata = $("#EliminarDependenciaForm").serialize();
         console.log(Mydata);
-        $('#eliminarDependencia').modal('hide');
+        $('#addDependencia').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
         $.ajax({
@@ -80,7 +80,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaDependencias").html(result);
+                $("#gridCatDependencias").data("kendoGrid").dataSource.data(result);
             }
         });
     }

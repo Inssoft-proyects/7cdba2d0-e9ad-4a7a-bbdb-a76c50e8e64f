@@ -140,7 +140,7 @@
 
         var Mydata = $("#EditarMotivoInfraccionForm").serialize();
         console.log(Mydata);
-        $('#editTipoCarga').modal('hide');
+        $('#addMotivo').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
         $.ajax({
@@ -148,7 +148,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaMotivosInfraccion").html(result);
+                $("#gridCatMotivos").data("kendoGrid").dataSource.data(result);
             }
         });
     }

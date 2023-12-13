@@ -106,7 +106,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 CrearInstitucionTraslado(model);
                 var ListInstitucionesTrasladoModel = GetInstitucionesTraslado();
-                return PartialView("_ListaInstitucionesTraslado", ListInstitucionesTrasladoModel);
+                return Json(ListInstitucionesTrasladoModel);
             }
 
             return PartialView("_Crear");
@@ -124,7 +124,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 EditarInstitucionTraslado(model);
                 var ListInstitucionesTrasladoModel = GetInstitucionesTraslado();
-                return PartialView("_ListaInstitucionesTraslado", ListInstitucionesTrasladoModel);
+                return Json(ListInstitucionesTrasladoModel);
             }
             return PartialView("_Editar");
         }
@@ -139,7 +139,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 EliminaInstitucionTraslado(model);
                 var ListInstitucionesTrasladoModel = GetInstitucionesTraslado();
-                return PartialView("_ListaInstitucionesTraslado", ListInstitucionesTrasladoModel);
+                return Json(ListInstitucionesTrasladoModel);
             }
             return PartialView("_Eliminar");
         }
@@ -225,7 +225,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             var ListInstitucionesTrasladoModel = (from catInstitucionesTraslado in dbContext.CatInstitucionesTraslado.ToList()
                                                   join estatus in dbContext.Estatus.ToList()
                                                   on catInstitucionesTraslado.Estatus equals estatus.estatus
-                                                  where catInstitucionesTraslado.Estatus == 1
+                                                 
                                                   select new CatInstitucionesTrasladoModel
                                                   {
                                                       IdInstitucionTraslado = catInstitucionesTraslado.IdInstitucionTraslado,

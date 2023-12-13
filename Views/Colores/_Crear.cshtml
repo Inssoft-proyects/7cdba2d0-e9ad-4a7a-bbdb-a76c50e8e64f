@@ -80,7 +80,7 @@
             data: Mydata,
             success: function (result) {
                 sitteg_success('Elemento guardado correctamente')
-                $("#tablaColores").html(result);
+                $("#gridCatColores").data("kendoGrid").dataSource.data(result);
             }
         });
     }

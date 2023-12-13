@@ -2,7 +2,7 @@
     <div class="col-12 mb-4 px-4 rounded gridCustom">
         @(
             Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CatFactoresAccidentesModel>()
-            .Name("grid")
+            .Name("gridCatFactoresAccidentes")
             .Columns(columns =>
             {
                 columns.Bound(c => c.IdFactorAccidente).Title("Id").Width(40);
@@ -61,8 +61,8 @@
             type: 'POST',
             data: { IdFactorAccidente: IdFactorAccidente },
             success: function (result) {
-                $('#ModalBodEditarFactorAccidente').html(result);
-                $('#editarFactorAccidente').modal('show');
+                $('#ModalBodyaAgregarFactorAccidente').html(result);
+                $('#agregarFactornAccidente').modal('show');
 
             },
         })
@@ -78,8 +78,8 @@
             type: 'POST',
             data: { IdFactorAccidente: IdFactorAccidente },
             success: function (result) {
-                $('#ModalBodyFactorAccidente').html(result);
-                $('#eliminarFactorAccidente').modal('show');
+                $('#ModalBodyaAgregarFactorAccidente').html(result);
+                $('#agregarFactornAccidente').modal('show');
 
             },
         })

@@ -1,101 +1,101 @@
 ﻿@model InfraccionesModel
 <div class="mainContainer bg-light">
-	<section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
-		<div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
-			<div class="col-12 col-md-auto">
-				<div class="row align-items-center justify-content-center justify-content-md-start">
-					<div class="col-auto">
-						<div class="border border-2 border-dark rounded-circle">
-							<h5 class="m-0 numberCard d-flex align-items-center justify-content-center">
-								<b>1</b>
-							</h5>
-						</div>
-					</div>
-					<div class="col-auto p-0">
-						<i class="icon-infracion h1 colorPrimary"></i>
-					</div>
-					<div class="col-auto my-3">
-						<h2 class="m-0 h3"><b>Captura de Infracción</b></h2>
-					</div>
-				</div>
-			</div>
+    <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
+        <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+            <div class="col-12 col-md-auto">
+                <div class="row align-items-center justify-content-center justify-content-md-start">
+                    <div class="col-auto">
+                        <div class="border border-2 border-dark rounded-circle">
+                            <h5 class="m-0 numberCard d-flex align-items-center justify-content-center">
+                                <b>1</b>
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="col-auto p-0">
+                        <i class="icon-infracion h1 colorPrimary"></i>
+                    </div>
+                    <div class="col-auto my-3">
+                        <h2 class="m-0 h3"><b>Captura de Infracción</b></h2>
+                    </div>
+                </div>
+            </div>
 
-		</div>
-		<div class="row">
-			<div class="col-5 pe-0">
-				<div class="bgSuccess py-1"></div>
-			</div>
-			<div class="col-7 ps-0">
-				<div class="bg-light py-1"></div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
-				<div class="col-12 col-md-6 col-lg-5 col-xl-auto">
-					<div class="row align-items-center justify-content-center justify-content-md-start">
-						<div class="col-auto">
-							<i class="icon-addInfracion h1 colorPrimary"></i>
-						</div>
-						<div class="col-auto my-3">
-							<h5 class="px-4 my-4"><b>Datos de la infracción</b></h5>
-							<h6 class="px-4 my-4 text-muted">Completa los datos solicitados.</h6>
-						</div>
-					</div>
-				</div>
-				<div class="col-12 col-md-6 col-lg-7 col-xl-auto">
-					<div class="row">
-						<div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-							<button href="#" id="btnGuardarInfraccion" onclick="btnGuardarInfraccion()">
-								<h6 class="m-0 d-flex align-items-center"><i class="icon-addInfracion h5 mb-0 me-2"></i><b>Guardar infracción</b></h6>
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div>
-				<nav class="tabCustom">
-					@*navegador tabs*@
-					<div class="nav nav-tabs row mx-0" id="nav-tab" role="tablist">
-						<button class="nav-link active col" id="informacionInfraccion-tab" data-bs-toggle="tab" data-bs-target="#informacionInfraccion-container" type="button" role="tab" aria-controls="informacionInfraccion-container" aria-selected="true">
-							<div class="row justify-content-center align-items-center px-2 py-1">
-								<div class="col-auto radioCustom p-0">
-									<div class="rounded-circle m-1"></div>
-								</div>
-								<div class="col-auto p-0">
-									<h6 class="m-0"><b>Información</b></h6>
-								</div>
-							</div>
-						</button>
-						<button class="nav-link col" id="lugar-tab" data-bs-toggle="tab" data-bs-target="#lugar-container" type="button" role="tab" aria-controls="lugar-container" aria-selected="false">
-							<div class="row justify-content-center align-items-center px-2 py-1">
-								<div class="col-auto radioCustom p-0">
-									<div class="rounded-circle m-1"></div>
-								</div>
-								<div class="col-auto p-0">
-									<h6 class="m-0"><b>Lugar</b></h6>
-								</div>
-							</div>
-						</button>
-						<button class="nav-link col" id="vehiculo-tab" data-bs-toggle="tab" data-bs-target="#vehiculo-container" type="button" role="tab" aria-controls="vehiculo-container" aria-selected="false">
-							<div class="row justify-content-center align-items-center px-2 py-1">
-								<div class="col-auto radioCustom p-0">
-									<div class="rounded-circle m-1"></div>
-								</div>
-								<div class="col-auto p-0">
-									<h6 class="m-0"><b>Vehículo</b></h6>
-								</div>
-							</div>
-						</button>
-						<button class="nav-link col" id="conductor-tab" data-bs-toggle="tab" data-bs-target="#conductor-container" type="button" role="tab" aria-controls="conductor-container" aria-selected="false">
-							<div class="row justify-content-center align-items-center px-2 py-1">
-								<div class="col-auto radioCustom p-0">
-									<div class="rounded-circle m-1"></div>
-								</div>
-								<div class="col-auto p-0">
-									<h6 class="m-0"><b>Conductor</b></h6>
-								</div>
-							</div>
-						</button>
+        </div>
+        <div class="row">
+            <div class="col-5 pe-0">
+                <div class="bgSuccess py-1"></div>
+            </div>
+            <div class="col-7 ps-0">
+                <div class="bg-light py-1"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                    <div class="row align-items-center justify-content-center justify-content-md-start">
+                        <div class="col-auto">
+                            <i class="icon-addInfracion h1 colorPrimary"></i>
+                        </div>
+                        <div class="col-auto my-3">
+                            <h5 class="px-4 my-4"><b>Datos de la infracción</b></h5>
+                            <h6 class="px-4 my-4 text-muted">Completa los datos solicitados.</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
+                    <div class="row">
+                        <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                            <button href="#" id="btnGuardarInfraccion" onclick="btnGuardarInfraccion()">
+                                <h6 class="m-0 d-flex align-items-center"><i class="icon-addInfracion h5 mb-0 me-2"></i><b>Guardar infracción</b></h6>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <nav class="tabCustom">
+                    @*navegador tabs*@
+                    <div class="nav nav-tabs row mx-0" id="nav-tab" role="tablist">
+                        <button class="nav-link active col" id="informacionInfraccion-tab" data-bs-toggle="tab" data-bs-target="#informacionInfraccion-container" type="button" role="tab" aria-controls="informacionInfraccion-container" aria-selected="true">
+                            <div class="row justify-content-center align-items-center px-2 py-1">
+                                <div class="col-auto radioCustom p-0">
+                                    <div class="rounded-circle m-1"></div>
+                                </div>
+                                <div class="col-auto p-0">
+                                    <h6 class="m-0"><b>Información</b></h6>
+                                </div>
+                            </div>
+                        </button>
+                        <button class="nav-link col" id="lugar-tab" data-bs-toggle="tab" data-bs-target="#lugar-container" type="button" role="tab" aria-controls="lugar-container" aria-selected="false">
+                            <div class="row justify-content-center align-items-center px-2 py-1">
+                                <div class="col-auto radioCustom p-0">
+                                    <div class="rounded-circle m-1"></div>
+                                </div>
+                                <div class="col-auto p-0">
+                                    <h6 class="m-0"><b>Lugar</b></h6>
+                                </div>
+                            </div>
+                        </button>
+                        <button class="nav-link col" id="vehiculo-tab" data-bs-toggle="tab" data-bs-target="#vehiculo-container" type="button" role="tab" aria-controls="vehiculo-container" aria-selected="false">
+                            <div class="row justify-content-center align-items-center px-2 py-1">
+                                <div class="col-auto radioCustom p-0">
+                                    <div class="rounded-circle m-1"></div>
+                                </div>
+                                <div class="col-auto p-0">
+                                    <h6 class="m-0"><b>Vehículo</b></h6>
+                                </div>
+                            </div>
+                        </button>
+                        <button class="nav-link col" id="conductor-tab" data-bs-toggle="tab" data-bs-target="#conductor-container" type="button" role="tab" aria-controls="conductor-container" aria-selected="false">
+                            <div class="row justify-content-center align-items-center px-2 py-1">
+                                <div class="col-auto radioCustom p-0">
+                                    <div class="rounded-circle m-1"></div>
+                                </div>
+                                <div class="col-auto p-0">
+                                    <h6 class="m-0"><b>Conductor</b></h6>
+                                </div>
+                            </div>
+                        </button>
 
                     </div>
                 </nav>
@@ -122,9 +122,11 @@
                                     <div class="controlForm">
                                         <label>Fecha infracción:</label>
                                         @(Html.Kendo().DateTimePickerFor(t => t.fechaInfraccion)
+                                            .Max(DateTime.Now)
                                             .Label(l => l.Content("Fecha: <b>(obligatorio)</b>:"))
-                                            .Format("dd-MM-yyyy")
-                                            .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                                            .Format("dd/MM/yyyy HH:mm")
+											.Value("")
+                                            .HtmlAttributes(new { style = "width: 100%", required = "required", id = "fechaInfraccion" })
                                             )
                                     </div>
                                 </div>
@@ -157,16 +159,16 @@
                                         <label>Municipio <b>(obligatorio):</b></label>
                                         @(Html.Kendo().DropDownList()
                                             .Name("idMunicipio")
-											 .DataTextField("Text")
-											 .DataValueField("Value")
-											.DataSource(source =>
-											{
-												source.Read(read =>
-												{
-													read.Action("Municipios_Por_Delegacion_Drop", "Infracciones");
-												});
-											})                                            
-											.OptionLabel("-- Seleccione --")
+                                            .DataTextField("Text")
+                                            .DataValueField("Value")
+                                            .DataSource(source =>
+                                            {
+                                                source.Read(read =>
+                                                {
+                                                    read.Action("Municipios_Por_Delegacion_Drop", "Infracciones");
+                                                });
+                                            })
+                                            .OptionLabel("-- Seleccione --")
                                             .Filter(FilterType.Contains)
 
                                             .HtmlAttributes(new { style = "width:100%;", required = "required" })
@@ -211,7 +213,7 @@
                                     <div class="controlForm">
                                         <label>Tramo <b>(obligatorio):</b></label>
                                         <div id="divTramo">
-											@(Html.Kendo().DropDownListFor(f => f.idTramo).Filter(FilterType.Contains)
+                                            @(Html.Kendo().DropDownListFor(f => f.idTramo).Filter(FilterType.Contains)
                                                 .OptionLabel("-- Seleccione --")
                                                 .HtmlAttributes(new { style = "width:100%;", required = "required" })
                                                 )
@@ -302,452 +304,505 @@
                                         @(Html.Kendo().SwitchFor(m => m.isPropietarioConductor)
                                             .Messages(c => c.Checked("SI").Unchecked("NO"))
 
-											.HtmlAttributes(new { style = "width:100%;", required = "required" })
-											)
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-12">
-									<div class="tabCustomEnd"></div>
-								</div>
-							</div>
-						</div>
-						<div class="tab-pane tabCustomConteiner fade show" id="lugar-container" role="tabpanel" aria-labelledby="lugar-tab">
-							<div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
-								<div class="col-12 col-md-6 col-lg-5 col-xl-auto">
-									<div class="row align-items-center justify-content-center justify-content-md-start">
-										<div class="col-auto">
-											<i class="icon-carretera h1 colorPrimary"></i>
-										</div>
-										<div class="col-auto my-3">
-											<h5 class="px-4"><b>Lugar de la infracción</b></h5>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="row my-4 px-4">
-								<div class="form-group col-md-4">
-									<div class="controlForm">
-										<label>Carretera <b>(obligatorio):</b></label>
-										@(Html.Kendo().DropDownList()
-											.Name("idCarretera")
-											.BindTo((SelectList)ViewBag.CatCarreteras)
-											.Filter(FilterType.Contains)
+                                            .HtmlAttributes(new { style = "width:100%;", required = "required" })
+                                            )
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="tabCustomEnd"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane tabCustomConteiner fade show" id="lugar-container" role="tabpanel" aria-labelledby="lugar-tab">
+                            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                                <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                                    <div class="row align-items-center justify-content-center justify-content-md-start">
+                                        <div class="col-auto">
+                                            <i class="icon-carretera h1 colorPrimary"></i>
+                                        </div>
+                                        <div class="col-auto my-3">
+                                            <h5 class="px-4"><b>Lugar de la infracción</b></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row my-4 px-4">
+                                <div class="form-group col-md-4">
+                                    <div class="controlForm">
+                                        <label>Carretera <b>(obligatorio):</b></label>
+                                        @(Html.Kendo().DropDownList()
+                                            .Name("idCarretera")
+                                            .BindTo((SelectList)ViewBag.CatCarreteras)
+                                            .Filter(FilterType.Contains)
 
-											.OptionLabel("-- Seleccione --")
-											.HtmlAttributes(new { style = "width:100%;", id = "ddlCarreteras", required = "required" })
-											)
-									</div>
-								</div>
-								<div class="form-group col-md-4">
-									<div class="controlForm">
-										<label>Tramo <b>(obligatorio):</b></label>
-										<div id="divTramo">
-											@(Html.Kendo().DropDownListFor(f => f.idTramo).Filter(FilterType.Contains)
-												.OptionLabel("-- Seleccione --")
-												.HtmlAttributes(new { style = "width:100%;", required = "required" })
-												)
-										</div>
-									</div>
-								</div>
-								
-							</div>
-							@*  <div class="row my-4 px-4">
-							<div class="form-group col-md-3">
-							<div class="controlForm">
-							@(Html.Kendo().TextBoxFor(t => t.lugarCalle)
-							.Label(l => l.Content("Calle:"))
-							.Placeholder("Ingresa calle")
-							.HtmlAttributes(new { style = "width: 100%" })
-							)
-							</div>
-							</div>
-							<div class="form-group col-md-3">
-							<div class="controlForm">
-							@(Html.Kendo().TextBoxFor(t => t.lugarNumero)
-							.Label(l => l.Content("Número:"))
-							.Placeholder("Ingresa número")
-							.HtmlAttributes(new { style = "width: 100%" })
-							)
-							</div>
-							</div>
-							<div class="form-group col-md-3">
-							<div class="controlForm">
-							@(Html.Kendo().TextBoxFor(t => t.lugarColonia)
-							.Label(l => l.Content("Colonia:"))
-							.Placeholder("Ingresa colonia")
-							.HtmlAttributes(new { style = "width: 100%" })
-							)
-							</div>
-							</div>
-							<div class="form-group col-md-3">
-							<div class="controlForm">
-							@(Html.Kendo().TextBoxFor(t => t.lugarEntreCalle)
-							.Label(l => l.Content("Entre calle: "))
-							.Placeholder("Ingresa entre calle")
-							.HtmlAttributes(new { style = "width: 100%" })
-							)
-							</div>
-							</div>
-							</div> *@
-							<div class="row">
-								<div class="col-12">
-									<div class="tabCustomEnd"></div>
-								</div>
-							</div>
-						</div>
-						<div class="tab-pane tabCustomConteiner fade show" id="vehiculo-container" role="tabpanel" aria-labelledby="vehiculo-tab">
-							<div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
-								<div class="col-12 col-md-6 col-lg-5 col-xl-auto">
-									<div class="row align-items-center justify-content-center justify-content-md-start">
-										<div class="col-auto">
-											<i class="icon-edit-car h1 colorPrimary"></i>
-										</div>
-										<div class="col-auto my-3">
-											<h5 class="px-4"><b>Vehículo de la infracción</b></h5>
-											@*<h6 class="px-4 text-muted">Marque el vehículo que desea asociar.</h6>*@
-										</div>
-									</div>
-								</div>
-								<div class="col-12 col-md-6 col-lg-7 col-xl-auto">
-									<div class="row">
-										<div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-											<button id="btnNuevoVehiculo" onclick="mostrarModalAgregarVehiculo()" type="button">
-												<h6 class="m-0 d-flex align-items-center"><i class="icon-addCar h5 mb-0 me-2"></i><b>Agregar nuevo vehículo</b></h6>
-											</button>
-										</div>
-									</div>
-								</div>
-							</div>
-							@Html.HiddenFor(m=> m.idVehiculo)
-							<div id="divIsPropietarioConductor" class="row my-4 px-4" style="display:none">
-								<div class="form-group col-md-8">
-									<div class="checkbox">
-										<label>El propietario del vehículo es el conductor: </label>&nbsp;&nbsp;
-										@(Html.Kendo().SwitchFor(m => m.isPropietarioConductor)
-											.Messages(c => c.Checked("SI").Unchecked("NO"))
+                                            .OptionLabel("-- Seleccione --")
+                                            .HtmlAttributes(new { style = "width:100%;", id = "ddlCarreteras", required = "required" })
+                                            )
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <div class="controlForm">
+                                        <label>Tramo <b>(obligatorio):</b></label>
+                                        <div id="divTramo">
+                                            @(Html.Kendo().DropDownListFor(f => f.idTramo).Filter(FilterType.Contains)
+                                                .OptionLabel("-- Seleccione --")
+                                                .HtmlAttributes(new { style = "width:100%;", required = "required" })
+                                                )
+                                        </div>
+                                    </div>
+                                </div>
 
-											.Events(ev => ev.Change("isPropietarioOnChange"))
-											)
-									</div>
-								</div>
-							</div>
-							<div class="row my-4 px-4">
-								<div id="detalleVehiculo">
-								</div>
-							</div>
-							<div class="row my-4 px-4">
-								<div id="listadoVehiculos">
-									<partial name="_ListadoVehiculos" model="ViewBag.Vehiculos" />
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-12">
-									<div class="tabCustomEnd"></div>
-								</div>
-							</div>
-						</div>
-						<div class="tab-pane tabCustomConteiner fade show" id="conductor-container" role="tabpanel" aria-labelledby="conductor-tab">
-							<div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
-								<div class="col-12 col-md-6 col-lg-5 col-xl-auto">
-									<div class="row align-items-center justify-content-center justify-content-md-start">
-										<div class="col-auto">
-											<i class="icon-conductor h1 colorPrimary"></i>
-										</div>
-										<div class="col-auto my-3">
-											<h5 class="px-4"><b>Conductor de la infracción</b></h5>
-											@*<h6 class="px-4 text-muted">Marque la persona que desea asociar como conductor.</h6>*@
-										</div>
-									</div>
-								</div>
-								<div class="col-12 col-md-6 col-lg-7 col-xl-auto">
-									<div class="row">
-										<div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-											<button type="button" href="#" id="btnNuevoConductor" onclick="mostrarModalAgregarConductor()">
-												<h6 class="m-0 d-flex align-items-center"><i class="icon-addConductor h5 mb-0 me-2"></i><b>Agregar nuevo conductor</b></h6>
-											</button>
-										</div>
-									</div>
-								</div>
-							</div>
-							@Html.HiddenFor(m=> m.idPersona)
-							<div class="row my-4 px-4">
-								<div id="detallePersonas">
-								</div>
-							</div>
-							<input type="hidden" id="hdnIdPersonaTemp" value="" />
-							<div class="row my-4 px-4">
-								<div id="listadoPersonas">
-									<partial name="_ListadoPersonas" model="ViewBag.Personas" />
-								</div>
-							</div>
+                            </div>
+                            @*  <div class="row my-4 px-4">
+                            <div class="form-group col-md-3">
+                            <div class="controlForm">
+                            @(Html.Kendo().TextBoxFor(t => t.lugarCalle)
+                            .Label(l => l.Content("Calle:"))
+                            .Placeholder("Ingresa calle")
+                            .HtmlAttributes(new { style = "width: 100%" })
+                            )
+                            </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                            <div class="controlForm">
+                            @(Html.Kendo().TextBoxFor(t => t.lugarNumero)
+                            .Label(l => l.Content("Número:"))
+                            .Placeholder("Ingresa número")
+                            .HtmlAttributes(new { style = "width: 100%" })
+                            )
+                            </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                            <div class="controlForm">
+                            @(Html.Kendo().TextBoxFor(t => t.lugarColonia)
+                            .Label(l => l.Content("Colonia:"))
+                            .Placeholder("Ingresa colonia")
+                            .HtmlAttributes(new { style = "width: 100%" })
+                            )
+                            </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                            <div class="controlForm">
+                            @(Html.Kendo().TextBoxFor(t => t.lugarEntreCalle)
+                            .Label(l => l.Content("Entre calle: "))
+                            .Placeholder("Ingresa entre calle")
+                            .HtmlAttributes(new { style = "width: 100%" })
+                            )
+                            </div>
+                            </div>
+                            </div> *@
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="tabCustomEnd"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane tabCustomConteiner fade show" id="vehiculo-container" role="tabpanel" aria-labelledby="vehiculo-tab">
+                            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                                <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                                    <div class="row align-items-center justify-content-center justify-content-md-start">
+                                        <div class="col-auto">
+                                            <i class="icon-edit-car h1 colorPrimary"></i>
+                                        </div>
+                                        <div class="col-auto my-3">
+                                            <h5 class="px-4"><b>Vehículo de la infracción</b></h5>
+                                            @*<h6 class="px-4 text-muted">Marque el vehículo que desea asociar.</h6>*@
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
+                                    <div class="row">
+                                        <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                                            <button id="btnNuevoVehiculo" onclick="mostrarModalAgregarVehiculo()" type="button">
+                                                <h6 class="m-0 d-flex align-items-center"><i class="icon-addCar h5 mb-0 me-2"></i><b>Agregar nuevo vehículo</b></h6>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @Html.HiddenFor(m=> m.idVehiculo)
+                            <div id="divIsPropietarioConductor" class="row my-4 px-4" style="display:none">
+                                <div class="form-group col-md-8">
+                                    <div class="checkbox">
+                                        <label>El propietario del vehículo es el conductor: </label>&nbsp;&nbsp;
+                                        @(Html.Kendo().SwitchFor(m => m.isPropietarioConductor)
+                                            .Messages(c => c.Checked("SI").Unchecked("NO"))
 
-							<div class="row">
-								<div class="col-12">
-									<div class="tabCustomEnd"></div>
-								</div>
-							</div>
-						</div>
-					</div>
+                                            .Events(ev => ev.Change("isPropietarioOnChange"))
+                                            )
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row my-4 px-4">
+                                <div id="detalleVehiculo">
+                                </div>
+                            </div>
+                            <div class="row my-4 px-4">
+                                <div id="listadoVehiculos">
+                                    <partial name="_ListadoVehiculos" model="ViewBag.Vehiculos" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="tabCustomEnd"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane tabCustomConteiner fade show" id="conductor-container" role="tabpanel" aria-labelledby="conductor-tab">
+                            <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                                <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
+                                    <div class="row align-items-center justify-content-center justify-content-md-start">
+                                        <div class="col-auto">
+                                            <i class="icon-conductor h1 colorPrimary"></i>
+                                        </div>
+                                        <div class="col-auto my-3">
+                                            <h5 class="px-4"><b>Conductor de la infracción</b></h5>
+                                            @*<h6 class="px-4 text-muted">Marque la persona que desea asociar como conductor.</h6>*@
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
+                                    <div class="row">
+                                        <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                                            <button type="button" href="#" id="btnNuevoConductor" onclick="mostrarModalAgregarConductor()">
+                                                <h6 class="m-0 d-flex align-items-center"><i class="icon-addConductor h5 mb-0 me-2"></i><b>Agregar nuevo conductor</b></h6>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @Html.HiddenFor(m=> m.idPersona)
+                            <div class="row my-4 px-4">
+                                <div id="detallePersonas">
+                                </div>
+                            </div>
+                            <input type="hidden" id="hdnIdPersonaTemp" value="" />
+                            <div class="row my-4 px-4">
+                                <div id="listadoPersonas">
+                                    <partial name="_ListadoPersonas" model="ViewBag.Personas" />
+                                </div>
+                            </div>
 
-				</form>
-			</div>
-		</div>
-		<!--Modal agregar conductor-->
-		<div class="modal fade modalCustom" id="agregarConductorModal"  aria-labelledby="agregarVehiculoLabel" aria-hidden="true">
-			<div class="modal-dialog modal-xl" role="document">
-				<div class="modal-content">
-					<div class="modal-body" id="ModalBodyAgregarConductor">
-					</div>
-				</div>
-			</div>
-		</div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="tabCustomEnd"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        <!--Modal agregar conductor-->
+        <div class="modal fade modalCustom" id="agregarConductorModal" aria-labelledby="agregarVehiculoLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-body" id="ModalBodyAgregarConductor">
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
-		<div class="modal fade modalCustom" id="agregarVehiculoModal"  aria-labelledby="agregarVehiculoLabel" aria-hidden="true">
-			<div class="modal-dialog modal-lg" role="document">
-				<div class="modal-content">
-					<div class="modal-body" id="ModalBodyAgregarVehiculo">
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+        <div class="modal fade modalCustom" id="agregarVehiculoModal" aria-labelledby="agregarVehiculoLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-body" id="ModalBodyAgregarVehiculo">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="loading" style="display: none">
+        <div class="container-fluid">
+            <main role="main" class="pb-3">
+                <div class="loadingGif" id="loadingx" >
+                    <div class="row text-center">
+                        <div class="col-md-12 loading-spinner">
+                            <div class="spinner-grow text-primary" style="color:#366777!important" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <div class="spinner-grow text-secondary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <div class="spinner-grow text-success" style="color:#6AB438!important" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
 </div>
 
+<style>
+    .loadingGif {
+        width: 100vw;
+        height: 100vh;
+        background: rgba(10, 10, 10, 0.10);
+        z-index: 9999;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        overflow: hidden;
+    }
+
+    .loading-spinner {
+        position: absolute;
+        top: 50%;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    .errorData {
+        border: 1px solid red !important;
+        border-radius: 5px !important;
+    }
+</style>
+
+
+
 <script>
+        function ListarOficiales() {
+            _set_combo_catalog("CatOficiales", "0", "idOficial", "false", "divOficiales", "");
+        }
 
-	function ListarOficiales() {
-		_set_combo_catalog("CatOficiales", "0", "idOficial", "false", "divOficiales", "");
-	}
+        $("#ddlCarreteras").on("change", function () {
+            var value = $(this).val();
+            if (value == "") {
+                $("#idTramo option[value!='']").remove();
+            }
+            else {
+                _set_combo_catalog("CatTramosByFilter", value, "idTramo", "false", "divTramo", "");
+                $('#idTramo').kendoDropDownList();
+            }
+        });
 
-	$("#ddlCarreteras").on("change", function () {
-		var value = $(this).val();
-		if (value == "") {
-			$("#idTramo option[value!='']").remove();
-		}
-		else {
-			_set_combo_catalog("CatTramosByFilter", value, "idTramo", "false", "divTramo", "");
-			$('#idTramo').kendoDropDownList();
-		}
-	});
+        function btnGuardarInfraccion() {
+            var validator = $("#frmCrearInfraccion").kendoValidator().data('kendoValidator');
+            validator.validate();
+            if ($("#idVehiculo").val() == '') {
+                sitteg_info('Debe seleccionar un vehículo');
+                return;
+            }
 
-	function btnGuardarInfraccion() {
-		var validator = $("#frmCrearInfraccion").kendoValidator().data('kendoValidator');
-		validator.validate();
-		if ($("#idVehiculo").val() == '') {
-			sitteg_info('Debe seleccionar un vehículo');
-			return;
-		}
+            if ($("#idPersona").val() == '') {
+                sitteg_info('Debe seleccionar un conductor');
+                return;
+            }
 
-		if ($("#idPersona").val() == '') {
-			sitteg_info('Debe seleccionar un conductor');
-			return;
-		}
+            if (ValidarCrear()) {
+                var formData = $("#frmCrearInfraccion").serialize();
+                //var formData = new FormData();
+                //formData.delete('idDelegacion');
+                //alert(json);
+                $.ajax({
+                    url: '@Url.Action("ajax_crearInfraccion")',
+                    type: 'POST',
+                    data: formData,
+                    dataType: "json",
+                    success: function (result) {
+                        sitteg_success('Elemento guardado correctamente')
+                        window.setTimeout(function () {
+                            window.location.href = '/Infracciones/Editar/' + result.id
+                        }, 500);
+                    },
+                    error: function (xhr, status) {
+                        var errmsg = xhr.responseText;
+                        console.log(errmsg)
+                        sitteg_warning('Lo sentimos, ha ocurrido un error.');
+                    }
+                });
+            }
+            else {
+                sitteg_info('Debe llenar los campos requeridos');
+                return;
+            }
 
-		if (ValidarCrear()) {
-			var formData = $("#frmCrearInfraccion").serialize();
-			//var formData = new FormData();
-			//formData.delete('idDelegacion');
-			//alert(json);
-			$.ajax({
-				url: '@Url.Action("ajax_crearInfraccion")',
-				type: 'POST',
-				data: formData,
-				dataType: "json",
-				success: function (result) {
-					sitteg_success('Elemento guardado correctamente')
-					window.setTimeout(function () {
-						window.location.href = '/Infracciones/Editar/' + result.id
-					}, 500);
-				},
-				error: function (xhr, status) {
-					var errmsg = xhr.responseText;
-					console.log(errmsg)
-					sitteg_warning('Lo sentimos, ha ocurrido un error.');
-				}
-			});
-		}
-		else {
-			sitteg_info('Debe llenar los campos requeridos');
-			return;
-		}
+        }
 
-	}
+        function isPropietarioOnChange(e) {
+            var isPropietario = e.checked;
+            if (isPropietario) {
+                $("#listadoPersonas").hide();
+                $("#listadoPersonas").html("");
+                $("#detallePersonas").show();
+                idPersona = $("#hdnIdPersonaTemp").val();
+                buscarPersona(idPersona);
+            }
+            else {
+                getListadoPersonasInfracciones();
+                $("#listadoPersonas").show();
+                $("#detallePersonas").hide();
+                $("#idPersona").val('');
+            }
+        }
+        function buscarVehiculo(pidVehiculo) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("ajax_detalleVehiculo")',
+                data: {
+                    "idVehiculo": pidVehiculo,
+                },
+                success: function (data) {
+                    $("#detalleVehiculo").empty().append(data);
+                    console.log("error", data)
+                    console.log(pidVehiculo)
+                    $("#idVehiculo").val(pidVehiculo);
+                }
+                //,
+                //error: function (xhr, status) {
+                //    var errmsg = msg_err_gral;
+                //    semg_error(errmsg);
+                //}
+            });
+        }
 
-	function isPropietarioOnChange(e) {
-		var isPropietario = e.checked;
-		if (isPropietario) {
-			$("#listadoPersonas").hide();
-			$("#listadoPersonas").html("");
-			$("#detallePersonas").show();
-			idPersona = $("#hdnIdPersonaTemp").val();
-			buscarPersona(idPersona);
-		}
-		else {
-			getListadoPersonasInfracciones();
-			$("#listadoPersonas").show();
-			$("#detallePersonas").hide();
-			$("#idPersona").val('');
-		}
-	}
-	function buscarVehiculo(pidVehiculo) {
-		$.ajax({
-			type: "GET",
-			url: '@Url.Action("ajax_detalleVehiculo")',
-			data: {
-				"idVehiculo": pidVehiculo,
-			},
-			success: function (data) {
-				$("#detalleVehiculo").empty().append(data);
-				console.log("error",data)
-				console.log(pidVehiculo)
-				$("#idVehiculo").val(pidVehiculo);
-			}
-			//,
-			//error: function (xhr, status) {
-			//    var errmsg = msg_err_gral;
-			//    semg_error(errmsg);
-			//}
-		});
-	}
+        function buscarPersona(pidPersona) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("ajax_detallePersona")',
+                data: {
+                    "idPersona": pidPersona,
+                },
+                success: function (data) {
+                    $("#detallePersonas").html(data);
+                    $("#idPersona").val(pidPersona);
+                    $("#detallePersonas").show();
+                }
+                //,
+                //error: function (xhr, status) {
+                //    var errmsg = msg_err_gral;
+                //    semg_error(errmsg);
+                //}
+            });
+        }
+        function getListadoPersonasInfracciones() {
+            $("#listadoPersonas").show();
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("ajax_listadoPersonasInfracciones")',
+                success: function (data) {
+                    $("#listadoPersonas").html(data);
+                }
+                //,
+                //error: function (xhr, status) {
+                //    var errmsg = msg_err_gral;
+                //    semg_error(errmsg);
+                //}
+            });
+        }
 
-	function buscarPersona(pidPersona) {
-		$.ajax({
-			type: "GET",
-			url: '@Url.Action("ajax_detallePersona")',
-			data: {
-				"idPersona": pidPersona,
-			},
-			success: function (data) {
-				$("#detallePersonas").html(data);
-				$("#idPersona").val(pidPersona);
-				$("#detallePersonas").show();
-			}
-			//,
-			//error: function (xhr, status) {
-			//    var errmsg = msg_err_gral;
-			//    semg_error(errmsg);
-			//}
-		});
-	}
-	function getListadoPersonasInfracciones() {
-		$("#listadoPersonas").show();
-		$.ajax({
-			type: "GET",
-			url: '@Url.Action("ajax_listadoPersonasInfracciones")',
-			success: function (data) {
-				$("#listadoPersonas").html(data);
-			}
-			//,
-			//error: function (xhr, status) {
-			//    var errmsg = msg_err_gral;
-			//    semg_error(errmsg);
-			//}
-		});
-	}
+        function mostrarModalAgregarConductor() {
+            $.ajax({
+                url: '@Url.Action("ModalAgregarConductor")',
+                type: 'POST',
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (data) {
+                    $('#ModalBodyAgregarConductor').html(data);
+                    $('#agregarConductorModal').modal({ backdrop: 'static', keyboard: false });
+                    $('#agregarConductorModal').modal('show');
+                }
+            });
+        }
 
-	function mostrarModalAgregarConductor() {
-		$.ajax({
-			url: '@Url.Action("ModalAgregarConductor")',
-			type: 'POST',
-			contentType: "application/json; charset=utf-8",
-			dataType: "html",
-			success: function (data) {
-				$('#ModalBodyAgregarConductor').html(data);
-				$('#agregarConductorModal').modal({ backdrop: 'static', keyboard: false });
-				$('#agregarConductorModal').modal('show');
-			}
-		});
-	}
-	
-	function mostrarModalAgregarVehiculo() {
+        function mostrarModalAgregarVehiculo() {
 
-		$.ajax({
-			url: '@Url.Action("ModalAgregarVehiculo")',
-			type: 'POST',
-			success: function (data) {
-				$('#ModalBodyAgregarVehiculo').html(data);
-				$('#agregarVehiculoModal').modal('show');
-			}
-		});
-	}
+            $.ajax({
+                url: '@Url.Action("ModalAgregarVehiculo")',
+                type: 'POST',
+                success: function (data) {
+                    $('#ModalBodyAgregarVehiculo').html(data);
+                    $('#agregarVehiculoModal').modal('show');
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $("#kmCarretera").on("input", function () {
+                var value = this.value;
+                if (value !== "") {
+                    this.value = value.replace(/[^\d.]/g, "");
+                }
+            });
+
+            $("#kmCarretera").on("paste", function (e) {
+                e.preventDefault();
+                var clipboardData = e.originalEvent.clipboardData.getData('text/plain');
+                if (/^\d+$/.test(clipboardData)) {
+                    document.execCommand('insertText', false, clipboardData);
+                }
+            });
+        });
+
+
+
+        function ValidarCrear() {
+            var result = true
+
+            var consult = $("#fechaInfraccion").val()
+
+            if (!consult)
+                return false
+            consult = $("#folioInfraccion").val()
+
+            if (!consult)
+                return false
+            consult = $("#idOficial").val()
+
+            if (!consult)
+                return false
+            consult = $("#idMunicipio").val()
+
+            if (!consult)
+                return false
+            consult = $("#ddlCarreteras").val()
+
+            if (!consult)
+                return false
+            consult = $("#idTramo").val()
+
+            if (!consult)
+                return false
+            consult = $("#kmCarretera").val()
+
+            if (!consult)
+                return false
+            consult = $("#lugarCalle").val()
+
+            if (!consult)
+                return false
+            consult = $("#lugarNumero").val()
+
+            if (!consult)
+                return false
+            consult = $("#lugarColonia").val()
+
+            if (!consult)
+                return false
+            consult = $("#lugarEntreCalle").val()
+
+            if (!consult)
+                return false
+            return result 
+        }
 
 	$(document).ready(function () {
-		$("#kmCarretera").on("input", function () {
-			var value = this.value;
-			if (value !== "") {
-				this.value = value.replace(/[^\d.]/g, "");
-			}
+        $("#fechaInfraccion").kendoDateTimePicker({
+			format: "dd/MM/yyyy HH:mm",
+			parseFormats: ["dd/MM/yyyy", "HH:mm"], timeFormat: "HH:mm",
+			value: null,
+			interval: 1
 		});
-
-		$("#kmCarretera").on("paste", function (e) {
-			e.preventDefault();
-			var clipboardData = e.originalEvent.clipboardData.getData('text/plain');
-			if (/^\d+$/.test(clipboardData)) {
-				document.execCommand('insertText', false, clipboardData);
-			}
-		});
+        $('#loading').css('display', 'none');
 	});
-
-
-
-	function ValidarCrear(){
-		var result=true
-
-		var consult = $("#fechaInfraccion").val()
-
-		if(!consult)
-				return false
-		consult = $("#folioInfraccion").val()
-
-		if (!consult)
-			return false
-		consult = $("#idOficial").val()
-
-		if (!consult)
-			return false
-		consult = $("#idMunicipio").val()
-
-		if (!consult)
-			return false
-		consult = $("#ddlCarreteras").val()
-
-		if (!consult)
-			return false
-		consult = $("#idTramo").val()
-
-		if (!consult)
-			return false
-		consult = $("#kmCarretera").val()
-
-		if (!consult)
-			return false
-		consult = $("#lugarCalle").val()
-
-		if (!consult)
-			return false
-		consult = $("#lugarNumero").val()
-
-		if (!consult)
-			return false
-		consult = $("#lugarColonia").val()
-
-		if (!consult)
-			return false
-		consult = $("#lugarEntreCalle").val()
-
-		if (!consult)
-			return false
-
-
-
-		return result	
-	}
-
-
-
 
 </script>
 

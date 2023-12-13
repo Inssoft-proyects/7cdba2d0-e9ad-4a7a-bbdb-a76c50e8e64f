@@ -2,6 +2,10 @@
 @model VehiculoModel
 
 @{
+
+
+
+
     var dateVigencia = Model.vigenciaTarjeta;
     var myAttributes = new { disabled = "", style = "width:100%;" };
     if (Model != null)
@@ -18,6 +22,7 @@
 
     ViewBag.serie = Model.serie;
 }
+
 <script>
      function EntidadDDChangeAccFis() {
         var entidadDDlValue = $("#Persona_PersonaDireccion_idEntidadFisico").data("kendoDropDownList").value();
@@ -199,18 +204,23 @@
                 <label>Vigencia de tarjeta:</label>
                 @if (disableInput)
                 {
-                    @(Html.Kendo().DatePickerFor(t => t.vigenciaTarjeta)
+                    @(Html.Kendo().DatePickerFor(t => t.vigenciaTarjeta).Format("dd/MM/yyyy")
                         .Value(dateVigencia)
                         .DateInput()
+                        
+                        .Culture("es-ES")
                         .HtmlAttributes(new { style = "width: 100%", title = "datetimepicker" })
+                        .Value("")
                         )
                 }
                 else
                 {
-                    @(Html.Kendo().DatePickerFor(t => t.vigenciaTarjeta)
-                        .Value(dateVigencia)
+                    @(Html.Kendo().DatePickerFor(t => t.vigenciaTarjeta).Format("dd/MM/yyyy")
+                        //.Value(dateVigencia)
                         .DateInput()
+                        .Culture("es-ES")
                         .HtmlAttributes(new { style = "width: 100%", title = "datetimepicker" })
+                        .Value("")
                         )
                 }
 
@@ -436,7 +446,12 @@
         @Html.HiddenFor(m=> m.idVehiculo, new { @id = "hdnIdVehiculo" })
         @Html.HiddenFor(m=> m.Persona.idPersona, new { @id = "ddlIdPersona" })
         @Html.HiddenFor(m=> m.Persona.idCatTipoPersona, new { @id = "ddlIdCatTipoPersona" })
-        @Html.HiddenFor(m=> m.idCatTipoServicio, new { @id = "hdnIdCatTipoPersona" })
+
+        <input type="text" disabled class="d-none" value="@Model.idCatTipoServicio" name="idCatTipoServicio" id="hdnIdCatTipoPersona">
+
+@*        @Html.HiddenFor(m=> m.idCatTipoServicio, new { @id = "hdnIdCatTipoPersona" })
+*@        
+        
         @Html.HiddenFor(m=> m.encontradoEn, new { @id = "hdnEncontradoEn" })
 
     </form>
@@ -556,8 +571,7 @@
 
                     <form id="frmSearchPersonaMoral" class="row px-4 mb-4 align-items-end" method="post">
                         <div class="col-12 col-md-6 col-lg-4">
-                            <div class="controlForm my-3">
-
+                            <div class="controlForm my-3">                              
                                 @(Html.Kendo().TextBoxFor(t => t.PersonaMoralBusquedaModel.RFCBusqueda)
                                     .Label(l => l.Content("RFC:"))
                                     .Placeholder("Ingresa el RFC del propietario o empresa")
@@ -657,7 +671,7 @@
                     <div class="col-auto">
                         <div class="row">
                             <div class="col-auto my-3">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" onclick="cerraModalMoral()"><b>X</b></button>
                             </div>
                         </div>
                     </div>
@@ -678,8 +692,8 @@
 
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="controlForm mb-3">
+                            <label>RFC:</label>
                             @(Html.Kendo().TextBoxFor(t => t.Persona.RFC)
-                                .Label(l => l.Content("RFC:"))
                                 .Placeholder("Ingresa RFC")
                                 .HtmlAttributes(new { style = "width: 100%" })
                                 )
@@ -687,8 +701,9 @@
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="controlForm my-3">
+                            <label>Nombre <b>(obligatorio)</b>:</label>
+
                             @(Html.Kendo().TextBoxFor(t => t.Persona.nombre)
-                                .Label(l => l.Content("Nombre <b>(obligatorio)</b>:"))
                                 .Placeholder("Ingresa Nombre")
                                 .HtmlAttributes(new { style = "width: 100%", required = "required" })
                                 )
@@ -696,18 +711,19 @@
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="controlForm my-3">
+                            <label>Teléfono:</label>
                             @(Html.Kendo().TextBoxFor(t => t.Persona.PersonaDireccion.telefono)
-                                .Label(l => l.Content("Teléfono:"))
                                 .Placeholder("Ingresa Teléfono")
-                                .HtmlAttributes(new { style = "width: 100%" })
+                                .HtmlAttributes(new { style = "width: 100%" ,onkeypress = "return validarNumero(event)"})
                                 )
+                        <div id="errorTelefono" style="color: red;"></div>
                         </div>
                     </div>
 
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="controlForm my-3">
+                            <label>Correo:</label>
                             @(Html.Kendo().TextBoxFor(t => t.Persona.PersonaDireccion.correo)
-                                .Label(l => l.Content("Correo electrónico:"))
                                 .Placeholder("Ingresa correo electrónico")
                                 .HtmlAttributes(new { style = "width: 100%" })
                                 )
@@ -763,8 +779,8 @@
 
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="controlForm my-3">
+                            <label>Colonia <b>(obligatorio)</b>:</label>
                             @(Html.Kendo().TextBoxFor(t => t.Persona.PersonaDireccion.colonia)
-                                .Label(l => l.Content("Colonia <b>(obligatorio)</b>:"))
                                 .Placeholder("Ingresa colonia")
                                 .HtmlAttributes(new { style = "width: 100%", required = "required" })
                                 )
@@ -772,21 +788,20 @@
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="controlForm my-3">
+                            <label>Calle <b>(obligatorio)</b>:</label>
                             @(Html.Kendo().TextBoxFor(t => t.Persona.PersonaDireccion.calle)
-                                .Label(l => l.Content("Calle <b>(obligatorio)</b>:"))
                                 .Placeholder("Ingresa calle")
-                                .HtmlAttributes(new { style = "width: 100%" })
+                                .HtmlAttributes(new { style = "width: 100%",required = "required" })
                                 )
 
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="controlForm my-3">
-
+                            <label>Número <b>(obligatorio)</b>:</label>
                             @(Html.Kendo().TextBoxFor(t => t.Persona.PersonaDireccion.numero)
-                                .Label(l => l.Content("Número <b>(obligatorio)</b>:"))
                                 .Placeholder("Ingresa número")
-                                .HtmlAttributes(new { style = "width: 100%" })
+                                .HtmlAttributes(new { style = "width: 100%",required = "required" })
                                 )
                         </div>
                     </div>
@@ -798,7 +813,7 @@
                     <div class="col-12 col-md-6 mx-md-auto">
                         <div class="row justify-content-around">
                             <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
-                                <button type="button" data-bs-dismiss="modal" aria-label="Close">
+                                <button type="button" onclick="cerraModalMoral()">
                                     <h6 class="m-0 px-3"><b>Cerrar</b></h6>
                                 </button>
                             </div>
@@ -886,7 +901,7 @@
                     <div class="col-auto">
                         <div class="row">
                             <div class="col-auto my-3">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" onclick="cerraModalFisico()"><b>X</b></button>
                             </div>
                         </div>
                     </div>
@@ -906,10 +921,10 @@
                 <form id="personaFisicaForm" class="row px-4 mb-4 align-items-end">
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="controlForm mb-3">
-                            @(Html.Kendo().TextBoxFor(t => t.Persona.nombreFisico)
-                                .Label(l => l.Content("Nombre(s) <b>(obligatorio)</b>:"))
+                            <label>Nombre <b>(obligatorio)</b>:</label>
+                            @(Html.Kendo().TextBoxFor(t => t.Persona.nombre)
                                 .Placeholder("Ingresa el nombre(s)")
-                                .HtmlAttributes(new { style = "width: 100%", required = "required"})
+                                .HtmlAttributes(new { style = "width: 100%",id="nombreFisico", required = "required"})
                                 )
 
                         </div>
@@ -917,8 +932,8 @@
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="controlForm my-3">
-                            @(Html.Kendo().TextBoxFor(t => t.Persona.apellidoPaternoFisico)
-                                .Label(l => l.Content("Apellido paterno:"))
+                            <label>Apellido paterno:</label>
+                            @(Html.Kendo().TextBoxFor(t => t.Persona.apellidoPaterno)
                                 .Placeholder("Ingresa el apellido paterno")
                                 .HtmlAttributes(new { style = "width: 100%" })
                                 )
@@ -927,8 +942,8 @@
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="controlForm my-3">
-                            @(Html.Kendo().TextBoxFor(t => t.Persona.apellidoMaternoFisico)
-                                .Label(l => l.Content("Apellido materno:"))
+                            <label>Apellido materno:</label>
+                            @(Html.Kendo().TextBoxFor(t => t.Persona.apellidoMaterno)
                                 .Placeholder("Ingresa el apellido materno")
                                 .HtmlAttributes(new { style = "width: 100%" })
                                 )
@@ -937,10 +952,10 @@
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm mb-3">
-                            @(Html.Kendo().TextBoxFor(t => t.Persona.RFCFisico)
-                                .Label(l => l.Content("RFC :"))
+                            <label>RFC:</label>
+                            @(Html.Kendo().TextBoxFor(t => t.Persona.RFC)
                                 .Placeholder("Ingresa un RFC valido")
-                                .HtmlAttributes(new { style = "width: 100%" })
+                                .HtmlAttributes(new { style = "width: 100%",id="RFCFisico" })
                                 )
 
                         </div>
@@ -948,8 +963,8 @@
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm mb-3">
-                            @(Html.Kendo().TextBoxFor(t => t.Persona.CURPFisico)
-                                .Label(l => l.Content("CURP:"))
+                            <label>CURP:</label>
+                            @(Html.Kendo().TextBoxFor(t => t.Persona.CURP)
                                 .Placeholder("Ingresa un CURP valido")
                                 .HtmlAttributes(new { style = "width: 100%" })
                                 )
@@ -961,7 +976,8 @@
                             <label>Fecha de nacimiento <b>(obligatorio)</b></label>
                             <span>
                                 @(Html.Kendo().DatePickerFor(t => t.Persona.fechaNacimiento)
-                                    .Format("dd-MM-yyyy")
+                                    .Format("dd/MM/yyyy")
+                                    .Culture("es-ES")
                                    .HtmlAttributes(new { style = "width: 100%", required = "required" })
                                     )
                             </span>
@@ -987,21 +1003,21 @@
 
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm mb-3">
-                            @(Html.Kendo().TextBoxFor(t => t.Persona.PersonaDireccion.telefonoFisico)
-                                .Label(l => l.Content("Teléfono:"))
+                            <label>Teléfono:</label>
+                            @(Html.Kendo().TextBoxFor(t => t.Persona.PersonaDireccion.telefono)
                                 .Placeholder("Ingresa un Teléfono")
-                                .HtmlAttributes(new { style = "width: 100%" })
+                                .HtmlAttributes(new { style = "width: 100%",id="telefonoFisico",onkeypress = "return validarNumero(event)" })
                                 )
-
+                        <div id="errorTelefonoFisico" style="color: red;"></div>
                         </div>
                     </div>
 
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm mb-3">
-                            @(Html.Kendo().TextBoxFor(t => t.Persona.PersonaDireccion.correoFisico)
-                                .Label(l => l.Content("Correo electrónico:"))
+                            <label>Correo electrónico:</label>
+                            @(Html.Kendo().TextBoxFor(t => t.Persona.PersonaDireccion.correo)
                                 .Placeholder("Ingresa un correo electrónico:")
-                                .HtmlAttributes(new { style = "width: 100%" })
+                                .HtmlAttributes(new { style = "width: 100%",id="correoFisico"})
                                 )
 
                         </div>
@@ -1011,11 +1027,11 @@
                         <div class="controlForm my-3">
                             <label>Entidad:</label>
                             <span>
-                                @(Html.Kendo().DropDownListFor(d => d.Persona.PersonaDireccion.idEntidadFisico)
+                                @(Html.Kendo().DropDownListFor(d => d.Persona.PersonaDireccion.idEntidad)
                                     .DataTextField("Text")
                                     .DataValueField("Value")
                                     .OptionLabel("Seleccione Entidad...")
-                                    .HtmlAttributes(new { style = "width:100%;" })
+                                    .HtmlAttributes(new { style = "width:100%;",id="idEntidadFisico" })
                                     .Filter(FilterType.Contains)
                                    .Events(e => e.Change("EntidadDDChangeAccFis"))
                                     .DataSource(source =>
@@ -1032,10 +1048,10 @@
 
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm my-3">
-                            @(Html.Kendo().TextBoxFor(t => t.Persona.PersonaDireccion.coloniaFisico)
-                                .Label(l => l.Content("Colonia <b>(obligatorio)</b>:"))
+                            <label>Colonia <b>(obligatorio)</b>:</label>
+                            @(Html.Kendo().TextBoxFor(t => t.Persona.PersonaDireccion.colonia)
                                 .Placeholder("Ingresa una colonia")
-                                .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                                .HtmlAttributes(new { style = "width: 100%", required = "required",id="coloniaFisico" })
                                 )
 
                         </div>
@@ -1044,10 +1060,10 @@
 
                     <div class="col-12 col-md-6 col-lg-6">
                         <div class="controlForm my-3">
-                            @(Html.Kendo().TextBoxFor(t => t.Persona.PersonaDireccion.calleFisico)
-                                .Label(l => l.Content("Calle <b>(obligatorio)</b>:"))
+                            <label>Calle <b>(obligatorio)</b>:</label>
+                            @(Html.Kendo().TextBoxFor(t => t.Persona.PersonaDireccion.calle)
                                 .Placeholder("Ingresa una calle")
-                                .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                                .HtmlAttributes(new { style = "width: 100%", required = "required",id="calleFisico" })
                                 )
 
                         </div>
@@ -1055,10 +1071,10 @@
                     </div>
                     <div class="col-12 col-md-6 col-lg-2">
                         <div class="controlForm my-3">
-                            @(Html.Kendo().TextBoxFor(t => t.Persona.PersonaDireccion.numeroFisico)
-                                .Label(l => l.Content("Número <b>(obligatorio)</b>:"))
+                            <label>Número <b>(obligatorio)</b>:</label>
+                            @(Html.Kendo().TextBoxFor(t => t.Persona.PersonaDireccion.numero)
                                 .Placeholder("Ingresa un número interior")
-                                .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                                .HtmlAttributes(new { style = "width: 100%", required = "required",id="numeroFisico"})
                                 )
 
                         </div>
@@ -1068,11 +1084,11 @@
                         <div class="controlForm my-3">
                             <label>Municipio:</label>
                             <span>
-                                @(Html.Kendo().DropDownListFor(d => d.Persona.PersonaDireccion.idMunicipioFisico)
+                                @(Html.Kendo().DropDownListFor(d => d.Persona.PersonaDireccion.idMunicipio)
                                     .DataTextField("Text")
                                     .DataValueField("Value")
                                     .OptionLabel("Seleccione Municipio...")
-                                    .HtmlAttributes(new { style = "width:100%;" })
+                                    .HtmlAttributes(new { style = "width:100%;",id="idMunicipioFisico" })
                                                         .Filter(FilterType.Contains)
 
                                     .DataSource(source =>
@@ -1096,8 +1112,8 @@
 
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm my-3">
-                            @(Html.Kendo().TextBoxFor(t => t.Persona.numeroLicenciaFisico)
-                                .Label(l => l.Content("No. Licencia:"))
+                            <label>No. de licencia:</label>
+                            @(Html.Kendo().TextBoxFor(t => t.Persona.numeroLicencia)
                                 .Placeholder("Ingresa un número de licencia:")
                                 .HtmlAttributes(new { style = "width: 100%" })
                                 )
@@ -1112,7 +1128,6 @@
                             <label>Tipo de licencia:</label>
                             <span>
                                 @(Html.Kendo().DropDownListFor(t => t.Persona.idTipoLicencia)
-                                    .Label(l => l.Content("Tipo de Licencia:"))
                                     .DataTextField("Text")
                                     .DataValueField("Value")
                                     .OptionLabel("Selecciona el tipo de licencia")
@@ -1134,8 +1149,9 @@
                         <div class="controlForm my-3">
                             <label>Fecha de vencimiento:</label>
                             <span>
-                                @(Html.Kendo().DatePickerFor(t => t.Persona.vigenciaLicencia)
+                                @(Html.Kendo().DatePickerFor(t => t.Persona.vigenciaLicencia).Format("dd/MM/yyyy")
                                     .DateInput()
+                                    .Culture("es-ES")
                                     )
 
                             </span>
@@ -1147,7 +1163,7 @@
                     <div class="col-12 col-md-6 mx-md-auto">
                         <div class="row justify-content-around">
                             <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
-                                <button type="button" data-bs-dismiss="modal_v" aria-label="Close">
+                                <button type="button" onclick="cerraModalFisico()">
                                     <h6 class="m-0 px-3"><b>Cerrar</b></h6>
                                 </button>
                             </div>
@@ -1203,6 +1219,29 @@
 
         buscarPersonasFisicas();
     });
+    function validarNumero(event) {
+            var charCode = (event.which) ? event.which : event.keyCode;
+
+            if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 8 && charCode !== 46) {
+                mostrarError("Solo se permiten números.");
+                event.preventDefault();
+                return false;
+            }
+
+            ocultarError();
+            return true;
+        }
+
+    function mostrarError(mensaje) {
+        $("#errorTelefono").text(mensaje);
+          $("#errorTelefonoFisico").text(mensaje);
+    }
+
+    function ocultarError() {
+        $("#errorTelefono").text("");
+                  $("#errorTelefonoFisico").text("");
+
+    }
 
     function buscarPersonasFisicas() {
 
@@ -1247,6 +1286,13 @@ function submitCreateMoral() {
 
     idTelefono.off('blur');
 
+
+    $("#idCatTipoServicio").prop("disabled",true)
+
+    $("#hdnIdCatTipoPersona").prop("disabled",true)
+
+
+
     if (validator.validate()) {
         var formData = $("#frmCreateMoral").serialize();
 
@@ -1272,6 +1318,10 @@ function submitCreateMoral() {
         });
     } else {
         idTelefono.prop("disabled", false);
+        $("#idCatTipoServicio").prop("disabled",false)
+        $("#hdnIdCatTipoPersona").prop("disabled",false)
+
+
         sitteg_info('Debe llenar los campos requeridos');
         return;
     }
@@ -1289,18 +1339,18 @@ function submitCreateMoral() {
                 document.getElementById("sec3").style.display = "none";
                 document.getElementById("PersonaMoralLocalizada").style.display = "block";
                 $("#PersonaMoralLocalizada").html(result);
-                var grid = $("#gridPersonasMoralesAC").data("kendoGrid");
+                var grid = $("#gridPersonasMorales").data("kendoGrid");
                 grid.refresh();
             }
         });
     }
 
     function submitCreatePersonaFisica() {
-    var nombreValue = $("#Persona_nombreFisico").val();
-    var RFCValue = $("#Persona_RFCFisico").val();
-    var coloniaValue = $("#Persona_PersonaDireccion_coloniaFisico").val();           
-    var calleValue = $("#Persona_PersonaDireccion_calleFisico").val();            
-     var numeroValue = $("#Persona_PersonaDireccion_numeroFisico").val();
+    var nombreValue = $("#nombreFisico").val();
+    var RFCValue = $("#RFCFisico").val();
+    var coloniaValue = $("#coloniaFisico").val();           
+    var calleValue = $("#calleFisico").val();            
+     var numeroValue = $("#numeroFisico").val();
     var fechaNacimientoValue = $("#Persona_fechaNacimiento").data("kendoDatePicker").value();
      $('.error-container').empty();
 
@@ -1416,5 +1466,11 @@ function asignarMensajeError(contenedorErrorId, mensaje) {
             datePicker.value(null);
         }
     });
-       
+       function cerraModalFisico(){
+            $('#addFisico').modal('hide');
+       }
+ function cerraModalMoral(){
+        $('#addMoral').modal('hide');
+       }
+
 </script>

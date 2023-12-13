@@ -3,7 +3,7 @@
 
 @(
     Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.OficialesModel>()
-        .Name("grid")
+        .Name("gridCatOficiales")
         .Columns(columns =>
         {
                 columns.Bound(c => c.IdOficial).Width(80).Title("Id");
@@ -60,8 +60,8 @@
             type: 'POST', // Tipo de solicitud HTTP (POST o GET)
             data: { IdOficial: IdOficial }, // Datos que se enviarán al controlador
             success: function (result) {
-                $('#ModalBodyEditarOficial').html(result);
-                $('#editarOficial').modal('show');
+                $('#ModalBodyCrearOficial').html(result);
+                $('#agregarOficial').modal('show');
 
             },
         })
@@ -77,8 +77,8 @@
             type: 'POST', // Tipo de solicitud HTTP (POST o GET)
             data: { IdOficial: IdOficial }, // Datos que se enviarán al controlador
             success: function (result) {
-                $('#ModalBodyEliminarOficial').html(result);
-                $('#eliminarOficial').modal('show');
+                $('#ModalBodyCrearOficial').html(result);
+                $('#agregarOficial').modal('show');
 
             },
         })

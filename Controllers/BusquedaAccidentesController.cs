@@ -16,8 +16,6 @@ using System.Linq;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
-
-
     [Authorize]
     public class BusquedaAccidentesController : BaseController
     {
@@ -28,21 +26,19 @@ namespace GuanajuatoAdminUsuarios.Controllers
         private readonly IOficiales _oficialesService;
         private readonly ICatEstatusReporteService _catEstatusReporteService;
         private readonly ICapturaAccidentesService _capturaAccidentesService;
-        private readonly IPdfGenerator<BusquedaAccidentesPDFModel> _pdfService;
         private readonly ICatDictionary _catDictionary;
 
         private int idOficina = 0;
 
         public BusquedaAccidentesController(IBusquedaAccidentesService busquedaAccidentesService, ICatCarreterasService catCarreterasService, ICatTramosService catTramosService,
-            ICatDelegacionesOficinasTransporteService catDelegacionesOficinasTransporteService, IOficiales oficialesService, IPdfGenerator<BusquedaAccidentesPDFModel> pdfService,
-            ICapturaAccidentesService capturaAccidentesService,ICatDictionary catDictionary, ICatEstatusReporteService catEstatusReporteService)
+            ICatDelegacionesOficinasTransporteService catDelegacionesOficinasTransporteService, IOficiales oficialesService,
+            ICapturaAccidentesService capturaAccidentesService, ICatDictionary catDictionary, ICatEstatusReporteService catEstatusReporteService)
         {
             _busquedaAccidentesService = busquedaAccidentesService;
             _catCarreterasService = catCarreterasService;
             _catTramosService = catTramosService;
             _catDelegacionesOficinasTransporteService = catDelegacionesOficinasTransporteService;
             _oficialesService = oficialesService;
-            _pdfService = pdfService;
             _capturaAccidentesService = capturaAccidentesService;
             _catDictionary = catDictionary;
             _catEstatusReporteService = catEstatusReporteService;
@@ -58,7 +54,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 int? idOficina = HttpContext.Session.GetInt32("IdOficina");
                 BusquedaAccidentesModel modelo = new BusquedaAccidentesModel
                 {
-                    IdDelegacionBusqueda = idOficina ?? 0, 
+                    IdDelegacionBusqueda = idOficina ?? 0,
                 };
                 return View(modelo);
             }
@@ -112,108 +108,44 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
         #endregion
 
-       /* public ActionResult ajax_BuscarAccidente(BusquedaAccidentesModel model)
+        /* public ActionResult ajax_BuscarAccidente(BusquedaAccidentesModel model)
+         {
+             if (model.FechaInicio == null)
+             {
+                 model.FechaInicio = DateTime.MinValue;
+             }
+
+             if (model.FechaFin == null)
+             {
+                 model.FechaFin = DateTime.MinValue;
+             }
+
+             int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+             var resultadoBusqueda = _busquedaAccidentesService.BusquedaAccidentes(model, idOficina);
+             return Json(resultadoBusqueda);
+         }*/
+        public IActionResult ajax_BusquedaAccidentes(BusquedaAccidentesModel model)
         {
-            if (model.FechaInicio == null)
-            {
-                model.FechaInicio = DateTime.MinValue;
-            }
-
-            if (model.FechaFin == null)
-            {
-                model.FechaFin = DateTime.MinValue;
-            }
-
             int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
-            var resultadoBusqueda = _busquedaAccidentesService.BusquedaAccidentes(model, idOficina);
+
+            var resultadoBusqueda = _busquedaAccidentesService.GetAllAccidentes(idOficina)
+                                                .Where(w => w.idMunicipio == (model.idMunicipio > 0 ? model.idMunicipio : w.idMunicipio)
+                                                    && w.idSupervisa == (model.IdOficialBusqueda > 0 ? model.IdOficialBusqueda : w.idSupervisa)
+                                                    && w.idCarretera == (model.IdCarreteraBusqueda > 0 ? model.IdCarreteraBusqueda : w.idCarretera)
+                                                    && w.idTramo == (model.IdTramoBusqueda > 0 ? model.IdTramoBusqueda : w.idTramo)
+                                                    && w.idElabora == (model.IdOficialBusqueda > 0 ? model.IdOficialBusqueda : w.idElabora)
+                                                    && w.idAutoriza == (model.IdOficialBusqueda > 0 ? model.IdOficialBusqueda : w.idAutoriza)
+                                                    && w.idEstatusReporte == (model.IdEstatusAccidente > 0 ? model.IdEstatusAccidente : w.idEstatusReporte)
+                                                   && (string.IsNullOrEmpty(model.folioBusqueda) || w.numeroReporte.Contains(model.folioBusqueda))
+                                                   && (string.IsNullOrEmpty(model.placasBusqueda) || w.placa.Contains(model.placasBusqueda))
+                                                   && (string.IsNullOrEmpty(model.propietarioBusqueda) || w.propietario.Contains(model.propietarioBusqueda))
+                                                   && (string.IsNullOrEmpty(model.serieBusqueda) || w.serie.Contains(model.serieBusqueda))
+                                                   && (string.IsNullOrEmpty(model.conductorBusqueda) || w.conductor.Contains(model.conductorBusqueda))
+                                                   && ((model.FechaInicio == default(DateTime) && model.FechaFin == default(DateTime)) || (w.fecha >= model.FechaInicio && w.fecha <= model.FechaFin))
+                                                    ).ToList();
+
             return Json(resultadoBusqueda);
-        }*/
-			public IActionResult ajax_BusquedaAccidentes(BusquedaAccidentesModel model)
-            {
-				int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
 
-				var resultadoBusqueda = _busquedaAccidentesService.GetAllAccidentes(idOficina)
-                                                    .Where(w => w.idMunicipio == (model.idMunicipio > 0 ? model.idMunicipio : w.idMunicipio)
-                                                        && w.idSupervisa == (model.IdOficialBusqueda > 0 ? model.IdOficialBusqueda : w.idSupervisa)
-                                                        && w.idCarretera == (model.IdCarreteraBusqueda > 0 ? model.IdCarreteraBusqueda : w.idCarretera)
-                                                        && w.idTramo == (model.IdTramoBusqueda > 0 ? model.IdTramoBusqueda : w.idTramo)
-                                                        && w.idElabora == (model.IdOficialBusqueda > 0 ? model.IdOficialBusqueda : w.idElabora)
-								                    	&& w.idAutoriza == (model.IdOficialBusqueda > 0 ? model.IdOficialBusqueda : w.idAutoriza)
-														&& w.idEstatusReporte == (model.IdEstatusAccidente > 0 ? model.IdEstatusAccidente : w.idEstatusReporte)
-													   &&(string.IsNullOrEmpty(model.folioBusqueda) || w.numeroReporte.Contains(model.folioBusqueda))
-												       && (string.IsNullOrEmpty(model.placasBusqueda) || w.placa.Contains(model.placasBusqueda))
-													   && (string.IsNullOrEmpty(model.propietarioBusqueda) || w.propietario.Contains(model.propietarioBusqueda))
-													   && (string.IsNullOrEmpty(model.serieBusqueda) || w.serie.Contains(model.serieBusqueda))
-												       && (string.IsNullOrEmpty(model.conductorBusqueda) || w.conductor.Contains(model.conductorBusqueda))
-													   && ((model.FechaInicio == default(DateTime) && model.FechaFin == default(DateTime)) || (w.fecha >= model.FechaInicio && w.fecha <= model.FechaFin))
-														).ToList();
-
-                return Json(resultadoBusqueda);
-
-            }
-
-		
-        [HttpGet]
-        public FileResult CreatePdfUnRegistro(int IdAccidente)
-        {
-            Dictionary<string, string> ColumnsNames = new Dictionary<string, string>()
-            {
-            {"numeroReporte","Folio"},
-            {"municipio","Municipio"},
-            {"carretera","Carretera"},
-            {"nombrePropietarioCompleto","Propietario"},
-            {"fecha","Fecha"},
-            {"hora","Hora"},
-
-
-            };
-            var AccidenteModel = _busquedaAccidentesService.ObtenerAccidentePorId(IdAccidente);
-            var result = _pdfService.CreatePdf("ReporteAccidente", "Accidentes", 6, ColumnsNames, AccidenteModel);
-            return File(result.Item1, "application/pdf", result.Item2);
         }
-
-        [HttpGet]
-        public FileResult CreatePdf(string data)
-        {
-            var model = JsonConvert.DeserializeObject<BusquedaAccidentesPDFModel>(data);
-
-            if (model.FechaInicio == null)
-            {
-                model.FechaInicio = DateTime.MinValue;
-            }
-
-            if (model.FechaFin == null)
-            {
-                model.FechaFin = DateTime.MinValue;
-            }
-      
-
-            model.placa = model.placa == string.Empty ? null : model.placa;
-            model.serie = model.serie == string.Empty ? null : model.serie;
-            model.folio = model.folio == string.Empty ? null : model.folio;
-            model.propietario = model.propietario == string.Empty ? null : model.propietario;
-            model.conductor = model.conductor == string.Empty ? null : model.conductor;
-            model.idDelegacion = model.idDelegacion == 0 ? null : model.idDelegacion;
-            model.idCarretera = model.idCarretera == 0 ? null : model.idCarretera;
-            model.idTramo = model.idTramo == 0 ? null : model.idTramo;
-            model.IdOficial = model.IdOficial == 0 ? null : model.IdOficial;
-
-            Dictionary<string, string> ColumnsNames = new Dictionary<string, string>()
-            {
-            {"municipio","Municipio"},
-            {"tramo","Tramo"},
-            {"carretera","Carretera"},
-            {"kilometro","Kilometro"},
-            {"fecha","Fecha" },
-            {"hora","Hora" },
-           
-            };
-            int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
-            var ListTransitoModel = _busquedaAccidentesService.BusquedaAccidentes(model, idOficina);
-            var result = _pdfService.CreatePdf("ReporteAccidentes", "Accidentes", 6, ColumnsNames, ListTransitoModel);
-            return File(result.Item1, "application/pdf", result.Item2);
-        }
-       
-
     }
 }

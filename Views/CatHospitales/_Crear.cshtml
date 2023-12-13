@@ -100,7 +100,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaHospitales").html(result);
+                $("#gridCatHospitales").data("kendoGrid").dataSource.data(result);
             }
         });
     }

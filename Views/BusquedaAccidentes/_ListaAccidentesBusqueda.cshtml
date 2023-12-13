@@ -4,6 +4,15 @@
 		@(
 			Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.BusquedaAccidentesModel>()
 			.Name("gridBusquedaAccidentes")
+			@*.ToolBar(tools => 
+			tools.Pdf())
+			.Pdf(pdf => pdf
+			.FileName("BusquedaGeneralAccidentes.pdf")
+			.AllPages()
+			.PaperSize("A4")
+			.Scale(0.75)
+			.TemplateId("page-template")
+			)*@
 			.Columns(columns =>
 			{
 				columns.Bound(c => c.IdAccidente).Title("Número").Width(60);
@@ -24,33 +33,91 @@
 				"<button onclick=\"consultarAccidente('#= IdAccidente #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Consultar</b></h6></button>"
 				).Title("Consultar").Sortable(false).Width(90);*/
 
-            }).HtmlAttributes(new { style = "height:550px" })
-            .Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }).Position(GridPagerPosition.Top))
-            .Sortable()
-            .Scrollable(scr => scr.Height(350))
-            .DataSource(dataSource => dataSource
-            .Ajax()
-            //.Read(read => read.Action("GetAllAccidentes", "BusquedaAccidentes"))
-            .ServerOperation(false)
-            )
-            .ToolBar(t => t.Search())
-            .Search(s =>
-            {
-                s.Field(c => c.numeroReporte);
-                s.Field(c => c.fecha);
-                s.Field(c => c.hora);
-                s.Field(c => c.municipio);
-                s.Field(c => c.carretera);
-                s.Field(c => c.tramo);
-                s.Field(c => c.estatusReporte);
-            })
-            )
+			}).HtmlAttributes(new { style = "height:550px" })
+			.Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }).Position(GridPagerPosition.Top))
+			.Sortable()
+			.Scrollable(scr => scr.Height(350))
+			.DataSource(dataSource => dataSource
+			.Ajax()
+			//.Read(read => read.Action("GetAllAccidentes", "BusquedaAccidentes"))
+			.ServerOperation(false)
+			)
+			.ToolBar(t => t.Search())
+			.Search(s =>
+			{
+				s.Field(c => c.numeroReporte);
+				s.Field(c => c.fecha);
+				s.Field(c => c.hora);
+				s.Field(c => c.municipio);
+				s.Field(c => c.carretera);
+				s.Field(c => c.tramo);
+				s.Field(c => c.estatusReporte);
+			})
+			)
 
 
-    </div>
+	</div>
 </div>
 
+
+<script type="text/x-kendo-template" id="page-template">
+	<div class="toolbar">
+	  <label class="category-label" for="category">Test input:</label>
+	  <input type="search" id="category" style="width: 150px"/>
+	  <a class="k-button k-button-icontext k-grid-pdf" href="\\#">Export to Pdf</a>
+	</div>
+</script>
+<script id="rowTemplate" type="text/x-kendo-tmpl">
+	<tr data-uid="#: uid #">
+	  <td class="photo">
+		<img src="../content/web/Employees/#: EmployeeID #.jpg" alt="#: EmployeeID #" />
+	  </td>
+	  <td class="details">
+		<span class="name">#: FirstName# #: LastName# </span>
+		<span class="title">Title: #: Title #</span>
+	  </td>
+	  <td class="country">
+		#: Country #
+	  </td>
+	  <td class="employeeID">
+		#: EmployeeID #
+	  </td>
+	</tr>
+</script>
+<script id="altRowTemplate" type="text/x-kendo-tmpl">
+	<tr class="k-alt" data-uid="#: uid #">
+	  <td class="photo">
+		<img src="../content/web/Employees/#: data.EmployeeID #.jpg" alt="#: EmployeeID #" />
+	  </td>
+	  <td class="details">
+		<span class="name">#: FirstName# #: LastName# </span>
+		<span class="title">Title: #: Title #</span>
+	  </td>
+	  <td class="country">
+		#: Country #
+	  </td>
+	  <td class="employeeID">
+		#: EmployeeID #
+	  </td>
+	</tr>
+</script>
+
+
+<script src="https://unpkg.com/pako/dist/pako_deflate.min.js"></script>
 <script>
+	const downloadFile = (blob, fileName) => {
+		const link = document.createElement('a');
+		// create a blobURI pointing to our Blob
+		link.href = URL.createObjectURL(blob);
+		link.download = fileName;
+		// some browser needs the anchor to be in the doc
+		document.body.append(link);
+		link.click();
+		link.remove();
+		// in case the Blob uses a lot of memory
+		setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+	};
+
 	function downLoadPdf(Id) {
 		var xhr = new XMLHttpRequest();
 		xhr.open('GET', '@Url.Action("AccidentesDetallado","PDFGenerator")' + "?idAccidente=" + Id, true);
@@ -58,8 +125,22 @@
 		xhr.onload = function (e) {
 			if (this.status == 200) {
 				var myBlob = this.response;
-				let fileURL = URL.createObjectURL(myBlob);
-				window.open(fileURL);
+				const downloadFile = (blob, fileName) => {
+					const link = document.createElement('a');
+					// create a blobURI pointing to our Blob
+					link.href = URL.createObjectURL(blob);
+					link.download = fileName;
+					// some browser needs the anchor to be in the doc
+					document.body.append(link);
+					link.click();
+					link.remove();
+					// in case the Blob uses a lot of memory
+					setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+				};
+				downloadFile(new Blob([myBlob]), "AccidentesDetalles.pdf");
+				//var myBlob = this.response;
+				//let fileURL = URL.createObjectURL(myBlob);
+				//window.open(fileURL);
 				// myBlob is now the blob that the object URL pointed to.
 			}
 		};
@@ -73,7 +154,7 @@
 			data: { idAccidente: idAccidente },
 			success: function (result) {
 
-				window.location.href = '/CapturaAccidentes/CapturaAaccidente/?showE=true'
+				window.location.href = '/CapturaAccidentes/CapturaAaccidente/?showE=false'
 
 			},
 

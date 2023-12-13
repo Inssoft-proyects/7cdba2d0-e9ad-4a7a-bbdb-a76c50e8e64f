@@ -90,7 +90,7 @@
             <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
                 <div class="row align-items-center justify-content-center justify-content-md-start">
                     <div class="col-auto">
-                        <i class="icon-edit-car h1 colorPrimary"></i>
+                        <i class="icon-deposito h1 colorPrimary"></i>
                     </div>
                     <div class="col-auto my-3">
                         <h2 class="m-0 h3"><b>Reporte de asignación de servicios</b></h2>
@@ -135,6 +135,7 @@
                 <div class="controlForm my-3">
                     <label>Inicio:</label>
                     @(Html.Kendo().DatePickerFor(t => t.FechaInicio)
+                        .Culture("es-ES")
                         .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "start" })
                         )
 
@@ -191,6 +192,7 @@
                 <div class="controlForm my-3">
                     <label>Fin:</label>
                     @(Html.Kendo().DatePickerFor(t => t.FechaFin)
+                        .Culture("es-ES")
                         .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "end" })
                         )
 
@@ -205,9 +207,9 @@
             </div>
 
             <div class="col-12 col-md-6 col-lg-2">
-                <div class="controlButton my-3">
+                <div class="btnOutline btnOutlinePrimary my-3">
 
-                    <button type="button" onclick="downLoadPdfFiltered()" class='btnPrimary'><h5 class="m-0"><i class='icon-data m-0'></i>&nbsp;&nbsp; <b>Reporte</b></h5></button>
+                    <button type="button" onclick="downLoadPdfFiltered()" class='btnPrimary w-100'><h5 class="m-0"><i class='icon-data m-0'></i>&nbsp;&nbsp; <b>Reporte</b></h5></button>
 
                 </div>
             </div>

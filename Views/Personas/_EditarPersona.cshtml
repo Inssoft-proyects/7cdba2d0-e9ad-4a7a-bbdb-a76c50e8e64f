@@ -1,5 +1,31 @@
 ﻿@model PersonaModel
+<script>
+    function onDatePickerChange(e) {
+        var datePicker = e.sender;
+        var selectedDate = datePicker.value();
 
+        // Verificar si la fecha seleccionada es la fecha predeterminada
+        if (selectedDate && selectedDate.getFullYear() == 1 && selectedDate.getMonth() == 0 && selectedDate.getDate() == 1) {
+            datePicker.value(null); // Si es la fecha predeterminada, establecer el valor del DatePicker como nulo
+        }
+    }
+    function EntidadDropDownChange() {
+        var entidadDDlValue = $("#idEntidadED").data("kendoDropDownList").value();
+
+
+        $.ajax({
+            url: "/Personas/Municipios_Drop",
+            type: "POST",
+            data: { entidadDDlValue: entidadDDlValue },
+            success: function (data) {
+                var MunicipiosDropDown = $("#idMunicipioED").data("kendoDropDownList");
+                MunicipiosDropDown.dataSource.data(data);
+            },
+            error: function (xhr, status, error) {
+            }
+        });
+    }
+</script>
 <form id="frmEditarPersona" class="row px-4 mb-4 align-items-end justify-content-center">
     @Html.HiddenFor(m=> m.idPersona)
     @Html.HiddenFor(m=> m.PersonaDireccion.idPersona)
@@ -36,7 +62,9 @@
             <div class="controlForm">
                 <label>Fecha de nacimiento:</label>
                 @(Html.Kendo().DatePickerFor(t => t.fechaNacimiento)
+                    .Culture("es-ES")
                     .HtmlAttributes(new { style = "width: 100%;", required = "required" })
+                
                     )
             </div>
         </div>
@@ -99,7 +127,12 @@
             <div class="controlForm">
                 <label>Vigencia licencia:</label>
                 @(Html.Kendo().DatePickerFor(t => t.vigenciaLicencia)
+                    .Culture("es-ES")
                     .HtmlAttributes(new { style = "width: 100%;" })
+                    .Value(Model.vigenciaLicencia != DateTime.MinValue ? Model.vigenciaLicencia : (DateTime?)null)
+                    .Events(e => e
+                    .Change("onDatePickerChange")
+                    )
                     )
             </div>
         </div>
@@ -109,18 +142,36 @@
             <div class="controlForm">
                 <label>Entidad:</label>
                 @(Html.Kendo().DropDownListFor(m => m.PersonaDireccion.idEntidad).Filter(FilterType.Contains)
-                    .BindTo((SelectList)ViewBag.CatEntidades)
-                    .OptionLabel("-- Seleccione --")
-                    .HtmlAttributes(new { style = "width:100%;", required = "required" }))
+                    .DataTextField("Text")
+                    .DataValueField("Value")
+                    .OptionLabel("Selecciona una opción")
+                    .Events(e => e.Change("EntidadDropDownChange"))
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("Entidades_Drop", "Personas");
+                        });
+                    })
+                    .HtmlAttributes(new { style = "width:100%;", required = "required", id = "idEntidadED" })
+                    )
             </div>
         </div>
         <div class="col-md-4">
             <div class="controlForm">
                 <label>Municipio:</label>
                 @(Html.Kendo().DropDownListFor(m => m.PersonaDireccion.idMunicipio).Filter(FilterType.Contains)
-                    .BindTo((SelectList)ViewBag.CatMunicipios)
-                    .OptionLabel("-- Seleccione --")
-                    .HtmlAttributes(new { style = "width:100%;", id = "ddlConcepto", required = "required" }))
+                    .DataTextField("Text")
+                    .DataValueField("Value")
+                    .OptionLabel("Selecciona un Municipio")
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("Municipios_Drop", "Personas");
+                        });
+                    })
+                    .HtmlAttributes(new { style = "width:100%;", required = "required", id = "idMunicipioED" }))
             </div>
         </div>
         <div class="col-md-4">
@@ -208,7 +259,7 @@
                 data: formData,
                 success: function (result) {
                     $("#listadoPersonas").html(result);
-                    $('#modalEditarPersona').modal('hide');
+                    $('#modalCrearPersona').modal('hide');
                     sitteg_success('Elemento guardado correctamente')
                 },
                 error: function (xhr, status) {
@@ -223,4 +274,6 @@
             return;
         }
     }
+
+   
 </script>

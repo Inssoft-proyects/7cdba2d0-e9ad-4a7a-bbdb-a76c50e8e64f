@@ -43,7 +43,8 @@
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="controlForm my-3">
                     <label>Inicio:</label>
-                    @(Html.Kendo().DatePickerFor(t => t.FechaInicio)
+                    @(Html.Kendo().DatePickerFor(t => t.FechaInicio).Format("dd/MM/yyyy HH:mm")
+                        .Culture("es-ES")
                         .HtmlAttributes(new { style = "width: 100%", title = "startDate" })
                         )
                 </div>
@@ -51,7 +52,8 @@
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="controlForm my-3">
                     <label>Fin:</label>
-                    @(Html.Kendo().DatePickerFor(t => t.FechaFin)
+                    @(Html.Kendo().DatePickerFor(t => t.FechaFin).Format("dd/MM/yyyy HH:mm")
+                        .Culture("es-ES")
                         .HtmlAttributes(new { style = "width: 100%", title = "endDate" })
                         )
                 </div>
@@ -235,7 +237,24 @@
             </div>
 
         </form>
-
+        <div class="row justify-content-between align-items-end mb-1">
+            <div class="col-12 col-md-auto mt-4 mb-2">
+                <h5 class="px-4"><b>Listado de infracción</b></h5>
+                <h6 class="px-4 text-muted">Edita los datos de infracción.</h6>
+            </div>
+            <div class="col-12 me-md-4 col-md-6 col-lg-7 col-xl-auto">
+                <div class="row">
+                    <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                        @* <button>
+                        <h6 class="m-0 d-flex align-items-center"><i class="icon-pdf h5 mb-0 me-2"></i><b>PDF de reporte de infracción</b></h6>
+                        </button>*@
+                        <button type="button" onclick="downLoadPdfFiltered()">
+                            <h6 class="m-0 d-flex align-items-center"><i class="icon-pdf h5 mb-0 me-2"></i><b>PDF de reporte de infracción</b></h6>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="listadoInfracciones">
             <partial name="_ListadoInfracciones" model="Model.ListInfracciones" />
         </div>
@@ -254,6 +273,36 @@
             data: Mydata,
             success: function (result) {
                 $("#listadoInfracciones").html(result);
+            }
+        });
+    }
+
+
+    function downLoadPdfFiltered() {
+        var Mydata = $("#frmSearch").serialize();
+        var fileName = "ReporteGeneralInfracciones.pdf";
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("InfraccionesGeneral","PDFGenerator")',
+            data: Mydata,
+            //contentType: "application/json; charset=utf-8",
+            //dataType: "text",
+            success: function (r) {
+                var bytes = Base64ToBytes(r);
+                var blob = new Blob([bytes], { type: "application/octetstream" });
+                var isIE = false || !!document.documentMode;
+                if (isIE) {
+                    window.navigator.msSaveBlob(blob, fileName);
+                } else {
+                    var url = window.URL || window.webkitURL;
+                    link = url.createObjectURL(blob);
+                    var a = $("<a />");
+                    a.attr("download", fileName);
+                    a.attr("href", link);
+                    $("body").append(a);
+                    a[0].click();
+                    $("body").remove(a);
+                }
             }
         });
     }

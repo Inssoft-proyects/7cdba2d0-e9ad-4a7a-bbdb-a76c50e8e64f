@@ -85,7 +85,7 @@
 
         var Mydata = $("#editarEntidadForm").serialize();
         console.log(Mydata);
-        $('#editarEntidad').modal('hide');
+        $('#agregarEntidad').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
         $.ajax({
@@ -93,7 +93,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaEntidades").html(result);
+                $("#gridCatEntidades").data("kendoGrid").dataSource.data(result);
                 sitteg_info('Se ha actualizado la información');
 
             },

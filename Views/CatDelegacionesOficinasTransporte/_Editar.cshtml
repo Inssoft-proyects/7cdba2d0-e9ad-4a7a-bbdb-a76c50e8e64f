@@ -116,7 +116,7 @@
 
         var Mydata = $("#editarDelOficinaForm").serialize();
         console.log(Mydata);
-        $('#editarDelegacionOficina').modal('hide');
+        $('#agregarDelegacionOficina').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
         $.ajax({
@@ -124,7 +124,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaDelegacionesOficinas").html(result);
+                $("#gridCatOficinasTransporte").data("kendoGrid").dataSource.data(result);
                 sitteg_info('Se ha actualizado la información');
 
             },

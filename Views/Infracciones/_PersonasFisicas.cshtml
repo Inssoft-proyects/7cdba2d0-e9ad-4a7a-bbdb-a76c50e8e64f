@@ -39,6 +39,14 @@
             .PageSize(5)
             )
             .ToolBar(t => t.Custom().Text("Buscar...").Name("search"))
+            .Search(s =>
+            {
+                s.Field(c => c.nombreCompleto);
+                s.Field(c => c.CURP);
+                s.Field(c => c.RFC);
+                s.Field(c => c.numeroLicencia);
+
+            })
             )
     </div>
 
@@ -78,7 +86,7 @@
                 setTimeout(function (e) {
                     var grid = $("#gridPersonasFisicasInf").data("kendoGrid");
                     grid.clearSelection();
-                    var gridMoral = $("#gridPersonasMoralesAc").data("kendoGrid");
+                    var gridMoral = $("#gridPersonasMorales").data("kendoGrid");
                     gridMoral.clearSelection();
                 })
             } else {

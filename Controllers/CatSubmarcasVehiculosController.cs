@@ -109,7 +109,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 _catSubmarcasVehiculosService.GuardarSubmarca(model);
                 var ListSubmarcasModel = _catSubmarcasVehiculosService.ObtenerSubarcas();
-                return PartialView("_ListaSubmarcas", ListSubmarcasModel);
+                return Json(ListSubmarcasModel);
             }
             Marcas_Drop();
             //return View("Create");
@@ -129,7 +129,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 _catSubmarcasVehiculosService.UpdateSubmarca(model);
                 var ListSubmarcasModel = _catSubmarcasVehiculosService.ObtenerSubarcas();
-                return PartialView("_ListaSubmarcas", ListSubmarcasModel);
+                return Json(ListSubmarcasModel);
             }
             Marcas_Drop();
             //return View("Create");

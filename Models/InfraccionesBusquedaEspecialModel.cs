@@ -11,7 +11,9 @@
         public string FechaInicio { get; set; }
         public string FechaFin { get; set; }
         public string noLicencia { get; set; }
-        
+        public string noEconomico { get; set; }
+
+
 
 
     }

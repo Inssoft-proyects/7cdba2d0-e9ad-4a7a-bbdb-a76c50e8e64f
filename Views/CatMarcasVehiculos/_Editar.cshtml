@@ -83,7 +83,7 @@
 
         var Mydata = $("#EditarMarcaForm").serialize();
         console.log(Mydata);
-        $('#editarMarca').modal('hide');
+        $('#addMarca').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
         $.ajax({
@@ -91,7 +91,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaMarcas").html(result);
+                $("#gridCatMarcas").data("kendoGrid").dataSource.data(result);
             }
         });
     }

@@ -1,4 +1,8 @@
-﻿<div class="row">
+﻿@{
+    bool esSoloLectura = ViewBag.EsSoloLectura ?? false;
+    string claseColor = esSoloLectura ? "colorDisabled" : "colorDanger";
+}
+<div class="row">
 <div class="col-12 mb-4 px-4 rounded gridCustom">
     @(
         Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel>()
@@ -11,9 +15,12 @@
             columns.Bound(c => c.ConductorInvolucrado).Title("Conductor").Width(130);
             columns.Bound(p => p.fullDetalles).Title("Detalles").Width(190);
             columns.Template("<button onclick='mostrarDetalle()' class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-research me-2'></i><b>Detalle</b></h6></button>").Width(110);
-            columns.Template("<button onclick='eliminarRegistro()' class='w-100 btn'><h6 class='m-0 colorDanger'><i class='h5 icon-delete me-2'></i><b>Eliminar</b></h6></button>").Width(110);
-
-
+                columns.Template(
+                "<button class='w-100 btn " + claseColor + "'>" +
+                "<h6 class='m-0' onclick='eliminarRegistro()'" +
+                "<i class='h5 icon-delete me-2'></i><b>Eliminar</b>" +
+                "</h6></button>"
+                ).Width(110);
         })
         .HtmlAttributes(new { style = "height:400px" })
         .Sortable()
@@ -79,6 +86,9 @@
         }
 
     function eliminarRegistro(){
+        if ('@ViewBag.EsSoloLectura' === 'True') {
+            return;
+        }
         var grid = $("#gridVehiculosInvolucrados").data("kendoGrid");
         var row = $(event.target).closest("tr");
         var dataItem = grid.dataItem(row);

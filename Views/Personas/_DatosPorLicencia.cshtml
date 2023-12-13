@@ -34,6 +34,7 @@
             <div class="controlForm">
                 <label>Fecha de nacimiento:</label>
                 @(Html.Kendo().DatePickerFor(t => t.fechaNacimiento)
+                    .Culture("es-ES")
                     .HtmlAttributes(new { style = "width: 100%;", required = "required" })
                     )
             </div>
@@ -79,7 +80,7 @@
         <div class="col-md-4">
             <div class="controlForm">
                 @(Html.Kendo().TextBoxFor(t => t.numeroLicencia)
-                    .Label(l => l.Content("Número licencia: <b>(obligatorio)</b>:"))
+                    .Label(l => l.Content("Número licencia:"))
                     .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
                     )
             </div>
@@ -90,14 +91,15 @@
                 @(Html.Kendo().DropDownListFor(m => m.idTipoLicencia).Filter(FilterType.Contains)
                     .BindTo((SelectList)ViewBag.CatTipoLicencia)
                     .OptionLabel("-- Seleccione --")
-                    .HtmlAttributes(new { style = "width:100%;", required = "required" }))
+                    .HtmlAttributes(new { style = "width:100%;" }))
             </div>
         </div>
         <div class="col-md-4">
             <div class="controlForm">
                 <label>Vigencia licencia:</label>
                 @(Html.Kendo().DatePickerFor(t => t.vigenciaLicencia)
-                    .HtmlAttributes(new { style = "width: 100%;", required = "required" })
+                    .Culture("es-ES")
+                    .HtmlAttributes(new { style = "width: 100%;" })
                     )
             </div>
         </div>
@@ -196,6 +198,11 @@
 </div>
 
 <script>
+
+    $(document).ready(function () {
+        $('#vigenciaLicencia').removeAttr("required");
+    });
+
     function btnCrearPersona() {
         var validator = $("#frmCrearPersona").kendoValidator().data('kendoValidator');
         validator.validate();

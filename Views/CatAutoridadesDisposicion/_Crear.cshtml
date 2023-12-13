@@ -74,14 +74,15 @@
 
         var Mydata = $("#AgregarAutoDispForm").serialize();
         $('#agregarAutoridadDisp').modal('hide');
-        $('body').removeClass('model-open');
-        $('.modal-backdrop').remove();
+       
         $.ajax({
             url: '@Url.Action("CrearAutoridadDisposicionParcialModal")',
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaAutoridadesDisposicion").html(result);
+                $("#gridAutoridadesDisp").data("kendoGrid").dataSource.data(result);
+
+               // $("#tablaAutoridadesDisposicion").html(result);
             }
         });
     }

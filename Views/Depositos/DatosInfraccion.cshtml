@@ -77,13 +77,14 @@
     </div>
     <div class="row px-4 mb-4 align-items-center justify-content-around">
         <div class="col-12">
-            <div class="controlForm">
+            <div class="controlForm my-3">
                 <label>Descripción del evento <b>(obligatorio)</b></label>
             </div>
         </div>
         <div class="radioCustomTelerik">
             @(Html.Kendo().RadioGroup()
                 .Name("radiogroup")
+                .HtmlAttributes(new { style = "width: 100%" })
                 .Items(i =>
                 {
                     i.Add().Label("Accidente").Value("1");
@@ -113,6 +114,7 @@
         <div class="radioCustomTelerik">
             @(Html.Kendo().RadioGroup()
                 .Name("tipoUsuario")
+                .HtmlAttributes(new { style = "width: 100%" })
                 .Items(i =>
                 {
                     i.Add().Label("Ajustador").Value("1");

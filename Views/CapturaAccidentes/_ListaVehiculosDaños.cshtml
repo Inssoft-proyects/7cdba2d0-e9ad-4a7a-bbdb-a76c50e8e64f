@@ -1,7 +1,17 @@
-﻿<script>
-    function modalAgregarmonto(e) {
+﻿@{
+    bool esSoloLectura = ViewBag.EsSoloLectura ?? false;
+    string claseColorEliminar = esSoloLectura ? "colorDisabled" : "colorDanger";
+    string claseColorOtroBoton = esSoloLectura ? "colorDisabled" : "colorPrimary";
+}
+<script>
+    function modalAgregarmonto(event) {
                 event.preventDefault();
-        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                 if ('@ViewBag.EsSoloLectura' === 'True') {
+            return;
+        }
+        var grid = $("#gridVehiculosDanos").data("kendoGrid");
+        var row = $(event.target).closest("tr");
+        var dataItem = grid.dataItem(row);
         var IdAccidente = dataItem.IdAccidente;
         var IdVehiculoInvolucrado = dataItem.IdVehiculoInvolucrado;
         var IdPropietarioInvolucrado = dataItem.IdPropietarioInvolucrado;
@@ -38,8 +48,13 @@
             columns.Bound(c => c.Color).Width(90);
             columns.Bound(c => c.Marca).Width(90);
             columns.Bound(c => c.montoVehiculo).Format("{0:C}").Title("Monto").Width(90);
-            columns.Command(c => c.Custom("Agregar monto").Click("modalAgregarmonto")).Width(100);
-
+            //columns.Command(c => c.Custom("Agregar monto").Click("modalAgregarmonto")).Width(100);
+           columns.Template(
+                "<button class='w-100 btn " + claseColorOtroBoton + "'>" +
+                "<h6 class='m-0' onclick='modalAgregarmonto(event)'>" +
+                "<i class='h5'></i><b>Agregar monto</b>" +
+                "</h6></button>"
+                ).Width(100);
 
         }).HtmlAttributes(new { style = "height:400px" })
         .Sortable()

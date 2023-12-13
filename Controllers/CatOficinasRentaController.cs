@@ -75,7 +75,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
 
 
-        public ActionResult EditarOficinaRentaModal(int IdOficinaRenta)
+        public ActionResult EditarOficinaRentaModal(int IdOficinaRenta, int IdDelegacion)
         {
             int IdModulo = 954;
             string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
@@ -113,7 +113,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 CrearOficinaRenta(model);
                 var ListOficinasRentaModel = GetOficinas();
-                return PartialView("_ListaOficinasRenta", ListOficinasRentaModel);
+                return Json(ListOficinasRentaModel);
             }
             Delegaciones_Drop();
             return PartialView("_Crear");
@@ -131,7 +131,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 EditarOficinaRenta(model);
                 var ListOficinasRentaModel = GetOficinas();
-                return PartialView("_ListaOficinasRenta", ListOficinasRentaModel);
+                return Json(ListOficinasRentaModel);
             }
             Delegaciones_Drop();
             return PartialView("_Editar");
@@ -147,7 +147,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 EliminarOficinaRenta(model);
                 var ListOficinasRentaModel = GetOficinas();
-                return PartialView("_ListaOficinasRenta", ListOficinasRentaModel);
+                return Json(ListOficinasRentaModel);
             }
             Delegaciones_Drop();
             return PartialView("_Eliminar");
@@ -233,6 +233,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                                       {
                                           IdOficinaRenta = catOficinasRenta.IdOficinaRenta,
                                           NombreOficina = catOficinasRenta.NombreOficina,
+                                          IdDelegacion = catOficinasRenta.IdDelegacion,
 
 
                                       }).Where(w => w.IdOficinaRenta == IdOficinaRenta).FirstOrDefault();

@@ -347,6 +347,21 @@ namespace GuanajuatoAdminUsuarios.Framework
                       .ToList();
 
                     break;
+                case "CatMunicipiosByEntidad":
+                    if (int.TryParse(parameter, out intId))
+                    {
+                        catalogModel.CatalogName = catalog;
+                        campos = new string[] { "idMunicipio", "municipio" };
+                        catalogModel.CatalogList = _catalogosService.GetGenericCatalogosByFilter("catMunicipios", campos, "idEntidad", intId)
+                                .Select(s => new SystemCatalogListModel()
+                                {
+                                    Id = Convert.ToInt32(s["idMunicipio"]),
+                                    Text = Convert.ToString(s["municipio"])
+                                })
+                                .OrderBy(s => s.Text)
+                                .ToList();
+                    }
+                    break;
                 case "CatDelegaciones":
                     catalogModel.CatalogName = catalog;
                     campos = new string[] { "idDelegacion", "delegacion" };

@@ -19,7 +19,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         private readonly IDelegacionesService _delegacionesService;
         private readonly IGarantiasService _garantiasService;
         private readonly IInfraccionesService _infraccionesService;
-        private readonly IPdfGenerator<InfraccionesModel> _pdfService;
+        private readonly IPdfGenerator _pdfService;
         private readonly ICatDictionary _catDictionary;
         private readonly IVehiculosService _vehiculosService;
         private readonly IPersonasService _personasService;
@@ -28,7 +28,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public EstadisticasAccidentesController(
             IEstatusInfraccionService estatusInfraccionService, IDelegacionesService delegacionesService,
             ITipoCortesiaService tipoCortesiaService, IDependencias dependeciaService, IGarantiasService garantiasService,
-            IInfraccionesService infraccionesService, IPdfGenerator<InfraccionesModel> pdfService,
+            IInfraccionesService infraccionesService, IPdfGenerator pdfService,
             ICatDictionary catDictionary,
             IVehiculosService vehiculosService,
             IPersonasService personasService,

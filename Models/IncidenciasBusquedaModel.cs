@@ -12,6 +12,7 @@ namespace GuanajuatoAdminUsuarios.Models
         public int IdTipoCortesia { get; set; }
         
         public int idTipoVehiculo { get; set; }
+        public int idSubtipoVehiculo { get; set; }       
         public int idTipoServicio { get; set; }
         public int idSubTipoServicio { get; set; }
         public int idTipoLicencia { get; set; }

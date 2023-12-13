@@ -46,7 +46,7 @@
                columns.Bound(p => p.idAsignacion).ClientTemplate(
             "<button onclick=\"editarGrua('#= idAsignacion #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>"
             ).Title("Editar").Sortable(false).Width(90);
-                columns.Template("<button data-bs-toggle='modal' class='w-100 btn'><h6 class='m-0 colorDanger' onclick='eliminarGruaModal(event)'>Eliminar<i class='h5 icon-delete me-2'></i><b>Eliminar</b></h6></button>").Width(50);
+                columns.Template("<button data-bs-toggle='modal' class='w-100 btn'><h6 class='m-0 colorDanger' onclick='eliminarGruaModal(event)'><i class='h5 icon-delete me-2'></i><b>Eliminar</b></h6></button>").Width(50);
 
             
             })

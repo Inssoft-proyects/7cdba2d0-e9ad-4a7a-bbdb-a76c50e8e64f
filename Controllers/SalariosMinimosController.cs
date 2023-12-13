@@ -108,7 +108,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 CreateSalario(model);
                 var ListSalariosModel = GetSalarios();
-                return PartialView("_ListaSalariosMinimos", ListSalariosModel);
+                return Json(ListSalariosModel);
             }
             //SetDDLCategories();
             //return View("Create");
@@ -127,7 +127,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                
                 UpdateSalario(model);
                 var ListSalariosModel = GetSalarios();
-                return PartialView("_ListaSalariosMinimos", ListSalariosModel);
+                return Json(ListSalariosModel);
             }
             //SetDDLCategories();
             //return View("Create");
@@ -145,7 +145,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 DeleteSalario(model);
                 var ListSalariosModel = GetSalarios();
-                return PartialView("_ListaSalariosMinimos", ListSalariosModel);
+                return Json(ListSalariosModel);
             }
             //SetDDLCategories();
             //return View("Create");

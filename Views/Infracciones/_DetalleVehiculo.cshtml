@@ -19,7 +19,7 @@
     </div>
     <div class="form-group col-md-3">
         <div class="controlForm">
-            <label>Vigencia tarjeta:</label>&nbsp;@(Model.vigenciaTarjeta.HasValue?Model.vigenciaTarjeta.Value.ToShortDateString():"-")
+            <label>Vigencia tarjeta:</label>&nbsp;@(Model.vigenciaTarjeta.HasValue?Model.vigenciaTarjeta.Value.ToString("dd/MM/yyyy"):"-")
         </div>
     </div>
 </div>

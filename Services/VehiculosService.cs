@@ -266,7 +266,11 @@ namespace GuanajuatoAdminUsuarios.Services
                     connection.Close();
                 }
             }
-            return modelList.FirstOrDefault();
+
+            VehiculoModel model22 = new VehiculoModel();
+            model22.Persona = new PersonaModel();
+
+            return modelList.FirstOrDefault()??model22;
         }
 
         public VehiculoModel GetVehiculoToAnexo(VehiculoBusquedaModel modelSearch)
@@ -287,9 +291,9 @@ namespace GuanajuatoAdminUsuarios.Services
                                 INNER JOIN catMarcasVehiculos catMV on v.idMarcaVehiculo = catMV.idMarcaVehiculo 
                                 left JOIN catTiposVehiculo catTV on v.idTipoVehiculo = catTV.idTipoVehiculo 
                                 left JOIN catSubmarcasVehiculos catSV on v.idSubmarca = catSV.idSubmarca 
-                                INNER JOIN catTipoServicio catTS on v.idCatTipoServicio = catTS.idCatTipoServicio 
-                                INNER JOIN catEntidades catE on v.idEntidad = catE.idEntidad  
-                                INNER JOIN catColores catC on v.idColor = catC.idColor  
+                                left JOIN catTipoServicio catTS on v.idCatTipoServicio = catTS.idCatTipoServicio 
+                                left JOIN catEntidades catE on v.idEntidad = catE.idEntidad  
+                                left JOIN catColores catC on v.idColor = catC.idColor  
                                 WHERE v.estatus = 1
                                 AND 
                                 (

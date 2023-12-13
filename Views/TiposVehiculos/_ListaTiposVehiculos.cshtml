@@ -2,7 +2,7 @@
     <div class="col-12 mb-4 px-4 rounded gridCustom">
         @(
             Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.TiposVehiculosModel>()
-            .Name("grid")
+            .Name("gridCatTipoVehiculo")
             .Columns(columns =>
             {
                 columns.Bound(c => c.IdTipoVehiculo).Title("Id").Width(20);
@@ -56,8 +56,8 @@
             type: 'POST', // Tipo de solicitud HTTP (POST o GET)
             data: { IdTipoVehiculo: IdTipoVehiculo }, // Datos que se enviarán al controlador
             success: function (result) {
-                $('#ModalBodyUpdateTipo').html(result);
-                $('#editTipoVehiculo').modal('show');
+                $('#ModalBodyCreateTipo').html(result);
+                $('#addTipo').modal('show');
 
             },
         })
@@ -73,8 +73,8 @@
             type: 'POST', // Tipo de solicitud HTTP (POST o GET)
             data: { IdTipoVehiculo: IdTipoVehiculo }, // Datos que se enviarán al controlador
             success: function (result) {
-                $('#ModalBodyEliminarTipoVehiculo').html(result);
-                $('#eliminarTipoVehiculo').modal('show');
+                $('#ModalBodyCreateTipo').html(result);
+                $('#addTipo').modal('show');
 
             },
         })

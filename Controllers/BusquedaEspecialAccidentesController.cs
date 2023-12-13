@@ -28,13 +28,13 @@ namespace GuanajuatoAdminUsuarios.Controllers
         private readonly ICatDelegacionesOficinasTransporteService _catDelegacionesOficinasTransporteService;
         private readonly IOficiales _oficialesService;
         private readonly ICapturaAccidentesService _capturaAccidentesService;
-        private readonly IPdfGenerator<BusquedaAccidentesPDFModel> _pdfService;
+        private readonly IPdfGenerator _pdfService;
         private readonly ICatDictionary _catDictionary;
 
         private int idOficina = 0;
 
         public BusquedaEspecialAccidentesController(IBusquedaEspecialAccidentesService busquedaEspecialAccidentesService, ICatCarreterasService catCarreterasService, ICatTramosService catTramosService,
-            ICatDelegacionesOficinasTransporteService catDelegacionesOficinasTransporteService, IOficiales oficialesService, IPdfGenerator<BusquedaAccidentesPDFModel> pdfService,
+            ICatDelegacionesOficinasTransporteService catDelegacionesOficinasTransporteService, IOficiales oficialesService, IPdfGenerator pdfService,
             ICapturaAccidentesService capturaAccidentesService, ICatDictionary catDictionary)
         {
             _busquedaEspecialAccidentesService = busquedaEspecialAccidentesService;

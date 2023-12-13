@@ -40,6 +40,7 @@
                             <span>
                                 @(Html.Kendo().DatePickerFor(t => t.FechaIngreso)
                                     .Label(l => l.Content("Fecha <b>(obligatorio)</b>:"))
+                                    .Culture("es-ES")
                                     .HtmlAttributes(new { style = "width: 100%", title = "please enter date" })
                                     )
                             </span>

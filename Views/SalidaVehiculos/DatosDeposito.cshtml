@@ -38,6 +38,7 @@
                             @(Html.Kendo().DatePickerFor(t => t.fechaIngreso)
                                 .Label(l => l.Content("Fecha Ingreso:"))
                                 .Value(Model.fechaIngreso)
+                                .Culture("es-ES")
                                 .HtmlAttributes(new { style = "width: 80%", id = "fechaIngreso", @readonly = "readonly" })
                                 )
                         </div>
@@ -47,6 +48,7 @@
                         <label>Fecha Salida <b>(obligatorio):</b></label>
                             @(Html.Kendo().DatePickerFor(t => t.fechaSalida)
                                 .Label(l => l.Content("Fecha salida:"))
+                                .Culture("es-ES")
                                 .HtmlAttributes(new { style = "width: 80%", id = "fechaSalida" })
                                 .Events(e => e.Change("calcularDiferenciaDias"))
                                 )

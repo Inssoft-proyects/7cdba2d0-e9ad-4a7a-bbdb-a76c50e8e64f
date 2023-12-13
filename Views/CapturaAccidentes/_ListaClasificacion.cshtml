@@ -1,4 +1,8 @@
-﻿<div class="row">
+﻿@{
+    bool esSoloLectura = ViewBag.EsSoloLectura ?? false;
+    string claseColor = esSoloLectura ? "colorDisabled" : "colorDanger";
+}
+<div class="row">
 <div class="col-12 mb-4 px-4 rounded gridCustom">
 
     @(
@@ -9,7 +13,12 @@
             columns.Bound(c => c.IdAccidente).Hidden();
             //columns.Command(c => c.Custom("Eliminar").Click("eliminarClasificacion")).Width(80);
             columns.Bound(c => c.NombreClasificacion).Width(90);
-            columns.Template("<button data-bs-toggle='modal' class='w-100 btn'><h6 class='m-0 colorDanger' onclick='eliminarClasificacion(event)'><i class='h5 icon-delete me-2'></i><b>Eliminar</b></h6></button>").Width(150);
+                columns.Template(
+                "<button class='w-100 btn " + claseColor + "'>" +
+                "<h6 class='m-0' onclick='eliminarClasificacion(event)'>" +
+                "<i class='h5 icon-delete me-2'></i><b>Eliminar</b>" +
+                "</h6></button>"
+                ).Width(150);
 
         }).HtmlAttributes(new { style = "height:300px" })
         .Sortable()
@@ -45,6 +54,9 @@
 </div>
 <script>
     function eliminarClasificacion(event) {
+          if ('@ViewBag.EsSoloLectura' === 'True') {
+            return;
+        }
         var grid = $("#gridClasificacion").data("kendoGrid");
         var row = $(event.target).closest("tr");
         var dataItem = grid.dataItem(row);

@@ -103,7 +103,7 @@
 
         var Mydata = $("#editarCarreteraForm").serialize();
         console.log(Mydata);
-        $('#editarCarretera').modal('hide');
+        $('#agregarCarretera').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
         $.ajax({
@@ -111,7 +111,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaCarreteras").html(result);
+                $("#gridCatCarreteras").data("kendoGrid").dataSource.data(result);
                 sitteg_info('Se ha actualizado la información');
 
             },

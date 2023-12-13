@@ -406,8 +406,8 @@ namespace GuanajuatoAdminUsuarios.Services
                                                         "SELECT cva.*, COALESCE(cva.idPersona, pcv.idPersona) AS idConductor,cva.idTipoCarga,cva.poliza,ctc.tipoCarga,v.placas, v.tarjeta, v.serie, v.idMarcaVehiculo, " +
                         "v.idSubmarca,v.idEntidad, v.idTipoVehiculo,acc.numeroReporte,v.idPersona AS idPropietario, v.modelo, v.idColor, v.idCatTipoServicio, v.motor, v.capacidad, " +
                         "cm.marcaVehiculo, csv.nombreSubmarca, tv.tipoVehiculo, COALESCE(p.nombre, pcv.nombre) AS nombre, COALESCE(p.apellidoPaterno, pcv.apellidoPaterno) AS apellidoPaterno, " +
-                        "p.apellidoMaterno,p.RFC,p.CURP,CONVERT(varchar, p.fechaNacimiento, 103) AS fechaNacimiento, c.color, ts.tipoServicio, pcv.nombre AS nombreConductor, pcv.apellidoPaterno AS apellidoPConductor, pcv.apellidoMaterno AS apellidoMConductor, " +
-                        "tc.tipoCarga, pen.pension, ft.formaTraslado, cent.nombreEntidad,va.montoVehiculo " +
+                        "p.apellidoMaterno,pcv.RFC,pcv.CURP,CONVERT(varchar, p.fechaNacimiento, 103) AS fechaNacimiento, c.color, ts.tipoServicio, pcv.nombre AS nombreConductor, pcv.apellidoPaterno AS apellidoPConductor, pcv.apellidoMaterno AS apellidoMConductor, " +
+                        "tc.tipoCarga,v.vigenciaTarjeta,tp.tipoPersona, pen.pension, ft.formaTraslado, cent.nombreEntidad,va.montoVehiculo " +
                         "FROM conductoresVehiculosAccidente AS cva INNER JOIN vehiculos AS v ON cva.idVehiculo = v.idVehiculo " +
                         "LEFT JOIN catMarcasVehiculos AS cm ON v.idMarcaVehiculo = cm.idMarcaVehiculo " +
                         "LEFT JOIN catTiposcarga AS ctc ON cva.idTipoCarga = ctc.idTipoCarga " +
@@ -423,7 +423,8 @@ namespace GuanajuatoAdminUsuarios.Services
                         "LEFT JOIN accidentes AS acc ON cva.idAccidente = acc.idAccidente " +
                         "LEFT JOIN catEntidades AS cent ON v.idEntidad = cent.idEntidad " +
                         "LEFT JOIN personas AS pcv ON cva.idPersona = pcv.idPersona " +
-                        "WHERE cva.idAccidente = @idAccidente AND cva.idPersona = @idPersona AND cva.idVehiculo = @IdVehiculoInvolucrado AND cva.idAccidente > 0;",connection);
+                        "LEFT JOIN catTipoPersona AS tp ON p.idCatTipoPersona = tp.idCatTipoPersona " +
+                        "WHERE cva.idAccidente = @idAccidente AND cva.idPersona = @idPersona AND cva.idVehiculo = @IdVehiculoInvolucrado AND cva.idAccidente > 0;", connection);
 
                     command.CommandType = CommandType.Text;
                     command.Parameters.AddWithValue("@idAccidente", idAccidente);
@@ -461,8 +462,9 @@ namespace GuanajuatoAdminUsuarios.Services
                             involucrado.Color = reader["color"] != DBNull.Value ? reader["color"].ToString() : string.Empty;
                             involucrado.RFC = reader["RFC"] != DBNull.Value ? reader["RFC"].ToString() : string.Empty;
                             involucrado.CURP = reader["CURP"] != DBNull.Value ? reader["CURP"].ToString() : string.Empty;
+                            involucrado.TipoPersona = reader["tipoPersona"] != DBNull.Value ? reader["tipoPersona"].ToString() : string.Empty;
                             involucrado.TipoServicio = reader["tipoServicio"] != DBNull.Value ? reader["tipoServicio"].ToString() : string.Empty;
-
+                            involucrado.VigenciaTarjeta = reader["vigenciaTarjeta"] != DBNull.Value ? (DateTime)reader["vigenciaTarjeta"] : DateTime.MinValue;
 
 
                         }
@@ -494,7 +496,8 @@ namespace GuanajuatoAdminUsuarios.Services
                                             ,pd.telefono
                                             ,pd.correo,pd.idEntidad,pd.idMunicipio,pd.colonia,pd.calle,pd.numero
 							                ,tl.tipoLicencia,tv.tipoVehiculo
-                                            ,mun.Municipio,cent.nombreEntidad
+                                            ,mun.Municipio,cent.nombreEntidad,cg.genero
+                                            ,v.vigenciaTarjeta
 
 
                                             FROM personas AS p                                           
@@ -524,8 +527,9 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.RFC = reader["rfc"].ToString();
                             model.CURP = reader["curp"].ToString();
                             model.numeroLicencia = reader["numeroLicencia"].ToString();
+                            model.Genero = reader["genero"].ToString();
                             model.TipoPersona = reader["tipoPersona"].ToString();
-                            model.fechaNacimiento = reader["fechaNacimiento"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["fechaNacimiento"].ToString());
+                            model.FormatDateNacimiento = reader["fechaNacimiento"] == System.DBNull.Value ? string.Empty : Convert.ToString(reader["fechaNacimiento"].ToString());
                             model.vigenciaLicencia = reader["vigenciaLicencia"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["vigenciaLicencia"].ToString());
                             model.idGenero = reader["idGenero"] == DBNull.Value ? default(int) : Convert.ToInt32(reader["idGenero"]);
 							model.Telefono = reader["telefono"].ToString();
@@ -895,7 +899,7 @@ namespace GuanajuatoAdminUsuarios.Services
             {
                 try
                 {
-                    connection.Open();
+					connection.Open();
                     string query = "INSERT into accidenteCausas(idAccidente,idCausaAccidente) values(@idAccidente, @idCausaAccidente)";
 
                     SqlCommand command = new SqlCommand(query, connection);
@@ -1031,9 +1035,9 @@ namespace GuanajuatoAdminUsuarios.Services
                 try
 
                 {
-                    connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT ac.idAccidenteCausa,ac.idAccidente, c.idCausaAccidente, c.causaAccidente, a.descripcionCausas, ac.indice " +
-                                                        "FROM accidenteCausas ac " +
+					int numeroContinuo = 1;
+					connection.Open();
+                    SqlCommand command = new SqlCommand("SELECT ac.*,a.descripcionCausas, c.causaAccidente, ac.idAccidenteCausa FROM accidenteCausas ac " +
                                                         "JOIN catCausasAccidentes c ON ac.idCausaAccidente = c.idCausaAccidente " +
                                                         "LEFT JOIN accidentes AS a ON ac.idAccidente = a.idAccidente " +
                                                         "WHERE ac.idAccidente = @idAccidente AND ac.idCausaAccidente > 0;", connection);
@@ -1051,13 +1055,14 @@ namespace GuanajuatoAdminUsuarios.Services
                             causa.IdCausaAccidente = Convert.ToInt32(reader["IdCausaAccidente"].ToString());
                             causa.CausaAccidente = reader["causaAccidente"].ToString();
                             causa.DescripcionCausa = reader["descripcionCausas"].ToString();
-                            causa.indice = Convert.ToInt32(reader["indice"].ToString());
-
+							causa.NumeroContinuo = numeroContinuo;
 							ListaGridCausa.Add(causa);
+							numeroContinuo++;
 
-                        }
 
-                    }
+						}
+
+					}
 
                 }
                 catch (SqlException ex)
@@ -1669,49 +1674,54 @@ namespace GuanajuatoAdminUsuarios.Services
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
                 try
 
+
                 {
+                    var nombre = @"
+hola
+";
+
                     connection.Open();
                     SqlCommand command = new SqlCommand("SELECT " +
-                                             "p.nombre, " +
-                                             "p.apellidoPaterno, " +
-                                             "p.apellidoMaterno, " +
-                                             "p.rfc, " +
-                                             "p.curp, " +
-                                             "p.idTipoLicencia, " +
-                                             "CONVERT(varchar, p.fechaNacimiento, 103) AS fechaNacimiento, " +
-                                             "tl.tipoLicencia, " +
-                                             "ia.idAccidente," +
-                                             "ia.idPersona, " +
-                                             "ia.idVehiculo, " +
-                                             "v.idTipoVehiculo, " +
-                                             "tv.tipoVehiculo, " +
-                                             "ia.idEstadoVictima, " +
-                                             "ev.estadoVictima, " +
-                                             "ia.idInstitucionTraslado, " +
-                                             "it.institucionTraslado, " +
-                                             "ia.idHospital, " +
-                                             "h.nombreHospital, " +
-                                             "ia.idAsiento, " +
-                                             "ia.fechaIngreso, "+
-                                             "ia.horaIngreso, "+
-                                             "ca.asiento, " +
-                                             "ia.idCinturon, " +
-											 "ev.EstadoVictima," +
-											 "v.modelo," +
-											 "v.placas," +
-											 "cg.genero," +
-											 "cm.marcaVehiculo," +
-											 "csv.nombreSubmarca," +
-											 "pd.telefono," +
-											 "pd.correo," +
-                                             "mun.municipio," +
-                                             "e.nombreEntidad," +
-											 "concat (pd.colonia,' ', pd.calle,' ', pd.numero,' ', pd.codigoPostal) as Direccion," +
-											 "va.idAccidente," +
-											 "ct.tipoInvolucrado," +
-											 "cc.cinturon " +
-                                             
-                                             "FROM involucradosAccidente ia " +
+											 "MAX(p.nombre) AS nombre, " +
+											 "MAX(p.apellidoPaterno) AS apellidoPaterno, " +
+											 "MAX(p.apellidoMaterno) AS apellidoMaterno, " +
+											 "MAX(p.rfc) AS rfc, " +
+											 "MAX(p.curp) AS curp, " +
+											 "MAX(p.idTipoLicencia) AS idTipoLicencia, " +
+											 "MAX(CONVERT(varchar, p.fechaNacimiento, 103)) AS fechaNacimiento, " +
+											 "MAX(tl.tipoLicencia) AS tipoLicencia, " +
+											 "MAX(ia.idAccidente) AS idAccidente," +
+											 "MAX(ia.idPersona) AS idPersona, " +
+											 "MAX(ia.idVehiculo) AS idVehiculo, " +
+											 "MAX(v.idTipoVehiculo) AS idTipoVehiculo, " +
+											 "MAX(tv.tipoVehiculo) AS tipoVehiculo, " +
+											 "MAX(ia.idEstadoVictima) AS idEstadoVictima, " +
+											 "MAX(ev.estadoVictima) AS estadoVictima, " +
+											 "MAX(ia.idInstitucionTraslado) AS idInstitucionTraslado, " +
+											 "MAX(it.institucionTraslado) AS institucionTraslado, " +
+											 "MAX(ia.idHospital) AS idHospital, " +
+											 "MAX(h.nombreHospital) AS nombreHospital, " +
+											 "MAX(ia.idAsiento) AS idAsiento, " +
+											 "MAX(ia.fechaIngreso) AS fechaIngreso, " +
+											 "MAX(ia.horaIngreso) AS horaIngreso, " +
+											 "MAX(ca.asiento) AS asiento, " +
+											 "MAX(ia.idCinturon) AS idCinturon, " +
+											 "MAX(ev.EstadoVictima) AS EstadoVictima," +
+											 "MAX(v.modelo) AS modelo," +
+											 "MAX(v.placas) AS placas," +
+											 "MAX(cg.genero) AS genero," +
+											 "MAX(cm.marcaVehiculo) AS marcaVehiculo," +
+											 "MAX(csv.nombreSubmarca) AS nombreSubmarca," +
+											 "MAX(pd.telefono) AS telefono," +
+											 "MAX(pd.correo) AS correo," +
+											 "MAX(mun.municipio) AS municipio," +
+											 "MAX(e.nombreEntidad) AS nombreEntidad," +
+											 "MAX(concat (pd.colonia,' ', pd.calle,' ', pd.numero,' ', pd.codigoPostal)) as Direccion," +
+											 "MAX(va.idAccidente) AS NoAccidente," +
+											 "MAX(ct.tipoInvolucrado) AS tipoInvolucrado," +
+											 "MAX(cc.cinturon) AS cinturon " +
+											 "FROM involucradosAccidente ia " +
+											 "LEFT JOIN accidentes a ON ia.idAccidente = a.idAccidente " +
                                              "LEFT JOIN personas p ON ia.idPersona = p.idPersona " +
                                              "LEFT JOIN catTipoLicencia tl ON p.idTipoLicencia = tl.idTipoLicencia " +
                                              "LEFT JOIN vehiculos v ON ia.idVehiculo = v.idVehiculo " +
@@ -1727,9 +1737,9 @@ namespace GuanajuatoAdminUsuarios.Services
                                              "LEFT JOIN catEntidades AS e ON v.idEntidad = e.idEntidad " +
 											 "LEFT JOIN personasDirecciones AS pd ON p.idPersona = pd.idPersona " +
 											 "LEFT JOIN catMunicipios AS mun ON mun.idMunicipio = pd.idMunicipio " +
-											 "LEFT JOIN vehiculosAccidente AS va ON  va.idVehiculo = v.idVehiculo " +
+											 "LEFT JOIN vehiculosAccidente AS va ON  va.idAccidente = a.idAccidente " +
 											 "LEFT JOIN catTipoInvolucrado ct ON ct.idTipoInvolucrado = ia.idTipoInvolucrado " +
-											 "WHERE ia.idAccidente = @idAccidente;", connection);
+											 "WHERE ia.idAccidente = @idAccidente group by ia.idPersona;", connection);
 
 
 
@@ -1774,7 +1784,12 @@ namespace GuanajuatoAdminUsuarios.Services
 							involucrado.Modelo = reader["modelo"] == System.DBNull.Value ? string.Empty : Convert.ToString(reader["modelo"].ToString());
 							involucrado.ConductorInvolucrado = reader["tipoInvolucrado"] == System.DBNull.Value ? string.Empty : Convert.ToString(reader["tipoInvolucrado"].ToString());
 							involucrado.Cinturon = reader["cinturon"] == System.DBNull.Value ? string.Empty : Convert.ToString(reader["cinturon"].ToString());
-							involucrado.fechaNacimiento = reader["fechaNacimiento"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["fechaNacimiento"].ToString());
+							involucrado.NumeroEconomico = reader["cinturon"] == System.DBNull.Value ? string.Empty : Convert.ToString(reader["cinturon"].ToString());
+							involucrado.NoAccidente = reader["NoAccidente"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["NoAccidente"].ToString());
+
+							involucrado.FormatDateNacimiento = reader["fechaNacimiento"] == System.DBNull.Value ? string.Empty : Convert.ToString(reader["fechaNacimiento"].ToString());
+
+                            
                             if (reader["fechaIngreso"] != System.DBNull.Value)
                             {
                                 involucrado.FechaIngreso = Convert.ToDateTime(reader["fechaIngreso"].ToString());
@@ -2090,7 +2105,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                     montoCamino, montoCarga, montoPropietarios, montoOtros,
                                     latitud ,longitud ,idCertificado ,
                                     armas ,drogas ,valores ,prendas ,otros ,entregaObjetos, entregaOtros ,
-                                    consignacionHechos, idCiudad ,
+                                    consignacionHechos, idCiudad , convenio ,
                                     idAutoridadEntrega , idAutoridadDisposicion , idElaboraConsignacion , 
                                     numeroOficio , idAgenciaMinisterio ,recibeMinisterio , 
                                     idElabora , idAutoriza , idSupervisa,armasTexto,drogasTexto,valoresTexto,prendasTexto,otrosTexto,
@@ -2121,6 +2136,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             datosFinales.EstadoValores = reader["valores"] == DBNull.Value ? 0 : int.Parse(reader["valores"].ToString());
                             datosFinales.EstadoPrendas = reader["prendas"] == DBNull.Value ? 0 : int.Parse(reader["prendas"].ToString());
                             datosFinales.EstadoOtros = reader["otros"] == DBNull.Value ? 0 : int.Parse(reader["otros"].ToString());
+                            datosFinales.EstadoConvenio = reader["convenio"] == DBNull.Value ? 0 : int.Parse(reader["convenio"].ToString());
                             datosFinales.consignacionHechos = reader["consignacionHechos"] == DBNull.Value ? "" : reader["consignacionHechos"].ToString();
                             datosFinales.IdCiudad = reader["idCiudad"] == DBNull.Value ? 0 : int.Parse(reader["idCiudad"].ToString());
                             datosFinales.entregaObjetos = reader["entregaObjetos"] == DBNull.Value ? "" : reader["entregaObjetos"].ToString();

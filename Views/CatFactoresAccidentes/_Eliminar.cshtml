@@ -79,7 +79,7 @@
 
         var Mydata = $("#eliminarFactorForm").serialize();
         console.log(Mydata);
-        $('#eliminarFactorAccidente').modal('hide');
+        $('#agregarFactornAccidente').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
         $.ajax({
@@ -87,7 +87,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaFactoresAccidentes").html(result);
+                $("#gridCatFactoresAccidentes").data("kendoGrid").dataSource.data(result);
             }
         });
     }

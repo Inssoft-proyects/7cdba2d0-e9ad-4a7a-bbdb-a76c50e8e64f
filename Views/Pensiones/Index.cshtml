@@ -9,7 +9,7 @@
             <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
                 <div class="row align-items-center justify-content-center justify-content-md-start">
                     <div class="col-auto">
-                        <i class="icon-edit-car h1 colorPrimary"></i>
+                        <i class="icon-pension h1 colorPrimary"></i>
                     </div>
                     <div class="col-auto my-3">
                         <h2 class="m-0 h3"><b>Pensiones</b></h2>
@@ -20,7 +20,7 @@
                 <div class="row">
                     <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
                         <button href="#" id="btnNuevaGrua" onclick="modalCrearPension()">
-                            <h6 class="m-0 d-flex align-items-center"><i class="icon-addDependencia h5 mb-0 me-2"></i><b>Agregar nueva pensión</b></h6>
+                            <h6 class="m-0 d-flex align-items-center"><i class="icon-addPension h5 mb-0 me-2"></i><b>Agregar nueva pensión</b></h6>
                         </button>
                     </div>
                 </div>
@@ -35,15 +35,15 @@
             <h5 class="px-4"><b>Búsqueda de pensiones</b></h5>
             <h6 class="px-4 text-muted">Realiza una búsqueda personalizada de pensiones.</h6>
         </div>
-        <div class="row row-height">
-            <div class="controlForm col-md-6">
+        <div class="row align-items-end px-4">
+            <div class="controlForm col-md-6 col-lg-3 my-3">
                 @(Html.Kendo().TextBox()
                     .Name("pension")
                     .Label(l => l.Content("Pensión:"))
                     .Placeholder("Ingresa un nombre de pensión")
                     .HtmlAttributes(new { style = "width: 100%", id = "txtPension" }))
             </div>
-            <div class="controlForm col-md-6">
+            <div class="controlForm col-md-6 col-lg-3 my-3">
                 <label>Delegación:</label>
                 @(Html.Kendo().DropDownList()
                     .Name("ddlIdDelegacion")
@@ -52,18 +52,20 @@
                     .HtmlAttributes(new { style = "width:100%;", id = "ddlIdDelegacion" })
                     .Filter(FilterType.Contains))
             </div>
-        </div>
-        <div class="col-12 col-md-6 col-lg-2">
-            <div class="controlButton my-3">
-                <button class="btnPrimary" type="button" onclick="btnBuscarPension()">  <h5 class="m-0"><b>Buscar</b></h5></button>
 
+            <div class="col-12 col-md-6 col-lg-3 my-3">
+                <div class="controlButton">
+                    <button class="btnPrimary" type="button" onclick="btnBuscarPension()">  <h5 class="m-0"><b>Buscar</b></h5></button>
+
+                </div>
             </div>
-        </div>
-        @*//Aqui*@
+
+            @*//Aqui*@
 
 
-        <div id="listadoPensiones">
-            <partial name="_ListadoPensiones" model="Model" />
+            <div id="listadoPensiones">
+                <partial name="_ListadoPensiones" model="Model" />
+            </div>
         </div>
     </section>
 </div>
@@ -79,7 +81,7 @@
                     <div class="col-auto pe-0">
                         <div class="row align-items-center justify-content-center justify-content-md-start">
                             <div class="col-auto pe-0">
-                                <i class="icon-addDependencia h1 colorPrimary"></i>
+                                <i class="icon-addPension h1 colorPrimary"></i>
                             </div>
                             <div class="col-auto my-3">
                                 <h2 class="m-0 h3"><b>Agregar pensión</b></h2>
@@ -114,7 +116,7 @@
                     <div class="col-auto pe-0">
                         <div class="row align-items-center justify-content-center justify-content-md-start">
                             <div class="col-auto pe-0">
-                                <i class="icon-addDependencia h1 colorPrimary"></i>
+                                <i class="icon-editPension h1 colorPrimary"></i>
                             </div>
                             <div class="col-auto my-3">
                                 <h2 class="m-0 h3"><b>Editar pensión</b></h2>

@@ -139,11 +139,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
             //if (ModelState.IsValid)
             //{
             int id = _personasService.CreatePersona(model);
-            model.PersonaDireccion.idPersona = id;
-            int idDireccion = _personasService.CreatePersonaDireccion(model.PersonaDireccion);
+            //model.PersonaDireccion.idPersona = id;
+            //int idDireccion = _personasService.CreatePersonaDireccion(model.PersonaDireccion);
 
-            var modelList = _personasService.GetAllPersonas();
-            return PartialView("_ListadoPersonas", modelList);
+            var modelList = _personasService.GetPersonaById(id);
+            return Json(modelList);
             //}
             //return RedirectToAction("Index");
         }
@@ -199,8 +199,9 @@ namespace GuanajuatoAdminUsuarios.Controllers
         {
             try
             {
-                 _personasService.InsertarDesdeServicio(personaDatos);
-                var datosTabla = _personasService.BuscarPersonaSoloLicencia(personaDatos.NUM_LICENCIA);
+                int idPersona = _personasService.InsertarDesdeServicio(personaDatos);
+                //var datosTabla = _personasService.BuscarPersonaSoloLicencia(personaDatos.NUM_LICENCIA);
+                var datosTabla = _personasService.GetPersonaById(idPersona);
 
                 return Json(datosTabla);
             }

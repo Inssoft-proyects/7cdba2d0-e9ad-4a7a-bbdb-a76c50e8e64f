@@ -99,7 +99,9 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaOficinasRenta").html(result);
+                $("#gridCatOficinasRenta").data("kendoGrid").dataSource.data(result);
+                sitteg_info('Se ha actualizado la información');
+
             }
         });
     }

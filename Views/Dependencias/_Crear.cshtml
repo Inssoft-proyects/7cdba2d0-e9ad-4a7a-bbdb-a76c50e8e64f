@@ -79,7 +79,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaDependencias").html(result);
+                $("#gridCatDependencias").data("kendoGrid").dataSource.data(result);
             }
         });
     }

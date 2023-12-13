@@ -3,7 +3,7 @@
 
         @(
             Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CatCarreterasModel>()
-            .Name("grid")
+            .Name("gridCatCarreteras")
             .Columns(columns =>
             {
                 columns.Bound(c => c.IdCarretera).Width(20).Title("Id");
@@ -59,8 +59,8 @@
             type: 'POST', // Tipo de solicitud HTTP (POST o GET)
             data: { IdCarretera: IdCarretera }, // Datos que se enviarán al controlador
             success: function (result) {
-                $('#ModalBodEditarCarretera').html(result);
-                $('#editarCarretera').modal('show');
+                $('#ModalBodyCarretera').html(result);
+                $('#agregarCarretera').modal('show');
 
             },
         })

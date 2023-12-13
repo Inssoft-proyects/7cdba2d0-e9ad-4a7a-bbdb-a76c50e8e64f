@@ -129,6 +129,7 @@
                             <label>Inicio:</label>
                             @(Html.Kendo().DatePicker()
                                 .Name("FechaInicio")
+                                .Culture("es-ES")
                                 .HtmlAttributes(new { style = "width: 100%", title = "startDate" })
                                 )
                         </div>
@@ -138,7 +139,7 @@
                             <label>Fin:</label>
                             @(Html.Kendo().DatePicker()
                                 .Name("FechaFin")
-                                
+                                .Culture("es-ES")
                                 .HtmlAttributes(new { style = "width: 100%", title = "startDate" })
                                 )
                         </div>
@@ -159,6 +160,21 @@
                         )
                 </div>
             </div>
+
+            <div class="col-12 col-md-6 col-lg-6">
+                <div class="controlForm my-3">
+                    <label>No. Economico:</label>
+                    @(Html.Kendo().TextBox()
+                        .Name("noEconomico")
+                        .Placeholder("Ingresa el Numero economico")
+                        .HtmlAttributes(new { style = "width:100%;" })
+
+                        )
+                </div>
+            </div>
+
+
+
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="controlButton my-3">
                     <button class="btnPrimary" type="submit">  <h5 class="m-0"><b>Buscar</b></h5></button>

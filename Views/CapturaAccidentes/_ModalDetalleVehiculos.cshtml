@@ -84,7 +84,11 @@
         <div class="col-auto">
             <div class="controlForm mb-3 mt-1">
                 <label class="text-muted">Vigencia de tarjeta:</label>
-                <label>@(Model.VigenciaTarjeta > DateTime.MinValue ? Model.VigenciaTarjeta.ToString("dd/MM/yyyy") : "-")</label>
+                <label>
+                    @((Model.vigenciaLicencia != new DateTime(1900, 1, 1) && Model.vigenciaLicencia != DateTime.MinValue)
+                        ? Model.vigenciaLicencia.ToString("dd/MM/yyyy")
+                        : "-")
+                </label>
             </div>
         </div>
         <div class="col">
@@ -174,7 +178,9 @@
         <div class="col-auto">
             <div class="controlForm mb-3 mt-1">
                 <label class="text-muted">Fecha de nacimiento:</label>
-                <label>@Model.fechaNacimiento</label>
+                <label>
+                    @(Model.FechaNacimientoFormateada != "01/01/0001" ? Model.FechaNacimientoFormateada : "-")
+                </label>
             </div>
         </div>
 

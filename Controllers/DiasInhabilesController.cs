@@ -109,7 +109,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 CreateDiaInhabil(model);
                 var ListDiasInhabilesModel = GetDiasInhabiles();
-                return PartialView("_ListaDiasInhabiles", ListDiasInhabilesModel);
+                return Json(ListDiasInhabilesModel);
             }
             Municipios_Drop();
             return PartialView("_Crear");
@@ -126,7 +126,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {
                 UpdateDiaInhabil(model);
                 var ListDiasInhabilesModel = GetDiasInhabiles();
-                return PartialView("_ListaDiasInhabiles", ListDiasInhabilesModel);
+                return Json(ListDiasInhabilesModel);
             }
             Municipios_Drop();
             return PartialView("_Editar");
@@ -143,7 +143,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 DeleteDiaInhabil(model);
                 var ListDiasInhabilesModel = GetDiasInhabiles();
-                return PartialView("_ListaDiasInhabiles", ListDiasInhabilesModel);
+                return Json(ListDiasInhabilesModel);
             }
             Municipios_Drop();
             //return View("Create");

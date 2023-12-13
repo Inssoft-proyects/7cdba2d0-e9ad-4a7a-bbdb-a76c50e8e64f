@@ -80,9 +80,8 @@
 
         var Mydata = $("#eliminarAutDispForm").serialize();
         console.log(Mydata);
-        $('#eliminarAutoridadDisp').modal('hide');
-        $('body').removeClass('model-open');
-        $('.modal-backdrop').remove();
+        $('#agregarAutoridadDisp').modal('hide');
+ 
         $.ajax({
             url: '@Url.Action("EliminarAutoridadDisposicionModal")',
             type: 'POST',

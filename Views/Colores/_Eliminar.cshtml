@@ -78,7 +78,7 @@
 
         var Mydata = $("#EliminarColorForm").serialize();
         console.log(Mydata);
-        $('#eliminarColor').modal('hide');
+        $('#addColor').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
         $.ajax({
@@ -86,7 +86,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaColores").html(result);
+                $("#gridCatColores").data("kendoGrid").dataSource.data(result);
             }
         });
     }

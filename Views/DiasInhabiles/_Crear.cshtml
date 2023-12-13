@@ -37,6 +37,7 @@
                             <label>Día inhábil <b>(obligatorio)</b>:</label>
                             <span>
                                 @(Html.Kendo().DatePickerFor(t => t.fecha)
+                        .Culture("es-ES")
                                     .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "end" })
                                     )
                             </span>
@@ -116,7 +117,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaDiasInhabiles").html(result);
+                $("#gridCatDiasInhabiles").data("kendoGrid").dataSource.data(result);
             }
         });
     }

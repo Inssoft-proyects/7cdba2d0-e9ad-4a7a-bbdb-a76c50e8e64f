@@ -142,7 +142,16 @@ namespace GuanajuatoAdminUsuarios.Services
                             infraccion.MontoCalificacion = reader["monto"].ToString();
                             infraccion.MontoPagado = reader["monto"].ToString();
                             infraccion.Recibo = reader["reciboPago"].ToString();
-                            infraccion.FechaPago = Convert.ToDateTime(reader["fechaPago"].ToString());
+                            object fechaPagoObj = reader["fechaPago"];
+
+                            if (fechaPagoObj != DBNull.Value && fechaPagoObj != null)
+                            {
+                                infraccion.FechaPago = Convert.ToDateTime(fechaPagoObj);
+                            }
+                            else
+                            {
+                                infraccion.FechaPago = DateTime.MinValue;
+                            }
                             infraccion.LugarPago = reader["lugarPago"].ToString();
                             //infraccion.OficioConDonacion = reader["OficioConDonacion"].ToString();
                             infraccion.Placas = reader["placasVehiculo"].ToString();

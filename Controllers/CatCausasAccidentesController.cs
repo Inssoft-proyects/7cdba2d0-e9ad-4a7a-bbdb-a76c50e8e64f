@@ -109,7 +109,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 CrearCausaAccidente(model);
                 var ListCausasAccidentesModel = GetCausasAccidentes();
-                return PartialView("_ListaCausasAccidentes", ListCausasAccidentesModel);
+                return Json(ListCausasAccidentesModel);
             }
 
             return PartialView("_Crear");
@@ -127,7 +127,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 EditarCausaAccidente(model);
                 var ListCausasAccidentesModel = GetCausasAccidentes();
-                return PartialView("_ListaCausasAccidentes", ListCausasAccidentesModel);
+                return Json(ListCausasAccidentesModel);
             }
             return PartialView("_Editar");
         }

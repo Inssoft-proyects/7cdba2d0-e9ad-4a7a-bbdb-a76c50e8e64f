@@ -148,10 +148,10 @@
                                 <div class="form-group col-md-4">
                                     <div class="controlForm">
                                         <label>Fecha infracción:</label>
-                                        @(Html.Kendo().DateTimePickerFor(t => t.fechaInfraccion)
+                                        @(Html.Kendo().DateTimePickerFor(t => t.fechaInfraccion).Max(DateTime.Now)
                                             .Label(l => l.Content("Fecha: <b>(obligatorio)</b>:"))
-                                            .Format("dd-MM-yyyy")
-                                            .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                                            .Format("dd/MM/yyyy HH:mm")
+                                            .HtmlAttributes(new { style = "width: 100%", required = "required"})
                                             )
                                     </div>
                                 </div>
@@ -546,7 +546,7 @@
                                         <div class="col-12 col-md-4">
                                             <div class="controlForm">
                                                 @(Html.Kendo().TextBoxFor(t => t.Garantia.numLicencia)
-                                                    .Label(l => l.Content("Número licencia: <b>(obligatorio)</b>:"))
+                                                    .Label(l => l.Content("Número licencia:"))
                                                     .Placeholder("Ingresa licencia")
                                                     .HtmlAttributes(new { style = "width: 100%" })
                                                     )
@@ -627,6 +627,10 @@
 
     function initialCharge() {
         var idCatGarantia = '@(Model.Garantia.idCatGarantia ?? 0)';
+        // Se inhabilita folio de infracción.
+        var folioInfraccion = '@(Model.folioInfraccion)';
+        if (folioInfraccion != null || folioInfraccion != undefined)
+            $("#folioInfraccion").prop('readonly', true);
 
         if (idCatGarantia == 1) { $("#divGarantiaPlaca").show(); }
         if (idCatGarantia == 2) { $("#divGarantiaLicencia").show(); }
@@ -930,7 +934,8 @@
             processData: false,
             contentType: false,
             success: function (response) {
-                sitteg_success("Se ha anexado la imagen exitosamente");
+                sitteg_success("Se ha anexado el archivo exitosamente");
+
                 console.log(response);
             },
             error: function (xhr, status, error) {
@@ -966,11 +971,11 @@
         }
         else if (currentval>max){
             $("#calificacion").val(max)
-            sitteg_info("la calificacion es mayor")
+            sitteg_info("La calificación es mayor")
 
         }else if(currentval<min){
             $("#calificacion").val(min)
-            sitteg_info("la calificacion es menor")
+            sitteg_info("La calificación es menor")
 
         }
         else{
@@ -998,6 +1003,8 @@
 
 
     }
+
+  
 
 
 </script>

@@ -102,7 +102,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaTramos").html(result);
+                $("#gridTramos").data("kendoGrid").dataSource.data(result);
             }
         });
     }

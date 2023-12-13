@@ -3,7 +3,7 @@
 
         @(
             Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CatAutoridadesEntregaModel>()
-            .Name("grid")
+            .Name("gridAutoridadesEntrega")
             .Columns(columns =>
             {
                 columns.Bound(c => c.IdAutoridadEntrega).Width(80).Title("Id");
@@ -49,8 +49,8 @@
             type: 'POST', // Tipo de solicitud HTTP (POST o GET)
             data: { IdAutoridadEntrega: IdAutoridadEntrega }, // Datos que se enviarán al controlador
             success: function (result) {
-                $('#ModalBodyEditarAutEntrega').html(result);
-                $('#editarAutEntrega').modal('show');
+                $('#ModalBodyaAgregarAutEntrega').html(result);
+                $('#agregarAutEntrega').modal('show');
 
             },
         })
@@ -66,8 +66,8 @@
             type: 'POST', // Tipo de solicitud HTTP (POST o GET)
             data: { IdAutoridadEntrega: IdAutoridadEntrega }, // Datos que se enviarán al controlador
             success: function (result) {
-                $('#ModalBodyEliminarAutEntrega').html(result);
-                $('#eliminarAutEntrega').modal('show');
+                $('#ModalBodyaAgregarAutEntrega').html(result);
+                $('#agregarAutEntrega').modal('show');
 
             },
         })

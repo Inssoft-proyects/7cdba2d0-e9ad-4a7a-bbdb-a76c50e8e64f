@@ -1,4 +1,4 @@
-﻿@model GuanajuatoAdminUsuarios.Models.OficialesModel
+﻿@model GuanajuatoAdminUsuarios.Models.CatOficialesModel
 @{
         var delegaciones = (SelectList)ViewBag.Delegaciones;
 
@@ -75,6 +75,7 @@
         <div class="row align-items-end">
             <div class="col-12 col-md-4">
                 <div class="controlForm my-3">
+                    @Html.HiddenFor(m=>m.IdOficial)
                     @(Html.Kendo().TextBoxFor(t=>t.Nombre)
                         .Label(l => l.Content("Nombre <b>(obligatorio)</b>:"))
                         .Placeholder("Ingresa el nombre del oficial")
@@ -135,7 +136,7 @@
 
         var Mydata = $("#EditarOficialForm").serialize();
         console.log(Mydata);
-        $('#editarOficial').modal('hide');
+        $('#agregarOficial').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
         $.ajax({
@@ -143,7 +144,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaOficiales").html(result);
+                $("#gridCatOficiales").data("kendoGrid").dataSource.data(result);
             }
         });
     }

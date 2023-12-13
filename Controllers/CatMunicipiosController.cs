@@ -104,7 +104,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 _catMunicipiosService.AgregarMunicipio(model);
                 var ListMunicipiosModel = _catMunicipiosService.GetMunicipios();
-                return PartialView("_ListaMunicipios", ListMunicipiosModel);
+                return Json(ListMunicipiosModel);
             }
             //SetDDLCategories();
             //return View("Create");
@@ -122,7 +122,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 _catMunicipiosService.EditarMunicipio(model);
                 var ListMunicipiosModel = _catMunicipiosService.GetMunicipios();
-                return PartialView("_ListaMunicipios", ListMunicipiosModel);
+                return Json(ListMunicipiosModel);
             }
 
             return PartialView("_Editar");

@@ -21,7 +21,7 @@
             <div class="row">
                 <div class="col-12 mb-4 px-4 rounded gridCustom">
                     @(Html.Kendo().Grid(Model)
-                        .Name("gridPersonasMoralesAc")
+                        .Name("gridPersonasMorales")
                         .Columns(columns =>
                         {
                             columns.Bound(c => c.idPersona).Hidden();
@@ -90,10 +90,10 @@
 <script>
 
     $(document).ready(function () {
-        var grid = $("#gridPersonasMoralesAc").data("kendoGrid");
+        var grid = $("#gridPersonasMorales").data("kendoGrid");
         grid.tbody.on("click", ".k-checkbox", onClickPersonasMorales);
         function onClickPersonasMorales(e) {
-            var grid = $("#gridPersonasMoralesAc").data("kendoGrid");
+            var grid = $("#gridPersonasMorales").data("kendoGrid");
             var row = $(e.target).closest("tr");
             var dataItem = grid.dataItem(row);
             var idPersona = dataItem.idPersona;
@@ -102,7 +102,7 @@
             $("#ddlIdCatTipoPersona").val(idCatTipoPersona);
             if (row.hasClass("k-selected")) {
                 setTimeout(function (e) {
-                    var grid = $("#gridPersonasMoralesAc").data("kendoGrid");
+                    var grid = $("#gridPersonasMorales").data("kendoGrid");
                     grid.clearSelection();
                     var gridFisica = $("#gridPersonasFisicasAc").data("kendoGrid");
                     gridFisica.clearSelection();

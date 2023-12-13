@@ -1,4 +1,7 @@
 ﻿@model GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel
+@{
+	bool esSoloLectura = ViewBag.EsSoloLectura ?? false;
+}
 
 <div class="mainContainer bg-light">
 	<section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded pb-1">
@@ -94,9 +97,10 @@
 			</div>
 			<div class="col-12 col-lg-auto text-center">
 				<div class="btnOutline btnOutlinePrimary px-4 my-3">
-					<button onclick="mostrarModalAgregarVehiculo()">
+					<button onclick="mostrarModalAgregarVehiculo()" @(ViewBag.EsSoloLectura ? "disabled" : "")>
 						<h6 class="m-0"><i class="me-2 icon-research"></i><b>Buscar vehículo</b></h6>
 					</button>
+
 				</div>
 			</div>
 
@@ -115,7 +119,7 @@
 		<div class="row">
 			<div class="col-12 px-4 rounded mb-4">
 			</div>
-			<partial name="_ListaVehiculosInvolucrados" model="Model" />
+			<partial name="_ListaVehiculosInvolucrados" model="Model" esSoloLectura="@ViewBag.EsSoloLectura" />
 		</div>
 		<div class="row mt-1 mb-3">
 			<div class="col-12">
@@ -123,7 +127,8 @@
 					<div class="col-auto btnOutline my-2 mx-auto p-0 text-center" onclick="mostrarModalAgregarVehiculo()">
 						@(Html.Kendo().Button()
 							.Name("editInvolucrados")
-							.HtmlAttributes(new { @class = "px-5",@readonly =  ViewBag.ModoSoloLectura })
+							.HtmlAttributes(new { @class = "px-5"})
+							.Enable(!ViewBag.EsSoloLectura) // Desactiva el botón si es solo lectura
 							.Content("<h6 class=\"m-0\"><b>Capturar nuevo vehículo</b></h6>"))
 					</div>
 				</div>
@@ -236,7 +241,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-body" id="ModalBodyAgregarConductor">
-						modalAgregarConductor
+						
 
 					</div>
 				</div>
@@ -285,8 +290,8 @@
 					</div>
 					<div class="col-12 col-lg-auto text-center">
 						<div class="btnOutline btnOutlinePrimary px-4 my-3">
-							<button onclick="mostrarModalCalsificacionAccidente()">	
-								<h6 class="m-0"><i class="me-2 icon-addClasificacionAccidente"></i><b>Agregar clasificación</b></h6>
+						<button onclick="mostrarModalCalsificacionAccidente()" @(ViewBag.EsSoloLectura ? "disabled" : "")>
+							<h6 class="m-0"><i class="me-2 icon-addClasificacionAccidente"></i><b>Agregar clasificación</b></h6>
 							</button>
 						</div>
 					</div>
@@ -305,15 +310,17 @@
 						<h6 class="px-4 text-muted">Da de alta las clasificación del accidente.</h6>
 					</div>
 				</div>
-				<partial name="_ListaClasificacion" model="Model" />
+			<partial name="_ListaClasificacion" model="Model" esSoloLectura="@ViewBag.EsSoloLectura" />
 				<div class="row ">
 					<!--TABLA-->
 					<div class="col-12 col-md-6 mx-md-auto">
 						<div class="row justify-content-around">
 							<div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
 								<div class="controlButton my-3">
-									<a class="text-decoration-none d-flex px-5" href="@Url.Action("CapturaBAccidente", "CapturaAccidentes")"><h6 class="m-0"><b>Siguiente</b></h6></a>
-								</div>
+								<a class="text-decoration-none d-flex px-5" href="@Url.Action("CapturaBAccidente", "CapturaAccidentes", new { esSoloLectura = esSoloLectura })">
+									<h6 class="m-0"><b>Siguiente</b></h6>
+								</a>
+							</div>
 							</div>
 						</div>
 					</div>
@@ -333,6 +340,9 @@
 		}
 	});
 	function mostrarModalAgregarVehiculo() {
+		if ('@ViewBag.EsSoloLectura' === 'True') {
+			return;
+		}
 		var idAccidente = '@Model.IdAccidente';
 
 		$.ajax({
@@ -378,6 +388,9 @@
 	}
 
 	function mostrarModalCalsificacionAccidente() {
+		if ('@ViewBag.EsSoloLectura' === 'True') {
+			return;
+		}
     $.ajax({
         url: '@Url.Action("ModalClasificacionAccidente")',
         type: 'POST',

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace GuanajuatoAdminUsuarios.Models
 {
@@ -25,7 +26,8 @@ namespace GuanajuatoAdminUsuarios.Models
 
         public long telefono { get; set; }
         public long telefonoFisico { get; set; }
-
+       
+        [EmailAddress(ErrorMessage = "El correo electrónico no es válido.")]
         public string correo { get; set; }
         public string correoFisico { get; set; }
 

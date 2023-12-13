@@ -9,14 +9,14 @@ namespace GuanajuatoAdminUsuarios.Interfaces
     public interface IOficiales
 
     {
-        List<Oficiales> GetOficiales();
-        List<OficialesModel> GetOficialesActivos();
+        List<CatOficialesModel> GetOficiales();
+        List<CatOficialesModel> GetOficialesActivos();
 
-        Oficiales GetOficialById(int IdOficial);
+        CatOficialesModel GetOficialById(int IdOficial);
 
-        int SaveOficial(Oficiales oficial);
+        int SaveOficial(CatOficialesModel oficial);
 
-        int UpdateOficial(Oficiales oficial);
+        int UpdateOficial(CatOficialesModel oficial);
 
         int DeleteOficial(int oficial);
 

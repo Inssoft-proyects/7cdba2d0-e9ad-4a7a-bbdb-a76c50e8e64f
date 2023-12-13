@@ -76,6 +76,8 @@ namespace GuanajuatoAdminUsuarios
             services.AddHttpClient();
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
+            
+
             services.AddRouting(setupAction =>
             {
                 setupAction.LowercaseUrls = true;
@@ -99,7 +101,7 @@ namespace GuanajuatoAdminUsuarios
             // services.AddTransient<ConexionBD>();
 
             //Servicios 
-            services.AddScoped(typeof(IPdfGenerator<>), typeof(PdfGenerator<>));
+            services.AddScoped(typeof(IPdfGenerator), typeof(PdfGenerator));
             services.AddScoped<ISqlClientConnectionBD, SqlClientConnectionBD>();
             services.AddScoped<IMarcasVehiculos, MarcasVehiculoService>();
             services.AddScoped<ICatFormasTrasladoService, CatFormasTrasladoService>();
@@ -161,6 +163,7 @@ namespace GuanajuatoAdminUsuarios
             services.AddScoped<IEnvioInfraccionesService, EnvioInfraccionesService>();
             services.AddScoped<ICatOficinasRentaService, CatOficinasRentaService>();
             services.AddScoped<ICatTiposVehiculosService, CatTiposVehiculosService>();
+            services.AddScoped<ICatSubtipoServicio, CatSubtipoServicioService>();
             services.AddScoped<ICatResponsablesPensiones, CatResponsablesPensionesService>();
             services.AddScoped<ICatDescripcionesEventoService, DescripcionEvetosService>();
             services.AddScoped<ICatTipoMotivoAsignacionService, CatTipoMotivoAsignacionService>();
@@ -229,7 +232,7 @@ namespace GuanajuatoAdminUsuarios
             // implementa la validacion de sesion
             app.UseSession();
             app.UseRouting();
-
+            
 
             //Autorizacion y autenticacion de usuario
             app.UseAuthentication();

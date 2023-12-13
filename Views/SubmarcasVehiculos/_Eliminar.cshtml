@@ -98,7 +98,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaSubmarcas").html(result);
+                $("#gridCatSubmarcas").data("kendoGrid").dataSource.data(result);
             }
         });
     }

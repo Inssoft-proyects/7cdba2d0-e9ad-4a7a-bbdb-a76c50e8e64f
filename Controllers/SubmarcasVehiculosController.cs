@@ -159,7 +159,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 CreateSubmarca(model);
                 var ListSubmarcasModel = GetSubmarcas();
-                return PartialView("_ListaSubmarcas", ListSubmarcasModel);
+                return Json(ListSubmarcasModel);
             }
             SetDDLMarcas();
             //return View("Create");
@@ -177,7 +177,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 UpdateSubmarca(model);
                 var ListSubmarcasModel = GetSubmarcas();
-                return PartialView("_ListaSubmarcas", ListSubmarcasModel);
+                return Json(ListSubmarcasModel);
             }
             SetDDLMarcas();
             //return View("Create");
@@ -195,7 +195,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 DeleteSubmarca(model);
                 var ListSubmarcasModel = GetSubmarcas();
-                return PartialView("_ListaSubmarcas", ListSubmarcasModel);
+                return Json(ListSubmarcasModel);
             }
             SetDDLMarcas();
             //return View("Create");

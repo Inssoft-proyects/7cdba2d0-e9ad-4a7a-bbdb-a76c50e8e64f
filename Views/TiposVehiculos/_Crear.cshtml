@@ -79,7 +79,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaTiposVehiculos").html(result);
+                $("#gridCatTipoVehiculo").data("kendoGrid").dataSource.data(result);
             }
         });
     }

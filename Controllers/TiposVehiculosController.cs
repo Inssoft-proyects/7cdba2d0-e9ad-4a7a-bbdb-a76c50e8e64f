@@ -117,7 +117,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {
                 _catTiposVehiculoService.CreateTipoVehiculo(model);
                 var ListTiposVehiculosModel = _catTiposVehiculoService.GetTiposVehiculos();
-                return PartialView("_ListaTiposVehiculos", ListTiposVehiculosModel);
+                return Json(ListTiposVehiculosModel);
             }
             //SetDDLCategories();
             //return View("Create");
@@ -135,7 +135,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 _catTiposVehiculoService.UpdateTipoVehiculo(model);
                 var ListTiposVehiculosModel = _catTiposVehiculoService.GetTiposVehiculos();
-                return PartialView("_ListaTiposVehiculos", ListTiposVehiculosModel);
+                return Json(ListTiposVehiculosModel);
             }
 
             return PartialView("_Editar");
@@ -149,7 +149,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {
                 DeleteTipoVehiculo(model);
                 var ListTiposVehiculosModel = _catTiposVehiculoService.GetTiposVehiculos();
-                return PartialView("_ListaTiposVehiculos", ListTiposVehiculosModel);
+                return Json(ListTiposVehiculosModel);
             }
 
             return PartialView("_Eliminar");

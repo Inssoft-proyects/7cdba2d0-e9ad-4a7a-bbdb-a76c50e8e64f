@@ -3,7 +3,7 @@
 
         @(
             Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CatSubmarcasVehiculosModel>()
-            .Name("grid")
+            .Name("gridCatSubmarcasVehiculos")
             .Columns(columns =>
             {
                 columns.Bound(c => c.IdSubmarca).Title("Id").Width(20);
@@ -60,8 +60,8 @@
             type: 'POST', // Tipo de solicitud HTTP (POST o GET)
             data: { IdSubmarca: IdSubmarca }, // Datos que se enviarán al controlador
             success: function (result) {
-                $('#editarSubmarcaBody').html(result);
-                $('#editarSubMarca').modal('show');
+                $('#agregarSubmarcaBody').html(result);
+                $('#agregarSubmarca').modal('show');
 
             },
         })
@@ -77,8 +77,8 @@
             type: 'POST', // Tipo de solicitud HTTP (POST o GET)
             data: { IdSubmarca: IdSubmarca }, // Datos que se enviarán al controlador
             success: function (result) {
-                $('#eliminarSubmarcaBody').html(result);
-                $('#eliminarSubMarca').modal('show');
+                $('#agregarSubmarcaBody').html(result);
+                $('#agregarSubmarca').modal('show');
 
             },
         })

@@ -1019,6 +1019,7 @@ h3 b, h4 b, h5 b, h6 b, label b {
 }
 
 .controlForm input,
+.controlForm input[type="file"],
 .controlForm .k-dropdown-wrap,
 .controlForm select,
 .controlForm .k-textarea {
@@ -1029,11 +1030,15 @@ h3 b, h4 b, h5 b, h6 b, label b {
     box-shadow: none;
 }
 
-.controlForm input, .controlForm .k-textarea, .controlForm .k-dropdown, .controlForm .k-datepicker, .controlForm .k-dateinput, .controlForm .k-datetimepicker, .controlForm .k-timepicker {
-    border: 2px #292929c7 solid;
-    display: block;
-    border-radius: 4px;
-}
+    .controlForm input[type="file"]{
+        padding:10px 0;
+    }
+
+    .controlForm input, .controlForm input[type="file"], .controlForm .k-textarea, .controlForm .k-dropdown, .controlForm .k-datepicker, .controlForm .k-dateinput, .controlForm .k-datetimepicker, .controlForm .k-timepicker {
+        border: 2px #292929c7 solid;
+        display: block;
+        border-radius: 4px;
+    }
 
 .controlForm .k-imageeditor .k-toolbar {
     background-color: #f2f2f6;

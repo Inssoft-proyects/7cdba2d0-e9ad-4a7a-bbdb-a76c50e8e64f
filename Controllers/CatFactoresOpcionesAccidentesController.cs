@@ -112,7 +112,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 CrearFactorOpcionAccidente(model);
                 var ListFactoresOpcionesAccidentesModel = GetFactoresOpcionesAccidentes();
-                return PartialView("_ListaFactoresOpcionesAccidentes", ListFactoresOpcionesAccidentesModel);
+                return Json(ListFactoresOpcionesAccidentesModel);
             }
 
             return PartialView("_Crear");
@@ -130,7 +130,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 EditarFactorOpcionAccidente(model);
                 var ListFactoresOpcionesAccidentesModel = GetFactoresOpcionesAccidentes();
-                return PartialView("_ListaFactoresOpcionesAccidentes", ListFactoresOpcionesAccidentesModel);
+                return Json(ListFactoresOpcionesAccidentesModel);
             }
             return PartialView("_Editar");
         }
@@ -145,7 +145,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 EliminaFactorOpcionAccidente(model);
                 var ListFactoresAccidentesModel = GetFactoresOpcionesAccidentes();
-                return PartialView("_ListaFactoresOpcionesAccidentes", ListFactoresAccidentesModel);
+                return Json(ListFactoresAccidentesModel);
             }
             return PartialView("_Eliminar");
         }

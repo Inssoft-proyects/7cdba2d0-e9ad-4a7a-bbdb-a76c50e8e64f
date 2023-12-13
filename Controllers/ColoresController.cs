@@ -122,7 +122,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 CreateColor(model);
                 var ListColoresModel = GetColores();
-                return PartialView("_ListaColores", ListColoresModel);
+                return Json(ListColoresModel);
             }
             //SetDDLCategories();
             //return View("Create");
@@ -141,7 +141,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 UpdateColor(model);
                 var ListColoresModel = GetColores();
-                return PartialView("_ListaColores", ListColoresModel);
+                return Json(ListColoresModel);
             }
             //SetDDLCategories();
             //return View("Create");
@@ -158,7 +158,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 DeleteColor(model);
                 var ListColoresModel = GetColores();
-                return PartialView("_ListaColores", ListColoresModel);
+                return Json(ListColoresModel);
             }
             //SetDDLCategories();
             //return View("Create");

@@ -21,7 +21,7 @@
 <div class="row px-4 mb-4 align-items-end justify-content-center">
     <div class="col-12 col-md-6 col-lg-4">
         <div class="controlForm mb-3">
-            <label>ID:</label>
+            <label><b>ID:</b></label>
             <span>
                 @Html.DisplayFor(m => m.IdDeposito,new {@class="control-label"})
                 @*@(Html.Kendo().TextBoxFor(m=>m.IdPension)
@@ -34,7 +34,7 @@
 
     <div class="col-12 col-md-6 col-lg-4">
         <div class="controlForm mb-3">
-            <label>Fecha ingreso:</label>
+            <label><b>Fecha ingreso:</b></label>
             <span>
                 @Html.DisplayFor(m => m.FechaIngreso,new {@class="control-label"})
             </span>
@@ -43,7 +43,7 @@
 
     <div class="col-12 col-md-6 col-lg-4">
         <div class="controlForm mb-3">
-            <label>Pensión:</label>
+            <label><b>Pensión:</b></label>
             <span>
                 @Html.DisplayFor(m => m.pension,new {@class="control-label"})
             </span>
@@ -53,7 +53,7 @@
 
     <div class="col-12 col-md-6 col-lg-4">
         <div class="controlForm mb-3">
-            <label>Marca:</label>
+            <label><b>Marca:</b></label>
             <span>
                 @Html.DisplayFor(m => m.marcaVehiculo,new {@class="control-label"})
             </span>
@@ -62,7 +62,7 @@
 
     <div class="col-12 col-md-6 col-lg-4">
         <div class="controlForm mb-3">
-            <label>Folio:</label>
+            <label><b>Folio:</b></label>
             <span>
                 @Html.DisplayFor(m => m.Folio,new {@class="control-label"})
             </span>
@@ -71,7 +71,7 @@
 
     <div class="col-12 col-md-6 col-lg-4">
         <div class="controlForm mb-3">
-            <label>Carretera:</label>
+            <label><b>Carretera:</b></label>
             <span>
                 @Html.DisplayFor(m => m.carretera,new {@class="control-label"})
             </span>
@@ -80,7 +80,7 @@
 
     <div class="col-12 col-md-6 col-lg-4">
         <div class="controlForm mb-3">
-            <label>Serie:</label>
+            <label><b>Serie:</b></label>
             <span>
                 @Html.DisplayFor(m => m.Serie,new {@class="control-label"})
             </span>
@@ -89,7 +89,7 @@
 
     <div class="col-12 col-md-6 col-lg-4">
         <div class="controlForm mb-3">
-            <label>Sub Marca:</label>
+            <label><b>Sub Marca:</b></label>
             <span>
                 @Html.DisplayFor(m => m.nombreSubmarca,new {@class="control-label"})
             </span>
@@ -98,7 +98,7 @@
 
     <div class="col-12 col-md-6 col-lg-4">
         <div class="controlForm mb-3">
-            <label>Tramo:</label>
+            <label><b>Tramo:</b></label>
             <span>
                 @Html.DisplayFor(m => m.tramo,new {@class="control-label"})
             </span>
@@ -107,7 +107,7 @@
 
     <div class="col-12 col-md-6 col-lg-4">
         <div class="controlForm mb-3">
-            <label>Placas:</label>
+            <label><b>Placas:</b></label>
             <span>
                 @Html.DisplayFor(m => m.Placa,new {@class="control-label"})
             </span>
@@ -116,7 +116,7 @@
 
     <div class="col-12 col-md-6 col-lg-4">
         <div class="controlForm mb-3">
-            <label>Color:</label>
+            <label><b>Color:</b></label>
             <span>
                 @Html.DisplayFor(m => m.Color,new {@class="control-label"})
             </span>
@@ -125,7 +125,7 @@
 
     <div class="col-12 col-md-6 col-lg-4">
         <div class="controlForm mb-3">
-            <label>Kilómetro:</label>
+            <label><b>Kilómetro:</b></label>
             <span>
                 @Html.DisplayFor(m => m.Km,new {@class="control-label"})
             </span>
@@ -147,7 +147,7 @@
     @Html.HiddenFor(m=>m.IdDeposito,new { id="hdnIdDeposito"})
     <div class="col-12 col-md-6 col-lg-4">
         <div class="controlForm mb-3">
-            <label><b>*</b>Acreditación de Propiedad:</label>
+            <label>Acreditación de Propiedad <b>(obligatorio)</b>:</label>
             <span>
                 <input type="file" name="ImageAcreditacionPropiedad" id="ImageAcreditacionPropiedad" required>
                 @*@Html.TextBoxFor(m => m.AcreditacionPropiedad, new { type = "file" ,@class = "btnPrimary px-3",id="ImageOne"})*@
@@ -157,7 +157,7 @@
 
     <div class="col-12 col-md-6 col-lg-4">
         <div class="controlForm mb-3">
-            <label><b>*</b>Acreditación de Personalidad:</label>
+            <label>Acreditación de Personalidad <b>(obligatorio)</b>:</label>
             <span>
                 <input type="file" name="ImageAcreditacionPersonalidad" id="ImageAcreditacionPersonalidad" required>
                 @*@Html.TextBoxFor(m => m.AcreditacionPersonalidad, new { type = "file" ,@class = "btnPrimary px-3"})*@
@@ -167,7 +167,7 @@
 
     <div class="col-12 col-md-6 col-lg-4">
         <div class="controlForm mb-3">
-            <label><b>*</b>Recibo de Infracción:</label>
+            <label>Recibo de Infracción <b>(obligatorio)</b>:</label>
             <span>
                 <input type="file" name="ImageReciboPago" id="ImageReciboPago" required>
                 @*@Html.TextBoxFor(m => m.ReciboPago, new { type = "file" ,@class = "btnPrimary px-3"})*@

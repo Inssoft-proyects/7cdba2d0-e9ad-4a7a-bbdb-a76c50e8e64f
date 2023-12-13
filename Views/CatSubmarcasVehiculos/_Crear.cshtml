@@ -104,7 +104,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaSubmarcas").html(result);
+                $("#gridCatSubmarcasVehiculos").data("kendoGrid").dataSource.data(result);
             }
         });
     }

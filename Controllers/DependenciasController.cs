@@ -112,7 +112,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 CreateDependencia(model);
                 var ListDependenciasModel = GetDependencias();
-                return PartialView("_ListaDependencias", ListDependenciasModel);
+                return Json(ListDependenciasModel);
             }
             //SetDDLCategories();
             //return View("Create");
@@ -132,7 +132,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 UpdateDependencia(model);
                 var ListDependenciasModel = GetDependencias();
-                return PartialView("_ListaDependencias", ListDependenciasModel);
+                return Json(ListDependenciasModel);
             }
             //SetDDLCategories();
             //return View("Create");
@@ -150,7 +150,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 DeleteDependencia(model);
                 var ListDependenciasModel = GetDependencias();
-                return PartialView("_ListaDependencias", ListDependenciasModel);
+                return Json(ListDependenciasModel);
             }
 
             return PartialView("_Eliminar");

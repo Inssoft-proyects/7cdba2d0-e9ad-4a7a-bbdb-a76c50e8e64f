@@ -24,7 +24,7 @@
             <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
                 <div class="row align-items-center justify-content-center justify-content-md-start">
                     <div class="col-auto">
-                        <i class="icon-edit-car h1 colorPrimary"></i>
+                        <i class="icon-inventario h1 colorPrimary"></i>
                     </div>
                     <div class="col-auto my-3">
                         <h2 class="m-0 h3"><b>Padrón de depósitos y grúas</b></h2>
@@ -44,7 +44,7 @@
         </div>
         <form id="frmSearch" class="row px-4 mb-4 align-items-end" method="post">
 
-            <div class="col-12 col-md-6 col-lg-4">
+            <div class="col-12 col-md-6 col-lg-3">
                 <div class="controlForm mb-3">
                     <label>Municipios:</label>
                     <span>
@@ -64,7 +64,7 @@
                     </span>
                 </div>
             </div>
-            <div class="col-12 col-md-6 col-lg-4">
+            <div class="col-12 col-md-6 col-lg-3">
                 <div class="controlForm my-3">
                     <label>Concesionario:</label>
                     @(Html.Kendo().DropDownListFor(d => d.IdConcesionario).Filter(FilterType.Contains)
@@ -85,7 +85,7 @@
                 </div>
             </div>
 
-            <div class="col-12 col-md-6 col-lg-4">
+            <div class="col-12 col-md-6 col-lg-3">
                 <div class="controlForm my-3">
                     <label>Depósitos:</label>
                     @(Html.Kendo().DropDownListFor(d => d.IdPension).Filter(FilterType.Contains)
@@ -106,7 +106,7 @@
                 </div>
             </div>
 
-            <div class="col-12 col-md-6 col-lg-4">
+            <div class="col-12 col-md-6 col-lg-3">
                 <div class="controlForm my-3">
                     <label>Tipo de grúa:</label>
                     @(Html.Kendo().DropDownListFor(d => d.IdTipoGrua).Filter(FilterType.Contains)
@@ -133,9 +133,7 @@
 
                 </div>
             </div>
-            <div class="col-12 col-md-6 col-lg-5">
-              
-            </div>
+            
 
         </form>
 

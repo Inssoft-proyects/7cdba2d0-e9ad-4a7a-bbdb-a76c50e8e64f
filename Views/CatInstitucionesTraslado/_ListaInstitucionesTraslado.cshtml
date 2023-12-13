@@ -2,7 +2,7 @@
     <div class="col-12 mb-4 px-4 rounded gridCustom">
         @(
             Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CatInstitucionesTrasladoModel>()
-            .Name("grid")
+            .Name("gridCatInstitucionesTraslado")
             .Columns(columns =>
             {
                 columns.Bound(c => c.IdInstitucionTraslado).Width(20).Title("Id");
@@ -61,8 +61,8 @@
             type: 'POST', // Tipo de solicitud HTTP (POST o GET)
             data: { IdInstitucionTraslado: IdInstitucionTraslado }, // Datos que se enviarán al controlador
             success: function (result) {
-                $('#ModalBodEditarInstTraslado').html(result);
-                $('#editarInstTraslado').modal('show');
+                $('#ModalBodyaAgregarInstTraslado').html(result);
+                $('#agregarInstTraslado').modal('show');
 
             },
         })
@@ -78,8 +78,8 @@
             type: 'POST', // Tipo de solicitud HTTP (POST o GET)
             data: { IdInstitucionTraslado: IdInstitucionTraslado }, // Datos que se enviarán al controlador
             success: function (result) {
-                $('#ModalBodyEliminarInstTraslado').html(result);
-                $('#eliminarInstTraslado').modal('show');
+                $('#ModalBodyaAgregarInstTraslado').html(result);
+                $('#agregarInstTraslado').modal('show');
 
             },
         })

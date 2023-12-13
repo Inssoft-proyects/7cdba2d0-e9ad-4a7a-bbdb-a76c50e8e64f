@@ -102,7 +102,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaCarreteras").html(result);
+                $("#gridCatCarreteras").data("kendoGrid").dataSource.data(result);
             }
         });
     }

@@ -104,7 +104,7 @@
 
         var Mydata = $("#editarTramoForm").serialize();
         console.log(Mydata);
-        $('#editarTramo').modal('hide');
+        $('#agregarTramo').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
         $.ajax({
@@ -112,7 +112,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaTramos").html(result);
+                $("#gridTramos").data("kendoGrid").dataSource.data(result);
                 sitteg_info('Se ha actualizado la información');
 
             },

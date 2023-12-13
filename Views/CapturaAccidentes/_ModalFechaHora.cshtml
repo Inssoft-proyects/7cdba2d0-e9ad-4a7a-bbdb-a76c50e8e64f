@@ -40,6 +40,7 @@
                     @Html.HiddenFor(model => model.IdPersona)
                     @(Html.Kendo().DatePickerFor(model => model.FechaIngreso)
                                 .Label(l => l.Content("Fecha:"))
+                        .Culture("es-ES")
                                 .HtmlAttributes(new { style = "width: 100%", title = "timepicker" })
                                 .DateInput()
                                 )

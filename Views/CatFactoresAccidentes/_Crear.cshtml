@@ -81,7 +81,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaFactoresAccidentes").html(result);
+                $("#gridCatFactoresAccidentes").data("kendoGrid").dataSource.data(result);
             }
         });
     }

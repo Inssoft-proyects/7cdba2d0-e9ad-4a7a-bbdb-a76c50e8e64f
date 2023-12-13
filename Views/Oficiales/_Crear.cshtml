@@ -1,4 +1,4 @@
-﻿@model GuanajuatoAdminUsuarios.Models.OficialesModel
+﻿@model GuanajuatoAdminUsuarios.Models.CatOficialesModel
 @{
     var delegaciones = (SelectList)ViewBag.Delegaciones;
 
@@ -128,7 +128,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaOficiales").html(result);
+                $("#gridCatOficiales").data("kendoGrid").dataSource.data(result);
             }
         });
     }

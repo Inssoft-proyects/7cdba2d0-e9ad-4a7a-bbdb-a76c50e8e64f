@@ -111,7 +111,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 CrearHospital(model);
                 var ListHospitalesModel = _catHospitalesService.GetHospitales();
-                return PartialView("_ListaHospitales", ListHospitalesModel);
+                return Json(ListHospitalesModel);
             }
 
             return PartialView("_Crear");
@@ -129,7 +129,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 EditarHospital(model);
                 var ListHospitalesModel = _catHospitalesService.GetHospitales();
-                return PartialView("_ListaHospitales", ListHospitalesModel);
+                return Json(ListHospitalesModel);
             }
             return PartialView("_Editar");
         }
@@ -143,7 +143,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 EliminarHospital(model);
                 var ListHospitalesModel = _catHospitalesService.GetHospitales();
-                return PartialView("_ListaHospitales", ListHospitalesModel);
+                return Json(ListHospitalesModel);
             }
             return PartialView("_Eliminar");
         }

@@ -628,7 +628,7 @@ namespace GuanajuatoAdminUsuarios.Services
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand(strQuery, connection);
-                    command.Parameters.Add(new SqlParameter("@numeroLicencia", SqlDbType.NVarChar)).Value = 'x';
+                    command.Parameters.Add(new SqlParameter("@numeroLicencia", SqlDbType.NVarChar)).Value = (object)model.numeroLicencia ?? DBNull.Value; 
                     command.Parameters.Add(new SqlParameter("@CURP", SqlDbType.NVarChar)).Value = (object)model.CURP ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@RFC", SqlDbType.NVarChar)).Value = (object)model.RFC ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@nombre", SqlDbType.NVarChar)).Value = (object)model.nombre ?? DBNull.Value;
@@ -727,12 +727,12 @@ namespace GuanajuatoAdminUsuarios.Services
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand(strQuery, connection);
-                    command.Parameters.Add(new SqlParameter("@numeroLicencia", SqlDbType.NVarChar)).Value = (object)model.numeroLicenciaFisico ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@CURP", SqlDbType.NVarChar)).Value = (object)model.CURPFisico ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@RFC", SqlDbType.NVarChar)).Value = (object)model.RFCFisico ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@nombre", SqlDbType.NVarChar)).Value = (object)model.nombreFisico ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@apellidoPaterno", SqlDbType.NVarChar)).Value = (object)model.apellidoPaternoFisico ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@apellidoMaterno", SqlDbType.NVarChar)).Value = (object)model.apellidoMaternoFisico ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@numeroLicencia", SqlDbType.NVarChar)).Value = (object)model.numeroLicencia ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@CURP", SqlDbType.NVarChar)).Value = (object)model.CURP ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@RFC", SqlDbType.NVarChar)).Value = (object)model.RFC ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@nombre", SqlDbType.NVarChar)).Value = (object)model.nombre ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@apellidoPaterno", SqlDbType.NVarChar)).Value = (object)model.apellidoPaterno ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@apellidoMaterno", SqlDbType.NVarChar)).Value = (object)model.apellidoMaterno ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@fechaActualizacion", SqlDbType.DateTime)).Value = (object)DateTime.Now;
                     command.Parameters.Add(new SqlParameter("@actualizadoPor", SqlDbType.Int)).Value = (object)1;
                     command.Parameters.Add(new SqlParameter("@estatus", SqlDbType.Int)).Value = (object)1;
@@ -744,7 +744,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     //command.Parameters.Add(new SqlParameter("@vigenciaLicencia", SqlDbType.DateTime)).Value = (object)(model.vigenciaLicencia.HasValue? model.vigenciaLicencia.Value : null);
 
                     //DateTime vigenciaLicenciaValue = (model.vigenciaLicencia != DateTime.MinValue) ? model.vigenciaLicencia : DateTime.MinValue;
-                    command.Parameters.Add(new SqlParameter("@vigenciaLicencia", SqlDbType.DateTime)).Value = vigenciaLicenciaValue;
+                    command.Parameters.Add(new SqlParameter("@vigenciaLicencia", SqlDbType.DateTime)).Value = (object)vigenciaLicenciaValue ?? DBNull.Value; 
 
 
                     command.Parameters.Add(new SqlParameter("@idGenero", SqlDbType.Int)).Value = (object)model.idGenero ?? DBNull.Value;
@@ -756,7 +756,7 @@ namespace GuanajuatoAdminUsuarios.Services
                 }
                 catch (SqlException ex)
                 {
-                    return result;
+                    return 0;
                 }
                 finally
                 {
@@ -820,7 +820,7 @@ namespace GuanajuatoAdminUsuarios.Services
                 }
                 catch (SqlException ex)
                 {
-                    return result;
+                    return 0;
                 }
                 finally
                 {
@@ -909,14 +909,14 @@ namespace GuanajuatoAdminUsuarios.Services
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand(strQuery, connection);
-                    command.Parameters.Add(new SqlParameter("@idEntidad", SqlDbType.Int)).Value = (object)model.idEntidadFisico ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@idMunicipio", SqlDbType.Int)).Value = (object)model.idMunicipioFisico ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@idEntidad", SqlDbType.Int)).Value = (object)model.idEntidad ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@idMunicipio", SqlDbType.Int)).Value = (object)model.idMunicipio ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@codigoPostal", SqlDbType.NVarChar)).Value = (object)model.codigoPostal ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@colonia", SqlDbType.NVarChar)).Value = (object)model.coloniaFisico;
-                    command.Parameters.Add(new SqlParameter("@calle", SqlDbType.NVarChar)).Value = (object)model.calleFisico;
-                    command.Parameters.Add(new SqlParameter("@numero", SqlDbType.NVarChar)).Value = (object)model.numeroFisico;
-                    command.Parameters.Add(new SqlParameter("@telefono", SqlDbType.BigInt)).Value = (object)model.telefonoFisico ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@correo", SqlDbType.NVarChar)).Value = (object)model.correoFisico ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@colonia", SqlDbType.NVarChar)).Value = (object)model.colonia;
+                    command.Parameters.Add(new SqlParameter("@calle", SqlDbType.NVarChar)).Value = (object)model.calle;
+                    command.Parameters.Add(new SqlParameter("@numero", SqlDbType.NVarChar)).Value = (object)model.numero;
+                    command.Parameters.Add(new SqlParameter("@telefono", SqlDbType.BigInt)).Value = (object)model.telefono ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@correo", SqlDbType.NVarChar)).Value = (object)model.correo ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idPersona", SqlDbType.Int)).Value = (object)model.idPersona ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@fechaActualizacion", SqlDbType.DateTime)).Value = (object)DateTime.Now;
                     command.Parameters.Add(new SqlParameter("@actualizadoPor", SqlDbType.Int)).Value = (object)1;
@@ -1172,7 +1172,7 @@ WHERE
             return licenciaNoSITTEG;
         }
 
-        public void InsertarDesdeServicio(LicenciaPersonaDatos personaDatos)
+        public int InsertarDesdeServicio(LicenciaPersonaDatos personaDatos)
         {
             int insertedId = 0; 
             int idPersona = ExistePersona(personaDatos.NUM_LICENCIA, personaDatos.CURP);
@@ -1187,7 +1187,7 @@ WHERE
 
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@NumeroLicencia", string.IsNullOrEmpty(personaDatos.NUM_LICENCIA) ? "" : personaDatos.NUM_LICENCIA);
+                        command.Parameters.AddWithValue("@NumeroLicencia", (object)personaDatos.NUM_LICENCIA ?? DBNull.Value);
                         command.Parameters.AddWithValue("@curp", string.IsNullOrEmpty(personaDatos.CURP) ? "" : personaDatos.CURP);
                         command.Parameters.AddWithValue("@rfc", string.IsNullOrEmpty(personaDatos.RFC) ? "" : personaDatos.RFC);
                         command.Parameters.AddWithValue("@nombre", string.IsNullOrEmpty(personaDatos.NOMBRE) ? "" : personaDatos.NOMBRE);
@@ -1211,6 +1211,7 @@ WHERE
             }
             idPersona = ExistePersona(personaDatos.NUM_LICENCIA, personaDatos.CURP);
             insertarDireccion(personaDatos, idPersona);
+            return (idPersona);
         }
 
         public void insertarDireccion(LicenciaPersonaDatos personaDatos, int insertado)
@@ -1246,18 +1247,45 @@ WHERE
         }
 
         public int ExistePersona(string licencia, string curp)
-        { 
-            int idPersona = 0; 
+        {
+            int idPersona = 0;
 
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
             {
                 connection.Open();
-                string query = "SELECT idPersona FROM PERSONAS p WHERE numeroLicencia=@licencia AND CURP=@curp";
+
+                // Verificar si alguno de los parámetros es null
+                if (licencia == null && curp == null)
+                {
+                    // Manejar la lógica cuando ambos parámetros son null
+                    return idPersona;
+                }
+
+                // Construir la consulta SQL basada en los parámetros no nulos
+                string query = "SELECT idPersona FROM PERSONAS p WHERE ";
+                if (licencia != null)
+                {
+                    query += "numeroLicencia=@licencia ";
+                }
+                if (curp != null)
+                {
+                    if (licencia != null)
+                    {
+                        query += "OR ";
+                    }
+                    query += "CURP=@curp";
+                }
 
                 using (SqlCommand command = new SqlCommand(query, connection))
-                { 
-                    command.Parameters.AddWithValue("@licencia", licencia);
-                    command.Parameters.AddWithValue("@curp", curp);
+                {
+                    if (licencia != null)
+                    {
+                        command.Parameters.AddWithValue("@licencia", licencia);
+                    }
+                    if (curp != null)
+                    {
+                        command.Parameters.AddWithValue("@curp", curp);
+                    }
 
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
@@ -1266,11 +1294,13 @@ WHERE
                             idPersona = reader["idPersona"] == DBNull.Value ? default(int) : Convert.ToInt32(reader["idPersona"]);
                         }
                     }
-                } 
+                }
+
             }
 
             return idPersona;
         }
+
 
         public PersonaModel BuscarPersonaSoloLicencia(string numeroLicencia)
         {
@@ -1423,6 +1453,86 @@ WHERE
                 }
             }
             return ListaPersonas;
+        }
+        public PersonaInfraccionModel GetPersonaInfraccionById(int idPersona)
+        {
+            List<PersonaInfraccionModel> modelList = new List<PersonaInfraccionModel>();
+            string strQuery = @"SELECT
+                                p.idPersona
+                               ,p.numeroLicencia
+                               ,p.CURP
+                               ,p.RFC
+                               ,p.nombre
+                               ,p.apellidoPaterno
+                               ,p.apellidoMaterno
+                               ,p.fechaActualizacion
+                               ,p.actualizadoPor
+                               ,p.estatus
+                               ,p.idCatTipoPersona
+							   ,p.idTipoLicencia
+							   ,p.fechaNacimiento
+							   ,p.idGenero
+							   ,p.vigenciaLicencia
+                               ,ctp.tipoPersona
+							   ,cl.tipoLicencia
+							   ,cg.genero
+                               FROM personas p
+                               LEFT JOIN catTipoPersona ctp
+                               on p.idCatTipoPersona = ctp.idCatTipoPersona AND ctp.estatus = 1
+							   LEFT JOIN catTipoLicencia cl
+							   on p.idTipoLicencia = cl.idTipoLicencia AND cl.estatus = 1
+							   LEFT JOIN catGeneros cg
+							   on p.idGenero = cg.idGenero
+                               WHERE p.estatus = 1
+                               AND p.idPersona = @idPersona";
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(strQuery, connection);
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.Add(new SqlParameter("@idPersona", SqlDbType.Int)).Value = (object)idPersona ?? DBNull.Value;
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            PersonaInfraccionModel model = new PersonaInfraccionModel();
+                            model.PersonaDireccion = new PersonaDireccionModel();
+                            model.idPersonaInfraccion = reader["idPersona"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idPersona"].ToString());
+                            model.numeroLicencia = reader["numeroLicencia"].ToString();
+                            model.CURP = reader["CURP"].ToString();
+                            model.RFC = reader["RFC"].ToString();
+                            model.nombre = reader["nombre"].ToString();
+                            model.apellidoPaterno = reader["apellidoPaterno"].ToString();
+                            model.apellidoMaterno = reader["apellidoMaterno"].ToString();
+                            model.fechaActualizacion = reader["fechaActualizacion"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["fechaActualizacion"].ToString());
+                            model.actualizadoPor = reader["actualizadoPor"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["actualizadoPor"].ToString());
+                            model.estatus = reader["estatus"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["estatus"].ToString());
+                            model.idCatTipoPersona = reader["idCatTipoPersona"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idCatTipoPersona"].ToString());
+                            model.tipoPersona = reader["tipoPersona"].ToString();
+                            model.idGenero = reader["idGenero"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idGenero"].ToString());
+                            model.genero = reader["genero"].ToString();
+                            model.idTipoLicencia = reader["idTipoLicencia"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idTipoLicencia"].ToString());
+                            model.tipoLicencia = reader["tipoLicencia"].ToString();
+                            model.fechaNacimiento = reader["fechaNacimiento"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["fechaNacimiento"].ToString());
+                            model.vigenciaLicencia = reader["vigenciaLicencia"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["vigenciaLicencia"].ToString());
+                            model.PersonaDireccion = GetPersonaDireccionByIdPersona((int)model.idPersonaInfraccion);
+                            modelList.Add(model);
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    //Guardar la excepcion en algun log de errores
+                    //ex
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return modelList.FirstOrDefault();
         }
     }
 

@@ -28,20 +28,28 @@
         <div class="mb-4 px-4">
             <form form id="busquedaEspecialAccidenteForm">
                 <div class="row">
-                    <div class="col-12 col-md-7">
+                    <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm my-3 selecciondeFecha">
                             <label>Fecha Inicio:</label>
-                            @(Html.Kendo().DateTimePickerFor(t => t.FechaInicio)
+                            @(Html.Kendo().DatePickerFor(t => t.FechaInicio)
                                 .Label(l => l.Content("Fecha Inicio:"))
-                                .HtmlAttributes(new { style = "width: 40%", id = "dateInicio" })
+                                .HtmlAttributes(new { style = "width: 100%", id = "dateInicio" })
                                 )
+                           
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="controlForm my-3 selecciondeFecha">
                             <label>Fecha Fin:</label>
-                            @(Html.Kendo().DateTimePickerFor(t => t.FechaFin)
+                            @(Html.Kendo().DatePickerFor(t => t.FechaFin)
                                 .Label(l => l.Content("Fecha Fin:"))
-                                .HtmlAttributes(new { style = "width: 40%", id = "dateFinal" })
+                                .HtmlAttributes(new { style = "width: 100%", id = "dateFinal" })
                                 )
                         </div>
                     </div>
+
+
+
                 </div>
                 <div class="row  align-items-end">
                     <div class="col-12 col-md-6 col-lg-3">
@@ -280,6 +288,22 @@
             }
         });
     }
+
+    $(document).ready(function () {
+        $("#dateInicio").kendoDatePicker({
+            format: "dd/MM/yyyy",
+            parseFormats: ["dd/MM/yyyy"],
+            value: null
+        });
+    });
+
+    $(document).ready(function () {
+        $("#dateFinal").kendoDatePicker({
+            format: "dd/MM/yyyy",
+            parseFormats: ["dd/MM/yyyy"],
+            value: null
+        });
+    });
 </script>
 
 

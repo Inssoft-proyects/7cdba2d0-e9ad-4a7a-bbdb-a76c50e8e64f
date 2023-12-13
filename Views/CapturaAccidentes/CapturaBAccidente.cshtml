@@ -70,7 +70,7 @@
                     } else {
                         if (response.data != null || response.data != undefined) {
                             var personasList = response.data;
-                            var grid = $("#gridInvolucradosPrevio").data("kendoGrid"); 
+                            var grid = $("#gridConductores").data("kendoGrid"); 
 
                             [].forEach.call(personasList, function (persona) {
                                 persona.fechaNacimiento = convertDate(persona.fechaNacimiento);
@@ -195,15 +195,20 @@
             }
         }
     function dirigirParteC() {
-        var descripcionCausa = document.getElementById("descripcionCausaTextArea").value;   
-
+        console.log('dirigirParteC llamado');
+        var descripcionCausa = document.getElementById("descripcionCausaTextArea").value;
+        var esSoloLectura = @(ViewBag.EsSoloLectura ? "true" : "false");
+        console.log("ESSOLO",esSoloLectura)
         $.ajax({
             url: '/CapturaAccidentes/CapturaAccidenteC',
             method: 'POST',
-            data: { descripcionCausa: descripcionCausa },
+            data: {
+                descripcionCausa: descripcionCausa,
+                esSoloLectura: esSoloLectura
+            },
             success: function (response) {
                 sitteg_success('Datos enviados correctamente');
-                window.location.href = '/CapturaAccidentes/CapturaAccidenteC';            
+            window.location.href = '/CapturaAccidentes/CapturaAccidenteC?rOy=' + esSoloLectura;           
             },
             error: function (xhr, status, error) {
                 sitteg_warning('Error al enviar los datos:', error);
@@ -236,7 +241,7 @@
             </div>
             <div class="col-12 col-lg-auto text-center">
                 <div class="btnOutline btnOutlinePrimary px-4 my-3">
-                    <button data-bs-toggle="modal" onclick="mostrarModalAgregarFactor()">
+                    <button data-bs-toggle="modal" onclick="mostrarModalAgregarFactor()" @(ViewBag.EsSoloLectura ? "disabled" : "")>
                         <h6 class="m-0"><i class="me-2 icon-addFactorAccidente"></i><b>Agregar factor</b></h6>
                     </button>
                 </div>
@@ -256,7 +261,7 @@
                 <h6 class="px-4 text-muted">Da de alta los factores del accidente.</h6>
             </div>
         </div>
-        <partial name="_ListaFactores" model="Model" />
+        <partial name="_ListaFactores" model="Model" esSoloLectura="@ViewBag.EsSoloLectura" />
       <!--SECCION CAUSAS-->
     </section>
     <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
@@ -280,7 +285,7 @@
                 </div>
                 <div class="col-12 col-lg-auto text-center">
                     <div class="btnOutline btnOutlinePrimary px-4 my-3">
-                    <button data-bs-toggle="modal" onclick="mostrarModalAgregarCausa()">
+                    <button data-bs-toggle="modal" onclick="mostrarModalAgregarCausa()" @(ViewBag.EsSoloLectura ? "disabled" : "")>
                             <h6 class="m-0"><i class="me-2 icon-addOpciones"></i><b>Agregar causas</b></h6>
                         </button>
                     </div>
@@ -300,16 +305,18 @@
                     <h6 class="px-4 text-muted">Da de alta las causas del accidente.</h6>
                 </div>
             </div>
-            <partial name="_ListaCausas" model="Model" />
+        <partial name="_ListaCausas" model="Model" esSoloLectura="@ViewBag.EsSoloLectura" />
             <form class="row justify-content-between align-items-end mb-2" id="descripcionForm">
                     <div class="col-12 px-4">
                         <div class="controlForm my-3">
                             <label>Descripción de causas determinantes</label>
                             <span>
-                                     @(Html.Kendo().TextAreaFor(t => t.DescripcionCausa)
-                            .Value(!string.IsNullOrWhiteSpace(ViewData["DescripcionCausa"] as string) ? ViewData["DescripcionCausa"] as string : "").Rows(3)
-                                    .HtmlAttributes(new { id = "descripcionCausaTextArea", style = "width:100%;" })
-                                    )
+                        @(Html.Kendo().TextAreaFor(t => t.DescripcionCausa)
+                            .Value(!string.IsNullOrWhiteSpace(ViewData["DescripcionCausa"] as string) ? ViewData["DescripcionCausa"] as string : "")
+                            .Rows(3)
+                            .Enable(!ViewBag.EsSoloLectura) 
+                            .HtmlAttributes(new { id = "descripcionCausaTextArea", style = "width:100%;" })
+                            )
                             </span>
                         </div>
                     </div>
@@ -338,7 +345,7 @@
             </div>
             <div class="col-12 col-lg-auto text-center">
                 <div class="btnOutline btnOutlinePrimary px-4 my-3">
-                    <button onclick="mostrarModalAgregarInvolucrados()">
+                        <button onclick="mostrarModalAgregarInvolucrados()" @(ViewBag.EsSoloLectura ? "disabled" : "")>
                         <h6 class="m-0"><i class="me-2 icon-addInvolucrado"></i><b>Agregar un nuevo involucrado</b></h6>
                     </button>
                 </div>
@@ -361,7 +368,7 @@
             
         </div>
         <div id="tablaInvolucrados">
-                <partial name="_ListadoInvolucrados" model="Model" />
+                <partial name="_ListadoInvolucrados" model="Model" esSoloLectura="@ViewBag.EsSoloLectura" />
         </div>
         <div class="row my-3 mb-4">
             <div class="col-12 col-md-6 mx-md-auto">
@@ -523,7 +530,7 @@
                                 <h6 class="px-4 text-muted">Selecciona un vehículo involucrado para continuar.</h6>
                             </div>
                         </div>
-                        <partial name="_ListaVehiculosInvolucrados" model="Model"/>
+                            <partial name="_ListaVehiculosInvolucrados" model="Model" esSoloLectura="@ViewBag.EsSoloLectura" />
                         <div class="row align-items-end mt-4">
                             <div class="col-12 col-md-6 col-lg-3">
                                 <div class="controlForm my-3">

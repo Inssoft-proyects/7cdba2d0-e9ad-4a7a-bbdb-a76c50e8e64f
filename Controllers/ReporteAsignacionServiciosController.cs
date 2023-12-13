@@ -22,7 +22,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         private readonly IGruasService _gruasService;
         private readonly IEventoService _eventoService;
         private readonly IReporteAsignacionService _reporteAsignacionService;
-        private readonly IPdfGenerator<ReporteAsignacionModel> _pdfService;
+        private readonly IPdfGenerator _pdfService;
         private readonly ICatDictionary _catDictionary;
         private readonly ITransitoTransporteService _transitoTransporteService;
 
@@ -30,7 +30,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             ITransitoTransporteService transitoTransporteService,
             IPadronDepositosGruasService padronDepositosGruasService,
              IGruasService gruasService, IEventoService eventoService,
-             IReporteAsignacionService reporteAsignacionService, IPdfGenerator<ReporteAsignacionModel> pdfService
+             IReporteAsignacionService reporteAsignacionService, IPdfGenerator pdfService
             , ICatDictionary catDictionary
             )
         {
@@ -117,7 +117,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
 
             var listReporteAsignacion = _reporteAsignacionService.GetAllReporteAsignaciones(model,idOficina);
-            var result = _pdfService.CreatePdf("ReporteAsignacionServicios", "Asignación de Servicios", 7, ColumnsNames, listReporteAsignacion);
+            var result = _pdfService.CreatePdf<ReporteAsignacionModel>("ReporteAsignacionServicios", "Asignación de Servicios", 7, ColumnsNames, listReporteAsignacion);
             return File(result.Item1, "application/pdf", result.Item2);
         }
 

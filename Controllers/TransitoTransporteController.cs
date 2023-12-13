@@ -25,12 +25,12 @@ namespace GuanajuatoAdminUsuarios.Controllers
         private readonly ITransitoTransporteService _transitoTransporteService;
         private readonly IDependencias _dependeciaService;
         private readonly IGruasService _gruasService;
-        private readonly IPdfGenerator<TransitoTransporteModel> _pdfService;
+        private readonly IPdfGenerator _pdfService;
         private readonly ICatDictionary _catDictionary;
 
         public TransitoTransporteController(ITransitoTransporteService transitoTransporteService,
             IDependencias dependeciaService, IGruasService gruasService,
-            IPdfGenerator<TransitoTransporteModel> pdfService, ICatDictionary catDictionary
+            IPdfGenerator pdfService, ICatDictionary catDictionary
             )
         {
             _transitoTransporteService = transitoTransporteService;

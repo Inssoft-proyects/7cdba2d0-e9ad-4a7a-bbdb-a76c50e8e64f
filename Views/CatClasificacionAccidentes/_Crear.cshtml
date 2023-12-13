@@ -83,7 +83,7 @@
             success: function (result) {
                 sitteg_success('Elemento guardado correctamente')
 
-                $("#tablaClasificacionAccidentes").html(result);
+                $("#gridCatClasificacionAccidente").data("kendoGrid").dataSource.data(result);
             }
         });
     }

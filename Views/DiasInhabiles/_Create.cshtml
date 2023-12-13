@@ -42,6 +42,7 @@
                             <span>
 
                             @(Html.Kendo().DatePickerFor(t => t.fecha)
+                        .Culture("es-ES")
                                 .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "end" })
                                 )
                             </span>

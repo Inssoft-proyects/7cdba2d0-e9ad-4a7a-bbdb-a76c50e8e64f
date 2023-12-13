@@ -3,11 +3,9 @@
 <div class="row mb-1 titleCustom">
     <div class="col-12 col-md-auto mt-4 mb-2">
         <h5 class="px-4"><b>Listado de vehículos</b></h5>
-        @*<h6 class="px-4 text-muted">Edita los datos de vehículo.</h6>*@
+        <h6 class="px-4 text-muted">Edita los datos de vehículo.</h6>
     </div>
 </div>
-<br />
-<br />
 <div class="row">
 
     <div class="col-12 mb-4 px-4 rounded gridCustom">
@@ -24,7 +22,7 @@
                 columns.Bound(c => c.tipoVehiculo).Title("Tipo Vehículo").Width(90);
                 columns.Bound(c => c.propietario).Title("Propietario").Width(90);
                 columns.Bound(c => c.tarjeta).Title("Tarjeta").Width(90);
-                columns.Bound(c => c.vigenciaTarjeta).Title("Vigencia tarjeta").Width(90);
+                columns.Bound(c => c.vigenciaTarjeta).Title("Vigencia tarjeta").Format("{0:dd/MM/yyyy}").Width(90);
                 columns.Bound(c => c.motor).Title(" No. Motor").Width(90);
                 columns.Bound(c => c.modelo).Title("Modelo").Width(90);
                 columns.Bound(c => c.color).Title("Color").Width(90);

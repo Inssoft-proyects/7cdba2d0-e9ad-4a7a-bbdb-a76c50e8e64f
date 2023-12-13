@@ -49,8 +49,8 @@
 </script>
 <div class="row">
 <div class="col-12 mb-4 px-4 rounded gridCustom">
-    
-    @(
+       
+        @(
         Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CapturaAccidentesModel>()
         .Name("gridPrevioVehiculo")
         .Events(events => events.Change("onRowSelect"))
@@ -82,9 +82,10 @@
         .Pageable()
         .DataSource(dataSource => dataSource
         .Ajax()
-        .Read(read => read.Action("ObtVehiculosInvol", "CapturaAccidentes"))
+        //.Read(read => read.Action("ObtVehiculosInvol", "CapturaAccidentes"))
             .PageSize(5).Model(model => model.Id(p => p.IdVehiculo))
         )
+            .NoRecords(noRecords => noRecords.Template("Realice una busqueda o revise los datos ingresados"))
             .ToolBar(t => t.Search())
             .Search(s =>
             {

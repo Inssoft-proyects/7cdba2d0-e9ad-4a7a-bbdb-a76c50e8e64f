@@ -11,7 +11,7 @@
 <div class="row">
  
     @*<column template="<button data-bs-toggle=modal data-bs-target=\#editVehiculo class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>" width="100" />*@
-    <div class="col-12 mb-4 px-4 rounded gridCustom">
+    
         @(Html.Kendo().Grid(Model)
             .Name("Grid")
             .Columns(columns =>
@@ -47,7 +47,6 @@
             })
             )
     </div>
-</div>
 @*<div>
      @(Html.Kendo().Grid(Model)
         .Name("Grid2")
@@ -80,7 +79,7 @@
                     <div class="col-auto pe-0">
                         <div class="row align-items-center justify-content-center justify-content-md-start">
                             <div class="col-auto pe-0">
-                                <i class="icon-addDependencia h1 colorPrimary"></i>
+                                <i class="icon-editGrua h1 colorPrimary"></i>
                             </div>
                             <div class="col-auto my-3">
                                 <h2 class="m-0 h3"><b>Editar grúa</b></h2>

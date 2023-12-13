@@ -102,7 +102,7 @@
 
         var Mydata = $("#eliminarHospitalForm").serialize();
         console.log(Mydata);
-        $('#eliminarHospital').modal('hide');
+        $('#agregarHospital').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
         $.ajax({
@@ -110,7 +110,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaHospitales").html(result);
+                $("#gridCatHospitales").data("kendoGrid").dataSource.data(result);
             }
         });
     }

@@ -92,7 +92,7 @@
                         </button>
                     </div>
                     <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-                        <div class="controlButton" onclick="editarAgencia()">
+                        <div type="button" class="controlButton" onclick="editarAgencia()">
                             @(Html.Kendo().Button()
                             .Name("EditMinisterio")
                             .HtmlAttributes(new { @class = "btnPrimary px-3" })
@@ -120,7 +120,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaAgenciasMinisterio").html(result);
+                $("#gridAgenciasMinisterio").data("kendoGrid").dataSource.data(result);
                 sitteg_info('Se ha actualizado la información');
 
             },

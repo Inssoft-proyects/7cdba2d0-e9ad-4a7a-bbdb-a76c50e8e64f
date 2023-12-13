@@ -90,8 +90,7 @@
     function editarColor() {
 
         var Mydata = $("#EditarColorForm").serialize();
-        console.log(Mydata);
-        $('#editColor').modal('hide');
+            $('#addColor').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
         $.ajax({
@@ -99,8 +98,8 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaColores").html(result);
-                sitteg_success('Se ha actualizado la información');
+                    sitteg_success('Se ha actualizado la información');
+                    $("#gridCatColores").data("kendoGrid").dataSource.data(result);
 
             },
             error: function (error) {

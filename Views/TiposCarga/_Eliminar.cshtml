@@ -92,7 +92,7 @@
 
         var Mydata = $("#EliminarTipoCargaForm").serialize();
         console.log(Mydata);
-        $('#eliminarTipoCarga').modal('hide');
+        $('#addTipoCarga').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
         $.ajax({
@@ -100,7 +100,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaTiposCarga").html(result);
+                $("#gridCatTiposCarga").data("kendoGrid").dataSource.data(result);
             }
         });
     }

@@ -115,7 +115,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 _clasificacionAccidentesService.CrearClasificacionAccidente(model);
                 var ListClasificacionAccidentesModel = _clasificacionAccidentesService.GetClasificacionAccidentes();
-                return PartialView("_ListaClasificacionAccidentes", ListClasificacionAccidentesModel);
+                return Json(ListClasificacionAccidentesModel);
             }
 
             return PartialView("_Crear");
@@ -133,7 +133,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 _clasificacionAccidentesService.EditarClasificacionAccidente(model);
                 var ListClasificacionAccidentesModel = _clasificacionAccidentesService.GetClasificacionAccidentes();
-                return PartialView("_ListaClasificacionAccidentes", ListClasificacionAccidentesModel);
+                return Json(ListClasificacionAccidentesModel);
             }
             return PartialView("_Editar");
         }

@@ -195,7 +195,7 @@ namespace GuanajuatoAdminUsuarios.Services
             return ListPensiones;
         }
 
-        public List<PensionModel> GetPensionById(int idPension, int idOficina)
+        public List<PensionModel> GetPensionById(int idPension, int idOficina)//se omite la condicion idOficina por falta de fatos en base
         {
 
             List<PensionModel> ListPensiones = new List<PensionModel>();
@@ -223,13 +223,13 @@ namespace GuanajuatoAdminUsuarios.Services
                                                  ,g.placas
                                                  ,c.concesionario
                                                  FROM pensiones p
-                                                 INNER JOIN catDelegaciones d
+                                                 LEFT JOIN catDelegaciones d
                                                  on p.idDelegacion = d.idDelegacion 
                                                  AND d.estatus = 1
-                                                 INNER JOIN catMunicipios m
+                                                 LEFT JOIN catMunicipios m
                                                  on p.idMunicipio = m.idMunicipio 
                                                  AND m.estatus = 1
-                                                 INNER JOIN catResponsablePensiones cr
+                                                 LEFT JOIN catResponsablePensiones cr
                                                  on p.idResponsable = cr.idResponsable
                                                  AND cr.estatus = 1
                                                  LEFT JOIN pensionGruas pg
@@ -241,7 +241,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                                  on g.idConcesionario = c.idConcesionario
                                                  AND c.estatus = 1
                                                  WHERE p.estatus = 1
-                                                 AND p.idPension = @idPension AND p.idDelegacion = @idOficina";
+                                                 AND p.idPension = @idPension";
 
 
                     SqlCommand command = new SqlCommand(SqlTransact, connection);
@@ -289,7 +289,7 @@ namespace GuanajuatoAdminUsuarios.Services
                 }
             return ListPensiones;
         }
-        public List<Gruas2Model> GetGruasDisponiblesByIdPension(int idPension, int idOficina)
+        public List<Gruas2Model> GetGruasDisponiblesByIdPension(int idPension, int idOficina)//se omite la condicion idOficina por falta de fatos en base
         {
             List<Gruas2Model> ListGruas = new List<Gruas2Model>();
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))

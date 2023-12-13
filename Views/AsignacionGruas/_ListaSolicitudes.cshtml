@@ -9,6 +9,13 @@
 
 <div class="row">
     <div class="col-12 mb-4 px-4 rounded gridCustom">
+        <div class="row justify-content-between mb-1 titleCustom">
+            <div class="col-12 col-md-auto mt-4 mb-2">
+                <h5 class="px-4"><b>Listado de grúas</b></h5>
+                <h6 class="px-4 text-muted">Edita o ajusta el listado de grúas.</h6>
+            </div>
+        </div>
+
         @(
             Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.AsignacionGruaModel>()
             .Name("gridBusquedaSolicitudes")

@@ -55,8 +55,8 @@
             type: 'POST', // Tipo de solicitud HTTP (POST o GET)
             data: { IdMarcaVehiculo: IdMarcaVehiculo }, // Datos que se enviarán al controlador
             success: function (result) {
-                $('#ModalBodyUpdate').html(result);
-                $('#editarMarca').modal('show');
+                $('#ModalBodyCreate').html(result);
+                $('#addMarca').modal('show');
 
             },
         })
@@ -72,8 +72,8 @@
             type: 'POST', // Tipo de solicitud HTTP (POST o GET)
             data: { IdMarcaVehiculo: IdMarcaVehiculo }, // Datos que se enviarán al controlador
             success: function (result) {
-                $('#ModalBodyEliminarMarca').html(result);
-                $('#eliminarMarca').modal('show');
+                $('#ModalBodyCreate').html(result);
+                $('#addMarca').modal('show');
 
             },
         })

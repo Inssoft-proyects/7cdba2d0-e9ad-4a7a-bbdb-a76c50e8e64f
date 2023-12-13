@@ -108,7 +108,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaDelegacionesOficinas").html(result);
+                $("#gridCatOficinasTransporte").data("kendoGrid").dataSource.data(result);
             }
         });
     }

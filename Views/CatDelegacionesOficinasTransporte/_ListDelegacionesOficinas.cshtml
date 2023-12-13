@@ -2,7 +2,7 @@
     <div class="col-12 mb-4 px-4 rounded gridCustom">
         @(
             Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CatDelegacionesOficinasTransporteModel>()
-            .Name("grid")
+            .Name("gridCatOficinasTransporte")
             .Columns(columns =>
             {
                 columns.Bound(c => c.IdOficinaTransporte).Title("Id").Width(40);
@@ -64,8 +64,8 @@
             type: 'POST',
             data: { IdOficinaTransporte: IdOficinaTransporte },
             success: function (result) {
-                $('#ModalBodyEditarDelegacionOficina').html(result);
-                $('#editarDelegacionOficina').modal('show');
+                $('#ModalBodyaAgregarDelegacionOficina').html(result);
+                $('#agregarDelegacionOficina').modal('show');
 
             },
         })
@@ -81,8 +81,8 @@
             type: 'POST',
             data: { IdOficinaTransporte: IdOficinaTransporte },
             success: function (result) {
-                $('#ModalBodyEliminarDelegacionOficina').html(result);
-                $('#eliminarDelegacionOficina').modal('show');
+                $('#ModalBodyaAgregarDelegacionOficina').html(result);
+                $('#agregarDelegacionOficina').modal('show');
 
             },
         })

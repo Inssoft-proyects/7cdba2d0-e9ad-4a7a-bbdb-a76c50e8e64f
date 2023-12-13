@@ -38,12 +38,13 @@
             <label>Fecha nacimiento:</label>
             @if (Model.fechaNacimiento.HasValue)
             {
-                <p>@Model.fechaNacimiento.Value.ToString("dd-MM-yyyy")</p>
+                <p>@(Model.fechaNacimiento > DateTime.MinValue ? Model.fechaNacimiento.Value.ToString("dd/MM/yyyy"):"-")</p>
             }
             else
             {
                 <p>-</p>
             }
+
         </div>
     </div>
 </div>
@@ -112,7 +113,11 @@
         <div class="controlForm">
             <label>Vigencia licencia:</label>
             <p>
-                @(Model.vigenciaLicencia != DateTime.MinValue ? Model.vigenciaLicencia.ToShortDateString() : "-")
+                @((Model.vigenciaLicencia.HasValue && Model.vigenciaLicencia.Value != new DateTime(1900, 1, 1) && Model.vigenciaLicencia.Value != DateTime.MinValue)
+                    ? Model.vigenciaLicencia.Value.ToString("dd/MM/yyyy")
+                    : "-")
+
+
             </p>
 
         </div>

@@ -94,7 +94,7 @@
 
         var Mydata = $("#EditarSalarioForm").serialize();
         console.log(Mydata);
-        $('#editUdiSalario').modal('hide');
+        $('#addUdiSalario').modal('hide');
         $('modal-body').removeClass('model-open');
         $('.modal-backdrop').remove();
         $.ajax({
@@ -102,7 +102,9 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaSalarios").html(result);
+                $("#gridCatUmas").data("kendoGrid").dataSource.data(result);
+                sitteg_info('Se ha actualizado la información');
+
             }
         });
     }

@@ -95,7 +95,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 _catTramosService.CrearTramo(model);
                 var TramosModel = _catTramosService.ObtenerTramos();
-                return PartialView("_ListaTramos", TramosModel);
+                return Json(TramosModel);
             }
 
             return PartialView("_Crear");
@@ -112,7 +112,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 _catTramosService.EditarTramo(model);
                 var TramosModel = _catTramosService.ObtenerTramos();
-                return PartialView("_ListaTramos", TramosModel);
+                return Json(TramosModel);
             }
             return PartialView("_Editar");
         }

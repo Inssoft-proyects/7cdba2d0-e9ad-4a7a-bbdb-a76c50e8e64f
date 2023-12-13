@@ -2,7 +2,7 @@
     <div class="col-12 mb-4 px-4 rounded gridCustom">
         @(
             Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.DiasInhabilesModel>()
-            .Name("grid")
+            .Name("gridCatDiasInhabiles")
             .Columns(columns =>
             {              
                 columns.Bound(c => c.idDiaInhabil).Title("Id").Width(20);
@@ -63,8 +63,8 @@
             type: 'POST', // Tipo de solicitud HTTP (POST o GET)
             data: { idDiaInhabil: idDiaInhabil }, // Datos que se enviarán al controlador
             success: function (result) {
-                $('#editarDiaInhabilBody').html(result);
-                $('#editDateInhabil').modal('show');
+                $('#ModalBodyCreateDiaInhabil').html(result);
+                $('#addDateInhabil').modal('show');
 
             },
         })
@@ -80,8 +80,8 @@
             type: 'POST', // Tipo de solicitud HTTP (POST o GET)
             data: { idDiaInhabil: idDiaInhabil }, // Datos que se enviarán al controlador
             success: function (result) {
-                $('#ModalBodyEliminarDiaInhabil').html(result);
-                $('#eliminarDiaInhabil').modal('show');
+                $('#ModalBodyCreateDiaInhabil').html(result);
+                $('#addDateInhabil').modal('show');
 
             },
         })

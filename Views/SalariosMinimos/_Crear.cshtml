@@ -89,7 +89,9 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaSalarios").html(result);
+                $("#gridCatUmas").data("kendoGrid").dataSource.data(result);
+                sitteg_info('Se ha actualizado la información');
+
             }
         });
     }

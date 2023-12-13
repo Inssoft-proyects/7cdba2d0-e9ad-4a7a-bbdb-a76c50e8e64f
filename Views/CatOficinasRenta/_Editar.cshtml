@@ -102,7 +102,7 @@
 
         var Mydata = $("#editarOficinaForm").serialize();
         console.log(Mydata);
-        $('#editarOficinasRenta').modal('hide');
+        $('#agregarOficinasRenta').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
         $.ajax({
@@ -110,7 +110,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaOficinasRenta").html(result);
+                $("#gridCatOficinasRenta").data("kendoGrid").dataSource.data(result);
                 sitteg_info('Se ha actualizado la información');
 
             },

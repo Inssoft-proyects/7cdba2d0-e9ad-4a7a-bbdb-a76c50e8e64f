@@ -79,7 +79,7 @@
 
         var Mydata = $("#eliminarClasificacionForm").serialize();
         console.log(Mydata);
-        $('#eliminarClasificacionAccidente').modal('hide');
+        $('#agregarClasificacionAccidente').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
         $.ajax({
@@ -87,7 +87,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaClasificacionAccidentes").html(result);
+                $("#gridCatClasificacionAccidente").data("kendoGrid").dataSource.data(result);
             }
         });
     }

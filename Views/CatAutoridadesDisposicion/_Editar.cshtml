@@ -84,15 +84,15 @@
 
         var Mydata = $("#editarAutDispForm").serialize();
         console.log(Mydata);
-        $('#editarAutoridadDisp').modal('hide');
-        $('body').removeClass('model-open');
-        $('.modal-backdrop').remove();
+        $('#agregarAutoridadDisp').modal('hide');
+  
         $.ajax({
-            url: '@Url.Action("EditarAutoridadDisposicionlModal")',
+            url: '@Url.Action("Update")',
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaAutoridadesDisposicion").html(result); 
+               // $("#tablaAutoridadesDisposicion").html(result);
+                $("#gridAutoridadesDisp").data("kendoGrid").dataSource.data(result);
                 sitteg_info('Se ha actualizado la información');
 
             },

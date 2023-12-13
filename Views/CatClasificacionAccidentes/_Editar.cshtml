@@ -84,7 +84,7 @@
 
         var Mydata = $("#editarClasificacionForm").serialize();
         console.log(Mydata);
-        $('#editarClasificacionAccidente').modal('hide');
+        $('#agregarClasificacionAccidente').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
         $.ajax({
@@ -92,7 +92,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaClasificacionAccidentes").html(result);
+                $("#gridCatClasificacionAccidente").data("kendoGrid").dataSource.data(result);
                 sitteg_success('Elemento modificado correctamente')
 
             },

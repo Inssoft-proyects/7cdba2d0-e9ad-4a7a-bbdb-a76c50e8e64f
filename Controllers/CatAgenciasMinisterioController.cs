@@ -110,7 +110,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                     CrearAgenciaMinisterio(model);
                     var ListAgenciasMinisterioModel = GetAgenciasministerio();
-                    return PartialView("_ListaAgenciasMinisterio", ListAgenciasMinisterioModel);
+                    return Json(ListAgenciasMinisterioModel);
                 }
                 SetDDLDelegaciones();
                 return PartialView("_Crear");
@@ -128,7 +128,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                     EditarAgenciaMinisterio(model);
                     var ListAgenciasMinisterioModel = GetAgenciasministerio();
-                    return PartialView("_ListaAgenciasMinisterio", ListAgenciasMinisterioModel);
+                    return Json(ListAgenciasMinisterioModel);
                 }
                 return PartialView("_ListaAgenciasMinisterio");
             }

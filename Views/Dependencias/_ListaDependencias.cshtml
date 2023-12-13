@@ -2,7 +2,7 @@
     <div class="col-12 mb-4 px-4 rounded gridCustom">
         @(
             Html.Kendo().Grid<GuanajuatoAdminUsuarios.Entity.Dependencias>()
-                    .Name("grid")
+            .Name("gridCatDependencias")
                     .Columns(columns =>
                     {
                         columns.Bound(c => c.IdDependencia).Width(20).Title("Id");
@@ -63,8 +63,8 @@
             type: 'POST', 
             data: { IdDependencia: IdDependencia }, 
             success: function (result) {
-                $('#ModalBodyUpdateDep').html(result);
-                $('#editDependencia').modal('show');
+                $('#ModalBodyCreate').html(result);
+                $('#addDependencia').modal('show');
 
             },
         })
@@ -80,8 +80,8 @@
             type: 'POST', 
             data: { IdDependencia: IdDependencia }, 
             success: function (result) {
-                $('#ModalBodyEliminarDep').html(result);
-                $('#eliminarDependencia').modal('show');
+                $('#ModalBodyCreate').html(result);
+                $('#addDependencia').modal('show');
 
             },
         })

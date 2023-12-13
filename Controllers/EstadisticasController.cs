@@ -22,20 +22,22 @@ namespace GuanajuatoAdminUsuarios.Controllers
         private readonly IDelegacionesService _delegacionesService;
         private readonly IGarantiasService _garantiasService;
         private readonly IInfraccionesService _infraccionesService;
-        private readonly IPdfGenerator<InfraccionesModel> _pdfService;
+        private readonly IPdfGenerator _pdfService;
         private readonly ICatDictionary _catDictionary;
         private readonly IVehiculosService _vehiculosService;
         private readonly IPersonasService _personasService;
         private readonly IEstadisticasService _estadisticasService;
+        private readonly ICatSubtipoServicio _catSubtipoServicio;
+
 
         public EstadisticasController(
             IEstatusInfraccionService estatusInfraccionService, IDelegacionesService delegacionesService,
             ITipoCortesiaService tipoCortesiaService, IDependencias dependeciaService, IGarantiasService garantiasService,
-            IInfraccionesService infraccionesService, IPdfGenerator<InfraccionesModel> pdfService,
+            IInfraccionesService infraccionesService, IPdfGenerator pdfService,
             ICatDictionary catDictionary,
             IVehiculosService vehiculosService,
             IPersonasService personasService, 
-            IEstadisticasService estadisticasService
+            IEstadisticasService estadisticasService,ICatSubtipoServicio catSubtipoServicio
            )
         {
             _catDictionary = catDictionary;
@@ -49,6 +51,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             _vehiculosService = vehiculosService;
             _personasService = personasService;
             _estadisticasService = estadisticasService;
+            _catSubtipoServicio = catSubtipoServicio;
         }
         public IActionResult Index()
         {
@@ -100,7 +103,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 return RedirectToAction("Principal", "Inicio", new { area = "" });
             }
         }
-
+        public JsonResult SubtipoServicio_Drop(int tipoServicioDDlValue)
+        {
+            var result = new SelectList(_catSubtipoServicio.GetSubtipoPorTipo(tipoServicioDDlValue), "idSubTipoServicio", "subTipoServicio");
+            return Json(result);
+        }
         public IActionResult ajax_BusquedaIncidenciasInfracciones(IncidenciasBusquedaModel model)
         {
             var modelList = _estadisticasService.GetAllInfraccionesEstadisticas(model)

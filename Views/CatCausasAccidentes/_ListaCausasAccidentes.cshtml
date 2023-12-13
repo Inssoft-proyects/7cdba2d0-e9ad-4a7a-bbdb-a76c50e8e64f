@@ -3,7 +3,7 @@
         
         @(
             Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CatCausasAccidentesModel>()
-            .Name("grid")
+            .Name("gridCatCausasAccidente")
             .Columns(columns =>
             {
                 columns.Bound(c => c.IdCausaAccidente).Title("Id").Width(40);
@@ -54,8 +54,8 @@
             type: 'POST',
             data: { IdCausaAccidente: IdCausaAccidente },
             success: function (result) {
-                $('#ModalBodEditarCausaAccidente').html(result);
-                $('#editarCausaAccidente').modal('show');
+                $('#ModalBodyaAgregarCausaAccidente').html(result);
+                $('#agregarCausaAccidente').modal('show');
 
             },
         })
@@ -71,8 +71,8 @@
             type: 'POST',
             data: { IdCausaAccidente: IdCausaAccidente },
             success: function (result) {
-                $('#ModalBodyCausaAccidente').html(result);
-                $('#eliminarCausaAccidente').modal('show');
+                $('#ModalBodyaAgregarCausaAccidente').html(result);
+                $('#agregarCausaAccidente').modal('show');
 
             },
         })

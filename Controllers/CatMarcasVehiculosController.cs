@@ -107,7 +107,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 _catMarcasVehiculosService.GuardarMarca(model);
                 var ListMarcasModel = _catMarcasVehiculosService.ObtenerMarcas();
-                return PartialView("_ListaMarcasVehiculos", ListMarcasModel);
+                return Json(ListMarcasModel);
             }
             //SetDDLCategories();
             //return View("Create");
@@ -126,7 +126,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 _catMarcasVehiculosService.UpdateMarca(model);
                 var ListMarcasModel = _catMarcasVehiculosService.ObtenerMarcas();
-                return PartialView("_ListaMarcasVehiculos", ListMarcasModel);
+                return Json(ListMarcasModel);
             }
             //SetDDLCategories();
             //return View("Create");

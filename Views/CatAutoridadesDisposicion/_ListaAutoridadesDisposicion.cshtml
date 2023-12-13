@@ -2,7 +2,7 @@
     <div class="col-12 mb-4 px-4 rounded gridCustom">
         @(
             Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CatAutoridadesDisposicionModel>()
-            .Name("grid")
+            .Name("gridAutoridadesDisp")
             .Columns(columns =>
             {
                 columns.Bound(c => c.IdAutoridadDisposicion).Width(20).Title("Id");
@@ -19,7 +19,7 @@
             .DataSource(dataSource => dataSource
             .Ajax()
             .Read(read => read.Action("GetAutDisp", "CatAutoridadesDisposicion"))
-            .PageSize(5).Model(model => model.Id(p => p.IdAutoridadDisposicion))
+            .PageSize(5)
             )
             .ToolBar(t => t.Search())
             .Search(s =>
@@ -51,8 +51,8 @@
             type: 'POST', // Tipo de solicitud HTTP (POST o GET)
             data: { IdAutoridadDisposicion: IdAutoridadDisposicion }, // Datos que se enviarán al controlador
             success: function (result) {
-                $('#ModalBodyEditarAutoridadDisp').html(result);
-                $('#editarAutoridadDisp').modal('show');
+                $('#ModalBodyCrearAutoridadDisp').html(result);
+                $('#agregarAutoridadDisp').modal('show');
 
             },
         })
@@ -68,8 +68,8 @@
             type: 'POST', // Tipo de solicitud HTTP (POST o GET)
             data: { IdAutoridadDisposicion: IdAutoridadDisposicion }, // Datos que se enviarán al controlador
             success: function (result) {
-                $('#ModalBodyEliminarAutoridadDisp').html(result);
-                $('#eliminarAutoridadDisp').modal('show');
+                $('#ModalBodyCrearAutoridadDisp').html(result);
+                $('#agregarAutoridadDisp').modal('show');
 
             },
         })

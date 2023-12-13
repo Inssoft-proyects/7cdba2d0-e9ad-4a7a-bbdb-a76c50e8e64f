@@ -48,7 +48,7 @@
             <div class="col-12 col-md-6 col-lg-5 col-xl-auto">
                 <div class="row align-items-center justify-content-center justify-content-md-start">
                     <div class="col-auto">
-                        <i class="icon-edit-car h1 colorPrimary"></i>
+                        <i class="icon-research h1 colorPrimary"></i>
                     </div>
                     <div class="col-auto my-3">
                         <h2 class="m-0 h3"><b>Tránsito/Transporte</b></h2>
@@ -251,7 +251,9 @@
                 <div class="controlForm my-3">
                     <label>Fecha de Ingreso:</label>
                     @(Html.Kendo().DatePickerFor(t => t.FechaIngreso)
-                        .Format("dd-MM-yyyy")
+                        .Format("dd/MM/yyyy")
+                        .Culture("es-ES")
+
                         .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "start" })
                         )
 
@@ -270,7 +272,8 @@
                     <label>Fecha Hasta:</label>
 
                     @(Html.Kendo().DatePickerFor(t => t.FechaIngresoFin)
-                        .Format("dd-MM-yyyy")
+                        .Format("dd/MM/yyyy")
+                        .Culture("es-ES")
                         .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "end" })
                         )
 

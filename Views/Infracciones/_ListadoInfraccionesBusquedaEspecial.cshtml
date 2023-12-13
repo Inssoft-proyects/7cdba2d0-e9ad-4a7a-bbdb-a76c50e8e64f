@@ -34,7 +34,7 @@
                 columns.Bound(p => p.PersonaInfraccion.nombreCompleto).Title("Conductor").Width(90);
                 columns.Bound(p => p.Vehiculo.Persona.nombreCompleto).Title("Propietario").Width(90);
                 columns.Bound(c => c.Vehiculo.placas).Title("Placas").Width(90);
-                columns.Bound(c => c.fechaInfraccion).Title("Fecha Aplicada a").Width(100);
+                columns.Bound(c => c.fechaInfraccion).Title("Fecha Aplicada a").Width(100).Format("{0:dd/MM/yyyy}");
                 columns.Bound(c => c.estatusInfraccion).Title("Estatus").Width(90);
                 columns.Bound(c => c.delegacion).Title("Delegación/Oficina").Width(90);
                 columns.Bound(p => p.idInfraccion).ClientTemplate("#= TemplateCortecia(data) #").Title("Cortesía").Sortable(false).Width(90);
@@ -59,7 +59,6 @@
                 s.Field(c => c.PersonaInfraccion.nombreCompleto);
                 s.Field(c => c.Vehiculo.Persona.nombreCompleto);
                 s.Field(c => c.Vehiculo.placas);
-                s.Field(c => c.fechaInfraccion);
                 s.Field(c => c.estatusInfraccion);
                 s.Field(c => c.delegacion);
 

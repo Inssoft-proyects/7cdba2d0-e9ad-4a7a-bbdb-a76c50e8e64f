@@ -3,7 +3,7 @@
 
         @(
             Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CatEntidadesModel>()
-            .Name("grid")
+            .Name("gridCatEntidades")
             .Columns(columns =>
             {
                 columns.Bound(c => c.idEntidad).Title("Id").Width(80);
@@ -56,8 +56,8 @@
             type: 'POST', // Tipo de solicitud HTTP (POST o GET)
             data: { idEntidad: idEntidad }, // Datos que se enviarán al controlador
             success: function (result) {
-                $('#ModalBodEditarEntidad').html(result);
-                $('#editarEntidad').modal('show');
+                $('#ModalBodyEntidad').html(result);
+                $('#agregarEntidad').modal('show');
 
             },
         })

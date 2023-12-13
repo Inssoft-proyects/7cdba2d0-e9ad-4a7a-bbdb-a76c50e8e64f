@@ -54,7 +54,9 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 //Crear el producto
 
                 CrearAutoridadDisp(model);
-                return RedirectToAction("Index");
+                var ListAutoridadesDisposicionModel = GetAutoridadesDisposicion();
+
+                return Json(ListAutoridadesDisposicionModel);
             }
             return View("_Agregar");
         }
@@ -81,7 +83,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 EditarAutoridadDisp(model);
                 var ListAutoridadesDisposicionModel = GetAutoridadesDisposicion();
-                return PartialView("_ListaAutoridadesDisposicion", ListAutoridadesDisposicionModel);
+                return Json(ListAutoridadesDisposicionModel);
             }
 
             return PartialView("_Editar");
@@ -181,38 +183,6 @@ namespace GuanajuatoAdminUsuarios.Controllers
             return PartialView("_Crear");
         }
 
-        public ActionResult EditarAutoridadDisposicionlModal(CatAutoridadesDisposicionModel model)
-        {
-            var errors = ModelState.Values.Select(s => s.Errors);
-            ModelState.Remove("AutoridadDisposicion");
-            if (ModelState.IsValid)
-            {
-
-
-                EditarAutoridadDisp(model);
-                var ListAutoridadesDisposicionModel = GetAutoridadesDisposicion();
-                return PartialView("_ListaAutoridadesDisposicion", ListAutoridadesDisposicionModel);
-            }
-            //SetDDLCategories();
-            //return View("Create");
-            return PartialView("_Editar");
-        }
-
-        public ActionResult EliminarAutoridadDisposicionModal(CatAutoridadesDisposicionModel model)
-        {
-            var errors = ModelState.Values.Select(s => s.Errors);
-            ModelState.Remove("AutoridadDisposicion");
-            if (ModelState.IsValid)
-            {
-
-
-                EliminarAutoridadDisp(model);
-                var ListAutoridadesDisposicionModel = GetAutoridadesDisposicion();
-                return PartialView("_ListaAutoridadesDisposicion", ListAutoridadesDisposicionModel);
-            }
-
-            return PartialView("_Eliminar");
-        }
         public JsonResult GetAutDisp([DataSourceRequest] DataSourceRequest request)
         {
             var ListAutoridadesDisposicionModel = GetAutoridadesDisposicion();

@@ -126,7 +126,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 CreateMotivo(model);
                 var ListMotivosInfraccionModel = _motivoInfraccionService.GetMotivos();
-                return PartialView("_ListaMotivosInfraccion", ListMotivosInfraccionModel);
+                return Json(ListMotivosInfraccionModel);
             }
             //SetDDLCategories();
             //return View("Create");
@@ -145,7 +145,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 UpdateMotivo(model);
                 var ListMotivosInfraccionModel = _motivoInfraccionService.GetMotivos();
-                return PartialView("_ListaMotivosInfraccion", ListMotivosInfraccionModel);
+                return Json(ListMotivosInfraccionModel);
             }
             return PartialView("_Editar");
         }
@@ -161,7 +161,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 DeleteMotivo(model);
                 var ListMotivosInfraccionModel = _motivoInfraccionService.GetMotivos();
-                return PartialView("_ListaMotivosInfraccion", ListMotivosInfraccionModel);
+                return Json(ListMotivosInfraccionModel);
             }
             return PartialView("_Eliminar");
         }

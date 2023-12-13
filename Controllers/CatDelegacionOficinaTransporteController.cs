@@ -114,7 +114,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 CrearDelegacionOficina(model);
                 var ListDelegacionesOficinasTModel = GetDelegacionesOficinas();
-                return PartialView("_ListDelegacionesOficinas", ListDelegacionesOficinasTModel);
+                return Json(ListDelegacionesOficinasTModel);
             }
 
             return PartialView("_Crear");
@@ -132,7 +132,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 EditarDelegacionOficina(model);
                 var ListDelegacionesOficinasTModel = GetDelegacionesOficinas();
-                return PartialView("_ListDelegacionesOficinas", ListDelegacionesOficinasTModel);
+                return Json(ListDelegacionesOficinasTModel);
             }
             return PartialView("_Editar");
         }
@@ -147,7 +147,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 EliminaDelegacionOficina(model);
                 var ListDelegacionesOficinasTModel = GetDelegacionesOficinas();
-                return PartialView("_ListDelegacionesOficinas", ListDelegacionesOficinasTModel);
+                return Json(ListDelegacionesOficinasTModel);
             }
             return PartialView("_Eliminar");
         }

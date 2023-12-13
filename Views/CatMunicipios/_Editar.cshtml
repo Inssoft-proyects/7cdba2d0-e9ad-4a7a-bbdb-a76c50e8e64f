@@ -127,7 +127,7 @@
 
         var Mydata = $("#editarMunicipioForm").serialize();
         console.log(Mydata);
-        $('#editarMunicipio').modal('hide');
+        $('#agregarMunicipio').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
         $.ajax({
@@ -135,7 +135,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaMunicipios").html(result);
+                $("#gridMunicipios").data("kendoGrid").dataSource.data(result);
                 sitteg_success('Elemento modificado correctamente')
 
             },

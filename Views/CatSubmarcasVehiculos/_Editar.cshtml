@@ -109,7 +109,7 @@
 
         var Mydata = $("#editarSubmarcaForm").serialize();
         console.log(Mydata);
-        $('#editarSubmarca').modal('hide');
+        $('#agregarSubmarca').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
         $.ajax({
@@ -117,7 +117,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaSubmarcas").html(result);
+                $("#gridCatSubmarcasVehiculos").data("kendoGrid").dataSource.data(result);
             }
         });
     }

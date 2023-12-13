@@ -1,4 +1,4 @@
-﻿@model GuanajuatoAdminUsuarios.Models.OficialesModel
+﻿@model GuanajuatoAdminUsuarios.Models.CatOficialesModel
 @{
     var delegaciones = (SelectList)ViewBag.Delegaciones;
 
@@ -113,7 +113,7 @@
 
         var Mydata = $("#EliminarOficialForm").serialize();
         console.log(Mydata);
-        $('#eliminarOficial').modal('hide');
+        $('#agregarOficial').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
         $.ajax({
@@ -121,7 +121,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaOficiales").html(result);
+                $("#gridCatOficiales").data("kendoGrid").dataSource.data(result);
             }
         });
     }

@@ -124,7 +124,7 @@
 
         var Mydata = $("#EditarDiaInhabilForm").serialize();
         console.log(Mydata);
-        $('#editDateInhabil').modal('hide');
+        $('#addDateInhabil').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
         $.ajax({
@@ -132,7 +132,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaDiasInhabiles").html(result);
+                $("#gridCatDiasInhabiles").data("kendoGrid").dataSource.data(result);
             }
         });
     }

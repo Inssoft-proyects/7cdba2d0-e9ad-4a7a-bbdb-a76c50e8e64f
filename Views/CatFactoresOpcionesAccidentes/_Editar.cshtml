@@ -112,7 +112,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaFactoresOpcionesAccidentes").html(result);
+                $("#gridCatFactoresopcion").data("kendoGrid").dataSource.data(result);
                 sitteg_info('Se ha actualizado la información');
 
             },

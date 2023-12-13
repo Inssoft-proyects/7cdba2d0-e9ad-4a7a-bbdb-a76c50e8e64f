@@ -87,7 +87,7 @@
 
         var Mydata = $("#EditarTipoVehiculoForm").serialize();
         console.log(Mydata);
-        $('#editTipoVehiculo').modal('hide');
+        $('#addTipo').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
         $.ajax({
@@ -95,7 +95,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaTiposVehiculos").html(result);
+                $("#gridCatTipoVehiculo").data("kendoGrid").dataSource.data(result);
             }
         });
     }
