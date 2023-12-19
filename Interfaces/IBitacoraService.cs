@@ -11,7 +11,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
 
         void insertBitacora(decimal id, string ip, string textoCamb, string operacion, string consulta, decimal operador);
 
-        List<BitacoraInfraccionesModel> getBitacoraData(string id);
+        List<BitacoraInfraccionesModel> getBitacoraData(string id,string nombre);
 
 
     }

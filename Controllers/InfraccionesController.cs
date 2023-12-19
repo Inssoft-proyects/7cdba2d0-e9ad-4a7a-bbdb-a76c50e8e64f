@@ -1368,7 +1368,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public IActionResult GetDataBusquedaEspecialBit(string id)
         {
 
-            var result = _bitacoraServices.getBitacoraData(id);
+            var nombre = HttpContext.Session.GetString("Nombre");
+			var result = _bitacoraServices.getBitacoraData(id,nombre);
+
+
+            
 
             return Json(result);
 

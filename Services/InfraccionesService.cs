@@ -1134,7 +1134,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                             left join catTramos catTra on inf.idTramo = catTra.idTramo
                                             left join catCarreteras catCarre on inf.IdCarretera = catCarre.idCarretera
                                             left join personasInfracciones pInf on pInf.idPersonaInfraccion = inf.idPersonaInfraccion
-                                            left join personas conduct on conduct.idPersona = inf.idPersonaInfraccion
+                                            left join personas conduct on conduct.idPersona = inf.idPersona
 			                                            left join personasDirecciones dirconduct on dirconduct.idPersona = inf.idPersonaInfraccion
 			                                            left join catMunicipios dirconductmuni on dirconductmuni.idMunicipio = dirconduct.idMunicipio
 			                                            left join catEntidades dirconductenti on dirconductenti.idEntidad = dirconduct.idEntidad
@@ -1800,7 +1800,7 @@ namespace GuanajuatoAdminUsuarios.Services
 							};
 							model.infraccionCortesia = reader["infraccionCortesia"] == System.DBNull.Value ? default(bool?) : Convert.ToBoolean(reader["infraccionCortesia"].ToString());
 							model.NumTarjetaCirculacion = reader["NumTarjetaCirculacion"].ToString();
-							model.Persona = _personasService.GetPersonaById((int)model.Vehiculo.idPersona);
+							model.Persona = _personasService.GetPersonaById((int)model.idPersona);
 							//model.PersonaInfraccion = _personasService.GetPersonaInfraccionById((int)model.idPersonaInfraccion);
 							model.PersonaInfraccion = model.idPersonaInfraccion == null ? new PersonaInfraccionModel() : GetPersonaInfraccionById((int)model.idPersonaInfraccion);
 							model.MotivosInfraccion = GetMotivosInfraccionByIdInfraccion(model.idInfraccion);

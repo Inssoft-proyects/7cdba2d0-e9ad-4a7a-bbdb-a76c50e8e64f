@@ -100,10 +100,21 @@ namespace GuanajuatoAdminUsuarios.Services
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand(@"
-                        SELECT DISTINCT a.idAccidente, a.numeroReporte, a.fecha, a.hora, a.idMunicipio, a.idCarretera, a.idTramo, a.kilometro, a.idClasificacionAccidente, 
-                        a.idFactorAccidente, a.IdFactorOpcionAccidente, a.idOficinaDelegacion, a.descripcionCausas, m.municipio, c.carretera, t.tramo, e.estatusDesc, 
+                        SELECT DISTINCT 
+                        a.idAccidente,
+                        a.numeroReporte,
+                        a.fecha, a.hora,
+                        a.idMunicipio, 
+                        a.idCarretera, 
+                        a.idTramo, 
+                        a.kilometro, 
+                        a.idClasificacionAccidente, 
+                        a.idFactorAccidente,
+                        a.IdFactorOpcionAccidente,
+                        a.idOficinaDelegacion,
+                        a.descripcionCausas, m.municipio, c.carretera, t.tramo, e.estatusDesc, 
                         ac.idCausaAccidente, d.delegacion
-                        FROM accidentes AS a 
+                        FROM accidentes AS a                         
                         JOIN catMunicipios AS m ON a.idMunicipio = m.idMunicipio
                         JOIN catDelegaciones as d on d.idDelegacion = (a.idOficinaDelegacion+1)
                         JOIN catCarreteras AS c ON a.idCarretera = c.idCarretera 

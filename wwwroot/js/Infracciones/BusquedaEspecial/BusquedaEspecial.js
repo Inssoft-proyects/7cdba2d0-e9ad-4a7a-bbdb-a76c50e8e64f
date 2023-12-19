@@ -95,10 +95,14 @@ var finish = (d) => {
 
         text=`${text}
         <tr>
+        <td>${w.folio}</td>
+        <td>${w.fecha + " " + w.hora}</td>
+        <td>${w.nombre}</td>
+
         <td>${w.operacion}</td>
-        <td>${w.fecha}</td>
-        <td>${w.hora}</td>
+        <td>${w.desc}</td>
         <td>${w.ip}</td>
+
         </tr>
         `
 
