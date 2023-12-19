@@ -39,7 +39,7 @@
     <div class="row my-2">
         <div class="col-md-4">
             <div class="controlForm">
-                <label>Fecha de nacimiento:</label>
+                <label>Fecha de nacimiento <b>(obligatorio)</b>:</label>
                 @(Html.Kendo().DatePickerFor(t => t.fechaNacimiento)
                     .HtmlAttributes(new { style = "width: 100%;", required = "required" })
                     .Culture("es-ES")
@@ -66,7 +66,7 @@
     <div class="row my-2">
         <div class="col-md-6">
             <div class="controlForm">
-                <label>Género:</label>
+                <label>Género <b>(obligatorio)</b>:</label>
                 @(Html.Kendo().DropDownListFor(m => m.idGenero).Filter(FilterType.Contains)
                     .BindTo((SelectList)ViewBag.CatGeneros)
                     .OptionLabel("-- Seleccione --")
@@ -271,6 +271,7 @@
         });
     }
 
+
     function btnCrearPersona() {
         var validator = $("#frmCrearPersona").kendoValidator().data('kendoValidator');
         var idTelefono = $("#telefono");
@@ -354,6 +355,7 @@
             return;
         }
     }
+    
 function completarConLicencia() {
     var formData = $("#frmCrearPersona").serialize();
 
