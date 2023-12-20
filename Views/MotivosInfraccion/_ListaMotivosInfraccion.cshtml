@@ -12,7 +12,8 @@
                 columns.Bound(c => c.CalificacionMinima).Title("Calificación Minima").Width(100);
                 columns.Bound(c => c.CalificacionMaxima).Title("Calificación Máxima").Width(100);
                 columns.Bound(c => c.estatusDesc).Title("Estatus en sistema").Width(80);
-                columns.Bound(c => c.fechaActualizacion).Title("Fecha").Width(80).Format("{0: dd/MM/yyyy}");
+                columns.Bound(c => c.fechaInicio).Title("Inicio vigencia").Width(80);
+                columns.Bound(c => c.fechaFinVigencia).Title("Fin vigencia").Width(80);
                 columns.Command(c => c.Custom("Editar").Click("getId")).Width(80);
                // columns.Command(c => c.Custom("Eliminar").Click("eliminar")).Width(80);
 
