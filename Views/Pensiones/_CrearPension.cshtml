@@ -98,10 +98,10 @@
                                     )
                                         .Label(l => l.Content("Correo electrónico <b>(obligatorio)</b>:"))
                                         .Placeholder("Ingresa correo electrónico")
-                                        .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                                        .HtmlAttributes(new { style = "width: 100%", })
 
                                         )
-                                    @Html.ValidationMessageFor(model => model.Correo, "", new { @class = "text-danger" })
+                                    @*@Html.ValidationMessageFor(model => model.Correo, "", new { @class = "text-danger" })*@
                                 </div>
                             </div>
                         </div>
@@ -134,18 +134,42 @@
     function btnCrearPension() {
         
         var validator = $("#frmCrearPension").kendoValidator().data('kendoValidator');
-        validator.validate();
+        var controlsValidate = [];
+        var isValid = true;
         var correo = $("#Correo").val();
 
-        // Expresión regular para validar el formato de correo electrónico
-        var regex = /^[a-zA-Z0-9._-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        //// Expresión regular para validar el formato de correo electrónico
+        //var regex = /^[a-zA-Z0-9._-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
-        // Realiza la validación del formato de correo electrónico
-        if (!regex.test(correo)) {
-            sitteg_info('El formato del correo electrónico no es válido.');
+        //// Realiza la validación del formato de correo electrónico
+        //if (!regex.test(correo)) {
+        //    sitteg_info('El formato del correo electrónico no es válido.');
+        //    return;
+        //}
+
+        controlsValidate.push({ 'controlName': 'Pension' });
+        controlsValidate.push({ 'controlName': 'Permiso' });
+        controlsValidate.push({ 'controlName': 'Direccion' });
+        controlsValidate.push({ 'controlName': 'Telefono' });
+        controlsValidate.push({ 'controlName': 'Correo' });
+
+        // INPUTS
+
+        if (!isControlsValid(controlsValidate)) { isValid = false; }
+
+        if (correo != "" && correo != undefined) {
+            if (!isValidEmail(correo)) {
+                $('#Correo').addClass("errorData");
+                isValid = false;
+            }
+        }
+
+        if (!isValid) {
+            sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
             return;
         }
-        if (validator.validate()) {
+
+        if (isValid) {
             var formData = $("#frmCrearPension").serialize();
         //var formData = new FormData();
         //formData.delete('idDelegacion');

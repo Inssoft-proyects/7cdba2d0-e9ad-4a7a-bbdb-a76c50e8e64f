@@ -72,6 +72,19 @@
     function agregarCausa() {
 
         var Mydata = $("#agregarCausaForm").serialize();
+        var controlsValidate = [];
+        var isValid = true;
+
+        controlsValidate.push({ 'controlName': 'CausaAccidente' });
+
+        // INPUTS
+        if (!isControlsValid(controlsValidate)) { isValid = false; }
+
+        if (!isValid) {
+            sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
+            return;
+        }
+
         console.log(Mydata);
         $('#agregarCausaAccidente').modal('hide');
         $('body').removeClass('model-open');

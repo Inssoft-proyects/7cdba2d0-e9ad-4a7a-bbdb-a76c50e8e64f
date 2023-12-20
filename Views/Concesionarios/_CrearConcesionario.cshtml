@@ -108,6 +108,28 @@
 <script>
     function btnCrearConcesionario() {
         var formData = $("#frmCrearConcesionario").serialize();
+        var controlsValidate = [];
+        var isValid = true;
+
+        controlsValidate.push({ 'controlName': 'nombre' });
+        controlsValidate.push({ 'controlName': 'alias' });
+        controlsValidate.push({ 'controlName': 'razonSocial' });
+
+        // INPUTS
+        if (!isControlsValid(controlsValidate)) { isValid = false; }
+
+
+        // DROP DOWN LIST
+        controlsValidate = [];
+        controlsValidate.push({ 'controlName': 'ddlDelegaciones' });
+        controlsValidate.push({ 'controlName': 'ddlMunicipio' });
+        if (!isControlsValidDropDown(controlsValidate)) { isValid = false; }
+
+        if (!isValid) {
+            sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
+            return;
+        }
+
         showLoading();
         $.ajax({
             url: '@Url.Action("ajax_CrearConcesionario")',

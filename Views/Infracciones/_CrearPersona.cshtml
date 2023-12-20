@@ -313,7 +313,6 @@
         if (!isControlsValidDropDown(controlsValidate)) { isValid = false; }
 
         var validator = $("#frmCrearPersona").kendoValidator().data('kendoValidator');
-        $("#vigenciaLicenciaFisico").prop("disabled", true);
         $("#idTipoLicencia").prop("disabled", true);
         $("#numeroLicencia").prop("disabled", true);
 
@@ -344,6 +343,7 @@
             $("#btnSave").prop("disabled", true);
 
             var formData = $("#frmCrearPersona").serialize();
+            console.log("DATA",formData)
             $.ajax({
                 url: '@Url.Action("ajax_CrearPersona","Infracciones")',
                 type: 'POST',

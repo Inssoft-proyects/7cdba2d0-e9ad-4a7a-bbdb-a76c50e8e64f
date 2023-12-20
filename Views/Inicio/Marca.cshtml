@@ -47,13 +47,13 @@
             var contrasena = document.getElementById('contrasena').value;
 
             $('#usuario').removeClass("errorData");
-            if (usuario != "" && usuario != undefined) {
+            $('#contrasena').removeClass("errorData");
+            if (usuario === '' || usuario === undefined) {
                 $('#usuario').addClass("errorData");
                 isValid = false;
             }
 
-            $('#contrasena').removeClass("errorData");
-            if (contrasena != "" && contrasena != undefined) {
+            if (contrasena === '' || contrasena === undefined) {
                 $('#contrasena').addClass("errorData");
                 isValid = false;
             }

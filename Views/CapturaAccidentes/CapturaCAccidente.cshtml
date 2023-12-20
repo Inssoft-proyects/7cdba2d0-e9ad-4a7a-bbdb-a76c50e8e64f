@@ -45,7 +45,7 @@
                         .Label(l => l.Content("Daños al camino:"))
                         .Placeholder("Ingresa el monto al que ascienden los daños al camino")
                         .Enable(!ViewBag.EsSoloLectura) 
-                        .HtmlAttributes(new { style = "width: 100%", type = "number" })
+                        .HtmlAttributes(new { style = "width: 100%"})
                         )
 
                 </div>
@@ -56,7 +56,7 @@
                         .Label(l => l.Content("Daños a la carga:"))
                         .Placeholder("Ingresa el monto al que ascienden los daños a la carga")
                         .Enable(!ViewBag.EsSoloLectura) 
-                        .HtmlAttributes(new { style = "width: 100%", type = "number" })
+                        .HtmlAttributes(new { style = "width: 100%" })
                         )
 
                 </div>
@@ -67,7 +67,7 @@
                         .Label(l => l.Content("Daños a propietarios:"))
                         .Placeholder("Ingresa el monto al que ascienden los daños a los propietarios")
                             .Enable(!ViewBag.EsSoloLectura)
-                        .HtmlAttributes(new { style = "width: 100%", type = "number" })
+                        .HtmlAttributes(new { style = "width: 100%"})
                         )
 
                 </div>
@@ -79,7 +79,7 @@
                         .Label(l => l.Content("Otros daños:"))
                         .Placeholder("Ingresa el monto al que ascienden los daños bajo el concepto de otros")
                             .Enable(!ViewBag.EsSoloLectura)
-                        .HtmlAttributes(new { style = "width: 100%", type = "number" })
+                        .HtmlAttributes(new { style = "width: 100%" })
                         )
 
                 </div>
@@ -277,69 +277,116 @@
                     <div class="bg-light pt-1"></div>
                 </div>
             </div>
-            <div class="col-12 col-lg-6 mt-4 mb-2">
-                <h5><b>Elementos</b></h5>
-            </div>
             <div class="col-12">
-                <div class="controlForm mt-4 mb-3">
-                  <label class="label">Seleccione uno o varios elementos que se encontraron en el accidente:</label>
-                       <label>Armas</label> @(Html.Kendo().SwitchFor(t => t.ArmasBool)
-                            .Name("armasSwitch")
-                            .Messages(c => c.Checked("Si").Unchecked("No"))
-                            .HtmlAttributes(new { data_valor = 1 }))
-                      <div id="campoArmasTexto" style="display:none">
-                            <label for="ArmasTextBox">Descripción de armas</label>
+                <h5><b>Elementos</b></h5>
+                <label class="label">Seleccione uno o varios elementos que se encontraron en el accidente:</label>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="controlForm mb-3">
+                       <label>Armas</label>
+                       <div class="btnToggleActive">
+                            @(Html.Kendo().SwitchFor(t => t.ArmasBool)
+                                .Name("armasSwitch")
+                                .Messages(c => c.Checked("Si").Unchecked("No"))
+                                .HtmlAttributes(new { data_valor = 1 }))
+                        </div>
+                 </div>
+            </div>
+            <div id="campoArmasTexto" style="display:none" class="col-12 col-md-6 col-lg-3">
+                <div class="controlForm mb-3">
+                    <label for="ArmasTextBox">Descripción de armas</label>
                             @(Html.Kendo().TextBoxFor(t => t.ArmasTexto)
                                 .HtmlAttributes(new { style = "width: 40%", id = "ArmasTexto" }) // Inicialmente oculto
                                 .Enable(!ViewBag.EsSoloLectura)
                                 )
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="controlForm mb-3">
+                    <label>Drogas</label>
+                        <div class="btnToggleActive">
+                            @(Html.Kendo().SwitchFor(t => t.DrogasBool)
+                                .Name("drogasSwitch")
+                                .Messages(c => c.Checked("Si").Unchecked("No"))
+                                .HtmlAttributes(new { data_valor = 1 }))
                         </div>
-                        <label>Drogas</label> @(Html.Kendo().SwitchFor(t => t.DrogasBool)
-                            .Name("drogasSwitch")
-                            .Messages(c => c.Checked("Si").Unchecked("No"))
-                            .HtmlAttributes(new { data_valor = 1 }))
-                         <div id="campoDrogasTexto" style="display:none">
-                             <label for="DrogasTextBox">Descripción de drogas</label>
+                </div>
+            </div>
+            <div id="campoDrogasTexto" style="display:none" class="col-12 col-md-6 col-lg-3">
+                <div class="controlForm mb-3">
+                    <label for="DrogasTextBox">Descripción de drogas</label>
                         @(Html.Kendo().TextBoxFor(t => t.DrogasTexto)
                                 .HtmlAttributes(new { style = "width: 40%", id = "DrogasTexto" }) // Inicialmente oculto
                                 .Enable(!ViewBag.EsSoloLectura)
                                 )
-                          </div>
-                        <label>Valores</label> @(Html.Kendo().SwitchFor(t => t.ValoresBool)
-                            .Name("valoresSwitch")
-                            .Messages(c => c.Checked("Si").Unchecked("No"))
-                            .HtmlAttributes(new { data_valor = 1 }))
-                         <div id="campoValoresTexto" style="display:none">
-                             <label for="ValoresTextBox">Descripción de valores</label>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="controlForm mb-3">
+                    <label>Valores</label>
+                        <div class="btnToggleActive">
+                            @(Html.Kendo().SwitchFor(t => t.ValoresBool)
+                                .Name("valoresSwitch")
+                                .Messages(c => c.Checked("Si").Unchecked("No"))
+                                .HtmlAttributes(new { data_valor = 1 }))
+                        </div>
+                </div>
+
+            </div>
+            <div id="campoValoresTexto" style="display:none" class="col-12 col-md-6 col-lg-3">
+                <div class="controlForm mb-3">
+                    <label for="ValoresTextBox">Descripción de valores</label>
                         @(Html.Kendo().TextBoxFor(t => t.ValoresTexto)
                             .HtmlAttributes(new { style = "width: 40%", id = "ValoresTexto" }) // Inicialmente oculto
                             .Enable(!ViewBag.EsSoloLectura)
                                 )
-                           </div>
-                         <label>Prendas</label> @(Html.Kendo().SwitchFor(t => t.PrendasBool)
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="controlForm mb-3">
+                    <label>Prendas</label>
+                    <div class="btnToggleActive">
+                          @(Html.Kendo().SwitchFor(t => t.PrendasBool)
                             .Name("prendasSwitch")
                             .Messages(c => c.Checked("Si").Unchecked("No"))
                             .HtmlAttributes(new { data_valor = 1 }))
-                          <div id="campoPrendasTexto" style="display:none">
-                            <label for="PrendasTextBox">Descripción de prendas</label>
+                    </div>
+                </div>
+            </div>
+            <div id="campoPrendasTexto" style="display:none" class="col-12 col-md-6 col-lg-3">
+                <div class="controlForm mb-3">
+                    <label for="PrendasTextBox">Descripción de prendas</label>
                         @(Html.Kendo().TextBoxFor(t => t.PrendasTexto)
                             .HtmlAttributes(new { style = "width: 40%", id = "PrendasTexto" }) // Inicialmente oculto
                             .Enable(!ViewBag.EsSoloLectura)
                                 )
-                                </div>
-                        <label>Otros</label> @(Html.Kendo().SwitchFor(t => t.OtrosBool)
+                </div>
+                            
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="controlForm mb-3">
+                    <label>Otros</label>
+                        <div class="btnToggleActive">
+                         @(Html.Kendo().SwitchFor(t => t.OtrosBool)
                             .Name("otrosSwitch")
                             .Messages(c => c.Checked("Si").Unchecked("No"))
                             .HtmlAttributes(new { data_valor = 1 }))
-                            <div id="campoTexto" style="display:none">
-                        <label for="OtrosTextBox">Descripción de prendas</label>
+                        </div>
+                </div>
+            </div>
+            <div id="campoTexto" style="display:none" class="col-12 col-md-6 col-lg-3">
+                <div class="controlForm mb-3">
+                    <label for="OtrosTextBox">Descripción de otros</label>
+
                         @(Html.Kendo().TextBoxFor(t => t.OtrosTexto)
                             .HtmlAttributes(new { style ="width: 40%", id = "OtrosTexto" }) // Inicialmente oculto
                                 .Enable(!ViewBag.EsSoloLectura)
                             )
-                            </div>
-                 </div>
+
+                </div>
+                
             </div>
+            
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="controlForm my-3">
                     @(Html.Kendo().TextBoxFor(t=>t.entregaObjetos)
@@ -407,26 +454,31 @@
                         </div>
                     </div>
                 </div>
-                <div>
-                     <label>Convenio</label> @(Html.Kendo().SwitchFor(t => t.convenioBool)
-                            .Name("convenioSwitch")
-                            .Checked(Model.EstadoConvenio == 1)
-                            .Messages(c => c.Checked("Si").Unchecked("No"))
-                            .HtmlAttributes(new { data_valor = 1 })
-                            )
-                </div>
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="controlForm my-3">
-                   <div id="convenioTexto" style="display:none">
-                    @(Html.Kendo().TextBoxFor(t => t.observacionesConvenio)
-                        .Label(l => l.Content("Observaciones de convenio:"))
-                        .Placeholder("Ingresa las observaciones")
-                            .HtmlAttributes(new { style = "width: 100%", id = "observacionesConvenio" })
-                        .Enable(!ViewBag.EsSoloLectura)
-                        )
+                <div class="row">
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <label>Convenio</label>
+                        <div class="btnToggleActive">
+                        @(Html.Kendo().SwitchFor(t => t.convenioBool)
+                                .Name("convenioSwitch")
+                                .Checked(Model.EstadoConvenio == 1)
+                                .Messages(c => c.Checked("Si").Unchecked("No"))
+                                .HtmlAttributes(new { data_valor = 1 })
+                                )
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="controlForm my-3">
+                        <div id="convenioTexto" style="display:none">
+                            @(Html.Kendo().TextBoxFor(t => t.observacionesConvenio)
+                                .Label(l => l.Content("Observaciones de convenio:"))
+                                .Placeholder("Ingresa las observaciones")
+                                    .HtmlAttributes(new { style = "width: 100%", id = "observacionesConvenio" })
+                                .Enable(!ViewBag.EsSoloLectura)
+                                )
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
                 <div class="row px-4 my-4">
                     <div class="col-12 col-md-6 col-lg-3">

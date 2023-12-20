@@ -91,6 +91,22 @@
 
 <script>
     function agregarCarretera() {
+        var controlsValidate = [];
+
+        controlsValidate.push({ 'controlName': 'Carretera' });
+
+        // INPUTS
+        if (!isControlsValid(controlsValidate)) { isValid = false; }
+
+        // DROP DOWN LIST
+        controlsValidate = [];
+        controlsValidate.push({ 'controlName': 'idOficinaTransporte' });
+        if (!isControlsValidDropDown(controlsValidate)) { isValid = false; }
+
+        if (!isValid) {
+            sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
+            return;
+        }
 
         var Mydata = $("#agregarCarreteraForm").serialize();
         console.log(Mydata);

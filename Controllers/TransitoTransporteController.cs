@@ -15,8 +15,6 @@ using Newtonsoft.Json.Converters;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
-
-
 namespace GuanajuatoAdminUsuarios.Controllers
 {
     [Authorize]
@@ -95,9 +93,10 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
             };
             var TransitoModel = _transitoTransporteService.GetTransitoTransporteById(IdDeposito);
-            var result = _pdfService.CreatePdf("ReporteTransitoTransporte", "Tránsito Transporte", 5, ColumnsNames, TransitoModel);
-            return File(result.Item1, "application/pdf", result.Item2);
-        }
+            //var result = _pdfService.CreatePdf("ReporteTransitoTransporte", "Tránsito Transporte", 5, ColumnsNames, TransitoModel);
+			var report = new TransitoTransporteReportService("ServicioGruaDetalle", "SERVICIO DE GRÚA").CreatePdf(TransitoModel);
+			return File(report.File.ToArray(), "application/pdf", report.FileName);
+		}
 
 
         [HttpPost]

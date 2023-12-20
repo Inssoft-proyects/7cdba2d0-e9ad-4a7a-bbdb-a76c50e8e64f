@@ -101,7 +101,7 @@
                                     read.Action("TiposVehiculos_Drop", "Depositos");
                                 });
                             })
-                                .HtmlAttributes(new { style = "width:100%;", Id = "ddlDelegaciones", required = "required" })
+                                .HtmlAttributes(new { style = "width:100%;", Id = "ddlDelegaciones" })
                             )
                     </span>
 
@@ -658,9 +658,40 @@
 
     function enviarSolicitud(){
         var validator = $("#solicitudForm").kendoValidator().data('kendoValidator');
-        validator.validate();
+        var controlsValidate = [];
+        var isValid = true;
 
-        if (validator.validate()) {
+        controlsValidate.push({ 'controlName': 'fechaSolicitud' });
+        controlsValidate.push({ 'controlName': 'nombreUsuario' });
+        controlsValidate.push({ 'controlName': 'apellidoPaternoUsuario' });
+        controlsValidate.push({ 'controlName': 'apellidoMaternoUsuario' });
+
+        // INPUTS
+        if (!isControlsValid(controlsValidate)) { isValid = false; }
+
+        // DROP DOWN LIST
+        controlsValidate = [];
+        
+        controlsValidate.push({ 'controlName': 'ddlDelegaciones' });
+        controlsValidate.push({ 'controlName': 'idOficial' });
+        controlsValidate.push({ 'controlName': 'idDescripcionEvento' });
+        controlsValidate.push({ 'controlName': 'idTipoUsuario' });
+        controlsValidate.push({ 'controlName': 'IdCarretera' });
+        controlsValidate.push({ 'controlName': 'IdTramo' });
+        controlsValidate.push({ 'controlName': 'idMunicipioUbicacion' });
+        controlsValidate.push({ 'controlName': 'idPensionUbicacion' });
+        controlsValidate.push({ 'controlName': 'idMunicipio' });
+        if (!isControlsValidDropDown(controlsValidate)) { isValid = false; }
+
+
+        //alert($("#fechaSolicitud").val());
+        if (!isValid) {
+            sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
+            return;
+        }
+
+
+        if (isValid) {
             var Mydata = $("#solicitudForm").serialize();
             console.log(Mydata);
             showLoading();

@@ -103,9 +103,7 @@
                 </div>
             </div>
         </div>
-      
-        @if(Model.showclose){
-            <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
+        <div class="col-12 col-md-6 col-lg-7 col-xl-auto">
             <div class="row">
                 <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0" onclick="cerrarModalV()">
                     @(Html.Kendo().Button()
@@ -115,12 +113,6 @@
                 </div>
             </div>
         </div>
-
-        }
-
-        
-
-
     </div>
     <div class="row">
         <div class="col-8 pe-0">
@@ -252,7 +244,8 @@
                 else
                 {
                     @(Html.Kendo().DatePickerFor(t => t.vigenciaTarjeta).Format("dd/MM/yyyy")
-                        //.Value(dateVigencia)                        
+                        //.Value(dateVigencia)
+                        .DateInput()
                         .Culture("es-ES")
                         .HtmlAttributes(new { style = "width: 100%", title = "datetimepicker" })
                         .Value("")
@@ -469,12 +462,14 @@
         <div class="col-12 col-md-6 col-lg-3">
             <div class="controlForm my-3">
                 <label>Carga:</label>
-                @Html.HiddenFor(m => m.cargaInt, new { id = "idCarga" })
-                @(Html.Kendo().SwitchFor(m => m.carga)
-                    .Messages(c => c.Checked("Si").Unchecked("No"))
-                    .HtmlAttributes(new { style = "transform: scale(1.2);", id = "cargaSwitch" })
+                <div class="btnToggleActive">
+                    @Html.HiddenFor(m => m.cargaInt, new { id = "idCarga" })
+                    @(Html.Kendo().SwitchFor(m => m.carga)
+                        .Messages(c => c.Checked("Si").Unchecked("No"))
+                        .HtmlAttributes(new { id = "cargaSwitch" })
 
-                    )
+                        )
+                </div>
             </div>
         </div>
 
@@ -1019,14 +1014,16 @@
                          <div id="errorContainerPersona_fechaNacimiento" class="error-container"></div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
-                        <div class="controlForm">
+                        <div class="controlForm mb-3">
                             <label>Sexo <b>(obligatorio)</b></label>
+                            <div class="btnToggleActive">
+                                @Html.HiddenFor(m => m.Persona.idGenero, new { id = "idGenero" })
+                                @(Html.Kendo().SwitchFor(m => m.Persona.generoBool)
+                                    .Messages(c => c.Checked("<span>Hombre</span>").Unchecked("<span>Mujer</span>"))
+                                    .HtmlAttributes(new { id = "generoSwitch",required = "required" })
+                                    )
+                            </div>
                         </div>
-                        @Html.HiddenFor(m => m.Persona.idGenero, new { id = "idGenero" })
-                        @(Html.Kendo().SwitchFor(m => m.Persona.generoBool)
-                            .Messages(c => c.Checked("<span style='font-size: 6px;'>Hombre</span>").Unchecked("<span style='font-size: 6px;'>Mujer</span>"))
-                            .HtmlAttributes(new { style = "transform: scale(1.6);", id = "generoSwitch",required = "required" })
-                            )
                     </div>
 
 
@@ -1231,7 +1228,7 @@
                 ¿Está seguro de que desea cerrar la ventana y perder la información ingresada?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+                <button type="button" class="btn btn-primary" onclick="backInicio()"">Aceptar</button>
                 <button type="button" class="btn btn-secondary" id="confirmarCerrar">Cancelar</button>
             </div>
         </div>
@@ -1431,7 +1428,7 @@ function submitCreateMoral() {
     }
 
     var generoBool = $("#generoSwitch").prop("checked");
-    $("#idGenero").val(generoBool ? 1 : 0);
+    $("#idGenero").val(generoBool ? 1 : 2);
 
     var Mydata = $("#personaFisicaForm").serialize();
     showLoading();
@@ -1543,6 +1540,12 @@ function asignarMensajeError(contenedorErrorId, mensaje) {
        }
  function cerraModalMoral(){
         $('#addMoral').modal('hide');
+       }
+       function backInicio(){
+                   $('#confirmacionModal').modal('show');
+                       $('.modal-backdrop').remove();
+            document.getElementById("sec0").style.display = "block";
+           document.getElementById("VehiculoLocalizado").style.display = "none";
        }
 
 </script>

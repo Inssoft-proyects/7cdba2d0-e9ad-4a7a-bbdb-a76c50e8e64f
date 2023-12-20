@@ -280,7 +280,6 @@
         var Vigencia = $("#vigencia");
         var vigenciaValue = Vigencia.val();
 
-
         if (idTelefonoValue === null || idTelefonoValue === "") {
             idTelefono.prop("disabled", true);
         }
@@ -295,8 +294,30 @@
             Vigencia.prop("disabled", true);
         }
         Vigencia.off('blur');
+        var controlsValidate = [];
+        var isValid = true;
 
-        if (validator.validate()) {
+        controlsValidate.push({ 'controlName': 'nombre' });
+        controlsValidate.push({ 'controlName': 'fechaNacimiento' });
+        controlsValidate.push({ 'controlName': 'PersonaDireccion_codigoPostal' });
+        controlsValidate.push({ 'controlName': 'PersonaDireccion_colonia' });
+        controlsValidate.push({ 'controlName': 'PersonaDireccion_calle' });
+        controlsValidate.push({ 'controlName': 'PersonaDireccion_numero' });
+
+        // INPUTS
+        if (!isControlsValid(controlsValidate)) { isValid = false; }
+
+        // DROP DOWN LIST
+        controlsValidate = [];
+        controlsValidate.push({ 'controlName': 'idGenero' });
+        if (!isControlsValidDropDown(controlsValidate)) { isValid = false; }
+
+        if (!isValid) {
+            sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
+            return;
+        }
+
+        if (isValid) {
             var formData = $("#frmCrearPersona").serialize();
             showLoading();
             $.ajax({

@@ -18,6 +18,8 @@ using Azure;
 using Org.BouncyCastle.Asn1.Cmp;
 using System.ServiceModel.Channels;
 
+
+
 namespace GuanajuatoAdminUsuarios.Services
 {
 	public class InfraccionesService : IInfraccionesService
@@ -1284,6 +1286,7 @@ namespace GuanajuatoAdminUsuarios.Services
 							model.IdConcepto = reader["idConcepto"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idConcepto"].ToString());
 							model.Motivo = reader["motivo"].ToString();
 							model.SubConcepto = reader["subConcepto"].ToString();
+							model.Concepto = reader["concepto"].ToString();
 							//model.concepto = reader["concepto"].ToString();
 							modelList.Add(model);
 						}

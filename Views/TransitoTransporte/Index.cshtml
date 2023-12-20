@@ -5,14 +5,20 @@
         function submitSearch() {
             var Mydata = $("#frmSearch").serialize();
             //console.log(Mydata);
+            showLoading();
             $.ajax({
                 url: '@Url.Action("ajax_BuscarTransito")',
                 type: 'POST',
                 data: Mydata,
                 success: function (result) {
                     $("#listadoTransitoTransporte").html(result);
+                    hideLoading();
                    // $("#frmSearch")[0].reset();
-                }
+            },
+            error: function (error) {
+                sitteg_warning('Sucedió un error, intente mas tarde...');
+                hideLoading();
+            }
             });
         }
 

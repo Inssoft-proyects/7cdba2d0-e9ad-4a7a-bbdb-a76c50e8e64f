@@ -83,9 +83,21 @@
     function editarAutoridadDisp() {
 
         var Mydata = $("#editarAutDispForm").serialize();
+        var controlsValidate = [];
+        var isValid = true;
+
+        controlsValidate.push({ 'controlName': 'NombreAutoridadDisposicion' });
+
+        // INPUTS
+        if (!isControlsValid(controlsValidate)) { isValid = false; }
+
+        if (!isValid) {
+            sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
+            return;
+        }
         console.log(Mydata);
         $('#agregarAutoridadDisp').modal('hide');
-  showLoading();
+        showLoading();
         $.ajax({
             url: '@Url.Action("Update")',
             type: 'POST',

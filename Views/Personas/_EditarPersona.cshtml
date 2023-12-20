@@ -9,6 +9,9 @@
             datePicker.value(null); // Si es la fecha predeterminada, establecer el valor del DatePicker como nulo
         }
     }
+
+
+
     function EntidadDropDownChange() {
         var entidadDDlValue = $("#idEntidadED").data("kendoDropDownList").value();
 
@@ -18,8 +21,18 @@
             type: "POST",
             data: { entidadDDlValue: entidadDDlValue },
             success: function (data) {
-                var MunicipiosDropDown = $("#idMunicipioED").data("kendoDropDownList");
-                MunicipiosDropDown.dataSource.data(data);
+                var municipiosDropDown = $("#idMunicipioED").data("kendoDropDownList");
+
+                // Guarda el valor actual de idMunicipio
+                var idMunicipio = @Model.PersonaDireccion.idMunicipio;
+                console.log("MUN",idMunicipio)
+                municipiosDropDown.dataSource.data(data);
+
+                // Establece el valor de idMunicipio si está presente en los nuevos datos
+                if (idMunicipio && data.some(item => item.Value === idMunicipio.toString())) {
+                    municipiosDropDown.value(idMunicipio);
+                }
+
                 hideLoading();
             },
             error: function (xhr, status, error) {
@@ -27,6 +40,14 @@
             }
         });
     }
+
+
+    function filterMunicipios() {
+        return {
+            entidadDDlValue: $("#idEntidadED").data("kendoDropDownList").value()
+        };
+    }
+
 </script>
 <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
     <div class="col-auto pe-0">
@@ -171,6 +192,7 @@
                 @(Html.Kendo().DropDownListFor(m => m.PersonaDireccion.idEntidad).Filter(FilterType.Contains)
                     .DataTextField("Text")
                     .DataValueField("Value")
+                    .Value(Model.PersonaDireccion.idEntidad.ToString())  // Asigna el valor desde el modelo
                     .OptionLabel("Selecciona una opción")
                     .Events(e => e.Change("EntidadDropDownChange"))
                     .DataSource(source =>
@@ -195,7 +217,8 @@
                     {
                         source.Read(read =>
                         {
-                            read.Action("Municipios_Drop", "Personas");
+                            read.Action("Municipios_Drop", "Personas")
+                    .Data("filterMunicipios");
                         });
                     })
                     .HtmlAttributes(new { style = "width:100%;", id = "idMunicipioED" }))
@@ -322,5 +345,9 @@
         }
     }
 
+
+    $(document).ready(function () {
+        EntidadDropDownChange();
+    });
    
 </script>

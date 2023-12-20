@@ -70,10 +70,23 @@
     function agregarAutEntrega() {
 
         var Mydata = $("#agregarAutentregaForm").serialize();
+        var controlsValidate = [];
+        var isValid = true;
+
+        controlsValidate.push({ 'controlName': 'AutoridadEntrega' });
+
+        // INPUTS
+        if (!isControlsValid(controlsValidate)) { isValid = false; }
+
+        if (!isValid) {
+            sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
+            return;
+        }
         console.log(Mydata);
         $('#agregarAutEntrega').modal('hide');
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
+
         showLoading();
         $.ajax({
             url: '@Url.Action("AgregarAutoridadEntrega")',

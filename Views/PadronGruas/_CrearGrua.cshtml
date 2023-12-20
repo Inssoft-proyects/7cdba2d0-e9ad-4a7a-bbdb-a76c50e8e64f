@@ -143,28 +143,40 @@
 </div>
 <script>
     function crearGrua() {
-        //var Mydata = $("frmCrearGrua").serializeObject();
         var formData = $("#frmCrearGrua").serialize();
-        //var formData = new FormData();
-        //formData.delete('idDelegacion');
-        //alert(json);
+        var isValid = true;
+        var controlsValidate = [];
+        controlsValidate.push({ 'controlName': 'capacidad' });
+        controlsValidate.push({ 'controlName': 'noEconomico' });
+        controlsValidate.push({ 'controlName': 'modelo' });
+        controlsValidate.push({ 'controlName': 'placas' });
+
+        // INPUTS
+        if (!isControlsValid(controlsValidate)) { isValid = false; }
+
+        if (!isValid) {
+            sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
+            return;
+        }
         showLoading();
         $.ajax({
             url: '@Url.Action("ajax_createGrua")',
             type: 'POST',
             data: formData,
             success: function (result) {
+                hideLoading();
                 $("#listadoGruas").html(result);
                 $('#addGrua').modal('hide');
                 sitteg_info('Elemento guardado correctamente')
-                hideLoading();
+               
             },
-            error: function (xhr, status) {
-            var errmsg = xhr.responseText;
-            console.log(errmsg)
-            sitteg_warning('Lo sentimos, ha ocurrido un error.');
-            hideLoading();
-        }
+            error: function (xhr, status) 
+            {
+                var errmsg = xhr.responseText;
+                console.log(errmsg)
+                sitteg_warning('Lo sentimos, ha ocurrido un error.');
+                hideLoading();
+            }
         });
 
         //$('#addDependencia').modal('hide');
