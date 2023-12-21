@@ -1,13 +1,8 @@
 ﻿import { Loading } from '../Templates/Templates.js'
-import { GetData, RemoveData,getDataBit } from '../Peticiones/PeticionDatosGrid.js'
+import { GetData, RemoveData } from '../Peticiones/PeticionDatosGrid.js'
 
 export function GetDataGrid(t,callback) {
     GetData(t, callback)   
-}
-
-
-export function getListBit(t, callback) {
-    getDataBit(t,callback)
 }
 
 export function AddLoading(id) {

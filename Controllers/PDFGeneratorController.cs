@@ -21,11 +21,10 @@ using Newtonsoft.Json;
 using GuanajuatoAdminUsuarios.Utils;
 //using Telerik.SvgIcons;
 using GuanajuatoAdminUsuarios.Models.PDFModels;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Globalization;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+
 	[Authorize]
 	public class PDFGeneratorController : Controller
 	{
@@ -70,7 +69,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 			var ParteNombre = _appSettingsService.GetAppSetting("ParteNombre").SettingValue;
 			var PartePuesto = _appSettingsService.GetAppSetting("PartePuesto").SettingValue;
-			List<PDFMotivosInfracciones> motivosInfraccion = ListInfracciones.Select(s => new PDFMotivosInfracciones { idInfraccion = s.IdInfraccion, Motivos = _infraccionesService.GetMotivosInfraccionByIdInfraccion((int)s.IdInfraccion).Select(ss => ss.Concepto).ToList() }).ToList();
+			List<PDFMotivosInfracciones> motivosInfraccion = ListInfracciones.Select(s => new PDFMotivosInfracciones { idInfraccion = s.IdInfraccion, Motivos = _infraccionesService.GetMotivosInfraccionByIdInfraccion((int)s.IdInfraccion).Select(ss => ss.Concepto+"-"+ss.Fundamento).ToList() }).ToList();
 
 			PDFAccidenteDetalladoModel model = new PDFAccidenteDetalladoModel();
 			model.Involucrados = ListInvolucrados;
@@ -173,22 +172,23 @@ namespace GuanajuatoAdminUsuarios.Controllers
 			}).ToList();
 			Dictionary<string, string> ColumnsNames = new Dictionary<string, string>()
 			{
+
                 //{"idInfraccion",""},
                 {"folioInfraccion","Folio"},
-				{"conductor","Conductor"},
-				{"propietario","Propietario"},
-				{"fechaAplicacion","Fecha Aplicación"},
-				{"garantia","Garantía"},
-				{"vehiculo","Vehículo"},
-				{"placas","Placas"},
-				{"delegacion","Delegación"},
-				{ "estatusInfraccion", "Estatus"}
-			};
-			var result = _pdfService.CreatePdf("ReporteInfraccionesGeneral", "Reporte General de Infracciones", 9, ColumnsNames, pdfModel);
-			byte[] bytes = result.Item1.ToArray();
-			string base64 = Convert.ToBase64String(bytes, 0, bytes.Length);
-			return Content(base64);
-		}
+                {"conductor","Conductor"},
+                {"propietario","Propietario"},
+                {"fechaAplicacion","Fecha Aplicación"},
+                {"garantia","Garantía"},
+                {"vehiculo","Vehículo"},
+                {"placas","Placas"},
+                {"delegacion","Delegación"},
+                { "estatusInfraccion", "Estatus"}
+            };
+            var result = _pdfService.CreatePdf("ReporteInfraccionesGeneral", "Reporte General de Infracciones", 9, ColumnsNames, pdfModel);
+            byte[] bytes = result.Item1.ToArray();
+            string base64 = Convert.ToBase64String(bytes, 0, bytes.Length);
+            return Content(base64);
+        }
 
-	}
+    }
 }

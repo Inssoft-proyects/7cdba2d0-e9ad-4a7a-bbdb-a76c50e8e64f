@@ -49,7 +49,7 @@
 
         <div class="col-12 col-md-6">
             <div class="controlForm">
-                <label>Concepto <b>(obligatorio)</b>:</label>
+                <label>Concepto:</label>
                 @(
                     Html.Kendo().DropDownListFor(m => m.idConcepto).Filter(FilterType.Contains)
                                 .BindTo((SelectList)ViewData["CatConcepto"])

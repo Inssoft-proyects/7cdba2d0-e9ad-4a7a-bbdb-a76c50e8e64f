@@ -12,7 +12,7 @@
             @Html.HiddenFor(m=>m.IdMarcaVehiculo)
             @(Html.Kendo().TextBoxFor(t => t.MarcaVehiculo)
                 .HtmlAttributes(new { placeholder = "Marca de Vehículo", required = "required", validationmessage = "Enter Category Name" })
-                .Label(l => l.Content("Marca de Vehículo <b>(obligatorio)</b>:"))
+                .Label(l => l.Content("Marca de Vehículo"))
                 )
 
         </form>

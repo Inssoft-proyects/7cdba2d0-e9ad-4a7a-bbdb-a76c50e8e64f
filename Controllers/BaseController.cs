@@ -303,6 +303,13 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 Modulo = "Catálogos",
                 SubModulo = "MotivosInfraccion"
             },
+             new Menu()
+            {
+                Controller = "CatMunicipios",
+                Action = "Index",
+                Modulo = "Catálogos",
+                SubModulo = "CatMunicipios"
+            },
             new Menu()
             {
                 Controller = "Oficiales",

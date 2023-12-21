@@ -107,7 +107,7 @@
                 <div class="controlForm my-3">
                     @(Html.Kendo().TextBoxFor(t => t.Serie)
                         .Label(l => l.Content("Número de Serie:"))
-                        .Placeholder("Ingresa el número de serie válido")
+                        .Placeholder("Ingresa el número de serie valido")
                         .HtmlAttributes(new { style = "width: 100%" })
                         )
                 </div>
@@ -115,12 +115,11 @@
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="controlForm my-3">
                     <label> Fecha de ingreso (obligatorio):</label>
-                    @(Html.Kendo().DatePickerFor(t => t.FechaIngreso)
+                    @(Html.Kendo().DatePickerFor(t => t.FechaIngreso).Max(DateTime.Now)
                         .Format("dd/MM/yyyy")
                         .Culture("es-ES")
                         .HtmlAttributes(new { style = "width: 100%"})
                         ) 
-
                 </div>
             </div>
 

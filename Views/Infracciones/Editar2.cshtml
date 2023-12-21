@@ -140,7 +140,7 @@
                             <div class="row my-4 px-4">
                                 <div class="form-group col-md-4">
                                     <div class="controlForm">
-                                        <label>Fecha infracción <b>(obligatorio)</b>:</label>
+                                        <label>Fecha infracción:</label>
                                         @(Html.Kendo().DateTimePickerFor(t => t.fechaInfraccion)
                                                 .Label(l => l.Content("Fecha: <b>(obligatorio)</b>:"))
                                                 .HtmlAttributes(new { style = "width: 100%", required = "required" })
@@ -160,7 +160,7 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <div class="controlForm">
-                                        <label>Oficial <b>(obligatorio)</b>:</label>
+                                        <label>Oficial:</label>
                                         @(Html.Kendo().DropDownListFor(m => m.idOficial).Filter(FilterType.Contains)
                                                 .BindTo((SelectList)ViewBag.CatOficiales)
                                                 .OptionLabel("-- Seleccione --")
@@ -171,7 +171,7 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <div class="controlForm">
-                                        <label>Municipio <b>(obligatorio)</b>:</label>
+                                        <label>Municipio:</label>
                                         @(Html.Kendo().DropDownListFor(m => m.IdMunicipio).Filter(FilterType.Contains)
                                                 .BindTo((SelectList)ViewBag.CatMunicipios)
                                                 .OptionLabel("-- Seleccione --")
@@ -183,12 +183,10 @@
                             <div class="row my-4 px-4">
                                 <div class="form-group col-md-4">
                                     <div class="checkbox">
-                                        <label>Infracción de cortesía: </label>
-                                        <div class="btnToggleActive">
-                                            @(Html.Kendo().SwitchFor(m => m.infraccionCortesia)
-                                                    .Messages(c => c.Checked("SI").Unchecked("NO"))
-                                                    )
-                                        </div>
+                                        <label>Infracción de cortesía: </label>&nbsp;&nbsp;
+                                        @(Html.Kendo().SwitchFor(m => m.infraccionCortesia)
+                                                .Messages(c => c.Checked("SI").Unchecked("NO"))
+                                                )
                                     </div>
                                 </div>
                                 <div class="form-group col-md-8">
@@ -225,7 +223,7 @@
                             <div class="row my-4 px-4">
                                 <div class="form-group col-md-4">
                                     <div class="controlForm">
-                                        <label>Carretera <b>(obligatorio)</b>:</label>
+                                        <label>Carretera:</label>
                                         @(Html.Kendo().DropDownListFor(m => m.IdCarretera).Filter(FilterType.Contains)
                                                 .BindTo((SelectList)ViewBag.CatCarreteras)
                                                 .OptionLabel("-- Seleccione --")
@@ -235,7 +233,7 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <div class="controlForm">
-                                        <label>Tramo <b>(obligatorio)</b>:</label>
+                                        <label>Tramo:</label>
                                         <div id="divTramo">
                                             @(Html.Kendo().DropDownListFor(f => f.IdTramo).Filter(FilterType.Contains)
                                                     .BindTo((SelectList)ViewBag.CatTramos)
@@ -448,7 +446,7 @@
                             <div class="row my-4 px-4">
                                 <div class="col-12 col-md-4">
                                     <div class="controlForm">
-                                        <label>Concepto <b>(obligatorio)</b>:</label>
+                                        <label>Concepto:</label>
                                         @(Html.Kendo().DropDownListFor(m => m.Garantia.idCatGarantia).Filter(FilterType.Contains)
                                                 .BindTo((SelectList)ViewBag.CatGarantias)
                                                 .OptionLabel("-- Seleccione --")
@@ -509,9 +507,7 @@
                                         <div class="col-12 col-md-4">
                                             <div class="controlForm">
                                                 <label>No. de placa:</label>
-                                                <span>
-                                                    @Html.DisplayFor(m=> m.Placa)
-                                                </span>
+                                                @Html.DisplayFor(m=> m.Placa)
                                             </div>
                                         </div>
                                     </div>
@@ -521,9 +517,7 @@
                                         <div class="col-12 col-md-4">
                                             <div class="controlForm">
                                                 <label>Tarjeta de circulación:</label>
-                                                <span>
-                                                    @Html.DisplayFor(m=> m.Tarjeta)
-                                                </span>
+                                                @Html.DisplayFor(m=> m.Tarjeta)
                                             </div>
                                         </div>
                                     </div>

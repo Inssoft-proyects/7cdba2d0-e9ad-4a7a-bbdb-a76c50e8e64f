@@ -70,11 +70,11 @@
                 success: function (listaIdsPermitidosJson) {
                     var mensajeUsuario = document.getElementById('mensajeUsuario');
                     if (listaIdsPermitidosJson.length > 0) {
-                        mensajeUsuario.textContent = "Inicio de Sesión Autorizado";
+                        mensajeUsuario.textContent = "Inicio de sesión autorizado";
                         mensajeUsuario.style.color = "green";
                         window.location.href = "/Principal";
                     } else {
-                        mensajeUsuario.textContent = "Usuario no Registrado";
+                        mensajeUsuario.textContent = "Usuario no registrado";
                         mensajeUsuario.style.color = "red";
                     }
 
@@ -83,7 +83,7 @@
                 },
                 error: function (error) {
                     var mensajeUsuario = document.getElementById('mensajeUsuario');
-                    mensajeUsuario.textContent = "Usuario no registrado";
+                    mensajeUsuario.textContent = "Ocurrió un error al procesar su solicitud.";
                     mensajeUsuario.style.color = "red";
                     mensajeUsuario.style.display = "block";
 
@@ -138,51 +138,70 @@
                 </div>
                 <div class="row">
                     <div class="col-12 my-4">
-                        <h6 class="px-4 text-muted">Introduce tus credenciales de acceso.</h6>
-                        <br />
+                        @*<h6 class="px-4 text-muted">Introduce tus credenciales de acceso.</h6>*@
+                        @*<br />*@
                         <h6 id="errorAlerta" class="px-4" style="display:none; color: red">Credenciales inválidas.</h6>
                     </div>
-
-
                 </div>
-                <div class="row px-4 mb-4 align-items-end">
-                    <!--todo select -->
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="controlForm my-3">
-                            @(Html.Kendo().TextBoxFor(m => m.Usuario)
-                                .Label(l => l.Content("Usuario:"))
-                                .Placeholder("Usuario")
-                                .HtmlAttributes(new { style = "width: 100%", id = "usuario" })
-                                )
 
+
+                <div class="card text-center">
+                    <div class="card-header fw-bold">
+                        Introduce tus credenciales de acceso.
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="controlForm">
+                                    @(Html.Kendo().TextBoxFor(m => m.Usuario)
+                                        .Label(l => l.Content("Usuario:"))
+                                        .Placeholder("Usuario")
+                                        .HtmlAttributes(new { style = "width: 100%", id = "usuario" })
+                                        )
+
+                                </div>
+                            </div>
+                            <br />
+                            <div class="col-md-6">
+                                <div class="controlForm">
+                                    @(Html.Kendo().TextBoxFor(m => m.Contraseña)
+                                        .Label(l => l.Content("Contraseña"))
+                                        .Placeholder("*****")
+                                        .HtmlAttributes(new { type = "password", style = "width: 100%", id = "contrasena" })
+                                        )
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row px-4 mb-4 align-items-end">
+                        <div class="alert-dismissible alert-info alert fw-bold" id="mensajeUsuario" style="display: none;">
                         </div>
                     </div>
 
-                    <div class="col-12 col-md-6 col-lg-3">
-                        <div class="controlForm my-3">
-                            @(Html.Kendo().TextBoxFor(m => m.Contraseña)
-                                .Label(l => l.Content("Contraseña"))
-                                .Placeholder("*****")
-                                .HtmlAttributes(new { type = "password", style = "width: 100%", id = "contrasena" })
-                                )
 
-                        </div>
-                    </div>
+                    <div class="card-footer text-center">
+                        <div class="col-md-4"></div>
+                        <div class="class="mx-md-auto col-lg-4 mx-lg-0">
+                            <button type="button" class="btn btn-primary controlForm" onclick="inicioSesion()" style="width:400px; height:60px;">
+                                Iniciar sesión
+                            </button>
 
-                    <div class="col-12 col-md-6 mx-md-auto col-lg-4 mx-lg-0 ">
-                        <div class="controlButton my-3" onclick="inicioSesion()">
+                            @*<div onclick="inicioSesion()">
                             @(Html.Kendo().Button()
-                                .Name("Iniciar")
-                                .HtmlAttributes(new { @class = "btnPrimary" })
-                                .Content("<h5 class=\"m-0\"><b>Iniciar</b></h5>")
-                                )
+                            .Name("Iniciar")
+                            .HtmlAttributes(new { @class = "btnPrimary" })
+                            .Content("<h5 class=\"m-0\"><b>Iniciar</b></h5>")
+                            )
+                            </div>*@
                         </div>
+                        <div class="col-md-4"></div>
                     </div>
-                        
-
-                    <div id="mensajeUsuario" style="display: none;"></div>
-
                 </div>
+
+
+                
             </section>
 
 

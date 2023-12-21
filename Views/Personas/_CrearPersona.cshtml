@@ -271,6 +271,7 @@
         });
     }
 
+
     function btnCrearPersona() {
         var validator = $("#frmCrearPersona").kendoValidator().data('kendoValidator');
         var idTelefono = $("#telefono");
@@ -315,7 +316,8 @@
         if (!isValid) {
             sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
             return;
-        }
+        } 
+
 
         if (isValid) {
             var formData = $("#frmCrearPersona").serialize();
@@ -354,6 +356,7 @@
             return;
         }
     }
+    
 function completarConLicencia() {
     var formData = $("#frmCrearPersona").serialize();
 
