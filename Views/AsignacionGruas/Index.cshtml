@@ -75,8 +75,7 @@
                             @(Html.Kendo().DatePickerFor(t => t.fecha)
                                 .Label(l => l.Content("Fecha:"))
                                 .Format("dd/MM/yyyy")
-                                .Culture("es-ES")
-                                .Max(DateTime.Now)
+                        .Culture("es-ES")
                                 .HtmlAttributes(new { style = "width: 40%", id="dateBusqueda" })
 
                                 )

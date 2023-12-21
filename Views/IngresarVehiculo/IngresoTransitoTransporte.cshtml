@@ -117,9 +117,9 @@
             <div class="col-12 col-md-7">
                 <div class="controlForm my-3 selecciondeFecha">
                     <label>Fecha Ingreso:</label>
-                    @(Html.Kendo().DateTimePickerFor(t => t.fechaIngreso).Max(DateTime.Now).Interval(1)
+                    @(Html.Kendo().DateTimePickerFor(t => t.fechaIngreso)
                         .Label(l => l.Content("Fecha Ingreso:"))
-                        .Format("dd/MM/yyyy HH:mm") 
+                        .Format("dd:MM:yyyy HH:mm") 
                         .HtmlAttributes(new { style = "width: 45%", id="ingreso" })
                         )            
                 </div>

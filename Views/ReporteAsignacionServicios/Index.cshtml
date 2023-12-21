@@ -139,7 +139,7 @@
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="controlForm my-3">
                     <label>Inicio:</label>
-                    @(Html.Kendo().DatePickerFor(t => t.FechaInicio).Max(DateTime.Now)
+                    @(Html.Kendo().DatePickerFor(t => t.FechaInicio)
                         .Culture("es-ES")
                         .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "start" })
                         )
@@ -196,7 +196,7 @@
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="controlForm my-3">
                     <label>Fin:</label>
-                    @(Html.Kendo().DatePickerFor(t => t.FechaFin).Max(DateTime.Now)
+                    @(Html.Kendo().DatePickerFor(t => t.FechaFin)
                         .Culture("es-ES")
                         .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "end" })
                         )

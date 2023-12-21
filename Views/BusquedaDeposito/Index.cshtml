@@ -47,7 +47,7 @@
                         <div class="controlForm my-3">
                             <label>Fecha de ingreso:</label>
                             <span>
-                                @(Html.Kendo().DatePickerFor(t => t.fechaIngreso).Max(DateTime.Now)
+                                @(Html.Kendo().DatePickerFor(t => t.fechaIngreso)
                                     .Label(l => l.Content("Fecha:"))
                                     .Culture("es-ES")
                                     .HtmlAttributes(new { style = "width: 100%", title = "please enter date" })

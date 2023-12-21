@@ -24,8 +24,6 @@ namespace GuanajuatoAdminUsuarios.Services
         {
             List<CatMotivosInfraccionModel> motivos = new List<CatMotivosInfraccionModel>();
             string query = @"SELECT 
-                                cmi.fechaInicio,
-								cmi.fechaFinVigencia,
 	                            cmi.idCatMotivoInfraccion ,
 	                            cmi.nombre,
 	                            cmi.fundamento , 
@@ -67,8 +65,6 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.idSubConcepto = reader["IdSubConcepto"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["IdSubConcepto"].ToString());
                             model.subConcepto = reader["subConcepto"].ToString();
                             model.ValorEstatusMotivosInfraccion = reader["ValorEstatusMotivosInfraccion"].ToString() == "inactivo" ? false :true;
-                            model.fechaInicio = reader["fechaInicio"] == System.DBNull.Value ? default(string) : Convert.ToString(reader["fechaInicio"].ToString());
-                            model.fechaFinVigencia = reader["fechaFinVigencia"] == System.DBNull.Value ? default(string) : Convert.ToString(reader["fechaFinVigencia"].ToString());
 
                             motivos.Add(model);
                         }

@@ -206,7 +206,8 @@
                 {
                     @(Html.Kendo().DatePickerFor(t => t.vigenciaTarjeta).Format("dd/MM/yyyy")
                         .Value(dateVigencia)
-                       // .DateInput()                        
+                        .DateInput()
+                        
                         .Culture("es-ES")
                         .HtmlAttributes(new { style = "width: 100%", title = "datetimepicker" })
                         .Value("")
@@ -976,7 +977,7 @@
                         <div class="controlForm mb-3">
                             <label>Fecha de nacimiento <b>(obligatorio)</b></label>
                             <span>
-                                @(Html.Kendo().DatePickerFor(t => t.Persona.fechaNacimiento).Max(DateTime.Now)
+                                @(Html.Kendo().DatePickerFor(t => t.Persona.fechaNacimiento)
                                     .Format("dd/MM/yyyy")
                                     .Culture("es-ES")
                                    .HtmlAttributes(new { style = "width: 100%" })

@@ -2390,36 +2390,6 @@ namespace GuanajuatoAdminUsuarios.Services
 			return modelList;
 		}
 
-		public bool ValidarFolio(string folioInfraccion)
-		{
-			int folio = 0;
-
-			using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
-			{
-				connection.Open();
-
-				string query = "SELECT COUNT(*) AS Result FROM infracciones WHERE folioInfraccion = @folioInfraccion and  year(fechaInfranccion) = year(getdate())";
-
-				using (SqlCommand command = new SqlCommand(query, connection))
-				{
-
-					command.Parameters.AddWithValue("@folioInfraccion", folioInfraccion);
-
-					using (SqlDataReader reader = command.ExecuteReader())
-					{
-						if (reader.Read())
-						{
-
-							folio = reader["Result"] == DBNull.Value ? default(int) : Convert.ToInt32(reader["Result"]);
-						}
-					}
-				}
-			}
-			return folio > 0;
-		}
-
-
-
 		public int CrearInfraccion(InfraccionesModel model)
 		{
 			int result = 0;
