@@ -1,6 +1,7 @@
 ﻿using GuanajuatoAdminUsuarios.Entity;
 using GuanajuatoAdminUsuarios.Models;
 using GuanajuatoAdminUsuarios.RESTModels;
+using System;
 using System.Collections.Generic;
 
 namespace GuanajuatoAdminUsuarios.Interfaces
