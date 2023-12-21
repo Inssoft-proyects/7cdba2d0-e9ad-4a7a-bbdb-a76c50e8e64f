@@ -191,12 +191,14 @@
                             <div class="row my-4 px-4">
                                 <div class="form-group col-md-4">
                                     <div class="checkbox">
-                                        <label>Infracción de cortesía: </label>&nbsp;&nbsp;
-                                        @Html.HiddenFor(m => m.cortesiaInt, new { id = "idCortesia" })
-                                        @(Html.Kendo().SwitchFor(m => m.infraccionCortesia)
-                                          .HtmlAttributes(new { style = "transform: scale(1.2);",  id = "cortesiaSwitch" })
-                                            .Messages(c => c.Checked("SI").Unchecked("NO"))
-                                            )
+                                        <label>Infracción de cortesía: </label>
+                                        <div class="btnToggleActive">
+                                            @Html.HiddenFor(m => m.cortesiaInt, new { id = "idCortesia" })
+                                            @(Html.Kendo().SwitchFor(m => m.infraccionCortesia)
+                                            .HtmlAttributes(new { style = "transform: scale(1.2);",  id = "cortesiaSwitch" })
+                                                .Messages(c => c.Checked("SI").Unchecked("NO"))
+                                                )
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-8">
@@ -527,7 +529,9 @@
                                         <div class="col-12 col-md-4">
                                             <div class="controlForm">
                                                 <label>Tarjeta de circulación:</label>
-                                                @Html.DisplayFor(m=> m.NumTarjetaCirculacion)
+                                                <span>
+                                                    @Html.DisplayFor(m=> m.NumTarjetaCirculacion)
+                                                </span>
                                             </div>
                                         </div>
                                     </div>

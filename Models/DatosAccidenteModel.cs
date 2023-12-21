@@ -2,10 +2,10 @@
 {
     public class DatosAccidenteModel
     { 
-        public float montoCamino { get; set; }
-        public float montoCarga { get; set; }
-        public float montoPropietarios { get; set; }
-        public float montoOtros { get; set; }
+        public string montoCamino { get; set; }
+        public string montoCarga { get; set; }
+        public string montoPropietarios { get; set; }
+        public string montoOtros { get; set; }
         public float Latitud { get; set; }
         public float Longitud { get; set; }
         public int IdCiudad { get; set; }

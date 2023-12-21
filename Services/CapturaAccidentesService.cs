@@ -100,12 +100,24 @@ namespace GuanajuatoAdminUsuarios.Services
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand(@"
-                        SELECT DISTINCT a.idAccidente, a.numeroReporte, a.fecha, a.hora, a.idMunicipio, a.idCarretera, a.idTramo, a.kilometro, a.idClasificacionAccidente, 
-                        a.idFactorAccidente, a.IdFactorOpcionAccidente, a.idOficinaDelegacion, a.descripcionCausas, m.municipio, c.carretera, t.tramo, e.estatusDesc, 
-                        ac.idCausaAccidente, d.delegacion
-                        FROM accidentes AS a 
+
+                        SELECT DISTINCT 
+                        a.idAccidente,
+                        a.numeroReporte,
+                        a.fecha, a.hora,
+                        a.idMunicipio, 
+                        a.idCarretera, 
+                        a.idTramo, 
+                        a.kilometro, 
+                        a.idClasificacionAccidente, 
+                        a.idFactorAccidente,
+                        a.IdFactorOpcionAccidente,
+                        a.idOficinaDelegacion,
+                        a.descripcionCausas, m.municipio, c.carretera, t.tramo, e.estatusDesc, 
+                        ac.idCausaAccidente, d.nombreOficina,d.jefeOficina
+                        FROM accidentes AS a                         
                         JOIN catMunicipios AS m ON a.idMunicipio = m.idMunicipio
-                        JOIN catDelegaciones as d on d.idDelegacion = (a.idOficinaDelegacion+1)
+                        JOIN catDelegacionesOficinasTransporte as d on d.idOficinaTransporte= a.idOficinaDelegacion
                         JOIN catCarreteras AS c ON a.idCarretera = c.idCarretera 
                         JOIN catTramos AS t ON a.idTramo = t.idTramo 
                         JOIN estatus AS e ON a.estatus = e.estatus 
@@ -136,7 +148,10 @@ namespace GuanajuatoAdminUsuarios.Services
                             accidente.Carretera = reader["Carretera"].ToString();
                             accidente.Kilometro = reader["Kilometro"].ToString();
                             accidente.IdTramo = Convert.ToInt32(reader["IdTramo"].ToString());
-							accidente.DelegacionOficina = reader["delegacion"].ToString();
+							accidente.DelegacionOficina = reader["nombreOficina"].ToString();
+                            accidente.jefeOficina = reader["jefeOficina"].ToString();
+                            accidente.Fecha=accidente.Fecha.Value.Add(accidente.Hora.Value);
+                            var tt = accidente.Hora.Value.ToString(@"hh\:mm",new CultureInfo("en-US"));
 						}
                     }
                 }
@@ -1288,27 +1303,38 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT cva.*, COALESCE(cva.idPersona, pcv.idPersona) AS idConductor,cva.idTipoCarga,cva.poliza,ctc.tipoCarga,v.placas, v.tarjeta, v.serie, v.idMarcaVehiculo, " +
-                        "v.idSubmarca,v.idEntidad, v.idTipoVehiculo,acc.numeroReporte,v.idPersona AS idPropietario, v.modelo, v.idColor, v.idCatTipoServicio, v.motor, v.capacidad, " +
-                        "cm.marcaVehiculo, csv.nombreSubmarca, tv.tipoVehiculo, COALESCE(p.nombre, pcv.nombre) AS nombre, COALESCE(p.apellidoPaterno, pcv.apellidoPaterno) AS apellidoPaterno, " +
-                        "p.apellidoMaterno,p.RFC,p.CURP, CONVERT(varchar, p.fechaNacimiento, 103) AS fechaNacimiento, c.color, ts.tipoServicio, pcv.nombre AS nombreConductor, pcv.apellidoPaterno AS apellidoPConductor, pcv.apellidoMaterno AS apellidoMConductor, " +
-                        "tc.tipoCarga, pen.pension, ft.formaTraslado, cent.nombreEntidad,va.montoVehiculo " +
-                        "FROM conductoresVehiculosAccidente AS cva INNER JOIN vehiculos AS v ON cva.idVehiculo = v.idVehiculo " +
-                        "LEFT JOIN catMarcasVehiculos AS cm ON v.idMarcaVehiculo = cm.idMarcaVehiculo " +
-                        "LEFT JOIN catTiposcarga AS ctc ON cva.idTipoCarga = ctc.idTipoCarga " +
-                        "LEFT JOIN catSubmarcasVehiculos AS csv ON v.idSubmarca = csv.idSubmarca " +
-                        "LEFT JOIN catTiposVehiculo AS tv ON v.idTipoVehiculo = tv.idTipoVehiculo " +
-                        "LEFT JOIN personas AS p ON v.idPersona = p.idPersona " +
-                        "LEFT JOIN catColores AS c ON v.idColor = c.idColor " +
-                        "LEFT JOIN catTiposcarga AS tc ON cva.idTipoCarga = tc.idTipoCarga " +
-                        "LEFT JOIN pensiones AS pen ON cva.idPension = pen.idPension " +
-                        "LEFT JOIN vehiculosAccidente AS va ON cva.idVehiculo = va.idVehiculo AND cva.idAccidente = va.idAccidente " +
-                        "LEFT JOIN catFormasTraslado AS ft ON cva.idFormaTraslado = ft.idFormaTraslado " +
-                        "LEFT JOIN catTipoServicio AS ts ON v.idCatTipoServicio = ts.idCatTipoServicio " +
-                        "LEFT JOIN accidentes AS acc ON cva.idAccidente = acc.idAccidente " +
-                        "LEFT JOIN catEntidades AS cent ON v.idEntidad = cent.idEntidad " +
-                        "LEFT JOIN personas AS pcv ON cva.idPersona = pcv.idPersona " +
-                        "WHERE cva.idAccidente = @idAccidente AND cva.idAccidente > 0 AND cva.estatus = 1;", connection);
+                    SqlCommand command = new SqlCommand(@"
+                       SELECT cva.*, COALESCE(cva.idPersona, pcv.idPersona) AS idConductor,cva.idTipoCarga,cva.poliza,ctc.tipoCarga,v.placas, v.tarjeta, v.serie, v.idMarcaVehiculo,  
+                        v.idSubmarca,v.idEntidad, v.idTipoVehiculo,acc.numeroReporte,v.idPersona AS idPropietario, v.modelo, v.idColor, v.idCatTipoServicio, v.motor, v.capacidad,  
+                        cm.marcaVehiculo, csv.nombreSubmarca, tv.tipoVehiculo, COALESCE(p.nombre, pcv.nombre) AS nombre, COALESCE(p.apellidoPaterno, pcv.apellidoPaterno) AS apellidoPaterno,  
+                        p.apellidoMaterno,p.RFC,p.CURP, CONVERT(varchar, p.fechaNacimiento, 103) AS fechaNacimiento, c.color, ts.tipoServicio, pcv.nombre AS nombreConductor, pcv.apellidoPaterno AS apellidoPConductor, pcv.apellidoMaterno AS apellidoMConductor,  
+                        tc.tipoCarga, pen.pension, ft.formaTraslado, cent.nombreEntidad,va.montoVehiculo ,p.vigenciaLicencia ,
+						isnull(pd.colonia,'')+' '+isnull(pd.codigoPostal,'')+' '+ isnull(pd.calle,'')+' '+isnull(pd.numero,'') as direccion,
+						isnull(pdc.colonia,'')+' '+isnull(pdc.codigoPostal,'')+' '+ isnull(pdc.calle,'')+' '+isnull(pdc.numero,'') as direccionc,
+						p.nombre,pcv.nombre, GC.genero,pcv.numeroLicencia,tl.tipoLicencia
+                        FROM conductoresVehiculosAccidente AS cva 
+						INNER JOIN vehiculos AS v ON cva.idVehiculo = v.idVehiculo  
+                        LEFT JOIN catMarcasVehiculos AS cm ON v.idMarcaVehiculo = cm.idMarcaVehiculo  
+                        LEFT JOIN catTiposcarga AS ctc ON cva.idTipoCarga = ctc.idTipoCarga  
+                        LEFT JOIN catSubmarcasVehiculos AS csv ON v.idSubmarca = csv.idSubmarca  
+                        LEFT JOIN catTiposVehiculo AS tv ON v.idTipoVehiculo = tv.idTipoVehiculo  
+                        LEFT JOIN personas AS p ON v.idPersona = p.idPersona  
+                        LEFT JOIN catColores AS c ON v.idColor = c.idColor  
+                        LEFT JOIN catTiposcarga AS tc ON cva.idTipoCarga = tc.idTipoCarga  
+                        LEFT JOIN pensiones AS pen ON cva.idPension = pen.idPension  
+                        LEFT JOIN vehiculosAccidente AS va ON cva.idVehiculo = va.idVehiculo AND cva.idAccidente = va.idAccidente  
+                        LEFT JOIN catFormasTraslado AS ft ON cva.idFormaTraslado = ft.idFormaTraslado  
+                        LEFT JOIN catTipoServicio AS ts ON v.idCatTipoServicio = ts.idCatTipoServicio  
+                        LEFT JOIN accidentes AS acc ON cva.idAccidente = acc.idAccidente  
+                        LEFT JOIN catEntidades AS cent ON v.idEntidad = cent.idEntidad  
+                        LEFT JOIN personas AS pcv ON cva.idPersona = pcv.idPersona  
+						left join personasDirecciones pd on pd.idPersona=p.idPersona
+						left join personasDirecciones pdc on pdc.idPersona=pcv.idPersona
+						left join catGeneros GC on GC.idGenero=pcv.idGenero
+						left join catTipoLicencia tl on pcv.idTipoLicencia=tl.idTipoLicencia
+
+                        WHERE cva.idAccidente = @idAccidente AND cva.idAccidente > 0 AND cva.estatus = 1;
+                        ", connection);
 
                     command.CommandType = CommandType.Text;
                     command.Parameters.AddWithValue("@idAccidente", IdAccidente);
@@ -1347,7 +1373,13 @@ namespace GuanajuatoAdminUsuarios.Services
                             vehiculo.CURP = reader["CURP"].ToString();
                             vehiculo.TipoServicio = reader["tipoServicio"].ToString();
                             vehiculo.FormaTrasladoInvolucrado = reader["formaTraslado"].ToString();
-                            vehiculo.ConductorInvolucrado = $"{reader["nombreConductor"]} {reader["apellidoPConductor"]} {reader["apellidoMConductor"]}";
+                            vehiculo.Direccion = reader["direccion"].ToString();
+							vehiculo.DireccionConductor = reader["direccionc"].ToString();
+                            vehiculo.Sexo = reader["genero"].ToString();
+                            vehiculo.numeroLicencia = reader["numeroLicencia"].ToString();
+                            vehiculo.TipoLicencia = reader["tipoLicencia"].ToString();
+							vehiculo.ConductorInvolucrado = $"{reader["nombreConductor"]} {reader["apellidoPConductor"]} {reader["apellidoMConductor"]}";
+                            vehiculo.vigenciaLicencia = reader["vigenciaLicencia"].GetType() == typeof(DBNull) ? DateTime.MinValue : (DateTime)reader["vigenciaLicencia"];
                             string montoVehiculoString = reader["montoVehiculo"].ToString();
                             float montoVehiculo;
 
@@ -2190,10 +2222,10 @@ hola
                     {
                         if (reader.Read())
                         {
-                            datosFinales.montoCamino = reader["montoCamino"] == DBNull.Value ? 0 : float.Parse(reader["montoCamino"].ToString());
-                            datosFinales.montoCarga = reader["montoCarga"] == DBNull.Value ? 0 : float.Parse(reader["montoCarga"].ToString());
-                            datosFinales.montoPropietarios = reader["montoPropietarios"] == DBNull.Value ? 0 : float.Parse(reader["montoPropietarios"].ToString());
-                            datosFinales.montoOtros = reader["montoOtros"] == DBNull.Value ? 0 : float.Parse(reader["montoOtros"].ToString());
+                            datosFinales.montoCamino = reader["montoCamino"] == DBNull.Value ? "": reader["montoCamino"].ToString();
+                            datosFinales.montoCarga = reader["montoCarga"] == DBNull.Value ? "" : reader["montoCarga"].ToString();
+                            datosFinales.montoPropietarios = reader["montoPropietarios"] == DBNull.Value ? "" : reader["montoPropietarios"].ToString();
+                            datosFinales.montoOtros = reader["montoOtros"] == DBNull.Value ? "" : reader["montoOtros"].ToString();
                             datosFinales.Latitud = reader["latitud"] == DBNull.Value ? 0 : float.Parse(reader["latitud"].ToString());
                             datosFinales.Longitud = reader["longitud"] == DBNull.Value ? 0 : float.Parse(reader["longitud"].ToString());
                             datosFinales.IdCertificado = reader["idCertificado"] == DBNull.Value ? 0 : int.Parse(reader["idCertificado"].ToString());

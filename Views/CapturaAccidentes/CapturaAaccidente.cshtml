@@ -38,40 +38,187 @@
 		</div>
 		<form class="row px-4 align-items-end">
 			<div class="col-auto">
-				<div class="controlForm mb-3 mt-1">
+				<div class="controlForm mb-3">
 					<label class="text-muted">No. de reporte de accidente:</label>
 					<label>@Model.NumeroReporte</label>
 				</div>
 			</div>
 			<div class="col-auto">
 				<div class="controlForm mb-3 mt-1">
-					<label class="text-muted">Fecha y hora:</label>
-				<!--	<label>@Model.Fecha.Value.ToString("dd/MM/yyyy") - @Model.Hora</label>-->
-					<label>@Model.FechaFormateada - @Model.Hora</label>
+
+					<label class="text-muted">Fecha:</label>
+					@(Html.Kendo().DatePickerFor(t => t.Fecha).Max(DateTime.Now)
+
+						.Label(l => l.Content("Fecha:"))
+						.Format("dd/MM/yyyy")
+						.Culture("es-ES")
+						.Enable(!ViewBag.EsSoloLectura)
+						.HtmlAttributes(new { style = "width: 100%", id = "dateF" })
+						)
+					@* <label>@Model.FechaFormateada - @Model.Hora</label> *@
 				</div>
 			</div>
+
 			<div class="col-auto">
 				<div class="controlForm mb-3 mt-1">
-					<label class="text-muted">Municipio:</label>
-					<label>@Model.Municipio</label>
+					<label class="text-muted">Hora:</label>
+					@(Html.Kendo().TimePickerFor(t => t.Hora).Interval(1).Max(DateTime.Now)
+						.Label(l => l.Content("Hora:"))
+						.Format("HH:mm")
+						.Culture("es-ES")
+						.Enable(!ViewBag.EsSoloLectura)
+						.HtmlAttributes(new { style = "width: 100%", id = "dateTime" })
+						)
+					@* <label>@Model.FechaFormateada - @Model.Hora</label> *@
 				</div>
 			</div>
-			<div class="col-auto">
-				<div class="controlForm mb-3 mt-1">
-					<label class="text-muted">Carretera:</label>
-					<label>@Model.Carretera</label>
+			<div class="col-12 col-md-6 col-lg-4">
+				<div class="controlForm mb-3">
+					<label>Municipio:</label>
+						@if(ViewBag.EsSoloLectura != null && ViewBag.EsSoloLectura)
+					{
+						@(Html.Kendo().DropDownListFor(t => t.IdMunicipio)
+							.Filter(FilterType.Contains)
+							.DataTextField("Text")
+							.DataValueField("Value")
+							.OptionLabel("Selecciona un Municipio")
+							.HtmlAttributes(new { @class = "CentradoList", style = "width:100%;", id = "ddlMunicipios", disabled = "disabled" })
+							.DataSource(source =>
+
+							{
+								source.Read(read =>
+								{
+									read.Action("Municipios_Drop", "CapturaAccidentes");
+								});
+							}))
+					}
+					else
+					{
+						@(Html.Kendo().DropDownListFor(t => t.IdMunicipio)
+							.Filter(FilterType.Contains)
+							.DataTextField("Text")
+							.DataValueField("Value")
+							.OptionLabel("Selecciona un Municipio")
+							.HtmlAttributes(new { @class = "CentradoList", style = "width:100%;", id = "ddlMunicipios" })
+							.DataSource(source =>
+							{
+								source.Read(read =>
+								{
+									read.Action("Municipios_Drop", "CapturaAccidentes");
+								});
+							}))
+					}
 				</div>
 			</div>
-			<div class="col-auto">
-				<div class="controlForm mb-3 mt-1">
-					<label class="text-muted">Tramo:</label>
-					<label>@Model.Tramo</label>
+			<div class="col-12 col-md-6 col-lg-4">
+				<div class="controlForm mb-3">
+					<label>Carretera:</label>
+				@if(ViewBag.EsSoloLectura != null && ViewBag.EsSoloLectura)
+					{
+						@(Html.Kendo().DropDownListFor(t => t.IdCarretera).Filter(FilterType.Contains)
+							.DataTextField("Text")
+							.DataValueField("Value")
+							.OptionLabel("Selecciona una Carretera")						
+							.DataSource(source =>
+							{
+								source.Read(read =>
+								{
+									read.Action("Carreteras_Drop", "CapturaAccidentes");
+								});
+							})
+							.Events(e => e.Change("OnCarreteraChange"))
+							//.HtmlAttributes(new { data_required_msg = "El campo Municipio es obligatorio" })
+							.HtmlAttributes(new { style = "width:100%;", Id = "ddlCarreteras", disabled = "disabled" })
+						)
+					}
+					else
+					{
+						@(Html.Kendo().DropDownListFor(t => t.IdCarretera).Filter(FilterType.Contains)
+							.DataTextField("Text")
+							.DataValueField("Value")
+							.OptionLabel("Selecciona una Carretera")
+							.DataSource(source =>
+							{
+								source.Read(read =>
+								{
+									read.Action("Carreteras_Drop", "CapturaAccidentes");
+								});
+							})
+							.Events(e => e.Change("OnCarreteraChange"))
+							//.HtmlAttributes(new { data_required_msg = "El campo Municipio es obligatorio" })
+							.HtmlAttributes(new { style = "width:100%;", Id = "ddlCarreteras" })
+							)
+					}
 				</div>
 			</div>
-			<div class="col-auto">
-				<div class="controlForm mb-3 mt-1">
-					<label class="text-muted">Kilómetro:</label>
-					<label>@Model.Kilometro</label>
+
+			<div class="col-12 col-md-6 col-lg-4">
+				<div class="controlForm mb-3">
+					<label>Tramo:</label>
+					@if(ViewBag.EsSoloLectura != null && ViewBag.EsSoloLectura)
+					{
+						@(
+							Html.Kendo().DropDownListFor(t => t.IdTramo).Filter(FilterType.Contains)
+								.DataTextField("Text")							
+								.DataValueField("Value")
+								.OptionLabel("Selecciona un Tramo")
+								.DataSource(source =>
+								{
+									source.Read(read =>
+									{
+										read.Action("Tramos_Drop", "CapturaAccidentes", new { carreteraDDValue = Model.IdCarretera });
+									});
+							})						
+							//.HtmlAttributes(new { data_required_msg = "El campo Municipio es obligatorio" })
+							.HtmlAttributes(new { style = "width:100%;", Id = "ddlTramos", disabled = "disabled" })
+						)
+					}
+					else
+					{
+						@(
+							Html.Kendo().DropDownListFor(t => t.IdTramo).Filter(FilterType.Contains)
+							.DataTextField("Text")						
+
+							.DataValueField("Value")
+							.OptionLabel("Selecciona un Tramo")
+							.DataSource(source =>
+							{
+								source.Read(read =>
+								{
+									read.Action("Tramos_Drop", "CapturaAccidentes", new { carreteraDDValue = Model.IdCarretera });
+								});
+							})
+							//.HtmlAttributes(new { data_required_msg = "El campo Municipio es obligatorio" })
+							.HtmlAttributes(new { style = "width:100%;", Id = "ddlTramos" })
+						)
+}
+
+				</div>
+			</div>
+			<div class="col-12 col-md-6 col-lg-4">
+				<div class="controlForm mb-3">
+					<label>Kilómetro:</label>
+					@(Html.Kendo().TextBoxFor(t => t.Kilometro)
+						.Placeholder("Ingresa Kilometro")
+						.Enable(!ViewBag.EsSoloLectura)
+						.HtmlAttributes(new { style = "width: 100%", Id = "txtKilometro" })
+						)
+				</div>
+			</div>			
+		</form>
+		<div class="row mt-1 mb-3">
+			<div class="col-12">
+				<div class="row justify-content-around">
+					<div class="col-auto btnOutline my-2 mx-auto p-0 text-center" onclick="ActualizaInformacion()">
+					@if(ViewBag.EsSoloLectura != null && !ViewBag.EsSoloLectura)
+					{
+						@(Html.Kendo().Button()
+							.Name("editInvolucrados")
+							.HtmlAttributes(new { @class = "px-5" })
+							.Enable(!ViewBag.EsSoloLectura) // Desactiva el botón si es solo lectura
+							.Content("<h6 class=\"m-0\"><b>Actualizar información del Accidente</b></h6>"))
+					}
+					</div>
 				</div>
 			</div>
 		</form>

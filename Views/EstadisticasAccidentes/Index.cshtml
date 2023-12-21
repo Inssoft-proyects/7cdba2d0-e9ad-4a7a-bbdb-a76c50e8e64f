@@ -24,9 +24,9 @@
 			<h6 class="px-4 text-muted">Filtros de búsqueda para localizar los accidentes</h6>
 		</div>
 		<form id="frmBusquedaEstadisticasIncidencias">
-			<div class="row my-4 px-4">
-				<div class="form-group col-md-4">
-					<div class="controlForm">
+			<div class="row my-4 px-4 align-items-end">
+				<div class="form-group col-12 col-md-6 col-lg-3">
+					<div class="controlForm mb-3">
 						<label>Municipio:</label>
 						<div id="divTramo">
 							@(Html.Kendo().DropDownListFor(f => f.idMunicipio).Filter(FilterType.Contains)
@@ -37,8 +37,8 @@
 						</div>
 					</div>
 				</div>
-				<div class="form-group col-md-4">
-					<div class="controlForm">
+				<div class="form-group col-12 col-md-6 col-lg-3">
+					<div class="controlForm mb-3">
 						<label>Delegación:</label>
 						@(Html.Kendo().DropDownListFor(m => m.idDelegacion).Filter(FilterType.Contains)
 							.BindTo((SelectList)ViewBag.CatDelegaciones)
@@ -47,8 +47,8 @@
 							)
 					</div>
 				</div>
-				<div class="form-group col-md-4">
-					<div class="controlForm">
+				<div class="form-group col-12 col-md-6 col-lg-3">
+					<div class="controlForm mb-3">
 						<label>Oficial:</label>
 						@(Html.Kendo().DropDownListFor(f => f.IdOficial).Filter(FilterType.Contains)
 							.BindTo((SelectList)ViewBag.CatOficiales)
@@ -57,10 +57,8 @@
 							)
 					</div>
 				</div>
-			</div>
-			<div class="row my-4 px-4">
-				<div class="form-group col-md-4">
-					<div class="controlForm">
+				<div class="form-group col-12 col-md-6 col-lg-3">
+					<div class="controlForm mb-3">
 						<label>Carretera:</label>
 						@(Html.Kendo().DropDownListFor(m => m.idCarretera).Filter(FilterType.Contains)
 							.BindTo((SelectList)ViewBag.CatCarreteras)
@@ -68,8 +66,8 @@
 							.HtmlAttributes(new { style = "width:100%;" }))
 					</div>
 				</div>
-				<div class="form-group col-md-4">
-					<div class="controlForm">
+				<div class="form-group col-12 col-md-6 col-lg-3">
+					<div class="controlForm mb-3">
 						<label>Tramo:</label>
 						@(Html.Kendo().DropDownListFor(m => m.idTramo).Filter(FilterType.Contains)
 							.BindTo((SelectList)ViewBag.CatTramos)
@@ -77,8 +75,8 @@
 							.HtmlAttributes(new { style = "width:100%;" }))
 					</div>
 				</div>
-				<div class="form-group col-md-4">
-					<div class="controlForm">
+				<div class="form-group col-12 col-md-6 col-lg-3">
+					<div class="controlForm mb-3">
 						<label>Tipo vehículo:</label>
 						<div id="divTramo">
 							@(Html.Kendo().DropDownListFor(f => f.IdTipoVehiculo).Filter(FilterType.Contains)
@@ -88,10 +86,8 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="row my-4 px-4">
-				<div class="form-group col-md-4">
-					<div class="controlForm">
+				<div class="form-group col-12 col-md-6 col-lg-3">
+					<div class="controlForm mb-3">
 						<label>Tipo servicio:</label>
 						@(Html.Kendo().DropDownListFor(m => m.IdTipoServicio).Filter(FilterType.Contains)
 							.BindTo((SelectList)ViewBag.CatTipoServicio)
@@ -100,8 +96,8 @@
 							)
 					</div>
 				</div>
-				<div class="form-group col-md-4">
-					<div class="controlForm">
+				<div class="form-group col-12 col-md-6 col-lg-3">
+					<div class="controlForm mb-3">
 						<label>Clasificación:</label>
 						@(Html.Kendo().DropDownListFor(m => m.idClasificacionAccidente).Filter(FilterType.Contains)
 							.BindTo((SelectList)ViewBag.CatClasificacionAccidentes)
@@ -120,10 +116,8 @@
 							)
 					</div>
 				</div>-->
-			</div>
-			<div class="row my-4 px-4">
-				<div class="form-group col-md-4">
-					<div class="controlForm">
+				<div class="form-group col-12 col-md-6 col-lg-3">
+					<div class="controlForm mb-3">
 						<label>Causas:</label>
 						@(Html.Kendo().DropDownListFor(m => m.idCausaAccidente).Filter(FilterType.Contains)
 							.BindTo((SelectList)ViewBag.CatCausasAccidentes)
@@ -132,8 +126,8 @@
 							)
 					</div>
 				</div>
-				<div class="form-group col-md-4">
-					<div class="controlForm">
+				<div class="form-group col-12 col-md-6 col-lg-3">
+					<div class="controlForm mb-3">
 						<label>Factor:</label>
 						@(Html.Kendo().DropDownListFor(m => m.idFactorAccidente).Filter(FilterType.Contains)
 							.BindTo((SelectList)ViewBag.CatFactoresAccidentes)
@@ -142,8 +136,8 @@
 							)
 					</div>
 				</div>
-				<div class="form-group col-md-4">
-					<div class="controlForm">
+				<div class="form-group col-12 col-md-6 col-lg-3">
+					<div class="controlForm mb-3">
 						<label>Factor Opción:</label>
 						<div id="divFactorOpcion">
 							@(Html.Kendo().DropDownListFor(m => m.idFactorOpcionAccidente).Filter(FilterType.Contains)
@@ -153,10 +147,8 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="row my-4 px-4 align-items-end">
-				<div class="form-group col-md-4">
-					<div class="controlForm">
+				<div class="form-group col-12 col-md-6 col-lg-3">
+					<div class="controlForm mb-3">
 						<label>Inicio:</label>
 						@(Html.Kendo().DatePickerFor(t => t.FechaInicio).Max(DateTime.Now)
 							.Format("dd/MM/yyyy")
@@ -166,8 +158,8 @@
 					</div>
 					<div id="mensajeError1" style="color: red;"></div>
 				</div>
-				<div class="form-group col-md-4">
-					<div class="controlForm">
+				<div class="form-group col-12 col-md-6 col-lg-3">
+					<div class="controlForm mb-3">
 						<label>Fin:</label>
 						@(Html.Kendo().DatePickerFor(t => t.FechaFin)
 							.Format("dd/MM/yyyy")
@@ -176,16 +168,16 @@
 					</div>
 				</div>
 
-				<div class="form-group col-md-4">
-					<div class="controlForm">
+				<div class="form-group col-12 col-md-6 col-lg-3">
+					<div class="controlForm mb-3">
 						<label>Hora:</label>
 						@(Html.Kendo().TimePickerFor(t => t.hora)
 							.Format("HH:mm")
 							.HtmlAttributes(new { style = "width: 100%", title = "timepicker" }))
 					</div>
 				</div>
-				<div class="form-group col-md-4">
-					<div class="controlForm">
+				<div class="form-group col-12 col-md-6 col-lg-3">
+					<div class="controlForm mb-3">
 						<div class="controlButton my-3 m-md-0">
 							<button class="btnPrimary" type="button" onclick="submitSearch()">  <h5 class="m-0"><b>Buscar</b></h5></button>
 						</div>

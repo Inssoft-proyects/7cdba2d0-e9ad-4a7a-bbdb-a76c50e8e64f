@@ -102,34 +102,40 @@
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm row justify-content-center btnToggleActive my-3">
                             <label>Abanderamiento:</label>
-                            @(Html.Kendo().SwitchFor(t => t.AbanderamientoBool)
-                                .Name("abanderamientoSwitch1")
-                                .Checked(false)
-                                .Messages(c => c.Checked("Si").Unchecked("No"))
-                                .HtmlAttributes(new { data_checked = "true" })
-                                )
+                            <div class="btnToggleActive">
+                                @(Html.Kendo().SwitchFor(t => t.AbanderamientoBool)
+                                    .Name("abanderamientoSwitch1")
+                                    .Checked(false)
+                                    .Messages(c => c.Checked("Si").Unchecked("No"))
+                                    .HtmlAttributes(new { data_checked = "true" })
+                                    )
+                            </div>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm row justify-content-center btnToggleActive my-3">
                             <label for="switch2">Salvamento:</label>
-                            @(Html.Kendo().SwitchFor(t => t.SalvamentoBool)
-                                .Name("salvamentoSwitch1")
-                                .Checked(false)
-                                .Messages(c => c.Checked("Si").Unchecked("No"))
-                                .HtmlAttributes(new { data_valor = 1 })
-                                )
+                            <div class="btnToggleActive">
+                                @(Html.Kendo().SwitchFor(t => t.SalvamentoBool)
+                                    .Name("salvamentoSwitch1")
+                                    .Checked(false)
+                                    .Messages(c => c.Checked("Si").Unchecked("No"))
+                                    .HtmlAttributes(new { data_valor = 1 })
+                                    )
+                            </div>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm row justify-content-center btnToggleActive my-3">
                             <label for="switch3">Arrastre:</label>
-                            @(Html.Kendo().SwitchFor(t => t.ArrastreBool)
-                                .Name("arrastreSwitch1")
-                                .Checked(false)
-                                .Messages(c => c.Checked("Si").Unchecked("No"))
-                                .HtmlAttributes(new { data_checked = "true" })
-                                )
+                            <div class="btnToggleActive">
+                                @(Html.Kendo().SwitchFor(t => t.ArrastreBool)
+                                    .Name("arrastreSwitch1")
+                                    .Checked(false)
+                                    .Messages(c => c.Checked("Si").Unchecked("No"))
+                                    .HtmlAttributes(new { data_checked = "true" })
+                                    )
+                            </div>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">

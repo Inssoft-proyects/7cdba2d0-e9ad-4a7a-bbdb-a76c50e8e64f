@@ -302,12 +302,15 @@
 							<div id="divIsPropietarioConductor" class="row my-4 px-4" style="display:none">
 								<div class="form-group col-md-8">
 									<div class="checkbox">
-										<label>El propietario del vehículo es el conductor <b>(obligatorio)</b>: </label>&nbsp;&nbsp;
+										<label>El propietario del vehículo es el conductor: </label>
+										<div class="btnToggleActive">
+
 										@(Html.Kendo().SwitchFor(m => m.isPropietarioConductor)
 											.Messages(c => c.Checked("SI").Unchecked("NO"))
 
 											.HtmlAttributes(new { style = "width:100%;", required = "required" })
 											)
+										</div>
 									</div>
 								</div>
 							</div>
@@ -428,12 +431,14 @@
 							<div id="divIsPropietarioConductor" class="row my-4 px-4" style="display:none">
 								<div class="form-group col-md-8">
 									<div class="checkbox">
-										<label>El propietario del vehículo es el conductor: </label>&nbsp;&nbsp;
+										<label>El propietario del vehículo es el conductor: </label>
+										<div class="btnToggleActive">
 										@(Html.Kendo().SwitchFor(m => m.isPropietarioConductor)
 											.Messages(c => c.Checked("SI").Unchecked("NO"))
 
 											.Events(ev => ev.Change("isPropietarioOnChange"))
 											)
+										</div>
 									</div>
 								</div>
 							</div>
