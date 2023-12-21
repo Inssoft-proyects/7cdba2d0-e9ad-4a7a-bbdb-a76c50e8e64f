@@ -36,7 +36,11 @@
         <div class="controlForm mb-3">
             <label><b>Fecha ingreso:</b></label>
             <span>
-                @Html.DisplayFor(m => m.FechaIngreso,new {@class="control-label"})
+                 @(Html.Kendo().DatePickerFor(t => t.FechaIngreso).Max(DateTime.Now)
+                        .Format("dd/MM/yyyy")
+                        .Culture("es-ES")
+                        .HtmlAttributes(new { style = "width: 100%"})
+                        ) 
             </span>
         </div>
     </div>

@@ -48,7 +48,6 @@
 
 					<label class="text-muted">Fecha:</label>
 					@(Html.Kendo().DatePickerFor(t => t.Fecha).Max(DateTime.Now)
-
 						.Label(l => l.Content("Fecha:"))
 						.Format("dd/MM/yyyy")
 						.Culture("es-ES")
@@ -62,7 +61,8 @@
 			<div class="col-auto">
 				<div class="controlForm mb-3 mt-1">
 					<label class="text-muted">Hora:</label>
-					@(Html.Kendo().TimePickerFor(t => t.Hora).Interval(1).Max(DateTime.Now)
+					@(Html.Kendo().TimePickerFor(t => t.Hora).Max(DateTime.Now)
+						.Interval(1)
 						.Label(l => l.Content("Hora:"))
 						.Format("HH:mm")
 						.Culture("es-ES")
