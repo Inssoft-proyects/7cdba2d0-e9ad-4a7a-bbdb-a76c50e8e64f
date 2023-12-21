@@ -438,6 +438,7 @@ namespace GuanajuatoAdminUsuarios.Services
                 try
                 {
                     connection.Open();
+                    int numeroSecuencial = 1;
                     SqlCommand command = new SqlCommand(strQuery, connection);
                     command.Parameters.Add(new SqlParameter("@idEntidad", SqlDbType.Int)).Value = (object)modelSearch.IdEntidadBusqueda ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@Placas", SqlDbType.NVarChar)).Value = (object)modelSearch.PlacasBusqueda != null ? modelSearch.PlacasBusqueda.ToUpper() : DBNull.Value;
@@ -497,7 +498,10 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.carga = reader["carga"] == System.DBNull.Value ? default(bool?) : Convert.ToBoolean(reader["carga"].ToString());
                             model.otros = reader["otros"].ToString();
                             model.encontradoEn = (int)EstatusBusquedaVehiculo.Sitteg;
+                            model.NumeroSecuencial = numeroSecuencial;
                             ListVehiculos.Add(model);
+
+                            numeroSecuencial++;
                         }
                     }
                 }
