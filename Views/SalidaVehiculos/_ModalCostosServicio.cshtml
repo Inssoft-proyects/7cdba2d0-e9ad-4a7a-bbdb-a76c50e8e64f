@@ -15,7 +15,7 @@
                     <i class="icon-accidentes h1 colorPrimary"></i>
                 </div>
                 <div class="col-auto my-3">
-                    <h2 class="m-0 h3"><b>Montos editables</b></h2>
+                    <h2 class="m-0 h3"><b>Salida de Vehículos</b></h2>
                 </div>
             </div>
         </div>
@@ -29,7 +29,7 @@
         </div>
     </div>
     <div class="col-12 col-md-auto mt-4 mb-2">
-        <h5 class="px-4"><b>Proporciona los montos correspondientes</b></h5>
+        <h5 class="px-4"><b>Busqueda de vehículos</b></h5>
     </div>
     <form id="costosForm" class="row px-4 mb-4 align-items-end">
         <div class="col-12">
@@ -114,21 +114,20 @@
             </div>
         </div>
     </form>
-        <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-            <div class="d-flex justify-content-between my-2 mx-auto mx-xl-2 p-0 flex-row">
-                <div class="col-auto btnOutline mx-2">
-                    <button type="button" onclick="cerrarMontos()">
-                        <h6 class="m-0 px-3"><b>Cerrar</b></h6>
-                    </button>
-                </div>
-                <div class="col-auto controlButton">
-                    @(Html.Kendo().Button()
-                        .Name("guardarCostos")
-                        .HtmlAttributes(new { @class = "btnPrimary" })
-                        .Content("<h5 class=\"m-0\"><b>Guardar</b></h5>"))
-                </div>
-            </div>
+    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+        <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
+            <button type="button" data-bs-dismiss="modal" aria-label="Close">
+                <h6 class="m-0 px-3"><b>Cerrar</b></h6>
+            </button>
         </div>
+        <div type="button" class="controlButton my-3" onclick="agregarCostos()">
+            @(Html.Kendo().Button()
+                .Name("guardarCostos")
+                .HtmlAttributes(new { @class = "btnPrimary" })
+                .Content("<h5 class=\"m-0\"><b>Guardar</b></h5>"))
+        </div>
+
+    </div>
 </section>
 <script>
     function agregarCostos(){
@@ -181,11 +180,6 @@
                 costoTotalPorGrua.value(costoTotal);
             }
         });
-
-    function cerrarMontos(){
-        $('#editarCostosModal').modal('hide');
-
-    }
 
 </script>
 

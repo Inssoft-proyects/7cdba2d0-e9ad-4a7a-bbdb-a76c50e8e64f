@@ -18,30 +18,14 @@
             type: "POST",
             data: { entidadDDlValue: entidadDDlValue },
             success: function (data) {
-                var municipiosDropDown = $("#idMunicipioED").data("kendoDropDownList");
-
-                var idMunicipio = @((Model.PersonaDireccion.idMunicipio != null) ? Model.PersonaDireccion.idMunicipio : 0);
-                console.log("MUN", idMunicipio)
-                municipiosDropDown.dataSource.data(data);
-
-                if (idMunicipio !== null && idMunicipio !== undefined &&
-                    data.some(item => item.Value == idMunicipio.toString())) {
-                    municipiosDropDown.value(idMunicipio.toString());
-                }
-
+                var MunicipiosDropDown = $("#idMunicipioED").data("kendoDropDownList");
+                MunicipiosDropDown.dataSource.data(data);
                 hideLoading();
             },
             error: function (xhr, status, error) {
                 hideLoading();
             }
         });
-    }
-
-
-    function filterMunicipios() {
-        return {
-            entidadDDlValue: $("#idEntidadED").data("kendoDropDownList").value()
-        };
     }
 </script>
 <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
@@ -211,8 +195,7 @@
                     {
                         source.Read(read =>
                         {
-                            read.Action("Municipios_Drop", "Personas")
-                    .Data("filterMunicipios");
+                            read.Action("Municipios_Drop", "Personas");
                         });
                     })
                     .HtmlAttributes(new { style = "width:100%;", id = "idMunicipioED" }))

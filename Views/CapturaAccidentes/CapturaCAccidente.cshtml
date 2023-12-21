@@ -280,94 +280,66 @@
             <div class="col-12 col-lg-6 mt-4 mb-2">
                 <h5><b>Elementos</b></h5>
             </div>
-
-                <div class="row">
-                    <div class="col-6 col-md-4">
-                        <div class="controlForm mb-3">
-                            <label>Armas</label>
-                            <div class="btnToggleActive">
-                                @(Html.Kendo().SwitchFor(t => t.ArmasBool)
-                                    .Name("armasSwitch")
-                                    .Messages(c => c.Checked("Si").Unchecked("No"))
-                                    .HtmlAttributes(new { data_valor = 1 }))
-                            </div>
-                        </div>
-
-                        <div class="controlForm mb-3">
-                            <label>Drogas</label>
-                            <div class="btnToggleActive">
-                                @(Html.Kendo().SwitchFor(t => t.DrogasBool)
-                                    .Name("drogasSwitch")
-                                    .Messages(c => c.Checked("Si").Unchecked("No"))
-                                    .HtmlAttributes(new { data_valor = 1 }))
-                            </div>
-                        </div>
-                         <div class="controlForm mb-3">
-                            <label>Valores</label>
-                            <div class="btnToggleActive">
-                                   @(Html.Kendo().SwitchFor(t => t.ValoresBool)
-                                .Name("valoresSwitch")
-                                .Messages(c => c.Checked("Si").Unchecked("No"))
-                                .HtmlAttributes(new { data_valor = 1}))
-                            </div>
-                        </div>
-                        <div class="controlForm mb-3">
-                            <label>Prendas</label>
-                            <div class="btnToggleActive">
-                                @(Html.Kendo().SwitchFor(t => t.PrendasBool)
-                                    .Name("prendasSwitch")
-                                    .Messages(c => c.Checked("Si").Unchecked("No"))
-                                    .HtmlAttributes(new { data_valor = 1}))
-                            </div>
-                        </div>
-                        <div class="controlForm mb-3">
-                            <label>Otros</label>
-                            <div class="btnToggleActive">
-                                @(Html.Kendo().SwitchFor(t => t.OtrosBool)
-                                    .Name("otrosSwitch")
-                                    .Messages(c => c.Checked("Si").Unchecked("No"))
-                                    .HtmlAttributes(new { data_valor = 1 }))
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6">
-                        <div id="campoArmasTexto" style="visibility: hidden;" class="controlForm mb-3">
+            <div class="col-12">
+                <div class="controlForm mt-4 mb-3">
+                  <label class="label">Seleccione uno o varios elementos que se encontraron en el accidente:</label>
+                       <label>Armas</label> @(Html.Kendo().SwitchFor(t => t.ArmasBool)
+                            .Name("armasSwitch")
+                            .Messages(c => c.Checked("Si").Unchecked("No"))
+                            .HtmlAttributes(new { data_valor = 1 }))
+                      <div id="campoArmasTexto" style="display:none">
                             <label for="ArmasTextBox">Descripción de armas</label>
                             @(Html.Kendo().TextBoxFor(t => t.ArmasTexto)
-                                .HtmlAttributes(new { style = "width: 40%", id = "ArmasTexto" }) 
+                                .HtmlAttributes(new { style = "width: 40%", id = "ArmasTexto" }) // Inicialmente oculto
                                 .Enable(!ViewBag.EsSoloLectura)
                                 )
                         </div>
-                        <div id="campoDrogasTexto" style="visibility: hidden;" class="controlForm mb-3">
-                            <label for="DrogasTextBox">Descripción de drogas</label>
-                            @(Html.Kendo().TextBoxFor(t => t.DrogasTexto)
-                                .HtmlAttributes(new { style = "width: 40%", id = "DrogasTexto" })
+                        <label>Drogas</label> @(Html.Kendo().SwitchFor(t => t.DrogasBool)
+                            .Name("drogasSwitch")
+                            .Messages(c => c.Checked("Si").Unchecked("No"))
+                            .HtmlAttributes(new { data_valor = 1 }))
+                         <div id="campoDrogasTexto" style="display:none">
+                             <label for="DrogasTextBox">Descripción de drogas</label>
+                        @(Html.Kendo().TextBoxFor(t => t.DrogasTexto)
+                                .HtmlAttributes(new { style = "width: 40%", id = "DrogasTexto" }) // Inicialmente oculto
                                 .Enable(!ViewBag.EsSoloLectura)
                                 )
-                        </div>
-                        <div id="campoValoresTexto" style="visibility: hidden;" class="controlForm mb-3">
-                            <label for="ValoresTextBox">Descripción de valores</label>
+                          </div>
+                        <label>Valores</label> @(Html.Kendo().SwitchFor(t => t.ValoresBool)
+                            .Name("valoresSwitch")
+                            .Messages(c => c.Checked("Si").Unchecked("No"))
+                            .HtmlAttributes(new { data_valor = 1 }))
+                         <div id="campoValoresTexto" style="display:none">
+                             <label for="ValoresTextBox">Descripción de valores</label>
                         @(Html.Kendo().TextBoxFor(t => t.ValoresTexto)
-                            .HtmlAttributes(new { style = "width: 40%", id = "ValoresTexto" }) 
+                            .HtmlAttributes(new { style = "width: 40%", id = "ValoresTexto" }) // Inicialmente oculto
                             .Enable(!ViewBag.EsSoloLectura)
-                            )
-                        </div>
-                        <div id="campoPrendasTexto" style="visibility: hidden;" class="controlForm mb-3">
-                            <label for="PrendasTextBox">Descripción de prendas</label>
-                            @(Html.Kendo().TextBoxFor(t => t.PrendasTexto)
-                                .HtmlAttributes(new { style = "width: 40%", id = "PrendasTexto" }) 
-                                .Enable(!ViewBag.EsSoloLectura)
                                 )
-                        </div>
-                        <div id="campoTexto" style="visibility: hidden;" class="controlForm mb-3">
-                            <label for="OtrosTextBox">Descripción de otros</label>
+                           </div>
+                         <label>Prendas</label> @(Html.Kendo().SwitchFor(t => t.PrendasBool)
+                            .Name("prendasSwitch")
+                            .Messages(c => c.Checked("Si").Unchecked("No"))
+                            .HtmlAttributes(new { data_valor = 1 }))
+                          <div id="campoPrendasTexto" style="display:none">
+                            <label for="PrendasTextBox">Descripción de prendas</label>
+                        @(Html.Kendo().TextBoxFor(t => t.PrendasTexto)
+                            .HtmlAttributes(new { style = "width: 40%", id = "PrendasTexto" }) // Inicialmente oculto
+                            .Enable(!ViewBag.EsSoloLectura)
+                                )
+                                </div>
+                        <label>Otros</label> @(Html.Kendo().SwitchFor(t => t.OtrosBool)
+                            .Name("otrosSwitch")
+                            .Messages(c => c.Checked("Si").Unchecked("No"))
+                            .HtmlAttributes(new { data_valor = 1 }))
+                            <div id="campoTexto" style="display:none">
+                        <label for="OtrosTextBox">Descripción de prendas</label>
                         @(Html.Kendo().TextBoxFor(t => t.OtrosTexto)
-                            .HtmlAttributes(new { style ="width: 40%", id = "OtrosTexto" }) 
+                            .HtmlAttributes(new { style ="width: 40%", id = "OtrosTexto" }) // Inicialmente oculto
                                 .Enable(!ViewBag.EsSoloLectura)
                             )
-                        </div>
-                    </div>
-                </div>                     
+                            </div>
+                 </div>
+            </div>
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="controlForm my-3">
                     @(Html.Kendo().TextBoxFor(t=>t.entregaObjetos)
@@ -435,29 +407,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-12 col-md-6 col-lg-3">
-                        <label>Convenio</label>
-                        <div class="btnToggleActive">
-                        @(Html.Kendo().SwitchFor(t => t.convenioBool)
-                                .Name("convenioSwitch")
-                                .Checked(Model.EstadoConvenio == 1)
-                                .Messages(c => c.Checked("Si").Unchecked("No"))
-                                .HtmlAttributes(new { data_valor = 1 })
-                                )
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-3">
-                        <div class="controlForm my-3">
-                        <div id="convenioTexto" style="visibility: hidden;">
-                            @(Html.Kendo().TextBoxFor(t => t.observacionesConvenio)
-                                .Label(l => l.Content("Observaciones de convenio:"))
-                                .Placeholder("Ingresa las observaciones")
-                                    .HtmlAttributes(new { style = "width: 100%", id = "observacionesConvenio" })
-                                .Enable(!ViewBag.EsSoloLectura)
-                                )
-                            </div>
-                        </div>
+                <div>
+                     <label>Convenio</label> @(Html.Kendo().SwitchFor(t => t.convenioBool)
+                            .Name("convenioSwitch")
+                            .Checked(Model.EstadoConvenio == 1)
+                            .Messages(c => c.Checked("Si").Unchecked("No"))
+                            .HtmlAttributes(new { data_valor = 1 })
+                            )
+                </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="controlForm my-3">
+                   <div id="convenioTexto" style="display:none">
+                    @(Html.Kendo().TextBoxFor(t => t.observacionesConvenio)
+                        .Label(l => l.Content("Observaciones de convenio:"))
+                        .Placeholder("Ingresa las observaciones")
+                            .HtmlAttributes(new { style = "width: 100%", id = "observacionesConvenio" })
+                        .Enable(!ViewBag.EsSoloLectura)
+                        )
                     </div>
                 </div>
             </div>
@@ -859,9 +825,9 @@
 
             switchElementA.bind("change", function () {
                 if (switchElementA.check()) {
-                campoArmasTexto.css("visibility", "visible");
+                    campoArmasTexto.show();
                 } else {
-                campoArmasTexto.css("visibility", "hidden");
+                campoArmasTexto.hide();
                 }
             });
         });
@@ -872,26 +838,25 @@
 
             switchElementD.bind("change", function () {
                 if (switchElementD.check()) {
-                    campoDrogasTexto.css("visibility", "visible");
+                    campoDrogasTexto.show();
                 } else {
-                campoDrogasTexto.css("visibility", "hidden");
+                campoDrogasTexto.hide();
                 }
             });
         });
 
-    $(document).ready(function () {
-        var switchElementV = $("#valoresSwitch").data("kendoSwitch");
-        var campoValoresTexto = $("#campoValoresTexto");
+       $(document).ready(function () {
+            var switchElementV = $("#valoresSwitch").data("kendoSwitch");
+            var campoValoresTexto = $("#campoValoresTexto");
 
-        switchElementV.bind("change", function () {
-            if (switchElementV.check()) {
-                campoValoresTexto.css("visibility", "visible");
-            } else {
-                campoValoresTexto.css("visibility", "hidden");
-            }
+            switchElementV.bind("change", function () {
+                if (switchElementV.check()) {
+                    campoValoresTexto.show();
+                } else {
+                campoValoresTexto.hide();
+                }
+            });
         });
-    });
-
 
      $(document).ready(function () {
             var switchElementP = $("#prendasSwitch").data("kendoSwitch");
@@ -899,9 +864,9 @@
 
             switchElementP.bind("change", function () {
                 if (switchElementP.check()) {
-                    campoPrendasTexto.css("visibility", "visible");
+                    campoPrendasTexto.show();
                 } else {
-                    campoPrendasTexto.css("visibility", "hidden");
+                    campoPrendasTexto.hide();
                 }
             });
         });
@@ -912,9 +877,9 @@
 
             switchElementO.bind("change", function () {
                 if (switchElementO.check()) {
-                    campoTexto.css("visibility", "visible");
+                    campoTexto.show();
                 } else {
-                    campoTexto.css("visibility", "hidden");
+                    campoTexto.hide();
                 }
             });
         });
@@ -925,9 +890,9 @@
 
         switchElementConv.bind("change", function () {
             if (switchElementConv.check()) {
-                convenioTexto.css("visibility", "visible");
+                convenioTexto.show();
             } else {
-                convenioTexto.css("visibility", "hidden");
+                convenioTexto.hide();
             }
         });
     });
@@ -948,9 +913,9 @@
             var textoNoVacio = $armasTexto.val().trim() !== "";
 
             if (textoNoVacio || switchEstado) {
-                $campoArmasTexto.css("visibility", "visible");
+                $campoArmasTexto.show();
             } else {
-                $campoArmasTexto.css("visibility", "hidden");
+                $campoArmasTexto.hide();
             }
         }
     });
@@ -971,9 +936,9 @@
             var textoNoVacioD = $drogasTexto.val().trim() !== "";
 
             if (textoNoVacioD || switchEstadoD) {
-                $campoDrogasTexto.css("visibility", "visible");
+                $campoDrogasTexto.show();
             } else {
-                $campoDrogasTexto.css("visibility", "hidden");
+                $campoDrogasTexto.hide();
             }
         }
     });
@@ -995,9 +960,9 @@
             var textoNoVacioV = $valoresTexto.val().trim() !== "";
 
             if (textoNoVacioV || switchEstadoV) {
-                $campoValoresTexto.css("visibility", "visible");
+                $campoValoresTexto.show();
             } else {
-                $campoValoresTexto.css("visibility", "hidden");
+                $campoValoresTexto.hide();
             }
         }
     });
@@ -1018,9 +983,9 @@
             var textoNoVacioP = $prendasTexto.val().trim() !== "";
 
             if (textoNoVacioP || switchEstadoP) {
-                $campoPrendasTexto.css("visibility", "visible");
+                $campoPrendasTexto.show();
             } else {
-                $campoPrendasTexto.css("visibility", "hidden");
+                $campoPrendasTexto.hide();
             }
         }
     });
@@ -1041,9 +1006,9 @@
             var textoNoVacioO = $otrosTexto.val().trim() !== "";
 
             if (textoNoVacioO || switchEstadoO) {
-                $campoOtrosTexto.css("visibility", "visible");
+                $campoOtrosTexto.show();
             } else {
-                $campoOtrosTexto.css("visibility", "hidden");
+                $campoOtrosTexto.hide();
             }
         }
     });
@@ -1063,9 +1028,9 @@
             var textoNoVacioConv = $convenioTexto.val().trim() !== "";
 
             if (textoNoVacioConv || switchEstadoConv) {
-                $campoconvenioTexto.css("visibility", "visible");
+                $campoconvenioTexto.show();
             } else {
-                $campoconvenioTexto.css("visibility", "hidden");
+                $campoconvenioTexto.hide();
             }
         }
     });

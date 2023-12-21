@@ -739,13 +739,10 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public ActionResult ajax_CrearVehiculo(VehiculoModel model)
         {
             int IdVehiculo = 0;
-            bool esEdicion = false;
-
             if (model.idVehiculo > 0)
             {
                 model.idSubmarca = model.idSubmarcaUpdated;
                 IdVehiculo = _vehiculosService.UpdateVehiculo(model);
-                esEdicion = true;
             }
             else if (model.idVehiculo <= 0)
             {
@@ -754,14 +751,13 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
             if (IdVehiculo != 0)
             {
-                return Json(new { id = IdVehiculo, esEdicion = esEdicion });
+                return Json(new { id = IdVehiculo });
             }
             else
             {
                 return null;
             }
         }
-
 
 
         [HttpPost]

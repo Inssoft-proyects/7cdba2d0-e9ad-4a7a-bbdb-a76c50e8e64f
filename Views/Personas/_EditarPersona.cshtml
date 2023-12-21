@@ -1,5 +1,4 @@
 ﻿@model PersonaModel
-
 <script>
     function onDatePickerChange(e) {
         var datePicker = e.sender;
@@ -19,18 +18,8 @@
             type: "POST",
             data: { entidadDDlValue: entidadDDlValue },
             success: function (data) {
-                var municipiosDropDown = $("#idMunicipioED").data("kendoDropDownList");
-
-                var idMunicipio = @((Model.PersonaDireccion.idMunicipio != null) ? Model.PersonaDireccion.idMunicipio : 0);
-                console.log("MUN", idMunicipio)
-                municipiosDropDown.dataSource.data(data);
-
-                // Establece el valor de idMunicipio si está presente en los nuevos datos
-                if (idMunicipio !== null && idMunicipio !== undefined &&
-                    data.some(item => item.Value == idMunicipio.toString())) {
-                    municipiosDropDown.value(idMunicipio.toString());
-                }
-
+                var MunicipiosDropDown = $("#idMunicipioED").data("kendoDropDownList");
+                MunicipiosDropDown.dataSource.data(data);
                 hideLoading();
             },
             error: function (xhr, status, error) {
