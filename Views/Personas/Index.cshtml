@@ -35,7 +35,7 @@
                     <div class="controlForm my-3">
                         @(Html.Kendo().TextBoxFor(t => t.numeroLicenciaBusqueda)
                             .Label(l => l.Content("No. de licencia:"))
-                            .Placeholder("Ingresa el número de licencia válido")
+                            .Placeholder("Ingresa el número de licencia valido")
                             .HtmlAttributes(new { style = "width: 100%" })
                             )
                     </div>
@@ -264,26 +264,25 @@
             type: 'POST',
             data: Mydata,
             success: function (response) {
-                if (response.tipo === "success") {
+                console.log("VERIF", response)
+                if (response.tipo == "success") {
                     mostrarModal(response.datos);
-                    hideLoading();
-                } else if (response.encontrada !== undefined && response.encontrada === false) {
-                    sitteg_warning("No se pudieron obtener resultados.");
-                } else if (response.tipo === "warning") {
+                } else if (response.encontrada != undefined) {
+                    if (response.encontrada == false) {
+                        sitteg_warning("No se pudieron obtener resultados.");
+                    }
+                } else if (response.tipo == "warning") {
                     sitteg_warning("No se pudieron obtener resultados, verifique los datos ingresados.");
-                } else {
-                    // Otro tipo de respuesta, si es necesario manejarla
                 }
 
                 var personasList = response.data;
                 var grid = $("#gridPersonas").data("kendoGrid");
                 grid.dataSource.data(personasList);
 
-                if (personasList.count === 0 && response.tipo !== "success") {
+                if (personasList.count === 0) {
                     sitteg_warning("La búsqueda no arrojó resultados.");
                     grid.dataSource.data([]);
                 }
-
                 hideLoading();
             },
             error: function (error) {
@@ -369,16 +368,11 @@
                 type: 'POST',
                 url: '/Personas/guardaDesdeServicio',
                 data: jsonData,
-                success: function (result) {
+                success: function (response) {
                     $('#modalLicencias').modal('hide');
+                    var personasList = [response];
                     var grid = $("#gridPersonas").data("kendoGrid");
-                    if (result && result.data) {
-                        var dataArray = [result.data];
-                        grid.dataSource.data(dataArray);
-                    } else {
-                        console.error("La respuesta no tiene la estructura esperada:", result);
-                    }
-                    sitteg_success('Elemento guardado correctamente')
+                    grid.dataSource.data(personasList);
                     hideLoading();
                 },
                 error: function (error) {

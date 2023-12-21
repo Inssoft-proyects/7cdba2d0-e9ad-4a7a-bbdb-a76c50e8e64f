@@ -246,7 +246,7 @@ namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
                 nested.AddCell(FieldCellBox("Télefono: ", ModelDataInfracciones.telefonoConductor));
                 nested.AddCell(FieldCellBox("No. Licencia: ", ModelDataInfracciones.numLicenciaConductor));
                 nested.AddCell(FieldCellBox("Tipo de licencia: ", ModelDataInfracciones.tipoLicenciaConductor));
-                if (ModelDataInfracciones.vencimientoLicConductor == null || ModelDataInfracciones.vencimientoLicConductor.Value == DateTime.MinValue  || ModelDataInfracciones.vencimientoLicConductor.Value.Year == 1900)
+                if (ModelDataInfracciones.vencimientoLicConductor == null || ModelDataInfracciones.vencimientoLicConductor.Value == DateTime.MinValue)
                     nested.AddCell(FieldCellBox("Vencimiento: ", ""));
                 else 
                     nested.AddCell(FieldCellBox("Vencimiento: ", ModelDataInfracciones.vencimientoLicConductor.Value.ToString("dd/MM/yyyy")));

@@ -87,7 +87,7 @@
 				</tr>
 				@*Datos*@
 				<tr>
-					<td><p class="s2">@item.TipoVehiculo</p></td>
+					<td><p class="s2">@item.Tipo</p></td>
 					<td><p class="s2">@item.Marca</p></td>
 					<td><p class="s2">@item.Submarca</p></td>
 					<td><p class="s2">@item.Modelo</p></td>
@@ -107,7 +107,7 @@
 				@*Datos*@
 				<tr>
 					<td colspan="3"><p class="s2">@item.Tarjeta</p></td>
-					<td><p class="s2">@(item.vigenciaLicencia == DateTime.MinValue ? "-" : item.vigenciaLicencia.ToString("dd/MM/yyyy"))</p></td>
+					<td><p class="s2">@item.vigenciaLicencia.ToString("dd/MM/yyyy")</p></td>
 					<td><p class="s2">@item.Entidad</p></td>
 					<td><p class="s2">@item.Capacidad</p></td>
 					<td><p class="s2">@item.NumeroEconomico</p></td>
@@ -135,6 +135,7 @@
 				@*Datos*@
 				<tr>
 					<td colspan="3"><p class="s2">@item.ConductorInvolucrado</p></td>
+
 					<td colspan="3"><p class="s2">@item.DireccionConductor</p></td>
 					<td><p class="s2">@(DateTime.Now.Year - Convert.ToDateTime(item.FechaNacimientoFormateada).Year)</p></td>
 					<td><p class="s2">@item.Sexo</p></td>
@@ -151,7 +152,7 @@
 					<td colspan="2"><p class="s2">@item.FechaNacimientoFormateada</p></td>
 					<td colspan="2"><p class="s2">@item.TipoLicencia</p></td>
 					<td><p class="s2">@item.numeroLicencia</p></td>
-					<td colspan="3"><p class="s2">@(item.vigenciaLicencia == DateTime.MinValue ? "-" : item.vigenciaLicencia.ToString("dd/MM/yyyy"))</p></td>
+					<td colspan="3"><p class="s2">@item.vigenciaLicencia.ToString("dd/MM/yyyy")</p></td>
 				</tr>
 			}
 		</table>
@@ -211,15 +212,15 @@
 				</tr>
 			</thead>
 			<tbody>
-				@foreach (var item in Model.CausasDeterminantes)
-				{
-					<tr>
-						<td><p class="s5">@item.CausaAccidente</p></td>
-					</tr>
-					<tr>
-						<td><p class="s2">@(string.IsNullOrEmpty(item.DescripcionCausa) ? "S/C" : item.DescripcionCausa)</p></td>
-					</tr>
-				}
+			@foreach (var item in Model.CausasDeterminantes)
+			{
+				<tr>
+					<td><p class="s5">@item.CausaAccidente</p></td>
+				</tr>
+				<tr>
+					<td><p class="s2">@(string.IsNullOrEmpty(item.DescripcionCausa) ? "S/C" : item.DescripcionCausa)</p></td>
+				</tr>
+			}
 			</tbody>
 		</table>
 		<br /><br />
@@ -245,104 +246,28 @@
 			</tr>
 			@{
 				contadorVehiculo = 0;
-				int totaLesionados = Model.Involucrados.Where(w => w.EstadoVictima.ToUpper().Trim() == "LESIONADO").Count();
-				int totalMuertos = Model.Involucrados.Where(w => w.EstadoVictima.ToUpper().Trim() == "MUERTO").Count();
-				int totalSinLesion = Model.Involucrados.Where(w => w.EstadoVictima == "Sin lesión").Count();
 			}
-			@foreach (var item in Model.Involucrados)
+			@foreach (var item in Model.VehiculosInvolucrados)
 			{
-				int rowspan = Model.Involucrados.Where(w => w.Placa == item.Placa).Count();
 				contadorVehiculo++;
-
-
-				@if (Model.Involucrados.Count() > 0)
-				{
-					<tr>
-						<td><p class="s2">@contadorVehiculo</p></td>
-						<td><p class="s2">@item.TipoVehiculo</p></td>
-						<td><p class="s2">@item.nombre</p></td>
-						<td><p class="s2">@item.Sexo</p></td>
-						<td>
-							<p class="s2">
-								@(
-									string.IsNullOrEmpty(item.FormatDateNacimiento) ? "-" : (DateTime.Now.Year - Convert.ToDateTime(item.FormatDateNacimiento).Year)
-									)
-							</p>
-						</td>
-						<td><p class="s2">@item.Direccion</p></td>
-						<td><p class="s2">@item.EstadoVictima</p></td>
-						<td><p class="s2">@item.NombreHospital</p></td>
-					</tr>
-				}
-				else
-				{
-					<tr>
-						<td><p class="s2">@contadorVehiculo</p></td>
-						<td><p class="s2">@item.TipoVehiculo</p></td>
-						<td><p class="s2">-</p></td>
-						<td><p class="s2">-</p></td>
-						<td><p class="s2">-</p></td>
-						<td><p class="s2">-</p></td>
-						<td><p class="s2">-</p></td>
-						<td><p class="s2">-</p></td>
-					</tr>
-				}
-
-				@*@if (Model.Involucrados.Where(w => w.Placa == item.Placa).Count() > 0)
-			{
-			int contadorInvolucrados = 0;
-			foreach (var involucrado in Model.Involucrados.Where(w => w.Placa == item.Placa))
-			{
-			if (contadorInvolucrados == 0)
-			{
-			<tr>
-			<td rowspan="@rowspan"><p class="s2">@contadorVehiculo</p></td>
-			<td rowspan="@rowspan"><p class="s2">@item.TipoVehiculo</p></td>
-			<td><p class="s2">@involucrado.nombre</p></td>
-			<td><p class="s2">@involucrado.Sexo</p></td>
-			<td><p class="s2">@(string.IsNullOrEmpty(involucrado.FormatDateNacimiento) ? "-" : (DateTime.Now.Year - Convert.ToDateTime(involucrado.FormatDateNacimiento).Year))</p></td>
-			<td><p class="s2">@involucrado.Direccion</p></td>
-			<td><p class="s2">@involucrado.EstadoVictima</p></td>
-			<td><p class="s2">@involucrado.NombreHospital</p></td>
-			</tr>
-			contadorInvolucrados++;
+				<tr>
+					<td><p class="s2">@contadorVehiculo</p></td>
+					<td><p class="s2">@item.Tipo</p></td>
+					<td><p class="s2">@item.ConductorInvolucrado</p></td>
+					<td><p class="s2">@item.Sexo</p></td>
+					<td><p class="s2">@(DateTime.Now.Year - item.dateNacimiento.Year)</p></td>
+					<td><p class="s2">@item.Direccion</p></td>
+					<td><p class="s2">@item.Estado</p></td>
+					<td><p class="s2">@item.LLevadoA</p></td>
+				</tr>
 			}
-			else
-			{
-			<tr>
-			<td><p class="s2">@involucrado.nombre</p></td>
-			<td><p class="s2">@involucrado.Sexo</p></td>
-			<td><p class="s2">@(string.IsNullOrEmpty(involucrado.FormatDateNacimiento) ? "-" : (DateTime.Now.Year - Convert.ToDateTime(involucrado.FormatDateNacimiento).Year))</p></td>
-			<td><p class="s2">@involucrado.Direccion</p></td>
-			<td><p class="s2">@involucrado.EstadoVictima</p></td>
-			<td><p class="s2">@involucrado.NombreHospital</p></td>
-			</tr>
-			}
-			}
-			}
-			else
-			{
-			<tr>
-			<td><p class="s2">@contadorVehiculo</p></td>
-			<td><p class="s2">@item.TipoVehiculo</p></td>
-			<td><p class="s2">-</p></td>
-			<td><p class="s2">-</p></td>
-			<td><p class="s2">-</p></td>
-			<td><p class="s2">-</p></td>
-			<td><p class="s2">-</p></td>
-			<td><p class="s2">-</p></td>
-			</tr>
-			}
-			*@
-			}
-
 			<tr>
 				<td><p class="s5">TOTAL DE LESIONADOS</p></td>
-				<td><p class="s2">@totaLesionados</p></td>
+				<td><p class="s2">0</p></td>
 				<td colspan="2"><p class="s5">TOTAL DE MUERTOS</p></td>
-				<td><p class="s2">@totalMuertos</p></td>
+				<td><p class="s2">0</p></td>
 				<td><p class="s5">TOTAL SIN LESIÓN</p></td>
-				<td><p class="s2">@totalSinLesion</p></td>
+				<td><p class="s2">0</p></td>
 			</tr>
 		</table>
 		<br /><br />
@@ -378,7 +303,7 @@
 					<td><p class="s2">@item.Serie</p></td>
 					<td><p class="s2">@item.Marca</p></td>
 					<td><p class="s2">@item.Submarca</p></td>
-					<td><p class="s2">@item.TipoVehiculo</p></td>
+					<td><p class="s2">@item.Tipo</p></td>
 					<td><p class="s2">@item.Color</p></td>
 					<td><p class="s2">@(String.Format("{0:C}", item.montoVehiculo))</p></td>
 				</tr>
@@ -390,13 +315,13 @@
 			</tr>
 			<tr>
 				<td><p class="s5">DAÑOS AL CAMINO:</p></td>
-				<td><p class="s2">@($"{Model.ParteAccidenteComplemento.montoCamino:n}")</p></td>
+				<td><p class="s2">@(String.Format("{0:C}", Model.ParteAccidente.montoCamino))</p></td>
 				<td><p class="s5">DAÑOS A LA CARGA:</p></td>
-				<td><p class="s2">@($"{Model.ParteAccidenteComplemento.montoCarga:n}")</p></td>
+				<td><p class="s2">@(String.Format("{0:C}", Model.ParteAccidente.montoCarga))</p></td>
 				<td><p class="s5">DAÑOS PROPIETARIOS:</p></td>
-				<td><p class="s2">@($"{Model.ParteAccidenteComplemento.montoPropietarios:n}")</p></td>
+				<td><p class="s2">@(String.Format("{0:C}", Model.ParteAccidente.montoPropietarios))</p></td>
 				<td><p class="s5">OTROS DAÑOS:</p></td>
-				<td><p class="s2">@($"{Model.ParteAccidenteComplemento.montoOtros:n}")</p></td>
+				<td><p class="s2">@(String.Format("{0:C}", Model.ParteAccidente.montoOtros))</p></td>
 			</tr>
 		</table>
 		<br /><br />
@@ -413,52 +338,22 @@
 			@{
 				contadorVehiculo = 0;
 			}
-			<tr>
-				<td><p class="s5">VEH.</p></td>
-				<td><p class="s5">No. DE FOLIO Y GARANTÍA</p></td>
-				<td><p class="s5">CONCEPTO</p></td>
-			</tr>
 			@foreach (var item in Model.Infracciones)
 			{
-				int rowspan = Model.MotivosInfraccion.Where(w => w.idInfraccion == item.IdInfraccion).SelectMany(sm => sm.Motivos).Count();
 				contadorVehiculo++;
-
-				@if (Model.MotivosInfraccion.Where(w => w.idInfraccion == item.IdInfraccion).SelectMany(sm => sm.Motivos).Count() > 0)
-				{
-					int contadorInfracciones = 0;
-					foreach (var motivo in Model.MotivosInfraccion.Where(w => w.idInfraccion == item.IdInfraccion).SelectMany(sm => sm.Motivos))
-					{
-						if (contadorInfracciones == 0)
-						{
-							<tr>
-								<td rowspan="@rowspan"><p class="s2">@contadorVehiculo</p></td>
-								<td rowspan="@rowspan"><p class="s2">@item.folioInfraccion</p></td>
-								<td><p class="s2">@motivo</p></td>
-							</tr>
-							contadorInfracciones++;
-						}
-						else
-						{
-							<tr>
-								<td><p class="s2">@motivo</p></td>
-							</tr>
-						}
-					}
-				}
-				else
-				{
-					<tr>
-						<td><p class="s2">@contadorVehiculo</p></td>
-						<td><p class="s2">@item.folioInfraccion</p></td>
-						<td><p class="s2">---</p></td>
-					</tr>
-				}
-
+				<tr>
+					<td><p class="s5">VEH.</p></td>
+					<td><p class="s5">No. DE FOLIO Y GARANTÍA</p></td>
+					<td><p class="s5">CONCEPTO</p></td>
+				</tr>
+				<tr>
+					<td><p class="s2">@contadorVehiculo</p></td>
+					<td><p class="s2">@item.folioInfraccion</p></td>
+					<td><p class="s2">---</p></td>
+				</tr>
 			}
 		</table>
-		<br />
-
-		<br />
+		<br /><br />
 		<table class="table">
 			<thead>
 				<tr style="background-color:#e7e7e7">
@@ -471,26 +366,24 @@
 			</thead>
 			<tr>
 				<td colspan="2"><p class="text-start s5">A DISPOSICIÓN DE:</p></td>
-				<td colspan="2"><p class="s2">@(string.IsNullOrEmpty(Model.ADisposicion) ? "-" : Model.ADisposicion)</p></td>
+				<td colspan="2"><p class="s2">@Model.ADisposicion</p></td>
 				<td colspan="2"><p class="text-start s5">ENTREGADO A:</p></td>
-				<td colspan="2"><p class="s2">@(string.IsNullOrEmpty(Model.entregadoA) ? "-" : Model.entregadoA)</p></td>
+				<td colspan="2"><p class="s2">-</p></td>
 			</tr>
 			<tr>
 				<td colspan="2"><p class="text-start s5">PROCEDE LA CONSIGNACIÓN DE LOS HECHOS AL C:</p></td>
-				<td colspan="2"><p class="s2">@(!string.IsNullOrEmpty(Model.ParteAccidenteComplemento.consignacionHechos) ? Model.ParteAccidenteComplemento.consignacionHechos : "-")</p></td>
+				<td colspan="2"><p class="s2">-</p></td>
 				<td colspan="2"><p class="text-start s5">CON SEDE:</p></td>
-				<td colspan="2"><p class="s2">@(string.IsNullOrEmpty(Model.sede) ? "-" : Model.sede)</p></td>
+				<td colspan="2"><p class="s2">-</p></td>
 			</tr>
 			<tr>
 				<td colspan="2"><p class="text-start s5">CONVENIO:</p></td>
-				<td colspan="2"><p class="s2">@(Model.ParteAccidenteComplemento.convenioBool ? "SI" : "NO")</p></td>
+				<td colspan="2"><p class="s2">NO</p></td>
 				<td colspan="2"><p class="text-start s5">OBSERVACIONES CONVENIO:</p></td>
-				<td colspan="2"><p>@(!string.IsNullOrEmpty(Model.ParteAccidenteComplemento.observacionesConvenio) ? Model.ParteAccidenteComplemento.observacionesConvenio : "-")</p></td>
+				<td colspan="2"><p><br /><br /></p></td>
 			</tr>
 		</table>
-		<br />
-
-		<br />
+		<br /><br />
 		<table class="table">
 			<thead>
 				<tr style="background-color:#e7e7e7">
@@ -503,20 +396,18 @@
 			</thead>
 			<tr>
 				<td><p class="s5">ELABORA CONSIGNACIÓN:</p></td>
-				<td><p class="s2">@(string.IsNullOrEmpty(Model.ElaboraConsignacion) ? "-" : Model.ElaboraConsignacion)</p></td>
+				<td><p class="s2">-</p></td>
 				<td><p class="s5">No. DE OFICIO:</p></td>
-				<td><p class="s2">@(string.IsNullOrEmpty(Model.NoOficio) ? "-" : Model.NoOficio)</p></td>
+				<td><p class="s2">-</p></td>
 			</tr>
 			<tr>
 				<td><p class="s5">AGENCIA DE MINISTERIO QUE RECIBE:</p></td>
-				<td><p class="s2">@(string.IsNullOrEmpty(Model.AgenciaRecibe) ? "-" : Model.AgenciaRecibe)</p></td>
+				<td><p class="s2">-</p></td>
 				<td><p class="s5">RECIBE:</p></td>
-				<td><p class="s2">@(string.IsNullOrEmpty(Model.recibe) ? "-" : Model.recibe)</p></td>
+				<td><p class="s2">-</p></td>
 			</tr>
 		</table>
-		<br />
-
-		<br />
+		<br /><br />
 		<table class="table">
 			<thead>
 				<tr style="background-color:#e7e7e7">
@@ -529,107 +420,51 @@
 			</thead>
 			<tr>
 				<td><p class="text-end s5">ELABORA:</p></td>
-				<td><p class="s2">@(string.IsNullOrEmpty(Model.Elabora) ? "-" : Model.Elabora)</p></td>
+				<td><p class="s2">ADRIAN LÓPEZ CARDONA</p></td>
 			</tr>
 			<tr>
 				<td><p class="text-end s5">SUPERVISOR:</p></td>
-				<td><p class="s2">@(string.IsNullOrEmpty(Model.Supervisor) ? "-" : Model.Supervisor)</p></td>
+				<td><p class="s2">JORGE RODRIGUEZ SANTIBAÑEZ</p></td>
 			</tr>
 			<tr>
 				<td><p class="text-end s5">AUTORIZA:</p></td>
-				<td><p class="s2">@(string.IsNullOrEmpty(Model.Autoriza) ? "-" : Model.Autoriza)</p></td>
+				<td><p class="s2">JORGE RODRIGUEZ SANTIBAÑEZ</p></td>
 			</tr>
 		</table>
-		<br />
-		<br />
-		<br />
-		<div>
-			<p class="s3">
-				<h1 style="text-align:center">RESPETUOSAMENTE</h1>
-			</p>
-			<p class="s3">
-				<h1 style="text-align:center">OFICIAL DE TRANSITO DEL ESTADO</h1>
-			</p>
-			<br />
-			<br />
-			<hr style="margin-left:25%; width:50%; margin-top: 40px; border: 2pt;border-top: 1pt solid rgb(0, 0, 0);" />
+		<br /><br />
+		<div class="text-center">
+			<h1>RESPETUOSAMENTE OFICIAL DE TRANSITO DEL ESTADO</h1>
+			<br /><br />
+			<div class="d-flex justify-content-center middle"><hr /></div>
 		</div>
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<div style="width:100%; margin-top:200px;">
-			<div style="width:100%;">
-				<p class="s3">
-					<h1 style="margin-left:180px">SUPERVISÓ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vo.Bo.</h1>
-				</p>
-				<p class="s3">
-					<h1 style="margin-left:160px">JEFE DE SERVICIOS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EL DELEGADO</h1>
-				</p>
-				<br />
-				<br />
-				<hr style="margin-left:20%; width:60%; margin-top: 40px; border: 2pt;border-top: 1pt solid rgb(0, 0, 0);" />
+		<div class="row">
+			<div class="col-md-6 col-md-offset-2">
+				<div class="text-end">
+					<div class="text-center">
+						<h1>SUPERVISÓ </h1>
+						<h1>JEFE DE SERVICIOS</h1>
+					</div>
+				</div>
 			</div>
-
-		</div>
-
-		@*	<table class="table" style="border:none">
-		<tr style="border:none">
-		<td style="border:none" colspan="2">
-		<p class="s3">
-		<h1 style="text-align:center">RESPETUOSAMENTE</h1>
-		</p>
-		<p class="s3">
-		<h1 style="text-align:center">OFICIAL DE TRANSITO DEL ESTADO</h1>
-		</p>
-		<br />
-		<hr style="margin-left:25%; width:50%; margin-top: 1rem; margin-bottom: 1rem;border: 0;border-top: 1pt solid rgb(0, 0, 0);" />
-		</td>
-		</tr>
-		<tr style="border:none">
-		<td style="border:none"><p>ELABORA:</p></td>
-		<td style="border:none"><p>ADRIAN LÓPEZ CARDONA</p></td>
-		</tr>
-		<tr style="border:none">
-		<td style="border:none"><p>SUPERVISOR:</p></td>
-		<td style="border:none"><p>JORGE RODRIGUEZ SANTIBAÑEZ</p></td>
-		</tr>
-		</table>*@
-
-		@*<div class="text-center">
-		<h1>RESPETUOSAMENTE OFICIAL DE TRANSITO DEL ESTADO</h1>
-		<br /><br />
-		<div class="d-flex justify-content-center middle"><hr /></div>
+			<div class="col-md-6 col-md-offset-2">
+				<div class="text-end">
+					<div class="text-center">
+						<h1>Vo. Bo. </h1>
+						<h1>EL DELEGADO</h1>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="row">
-		<div class="col-md-6 col-md-offset-2">
-		<div class="text-end">
-		<div class="text-center">
-		<h1>SUPERVISÓ </h1>
-		<h1>JEFE DE SERVICIOS</h1>
+			<div class="col-md-6">
+				<br /><br />
+				<div class="d-flex justify-content-center lateral"><hr /></div>
+			</div>
+			<div class="col-md-6">
+				<br /><br />
+				<div class="d-flex justify-content-center lateral"><hr /></div>
+			</div>
 		</div>
-		</div>
-		</div>
-		<div class="col-md-6 col-md-offset-2">
-		<div class="text-end">
-		<div class="text-center">
-		<h1>Vo. Bo. </h1>
-		<h1>EL DELEGADO</h1>
-		</div>
-		</div>
-		</div>
-		</div>
-		<div class="row">
-		<div class="col-md-6">
-		<br /><br />
-		<div class="d-flex justify-content-center lateral"><hr /></div>
-		</div>
-		<div class="col-md-6">
-		<br /><br />
-		<div class="d-flex justify-content-center lateral"><hr /></div>
-		</div>
-		</div>*@
 	</div>
 </body>
 </html>

@@ -30,13 +30,12 @@ namespace GuanajuatoAdminUsuarios.Controllers
         private readonly ICapturaAccidentesService _capturaAccidentesService;
         private readonly IPdfGenerator _pdfService;
         private readonly ICatDictionary _catDictionary;
-        private readonly ICatEstatusReporteService _catEstatusReporteService;
 
         private int idOficina = 0;
 
         public BusquedaEspecialAccidentesController(IBusquedaEspecialAccidentesService busquedaEspecialAccidentesService, ICatCarreterasService catCarreterasService, ICatTramosService catTramosService,
             ICatDelegacionesOficinasTransporteService catDelegacionesOficinasTransporteService, IOficiales oficialesService, IPdfGenerator pdfService,
-            ICapturaAccidentesService capturaAccidentesService, ICatDictionary catDictionary, ICatEstatusReporteService catEstatusReporteService)
+            ICapturaAccidentesService capturaAccidentesService, ICatDictionary catDictionary)
         {
             _busquedaEspecialAccidentesService = busquedaEspecialAccidentesService;
             _catCarreterasService = catCarreterasService;
@@ -46,7 +45,6 @@ namespace GuanajuatoAdminUsuarios.Controllers
             _pdfService = pdfService;
             _capturaAccidentesService = capturaAccidentesService;
             _catDictionary = catDictionary;
-            _catEstatusReporteService = catEstatusReporteService;
         }
         #region DropDowns
         public IActionResult Index()
@@ -91,11 +89,6 @@ namespace GuanajuatoAdminUsuarios.Controllers
             oficiales = oficiales.Skip(1);
             var result = new SelectList(oficiales, "IdOficial", "NombreCompleto");
 
-            return Json(result);
-        }
-        public JsonResult EstatusReporte_Drop()
-        {
-            var result = new SelectList(_catEstatusReporteService.ObtenerEstatusReporte(), "idEstatusReporte", "estatusReporte");
             return Json(result);
         }
         #endregion
@@ -208,31 +201,6 @@ namespace GuanajuatoAdminUsuarios.Controllers
             };
 
             return PartialView("_ModalEditarFolio", viewModel);
-        }
-
-        public IActionResult ajax_BusquedaAccidentes(BusquedaEspecialAccidentesModel model)
-        {
-            int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
-
-            var resultadoBusqueda = _busquedaEspecialAccidentesService.ObtenerTodosAccidentes(idOficina)
-                                                .Where(w => w.idMunicipio == (model.idMunicipio > 0 ? model.idMunicipio : w.idMunicipio)
-                                                    && w.idSupervisa == (model.IdOficialBusqueda > 0 ? model.IdOficialBusqueda : w.idSupervisa)
-                                                    && w.idCarretera == (model.IdCarreteraBusqueda > 0 ? model.IdCarreteraBusqueda : w.idCarretera)
-                                                    && w.idTramo == (model.IdTramoBusqueda > 0 ? model.IdTramoBusqueda : w.idTramo)
-                                                    && w.idElabora == (model.IdOficialBusqueda > 0 ? model.IdOficialBusqueda : w.idElabora)
-                                                    && w.idAutoriza == (model.IdOficialBusqueda > 0 ? model.IdOficialBusqueda : w.idAutoriza)
-                                                    && w.idEstatusReporte == (model.idEstatusReporte > 0 ? model.idEstatusReporte : w.idEstatusReporte)
-                                                    && w.IdDelegacionBusqueda == (model.IdDelegacionBusqueda > 0 ? model.IdDelegacionBusqueda : w.IdDelegacionBusqueda)
-                                                    && (string.IsNullOrEmpty(model.folioBusqueda) || w.numeroReporte.Contains(model.folioBusqueda))
-                                                   && (string.IsNullOrEmpty(model.placasBusqueda) || w.placa.Contains(model.placasBusqueda))
-                                                   && (string.IsNullOrEmpty(model.propietarioBusqueda) || w.propietario.Contains(model.propietarioBusqueda, StringComparison.OrdinalIgnoreCase))
-                                                   && (string.IsNullOrEmpty(model.serieBusqueda) || w.serie.Contains(model.serieBusqueda))
-                                                   && (string.IsNullOrEmpty(model.conductorBusqueda) || w.conductor.Contains(model.conductorBusqueda, StringComparison.OrdinalIgnoreCase))
-                                                   && ((model.FechaInicio == default(DateTime) && model.FechaFin == default(DateTime)) || (w.fecha >= model.FechaInicio && w.fecha <= model.FechaFin))
-                                                    ).ToList();
-
-            return Json(resultadoBusqueda);
-
         }
 
     }

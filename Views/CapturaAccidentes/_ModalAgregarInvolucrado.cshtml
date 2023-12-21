@@ -9,34 +9,36 @@
 			type: 'POST',
 			data: Mydata,
 			success: function (response) {
-				if (response.tipo === "success") {
+				if (response.tipo == "success") {
+					// Crear instancia del modelo con los datos recibidos
 					mostrarModal(response.datos);
-					hideLoading();
-				} else if (response.encontrada !== undefined && response.encontrada === false) {
-					sitteg_warning("No se pudieron obtener resultados.");
-				} else if (response.tipo === "warning") {
-					sitteg_warning("No se pudieron obtener resultados, verifique los datos ingresados.");
+
 				} else {
-					// Otro tipo de respuesta, si es necesario manejarla
+					// Mostrar los resultados de personas encontradas en la búsqueda
+					if (response.encontrada == false) {
+						sitteg_warning("No se pudieron obtener resultados, verifique los datos ingresados.");
+					} else {
+						if (response.data != null || response.data != undefined) {
+							var personasList = response.data;
+							var grid = $("#gridInvolucradosPrevio").data("kendoGrid");
+							grid.dataSource.data(personasList);
+
+							if (personasList.length === 0) {
+								sitteg_warning("La búsqueda no arrojó resultados.");
+							}
+						} else {
+							sitteg_warning("La búsqueda no arrojó resultados.");
+						}
+					}
 				}
-
-				var personasList = response.data;
-				var grid = $("#gridConductores").data("kendoGrid");
-				grid.dataSource.data(personasList);
-
-				if (personasList.count === 0 && response.tipo !== "success") {
-					sitteg_warning("La búsqueda no arrojó resultados.");
-					grid.dataSource.data([]);
-				}
-
 				hideLoading();
 			},
-            error: function (error) {
-                sitteg_warning('Ocurrió un error en la búsqueda.');
-                hideLoading();
-            }
-        });
-    }
+			error: function (error) {
+				sitteg_warning('Ocurrió un error en la búsqueda.');
+				hideLoading();
+			}
+		});
+	}
 
 	function mostrarModal(jsonData) {
 		const modal = document.getElementById('modalLicencias');
@@ -105,7 +107,7 @@
 				success: function (response) {
 					$('#modalLicencias').modal('hide');
 					var personasList = [response];
-					var grid = $("#gridConductores").data("kendoGrid");
+					var grid = $("#gridInvolucradosPrevio").data("kendoGrid");
 					grid.dataSource.data(personasList);
 					hideLoading();
 				},
@@ -274,16 +276,16 @@
 				<div class="row px-4 mt-4 pb-4 align-items-end">
 					<div class="col-12 col-md-6 col-lg-3">
 						<div class="controlForm my-3">
-							@(Html.Kendo().TextBoxFor(t => t.numeroLicenciaBusqueda)
+							@(Html.Kendo().TextBoxFor(t => t.numeroLicencia)
 								.Label(l => l.Content("No. de licencia:"))
-								.Placeholder("Ingresa el número de licencia válido")
+								.Placeholder("Ingresa el número de licencia valido")
 								.HtmlAttributes(new { style = "width: 100%" })
 								)
 						</div>
 					</div>
 					<div class="col-12 col-md-6 col-lg-3">
 						<div class="controlForm my-3">
-							@(Html.Kendo().TextBoxFor(t => t.CURPBusqueda)
+							@(Html.Kendo().TextBoxFor(t => t.CURP)
 								.Label(l => l.Content("CURP:"))
 								.Placeholder("Ingresa el CURP del propietario")
 								.HtmlAttributes(new { style = "width: 100%" })
@@ -292,7 +294,7 @@
 					</div>
 					<div class="col-12 col-md-6 col-lg-3">
 						<div class="controlForm my-3">
-							@(Html.Kendo().TextBoxFor(t => t.RFCBusqueda)
+							@(Html.Kendo().TextBoxFor(t => t.RFC)
 								.Label(l => l.Content("RFC:"))
 								.Placeholder("Ingresa el RFC del propietario")
 								.HtmlAttributes(new { style = "width: 100%" })
@@ -304,7 +306,7 @@
 					</div>
 					<div class="col-12 col-md-6 col-lg-3">
 						<div class="controlForm my-3">
-							@(Html.Kendo().TextBoxFor(t => t.nombreBusqueda)
+							@(Html.Kendo().TextBoxFor(t => t.nombre)
 								.Label(l => l.Content("Nombre(s):"))
 								.Placeholder("Ingresa el nombre(s) del propietario")
 								.HtmlAttributes(new { style = "width: 100%" })
@@ -314,7 +316,7 @@
 					</div>
 					<div class="col-12 col-md-6 col-lg-3">
 						<div class="controlForm my-3">
-							@(Html.Kendo().TextBoxFor(t => t.apellidoPaternoBusqueda)
+							@(Html.Kendo().TextBoxFor(t => t.apellidoPaterno)
 								.Label(l => l.Content("Apellido paterno:"))
 								.Placeholder("Ingresa el apellido paterno")
 								.HtmlAttributes(new { style = "width: 100%" })
@@ -324,7 +326,7 @@
 					</div>
 					<div class="col-12 col-md-6 col-lg-3">
 						<div class="controlForm my-3">
-							@(Html.Kendo().TextBoxFor(t => t.apellidoMaternoBusqueda)
+							@(Html.Kendo().TextBoxFor(t => t.apellidoMaterno)
 								.Label(l => l.Content("Apellido materno:"))
 								.Placeholder("Ingresa el apellido materno")
 								.HtmlAttributes(new { style = "width: 100%" })

@@ -2,13 +2,13 @@
 
 
 <div class="row">
-	@if (ViewBag.NoResultsMessage != null)
-	{
-		<div class="alert alert-info">
-			@ViewBag.NoResultsMessage
-		</div>
-	}
-	<div class="col-12 mb-4 px-4 rounded">
+    @if (ViewBag.NoResultsMessage != null)
+    {
+        <div class="alert alert-info">
+            @ViewBag.NoResultsMessage
+        </div>
+    }
+    <div class="col-12 mb-4 px-4 rounded">
 
         @*<div class="col-12 mb-4 px-4 rounded gridCustom">*@
         @(
@@ -20,8 +20,8 @@
                 columns.Bound(p => p.folioInfraccion).Title("Folio").Width(90);
                 columns.Bound(p => p.PersonaInfraccion.nombreCompleto).Title("Conductor").Width(90);
                 columns.Bound(p => p.Vehiculo.Persona.nombreCompleto).Title("Propietario").Width(90);
-                columns.Bound(c => c.fechaInfraccion).Title("Fecha Aplicada a").Width(100).Format("{0:dd/MM/yyyy}");
-                columns.Bound(c => c.Garantia.garantia).Title("Garantía").Width(90);
+                columns.Bound(c => c.fechaInfraccion).Title("Fecha Aplicada a").Width(100);
+                columns.Bound(c => c.NombreGarantia).Title("Garantía").Width(90);
                 columns.Bound(c => c.Vehiculo.fullVehiculo).Title("Vehículo").Width(90);
                 columns.Bound(c => c.Vehiculo.placas).Title("Placas").Width(90);
                 columns.Bound(c => c.delegacion).Title("Delegación/Oficina").Width(90);
@@ -30,159 +30,159 @@
                 @*Aun no se usa cortesia pro que no saben como se relaciona *@
                 @*columns.Bound(c => c.cortesia).Title("Estatus/Cortesía").Width(120);*@
 
-				@*    columns.Bound(p => p.idInfraccion)
-		.ClientTemplate(
-		"# if (idEstatusInfraccion == 5) { #" +
-		"<input type=\"checkbox\" id=\"checkBox\" class=\"parentCheckBox\" window-call=\"template\" checked/>" +
-		"# } else { #" +
-		"<input type=\"checkbox\" id=\"checkBox\" class=\"parentCheckBox\" window-call=\"template\" />" +
-		"# } #")
-		.Width(90);*@
+                @*    columns.Bound(p => p.idInfraccion)
+        .ClientTemplate(
+        "# if (idEstatusInfraccion == 5) { #" +
+        "<input type=\"checkbox\" id=\"checkBox\" class=\"parentCheckBox\" window-call=\"template\" checked/>" +
+        "# } else { #" +
+        "<input type=\"checkbox\" id=\"checkBox\" class=\"parentCheckBox\" window-call=\"template\" />" +
+        "# } #")
+        .Width(90);*@
 
-				columns.Bound(p => p.idInfraccion)
-			.ClientTemplate(
-			"# if (infraccionCortesia == 1) { #" +
-			"<button disabled onclick=\"ShowCortesia('#= idInfraccion #')\" class='w-100 btn'><h6 class='m-0 colorWarning'><i class='icon-edit me-2'></i><b> Cortesía</b></h6></button>" +
-			"# } else { #" +
-			"<button onclick=\"ShowCortesia('#= idInfraccion #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b> Cortesía</b></h6></button>" +
-			"# } #")
-			.Title("Cortesía").Sortable(false).Width(90);
+                columns.Bound(p => p.idInfraccion)
+            .ClientTemplate(
+            "# if (infraccionCortesia == 1) { #" +
+            "<button disabled onclick=\"ShowCortesia('#= idInfraccion #')\" class='w-100 btn'><h6 class='m-0 colorWarning'><i class='icon-edit me-2'></i><b> Cortesía</b></h6></button>" +
+            "# } else { #" +
+            "<button onclick=\"ShowCortesia('#= idInfraccion #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b> Cortesía</b></h6></button>" +
+            "# } #")
+            .Title("Cortesía").Sortable(false).Width(90);
 
-				columns.Bound(p => p.idInfraccion).ClientTemplate(
-				"<button onclick=\"ShowUpdate('#= idInfraccion #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>"
-				).Title("Editar").Sortable(false).Width(90);
+                columns.Bound(p => p.idInfraccion).ClientTemplate(
+                "<button onclick=\"ShowUpdate('#= idInfraccion #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>"
+                ).Title("Editar").Sortable(false).Width(90);
 
-				@*columns.Bound(p => p.idInfraccion).ClientTemplate(
-		"<button onclick=\"ShowDetail('#= idInfraccion #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Ver</b></h6></button>"
-		).Title("Ver").Sortable(false).Width(90);*@
+                @*columns.Bound(p => p.idInfraccion).ClientTemplate(
+        "<button onclick=\"ShowDetail('#= idInfraccion #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Ver</b></h6></button>"
+        ).Title("Ver").Sortable(false).Width(90);*@
 
-				columns.Bound(p => p.idInfraccion).ClientTemplate(
-			"<button onclick=\"downLoadPdf('#= idInfraccion #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='h5 icon-pdf me-2'></i><b>Descargar</b></h6></button>"
-			).Title("Exportar").Sortable(false).Width(90);
+                columns.Bound(p => p.idInfraccion).ClientTemplate(
+            "<button onclick=\"downLoadPdf('#= idInfraccion #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='h5 icon-pdf me-2'></i><b>Descargar</b></h6></button>"
+            ).Title("Exportar").Sortable(false).Width(90);
 
-			}).HtmlAttributes(new { style = "height:450" })
-			.Pageable(p => p.Enabled(true).PageSizes(new[] { 10, 20, 30 }))
-			.DataSource(dataSource => dataSource
-			.Ajax())
-			.Sortable()
-			.Scrollable(scr => scr.Height(350))
-			.DataSource(dataSource => dataSource
-			.Ajax()
-			.ServerOperation(false)
-			)
-			.ToolBar(t => t.Search())
-			.Search(s =>
-			{
-				s.Field(c => c.folioInfraccion);
-				s.Field(c => c.PersonaInfraccion.nombreCompleto);
-				s.Field(c => c.Vehiculo.Persona.nombreCompleto);
-				s.Field(c => c.NombreGarantia);
-				s.Field(c => c.Vehiculo.fullVehiculo);
-				s.Field(c => c.Vehiculo.placas);
-				s.Field(c => c.delegacion);
-				s.Field(c => c.estatusInfraccion);
+            }).HtmlAttributes(new { style = "height:450" })
+            .Pageable(p => p.Enabled(true).PageSizes(new[] { 10, 20, 30 }))
+            .DataSource(dataSource => dataSource
+            .Ajax())            
+            .Sortable()
+            .Scrollable(scr => scr.Height(350))
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .ServerOperation(false)
+            )
+            .ToolBar(t => t.Search())
+            .Search(s =>
+            {
+                s.Field(c => c.folioInfraccion);
+                s.Field(c => c.PersonaInfraccion.nombreCompleto);
+                s.Field(c => c.Vehiculo.Persona.nombreCompleto);
+                s.Field(c => c.NombreGarantia);
+                s.Field(c => c.Vehiculo.fullVehiculo);
+                s.Field(c => c.Vehiculo.placas);
+                s.Field(c => c.delegacion);
+                s.Field(c => c.estatusInfraccion);
 
-			})
-			)
-		@*</div>*@
+            })
+            )
+        @*</div>*@
 
-		@(Html.Kendo().Tooltip()
-			.For("#GridInf")
-			.Filter("th")
-			.Position(TooltipPosition.Top)
-			.ContentHandler("tooltipContent")
-			)
-	</div>
+        @(Html.Kendo().Tooltip()
+            .For("#GridInf")
+            .Filter("th")
+            .Position(TooltipPosition.Top)
+            .ContentHandler("tooltipContent")
+            )
+    </div>
 </div>
 
 
 @*Modal*@
-<div class="modal fade modalCustom" id="modalCortesia" aria-labelledby="editVehiculo" aria-hidden="true">
-	<div class="modal-dialog modal-xl boxShadow modal-dialog-centered">
-		<div class="modal-content">
+<div class="modal fade modalCustom" id="modalCortesia"  aria-labelledby="editVehiculo" aria-hidden="true">
+    <div class="modal-dialog modal-xl boxShadow modal-dialog-centered">
+        <div class="modal-content">
 
-			<section class=" bg-white rounded">
-				<div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
-					<div class="col-auto pe-0">
-						<div class="row align-items-center justify-content-center justify-content-md-start">
-							<div class="col-auto pe-0">
-								<i class="icon-edit-car h1 colorPrimary"></i>
-							</div>
-							<div class="col-auto my-3">
-								<h2 class="m-0 h3"><b>Cortesías no aplicadas</b></h2>
-							</div>
-						</div>
-					</div>
-					<div class="col-auto">
-						<div class="row">
-							<div class="col-auto my-3">
-								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-12">
-						<div class="bg-light py-1"></div>
-					</div>
+            <section class=" bg-white rounded">
+                <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                    <div class="col-auto pe-0">
+                        <div class="row align-items-center justify-content-center justify-content-md-start">
+                            <div class="col-auto pe-0">
+                                <i class="icon-edit-car h1 colorPrimary"></i>
+                            </div>
+                            <div class="col-auto my-3">
+                                <h2 class="m-0 h3"><b>Cortesías no aplicadas</b></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="row">
+                            <div class="col-auto my-3">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="bg-light py-1"></div>
+                    </div>
 
-				</div>
+                </div>
 
-				<div class="row align-items-end">
-					<div class="col-12 col-lg-6 my-4">
-						<h5 class="px-4"><b>Infracción:</b></h5>
-					</div>
+                <div class="row align-items-end">
+                    <div class="col-12 col-lg-6 my-4">
+                        <h5 class="px-4"><b>Infracción:</b></h5>
+                    </div>
 
-				</div>
+                </div>
 
 
-				<div class="modal-body" id="ModalBodyCortesia">
-				</div>
+                <div class="modal-body" id="ModalBodyCortesia">
+                </div>
 
-			</section>
-		</div>
-	</div>
+            </section>
+        </div>
+    </div>
 </div>
 
 <script>
 
-	function downLoadPdf(Id) {
-		window.location = '/Infracciones/CreatePdfUnRegistro?IdInfraccion=' + Id;
-	}
+    function downLoadPdf(Id) {
+        window.location = '/Infracciones/CreatePdfUnRegistro?IdInfraccion=' + Id;
+    }
 
-	function ShowDetail(Id) {
-		//console.log(Id);
-		window.location = '/Infracciones/Detail?IdInfraccion=' + Id;
-	}
+    function ShowDetail(Id) {
+        //console.log(Id);
+        window.location = '/Infracciones/Detail?IdInfraccion=' + Id;
+    }
 
-	function ShowUpdate(Id) {
-		//console.log(Id);
-		window.location = '/Infracciones/Editar?id=' + Id;
-	}
+    function ShowUpdate(Id) {
+        //console.log(Id);
+        window.location = '/Infracciones/Editar?id=' + Id;
+    }
 
-	function ShowCortesia(Id) {
-		showLoading();
-		$.ajax({
-			url: '@Url.Action("ajax_CortesiaInfraccion")',
-			type: 'GET',
-			data: { id: Id },
-			contentType: "application/json; charset=utf-8",
-			dataType: "html",
-			success: function (value) {
-				$('#ModalBodyCortesia').html(value);
-				$('#modalCortesia').modal('show');
-				hideLoading();
-			}, error: function () {
-				sitteg_warning("Ocurrio un error al procesar su solicitud.");
-				hideLoading();
-			}
-		});
-	}
+    function ShowCortesia(Id) {
+        showLoading();
+        $.ajax({
+            url: '@Url.Action("ajax_CortesiaInfraccion")',
+            type: 'GET',
+            data: { id: Id },
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (value) {
+                $('#ModalBodyCortesia').html(value);
+                $('#modalCortesia').modal('show');
+                hideLoading();
+            }, error: function () {
+                sitteg_warning("Ocurrio un error al procesar su solicitud.");
+                hideLoading();
+            }
+        });
+    }
 
-	function tooltipContent(e) {
-		var titulo = e.target.context.dataset.title;
-		return titulo;
-	}
+    function tooltipContent(e) {
+        var titulo = e.target.context.dataset.title;
+        return titulo;
+    }
 
 
 </script>
