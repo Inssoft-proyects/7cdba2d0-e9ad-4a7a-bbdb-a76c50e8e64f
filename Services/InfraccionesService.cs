@@ -18,8 +18,6 @@ using Azure;
 using Org.BouncyCastle.Asn1.Cmp;
 using System.ServiceModel.Channels;
 
-
-
 namespace GuanajuatoAdminUsuarios.Services
 {
 	public class InfraccionesService : IInfraccionesService

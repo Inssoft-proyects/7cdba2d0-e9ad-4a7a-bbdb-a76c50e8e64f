@@ -1190,7 +1190,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             Persona.RFC = Persona.RFCFisico;
             Persona.numeroLicencia = Persona.numeroLicenciaFisico;
             Persona.idTipoLicencia = Persona.idTipoLicencia;
-            Persona.vigenciaLicencia = Persona.vigenciaLicencia;
+            Persona.vigenciaLicencia = Persona.vigenciaLicenciaFisico;
             Persona.PersonaDireccion.idEntidad = Persona.PersonaDireccion.idEntidadFisico;
             Persona.PersonaDireccion.idMunicipio = Persona.PersonaDireccion.idMunicipioFisico;
             Persona.PersonaDireccion.correo = Persona.PersonaDireccion.correoFisico;

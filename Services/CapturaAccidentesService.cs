@@ -2222,10 +2222,10 @@ hola
                     {
                         if (reader.Read())
                         {
-                            datosFinales.montoCamino = reader["montoCamino"] == DBNull.Value ? "": reader["montoCamino"].ToString();
-                            datosFinales.montoCarga = reader["montoCarga"] == DBNull.Value ? "" : reader["montoCarga"].ToString();
-                            datosFinales.montoPropietarios = reader["montoPropietarios"] == DBNull.Value ? "" : reader["montoPropietarios"].ToString();
-                            datosFinales.montoOtros = reader["montoOtros"] == DBNull.Value ? "" : reader["montoOtros"].ToString();
+                            datosFinales.montoCamino = reader["montoCamino"] == DBNull.Value ? 0 : float.Parse(reader["montoCamino"].ToString());
+                            datosFinales.montoCarga = reader["montoCarga"] == DBNull.Value ? 0 : float.Parse(reader["montoCarga"].ToString());
+                            datosFinales.montoPropietarios = reader["montoPropietarios"] == DBNull.Value ? 0 : float.Parse(reader["montoPropietarios"].ToString());
+                            datosFinales.montoOtros = reader["montoOtros"] == DBNull.Value ? 0 : float.Parse(reader["montoOtros"].ToString());
                             datosFinales.Latitud = reader["latitud"] == DBNull.Value ? 0 : float.Parse(reader["latitud"].ToString());
                             datosFinales.Longitud = reader["longitud"] == DBNull.Value ? 0 : float.Parse(reader["longitud"].ToString());
                             datosFinales.IdCertificado = reader["idCertificado"] == DBNull.Value ? 0 : int.Parse(reader["idCertificado"].ToString());

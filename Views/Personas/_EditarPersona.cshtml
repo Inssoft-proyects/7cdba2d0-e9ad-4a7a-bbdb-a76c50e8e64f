@@ -10,9 +10,6 @@
             datePicker.value(null); // Si es la fecha predeterminada, establecer el valor del DatePicker como nulo
         }
     }
-
-
-
     function EntidadDropDownChange() {
         var entidadDDlValue = $("#idEntidadED").data("kendoDropDownList").value();
 
@@ -41,14 +38,6 @@
             }
         });
     }
-
-
-    function filterMunicipios() {
-        return {
-            entidadDDlValue: $("#idEntidadED").data("kendoDropDownList").value()
-        };
-    }
-
 </script>
 <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
     <div class="col-auto pe-0">
@@ -194,7 +183,6 @@
                 @(Html.Kendo().DropDownListFor(m => m.PersonaDireccion.idEntidad).Filter(FilterType.Contains)
                     .DataTextField("Text")
                     .DataValueField("Value")
-                    .Value(Model.PersonaDireccion.idEntidad.ToString())  // Asigna el valor desde el modelo
                     .OptionLabel("Selecciona una opción")
                     .Events(e => e.Change("EntidadDropDownChange"))
                     .DataSource(source =>
@@ -219,8 +207,7 @@
                     {
                         source.Read(read =>
                         {
-                            read.Action("Municipios_Drop", "Personas")
-                    .Data("filterMunicipios");
+                            read.Action("Municipios_Drop", "Personas");
                         });
                     })
                     .HtmlAttributes(new { style = "width:100%;", id = "idMunicipioED" }))
@@ -307,11 +294,35 @@
         var validator = $("#frmEditarPersona").kendoValidator().data('kendoValidator');
         var idTelefono = $("#telefono");
         var idTelefonoValue = idTelefono.val();
-        if (idTelefonoValue === null || idTelefonoValue === "") {
-            idTelefono.prop("disabled", true);
+        //if (idTelefonoValue === null || idTelefonoValue === "") {
+        //    idTelefono.prop("disabled", true);
+        //}
+
+        var controlsValidate = [];
+        var isValid = true;
+
+        controlsValidate.push({ 'controlName': 'nombre' });
+        controlsValidate.push({ 'controlName': 'CURP' });
+        controlsValidate.push({ 'controlName': 'PersonaDireccion_codigoPostal' });
+        controlsValidate.push({ 'controlName': 'PersonaDireccion_colonia' });
+        controlsValidate.push({ 'controlName': 'PersonaDireccion_calle' });
+        controlsValidate.push({ 'controlName': 'PersonaDireccion_numero' });
+
+        // INPUTS
+        if (!isControlsValid(controlsValidate)) { isValid = false; }
+
+        //// DROP DOWN LIST
+        //controlsValidate = [];
+        //controlsValidate.push({ 'controlName': 'idGenero' });
+        //if (!isControlsValidDropDown(controlsValidate)) { isValid = false; }
+
+        if (!isValid) {
+            sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
+            return;
         }
-        idTelefono.off('blur');
-        if (validator.validate()) {
+
+        //idTelefono.off('blur');
+        if (isValid) {
             var formData = $("#frmEditarPersona").serialize();
             showLoading();
             $.ajax({
@@ -347,9 +358,5 @@
         }
     }
 
-
-    $(document).ready(function () {
-        EntidadDropDownChange();
-    });
    
 </script>

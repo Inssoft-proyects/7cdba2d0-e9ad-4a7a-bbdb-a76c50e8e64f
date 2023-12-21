@@ -98,6 +98,19 @@
 
 		var folio = $("#folio_infraccion").val();
 		var Mydata = $("#ObservacionesForm").serialize();
+		var controlsValidate = [];
+		var isValid = true;
+
+		controlsValidate.push({ 'controlName': 'Observaciones' });
+
+		// INPUTS
+		if (!isControlsValid(controlsValidate)) { isValid = false; }
+
+		if (!isValid) {
+			sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
+			return;
+		}
+
 		showLoading();
 		$.ajax({
 			url: '@Url.Action("GuardarObservaciones", "CortesiasNoAplicadas")',

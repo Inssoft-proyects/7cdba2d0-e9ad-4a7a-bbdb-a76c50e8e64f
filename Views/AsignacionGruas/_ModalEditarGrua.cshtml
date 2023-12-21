@@ -100,40 +100,34 @@
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm row justify-content-center btnToggleActive my-3">
                             <label>Abanderamiento:</label>
-                            <div class="btnToggleActive">
                             @(Html.Kendo().SwitchFor(t => t.AbanderamientoBool)
                                 .Name("abanderamientoSwitch")
                                 .Checked(false)
                                 .Messages(c => c.Checked("Si").Unchecked("No"))
                                 .HtmlAttributes(new { data_checked = "true" })
                                 )
-                            </div>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm row justify-content-center btnToggleActive my-3">
                             <label for="switch2">Salvamento:</label>
-                            <div class="btnToggleActive">
                             @(Html.Kendo().SwitchFor(t => t.SalvamentoBool)
                                 .Name("salvamentoSwitch")
                                 .Checked(false)
                                 .Messages(c => c.Checked("Si").Unchecked("No"))
                                 .HtmlAttributes(new { data_valor = 1 })
                                 )
-                            </div>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm row justify-content-center btnToggleActive my-3">
                             <label for="switch3">Arrastre:</label>
-                            <div class="btnToggleActive">
                             @(Html.Kendo().SwitchFor(t => t.ArrastreBool)
                                 .Name("arrastreSwitch")
                                 .Checked(false)
                                 .Messages(c => c.Checked("Si").Unchecked("No"))
                                 .HtmlAttributes(new { data_checked = "true" })
                                 )
-                            </div>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">

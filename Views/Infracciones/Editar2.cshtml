@@ -183,12 +183,10 @@
                             <div class="row my-4 px-4">
                                 <div class="form-group col-md-4">
                                     <div class="checkbox">
-                                        <label>Infracción de cortesía: </label>
-                                        <div class="btnToggleActive">
-                                            @(Html.Kendo().SwitchFor(m => m.infraccionCortesia)
-                                                    .Messages(c => c.Checked("SI").Unchecked("NO"))
-                                                    )
-                                        </div>
+                                        <label>Infracción de cortesía: </label>&nbsp;&nbsp;
+                                        @(Html.Kendo().SwitchFor(m => m.infraccionCortesia)
+                                                .Messages(c => c.Checked("SI").Unchecked("NO"))
+                                                )
                                     </div>
                                 </div>
                                 <div class="form-group col-md-8">
@@ -509,9 +507,7 @@
                                         <div class="col-12 col-md-4">
                                             <div class="controlForm">
                                                 <label>No. de placa:</label>
-                                                <span>
-                                                    @Html.DisplayFor(m=> m.Placa)
-                                                </span>
+                                                @Html.DisplayFor(m=> m.Placa)
                                             </div>
                                         </div>
                                     </div>
@@ -521,9 +517,7 @@
                                         <div class="col-12 col-md-4">
                                             <div class="controlForm">
                                                 <label>Tarjeta de circulación:</label>
-                                                <span>
-                                                    @Html.DisplayFor(m=> m.Tarjeta)
-                                                </span>
+                                                @Html.DisplayFor(m=> m.Tarjeta)
                                             </div>
                                         </div>
                                     </div>

@@ -55,7 +55,7 @@
 	<div class="row my-2">
 		<div class="col-md-4">
 			<div class="controlForm">
-				<label>Fecha de nacimiento <b>(obligatorio)</b>:</label>
+				<label>Fecha de nacimiento <b>(obligatorio)</b>:"</label>
 				@(Html.Kendo().DatePickerFor(t => t.fechaNacimiento)
 .Culture("es-ES")
 					.HtmlAttributes(new { style = "width: 100%;", required = "required" })
@@ -295,6 +295,7 @@
 					var grid = $("#gridConductores").data("kendoGrid");
 
 					if (typeof result === "object") {
+						// Limpia el DataSource del grid
 						grid.dataSource.data([]);
 						grid.dataSource.add(result);
 						grid.refresh();
@@ -311,7 +312,7 @@
 			});
 		}
 		else {
-			$("#vigenciaLicencia").prop("disabled", false);
+			$("#vigenciaLicencia").prop("disabled", false);s
 			sitteg_info('Debe llenar los campos requeridos');
 			return;
 		}

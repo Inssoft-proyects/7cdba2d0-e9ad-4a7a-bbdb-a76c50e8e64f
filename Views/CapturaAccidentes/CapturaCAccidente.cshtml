@@ -45,7 +45,7 @@
                         .Label(l => l.Content("Daños al camino:"))
                         .Placeholder("Ingresa el monto al que ascienden los daños al camino")
                         .Enable(!ViewBag.EsSoloLectura) 
-                        .HtmlAttributes(new { style = "width: 100%"})
+                        .HtmlAttributes(new { style = "width: 100%", type = "number" })
                         )
 
                 </div>
@@ -56,7 +56,7 @@
                         .Label(l => l.Content("Daños a la carga:"))
                         .Placeholder("Ingresa el monto al que ascienden los daños a la carga")
                         .Enable(!ViewBag.EsSoloLectura) 
-                        .HtmlAttributes(new { style = "width: 100%" })
+                        .HtmlAttributes(new { style = "width: 100%", type = "number" })
                         )
 
                 </div>
@@ -67,7 +67,7 @@
                         .Label(l => l.Content("Daños a propietarios:"))
                         .Placeholder("Ingresa el monto al que ascienden los daños a los propietarios")
                             .Enable(!ViewBag.EsSoloLectura)
-                        .HtmlAttributes(new { style = "width: 100%"})
+                        .HtmlAttributes(new { style = "width: 100%", type = "number" })
                         )
 
                 </div>
@@ -79,7 +79,7 @@
                         .Label(l => l.Content("Otros daños:"))
                         .Placeholder("Ingresa el monto al que ascienden los daños bajo el concepto de otros")
                             .Enable(!ViewBag.EsSoloLectura)
-                        .HtmlAttributes(new { style = "width: 100%" })
+                        .HtmlAttributes(new { style = "width: 100%", type = "number" })
                         )
 
                 </div>
@@ -277,9 +277,8 @@
                     <div class="bg-light pt-1"></div>
                 </div>
             </div>
-            <div class="col-12">
+            <div class="col-12 col-lg-6 mt-4 mb-2">
                 <h5><b>Elementos</b></h5>
-                <label class="label">Seleccione uno o varios elementos que se encontraron en el accidente:</label>
             </div>
 
                 <div class="row">
@@ -461,6 +460,7 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
                 <div class="row px-4 my-4">
                     <div class="col-12 col-md-6 col-lg-3">
