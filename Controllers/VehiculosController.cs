@@ -99,13 +99,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             vehiculoBusquedaModel.Vehiculo.PersonaMoralBusquedaModel.PersonasMorales = new List<PersonaModel>();
             vehiculoBusquedaModel.isFromUpdate = true;
             vehiculosModel.encontradoEn = (int)EstatusBusquedaVehiculo.Sitteg;
-
-            vehiculoBusquedaModel.Vehiculo.ErrorRepube = "No";
-            vehiculoBusquedaModel.Vehiculo.showclose = false;
-
-
-
-            return View("EditarVehiculo", vehiculoBusquedaModel.Vehiculo);
+            return View("Index", vehiculoBusquedaModel);
         }
 
         public JsonResult Entidades_Read()
@@ -524,7 +518,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
             if (allowSistem)
             {
-                var repuveConsGralResponse = _repuveService.ConsultaGeneral(repuveGralModel)?.FirstOrDefault()?? new RepuveConsgralResponseModel();
+                var repuveConsGralResponse = _repuveService.ConsultaGeneral(repuveGralModel).FirstOrDefault();
 
                 var vehiculoEncontrado = new VehiculoModel
                 {
@@ -696,7 +690,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         [HttpPost]
         public ActionResult ajax_BuscarPersonasFiscas()
         {
-           var personasFisicas = _personasService.GetAllPersonasFisicas();
+            var personasFisicas = _personasService.GetAllPersonas();
             return PartialView("_PersonasFisicas", personasFisicas);
         }
 
@@ -745,10 +739,13 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public ActionResult ajax_CrearVehiculo(VehiculoModel model)
         {
             int IdVehiculo = 0;
+            bool esEdicion = false;
+
             if (model.idVehiculo > 0)
             {
                 model.idSubmarca = model.idSubmarcaUpdated;
                 IdVehiculo = _vehiculosService.UpdateVehiculo(model);
+                esEdicion = true;
             }
             else if (model.idVehiculo <= 0)
             {
@@ -757,13 +754,14 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
             if (IdVehiculo != 0)
             {
-                return Json(new { id = IdVehiculo });
+                return Json(new { id = IdVehiculo, esEdicion = esEdicion });
             }
             else
             {
                 return null;
             }
         }
+
 
 
         [HttpPost]

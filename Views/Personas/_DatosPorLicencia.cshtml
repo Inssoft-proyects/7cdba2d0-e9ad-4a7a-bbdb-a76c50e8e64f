@@ -32,7 +32,7 @@
     <div class="row my-2">
         <div class="col-md-4">
             <div class="controlForm">
-                <label>Fecha de nacimiento <b>(obligatorio)</b>:</label>
+                <label>Fecha de nacimiento:</label>
                 @(Html.Kendo().DatePickerFor(t => t.fechaNacimiento)
                     .Culture("es-ES")
                     .HtmlAttributes(new { style = "width: 100%;", required = "required" })
@@ -59,7 +59,7 @@
     <div class="row my-2">
         <div class="col-md-6">
             <div class="controlForm">
-                <label>Género <b>(obligatorio)</b>:</label>
+                <label>Género:</label>
                 @(Html.Kendo().DropDownListFor(m => m.idGenero).Filter(FilterType.Contains)
                     .BindTo((SelectList)ViewBag.CatGeneros)
                     .OptionLabel("-- Seleccione --")
@@ -68,7 +68,7 @@
         </div>
         <div class="col-md-6">
             <div class="controlForm">
-                <label>Tipo persona <b>(obligatorio)</b>:</label>
+                <label>Tipo persona:</label>
                 @(Html.Kendo().DropDownListFor(m => m.idCatTipoPersona).Filter(FilterType.Contains)
                     .BindTo((SelectList)ViewBag.CatTipoPersona)
                     .OptionLabel("-- Seleccione --")
@@ -80,7 +80,7 @@
         <div class="col-md-4">
             <div class="controlForm">
                 @(Html.Kendo().TextBoxFor(t => t.numeroLicencia)
-                    .Label(l => l.Content("Número licencia <b>(obligatorio)</b>:"))
+                    .Label(l => l.Content("Número licencia:"))
                     .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
                     )
             </div>
@@ -107,7 +107,7 @@
     <div class="row my-2">
         <div class="col-md-4">
             <div class="controlForm">
-                <label>Entidad <b>(obligatorio)</b>:</label>
+                <label>Entidad:</label>
                 @(Html.Kendo().DropDownListFor(m => m.PersonaDireccion.idEntidad).Filter(FilterType.Contains)
                     .BindTo((SelectList)ViewBag.CatEntidades)
                     .OptionLabel("-- Seleccione --")
@@ -116,7 +116,7 @@
         </div>
         <div class="col-md-4">
             <div class="controlForm">
-                <label>Municipio <b>(obligatorio)</b>:</label>
+                <label>Municipio:</label>
                 @(Html.Kendo().DropDownListFor(m => m.PersonaDireccion.idMunicipio).Filter(FilterType.Contains)
                     .BindTo((SelectList)ViewBag.CatMunicipios)
                     .OptionLabel("-- Seleccione --")

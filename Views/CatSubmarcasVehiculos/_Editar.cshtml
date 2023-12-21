@@ -31,15 +31,16 @@
         </div>
 
     </div>
-    <form id="editarSubmarcaForm" class="row px-4 mb-4 align-items-end">
+    <form id="editarSubmarcaForm" class="row px-4 mb-4 align-items-end justify-content-center">
 
-    <div class="row">
+    <div class="row align-items-end">
         <div class="col-12 col-lg-6 my-4">
             <h5 class="px-4"><b>Datos de submarca de vehículo</b></h5>
             <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
         </div>
 
-                <div class="col-12 col-lg-6 my-4 btnToggleActive">
+        <div class="col-12 col-lg-6 my-4">
+                   <div class="col-12 col-lg-6 my-4 btnToggleActive">
                     @(Html.Kendo().SwitchFor(t => t.ValorEstatusSubmarcas)
                         .Name("submarcasSwitch")
                         .Checked(true)
@@ -48,7 +49,8 @@
 
                         )
                 </div>
-   </div>
+            </div>
+        </div>
         <div class="col-12 col-md-6">
             <div class="controlForm my-3">
                 <label>Marca <b>(obligatorio)</b>:</label>

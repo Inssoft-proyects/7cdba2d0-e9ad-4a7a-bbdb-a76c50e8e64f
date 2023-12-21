@@ -1736,3 +1736,9 @@ td button, td .k-button {
     border: 1px solid red !important;
     border-radius: 5px !important;
 }
+
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+}

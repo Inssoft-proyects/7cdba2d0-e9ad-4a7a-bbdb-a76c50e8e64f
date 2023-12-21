@@ -42,7 +42,7 @@
                 <div class="controlForm my-3">
                     @(Html.Kendo().TextBoxFor(t => t.numeroLicenciaBusqueda)
                         .Label(l => l.Content("No. de licencia:"))
-                        .Placeholder("Ingresa el número de licencia válido")
+                        .Placeholder("Ingresa el número de licencia valido")
                         .HtmlAttributes(new { style = "width: 100%" })
                         )
                 </div>
@@ -318,7 +318,7 @@
                     mostrarModal(response.datos);
                 } else if (response.encontrada != undefined) {
                     if (response.encontrada == false) {
-                         sitteg_warning("No se pudieron obtener resultados.");
+                        // sitteg_warning("No se pudieron obtener resultados.");
                     }
                 } else if (response.tipo == "warning") {
                     sitteg_warning("No se pudieron obtener resultados, verifique los datos ingresados.");

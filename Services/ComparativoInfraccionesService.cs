@@ -233,10 +233,10 @@ namespace GuanajuatoAdminUsuarios.Services
             condiciones += modelBusqueda.idTipoLicencia.Equals(null) || modelBusqueda.idTipoLicencia == 0 ? "" : " AND gar.idTipoLicencia = @idTipoLicencia ";
             condiciones += modelBusqueda.idMunicipio.Equals(null) || modelBusqueda.idMunicipio == 0 ? "" : " AND inf.idMunicipio =@idMunicipio ";
 
-            string query = @"SELECT C.NUMERO_MOTIVO AS NUMERO_MOTIVO, COUNT(C.idInfraccion) AS TOTAL_INFRACCIONES, CUENTA* Count(c.idInfraccion) AS TOTAL_CONTAB, C.FECHA AS ANIO 
-                        FROM (
-                        SELECT COUNT(distinct MI.idMotivoInfraccion) CUENTA, CONCAT('CON ',COUNT(distinct MI.idMotivoInfraccion), ' MOTIVO(S)') AS NUMERO_MOTIVO, 
-                        inf.idInfraccion,
+            string query = @"SELECT C.NUMERO_MOTIVO AS NUMERO_MOTIVO, COUNT(C.idInfraccion) AS TOTAL_INFRACCIONES, 0 AS TOTAL_CONTAB, C.FECHA AS ANIO 
+                    FROM (
+	                    SELECT COUNT(MI.idMotivoInfraccion) CUENTA, CONCAT('CON ',COUNT(MI.idMotivoInfraccion), ' MOTIVO(S)') AS NUMERO_MOTIVO, 
+	                    inf.idInfraccion,
 	                    YEAR(inf.fechaInfraccion) AS FECHA
 	                    FROM infracciones inf
 	                    LEFT JOIN motivosInfraccion MI ON MI.idInfraccion = inf.idInfraccion
@@ -261,7 +261,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     ) C
                     GROUP BY C.CUENTA, C.NUMERO_MOTIVO, C.FECHA
                     ORDER BY FECHA, C.CUENTA ASC "
-			;
+            ;
             string strQuery = query.Replace("@WHERES", condiciones);
 
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))

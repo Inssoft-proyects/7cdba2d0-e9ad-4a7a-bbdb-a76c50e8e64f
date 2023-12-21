@@ -1,4 +1,5 @@
 ﻿@model PersonaModel
+
 <script>
     function onDatePickerChange(e) {
         var datePicker = e.sender;
@@ -23,14 +24,14 @@
             success: function (data) {
                 var municipiosDropDown = $("#idMunicipioED").data("kendoDropDownList");
 
-                // Guarda el valor actual de idMunicipio
-                var idMunicipio = @Model.PersonaDireccion.idMunicipio;
-                console.log("MUN",idMunicipio)
+                var idMunicipio = @((Model.PersonaDireccion.idMunicipio != null) ? Model.PersonaDireccion.idMunicipio : 0);
+                console.log("MUN", idMunicipio)
                 municipiosDropDown.dataSource.data(data);
 
                 // Establece el valor de idMunicipio si está presente en los nuevos datos
-                if (idMunicipio && data.some(item => item.Value === idMunicipio.toString())) {
-                    municipiosDropDown.value(idMunicipio);
+                if (idMunicipio !== null && idMunicipio !== undefined &&
+                    data.some(item => item.Value == idMunicipio.toString())) {
+                    municipiosDropDown.value(idMunicipio.toString());
                 }
 
                 hideLoading();
@@ -110,6 +111,7 @@
             <div class="controlForm">
                 <label>Fecha de nacimiento <b>(obligatorio)</b>:</label>
                 @(Html.Kendo().DatePickerFor(t => t.fechaNacimiento).Max(DateTime.Now)
+
                     .Culture("es-ES")
                     .HtmlAttributes(new { style = "width: 100%;", required = "required" })
                 

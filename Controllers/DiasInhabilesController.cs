@@ -224,7 +224,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                                    {
                                        idDiaInhabil = diasInhabiles.idDiaInhabil,
-                                       fecha =  diasInhabiles.fecha,
+                                       fecha = diasInhabiles.fecha,
                                        idMunicipio = diasInhabiles.idMunicipio,
                                        todosMunicipiosDesc = diasInhabiles.todosMunicipiosDesc,
 

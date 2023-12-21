@@ -5,7 +5,7 @@
     <div class="row my-4">
         <div class="col-12 col-md-4">
             <div class="controlForm">
-                <label>Concepto <b>(obligatorio)</b>:</label>
+                <label>Concepto:</label>
                 @(Html.Kendo().DropDownListFor(m => m.idConcepto).Filter(FilterType.Contains)
                     .BindTo((SelectList)ViewData["CatConcepto"])
                     .OptionLabel("-- Seleccione --")
@@ -14,7 +14,7 @@
         </div>
         <div class="form-group col-md-4">
             <div class="controlForm">
-                <label>Subconcepto <b>(obligatorio)</b>:</label>
+                <label>Subconcepto:</label>
                 <div id="divSubConcepto">
                     @(Html.Kendo().DropDownListFor(m => m.IdSubConcepto).Filter(FilterType.Contains)
                         .OptionLabel("-- Seleccione --")
@@ -37,7 +37,7 @@
         <div class="form-group col-md-4">
             <div class="controlForm">
                 @(Html.Kendo().TextBoxFor(t => t.calificacionMinima)
-                    .Label(l => l.Content("Calificación mínima <b>(obligatorio)</b>:"))
+                    .Label(l => l.Content("Calificación mínima:"))
                     .HtmlAttributes(new { style = "width: 100%; height:58px;", id = "calificacionMinima", required = "required", disabled="disabled" })
                     )
             </div>
@@ -45,7 +45,7 @@
         <div class="form-group col-md-4">
             <div class="controlForm">
                 @(Html.Kendo().TextBoxFor(t => t.calificacionMaxima)
-                    .Label(l => l.Content("Calificación máxima <b>(obligatorio)</b>:"))
+                    .Label(l => l.Content("Calificación máxima:"))
                     .HtmlAttributes(new { style = "width: 100%; height:58px;", id = "calificacionMaxima", required = "required", disabled = "disabled" })
                     )
             </div>

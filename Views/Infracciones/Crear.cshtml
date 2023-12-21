@@ -207,7 +207,7 @@
 											.Filter(FilterType.Contains)
 
 											.OptionLabel("-- Seleccione --")
-											.HtmlAttributes(new { style = "width:100%;", id = "ddlCarreteras", required = "required" })
+											.HtmlAttributes(new { style = "width:100%;", id = "ddlCarreteras" })
 											)
 									</div>
 								</div>
@@ -217,7 +217,7 @@
 										<div id="divTramo">
 											@(Html.Kendo().DropDownListFor(f => f.idTramo).Filter(FilterType.Contains)
 												.OptionLabel("-- Seleccione --")
-												.HtmlAttributes(new { style = "width:100%;", required = "required" })
+												.HtmlAttributes(new { style = "width:100%;" })
 												)
 										</div>
 									</div>
@@ -226,7 +226,7 @@
 									<div class="controlForm">
 										@(Html.Kendo().TextBoxFor(t => t.kmCarretera)
 											.Label(l => l.Content("Kilómetro <b>(obligatorio)</b>:"))
-											.HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
+											.HtmlAttributes(new { style = "width: 100%; height:58px;" })
 											)
 									</div>
 								</div>
@@ -343,7 +343,7 @@
 											.Filter(FilterType.Contains)
 
 											.OptionLabel("-- Seleccione --")
-											.HtmlAttributes(new { style = "width:100%;", id = "ddlCarreteras", required = "required" })
+											.HtmlAttributes(new { style = "width:100%;", id = "ddlCarreteras" })
 											)
 									</div>
 								</div>
@@ -543,9 +543,34 @@
 
 	function btnGuardarInfraccion() {
 		var validator = $("#frmCrearInfraccion").kendoValidator().data('kendoValidator');
-		validator.validate();
+		//validator.validate();
+		var controlsValidate = [];
+		var isValid = true;
+
+		controlsValidate.push({ 'controlName': 'fechaInfraccion' });
+		controlsValidate.push({ 'controlName': 'folioInfraccion' });
+		controlsValidate.push({ 'controlName': 'kmCarretera' });
+		//controlsValidate.push({ 'controlName': '' });
+
+		// INPUTS
+		if (!isControlsValid(controlsValidate)) { isValid = false; }
+
+		// DROP DOWN LIST
+		controlsValidate = [];
+		controlsValidate.push({ 'controlName': 'idOficial' });
+		controlsValidate.push({ 'controlName': 'idMunicipio' });
+		controlsValidate.push({ 'controlName': 'ddlCarreteras' });
+		controlsValidate.push({ 'controlName': 'idTramo' });
+
+		if (!isControlsValidDropDown(controlsValidate)) { isValid = false; }
+
+		if (!isValid) {
+			sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
+			return;
+		}
+
 		if ($("#idVehiculo").val() == '') {
-			sitteg_info('Debe seleccionar un vehículo');
+			sitteg_info('Debe seleccionar un vehículo'); 
 			return;
 		}
 
@@ -554,7 +579,7 @@
 			return;
 		}
 
-		if (ValidarCrear()) {
+		if (isValid) {
 			var formData = $("#frmCrearInfraccion").serialize();
 			//var formData = new FormData();
 			//formData.delete('idDelegacion');

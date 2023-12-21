@@ -100,6 +100,7 @@ namespace GuanajuatoAdminUsuarios.Services
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand(@"
+
                         SELECT DISTINCT 
                         a.idAccidente,
                         a.numeroReporte,
@@ -611,45 +612,7 @@ namespace GuanajuatoAdminUsuarios.Services
 
         }
 
-		public int ActualizaInfoAccidente(int idAccidente, DateTime Fecha, TimeSpan Hora, int IdMunicipio, int IdCarretera, int IdTramo, int Kilometro)
-		{
-			int result = 0;
-
-			using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
-			{
-				try
-				{
-					connection.Open();
-					string query = "UPDATE accidentes SET fecha = @fecha, hora = @hora, idMunicipio = @idMunicipio, idCarretera = @idCarretera, idTramo = @idTramo, kilometro = @kilometro WHERE idAccidente = @idAccidente";
-
-					SqlCommand command = new SqlCommand(query, connection);
-
-					command.Parameters.Add(new SqlParameter("@fecha", SqlDbType.Date)).Value = (object)Fecha ?? DBNull.Value;
-					command.Parameters.Add(new SqlParameter("@hora", SqlDbType.Time)).Value = (object)Hora ?? DBNull.Value;
-					command.Parameters.Add(new SqlParameter("@idMunicipio", SqlDbType.Int)).Value = IdMunicipio;
-					command.Parameters.Add(new SqlParameter("@idCarretera", SqlDbType.Int)).Value = IdCarretera;
-					command.Parameters.Add(new SqlParameter("@idTramo", SqlDbType.Int)).Value = IdTramo;
-					command.Parameters.Add(new SqlParameter("@kilometro", SqlDbType.Int)).Value = Kilometro;
-					command.Parameters.Add(new SqlParameter("@idAccidente", SqlDbType.Int)).Value = idAccidente;
-
-					result = command.ExecuteNonQuery();
-				}
-				catch (SqlException ex)
-				{
-					return result;
-				}
-				finally
-				{
-					connection.Close();
-				}
-
-				return result;
-			}
-
-
-		}
-
-		public int AgregarValorClasificacion(int IdClasificacionAccidente, int idAccidente)
+        public int AgregarValorClasificacion(int IdClasificacionAccidente, int idAccidente)
         {
             int result = 0;
 
@@ -952,8 +915,7 @@ namespace GuanajuatoAdminUsuarios.Services
                 try
                 {
 					connection.Open();
-                    string query = @"INSERT into accidenteCausas(idAccidente,idCausaAccidente,indice) values(@idAccidente, @idCausaAccidente,
-                    (SELECT isnull(Max(indice),0)+1 FROM accidenteCausas where idAccidente = @idAccidente and idCausaAccidente <> 0))";
+                    string query = "INSERT into accidenteCausas(idAccidente,idCausaAccidente,indice) values(@idAccidente, @idCausaAccidente, (SELECT Max(indice)+1 FROM accidenteCausas where idAccidente = @idAccidente and idCausaAccidente <> 0))";
 
                     SqlCommand command = new SqlCommand(query, connection);
 
@@ -1640,8 +1602,8 @@ namespace GuanajuatoAdminUsuarios.Services
                         "i.folioInfraccion, " +
                         "cei.estatusInfraccion, " +
                         "i.idEstatusInfraccion, "+
-						"mv.marcaVehiculo, sv.nombreSubmarca, i.idInfraccion " +
-						"FROM infraccionesAccidente AS ia JOIN vehiculos AS v ON ia.idVehiculo = v.idVehiculo " +
+                        "mv.marcaVehiculo, sv.nombreSubmarca " +
+                        "FROM infraccionesAccidente AS ia JOIN vehiculos AS v ON ia.idVehiculo = v.idVehiculo " +
                         "JOIN accidentes AS a ON ia.idAccidente = a.idAccidente " +
                         "JOIN infracciones AS i ON ia.idInfraccion = i.idInfraccion " +
                         "JOIN catEstatusInfraccion AS cei ON cei.idEstatusInfraccion = i.idEstatusInfraccion " +
@@ -1659,8 +1621,7 @@ namespace GuanajuatoAdminUsuarios.Services
                         while (reader.Read())
                         {
                             CapturaAccidentesModel elemnto = new CapturaAccidentesModel();
-							elemnto.IdInfraccion = Convert.IsDBNull(reader["idInfraccion"]) ? 0 : Convert.ToInt32(reader["idInfraccion"]);
-							elemnto.IdInfAcc = Convert.IsDBNull(reader["IdInf_Acc"]) ? 0 : Convert.ToInt32(reader["IdInf_Acc"]);
+                            elemnto.IdInfAcc = Convert.IsDBNull(reader["IdInf_Acc"]) ? 0 : Convert.ToInt32(reader["IdInf_Acc"]);
                             elemnto.IdAccidente = Convert.IsDBNull(reader["IdAccidente"]) ? 0 : Convert.ToInt32(reader["IdAccidente"]);
                             elemnto.IdVehiculoInvolucrado = Convert.IsDBNull(reader["IdVehiculo"]) ? 0 : Convert.ToInt32(reader["IdVehiculo"]);
                             elemnto.Placa = reader["placas"].ToString();

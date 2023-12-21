@@ -7,8 +7,6 @@ using GuanajuatoAdminUsuarios.Models;
 using System.Data.SqlClient;
 using Newtonsoft.Json.Linq;
 using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
 namespace GuanajuatoAdminUsuarios.Services
 {
     
@@ -29,94 +27,55 @@ namespace GuanajuatoAdminUsuarios.Services
 
                     {
                         connection.Open();
-                        SqlCommand command = new SqlCommand(@"SELECT 
-    a.idAccidente, 
-    a.numeroReporte, 
-    a.fecha, 
-    a.hora, 
-    a.idMunicipio, 
-    a.idTramo, 
-    a.idCarretera, 
-    a.idElabora, 
-    a.idSupervisa, 
-    a.idAutoriza, 
-    a.kilometro, 
-    a.idOficinaDelegacion, 
-    a.idEstatusReporte, 
-    mun.municipio, 
-    car.carretera, 
-    tra.tramo, 
-    er.estatusReporte AS estatusReporteDesc, 
-    MAX(vea.placa) AS placa, 
-    MAX(vea.serie) AS serie, 
-    MAX(cond.idPersona) AS idConductor, 
-    MAX(vea.idPersona) AS idPropietario, 
-    ela.idOficial AS elabora, 
-    sup.idOficial AS supervisa, 
-    aut.idOficial AS autoriza 
-FROM 
-    accidentes AS a 
-    LEFT JOIN vehiculosAccidente AS vea ON a.idAccidente = vea.idAccidente 
-    LEFT JOIN vehiculos AS v ON vea.idVehiculo = v.idVehiculo 
-    LEFT JOIN conductoresVehiculosAccidente AS cva ON a.idAccidente = cva.idAccidente 
-    LEFT JOIN personas AS cond ON cva.idPersona = cond.idPersona 
-    LEFT JOIN personas AS prop ON vea.idPersona = prop.idPersona 
-    LEFT JOIN catMunicipios AS mun ON a.idMunicipio = mun.idMunicipio 
-    LEFT JOIN catCarreteras AS car ON a.idCarretera = car.idCarretera 
-    LEFT JOIN catTramos AS tra ON a.idTramo = tra.idTramo 
-    LEFT JOIN catEstatusReporteAccidente AS er ON a.idEstatusReporte = er.idEstatusReporte 
-    LEFT JOIN catOficiales AS ela ON a.idElabora = ela.idOficial 
-    LEFT JOIN catOficiales AS sup ON a.idSupervisa = sup.idOficial 
-    LEFT JOIN catOficiales AS aut ON a.idAutoriza = aut.idOficial 
-WHERE 
-    a.idOficinaDelegacion = @idOficina
-    AND a.estatus != 0
-    AND (
-        (@fechaInicio IS NULL OR @fechaFin IS NULL OR (a.fecha BETWEEN @fechaInicio AND @fechaFin))
-        OR vea.placa = @placasBusqueda
-        OR UPPER(a.numeroReporte) = @oficioBusqueda
-        OR a.idAutoriza = @idOficialBusqueda
-        OR a.idSupervisa = @idOficialBusqueda
-        OR a.idCarretera = @idCarreteraBusqueda
-        OR a.idTramo = @idTramoBusqueda
-        OR prop.nombre = @propietarioBusqueda
-        OR UPPER(prop.apellidoPaterno) = @propietarioBusqueda
-        OR UPPER(prop.apellidoMaterno) = @propietarioBusqueda
-        OR cond.nombre = @conductorBusqueda
-        OR UPPER(cond.apellidoPaterno) = @conductorBusqueda
-        OR UPPER(cond.apellidoMaterno) = @conductorBusqueda
-        OR vea.serie = @serieBusqueda
-        OR a.idEstatusReporte = @idEstatusReporte
-    )
-GROUP BY 
-    a.idAccidente, 
-    a.numeroReporte, 
-    a.fecha, 
-    a.hora, 
-    a.idMunicipio, 
-    a.idTramo, 
-    a.idCarretera, 
-    a.idElabora, 
-    a.idEstatusReporte, 
-    a.idSupervisa, 
-    a.idAutoriza, 
-    a.kilometro, 
-    a.idOficinaDelegacion, 
-    mun.municipio, 
-    car.carretera, 
-    tra.tramo, 
-    er.estatusReporte, 
-    ela.idOficial, 
-    sup.idOficial, 
-    aut.idOficial;
-", connection);
+                        SqlCommand command = new SqlCommand("SELECT a.idAccidente, a.numeroReporte, a.fecha, a.hora, a.idMunicipio, a.idTramo, a.idCarretera, a.idElabora, a.idSupervisa, a.idAutoriza, a.kilometro, a.idOficinaDelegacion, " +
+                            "mun.municipio, " +
+                            "car.carretera, " +
+                            "tra.tramo, " +
+                            "er.estatusReporte,er.idEstatusReporte, " +
+                            "MAX(vea.placa) AS placa, MAX(vea.serie) AS serie, " +
+                            "MAX(cond.idPersona) AS idConductor, " +
+                            "MAX(vea.idPersona) AS idPropietario, " +
+                            "ela.idOficial AS elabora, " +
+                            "sup.idOficial AS supervisa, " +
+                            "aut.idOficial AS autoriza " +
+                            "FROM accidentes AS a " +
+                            "LEFT JOIN vehiculosAccidente AS vea ON a.idAccidente = vea.idAccidente " +
+                            "LEFT JOIN vehiculos AS v ON vea.idVehiculo = v.idVehiculo " +
+                            "LEFT JOIN conductoresVehiculosAccidente AS cva ON a.idAccidente = cva.idAccidente " +
+                            "LEFT JOIN personas AS cond ON cva.idPersona = cond.idPersona " +
+                            "LEFT JOIN personas AS prop ON vea.idPersona = prop.idPersona " +
+                            "LEFT JOIN catMunicipios AS mun ON a.idMunicipio = mun.idMunicipio " +
+                            "LEFT JOIN catCarreteras AS car ON a.idCarretera = car.idCarretera " +
+                            "LEFT JOIN catTramos AS tra ON a.idTramo = tra.idTramo " +
+                            "LEFT JOIN catEstatusReporteAccidente AS er ON a.idEstatusReporte = er.idEstatusReporte " +
+                            "LEFT JOIN catOficiales AS ela ON a.idElabora = ela.idOficial " +
+                            "LEFT JOIN catOficiales AS sup ON a.idSupervisa = sup.idOficial " +
+                            "LEFT JOIN catOficiales AS aut ON a.idAutoriza = aut.idOficial " +
+                            "WHERE (vea.placa = @placasBusqueda OR a.fecha BETWEEN @fechaInicio AND @fechaFin " +
+                            "OR UPPER(a.numeroReporte) = @oficioBusqueda " +
+                            "OR a.idAutoriza = @idOficialBusqueda " +
+                            "OR a.idSupervisa = @idOficialBusqueda " +
+                            "OR a.idAutoriza = @idOficialBusqueda " +
+                            "OR a.idCarretera = @idCarreteraBusqueda " +
+                            "OR a.idTramo = @idTramoBusqueda " +
+                            "OR prop.nombre = @propietarioBusqueda " +
+                            "OR UPPER(prop.apellidoPaterno) = @propietarioBusqueda " +
+                            "OR UPPER(prop.apellidoMaterno) = @propietarioBusqueda " +
+                            "OR cond.nombre = @conductorBusqueda " +
+                            "OR UPPER(cond.apellidoPaterno) = @conductorBusqueda " +
+                            "OR UPPER(cond.apellidoMaterno) = @conductorBusqueda " +
+                            "OR vea.serie = @serieBusqueda)" +
+                            "AND a.idOficinaDelegacion = @idOficina AND a.estatus != 0 " +
+                            "GROUP BY a.idAccidente, a.numeroReporte, a.fecha, a.hora, a.idMunicipio, a.idTramo, a.idCarretera, a.idElabora, a.idSupervisa,a. idAutoriza,a.kilometro,a.idOficinaDelegacion, " +
+                            "mun.municipio, car.carretera, tra.tramo, er.estatusReporte,er.idEstatusReporte, ela.idOficial, sup.idOficial, aut.idOficial; ", connection);
 
 
                         command.CommandType = CommandType.Text;
                         command.Parameters.Add(new SqlParameter("@fechaInicio", SqlDbType.DateTime)).Value = (model.FechaInicio == DateTime.MinValue) ? DBNull.Value : (object)model.FechaInicio;
+
                         command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = (object)idOficina ?? DBNull.Value;
                         command.Parameters.Add(new SqlParameter("@fechaFin", SqlDbType.DateTime)).Value = (model.FechaFin == DateTime.MinValue) ? DBNull.Value : (object)model.FechaFin;
-                        command.Parameters.Add(new SqlParameter("@idEstatusReporte", SqlDbType.Int)).Value = (object)model.idEstatusReporte ?? DBNull.Value;
+
                         command.Parameters.Add(new SqlParameter("@oficioBusqueda", SqlDbType.NVarChar)).Value = (object)model.folioBusqueda != null ? model.folioBusqueda.ToUpper() : DBNull.Value;
                         command.Parameters.Add(new SqlParameter("@idDelegacionBusqueda", SqlDbType.Int)).Value = (object)model.IdDelegacionBusqueda ?? DBNull.Value;
                         command.Parameters.Add(new SqlParameter("@idOficialBusqueda", SqlDbType.Int)).Value = (object)model.IdOficialBusqueda ?? DBNull.Value;
@@ -140,7 +99,7 @@ GROUP BY
                                 accidente.idTramo = Convert.IsDBNull(reader["idTramo"]) ? 0 : Convert.ToInt32(reader["idTramo"]);
                                 accidente.kilometro = reader["kilometro"].ToString();
                                 accidente.idEstatusReporte = Convert.IsDBNull(reader["idEstatusReporte"]) ? 0 : Convert.ToInt32(reader["idEstatusReporte"]);
-                                accidente.estatusReporte = reader["estatusReporteDesc"].ToString();
+                                accidente.estatusReporte = reader["estatusReporte"].ToString();
                                 accidente.municipio = reader["municipio"].ToString();
                                 accidente.carretera = reader["carretera"].ToString();
                                 accidente.tramo = reader["tramo"].ToString();
@@ -459,16 +418,13 @@ GROUP BY
                         "mun.municipio, " +
                         "car.carretera, " +
                         "tra.tramo, " +
-                        "er.estatusReporte, " +
-                        "a.idEstatusReporte, " +
+                        "er.estatusReporte,er.idEstatusReporte, " +
                         "MAX(vea.placa) AS placa, MAX(vea.serie) AS serie, " +
                         "MAX(cond.idPersona) AS idConductor, " +
                         "MAX(vea.idPersona) AS idPropietario, " +
                         "ela.idOficial AS elabora, " +
                         "sup.idOficial AS supervisa, " +
-                        "aut.idOficial AS autoriza, " +
-                        "MAX(prop.nombre) AS nombre, MAX(prop.apellidoPaterno) AS apellidoPaterno, MAX(prop.apellidoMaterno) AS apellidoMaterno, " +
-                        "MAX(cond.nombre) AS nombreConductor, MAX(cond.apellidoPaterno) AS apellidoPaternoConductor, MAX(cond.apellidoMaterno) AS apellidoMaternoConductor " +
+                        "aut.idOficial AS autoriza " +
                         "FROM accidentes AS a " +
                         "LEFT JOIN vehiculosAccidente AS vea ON a.idAccidente = vea.idAccidente " +
                         "LEFT JOIN vehiculos AS v ON vea.idVehiculo = v.idVehiculo " +
@@ -482,14 +438,13 @@ GROUP BY
                         "LEFT JOIN catOficiales AS ela ON a.idElabora = ela.idOficial " +
                         "LEFT JOIN catOficiales AS sup ON a.idSupervisa = sup.idOficial " +
                         "LEFT JOIN catOficiales AS aut ON a.idAutoriza = aut.idOficial " +
-                        "WHERE a.estatus=1 " +
+                        "WHERE a.idOficinaDelegacion = @idOficina AND a.idAccidente != 0 " +
                         "GROUP BY a.idAccidente, a.numeroReporte, a.fecha, a.hora, a.idMunicipio, a.idTramo, a.idCarretera, a.idElabora, a.idSupervisa,a. idAutoriza,a.kilometro,a.idOficinaDelegacion, " +
-                        "mun.municipio, car.carretera, tra.tramo, er.estatusReporte,a.idEstatusReporte, ela.idOficial, sup.idOficial,aut.idOficial; ", connection);
-
-
+                        "mun.municipio, car.carretera, tra.tramo, er.estatusReporte,er.idEstatusReporte, ela.idOficial, sup.idOficial, aut.idOficial; ", connection);
                     command.CommandType = CommandType.Text;
-                    command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = (object)idOficina ?? DBNull.Value;
 
+                    command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = (object)idOficina ?? DBNull.Value;
+                   
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
                         while (reader.Read())
@@ -500,23 +455,12 @@ GROUP BY
                             accidente.IdAccidente = Convert.IsDBNull(reader["idAccidente"]) ? 0 : Convert.ToInt32(reader["idAccidente"]);
                             accidente.idMunicipio = Convert.IsDBNull(reader["idMunicipio"]) ? 0 : Convert.ToInt32(reader["idMunicipio"]);
                             accidente.idCarretera = Convert.IsDBNull(reader["idCarretera"]) ? 0 : Convert.ToInt32(reader["idCarretera"]);
-                            accidente.IdDelegacionBusqueda = Convert.IsDBNull(reader["idOficinaDelegacion"]) ? 0 : Convert.ToInt32(reader["idOficinaDelegacion"]);
                             accidente.idTramo = Convert.IsDBNull(reader["idTramo"]) ? 0 : Convert.ToInt32(reader["idTramo"]);
                             accidente.kilometro = reader["kilometro"].ToString();
                             accidente.idEstatusReporte = Convert.IsDBNull(reader["idEstatusReporte"]) ? 0 : Convert.ToInt32(reader["idEstatusReporte"]);
                             accidente.estatusReporte = reader["estatusReporte"].ToString();
                             accidente.municipio = reader["municipio"].ToString();
                             accidente.carretera = reader["carretera"].ToString();
-                            accidente.placa = reader["placa"].ToString();
-                            accidente.serie = reader["serie"].ToString();
-                            string nombrePropietario = reader["nombre"].ToString();
-                            string apellidoPaternoPropietario = reader["apellidoPaterno"].ToString();
-                            string apellidoMaternoPropietario = reader["apellidoMaterno"].ToString();
-                            accidente.propietario = $"{nombrePropietario} {apellidoPaternoPropietario} {apellidoMaternoPropietario}";
-                            string nombreConductor = reader["nombreConductor"].ToString();
-                            string apellidoPaternoConductor = reader["apellidoPaternoConductor"].ToString();
-                            string apellidoMaternoConductor = reader["apellidoMaternoConductor"].ToString();
-                            accidente.conductor = $"{nombreConductor} {apellidoPaternoConductor} {apellidoMaternoPropietario}";
                             accidente.tramo = reader["tramo"].ToString();
                             accidente.idElabora = Convert.IsDBNull(reader["idElabora"]) ? 0 : Convert.ToInt32(reader["idElabora"]);
                             accidente.idSupervisa = Convert.IsDBNull(reader["idSupervisa"]) ? 0 : Convert.ToInt32(reader["idSupervisa"]);
@@ -526,6 +470,7 @@ GROUP BY
                             accidente.numeroReporte = reader["numeroReporte"].ToString();
                             accidente.fecha = reader["fecha"] != DBNull.Value ? Convert.ToDateTime(reader["fecha"]) : DateTime.MinValue;
                             accidente.hora = reader["hora"] != DBNull.Value ? TimeSpan.Parse(reader["hora"].ToString()) : TimeSpan.MinValue;
+
                             ListaAccidentes.Add(accidente);
 
                         }

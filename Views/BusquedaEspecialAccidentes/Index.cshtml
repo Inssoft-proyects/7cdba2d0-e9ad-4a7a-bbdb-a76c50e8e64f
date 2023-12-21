@@ -31,7 +31,7 @@
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm my-3 selecciondeFecha">
                             <label>Fecha Inicio:</label>
-                            @(Html.Kendo().DatePickerFor(t => t.FechaInicio).Max(DateTime.Now)
+                            @(Html.Kendo().DatePickerFor(t => t.FechaInicio)
                                 .Label(l => l.Content("Fecha Inicio:"))
                                 .HtmlAttributes(new { style = "width: 100%", id = "dateInicio" })
                                 )
@@ -41,7 +41,7 @@
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm my-3 selecciondeFecha">
                             <label>Fecha Fin:</label>
-                            @(Html.Kendo().DatePickerFor(t => t.FechaFin).Max(DateTime.Now)
+                            @(Html.Kendo().DatePickerFor(t => t.FechaFin)
                                 .Label(l => l.Content("Fecha Fin:"))
                                 .HtmlAttributes(new { style = "width: 100%", id = "dateFinal" })
                                 )
@@ -60,29 +60,6 @@
                                 .HtmlAttributes(new { style = "width: 100%", Id = "txtFolio" })
                                 )
 
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-3">
-                        <div class="controlForm my-3">
-                            <label>Estatus:</label>
-                            <span>
-                                @(Html.Kendo().DropDownListFor(m => m.idEstatusReporte)
-                                    .Label(l => l.Content("Estatus:"))
-                                    .DataTextField("Text")
-                                    .DataValueField("Value")
-                                    .Filter(FilterType.Contains)
-
-                                    .OptionLabel("Selecciona una opción")
-                                    .DataSource(source =>
-                                    {
-                                        source.Read(read =>
-                                        {
-                                            read.Action("EstatusReporte_Drop", "BusquedaEspecialAccidentes");
-                                        });
-                                    })
-                                    .HtmlAttributes(new { style = "width:100%;", Id = "ddlEstatus" })
-                                    )
-                            </span>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
@@ -235,7 +212,7 @@
                 <h5 class="px-4"><b>Listado de accidente</b></h5>
                 <h6 class="px-4 text-muted">Edita los datos de accidente.</h6>
             </div>
-            <!-- <div class="col-12 me-md-4 col-md-6 col-lg-7 col-xl-auto">
+            <div class="col-12 me-md-4 col-md-6 col-lg-7 col-xl-auto">
                 <div class="row">
                     <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
                         <button onclick="downLoadPdfFiltered()">
@@ -243,7 +220,7 @@
                         </button>
                     </div>
                 </div>
-            </div>-->
+            </div>
         </div>
         <div class="row">
             <div class="col-12 mb-4 px-4 rounded">
@@ -260,25 +237,13 @@
 </div>
 <script>
     function buscarAccidente() {
-        var data = {
-            FechaInicio: $('#dateInicio').val(),
-            FechaFin: $('#dateFinal').val(),
-            placasBusqueda: $('#txtPlacas').val(),
-            serieBusqueda: $('#txtSerie').val(),
-            folioBusqueda: $('#txtFolio').val(),
-            IdDelegacionBusqueda: $('#ddlDelegaciones').val(),
-            idCarreteraBusqueda: $('#ddlCarreteras').val(),
-            idTramoBusqueda: parseInt($('#ddlTramos').val()),
-            propietarioBusqueda: $('#txtPropietarios').val(),
-            conductorBusqueda: $('#txtConductores').val(),
-            IdOficialBusqueda: $('#ddlOficiales').val(),
-            IdEstatusReporte: $('#ddlEstatus').val(),
-        };
+        var Mydata = $("#busquedaEspecialAccidenteForm").serialize();
+        console.log(Mydata);
         showLoading();
         $.ajax({
-            url: '/BusquedaEspecialAccidentes/ajax_BusquedaAccidentes',
+            url: '/BusquedaEspecialAccidentes/ajax_BuscarAccidente',
             type: 'GET',
-            data: data,
+            data: Mydata,
             success: function (data) {
                 var grid = $("#gridBusquedaEspecialAccidentes").data("kendoGrid");
                 grid.dataSource.data(data);
@@ -286,7 +251,7 @@
                 hideLoading();
             },
             error: function () {
-                sitteg_warning("Ocurrieron los siguientes errores");
+                sitteg_warning("Ocurrio un error en la busqueda,intente mas tarde");
                 hideLoading();
             }
         });
@@ -328,6 +293,21 @@
         });
     }
 
+    $(document).ready(function () {
+        $("#dateInicio").kendoDatePicker({
+            format: "dd/MM/yyyy",
+            parseFormats: ["dd/MM/yyyy"],
+            value: null
+        });
+    });
+
+    $(document).ready(function () {
+        $("#dateFinal").kendoDatePicker({
+            format: "dd/MM/yyyy",
+            parseFormats: ["dd/MM/yyyy"],
+            value: null
+        });
+    });
 </script>
 
 

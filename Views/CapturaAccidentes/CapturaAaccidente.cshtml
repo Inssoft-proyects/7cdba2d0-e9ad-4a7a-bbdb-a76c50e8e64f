@@ -36,7 +36,7 @@
 				<h6 class="px-4 text-muted">El accidente ya está registrado en la plataforma. Puede actualizar o corregir la información del vehículo.</h6>
 			</div>
 		</div>
-		<form class="row px-4 align-items-end" id="AccidenteInfoForm">
+		<form class="row px-4 align-items-end">
 			<div class="col-auto">
 				<div class="controlForm mb-3">
 					<label class="text-muted">No. de reporte de accidente:</label>
@@ -45,6 +45,7 @@
 			</div>
 			<div class="col-auto">
 				<div class="controlForm mb-3 mt-1">
+
 					<label class="text-muted">Fecha:</label>
 					@(Html.Kendo().DatePickerFor(t => t.Fecha).Max(DateTime.Now)
 						.Label(l => l.Content("Fecha:"))
@@ -220,7 +221,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</form>
 	</section>
 	<section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded pb-1">
 		<div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
@@ -484,7 +485,6 @@
 		if (showClasificacionAccidente === 'true') {
 			$('#ClasificacionAccidente').show();
 		}
-
 	});
 	function mostrarModalAgregarVehiculo() {
 		if ('@ViewBag.EsSoloLectura' === 'True') {
@@ -563,6 +563,8 @@
     });
 }
 
+	
+
 	function abrirModalAnexo2() {
 		$.ajax({
 			url: '@Url.Action("ModalAnexo2")',
@@ -572,44 +574,6 @@
 			success: function (data) {
 				$('#BodyModalAnexo2').html(data);
 				$('#anexo2Modal').modal('show');
-			}
-		});
-	}
-
-	function ActualizaInformacion() {
-		var Mydata = $("#AccidenteInfoForm").serialize();
-		console.log(Mydata);
-		showLoading();
-		$.ajax({
-			url: '@Url.Action("ActualizarInfoAccidente")',
-			type: 'POST',
-			data: Mydata,
-			success: function (data) {	
-				sitteg_success("Información actualizada con éxito");
-				hideLoading();
-			},
-			error: function () {
-				sitteg_warning("Ocurrieron los siguientes errores");
-				hideLoading();
-			}
-		});
-	}
-
-	function OnCarreteraChange(e) {
-		var carreteraDDValue = $("#ddlCarreteras").data("kendoDropDownList").value();
-		showLoading();
-		$.ajax({
-			url: '@Url.Action("Tramos_Drop")',
-			type: "POST",
-			data: { carreteraDDValue: carreteraDDValue },
-			success: function (data) {
-				var TramosDropDown = $("#ddlTramos").data("kendoDropDownList");
-				TramosDropDown.dataSource.data(data);
-				hideLoading();
-			},
-			error: function (xhr, status, error) {
-				console.log("EE", error)
-				hideLoading();
 			}
 		});
 	}

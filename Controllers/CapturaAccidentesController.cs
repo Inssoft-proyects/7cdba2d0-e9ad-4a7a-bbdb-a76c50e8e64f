@@ -146,7 +146,6 @@ namespace GuanajuatoAdminUsuarios.Controllers
 			int IdModulo = 800;
 			string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
 			List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-			ViewBag.EsSoloLectura = false;
 			if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
 
 			{
@@ -208,14 +207,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 			var result = new SelectList(_catTramosService.ObtenerTamosPorCarretera(carreteraDDValue), "IdTramo", "Tramo");
 			return Json(result);
 		}
-
-		public JsonResult TramosTodos_Drop(int carreteraDDValue)
-		{
-			var result = new SelectList(_catTramosService.ObtenerTramos(), "IdTramo", "Tramo");
-			return Json(result);
-		}
-
-		public JsonResult Municipios_Por_Entidad(int entidadDDlValue)
+        public JsonResult Municipios_Por_Entidad(int entidadDDlValue)
         {
             var result = new SelectList(_catMunicipiosService.GetMunicipiosPorEntidad(entidadDDlValue), "IdMunicipio", "Municipio");
             return Json(result);
@@ -649,9 +641,6 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 if (result!=null && result.MT_CotejarDatos_res != null && result.MT_CotejarDatos_res.Es_mensaje != null && result.MT_CotejarDatos_res.Es_mensaje.TpMens.ToString().Equals("I", StringComparison.OrdinalIgnoreCase))
                 {
                     vehiculosModel = GetVEiculoModelFromFinanzas(result);
-
-                    vehiculosModel.ErrorRepube = string.IsNullOrEmpty(vehiculosModel.placas) ? "No" : "";
-
                     return await this.RenderViewAsync("_Create", vehiculosModel, true);
                 }
             }
@@ -682,15 +671,10 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                         PersonaMoralBusquedaModel = new PersonaMoralBusquedaModel(),
                     };
-
-                    vehiculoEncontrado.ErrorRepube = string.IsNullOrEmpty(vehiculoEncontrado.placas) ? "No" : "";
-
                     return await this.RenderViewAsync("_Create", vehiculoEncontrado, true);
 
                 }
             }
-
-            vehiculosModel.ErrorRepube = string.IsNullOrEmpty(vehiculosModel.placas) ? "No" : "";
 
             return await this.RenderViewAsync("_Create", vehiculosModel, true);
         }
@@ -850,15 +834,6 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 			return Json(idVehiculoInsertado);
 		}
-
-		[HttpPost]
-		public IActionResult ActualizarInfoAccidente(DateTime Fecha, TimeSpan Hora, int IdMunicipio, int IdCarretera, int IdTramo, int Kilometro)
-		{
-			int idAccidente = HttpContext.Session.GetInt32("LastInsertedId") ?? 0; // Obtener el valor de lastInsertedId desde la variable de sesión
-			var idAccidenteActualizado = _capturaAccidentesService.ActualizaInfoAccidente(idAccidente, Fecha, Hora, IdMunicipio, IdCarretera, IdTramo, Kilometro);
-			return Json(idAccidenteActualizado);
-		}
-
 		public IActionResult GuardarConductorVehiculo(int IdPersona,int idAuto)
 		{
 			int IdVehiculoI = HttpContext.Session.GetInt32("idVehiculoInsertado") ?? 0; // Obtener el valor de idVehiculoInsertado desde la variable de sesión
@@ -1429,8 +1404,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
 		[HttpPost]
 		public ActionResult ajax_BuscarPersonasFiscas()
 		{
-			var personasFisicas = _personasService.GetAllPersonasFisicas();
-			return PartialView("_PersonasFisicas", personasFisicas);
+			var personasFisicas = _personasService.GetAllPersonas();
+			return PartialView("_PersonasFisicas");
 		}
 
 		[HttpPost]
@@ -1539,7 +1514,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 			if (IdVehiculo != 0)
 			{
 				var resultados = _vehiculosService.GetAllVehiculos();
-                return Json(new { data = resultados });
+                return Json(resultados); 
             }
             else
 			{
@@ -1547,37 +1522,49 @@ namespace GuanajuatoAdminUsuarios.Controllers
 			}
 		}
 
-		public async Task<IActionResult> BuscarPorParametro(PersonaModel model)
+		public async Task<IActionResult> BuscarPorParametro(CapturaAccidentesModel model)
 		{
-			// Realizar la búsqueda de personas
-			var personasList = _personasService.BusquedaPersona(model);
-
-			var personasListFormato = personasList.Select(persona => new
-			{
-				IdPersona = persona.idPersona, 
-				nombre = persona.nombre,
-				apellidoPaterno = persona.apellidoPaterno,
-				apellidoMaterno = persona.apellidoMaterno,
-				CURP = persona.CURP,
-				RFC = persona.RFC,
-				fechaNacimiento = persona.fechaNacimiento,
-				numeroLicencia = persona.numeroLicencia
-			}).ToList(); 
-			if (personasList.Any())
-			{
-				return Json(new { encontrada = true, data = personasListFormato });
-			}
+			List<CapturaAccidentesModel> ListaInvolucrados = new List<CapturaAccidentesModel>();
 			string parametros = "";
-			parametros += string.IsNullOrEmpty(model.numeroLicenciaBusqueda) ? "" : "licencia=" + model.numeroLicenciaBusqueda;
-			parametros += string.IsNullOrEmpty(model.CURPBusqueda) ? "" : "curp=" + model.CURPBusqueda + "&";
-			parametros += string.IsNullOrEmpty(model.RFCBusqueda) ? "" : "rfc=" + model.RFCBusqueda + "&";
-			parametros += string.IsNullOrEmpty(model.nombreBusqueda) ? "" : "nombre=" + model.nombreBusqueda + "&";
-			parametros += string.IsNullOrEmpty(model.apellidoPaternoBusqueda) ? "" : "primer_apellido=" + model.apellidoPaternoBusqueda + "&";
-			parametros += string.IsNullOrEmpty(model.apellidoMaternoBusqueda) ? "" : "segundo_apellido=" + model.apellidoMaternoBusqueda;
+			parametros += string.IsNullOrEmpty(model.numeroLicencia) ? "" : "licencia=" + model.numeroLicencia;
+			parametros += string.IsNullOrEmpty(model.CURP) ? "" : "curp=" + model.CURP + "&";
+			parametros += string.IsNullOrEmpty(model.RFC) ? "" : "rfc=" + model.RFC + "&";
+			parametros += string.IsNullOrEmpty(model.nombre) ? "" : "nombre=" + model.nombre + "&";
+			parametros += string.IsNullOrEmpty(model.apellidoPaterno) ? "" : "primer_apellido=" + model.apellidoPaterno + "&";
+			parametros += string.IsNullOrEmpty(model.apellidoMaterno) ? "" : "segundo_apellido=" + model.apellidoMaterno + "";
 
 			string ultimo = parametros.Substring(parametros.Length - 1);
 			if (ultimo.Equals("&"))
 				parametros = parametros.Substring(0, parametros.Length - 1);
+
+
+			// realiza la búsqueda de personas y devuelve los resultados en formato JSON
+
+			PersonaModel persona = new PersonaModel();
+			persona.numeroLicenciaBusqueda = model.numeroLicencia;
+			persona.CURPBusqueda = model.CURP;
+			persona.RFCBusqueda = model.RFC;
+			persona.nombreBusqueda = model.nombre;
+			persona.apellidoPaternoBusqueda = model.apellidoPaterno;
+			persona.apellidoMaternoBusqueda = model.apellidoMaterno;
+			List<PersonaModel> personasList = _personasService.BusquedaPersona(persona);
+			if (personasList != null && personasList.Count > 0)
+			{
+				foreach (PersonaModel p in personasList)
+				{
+					CapturaAccidentesModel involucrado = new CapturaAccidentesModel();
+					involucrado.IdPersona = (int)p.idPersona;
+					involucrado.nombre = p.nombre;
+					involucrado.apellidoPaterno = p.apellidoPaterno;
+					involucrado.apellidoMaterno = p.apellidoMaterno;
+					involucrado.RFC = p.RFC;
+					involucrado.CURP = p.CURP;
+					involucrado.numeroLicencia = p.numeroLicencia;
+					involucrado.fechaNacimiento = p.fechaNacimiento.Value;
+					ListaInvolucrados.Add(involucrado);
+				}
+				return Json(new { encontrada = true, data = ListaInvolucrados });
+			}
 
 			try
 			{
@@ -1597,15 +1584,18 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 					return Json(respuesta);
 				}
+				else
+				{
+
+					return Json(new { encontrada = false, message = "No se pudieron obtener los datos. " });
+				}
 			}
 			catch (Exception ex)
 			{
 				// En caso de errores, devolver una respuesta JSON con licencia no encontrada
-				return Json(new { encontrada = false, data = personasListFormato, message = "Ocurrió un error al obtener los datos. " + ex.Message + "; " + ex.InnerException });
+				return Json(new { encontrada = false, message = "Ocurrió un error al obtener los datos. " + ex.Message + "; " + ex.InnerException });
 			}
 
-			// Si no se cumple la condición anterior, devolver una respuesta JSON indicando que no se encontraron resultados
-			return Json(new { encontrada = false, data = personasListFormato, message = "No se encontraron resultados." });
 		}
 
 		[HttpPost]
@@ -1660,57 +1650,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             return Json(result);
         }
 
-		[HttpGet]
-		public IActionResult ajax_ModalEditarPersona(int id)
-		{
-			var model = _personasService.GetPersonaById(id);
-			var catTipoPersona = _catDictionary.GetCatalog("CatTipoPersona", "0");
-			var catTipoLicencia = _catDictionary.GetCatalog("CatTipoLicencia", "0");
-			var catEntidades = _catDictionary.GetCatalog("CatEntidades", "0");
-			var catGeneros = _catDictionary.GetCatalog("CatGeneros", "0");
-			var catMunicipios = _catDictionary.GetCatalog("CatMunicipios", "0");
 
-			ViewBag.CatMunicipios = new SelectList(catMunicipios.CatalogList, "Id", "Text");
-			ViewBag.CatGeneros = new SelectList(catGeneros.CatalogList, "Id", "Text");
-			ViewBag.CatEntidades = new SelectList(catEntidades.CatalogList, "Id", "Text");
-			ViewBag.CatTipoPersona = new SelectList(catTipoPersona.CatalogList, "Id", "Text");
-			ViewBag.CatTipoLicencia = new SelectList(catTipoLicencia.CatalogList, "Id", "Text");
-			return PartialView("_EditarPersona", model);
-		}
-
-		[HttpPost]
-		public IActionResult ajax_EditarPersona(PersonaModel model)
-		{
-			//var model = json.ToObject<Gruas2Model>();
-			var errors = ModelState.Values.Select(s => s.Errors);
-			if (ModelState.IsValid)
-			{
-				if (model.PersonaDireccion.idPersona == null || model.PersonaDireccion.idPersona <= 0)
-				{
-					model.PersonaDireccion.idPersona = model.idPersona;
-					int idDireccion = _personasService.CreatePersonaDireccion(model.PersonaDireccion);
-				}
-				else
-				{
-					int idDireccion = _personasService.UpdatePersonaDireccion(model.PersonaDireccion);
-				}
-				int id = _personasService.UpdatePersona(model);
-				var modelList = _personasService.GetPersonaById((int)model.idPersona);
-                var formattedModelList = new
-                {
-                    IdPersona = modelList.idPersona,
-					nombre = modelList.nombre,
-					apellidoPaterno = modelList.apellidoPaterno,
-					apellidoMaterno = modelList.apellidoMaterno,
-					RFC = modelList.RFC,
-					CURP = modelList.CURP,
-					fechaNacimiento = modelList.fechaNacimiento,
-					numeroLicencia = modelList.numeroLicencia
-                };
-                return Json(new { data = formattedModelList });
-			}
-			return RedirectToAction("Index");
-		}
-	}
+    }
 }
 
