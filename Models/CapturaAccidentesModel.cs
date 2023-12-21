@@ -7,6 +7,7 @@ namespace GuanajuatoAdminUsuarios.Models
 {
     public class CapturaAccidentesModel
     {
+        public string jefeOficina { get; set; }
         public int? IdAccidente { get; set; }
         public int? IdInfAcc { get; set; }
         public int? idAccidenteCausa { get; set; }
@@ -170,7 +171,9 @@ namespace GuanajuatoAdminUsuarios.Models
         public string Cinturon { get; set; }
         public string Entidad { get; set; }
         public string Direccion { get; set; }
-        public string Telefono { get; set; }
+		public string DireccionConductor { get; set; }
+
+		public string Telefono { get; set; }
         public string Correo { get; set; }
 
 

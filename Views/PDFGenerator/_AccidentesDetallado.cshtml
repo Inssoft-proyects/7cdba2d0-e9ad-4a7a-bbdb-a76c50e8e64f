@@ -30,7 +30,7 @@
 			</tr>
 			<tr style="background-color:#e7e7e7">
 				<td colspan="6"><p class="s1">CARR. @Model.ParteAccidente.Carretera KM. @Model.ParteAccidente.Kilometro</p></td>
-				<td colspan="2"><p class="s1">HUMBERTO TORRES PESCADOR</p></td>
+				<td colspan="2"><p class="s1">@Model.ParteAccidente.jefeOficina</p></td>
 			</tr>
 			<tr style="background-color:#e7e7e7">
 				<td colspan="6"><p class="s1">@Model.ParteAccidente.DelegacionOficina , GTO.</p></td>
@@ -49,13 +49,13 @@
 			</tr>
 			@*DATOS*@
 			<tr>
-				<td><p class="s2">@Model.ParteAccidente.Fecha.Value.ToString("hh:ss")</p></td>
+				<td><p class="s2">@Model.ParteAccidente.Fecha.Value.ToString("HH:mm")</p></td>
 				<td><p class="s2">@Model.ParteAccidente.Fecha.Value.ToString("dd")</p></td>
 				<td><p class="s2">@Model.ParteAccidente.Fecha.Value.ToString("MM")</p></td>
 				<td><p class="s2">@Model.ParteAccidente.Fecha.Value.ToString("yyyy")</p></td>
 				<td><p class="s2">@Model.ParteAccidente.Fecha.Value.ToString("dddd").ToUpper()</p></td>
 				<td><p class="s2">@Model.ParteAccidente.Kilometro</p></td>
-				<td><p class="s2"></p></td>
+				<td><p class="s2">@Model.ParteAccidente.Carretera</p></td>
 				<td><p class="s2">@Model.ParteAccidente.Tramo</p></td>
 			</tr>
 		</table>
@@ -121,8 +121,8 @@
 				</tr>
 				@*Datos*@
 				<tr>
-					<td colspan="3"><p class="s2">@item.TipoServicio</p></td>
-					<td><p class="s2">@item.Propietario</p></td>
+					<td colspan="3"><p class="s2">  @(string.IsNullOrEmpty(item.TipoServicio) ? "-" : item.TipoServicio)</p></td>
+					<td><p class="s2">@item.PropietarioInvolucrado</p></td>
 					<td colspan="4"><p class="s2">@item.Direccion</p></td>
 				</tr>
 				@*Columnas*@
@@ -135,7 +135,7 @@
 				@*Datos*@
 				<tr>
 					<td colspan="3"><p class="s2">@item.ConductorInvolucrado</p></td>
-					<td colspan="3"><p class="s2">-------</p></td>
+					<td colspan="3"><p class="s2">@item.DireccionConductor</p></td>
 					<td><p class="s2">@(DateTime.Now.Year - Convert.ToDateTime(item.FechaNacimientoFormateada).Year)</p></td>
 					<td><p class="s2">@item.Sexo</p></td>
 				</tr>

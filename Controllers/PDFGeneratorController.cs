@@ -70,7 +70,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 			var ParteNombre = _appSettingsService.GetAppSetting("ParteNombre").SettingValue;
 			var PartePuesto = _appSettingsService.GetAppSetting("PartePuesto").SettingValue;
-			List<PDFMotivosInfracciones> motivosInfraccion = ListInfracciones.Select(s => new PDFMotivosInfracciones { idInfraccion = s.IdInfraccion, Motivos = _infraccionesService.GetMotivosInfraccionByIdInfraccion((int)s.IdInfraccion).Select(ss => ss.Concepto).ToList() }).ToList();
+			List<PDFMotivosInfracciones> motivosInfraccion = ListInfracciones.Select(s => new PDFMotivosInfracciones { idInfraccion = s.IdInfraccion, Motivos = _infraccionesService.GetMotivosInfraccionByIdInfraccion((int)s.IdInfraccion).Select(ss => ss.Concepto+"-"+ss.Fundamento).ToList() }).ToList();
 
 			PDFAccidenteDetalladoModel model = new PDFAccidenteDetalladoModel();
 			model.Involucrados = ListInvolucrados;

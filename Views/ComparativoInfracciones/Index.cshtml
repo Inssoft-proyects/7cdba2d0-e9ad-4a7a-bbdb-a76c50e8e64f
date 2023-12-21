@@ -133,10 +133,34 @@
                         @(Html.Kendo().DropDownListFor(m => m.idTipoServicio).Filter(FilterType.Contains)
                             .BindTo((SelectList)ViewBag.CatTipoServicio)
                             .OptionLabel("-- Seleccione --")
+                            .Events(e => e.Change("tipoServicioDropDownChange"))
                             .HtmlAttributes(new { style = "width:100%;" })
                             )
                     </div>
                 </div>
+
+                <div class="form-group col-12 col-md-6 col-lg-4 my-3">
+                    <div class="controlForm">
+                        <label>Subtipo servicio:</label>
+                        <div id="divTramo">
+                            @(Html.Kendo().DropDownListFor(f => f.idSubTipoServicio).Filter(FilterType.Contains)
+                                .DataTextField("Text")
+                                .DataValueField("Value")
+                                .OptionLabel("Selecciona una opción")
+                                .Filter(FilterType.Contains)
+                                .DataSource(source =>
+                                {
+                                    source.Read(read =>
+                                    {
+                                        read.Action("SubtipoServicio_Drop", "ComparativoInfracciones");
+                                    });
+                                })
+                                .HtmlAttributes(new { style = "width:100%;" })
+                                )
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-group col-md-4 my-3">
                     <div class="controlForm">
                         <label>Tipo licencia:</label>
