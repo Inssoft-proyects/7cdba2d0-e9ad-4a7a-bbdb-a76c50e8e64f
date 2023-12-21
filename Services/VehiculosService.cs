@@ -42,6 +42,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                 ,v.fechaActualizacion
                                 ,v.actualizadoPor
                                 ,v.estatus
+                                ,v.motor
                                 ,p.idPersona
                                 ,p.numeroLicencia
                                 ,p.CURP
@@ -58,6 +59,7 @@ namespace GuanajuatoAdminUsuarios.Services
 								,ce.nombreEntidad
 								,cv.tipoVehiculo
 								,cc.color
+                                ,catTS.tipoServicio
                                 FROM vehiculos v
 								LEFT JOIN catColores cc
 								on v.idColor = cc.idColor AND cc.estatus = 1
@@ -71,6 +73,7 @@ namespace GuanajuatoAdminUsuarios.Services
 								on v.idMarcaVehiculo = cmv.idMarcaVehiculo and cmv.estatus = 1
 								LEFT JOIN catSubmarcasVehiculos csv
 								on v.idSubmarca = csv.idSubmarca and csv.estatus = 1
+                                LEFT JOIN catTipoServicio catTS on v.idCatTipoServicio = catTS.idCatTipoServicio 
                                 WHERE v.estatus = 1
                                 order by v.idVehiculo desc";
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
@@ -101,6 +104,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.idEntidad = Convert.ToInt32(reader["idEntidad"].ToString());
                             model.idCatTipoServicio = Convert.ToInt32(reader["idCatTipoServicio"].ToString());
                             model.numeroEconomico = reader["numeroEconomico"].ToString();
+                            model.tipoServicio = reader["tipoServicio"].ToString();
                             model.fechaActualizacion = Convert.ToDateTime(reader["fechaActualizacion"].ToString());
                             model.actualizadoPor = Convert.ToInt32(reader["actualizadoPor"].ToString());
                             model.estatus = Convert.ToInt32(reader["estatus"].ToString());
@@ -109,6 +113,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.Persona.numeroLicencia = reader["numeroLicencia"].ToString();
                             model.Persona.CURP = reader["CURP"].ToString();
                             model.Persona.RFC = reader["RFC"].ToString();
+                            model.motor = reader["motor"].ToString();
                             model.Persona.nombre = reader["nombre"].ToString();
                             model.Persona.apellidoPaterno = reader["apellidoPaterno"].ToString();
                             model.Persona.apellidoMaterno = reader["apellidoMaterno"].ToString();
@@ -416,14 +421,14 @@ namespace GuanajuatoAdminUsuarios.Services
                                 ,catMV.marcaVehiculo, catTV.tipoVehiculo, catSV.nombreSubmarca, catTS.tipoServicio
                                 ,catE.nombreEntidad, catC.color  
                                 FROM vehiculos v
-                                INNER JOIN catMarcasVehiculos catMV on v.idMarcaVehiculo = catMV.idMarcaVehiculo 
-                                INNER JOIN catTiposVehiculo catTV on v.idTipoVehiculo = catTV.idTipoVehiculo 
-                                INNER JOIN catSubmarcasVehiculos catSV on v.idSubmarca = catSV.idSubmarca 
-                                INNER JOIN catTipoServicio catTS on v.idCatTipoServicio = catTS.idCatTipoServicio 
-                                INNER JOIN catEntidades catE on v.idEntidad = catE.idEntidad  
-                                INNER JOIN catColores catC on v.idColor = catC.idColor  
+                                LEFT JOIN catMarcasVehiculos catMV on v.idMarcaVehiculo = catMV.idMarcaVehiculo 
+                                LEFT JOIN catTiposVehiculo catTV on v.idTipoVehiculo = catTV.idTipoVehiculo 
+                                LEFT JOIN catSubmarcasVehiculos catSV on v.idSubmarca = catSV.idSubmarca 
+                                LEFT JOIN catTipoServicio catTS on v.idCatTipoServicio = catTS.idCatTipoServicio 
+                                LEFT JOIN catEntidades catE on v.idEntidad = catE.idEntidad  
+                                LEFT JOIN catColores catC on v.idColor = catC.idColor  
                                 WHERE v.estatus = 1
-                                    {0}
+                                    {0} ORDER BY v.idVehiculo DESC;
                                 ", sqlCondiciones);
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
             {
