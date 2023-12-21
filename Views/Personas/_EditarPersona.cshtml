@@ -307,11 +307,35 @@
         var validator = $("#frmEditarPersona").kendoValidator().data('kendoValidator');
         var idTelefono = $("#telefono");
         var idTelefonoValue = idTelefono.val();
-        if (idTelefonoValue === null || idTelefonoValue === "") {
-            idTelefono.prop("disabled", true);
+        //if (idTelefonoValue === null || idTelefonoValue === "") {
+        //    idTelefono.prop("disabled", true);
+        //}
+
+        var controlsValidate = [];
+        var isValid = true;
+
+        controlsValidate.push({ 'controlName': 'nombre' });
+        controlsValidate.push({ 'controlName': 'CURP' });
+        controlsValidate.push({ 'controlName': 'PersonaDireccion_codigoPostal' });
+        controlsValidate.push({ 'controlName': 'PersonaDireccion_colonia' });
+        controlsValidate.push({ 'controlName': 'PersonaDireccion_calle' });
+        controlsValidate.push({ 'controlName': 'PersonaDireccion_numero' });
+
+        // INPUTS
+        if (!isControlsValid(controlsValidate)) { isValid = false; }
+
+        //// DROP DOWN LIST
+        //controlsValidate = [];
+        //controlsValidate.push({ 'controlName': 'idGenero' });
+        //if (!isControlsValidDropDown(controlsValidate)) { isValid = false; }
+
+        if (!isValid) {
+            sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
+            return;
         }
-        idTelefono.off('blur');
-        if (validator.validate()) {
+
+        //idTelefono.off('blur');
+        if (isValid) {
             var formData = $("#frmEditarPersona").serialize();
             showLoading();
             $.ajax({
