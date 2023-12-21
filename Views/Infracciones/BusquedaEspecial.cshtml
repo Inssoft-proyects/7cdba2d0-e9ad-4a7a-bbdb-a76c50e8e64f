@@ -128,7 +128,7 @@
                         <div class="controlForm my-3">
                             <label>Inicio:</label>
                             @(Html.Kendo().DatePicker()
-                                .Name("FechaInicio")
+                                .Name("FechaInicio").Max(DateTime.Now)
                                 .Culture("es-ES")
                                 .HtmlAttributes(new { style = "width: 100%", title = "startDate" })
                                 )
@@ -138,7 +138,7 @@
                         <div class="controlForm my-3">
                             <label>Fin:</label>
                             @(Html.Kendo().DatePicker()
-                                .Name("FechaFin")
+                                .Name("FechaFin").Max(DateTime.Now)
                                 .Culture("es-ES")
                                 .HtmlAttributes(new { style = "width: 100%", title = "startDate" })
                                 )
