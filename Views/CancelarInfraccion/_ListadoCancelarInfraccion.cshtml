@@ -3,7 +3,7 @@
 <div class="row">
     @if (TempData["ErrorNoCoinciencia"] != null || TempData.Count != 0)
 {
-    <div style=" position: absolute; max-width: fit-content; z-index: 1; margin: 22px 2%;" class="alert alert-danger">@TempData["ErrorNoCoinciencia"]</div>
+    <div class="alert alert-danger">@TempData["ErrorNoCoinciencia"]</div>
 }
 
     <div class="col-12 mb-4 px-4 rounded gridCustom">

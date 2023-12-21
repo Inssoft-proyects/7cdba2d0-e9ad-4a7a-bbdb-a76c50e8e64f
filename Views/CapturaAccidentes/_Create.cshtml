@@ -439,14 +439,12 @@
         <div class="col-12 col-md-6 col-lg-3">
             <div class="controlForm my-3">
                 <label>Carga:</label>
-                <div class="btnToggleActive">
                 @Html.HiddenFor(m => m.cargaInt, new { id = "idCarga" })
                 @(Html.Kendo().SwitchFor(m => m.carga)
                     .Messages(c => c.Checked("Si").Unchecked("No"))
-                    .HtmlAttributes(new {id = "cargaSwitch" })
+                    .HtmlAttributes(new { style = "transform: scale(1.2);", id = "cargaSwitch" })
 
                     )
-                </div>
             </div>
         </div>
 
@@ -992,16 +990,14 @@
                          <div id="errorContainerPersona_fechaNacimiento" class="error-container"></div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
-                        <div class="controlForm mb-3">
+                        <div class="controlForm">
                             <label>Sexo <b>(obligatorio)</b></label>
-                            <div class="btnToggleActive">
-                                @Html.HiddenFor(m => m.Persona.idGenero, new { id = "idGenero" })
-                                @(Html.Kendo().SwitchFor(m => m.Persona.generoBool)
-                                .Messages(c => c.Checked("<span>Hombre</span>").Unchecked("<span>Mujer</span>"))
-                                .HtmlAttributes(new { id = "generoSwitch",required = "required" })
-                                )
-                            </div>
                         </div>
+                        @Html.HiddenFor(m => m.Persona.idGenero, new { id = "idGenero" })
+                        @(Html.Kendo().SwitchFor(m => m.Persona.generoBool)
+                            .Messages(c => c.Checked("<span style='font-size: 6px;'>Hombre</span>").Unchecked("<span style='font-size: 6px;'>Mujer</span>"))
+                            .HtmlAttributes(new { style = "transform: scale(1.6);", id = "generoSwitch",required = "required" })
+                            )
                     </div>
 
 
@@ -1392,7 +1388,7 @@ function submitCreateMoral() {
     }
 
     var generoBool = $("#generoSwitch").prop("checked");
-    $("#idGenero").val(generoBool ? 1 : 2);
+    $("#idGenero").val(generoBool ? 1 : 0);
 
     var Mydata = $("#personaFisicaForm").serialize();
     showLoading();

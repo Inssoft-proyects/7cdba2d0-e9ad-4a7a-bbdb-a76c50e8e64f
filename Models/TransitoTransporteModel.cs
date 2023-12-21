@@ -5,8 +5,8 @@ using System.Collections.Generic;
 
 namespace GuanajuatoAdminUsuarios.Models
 {
-    public class TransitoTransporteModel : EntityModel
-	{
+    public class TransitoTransporteModel
+    {
         #region Depositos
         public int IdDeposito { get; set; }
 
@@ -289,7 +289,7 @@ namespace GuanajuatoAdminUsuarios.Models
         {
             get
             {
-                return propietarioNombre + " " + propietarioApellidoPaterno + " " + propietarioApellidoMaterno;
+                return propietarioNombre + propietarioApellidoPaterno + propietarioApellidoMaterno;
             }
         }
 
@@ -297,7 +297,7 @@ namespace GuanajuatoAdminUsuarios.Models
         {
             get
             {
-                return oficialNombre + " " + oficialApellidoPaterno + " " + oficialApellidoMaterno;
+                return oficialNombre + oficialApellidoPaterno + oficialApellidoMaterno;
             }
         }
 
