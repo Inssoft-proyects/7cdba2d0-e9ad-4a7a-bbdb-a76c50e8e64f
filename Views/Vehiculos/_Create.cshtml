@@ -478,10 +478,9 @@
         @Html.HiddenFor(m=> m.Persona.idPersona, new { @id = "ddlIdPersona" })
         @Html.HiddenFor(m=> m.Persona.idCatTipoPersona, new { @id = "ddlIdCatTipoPersona" })
 
-        <input type="text" disabled class="d-none" value="@Model.idCatTipoServicio" name="idCatTipoServicio" id="hdnIdCatTipoPersona">
+     <input type="hidden" value="@Model.idCatTipoServicio" name="idCatTipoServicio" id="hdnIdCatTipoServicio">
 
-     @Html.HiddenFor(m=> m.idCatTipoServicio, new { @id = "hdnIdCatTipoPersona" })
-        
+
         
         @Html.HiddenFor(m=> m.encontradoEn, new { @id = "hdnEncontradoEn" })
 
@@ -1306,12 +1305,7 @@
 
     //});
 
-    $("#ddlCatTipoServicio").on("change", function () {
-        var value = $(this).val();
-        console.log(value);
-        $('#hdnIdCatTipoPersona').val(value);
-
-    });
+   
 function submitCreateMoral() {
     var validator = $("#frmCreateMoral").kendoValidator().data('kendoValidator');
     
@@ -1450,7 +1444,7 @@ function submitCreateMoral() {
     controlsValidate.push({ 'controlName': 'nombreFisico' });
     controlsValidate.push({ 'controlName': 'coloniaFisico' });
     controlsValidate.push({ 'controlName': 'calleFisico' });
-    controlsValidate.push({ 'controlName': 'fechaNacimiento' });
+    controlsValidate.push({ 'controlName': 'Persona_fechaNacimiento' });
     controlsValidate.push({ 'controlName': 'numeroFisico' });
 
     // INPUTS
@@ -1514,12 +1508,13 @@ function asignarMensajeError(contenedorErrorId, mensaje) {
             sitteg_info('Debe seleccionar una Persona');
             return;
         }
-
+            var idTipoSer = $('#hdnIdCatTipoServicio').val();
         if (validator.validate()) {
 
             var formData = $("#frmCreateVehiculo").serialize();
             var idVeh = $('#hdnIdVehiculo').val();
-            console.log("Id vehiculo: ", idVeh)
+
+            console.log("Id servio: ", idTipoSer)
                console.log("dtaa: ", formData)
                showLoading();
             $.ajax({
@@ -1550,6 +1545,12 @@ function asignarMensajeError(contenedorErrorId, mensaje) {
         }
 
     }
+     $("#ddlCatTipoServicio").on("change", function () {
+        var value = $(this).val();
+        console.log(value);
+        $('#hdnIdCatTipoServicio').val(value);
+
+    });
     function cerrarModalV() {
         $('#confirmacionModal').modal('show');
 

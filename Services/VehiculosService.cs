@@ -419,12 +419,15 @@ namespace GuanajuatoAdminUsuarios.Services
                                 ,v.propietario, v.numeroEconomico, v.paisManufactura, v.idPersona
                                 ,v.motor,v.capacidad,v.poliza,v.otros, v.carga
                                 ,catMV.marcaVehiculo, catTV.tipoVehiculo, catSV.nombreSubmarca, catTS.tipoServicio
-                                ,catE.nombreEntidad, catC.color  
+                                ,catE.nombreEntidad, catC.color,p.nombre
+                                ,p.apellidoPaterno
+                                ,p.apellidoMaterno  
                                 FROM vehiculos v
                                 LEFT JOIN catMarcasVehiculos catMV on v.idMarcaVehiculo = catMV.idMarcaVehiculo 
                                 LEFT JOIN catTiposVehiculo catTV on v.idTipoVehiculo = catTV.idTipoVehiculo 
                                 LEFT JOIN catSubmarcasVehiculos catSV on v.idSubmarca = catSV.idSubmarca 
                                 LEFT JOIN catTipoServicio catTS on v.idCatTipoServicio = catTS.idCatTipoServicio 
+                                LEFT JOIN personas p on v.idPersona = p.idPersona 
                                 LEFT JOIN catEntidades catE on v.idEntidad = catE.idEntidad  
                                 LEFT JOIN catColores catC on v.idColor = catC.idColor  
                                 WHERE v.estatus = 1
@@ -457,6 +460,7 @@ namespace GuanajuatoAdminUsuarios.Services
                         while (reader.Read())
                         {
                             VehiculoModel model = new VehiculoModel();
+                            model.Persona = new PersonaModel();
                             model.idVehiculo = Convert.ToInt32(reader["idVehiculo"]);
                             model.placas = reader["placas"].ToString();
 
@@ -473,7 +477,6 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.idColor = Convert.ToInt32(reader["idColor"]);
                             model.idEntidad = Convert.ToInt32(reader["idEntidad"]);
                             model.idCatTipoServicio = Convert.ToInt32(reader["idCatTipoServicio"]);
-                            model.propietario = reader["propietario"].ToString();
                             model.numeroEconomico = reader["numeroEconomico"].ToString();
                             model.idPersona = reader["idPersona"] == System.DBNull.Value ? default(int?) : (int?)reader["idPersona"];
                             model.paisManufactura = reader["paisManufactura"].ToString();
@@ -485,8 +488,10 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.color = reader["color"].ToString();
                             model.entidadRegistro = reader["nombreEntidad"].ToString();
                             model.tipoServicio = reader["tipoServicio"].ToString();
-
-                            model.motor = reader["motor"].ToString();
+                            model.Persona.nombre = reader["nombre"].ToString();
+                            model.Persona.apellidoPaterno = reader["apellidoPaterno"].ToString();
+                            model.Persona.apellidoMaterno = reader["apellidoMaterno"].ToString(); model.motor = reader["motor"].ToString();
+                            model.propietario = model.Persona.nombre + " " + model.Persona.apellidoPaterno + " " + model.Persona.apellidoMaterno;
                             model.capacidad = reader["capacidad"] == System.DBNull.Value ? default(int?) : (int?)reader["capacidad"];
                             model.poliza = reader["poliza"].ToString();
                             model.carga = reader["carga"] == System.DBNull.Value ? default(bool?) : Convert.ToBoolean(reader["carga"].ToString());

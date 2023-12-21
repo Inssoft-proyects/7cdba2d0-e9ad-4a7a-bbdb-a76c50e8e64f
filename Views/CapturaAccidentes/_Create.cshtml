@@ -478,7 +478,7 @@
         @Html.HiddenFor(m=> m.Persona.idPersona, new { @id = "ddlIdPersona" })
         @Html.HiddenFor(m=> m.Persona.idCatTipoPersona, new { @id = "ddlIdCatTipoPersona" })
 
-        <input type="text" disabled class="d-none" value="@Model.idCatTipoServicio" name="idCatTipoServicio" id="hdnIdCatTipoPersona">
+     <input type="hidden" value="@Model.idCatTipoServicio" name="idCatTipoServicio" id="hdnIdCatTipoServicio">
 
 @*        @Html.HiddenFor(m=> m.idCatTipoServicio, new { @id = "hdnIdCatTipoPersona" })
 *@        
@@ -1300,12 +1300,7 @@
 
     //});
 
-    $("#ddlCatTipoServicio").on("change", function () {
-        var value = $(this).val();
-        console.log(value);
-        $('#hdnIdCatTipoPersona').val(value);
 
-    });
 function submitCreateMoral() {
     var validator = $("#frmCreateMoral").kendoValidator().data('kendoValidator');
     
@@ -1473,17 +1468,13 @@ function asignarMensajeError(contenedorErrorId, mensaje) {
         var validator = $("#frmCreateVehiculo").kendoValidator().data('kendoValidator');
         validator.validate();
 
-        if ($("#ddlIdPersona").val() == '') {
-            sitteg_info('Debe seleccionar una Persona');
-            return;
-        }
-
+      
         if (validator.validate()) {
 
             var formData = $("#frmCreateVehiculo").serialize();
             var idVeh = $('#hdnIdVehiculo').val();
             console.log("Id vehiculo: ", idVeh)
-               console.log("dtaa: ", formData)
+            var idTipoSer = $('#hdnIdCatTipoServicio').val();
                showLoading();
             $.ajax({
                 url: '@Url.Action("ajax_CrearVehiculo_Ejemplo2")',
@@ -1518,6 +1509,12 @@ function asignarMensajeError(contenedorErrorId, mensaje) {
         }
 
     }
+    $("#ddlCatTipoServicio").on("change", function () {
+        var value = $(this).val();
+        console.log(value);
+        $('#hdnIdCatTipoServicio').val(value);
+
+    });
     function cerrarModalV() {
         $('#confirmacionModal').modal('show');
 

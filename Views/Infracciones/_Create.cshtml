@@ -449,7 +449,7 @@ $(document).ready(()=>{
         @Html.HiddenFor(m=> m.Persona.idPersona, new { @id = "ddlIdPersona" })
         @Html.HiddenFor(m=> m.Persona.idCatTipoPersona, new { @id = "ddlIdCatTipoPersona" })
         
-        <input type="text" disabled class="d-none" value="@Model.idCatTipoServicio" name="idCatTipoServicio" id="hdnidCatTipoServicio">
+     <input type="hidden" value="@Model.idCatTipoServicio" name="idCatTipoServicio" id="hdnIdCatTipoServicio">
 @*        @Html.HiddenFor(m=> m.idCatTipoServicio, new { @id = "hdnidCatTipoServicio" })
 *@        
         
@@ -1246,12 +1246,7 @@ $(document).ready(()=>{
 
     //});
 
-    $("#ddlCatTipoServicio").on("change", function () {
-        var value = $(this).val();
-        console.log(value);
-        $('#hdnidCatTipoServicio').val(value);
-
-    });
+ 
 
    function submitCreateMoral() {
     var controlsValidate = [];
@@ -1468,6 +1463,7 @@ function asignarMensajeError(contenedorErrorId, mensaje) {
             sitteg_info('Debe seleccionar una Persona');
             return;
         }
+                    var idTipoSer = $('#hdnIdCatTipoServicio').val();
 
         if (validator.validate()) {
 
@@ -1500,6 +1496,12 @@ function asignarMensajeError(contenedorErrorId, mensaje) {
         }
 
     }
+        $("#ddlCatTipoServicio").on("change", function () {
+        var value = $(this).val();
+        console.log(value);
+        $('#hdnIdCatTipoServicio').val(value);
+
+    });
      function cerrarModalV() {
         $('#confirmacionModal').modal('show');
 
