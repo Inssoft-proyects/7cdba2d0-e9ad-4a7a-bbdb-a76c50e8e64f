@@ -151,14 +151,20 @@
    
 <script>
     function guardarComplementoVehiculo() {
-        var validator = $("#complementoVehiculoForm").kendoValidator().data('kendoValidator');
-
-        $("#IdDelegacion").prop("disabled", true);
+        var controlsValidate = [];
+       var IdTipoCarga = $("#IdTipoCarga").val();
+        var isValid = true;
+        var validator = $("#complementoVehiculoForm").kendoValidator().data('kendoValidator');       
+        /*$("#IdDelegacion").prop("disabled", true);
         $("#IdPension").prop("disabled", true);
-        $("#IdFormaTraslado").prop("disabled", true);
+        $("#IdFormaTraslado").prop("disabled", true);*/
+        controlsValidate.push({ 'controlName': 'IdTipoCarga' });
+        if (!isControlsValidDropDown(controlsValidate)) { isValid = false; }
 
-        var isValid = validator.validate();
-
+        if (!isValid) {
+            sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
+            return;
+        }
         if (isValid) {
             var Mydata = $("#complementoVehiculoForm").serialize();
             showLoading();

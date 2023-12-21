@@ -418,7 +418,7 @@ namespace GuanajuatoAdminUsuarios.Services
                         "v.idSubmarca,v.idEntidad, v.idTipoVehiculo,acc.numeroReporte,v.idPersona AS idPropietario, v.modelo, v.idColor, v.idCatTipoServicio, v.motor, v.capacidad, " +
                         "cm.marcaVehiculo, csv.nombreSubmarca, tv.tipoVehiculo, COALESCE(p.nombre, pcv.nombre) AS nombre, COALESCE(p.apellidoPaterno, pcv.apellidoPaterno) AS apellidoPaterno, " +
                         "p.apellidoMaterno,pcv.RFC,pcv.CURP,CONVERT(varchar, p.fechaNacimiento, 103) AS fechaNacimiento, c.color, ts.tipoServicio, pcv.nombre AS nombreConductor, pcv.apellidoPaterno AS apellidoPConductor, pcv.apellidoMaterno AS apellidoMConductor, " +
-                        "tc.tipoCarga,v.vigenciaTarjeta,tp.tipoPersona, pen.pension, ft.formaTraslado, cent.nombreEntidad,va.montoVehiculo " +
+                        "tc.tipoCarga,v.vigenciaTarjeta,v.otros,tp.tipoPersona, pen.pension, ft.formaTraslado, cent.nombreEntidad,va.montoVehiculo " +
                         "FROM conductoresVehiculosAccidente AS cva INNER JOIN vehiculos AS v ON cva.idVehiculo = v.idVehiculo " +
                         "LEFT JOIN catMarcasVehiculos AS cm ON v.idMarcaVehiculo = cm.idMarcaVehiculo " +
                         "LEFT JOIN catTiposcarga AS ctc ON cva.idTipoCarga = ctc.idTipoCarga " +
@@ -476,6 +476,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             involucrado.TipoPersona = reader["tipoPersona"] != DBNull.Value ? reader["tipoPersona"].ToString() : string.Empty;
                             involucrado.TipoServicio = reader["tipoServicio"] != DBNull.Value ? reader["tipoServicio"].ToString() : string.Empty;
                             involucrado.VigenciaTarjeta = reader["vigenciaTarjeta"] != DBNull.Value ? (DateTime)reader["vigenciaTarjeta"] : DateTime.MinValue;
+                            involucrado.Otros = reader["otros"] != DBNull.Value ? reader["otros"].ToString() : string.Empty;
 
 
                         }
@@ -1434,8 +1435,7 @@ namespace GuanajuatoAdminUsuarios.Services
         {
             int result = 0;
             string strQuery = @"
-                                IF EXISTS (SELECT 1 FROM conductoresVehiculosAccidente WHERE idVehiculo = @IdVehiculo AND idAccidente = @IdAccidente)
-                                    UPDATE conductoresVehiculosAccidente
+                                UPDATE conductoresVehiculosAccidente
                                     SET idTipoCarga = @IdTipoCarga,
                                         poliza = @Poliza,
                                         idDelegacion = @IdDelegacion,
@@ -1444,7 +1444,8 @@ namespace GuanajuatoAdminUsuarios.Services
                                         fechaActualizacion = @fechaActualizacion,
                                         actualizadoPor = @actualizadoPor,
                                         estatus = @estatus
-                                    WHERE idVehiculo = @IdVehiculo AND idAccidente = @IdAccidente;";
+                                    WHERE idVehiculo = @IdVehiculo AND idAccidente = @IdAccidente AND estatus > 0;
+                                    ";
 
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
             {

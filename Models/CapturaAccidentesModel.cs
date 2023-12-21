@@ -63,6 +63,8 @@ namespace GuanajuatoAdminUsuarios.Models
         public string Placa { get; set; }
         public string Tarjeta { get; set; }
         public DateTime VigenciaTarjeta { get; set; }
+        public string Otros { get; set; }
+        
         public string Marca { get; set; }
         public string Submarca { get; set; }
         public string TipoVehiculo { get; set; }
