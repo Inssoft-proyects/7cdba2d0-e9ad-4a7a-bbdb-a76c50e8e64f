@@ -100,7 +100,6 @@
             <div class="controlForm">
                 <label>Fecha de nacimiento <b>(obligatorio)</b>:</label>
                 @(Html.Kendo().DatePickerFor(t => t.fechaNacimiento).Max(DateTime.Now)
-
                     .Culture("es-ES")
                     .HtmlAttributes(new { style = "width: 100%;", required = "required" })
                 
