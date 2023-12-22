@@ -31,7 +31,7 @@
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm my-3 selecciondeFecha">
                             <label>Fecha Inicio:</label>
-                            @(Html.Kendo().DatePickerFor(t => t.FechaInicio).Format("dd/MM/yyyy").Max(DateTime.Now)
+                            @(Html.Kendo().DatePickerFor(t => t.FechaInicio).Format("dd/MM/yyyy")
                                 .Label(l => l.Content("Fecha Inicio:"))
                                 .HtmlAttributes(new { style = "width: 100%", id = "FechaInicio" })
                                 .Value("")
@@ -42,7 +42,7 @@
 
                         <div class="controlForm my-3 selecciondeFecha">
                             <label>Fecha Fin:</label>
-                            @(Html.Kendo().DatePickerFor(t => t.FechaFin).Format("dd/MM/yyyy").Max(DateTime.Now)
+                            @(Html.Kendo().DatePickerFor(t => t.FechaFin).Format("dd/MM/yyyy")
                                 .Label(l => l.Content("Fecha Fin:"))
                                 .HtmlAttributes(new { style = "width: 100%", id = "FechaFin" })
                                 .Value("")
@@ -215,7 +215,7 @@
                                             read.Action("EstatusAccidente_Drop", "BusquedaAccidentes");
                                         });
                                     })
-                                    .HtmlAttributes(new { style = "width:100%;", Id = "ddlEstatusAccidentes" })
+                                    .HtmlAttributes(new { style = "width:100%;", Id = "ddlEstatusccidentes" })
                                     )
                             </span>
                         </div>
@@ -278,25 +278,13 @@
 
 <script>
     function buscarAccidente() {
-        var data = {
-            FechaInicio: $('#FechaInicio').val(),
-            FechaFin: $('#FechaFin').val(),
-            placasBusqueda: $('#txtPlacas').val(),
-            serieBusqueda: $('#txtSerie').val(),
-            folioBusqueda: $('#txtFolio').val(),
-            IdDelegacionBusqueda: $('#ddlDelegaciones').val(),
-            idCarreteraBusqueda: $('#ddlCarreteras').val(),
-            idTramoBusqueda: parseInt($('#ddlTramos').val()),
-            propietarioBusqueda: $('#txtPropietarios').val(),
-            conductorBusqueda: $('#txtConductores').val(),
-            IdOficialBusqueda: $('#ddlOficiales').val(),
-            IdEstatusAccidente: $('#ddlEstatusAccidentes').val(),
-        };
+        var Mydata = $("#busquedaAccidenteForm").serialize();
+        console.log(Mydata);
         showLoading();
         $.ajax({
             url: '/BusquedaAccidentes/ajax_BusquedaAccidentes',
             type: 'GET',
-            data: data,
+            data: Mydata,
             success: function (data) {
                 var grid = $("#gridBusquedaAccidentes").data("kendoGrid");
                 grid.dataSource.data(data);
@@ -314,49 +302,38 @@
         var Mydata = $("#busquedaAccidenteForm").serialize();
         var fileName = "ReporteGeneralAccidentes.pdf";
         showLoading();
-
         $.ajax({
             type: "POST",
             url: '@Url.Action("AccidentesGeneral","PDFGenerator")',
             data: Mydata,
+            //contentType: "application/json; charset=utf-8",
+            //dataType: "text",
             success: function (r) {
-                try {
-                    var bytes = Base64ToBytes(r);
-                    var blob = new Blob([bytes], { type: "application/octetstream" });
-                    var isIE = false || !!document.documentMode;
-
-                    if (isIE) {
-                        window.navigator.msSaveBlob(blob, fileName);
-                    } else {
-                        var url = window.URL || window.webkitURL;
-                        link = url.createObjectURL(blob);
-                        var a = $("<a />");
-                        a.attr("download", fileName);
-                        a.attr("href", link);
-                        $("body").append(a);
-                        a[0].click();
-                        $("body").remove(a);
-                    }
-                } catch (error) {
-                    handleError(error);
+                var bytes = Base64ToBytes(r);
+                var blob = new Blob([bytes], { type: "application/octetstream" });
+                var isIE = false || !!document.documentMode;
+                if (isIE) {
+                    window.navigator.msSaveBlob(blob, fileName);
+                } 
+                else {
+                    var url = window.URL || window.webkitURL;
+                    link = url.createObjectURL(blob);
+                    var a = $("<a />");
+                    a.attr("download", fileName);
+                    a.attr("href", link);
+                    $("body").append(a);
+                    a[0].click();
+                    $("body").remove(a);
+                    hideLoading();
                 }
-            },
-            error: function () {
-                handleError("Ocurrió un error, inténtelo de nuevo más tarde");
-            },
-            complete: function () {
-                hideLoading();
-            }
+                },
+                error: function () {
+                    sitteg_warning("Ocurrio un error intetnte mas tarde");
+                    hideLoading();
+                }
+            
         });
-        hideLoading();
     }
-
-    function handleError(error) {
-        console.error(error);
-        hideLoading();
-    }
-
-
     function carreteraDropDownChange() {
         var carreteraDDValue = $("#ddlCarreteras").data("kendoDropDownList").value();
         console.log("IDK", carreteraDDValue)

@@ -978,17 +978,16 @@ h3 b, h4 b, h5 b, h6 b, label b {
 .controlForm input,
 .controlForm select,
 .controlForm .k-datepicker,
-.controlForm .k-timepicker,
-.controlForm .k-formatted-value {
+.controlForm .k-timepicker {
     width: 100%;
 }
 
-    .controlForm .k-picker-wrap, .controlForm .k-picker-wrap input, .controlForm .k-datetimepicker input, .controlForm .k-timepicker input, .controlForm .k-formatted-value {
+    .controlForm .k-picker-wrap, .controlForm .k-picker-wrap input, .controlForm .k-datetimepicker input, .controlForm .k-timepicker input {
         border: none;
         height: 100%;
     }
 
-    .controlForm .k-textbox, .controlForm .k-dropdown, .controlForm .k-datepicker, .controlForm .k-datetimepicker, .controlForm .k-timepicker input , .controlForm .k-formatted-value {
+    .controlForm .k-textbox, .controlForm .k-dropdown, .controlForm .k-datepicker, .controlForm .k-datetimepicker, .controlForm .k-timepicker input {
         border: none;
         height: 58px;
     }
@@ -1035,7 +1034,7 @@ h3 b, h4 b, h5 b, h6 b, label b {
         padding:10px 0;
     }
 
-    .controlForm input, .controlForm input[type="file"], .controlForm .k-textarea, .controlForm .k-dropdown, .controlForm .k-datepicker, .controlForm .k-dateinput, .controlForm .k-datetimepicker, .controlForm .k-timepicker, .controlForm .k-formatted-value {
+    .controlForm input, .controlForm input[type="file"], .controlForm .k-textarea, .controlForm .k-dropdown, .controlForm .k-datepicker, .controlForm .k-dateinput, .controlForm .k-datetimepicker, .controlForm .k-timepicker {
         border: 2px #292929c7 solid;
         display: block;
         border-radius: 4px;

@@ -30,6 +30,7 @@
             var valorActual = factorDD.dataSource.view()[factorDD.selectedIndex].Value;
 
             if (nuevoValor !== valorActual) {
+                // Realizar la llamada AJAX solo si el valor ha cambiado
                 showLoading();
                 $.ajax({
                     url: "/CapturaAccidentes/FactoresOpciones_Drop",

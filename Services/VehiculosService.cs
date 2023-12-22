@@ -467,9 +467,7 @@ namespace GuanajuatoAdminUsuarios.Services
 
                             model.serie = reader["serie"].ToString();
                             model.tarjeta = reader["tarjeta"].ToString();
-                            model.vigenciaTarjeta = reader["vigenciaTarjeta"] == DBNull.Value
-                                ? (DateTime?)null 
-                                : Convert.ToDateTime(reader["vigenciaTarjeta"].ToString());
+                            model.vigenciaTarjeta = Convert.ToDateTime(reader["vigenciaTarjeta"].ToString());
                             model.idMarcaVehiculo = Convert.ToInt32(reader["idMarcaVehiculo"]);
                             model.idSubmarca = Convert.ToInt32(reader["idSubmarca"]);
                             model.idTipoVehiculo = Convert.ToInt32(reader["idTipoVehiculo"]);

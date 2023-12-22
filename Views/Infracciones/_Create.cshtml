@@ -14,26 +14,8 @@
     {
         disableInput = Model.encontradoEn == (int)EstatusBusquedaVehiculo.Sitteg ? true : false;
     }
-
-
-    var mensaje = Model.ErrorRepube;
-
 }
 <script>
-
-$(document).ready(()=>{
-
-    var t = "@mensaje"
-
-    if(!t){
-                  sitteg_warning('Lo sentimos, ha ocurrido un error con la consulta de Repuve.');
- 
-    }
- 
-})
-
-
-
      function EntidadDropDownChangeFis() {
         var entidadDDlValue = $("#Persona_PersonaDireccion_idEntidadFisico").data("kendoDropDownList").value();
 
@@ -433,15 +415,12 @@ $(document).ready(()=>{
         <div class="col-12 col-md-6 col-lg-3">
             <div class="controlForm my-3">
                 <label>Carga:</label>
-                <div class="btnToggleActive">
-                    @Html.HiddenFor(m => m.cargaInt, new { id = "idCarga" })
-                    @(Html.Kendo().SwitchFor(m => m.carga)
-                            .Messages(c => c.Checked("SI").Unchecked("NO"))
-                            .HtmlAttributes(new { id = "cargaSwitch" })
+               @Html.HiddenFor(m => m.cargaInt, new { id = "idCarga" })
+               @(Html.Kendo().SwitchFor(m => m.carga)
+                    .Messages(c => c.Checked("SI").Unchecked("NO"))
+                    .HtmlAttributes(new { style = "transform: scale(1.2);",  id = "cargaSwitch" })
 
-                            )
-
-                </div>
+                    )
             </div>
         </div>
 
@@ -956,7 +935,7 @@ $(document).ready(()=>{
                         <div class="controlForm mb-3">
                             @(Html.Kendo().TextBoxFor(t => t.Persona.RFCFisico)
                                 .Label(l => l.Content("RFC:"))
-                                .Placeholder("Ingresa un RFC válido")
+                                .Placeholder("Ingresa un RFC valido")
                                 .HtmlAttributes(new { style = "width: 100%" })
                                 )
 
@@ -967,7 +946,7 @@ $(document).ready(()=>{
                         <div class="controlForm mb-3">
                             @(Html.Kendo().TextBoxFor(t => t.Persona.CURPFisico)
                                 .Label(l => l.Content("CURP:"))
-                                .Placeholder("Ingresa un CURP válido")
+                                .Placeholder("Ingresa un CURP valido")
                                 .HtmlAttributes(new { style = "width: 100%" })
                                 )
                         </div>
@@ -986,16 +965,14 @@ $(document).ready(()=>{
                          @*<div id="errorContainerPersona_fechaNacimiento" class="error-container"></div>*@
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
-                        <div class="controlForm mb-3">
+                        <div class="controlForm">
                             <label>Sexo <b>(obligatorio):</b></label>
-                            <div class="btnToggleActive">
-                                @Html.HiddenFor(m => m.Persona.idGenero, new { id = "idGenero" })
-                                @(Html.Kendo().SwitchFor(m => m.Persona.generoBool)
-                                    .Messages(c => c.Checked("<span>Hombre</span>").Unchecked("<span>Mujer</span>"))
-                                    .HtmlAttributes(new { id = "generoSwitch" })
-                                    )
-                            </div>
                         </div>
+                        @Html.HiddenFor(m => m.Persona.idGenero, new { id = "idGenero" })
+                        @(Html.Kendo().SwitchFor(m => m.Persona.generoBool)
+                            .Messages(c => c.Checked("<span style='font-size: 6px;'>Hombre</span>").Unchecked("<span style='font-size: 6px;'>Mujer</span>"))
+                            .HtmlAttributes(new { style = "transform: scale(1.6);", id = "generoSwitch" })
+                            )
                     </div>
 
 
@@ -1412,7 +1389,7 @@ $(document).ready(()=>{
     }
 
     var generoBool = $("#generoSwitch").prop("checked");
-    $("#idGenero").val(generoBool ? 1 : 2);
+    $("#idGenero").val(generoBool ? 1 : 0);
 
     var Mydata = $("#personaFisicaForm").serialize();
     showLoading();

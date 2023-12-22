@@ -1,0 +1,181 @@
+﻿@model PersonaModel
+
+
+<form id="frmUpdateMoral" class="row px-4 mb-4 align-items-end">
+    @Html.HiddenFor(m=> m.idPersona, new { @id = "hdnIdPersona" })
+    @Html.HiddenFor(m=> m.PersonaDireccion.idPersonasDirecciones, new { @id = "hdnIdPersonasDireccion" })
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="controlForm mb-3">
+            @(Html.Kendo().TextBoxFor(t => t.RFC)
+                .Label(l => l.Content("RFC :"))
+                .Placeholder("Ingresa RFC")
+                .HtmlAttributes(new { style = "width: 100%" })
+                )
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="controlForm my-3">
+            @(Html.Kendo().TextBoxFor(t => t.nombre)
+                .Label(l => l.Content("Nombre <b>(obligatorio)</b>:"))
+                .Placeholder("Ingresa Nombre")
+                .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                )
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="controlForm my-3">
+            @(Html.Kendo().TextBoxFor(t => t.PersonaDireccion.telefono)
+                .Label(l => l.Content("Telefono:"))
+                .Placeholder("Ingresa Telefono")
+                .HtmlAttributes(new { style = "width: 100%" })
+                )
+        </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="controlForm my-3">
+            @(Html.Kendo().TextBoxFor(t => t.PersonaDireccion.correo)
+                .Label(l => l.Content("Correo electrónico:"))
+                .Placeholder("Ingresa correo electrónico")
+                .HtmlAttributes(new { style = "width: 100%" })
+                )
+
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="controlForm my-3">
+
+            <label>Entidad:</label>
+            <span>
+                @(Html.Kendo().DropDownListFor(d => d.PersonaDireccion.idEntidad).Filter(FilterType.Contains)
+                    .DataTextField("Text")
+                    .DataValueField("Value")
+                    .OptionLabel("Seleccione Entidad...")
+                    .HtmlAttributes(new { style = "width:100%;" })
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("Entidades_Read", "Vehiculos");
+                        });
+                    })
+                    )
+            </span>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="controlForm my-3">
+            <label>Municipio:</label>
+            <span>
+                @(Html.Kendo().DropDownListFor(d => d.PersonaDireccion.idMunicipio).Filter(FilterType.Contains)
+                    .DataTextField("Text")
+                    .DataValueField("Value")
+                    .OptionLabel("Seleccione Municipio...")
+                    .HtmlAttributes(new { style = "width:100%;" })
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("Municipios_Read", "Vehiculos");
+                        });
+                    })
+                    )
+
+            </span>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="controlForm my-3">
+            @(Html.Kendo().TextBoxFor(t => t.PersonaDireccion.colonia)
+                .Label(l => l.Content("Colonia <b>(obligatorio)</b>:"))
+                .Placeholder("Ingresa colonia")
+                .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                )
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="controlForm my-3">
+            @(Html.Kendo().TextBoxFor(t => t.PersonaDireccion.calle)
+                .Label(l => l.Content("Calle <b>(obligatorio)</b>:"))
+                .Placeholder("Ingresa calle")
+                .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                )
+
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="controlForm my-3">
+
+            @(Html.Kendo().TextBoxFor(t => t.PersonaDireccion.numero)
+                .Label(l => l.Content("Número <b>(obligatorio)</b>:"))
+                .Placeholder("Ingresa número")
+                .HtmlAttributes(new { style = "width: 100%", required = "required" })
+                )
+        </div>
+    </div>
+
+</form>
+<div class="row my-4">
+    <div class="col-12 col-md-6 mx-md-auto">
+        <div class="row justify-content-around">
+            <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
+                <button type="button" data-bs-dismiss="modal" aria-label="Close">
+                    <h6 class="m-0 px-3"><b>Cerrar</b></h6>
+                </button>
+            </div>
+            <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                <div class="controlButton" onClick="submitUpdateMoral()" aria-label="Close">
+                    @(Html.Kendo().Button()
+                        .Name("UpdateMoral")
+                        .HtmlAttributes(new { @class = "btnPrimary px-3" })
+                        .Content("<h5 class=\"m-0\"><b>Guardar ajustes</b></h5>"))
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function submitUpdateMoral() {
+        var validator = $("#frmUpdateMoral").kendoValidator().data('kendoValidator');
+        validator.validate();
+        if (validator.validate()) {
+            var formData = $("#frmUpdateMoral").serialize();
+            showLoading();
+            $.ajax({
+                url: '@Url.Action("ajax_UpdatePersonaMoral")',
+                type: 'POST',
+                data: formData,
+                success: function (result) {
+
+                    var grid = $("#gridPersonasMorales").data("kendoGrid");
+
+                    if (result && result.data) {
+                        var dataArray = [result.data];
+                        grid.dataSource.data(dataArray);
+                    } else {
+                        console.error("La respuesta no tiene la estructura esperada:", result);
+                    }
+
+                    $('#modalUpdateMoral').modal('hide');
+                    sitteg_success('Elemento guardado correctamente');
+                },
+              hideLoading();
+
+                error: function (xhr, status) {
+                    var errmsg = xhr.responseText;
+                    console.log(errmsg)
+                    sitteg_warning('Lo sentimos, ha ocurrido un error.');
+                    hideLoading();
+                }
+            });
+        }
+        else {
+            sitteg_info('Debe llenar los campos requeridos');
+            return;
+        }
+    }
+
+</script>

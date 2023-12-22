@@ -11,9 +11,9 @@
 		var apellidoPaterno = dataItem.apellidoPaterno
 		var apellidoMaterno = dataItem.apellidoMaterno
 		var CURP = dataItem.CURP
-		var fechaNacimiento = dataItem.fechaNacimiento;
-		console.log("FEC", fechaNacimiento)
-		fechaNacimiento = fechaNacimiento == "01/01/0001" ? "" : fechaNacimiento;
+		var FechaNacimientoFormateada = dataItem.FechaNacimientoFormateada;
+		console.log("FEC", FechaNacimientoFormateada)
+		FechaNacimientoFormateada = FechaNacimientoFormateada == "01/01/0001" ? "" : FechaNacimientoFormateada;
 		var RFC = dataItem.RFC
 
 		var nombreCompleto = nombre + " " + apellidoPaterno + " " + apellidoMaterno;
@@ -21,7 +21,7 @@
 
 		document.getElementById("nombreModal").innerText = nombreCompleto;
 		document.getElementById("curpModal").innerText = CURP;
-		document.getElementById("fechaNacimientoModal").innerText = fechaNacimiento;
+		document.getElementById("fechaNacimientoModal").innerText = FechaNacimientoFormateada;
 		document.getElementById("rfcModal").innerText = RFC;
 
 		$('#buscarInvolucradoModal').modal('hide');
@@ -31,29 +31,6 @@
 		$('#involucradoSeleccionado').show();
 
 	}
-
-	function editarPersona(id) {
-		 showLoading();
-		$.ajax({
-			url: '@Url.Action("ajax_ModalEditarPersona")',
-			type: 'GET',
-			data: { id: id },
-			contentType: "application/json; charset=utf-8",
-			dataType: "html",
-			success: function (value) {
-				$('#modalBodyCrearPersona').html(value);
-				$('#modalCrearPersona').modal({ backdrop: 'static', keyboard: false });
-				$('#modalCrearPersona').modal('show');
-				hideLoading();
-			}, error: function () {
-				sitteg_warning("Ocurrio un error al procesar su solicitud.");
-				hideLoading();
-			}
-		});
-		event.stopPropagation();
-	}
-	
-
 </script>
 
 <div class="col-12 mb-4 px-4 rounded gridCustom">
@@ -75,15 +52,8 @@
 				columns.Bound(c => c.CURP).Title("CURP").Width(100);
 				columns.Bound(c => c.fechaNacimiento).Title("Fecha Nacimiento").Format("{0:dd/MM/yyyy}").Width(100);
 				columns.Bound(c => c.numeroLicencia).Title("No Licencia").Width(100);
-				//columns.Template("<button data-bs-toggle='modal' class='w-100 btn'><h6 class='m-0 colorPrimary' onclick='editarPersona(event)'><i class='h5 icon-edit me-2'></i><b>Editar</b></h6></button>").Width(150);
-				columns.Bound(c => c.IdPersona)
-				.ClientTemplate(
-				"<button data-bs-toggle='modal' class='w-100 btn' onclick='editarPersona(#=IdPersona#)'>" +
-				"<h6 class='m-0 colorPrimary'><i class='h5 icon-edit me-2'></i><b>Editar</b></h6>" +
-				"</button>"
-				)
-				.Title("Editar")
-				.Width(150);
+				//columns.Command(c => c.Custom("Editar").Click("getId")).Width(100);
+
 
 			})
 			.Sortable()
@@ -99,11 +69,6 @@
 			.Search(s =>
 			{
 				s.Field(c => c.nombre);
-				s.Field(c => c.apellidoPaterno); 
-				s.Field(c => c.apellidoMaterno);
-				s.Field(c => c.RFC);
-				s.Field(c => c.CURP);
-				s.Field(c => c.numeroLicencia);
 
 			}).Selectable(selectable => selectable.Mode(GridSelectionMode.Single).Type(GridSelectionType.Row)
 			)
@@ -115,14 +80,6 @@
 			< div >< h1 > @ex.Message </ h1 > </ div >
 		}
 	}
-	<div class="modal fade modalCustom" id="modalCrearPersona" aria-labelledby="modalCrearPersona" aria-hidden="true">
-		<div class="modal-dialog modal-xl boxShadow modal-dialog-centered ">
-			<div class="modal-content">
 
-				<div class="modal-body" id="modalBodyCrearPersona">
-				</div>
-			</div>
-		</div>
-	</div>
 </div>
 

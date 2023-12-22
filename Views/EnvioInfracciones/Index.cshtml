@@ -29,10 +29,9 @@
 				<div class="col-3 ">
 					<div class="controlForm my-3">
 						<label>Inicio:</label>
-						@(
-							Html.Kendo().DatePickerFor(m => m.FechaInicio).Format("dd/MM/yyyy")
-							.Culture("es-ES").Max(DateTime.Now)
-										.HtmlAttributes(new { style = "width: 100%", title = "startDate" })
+						@(Html.Kendo().DatePickerFor(m => m.FechaInicio).Format("dd/MM/yyyy")
+							.Culture("es-ES")
+							.HtmlAttributes(new { style = "width: 100%", title = "startDate" })
 							)
 					</div>
 				</div>
@@ -40,7 +39,7 @@
 					<div class="controlForm my-3">
 						<label>Fin:</label>
 						@(Html.Kendo().DatePickerFor(m => m.FechaFin).Format("dd/MM/yyyy")
-							.Culture("es-ES").Max(DateTime.Now)
+							.Culture("es-ES")
 							.HtmlAttributes(new { style = "width: 100%", title = "endDate" })
 							)
 					</div>
@@ -83,18 +82,6 @@
 
 <script>
 	function busquedaInfracciones() {
-
-		var fechaI = $("#FechaInicio").val()
-		var fechaF = $("#FechaFin").val()
-
-
-		if (fechaI === "" || fechaF === ""){
-			sitteg_warning('Se requieren Fecha Inicio y Fecha Fin para filtrar.');
-			return
-		}
-
-
-
 		var myData = $("#busquedaInfraccionForm").serialize();
 		showLoading();
 		$.ajax({
@@ -108,8 +95,8 @@
 				hideLoading();
 			},
 			error: function (error) {
-				sitteg_warning("Se requieren Fecha Inicio y Fecha Fin para filtrar");
 				hideLoading();
+				alert("ERROR");
 			}
 		});
 	}
