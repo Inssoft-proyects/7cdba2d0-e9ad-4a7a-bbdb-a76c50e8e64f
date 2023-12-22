@@ -108,6 +108,26 @@
     function agregarDiaInhabil() {
   
         var Mydata = $("#ProductForm").serialize();
+        var controlsValidate = [];
+        var isValid = true;
+
+        controlsValidate.push({ 'controlName': 'end' });
+
+        // INPUTS
+        if (!isControlsValid(controlsValidate)) { isValid = false; }
+
+
+        // DROP DOWN LIST
+        controlsValidate = [];
+        controlsValidate.push({ 'controlName': 'idMunicipio' });
+        if (!isControlsValidDropDown(controlsValidate)) { isValid = false; }
+
+
+        if (!isValid) {
+            sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
+            return;
+        }
+
         console.log(Mydata);
         $('#addDateInhabil').modal('hide');
         $('body').removeClass('model-open');
