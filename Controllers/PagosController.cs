@@ -23,29 +23,43 @@ namespace GuanajuatoAdminUsuarios.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] InfoPagoModel InfoPago)
         {
-            var resp = _PagosInfraccionesService.Pagar(InfoPago);
-            LogTraficoModel LogModel = new LogTraficoModel();
-            LogModel.jsonRequest = JsonConvert.SerializeObject(InfoPago);
-            LogModel.jsonResponse = JsonConvert.SerializeObject(resp);
-            LogModel.fecha = DateTime.Now;
-            LogModel.valor = InfoPago.FolioInfraccion;
-            LogModel.api = nameof(PagosController) + "/Post";
-            _LogTraficoService.CreateLog(LogModel);
-            return Ok(resp);
+            try
+            {
+                var resp = _PagosInfraccionesService.Pagar(InfoPago);
+                LogTraficoModel LogModel = new LogTraficoModel();
+                LogModel.jsonRequest = JsonConvert.SerializeObject(InfoPago);
+                LogModel.jsonResponse = JsonConvert.SerializeObject(resp);
+                LogModel.fecha = DateTime.Now;
+                LogModel.valor = InfoPago.FolioInfraccion;
+                LogModel.api = nameof(PagosController) + "/Post";
+                _LogTraficoService.CreateLog(LogModel);
+                return Ok(resp);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponsePagoModel() { CodigoRespuesta = 6, HasError = true, Mensaje = "Error al pagar: " + ex.Message });
+            }
         }
 
         // PUT api/<PagosController>/5
         [HttpDelete]
         public IActionResult Delete([FromBody] ReversaPagoModel ReversaPago)
         {
-            var resp = _PagosInfraccionesService.ReversaDePago(ReversaPago);
-            LogTraficoModel LogModel = new LogTraficoModel();
-            LogModel.jsonRequest = JsonConvert.SerializeObject(ReversaPago);
-            LogModel.jsonResponse = JsonConvert.SerializeObject(resp);
-            LogModel.fecha = DateTime.Now;
-            LogModel.api = nameof(PagosController) + "/Delete";
-            _LogTraficoService.CreateLog(LogModel);
-            return Ok(resp);
+            try
+            {
+                var resp = _PagosInfraccionesService.ReversaDePago(ReversaPago);
+                LogTraficoModel LogModel = new LogTraficoModel();
+                LogModel.jsonRequest = JsonConvert.SerializeObject(ReversaPago);
+                LogModel.jsonResponse = JsonConvert.SerializeObject(resp);
+                LogModel.fecha = DateTime.Now;
+                LogModel.api = nameof(PagosController) + "/Delete";
+                _LogTraficoService.CreateLog(LogModel);
+                return Ok(resp);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponsePagoModel() { CodigoRespuesta = 6, HasError = true, Mensaje = "Error al eliminar el pago: " + ex.Message });
+            }
         }
     }
 }

@@ -23,7 +23,7 @@
             .Read(read => read.Action("GetEnt", "CatEntidades"))
             .PageSize(5).Model(model => model.Id(p => p.idEntidad))
             )
-            .ToolBar(t => t.Search())
+            .ToolBar(t => t.Search().Text("Buscar..."))
             .Search(s =>
             {
                 s.Field(c => c.nombreEntidad);

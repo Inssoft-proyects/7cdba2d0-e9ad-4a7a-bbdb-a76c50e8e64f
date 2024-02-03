@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using Newtonsoft.Json.Linq;
 using System.Text;
 using System.Runtime.ConstrainedExecution;
+using System.Data.Common;
 
 namespace GuanajuatoAdminUsuarios.Services
 {
@@ -19,7 +20,7 @@ namespace GuanajuatoAdminUsuarios.Services
             _sqlClientConnectionBD = sqlClientConnectionBD;
         }
 
-        public List<BusquedaAccidentesModel> GetAllAccidentes(int idOficina)
+        public List<BusquedaAccidentesModel> GetAllAccidentes()
         {
             //
             List<BusquedaAccidentesModel> ListaAccidentes = new List<BusquedaAccidentesModel>();
@@ -62,7 +63,7 @@ namespace GuanajuatoAdminUsuarios.Services
 
 
                     command.CommandType = CommandType.Text;
-                    command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = (object)idOficina ?? DBNull.Value;
+                    //command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = (object)idOficina ?? DBNull.Value;
                    // command.Parameters.Add(new SqlParameter("@idDependencia", SqlDbType.Int)).Value = (object)idDependencia ?? DBNull.Value;
 
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
@@ -470,6 +471,119 @@ namespace GuanajuatoAdminUsuarios.Services
                     connection.Close();
                 }
             return ListaAccidentes;
+
+
+        }
+
+        public IEnumerable<BusquedaAccidentesModel> GetAllAccidentesPagination(Pagination pagination, BusquedaAccidentesModel model)
+        {
+            List<BusquedaAccidentesModel> modelList = new List<BusquedaAccidentesModel>();
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    int numeroSecuencial = 1;
+                    connection.Open();
+                    using (SqlCommand cmd = new SqlCommand("usp_ObtieneAccidentesBusqueda", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@PageIndex", pagination.PageIndex);
+                        cmd.Parameters.AddWithValue("@PageSize", pagination.PageSize);
+						cmd.Parameters.AddWithValue("@IdMunicipio", model.idMunicipio);
+						cmd.Parameters.AddWithValue("@IdSupervisa", model.idSupervisa);
+						cmd.Parameters.AddWithValue("@IdCarretera", model.IdCarreteraBusqueda);
+						cmd.Parameters.AddWithValue("@IdTramo", model.IdTramoBusqueda);
+						cmd.Parameters.AddWithValue("@IdElabora", model.idElabora);
+						cmd.Parameters.AddWithValue("@IdAutoriza", model.idAutoriza);
+						cmd.Parameters.AddWithValue("@IdEstatusAccidente", model.idEstatusReporte);
+						cmd.Parameters.AddWithValue("@IdDelegacionBusqueda", model.IdDelegacionBusqueda);
+						cmd.Parameters.AddWithValue("@FolioBusqueda", model.folioBusqueda);
+						cmd.Parameters.AddWithValue("@PlacasBusqueda", model.placasBusqueda);
+						cmd.Parameters.AddWithValue("@PropietarioBusqueda", model.propietarioBusqueda);      
+                        cmd.Parameters.AddWithValue("@SerieBusqueda", model.serieBusqueda);
+						cmd.Parameters.AddWithValue("@ConductorBusqueda", model.conductorBusqueda);
+						if (model.FechaInicio != null)
+						{
+                            cmd.Parameters.AddWithValue("@FechaInicio", model.FechaInicio);
+                        }
+                        else
+						{
+							cmd.Parameters.AddWithValue("@FechaInicio", DBNull.Value);
+
+						}
+
+						if (model.FechaFin != null)
+						{
+                            cmd.Parameters.AddWithValue("@FechaFin", model.FechaFin);
+                        }
+                        else
+						{
+							cmd.Parameters.AddWithValue("@FechaFin", DBNull.Value);
+
+						}
+
+
+						/*if (pagination.Filter.Trim() != "")
+                            cmd.Parameters.AddWithValue("@Filter", pagination.Filter);*/
+
+						using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+                        {
+                            while (reader.Read())
+
+                            {
+                                BusquedaAccidentesModel accidente = new BusquedaAccidentesModel();
+                                accidente.IdAccidente = Convert.IsDBNull(reader["idAccidente"]) ? 0 : Convert.ToInt32(reader["idAccidente"]);
+                                accidente.idMunicipio = Convert.IsDBNull(reader["idMunicipio"]) ? 0 : Convert.ToInt32(reader["idMunicipio"]);
+                                accidente.idCarretera = Convert.IsDBNull(reader["idCarretera"]) ? 0 : Convert.ToInt32(reader["idCarretera"]);
+                                accidente.IdDelegacionBusqueda = Convert.IsDBNull(reader["idOficinaDelegacion"]) ? 0 : Convert.ToInt32(reader["idOficinaDelegacion"]);
+                                accidente.idTramo = Convert.IsDBNull(reader["idTramo"]) ? 0 : Convert.ToInt32(reader["idTramo"]);
+                                accidente.kilometro = reader["kilometro"].ToString();
+                                accidente.idEstatusReporte = Convert.IsDBNull(reader["idEstatusReporte"]) ? 0 : Convert.ToInt32(reader["idEstatusReporte"]);
+                                accidente.estatusReporte = reader["estatusReporte"].ToString();
+                                accidente.municipio = reader["municipio"].ToString();
+                                accidente.carretera = reader["carretera"].ToString();
+                                accidente.placa = reader["placa"].ToString();
+                                accidente.serie = reader["serie"].ToString();
+                                string nombrePropietario = reader["nombre"].ToString();
+                                string apellidoPaternoPropietario = reader["apellidoPaterno"].ToString();
+                                string apellidoMaternoPropietario = reader["apellidoMaterno"].ToString();
+                                accidente.propietario = $"{nombrePropietario} {apellidoPaternoPropietario} {apellidoMaternoPropietario}";
+                                string nombreConductor = reader["nombreConductor"].ToString();
+                                string apellidoPaternoConductor = reader["apellidoPaternoConductor"].ToString();
+                                string apellidoMaternoConductor = reader["apellidoMaternoConductor"].ToString();
+                                accidente.conductor = $"{nombreConductor} {apellidoPaternoConductor} {apellidoMaternoPropietario}";
+                                accidente.tramo = reader["tramo"].ToString();
+                                accidente.idElabora = Convert.IsDBNull(reader["idElabora"]) ? 0 : Convert.ToInt32(reader["idElabora"]);
+                                accidente.idSupervisa = Convert.IsDBNull(reader["idSupervisa"]) ? 0 : Convert.ToInt32(reader["idSupervisa"]);
+                                accidente.idAutoriza = Convert.IsDBNull(reader["idAutoriza"]) ? 0 : Convert.ToInt32(reader["idAutoriza"]);
+                                accidente.idConductor = Convert.IsDBNull(reader["idConductor"]) ? 0 : Convert.ToInt32(reader["idConductor"]);
+                                accidente.idPropietario = Convert.IsDBNull(reader["idPropietario"]) ? 0 : Convert.ToInt32(reader["idPropietario"]);
+                                accidente.numeroReporte = reader["numeroReporte"].ToString();
+                                accidente.fecha = reader["fecha"] != DBNull.Value ? Convert.ToDateTime(reader["fecha"]) : DateTime.MinValue;
+                                accidente.hora = reader["hora"] != DBNull.Value ? TimeSpan.Parse(reader["hora"].ToString()) : TimeSpan.MinValue;
+                                accidente.NumeroSecuencial = Convert.IsDBNull(reader["rowIndex"]) ? 0 : Convert.ToInt32(reader["rowIndex"]); 
+
+                               accidente.total = Convert.ToInt32(reader["Total"]);
+
+                                modelList.Add(accidente);
+
+
+                            }
+                        }
+
+                    }
+
+                }
+                catch (SqlException ex)
+                {
+
+                }
+                finally
+                {
+                    connection.Close();
+                }
+                return modelList;
+            }
 
 
         }

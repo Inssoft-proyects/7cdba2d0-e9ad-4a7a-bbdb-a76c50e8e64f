@@ -14,7 +14,20 @@
                 <h6 class="px-4 text-muted">Edita o ajusta el listado de grúas.</h6>
             </div>
         </div>
-
+        <div class="row">
+            @if (ViewBag.NoResultsMessage != null)
+            {
+                <div class="alert alert-info">
+                    @ViewBag.NoResultsMessage
+                </div>
+            }
+             @if (ViewBag.NoAuth != null)
+            {
+                <div class="alert alert-info">
+                    @ViewBag.NoAuth
+                </div>
+            }
+        </div>
         @(
             Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.AsignacionGruaModel>()
             .Name("gridBusquedaSolicitudes")
@@ -40,7 +53,7 @@
             .Read(read => read.Action("Index", "AsignacionGruas"))
             .PageSize(5).Model(model => model.Id(p => p.FolioSolicitud))
             )
-            .ToolBar(t => t.Search())
+            .ToolBar(t => t.Search().Text("Buscar..."))
             .Search(s =>
             {
                 s.Field(c => c.FolioSolicitud);
@@ -61,9 +74,9 @@
     function onRowSelect(e) {
         var selectedRow = e.sender.select(); 
         var dataItem = e.sender.dataItem(selectedRow); 
-        var idSolicitud = dataItem.idSolicitud; 
+        var FolioSolicitud = dataItem.FolioSolicitud;
         var idPropietarioGrua = dataItem.idPropietarioGrua;
         console.log("D",dataItem)
-        window.location.href = '@Url.Action("DatosGruas", "AsignacionGruas")?iSo=' + idSolicitud + '&iPg=' + idPropietarioGrua;
+        window.location.href = '@Url.Action("DatosGruas", "AsignacionGruas")?iSo=' + FolioSolicitud + '&iPg=' + idPropietarioGrua;
     }
 </script>

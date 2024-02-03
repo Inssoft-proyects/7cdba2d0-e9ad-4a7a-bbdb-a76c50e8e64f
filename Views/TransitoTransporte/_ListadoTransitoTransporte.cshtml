@@ -1,5 +1,40 @@
 ﻿@model List<TransitoTransporteModel>
+@{
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+    var listaIdsPermitidosJson = @HttpContextAccessor.HttpContext.Session.GetString("IdsPermitidos").ToString();
+    var autorizaciones = @HttpContextAccessor.HttpContext.Session.GetString("Autorizaciones").ToString();
+}
 <script>
+    $(document).ready(function () {
+        var access = @listaIdsPermitidosJson;
+        var auth = @autorizaciones;
+        console.log(auth);
+
+        if (access != undefined && access != '') {
+            if (!access.toString().includes(localStorage.getItem("menuId"))) {
+                Swal.fire({
+                    icon: "error",
+                    title: "¡El usuario no tiene acceso a esta opción!"
+                });
+                setTimeout(function () {
+                    window.location.href = "/Principal";
+                }, 200);
+            } else {
+                //IMPRIMIR
+                if (!auth.toString().includes("203")) {
+                    $("#btnExcelTransito").prop('disabled', true).css({ "opacity": "0.3" });
+                }
+            }
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "¡El usuario no tiene acceso a esta opción!"
+            });
+            setTimeout(function () {
+                window.location.href = "/Principal";
+            }, 200);
+        }
+    });
     function ShowGruaPopUp(id) {
         $.ajax({
             url: '@Url.Action("ajax_DetailGruas")',
@@ -24,7 +59,7 @@
         $('body').removeClass('model-open');
         $('.modal-backdrop').remove();
         var ids = $('#hdnIds').val();
-		showLoading();
+        showLoading();
         $.ajax({
             url: '@Url.Action("ajax_DeleteTransito")',
             type: 'POST',
@@ -33,11 +68,11 @@
             success: function (result) {
                 sitteg_success('Elemento guardado correctamente');
                 $('#listadoTransitoTransporte').html(result);
-				hideLoading();
-			}, error: function () {
-				sitteg_warning("Ocurrio un error al procesar su solicitud.");
-				hideLoading();
-			}
+                hideLoading();
+            }, error: function () {
+                sitteg_warning("Ocurrio un error al procesar su solicitud.");
+                hideLoading();
+            }
         });
     }
 
@@ -47,7 +82,7 @@
     }
 
     function downLoadPdf(Id) {
-       
+
         window.location = '/TransitoTransporte/CreatePdfUnRegistro?IdDeposito=' + Id;
     }
 </script>
@@ -71,20 +106,20 @@
     @*<column template="<button data-bs-toggle=modal data-bs-target=\#editVehiculo class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>" width="100" />*@
 
     <div class="col-12 mb-4 px-4 rounded gridCustom">
-    @{
-	    try
-		{
-				<button type="button" class="btn btn-outline-success mb-4" onclick="generateExcel()">
-					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filetype-xls" viewBox="0 0 16 16">
-						<path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5ZM6.472 15.29a1.176 1.176 0 0 1-.111-.449h.765a.578.578 0 0 0 .254.384c.07.049.154.087.25.114.095.028.202.041.319.041.164 0 .302-.023.413-.07a.559.559 0 0 0 .255-.193.507.507 0 0 0 .085-.29.387.387 0 0 0-.153-.326c-.101-.08-.255-.144-.462-.193l-.619-.143a1.72 1.72 0 0 1-.539-.214 1.001 1.001 0 0 1-.351-.367 1.068 1.068 0 0 1-.123-.524c0-.244.063-.457.19-.639.127-.181.303-.322.527-.422.225-.1.484-.149.777-.149.305 0 .564.05.78.152.216.102.383.239.5.41.12.17.186.359.2.566h-.75a.56.56 0 0 0-.12-.258.625.625 0 0 0-.247-.181.923.923 0 0 0-.369-.068c-.217 0-.388.05-.513.152a.472.472 0 0 0-.184.384c0 .121.048.22.143.3a.97.97 0 0 0 .405.175l.62.143c.217.05.406.12.566.211a1 1 0 0 1 .375.358c.09.148.135.335.135.56 0 .247-.063.466-.188.656a1.216 1.216 0 0 1-.539.439c-.234.105-.52.158-.858.158-.254 0-.476-.03-.665-.09a1.404 1.404 0 0 1-.478-.252 1.13 1.13 0 0 1-.29-.375Zm-2.945-3.358h-.893L1.81 13.37h-.036l-.832-1.438h-.93l1.227 1.983L0 15.931h.861l.853-1.415h.035l.85 1.415h.908L2.253 13.94l1.274-2.007Zm2.727 3.325H4.557v-3.325h-.79v4h2.487v-.675Z"></path>
-					</svg>
-					<h5>Generar excel</h5>
-				</button>
+        @{
+            try
+            {
+                <button id="btnExcelTransito" type="button" class="btn btn-outline-success mb-4" onclick="generateExcel()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filetype-xls" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5ZM6.472 15.29a1.176 1.176 0 0 1-.111-.449h.765a.578.578 0 0 0 .254.384c.07.049.154.087.25.114.095.028.202.041.319.041.164 0 .302-.023.413-.07a.559.559 0 0 0 .255-.193.507.507 0 0 0 .085-.29.387.387 0 0 0-.153-.326c-.101-.08-.255-.144-.462-.193l-.619-.143a1.72 1.72 0 0 1-.539-.214 1.001 1.001 0 0 1-.351-.367 1.068 1.068 0 0 1-.123-.524c0-.244.063-.457.19-.639.127-.181.303-.322.527-.422.225-.1.484-.149.777-.149.305 0 .564.05.78.152.216.102.383.239.5.41.12.17.186.359.2.566h-.75a.56.56 0 0 0-.12-.258.625.625 0 0 0-.247-.181.923.923 0 0 0-.369-.068c-.217 0-.388.05-.513.152a.472.472 0 0 0-.184.384c0 .121.048.22.143.3a.97.97 0 0 0 .405.175l.62.143c.217.05.406.12.566.211a1 1 0 0 1 .375.358c.09.148.135.335.135.56 0 .247-.063.466-.188.656a1.216 1.216 0 0 1-.539.439c-.234.105-.52.158-.858.158-.254 0-.476-.03-.665-.09a1.404 1.404 0 0 1-.478-.252 1.13 1.13 0 0 1-.29-.375Zm-2.945-3.358h-.893L1.81 13.37h-.036l-.832-1.438h-.93l1.227 1.983L0 15.931h.861l.853-1.415h.035l.85 1.415h.908L2.253 13.94l1.274-2.007Zm2.727 3.325H4.557v-3.325h-.79v4h2.487v-.675Z"></path>
+                    </svg>
+                    <h5>Generar excel</h5>
+                </button>
                 @(Html.Kendo().Grid(Model)
                 .Name("Grid")
                 .Columns(columns =>
                 {
-					columns.Bound(c => c.IdSolicitud).Hidden();
+                    columns.Bound(c => c.IdSolicitud).Hidden();
                     columns.Bound(p => p.IdDeposito).Title("Número").Width(90);
                     columns.Bound(p => p.fullSolicitudfolioInfraccion).Title("Fecha_Evento/Folio_Solicitud/Folio_Infracción").Width(190);
                     columns.Bound(p => p.fullVehiculo).Title("Vehículo").Width(150);
@@ -97,269 +132,302 @@
                     ).Title("Detalle Grúa(s)").Sortable(false).Width(100);
                     columns.Bound(p => p.IdDependencia).ClientTemplate(
                     "<button onclick=\"downLoadPdf('#= IdDeposito #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-pdf me-2'></i></h6></button>"
-                    ).Title("Descargar deatalle").Sortable(false).Width(100);
+                    ).Title("Descargar detalle").Sortable(false).Width(100);
                     columns.Bound(c => c.fullDependencia).Title("Estatus").Width(100);
 
-						columns.Bound(p => p.IdGrua).ClientTemplate(
-					"<button onclick=\"ShowUpdatePopUp('#= IdSolicitud #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i></h6></button>"
-						).Title("Editar").Sortable(false).Width(100);
+                    columns.Bound(p => p.IdGrua).ClientTemplate(
+                    "<button onclick=\"ShowUpdatePopUp('#= IdSolicitud #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i></h6></button>"
+                    ).Title("Editar").Sortable(false).Width(100);
 
-						columns.Bound(p => p.IdDeposito).ClientTemplate(
-						"<button onclick=\"ShowDeletePopUp('#= IdDeposito #,#= IdSolicitud # ')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-delete me-2'></i></h6></button>"
-						).Title("Eliminar").Sortable(false).Width(100);
-						columns.Bound(p => p.IdDependenciaGenera).ClientTemplate(
-						"<div class='turno-captura'>" +
-						"<div class='tto-marked'>TTO:</div>" +
-						"#= IdDependenciaGenera === 1 ? '✓' : '' #" +
-						"<div class='dep-marked'>Dep:</div>" +
-						"#= IdDependenciaGenera === 2 ? '✓' : '' #" +
-						"</div>"
-						).Title("Turno Captura").Width(150);
-
-
-
-					}).HtmlAttributes(new { style = "height:350" })
-					@*.Pageable(pager => pager.Input(true).Position(GridPagerPosition.Top))*@
-					@*.Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }))*@
-					.Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }).Position(GridPagerPosition.Bottom))
-					.Sortable()
-					.Scrollable(scr => scr.Height(350))
-					.DataSource(dataSource => dataSource
-					.Ajax()
-					.ServerOperation(false)
-					)
-				.ToolBar(t => t.Search())
-				.Search(s =>
-				{
-					s.Field(c => c.fullSolicitudfolioInfraccion);
-				    s.Field(c => c.fullVehiculo);
-					s.Field(c => c.FechaIngreso);
-					s.Field(c => c.FechaLiberacion);
-					s.Field(c => c.pension);
-					s.Field(c => c.Concesionario);
-				})
-						)
-
-				}
-				catch (Exception ex)
-				{
-					< div >< h1 > @ex.Message </ h1 > </ div >
-				}
-			}
-
-			@(Html.Kendo().Tooltip()
-				.For("#Grid")
-				.Filter("th")
-				.Position(TooltipPosition.Top)
-				.ContentHandler("tooltipContent")
-				)
-		</div>
-
-	</div>
-
-	@*Modal*@
-	<div class="modal fade modalCustom" id="modalGruasConcDetail"  aria-labelledby="editVehiculo" aria-hidden="true">
-		<div class="modal-dialog modal-xl boxShadow modal-dialog-centered">
-			<div class="modal-content">
-
-				<section class=" bg-white rounded">
-					<div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
-						<div class="col-auto pe-0">
-							<div class="row align-items-center justify-content-center justify-content-md-start">
-								<div class="col-auto pe-0">
-									<i class="icon-edit-car h1 colorPrimary"></i>
-								</div>
-								<div class="col-auto my-3">
-									<h2 class="m-0 h3"><b>Detalle Grúas</b></h2>
-								</div>
-							</div>
-						</div>
-						<div class="col-auto">
-							<div class="row">
-								<div class="col-auto my-3">
-									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-12">
-							<div class="bg-light py-1"></div>
-						</div>
-
-					</div>
-
-					<div class="modal-body" id="ModalBodyDetail">
-					</div>
-
-				</section>
-			</div>
-		</div>
-	</div>
+                    columns.Bound(p => p.IdDeposito).ClientTemplate(
+                    "<button onclick=\"ShowDeletePopUp('#= IdDeposito #,#= IdSolicitud # ')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-delete me-2'></i></h6></button>"
+                    ).Title("Eliminar").Sortable(false).Width(100);
+                    columns.Bound(p => p.IdDependenciaGenera).ClientTemplate(
+                    "<div class='turno-captura'>" +
+                    "<div class='tto-marked'>TTO:</div>" +
+                    "#= IdDependenciaGenera === 1 ? '✓' : '' #" +
+                    "<div class='dep-marked'>Dep:</div>" +
+                    "#= IdDependenciaGenera === 2 ? '✓' : '' #" +
+                    "</div>"
+                    ).Title("Turno Captura").Width(150);
 
 
-	<div class="modal fade modalCustom" id="myDeleteModal"  aria-labelledby="editVehiculo" aria-hidden="true">
-		<div class="modal-dialog modal-xl boxShadow modal-dialog-centered">
-			<div class="modal-content">
-				<section class=" bg-white rounded">
-					<div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
-						<div class="col-auto pe-0">
-							<div class="row align-items-center justify-content-center justify-content-md-start">
-								<div class="col-auto pe-0">
-									<i class="icon-delete h1 colorPrimary"></i>
-								</div>
-								<div class="col-auto my-3">
-									<h2 class="m-0 h3"><b>Confirmación</b></h2>
-								</div>
-							</div>
-						</div>
-						<div class="col-auto">
-							<div class="row">
-								<div class="col-auto my-3">
-									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-								</div>
-							</div>
-						</div>
-					</div>
 
-					<div class="row">
-						<div class="col-12">
-							<div class="bg-light py-1"></div>
-						</div>
+                }).HtmlAttributes(new { style = "height:350" })
+                @*.Pageable(pager => pager.Input(true).Position(GridPagerPosition.Top))*@
+                @*.Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }))*@
+                .Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }).Position(GridPagerPosition.Bottom))
+                .Sortable()
+                .Scrollable(scr => scr.Height(350))
+                .DataSource(dataSource => dataSource
+                .Ajax()
+                .ServerOperation(false)
+                )
+                .ToolBar(t => t.Search().Text("Buscar..."))
+                .Search(s =>
+                {
+                    s.Field(c => c.fullSolicitudfolioInfraccion);
+                    s.Field(c => c.fullVehiculo);
+                    s.Field(c => c.FechaIngreso);
+                    s.Field(c => c.FechaLiberacion);
+                    s.Field(c => c.pension);
+                    s.Field(c => c.Concesionario);
+                })
+                    )
 
-					</div>
+            }
+            catch (Exception ex)
+            {
+                < div >< h1 > @ex.Message </ h1 > </ div >
+            }
+        }
 
-					<div class="modal-body" id="ModalBodyDelete">
-						<input type="hidden" id="hdnIds" />
-						<p class="success-message">¿Esta seguro que desea eliminar este registro?</p>
-					</div>
-
-					<div class="row my-4">
-						<div class="col-12 col-md-6 mx-md-auto">
-							<div class="row justify-content-around">
-								<div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
-									<button type="button" data-bs-dismiss="modal" aria-label="Close">
-										<h6 class="m-0 v"><b>Cancelar</b></h6>
-									</button>
-								</div>
-								<div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-									<div class="controlButton">
-
-										<button type="button" class="btnPrimary px-3" onclick="ConfirmDelete()">
-											<h6 class="m-0 px-3"><b>Aceptar</b></h6>
-										</button>
-
-									</div>
-								</div>
-							</div>
-						</div>
-
-					</div>
+        @(Html.Kendo().Tooltip()
+            .For("#Grid")
+            .Filter("th")
+            .Position(TooltipPosition.Top)
+            .ContentHandler("tooltipContent")
+            )
 
 
-				</section>
-			</div>
-		</div>
-	</div>
+
+        <script>
+
+            $(document).ready(function () {
+                var auth = @autorizaciones;
+                var grid = $("#Grid").data("kendoGrid");
+
+                //ELIMINAR
+                if (!auth.toString().includes("205")) {
+                    grid.hideColumn(12);
+                }
+                // EDITAR
+                if (!auth.toString().includes("206")) {
+                    grid.hideColumn(11);
+                }
+                //EXPORTAR
+                if (!auth.toString().includes("203")) {
+                    grid.hideColumn(9);
+                }
+
+                //CONSULTAR
+                if (!auth.toString().includes("202")) {
+                    grid.hideColumn(8);
+                }
+
+            });
+
+        </script>
+    </div>
 
 
-	<div class="modal fade modalCustom" id="myUpdateModal"  aria-labelledby="editVehiculo" aria-hidden="true">
-		<div class="modal-dialog modal-xl boxShadow modal-dialog-centered">
-			<div class="modal-content">
-				<section class=" bg-white rounded">
-					<div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
-						<div class="col-auto pe-0">
-							<div class="row align-items-center justify-content-center justify-content-md-start">
-								<div class="col-auto pe-0">
-									<i class="icon-edit me-2 h1 colorPrimary"></i>
-								</div>
-								<div class="col-auto my-3">
-									<h2 class="m-0 h3"><b>Modificar</b></h2>
-								</div>
-							</div>
-						</div>
-						<div class="col-auto">
-							<div class="row">
-								<div class="col-auto my-3">
-									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-								</div>
-							</div>
-						</div>
-					</div>
 
-					<div class="row">
-						<div class="col-12">
-							<div class="bg-light py-1"></div>
-						</div>
+</div>
 
-					</div>
+@*Modal*@
+<div class="modal fade modalCustom" id="modalGruasConcDetail" aria-labelledby="editVehiculo" aria-hidden="true">
+    <div class="modal-dialog modal-xl boxShadow modal-dialog-centered">
+        <div class="modal-content">
 
-				<div class="modal-body" id="ModalBodyUpdate">
-					<input type="hidden" id="hdnIdDeposito" />
-					<div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-						<div class="controlButton">
-							<button type="button" class="btn btn-primary btn-sm" data-id="solicitud" onclick="datosSolicitud()">
-								Datos de Registro de Solicitud
-							</button>
-						</div>
-					</div>
-					<div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-						<div class="controlButton">
-							<button type="button" class="btn btn-primary btn-sm" data-id="gruas" onclick="datosGruas()">
-								Datos de las Grúas Asignadas
-							</button>
-						</div>
-					</div>
-				</div>
-
-				<div class="row my-4">
-    <div class="col-12 col-md-6 mx-md-auto">
-        <div class="row justify-content-around">
-            <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
-                <button type="button" data-bs-dismiss="modal" aria-label="Close" style="width: 100%; height: auto;">
-                    <h6 class="m-0"><b>Cancelar</b></h6>
-                </button>
-            </div>
-            <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-                <div class="controlButton">
-                    <button type="button" class="btnPrimary px-3" onclick="ConfirmDelete()" style="width: 100%; height: auto;">
-                        <h6 class="m-0 px-3"><b>Aceptar</b></h6>
-                    </button>
+            <section class=" bg-white rounded">
+                <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                    <div class="col-auto pe-0">
+                        <div class="row align-items-center justify-content-center justify-content-md-start">
+                            <div class="col-auto pe-0">
+                                <i class="icon-edit-car h1 colorPrimary"></i>
+                            </div>
+                            <div class="col-auto my-3">
+                                <h2 class="m-0 h3"><b>Detalle Grúas</b></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="row">
+                            <div class="col-auto my-3">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="bg-light py-1"></div>
+                    </div>
+
+                </div>
+
+                <div class="modal-body" id="ModalBodyDetail">
+                </div>
+
+            </section>
         </div>
     </div>
 </div>
 
-				</section>
-			</div>
-		</div>
-	</div>
 
-	<script>
-		function tooltipContent(e) {
-			var titulo = e.target.context.dataset.title;
-			return titulo;
-		}
-		function generateExcel() {
-		var grid = $("#Grid").data("kendoGrid");
-		var pageSize = grid.dataSource._data.length;
-		var dataSourceTotal = grid.dataSource.total();
-		grid.dataSource.pageSize(dataSourceTotal);
-		grid.saveAsExcel();
+<div class="modal fade modalCustom" id="myDeleteModal" aria-labelledby="editVehiculo" aria-hidden="true">
+    <div class="modal-dialog modal-xl boxShadow modal-dialog-centered">
+        <div class="modal-content">
+            <section class=" bg-white rounded">
+                <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                    <div class="col-auto pe-0">
+                        <div class="row align-items-center justify-content-center justify-content-md-start">
+                            <div class="col-auto pe-0">
+                                <i class="icon-delete h1 colorPrimary"></i>
+                            </div>
+                            <div class="col-auto my-3">
+                                <h2 class="m-0 h3"><b>Confirmación</b></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="row">
+                            <div class="col-auto my-3">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-			setTimeout(function () {
-				grid.dataSource.pageSize(pageSize);
-			}, 300);
-		}
+                <div class="row">
+                    <div class="col-12">
+                        <div class="bg-light py-1"></div>
+                    </div>
 
-		function datosSolicitud(){
-		var idSolicitud = document.getElementById('hdnIdDeposito').value;
+                </div>
+
+                <div class="modal-body" id="ModalBodyDelete">
+                    <input type="hidden" id="hdnIds" />
+                    <p class="success-message">¿Esta seguro que desea eliminar este registro?</p>
+                </div>
+
+                <div class="row my-4">
+                    <div class="col-12 col-md-6 mx-md-auto">
+                        <div class="row justify-content-around">
+                            <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
+                                <button type="button" data-bs-dismiss="modal" aria-label="Close">
+                                    <h6 class="m-0 v"><b>Cancelar</b></h6>
+                                </button>
+                            </div>
+                            <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                                <div class="controlButton">
+
+                                    <button type="button" class="btnPrimary px-3" onclick="ConfirmDelete()">
+                                        <h6 class="m-0 px-3"><b>Aceptar</b></h6>
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </section>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade modalCustom" id="myUpdateModal" aria-labelledby="editVehiculo" aria-hidden="true">
+    <div class="modal-dialog modal-xl boxShadow modal-dialog-centered">
+        <div class="modal-content">
+            <section class=" bg-white rounded">
+                <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
+                    <div class="col-auto pe-0">
+                        <div class="row align-items-center justify-content-center justify-content-md-start">
+                            <div class="col-auto pe-0">
+                                <i class="icon-edit me-2 h1 colorPrimary"></i>
+                            </div>
+                            <div class="col-auto my-3">
+                                <h2 class="m-0 h3"><b>Modificar</b></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="row">
+                            <div class="col-auto my-3">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="bg-light py-1"></div>
+                    </div>
+
+                </div>
+
+                <div class="modal-body" id="ModalBodyUpdate">
+                    <input type="hidden" id="hdnIdDeposito" />
+                    <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                        <div class="controlButton">
+                            <button type="button" class="btn btn-primary btn-sm" data-id="solicitud" onclick="datosSolicitud()">
+                                Datos de Registro de Solicitud
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                        <div class="controlButton">
+                            <button type="button" class="btn btn-primary btn-sm" data-id="gruas" onclick="datosGruas()">
+                                Datos de las Grúas Asignadas
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row my-4">
+                    <div class="col-12 col-md-6 mx-md-auto">
+                        <div class="row justify-content-around">
+                            <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
+                                <button type="button" data-bs-dismiss="modal" aria-label="Close" style="width: 100%; height: auto;">
+                                    <h6 class="m-0"><b>Cancelar</b></h6>
+                                </button>
+                            </div>
+                            <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+                                <div class="controlButton">
+                                    <button type="button" class="btnPrimary px-3" onclick="ConfirmDelete()" style="width: 100%; height: auto;">
+                                        <h6 class="m-0 px-3"><b>Aceptar</b></h6>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </div>
+</div>
+
+<script>
+    function tooltipContent(e) {
+        var titulo = e.target.context.dataset.title;
+        return titulo;
+    }
+    function generateExcel() {
+        var grid = $("#Grid").data("kendoGrid");
+        var pageSize = grid.dataSource._data.length;
+        var dataSourceTotal = grid.dataSource.total();
+        grid.dataSource.pageSize(dataSourceTotal);
+        grid.saveAsExcel();
+
+        setTimeout(function () {
+            grid.dataSource.pageSize(pageSize);
+        }, 300);
+
+    }
+
+    function datosSolicitud() {
+        var idSolicitud = document.getElementById('hdnIdDeposito').value;
 
         window.location.href = "/Depositos/Depositos?Isol=" + idSolicitud;
-	}
-		function datosGruas(){
-		var idSolicitud = document.getElementById('hdnIdDeposito').value;
-			 window.location.href = '@Url.Action("DatosGruas", "AsignacionGruas")?iSo=' + idSolicitud;
-			}
-	</script>
+    }
+    function datosGruas() {
+        var idSolicitud = document.getElementById('hdnIdDeposito').value;
+        window.location.href = '@Url.Action("DatosGruas", "AsignacionGruas")?iSo=' + idSolicitud;
+    }
+</script>

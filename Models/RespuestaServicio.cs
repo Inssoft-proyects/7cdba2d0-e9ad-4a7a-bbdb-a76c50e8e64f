@@ -6,6 +6,8 @@
         public string Nombre { get; set; }
         public string Oficina { get; set; }
         public string Vector { get; set; }
+        public string autorizaciones { get; set; }
+
     }
 
 }

@@ -1,5 +1,38 @@
 ﻿@model GuanajuatoAdminUsuarios.Models.BusquedaAccidentesModel
 
+@{
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+    var listaIdsPermitidosJson = @HttpContextAccessor.HttpContext.Session.GetString("IdsPermitidos").ToString();
+    var autorizaciones = @HttpContextAccessor.HttpContext.Session.GetString("Autorizaciones").ToString();
+}
+
+<script>
+
+    $(document).ready(function () {
+        var access = @listaIdsPermitidosJson;
+        if (access != undefined && access != '') {
+            if (!access.toString().includes(localStorage.getItem("menuId"))) {
+                Swal.fire({
+                    icon: "error",
+                    title: "¡El usuario no tiene acceso a esta opción!",
+                });
+                setTimeout(() => {
+                    window.location.href = "/Principal";
+                }, 200);
+            }
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "¡El usuario no tiene acceso a esta opción!"
+            });
+            setTimeout(() => {
+                window.location.href = "/Principal";
+            }, 200);
+        }
+    });
+
+</script>
+
 <div class="mainContainer bg-light">
     <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
         <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
@@ -85,6 +118,7 @@
                             </span>
                         </div>
                     </div>
+                    
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm my-3">
                             <label>Carretera:</label>
@@ -110,6 +144,7 @@
                             </span>
                         </div>
                     </div>
+
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm my-3">
                             <label>Tramo:</label>
@@ -278,7 +313,7 @@
 
 <script>
     function buscarAccidente() {
-        var data = {
+        var _data = {
             FechaInicio: $('#FechaInicio').val(),
             FechaFin: $('#FechaFin').val(),
             placasBusqueda: $('#txtPlacas').val(),
@@ -291,65 +326,71 @@
             conductorBusqueda: $('#txtConductores').val(),
             IdOficialBusqueda: $('#ddlOficiales').val(),
             IdEstatusAccidente: $('#ddlEstatusAccidentes').val(),
+            fecha: $('#FechaFin').val()
         };
+
+        console.log(_data);
+
         showLoading();
         $.ajax({
             url: '/BusquedaAccidentes/ajax_BusquedaAccidentes',
-            type: 'GET',
-            data: data,
-            success: function (data) {
-                var grid = $("#gridBusquedaAccidentes").data("kendoGrid");
-                grid.dataSource.data(data);
-                grid.refresh();
+            type: 'POST',
+            data: _data,
+            success: function (result) {
+                $("#tablaBusquedaAccidentes").html(result);
                 hideLoading();
             },
             error: function () {
-                sitteg_warning("Ocurrieron los siguientes errores");
+                sitteg_warning("Ocurrió un error");
                 hideLoading();
             }
         });
     }
 
     function downLoadPdfFiltered() {
-        var Mydata = $("#busquedaAccidenteForm").serialize();
-        var fileName = "ReporteGeneralAccidentes.pdf";
-        showLoading();
+            var Mydata = $("#busquedaAccidenteForm").serialize();
+            var fileName = "ReporteGeneralAccidentes.pdf";
+            showLoading();
 
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("AccidentesGeneral","PDFGenerator")',
-            data: Mydata,
-            success: function (r) {
-                try {
-                    var bytes = Base64ToBytes(r);
-                    var blob = new Blob([bytes], { type: "application/octetstream" });
-                    var isIE = false || !!document.documentMode;
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AccidentesGeneral","PDFGenerator")',
+                data: Mydata,
+                success: function (r) {
+                    try {
+                        var bytes = Base64ToBytes(r);
+                        var blob = new Blob([bytes], { type: "application/octetstream" });
+                        var isIE = false || !!document.documentMode;
 
-                    if (isIE) {
-                        window.navigator.msSaveBlob(blob, fileName);
-                    } else {
-                        var url = window.URL || window.webkitURL;
-                        link = url.createObjectURL(blob);
-                        var a = $("<a />");
-                        a.attr("download", fileName);
-                        a.attr("href", link);
-                        $("body").append(a);
-                        a[0].click();
-                        $("body").remove(a);
+                        if (isIE) {
+                            window.navigator.msSaveBlob(blob, fileName);
+                        } else {
+                            var url = window.URL || window.webkitURL;
+                            link = url.createObjectURL(blob);
+                            var a = $("<a />");
+                            a.attr("download", fileName);
+                            a.attr("href", link);
+                            $("body").append(a);
+                            a[0].click();
+                            $("body").remove(a);
+                        }
+                    } catch (error) {
+                        handleError(error);
                     }
-                } catch (error) {
-                    handleError(error);
+                },
+                error: function () {
+                    handleError("Ocurrió un error, inténtelo de nuevo más tarde");
+                },
+                complete: function () {
+                    hideLoading();
                 }
-            },
-            error: function () {
-                handleError("Ocurrió un error, inténtelo de nuevo más tarde");
-            },
-            complete: function () {
-                hideLoading();
-            }
-        });
-        hideLoading();
+            });
+       
+        //    sitteg_warning("El usuario no tiene permisos suficientes para esta acción.");
+        //}
+        //hideLoading();
     }
+
 
     function handleError(error) {
         console.error(error);

@@ -32,24 +32,21 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
         public IActionResult Index()
         {
-            /* int IdModulo = 800;
-             string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-             List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);*/
-            //var resultadoSolicitudes = _asignacionGruasService.ObtenerTodasSolicitudes();
-
-            var q =User.FindFirst(CustomClaims.Nombre).Value;
-
-            return View();
+           
+                //var resultadoSolicitudes = _asignacionGruasService.ObtenerTodasSolicitudes();
+                var q = User.FindFirst(CustomClaims.Nombre).Value;
+                return View();                    
         }
         public IActionResult ajax_BuscarSolicitudes(AsignacionGruaModel model)
         {
-            var resultadoSolicitudes = _asignacionGruasService.BuscarSolicitudes(model);
+       
+                var resultadoSolicitudes = _asignacionGruasService.BuscarSolicitudes(model);
 
-            return Json(resultadoSolicitudes);
-        }
-        public IActionResult DatosGruas(int iSo, int iPg)
+                return Json(resultadoSolicitudes);
+            }
+            public IActionResult DatosGruas(string iSo, int iPg)
         {
-            HttpContext.Session.SetInt32("iSo", iSo);
+            HttpContext.Session.SetString("iSo", iSo);
             HttpContext.Session.SetInt32("iPg", iPg);
 
             int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
@@ -98,7 +95,17 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {
                 int iDep = HttpContext.Session.GetInt32("idDeposito") ?? 0;
                 _asignacionGruasService.ActualizarDatos(selectedRowData, iDep);
-                
+                selectedRowData.Placa = string.IsNullOrEmpty(selectedRowData.Placa) ? "-" : selectedRowData.Placa;
+                selectedRowData.Serie = string.IsNullOrEmpty(selectedRowData.Serie) ? "-" : selectedRowData.Serie;
+                selectedRowData.Tarjeta = string.IsNullOrEmpty(selectedRowData.Tarjeta) ? "-" : selectedRowData.Tarjeta;
+                selectedRowData.Marca = string.IsNullOrEmpty(selectedRowData.Marca) ? "-" : selectedRowData.Marca;
+                selectedRowData.Submarca = string.IsNullOrEmpty(selectedRowData.Submarca) ? "-" : selectedRowData.Submarca;
+                selectedRowData.Modelo = string.IsNullOrEmpty(selectedRowData.Modelo) ? "-" : selectedRowData.Modelo;
+                selectedRowData.Propietario = string.IsNullOrEmpty(selectedRowData.Propietario) ? "-" : selectedRowData.Propietario;
+                selectedRowData.CURP = string.IsNullOrEmpty(selectedRowData.CURP) ? "-" : selectedRowData.CURP;
+                selectedRowData.RFC = string.IsNullOrEmpty(selectedRowData.RFC) ? "-" : selectedRowData.RFC;
+
+
                 //BITACORA
                 var ip = HttpContext.Connection.RemoteIpAddress.ToString();
                 var user = Convert.ToDecimal(User.FindFirst(CustomClaims.IdUsuario).Value);

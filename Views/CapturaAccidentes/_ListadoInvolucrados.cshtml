@@ -69,7 +69,6 @@
 			.Name("gridInvolucradosTodo").Groupable()
 			.Columns(columns =>
 			{
-				columns.Template(" ").Width(40).Title("Número");
 				columns.Template(" ").Width(140).Title("Detalles");
 				columns.Template(" ").Width(140).Title("Datos persona");
 				columns.Template(" ").Width(140).Title("Domicilio persona");
@@ -80,10 +79,7 @@
 
 			}).HtmlAttributes(new { style = "height:500px" })		
 			.ClientRowTemplate(
-			"<tr data-uid='#: uid #'>" +
-			"<td class='Número'>" +
-			"<p><span class='description'>#: numeroConsecutivo# </span></p>" +
-			"</td>" +
+			"<tr data-uid='#: uid #'>" +	
 			"<td class='Detalles'>" +
 			"<p><span class='description'>Participacion : #: ConductorInvolucrado# </span></p>" +
 			"<p><span class='description'>Estado : #: EstadoVictima# </span></p>" +
@@ -123,9 +119,6 @@
 			)
 			.ClientAltRowTemplate(
 			"<tr data-uid='#: uid #'>" +
-			"<td class='Número'>" +
-			"<p><span class='description'>#: numeroConsecutivo# </span></p>" +
-			"</td>" +
 			"<td class='Detalles'>" +
 			"<p><span class='description'>Participacion : #: ConductorInvolucrado# </span></p>" +
 			"<p><span class='description'>Estado : #: EstadoVictima# </span></p>" +
@@ -172,7 +165,7 @@
 			.Read(read => read.Action("ObtInvolucradosAccidente", "CapturaAccidentes"))
 			.PageSize(5).Model(model => model.Id(p => p.nombre))
 			)
-			.ToolBar(t => t.Search())
+			.ToolBar(t => t.Search().Text("Buscar..."))
 			.Search(s =>
 			{
 				s.Field(c => c.nombre);
@@ -234,7 +227,7 @@
 		var row = $(event.target).closest("tr");
 		var dataItem = grid.dataItem(row);
 		var IdPersona = dataItem.IdPersona
-		console.log(IdPersona);
+		console.log(dataItem);
 		showLoading();
 		$.ajax({
 			url: '@Url.Action("ModalAgregarInvolucradoPersona", "CapturaAccidentes")',

@@ -85,7 +85,7 @@ namespace GuanajuatoAdminUsuarios.Models
 
         public decimal umas { get; set; }
         public decimal totalInfraccion { get; set; }
-
+        public int Total { get; set; }
         #endregion
     }
     public class InfraccionesReportModel : EntityModel

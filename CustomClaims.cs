@@ -7,6 +7,9 @@ namespace GuanajuatoAdminUsuarios
         public const string Nombre = "Nombre";
         public const string Perfil = "Perfil";
         public const string NombreOficina = "Delegación";
+		public const string Pension = "Pension";
+        public const string TipoOficina = "TipoOficina";
+
 
     }
 }

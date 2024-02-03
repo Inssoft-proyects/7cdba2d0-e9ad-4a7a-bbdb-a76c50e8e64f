@@ -1,5 +1,35 @@
 ﻿@model ReporteAsignacionBusquedaModel
+@{
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+    var listaIdsPermitidosJson = @HttpContextAccessor.HttpContext.Session.GetString("IdsPermitidos").ToString();
+    var autorizaciones = @HttpContextAccessor.HttpContext.Session.GetString("Autorizaciones").ToString();
+}
 
+<script>
+    $(document).ready(function () {
+        var access = @listaIdsPermitidosJson;
+        if (access != undefined && access != '') {
+            if (!access.toString().includes(localStorage.getItem("menuId"))) {
+                Swal.fire({
+                    icon: "error",
+                    title: "¡EL usuario no tiene acceso a esta opción!"
+                });
+                setTimeout(() => {
+                    window.location.href = "/Principal";
+                }, 200);
+            }
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "¡EL usuario no tiene acceso a esta opción!"
+            });
+            setTimeout(() => {
+                window.location.href = "/Principal";
+            }, 200);
+        }
+    });
+
+</script>
 
 <head>
     <script>
@@ -44,7 +74,7 @@
 
         $(".export-pdf").click(function () {
             // Convert the DOM element to a drawing using kendo.drawing.drawDOM
-            alert("caigo")
+           
             kendo.drawing.drawDOM($(".content-wrapper"))
                 .then(function (group) {
                     // Render the result as a PDF file
@@ -73,6 +103,8 @@
         }
 
         function downLoadPdfFiltered() {
+            if ('@autorizaciones' && '@autorizaciones'.indexOf('241') !== -1) {
+
             var data = {
                 IdGrua: $('#ddlGrua').val(),
                 IdPension: $('#ddlPension').val(),
@@ -83,6 +115,10 @@
             };
             var json = JSON.stringify(data);
             window.location = '/ReporteAsignacionServicios/CreatePdf?data=' + json;
+            }
+            else {
+                sitteg_warning("El usuario no tiene permisos suficientes para esta acción.");
+            }
         }
 
     </script>
@@ -142,6 +178,7 @@
                     @(Html.Kendo().DatePickerFor(t => t.FechaInicio).Max(DateTime.Now)
                         .Culture("es-ES")
                         .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "start" })
+                        .ParseFormats(new[] { "dd/MM/yyyy", "dd-MM-yyyy" })  // Agrega los formatos que esperas recibir
                         )
 
                 </div>
@@ -199,6 +236,7 @@
                     @(Html.Kendo().DatePickerFor(t => t.FechaFin).Max(DateTime.Now)
                         .Culture("es-ES")
                         .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "end" })
+                        .ParseFormats(new[] { "dd/MM/yyyy", "dd-MM-yyyy" })  // Agrega los formatos que esperas recibir
                         )
 
                 </div>
@@ -232,7 +270,7 @@
 
             var startDate = $("#start")
             var endDate = $("#end")
-            console.log(startDate.val(), endDate.val())
+            console.log("START",startDate.val(),"END", endDate.val())
             console.log(kendo.parseDate(endDate.val()) > kendo.parseDate(startDate.val()))
             if (startDate.val() != '' && endDate.val() != '') {
                 if (kendo.parseDate(endDate.val()) < kendo.parseDate(startDate.val())) {
@@ -251,6 +289,7 @@
         });
 
         $("#start").kendoValidator({
+            parseFormats: []  // Deshabilita la validación automática
             rules: {
                 date: function (input) {
                     var d = kendo.parseDate(input.val());
@@ -260,6 +299,7 @@
         });
 
         $("#end").kendoValidator({
+            parseFormats: []  // Deshabilita la validación automática
             rules: {
                 date: function (input) {
                     var d = kendo.parseDate(input.val());

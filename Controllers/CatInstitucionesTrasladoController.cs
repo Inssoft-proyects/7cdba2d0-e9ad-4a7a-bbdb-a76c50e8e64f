@@ -27,27 +27,19 @@ namespace GuanajuatoAdminUsuarios.Controllers
         DBContextInssoft dbContext = new DBContextInssoft();
         public IActionResult Index()
         {
-            int IdModulo = 972;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+         
                 var ListInstitucionesTrasladoModel = GetInstitucionesTraslado();
 
-            return View(ListInstitucionesTrasladoModel);
+                return View(ListInstitucionesTrasladoModel);
             }
-            else
-            {
-                TempData["ErrorMessage"] = "Este usuario no tiene acceso a esta sección.";
-                return RedirectToAction("Principal", "Inicio", new { area = "" });
-            }
-        }
+      
 
 
 
 
-        #region Modal Action
-        public ActionResult IndexModal()
+
+            #region Modal Action
+            public ActionResult IndexModal()
         {
             var ListInstitucionesTrasladoModel = GetInstitucionesTraslado();
             return View("Index", ListInstitucionesTrasladoModel);
@@ -56,36 +48,18 @@ namespace GuanajuatoAdminUsuarios.Controllers
         [HttpPost]
         public ActionResult AgregarInstitucionTrasladoModal()
         {
-            int IdModulo = 973;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+      
                 return PartialView("_Crear");
             }
-            else
-            {
-                TempData["ErrorMessage"] = "El usuario no tiene permisos suficientes para esta acción.";
-                return PartialView("ErrorPartial");
-            }
-        }
+   
 
         public ActionResult EditarInstitucionTrasladoModal(int IdInstitucionTraslado)
         {
-            int IdModulo = 974;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+       
                 var institucionesTrasladoModel = GetInstitucionTrasladoByID(IdInstitucionTraslado);
             return PartialView("_Editar", institucionesTrasladoModel);
             }
-            else
-            {
-                TempData["ErrorMessage"] = "El usuario no tiene permisos suficientes para esta acción.";
-                return PartialView("ErrorPartial");
-            }
-        }
+   
 
         public ActionResult EliminarInstitucionTrasladoModal(int IdInstitucionTraslado)
         {

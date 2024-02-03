@@ -69,6 +69,40 @@ $(document).ready(()=>{
             }
         });
     }
+
+
+    function ChangeSubTipoServicio() {
+        var idTipoServicio = $("#ddlCatTipoServicio").data("kendoDropDownList").value();
+        var DivSubTipoServicio = $("#DivSubTipoServicio");
+
+        if (idTipoServicio == 1 || idTipoServicio == 5)
+            DivSubTipoServicio.css('display', 'block');
+        else 
+            DivSubTipoServicio.css('display', 'none');
+
+        showLoading();
+        $.ajax({
+            url: "/Vehiculos/GetSubtipoPorTipo",
+            type: "POST",
+            data: { idTipoServicio: idTipoServicio },
+            success: function (data) {
+                var SubTipoServicio = $("#ddlCatSubTipoServicio").data("kendoDropDownList");
+                if (SubTipoServicio) 
+                    SubTipoServicio.dataSource.data(data);
+                console.log(data);
+                hideLoading();
+            },
+            error: function (xhr, status, error) {
+                hideLoading();
+            }
+        });
+    }
+	
+    $("#ddlCatSubTipoServicio").on("change", function () {
+        var value = $(this).val();
+        console.log(value);
+        $('#hdnidSubtipoServicio').val(value);
+    });
 </script>
 <section id="sectionCap" class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow mt-3 mb-5 rounded">
     <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
@@ -450,10 +484,9 @@ $(document).ready(()=>{
         @Html.HiddenFor(m=> m.Persona.idCatTipoPersona, new { @id = "ddlIdCatTipoPersona" })
         
      <input type="hidden" value="@Model.idCatTipoServicio" name="idCatTipoServicio" id="hdnIdCatTipoServicio">
-@*        @Html.HiddenFor(m=> m.idCatTipoServicio, new { @id = "hdnidCatTipoServicio" })
-*@        
-        
-        @Html.HiddenFor(m=> m.encontradoEn, new { @id = "hdnEncontradoEn" })
+     <input type="hidden" value="@Model.idSubtipoServicio" name="idSubtipoServicio" id="hdnidSubtipoServicio">
+     
+     @Html.HiddenFor(m=> m.encontradoEn, new { @id = "hdnEncontradoEn" })
 
     </form>
 
@@ -494,16 +527,16 @@ $(document).ready(()=>{
             <h6 class="px-4 text-muted">Completa los datos solicitados como tipo de servicio y el propietario.</h6>
         </div>
     </div>
-    <div class="row px-4 align-items-end">
+    <div class="row align-items-end">
 
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="controlForm my-3">
+        <div class="col-6 controlForm my-3" >
                 <label>Tipo de Servicio:</label>
                 @(Html.Kendo().DropDownListFor(d => d.idCatTipoServicio).Filter(FilterType.Contains)
                     .DataTextField("Text")
                     .DataValueField("Value")
                     .OptionLabel("Seleccione Tipo de Servicio...:")
                     .HtmlAttributes(new { style = "width:100%;", id = "ddlCatTipoServicio" })
+                    .Events(e => e.Change("ChangeSubTipoServicio"))
                     .DataSource(source =>
                     {
                         source.Read(read =>
@@ -512,9 +545,49 @@ $(document).ready(()=>{
                         });
                     })
                     )
-            </div>
         </div>
+         @if (Model.showSubTipo == true)
+            {
+                <div class="col-6 controlForm my-3" id="DivSubTipoServicio" style="display:block">
+                <label>Subtipo de Servicio:</label>
+                @(
+                Html.Kendo().DropDownListFor(d => d.idSubtipoServicio)
+                                            .Filter(FilterType.Contains)
 
+                            .DataTextField("Text")
+                            .DataValueField("Value")
+                            .OptionLabel("Seleccione Subtipo de Servicio...:")
+                            .HtmlAttributes(new { style = "width:100%;", id = "ddlCatSubTipoServicio" })
+                            .DataSource(source =>
+                            {
+                                source.Read(read =>
+                                {
+                                    read.Action("GetSubtipoPorTipo", "Vehiculos");
+                                });
+                            })
+                            )
+            </div>
+            } else {
+                <div class="col-6 controlForm my-3" id="DivSubTipoServicio" style="display:none">
+                <label>Subtipo de Servicio:</label>
+                @(
+                Html.Kendo().DropDownListFor(d => d.idSubtipoServicio)
+                                            .Filter(FilterType.Contains)
+
+                            .DataTextField("Text")
+                            .DataValueField("Value")
+                            .OptionLabel("Seleccione Subtipo de Servicio...:")
+                            .HtmlAttributes(new { style = "width:100%;", id = "ddlCatSubTipoServicio" })
+                            .DataSource(source =>
+                            {
+                                source.Read(read =>
+                                {
+                                    read.Action("GetSubtipoPorTipo", "Vehiculos");
+                                });
+                            })
+                            )
+            </div>
+            }          
     </div>
 
 
@@ -1446,7 +1519,7 @@ function asignarMensajeError(contenedorErrorId, mensaje) {
             sitteg_info('Debe seleccionar una Persona');
             return;
         }
-                    var idTipoSer = $('#hdnIdCatTipoServicio').val();
+        var idTipoSer = $('#hdnIdCatTipoServicio').val();
 
         if (validator.validate()) {
 

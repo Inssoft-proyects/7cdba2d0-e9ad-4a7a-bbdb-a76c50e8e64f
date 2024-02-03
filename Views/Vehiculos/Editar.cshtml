@@ -1,5 +1,44 @@
-﻿@model VehiculoBusquedaModel
+@model VehiculoBusquedaModel
+@{
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+    var listaIdsPermitidosJson = @HttpContextAccessor.HttpContext.Session.GetString("IdsPermitidos").ToString();
+    var autorizaciones = @HttpContextAccessor.HttpContext.Session.GetString("Autorizaciones").ToString();
+}
 
+<script>
+
+    $(document).ready(function () {
+        var access = @listaIdsPermitidosJson;
+        var auth = @autorizaciones;
+
+        console.log(auth);
+        if (access != undefined && access != '') {
+            if (!access.toString().includes(localStorage.getItem("menuId"))) {
+                Swal.fire({
+                    icon: "error",
+                    title: "¡El usuario no tiene acceso a esta opción!"
+                });
+                setTimeout(() => {
+                    window.location.href = "/Principal";
+                }, 200);
+            } else {
+                // BUSCAR - CONSULTAR
+                if (!auth.toString().includes("251")) {
+                    $("#btnBuscar").prop('disabled', true).css({ "opacity": "0.3" });
+                }
+            }
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "¡El usuario no tiene acceso a esta opción!"
+            });
+            setTimeout(() => {
+                window.location.href = "/Principal";
+            }, 200);
+        }
+    });
+
+</script>
 <!-- ***************************** -->
 <div class="mainContainer bg-light">
 
@@ -135,19 +174,19 @@
 
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="controlForm my-3">
-                    <label>Tipo de Servicio:</label>
+                    <label>Subtipo de Servicio:</label>
                     <span>
-                        @(Html.Kendo().DropDownListFor(d => d.idTipoServicio).Filter(FilterType.Contains)
+                        @(Html.Kendo().DropDownListFor(d => d.idSubtipoServicio).Filter(FilterType.Contains)
                             .DataTextField("Text")
                             .DataValueField("Value")
-                            .OptionLabel("Seleccione Tipo Servicio...")
+                            .OptionLabel("Seleccione Subtipo Servicio...")
                             .HtmlAttributes(new { style = "width:100%;" })
                             .Filter(FilterType.Contains)
                             .DataSource(source =>
                             {
                                 source.Read(read =>
                                 {
-                                    read.Action("TipoServicios_Read", "Vehiculos");
+                                    read.Action("SubTipoServicios_Read", "Vehiculos");
                                 });
                             }))
                     </span>
@@ -232,7 +271,7 @@
             <div class="col-12 col-md-6 mx-md-auto col-lg-4 mx-lg-0 ">
                 @*<div class="controlButton my-3" onclick="closeForm()">*@
                 <div class="controlButton my-3">
-                    <button class="btnPrimary" type="button" onclick="submitSearch()">  <h5 class="m-0"><b>Buscar</b></h5></button>
+                    <button class="btnPrimary" type="button" id="btnBuscar" onclick="submitSearch()">  <h5 class="m-0"><b>Buscar</b></h5></button>
                 </div>
             </div>
         </form>
@@ -256,7 +295,7 @@
         console.log(Mydata);
         showLoading();
         $.ajax({
-            url: '@Url.Action("ajax_BuscarVehiculos")',
+            url: '@Url.Action("GetBuscarVehiculos")',
             type: 'POST',
             data: Mydata,
             success: function (result) {
@@ -264,6 +303,7 @@
                 //console.log("IDDs: ", dataObject.idMarcaVehiculo);
                 //document.getElementById("sec0").style.display = "none";
                 //document.getElementById("VehiculoLocalizado").style.display = "block";
+                console.log(result);
                 $("#ListVehiculos").html(result);
                 hideLoading();
             }, error: function () {

@@ -1,12 +1,15 @@
 ﻿using GuanajuatoAdminUsuarios.Models;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using PdfSharp.Charting;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+//using Telerik.SvgIcons;
 using iText = iTextSharp.text;
 
 namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
@@ -62,11 +65,9 @@ namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
                         doc = WritteHeader(doc, ModelDataInfracciones);
                         doc = BodyLugar(doc, ModelDataInfracciones);
                         doc = BodyCoductor(doc, ModelDataInfracciones);
-                        doc = BodyVehiculo(doc, ModelDataInfracciones);
+						doc = BodyVehiculo(doc, ModelDataInfracciones);
                         doc = BodyAplicacion(doc, ModelDataInfracciones);
-                        
                         doc = BodyMotivosInfraccion(doc, ModelDataInfracciones);
-
                         doc = BodyGarantía(doc, ModelDataInfracciones);
                         doc = BodyDatosPago(doc, ModelDataInfracciones);
                         doc = BodyConceptoInfraccion(doc, ModelDataInfracciones);
@@ -106,9 +107,9 @@ namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
                 PdfPTable nested = new PdfPTable(1);
                 nested.DefaultCell.Border = Rectangle.NO_BORDER;
                 nested.AddCell(FieldCellBox("Folio: ", ModelDataInfracciones.folioInfraccion));
-                nested.AddCell(FieldCellBox("Fecha: ", ModelDataInfracciones.fechaInfraccion.ToString("dd/MM/yyyy")));
+                nested.AddCell(FieldCellBox("Fecha: ", ModelDataInfracciones.fechaInfraccion.ToString("dd-MM-yyyy")));
                 nested.AddCell(FieldCellBox("Hora: ", ModelDataInfracciones.fechaInfraccion.ToString("HH:mm:ss")));
-                nested.AddCell(FieldCellBox("Fecha de vencimiento: ", ModelDataInfracciones.fechaVencimiento.ToString("dd/MM/yyyy")));
+                nested.AddCell(FieldCellBox("Fecha de vencimiento: ", ModelDataInfracciones.fechaVencimiento.ToString("dd-MM-yyyy")));
                 nested.AddCell("");
                 PdfPCell nesthousing = new PdfPCell(nested);
                 nesthousing.Border = Rectangle.NO_BORDER;
@@ -227,16 +228,15 @@ namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
                 if (ModelDataInfracciones.fechaNacimientoConductor == null || ModelDataInfracciones.fechaNacimientoConductor.Value == DateTime.MinValue)                
                     nested.AddCell(FieldCellBox("Fecha de nacimiento: ", ""));
                 else
-                    nested.AddCell(FieldCellBox("Fecha de nacimiento: ", ModelDataInfracciones.fechaNacimientoConductor?.ToString("dd/MM/yyyy")));
+                    nested.AddCell(FieldCellBox("Fecha de nacimiento: ", ModelDataInfracciones.fechaNacimientoConductor?.ToString("dd-MM-yyyy")));
 
                 nested.AddCell(FieldCellBox("Edad: ", ModelDataInfracciones.edadConductor.ToString()));
                 nested.AddCell(FieldCellBox("Sexo: ", ModelDataInfracciones.generoConductor.ToString()));
-                nested.AddCell(FieldCellBox("Domicilio: ", ModelDataInfracciones.domicilioConductor.ToString()));
-                nested.AddCell("");
+
                 PdfPCell nesthousing = new PdfPCell(nested);
                 nesthousing.Border = Rectangle.NO_BORDER;
-                nesthousing.Rowspan = 5;
-                nesthousing.PaddingBottom = 5f;
+                nesthousing.Rowspan = 4;
+                nesthousing.PaddingBottom = 4f;
                 Invoicetable.AddCell(nesthousing);
             }
             {
@@ -249,18 +249,21 @@ namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
                 if (ModelDataInfracciones.vencimientoLicConductor == null || ModelDataInfracciones.vencimientoLicConductor.Value == DateTime.MinValue  || ModelDataInfracciones.vencimientoLicConductor.Value.Year == 1900)
                     nested.AddCell(FieldCellBox("Vencimiento: ", ""));
                 else 
-                    nested.AddCell(FieldCellBox("Vencimiento: ", ModelDataInfracciones.vencimientoLicConductor.Value.ToString("dd/MM/yyyy")));
+                    nested.AddCell(FieldCellBox("Vencimiento: ", ModelDataInfracciones.vencimientoLicConductor.Value.ToString("dd-MM-yyyy")));
 
-                nested.AddCell("");
-                PdfPCell nesthousing = new PdfPCell(nested);
+				PdfPCell nesthousing = new PdfPCell(nested);
                 nesthousing.Border = Rectangle.NO_BORDER;
-                nesthousing.Rowspan = 5;
-                nesthousing.PaddingBottom = 5f;
+                nesthousing.Rowspan = 4;
+                nesthousing.PaddingBottom = 4f;
                 Invoicetable.AddCell(nesthousing);
             }
 
+			PdfPCell domicilio = new PdfPCell(FieldCellBox("Domicilio: ", ModelDataInfracciones.domicilioConductor.ToString()));
+			domicilio.Colspan = 2;
+			Invoicetable.AddCell(domicilio);
 
-            Invoicetable.PaddingTop = 10f;
+
+			Invoicetable.PaddingTop = 10f;
 
             PdfPCell nesthousingMain = new PdfPCell(Invoicetable);
             nesthousingMain.Border = Rectangle.NO_BORDER;
@@ -272,7 +275,8 @@ namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
             doc.Add(TableMain);
             return doc;
         }
-        public Document BodyVehiculo(Document doc, InfraccionesReportModel ModelDataInfracciones)
+
+		public Document BodyVehiculo(Document doc, InfraccionesReportModel ModelDataInfracciones)
         {
             RoundRectangle roundRectangle = new RoundRectangle();
 
@@ -419,12 +423,14 @@ namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
             
             return doc;
         }
+
+
         public Document WritteTotalesMotivosInfraccion(Document doc, InfraccionesReportModel ModelDataInfracciones,decimal uma)
         {
             PdfPTable Invoicetable = new PdfPTable(3);
-            Invoicetable.HorizontalAlignment = 0;
+            Invoicetable.HorizontalAlignment = 1;
             Invoicetable.WidthPercentage = 100;
-            Invoicetable.SetWidths(new float[] { 200f, 400f, 200f });  // then set the column's __relative__ widths
+            Invoicetable.SetWidths(new float[] { 410f, 100f, 90f });  // then set the column's __relative__ widths
             Invoicetable.DefaultCell.Border = Rectangle.NO_BORDER;
 
             {
@@ -441,32 +447,73 @@ namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
             {
                 PdfPTable nested = new PdfPTable(1);
                 nested.DefaultCell.Border = Rectangle.NO_BORDER;
-                nested.AddCell("");
-                PdfPCell nesthousing = new PdfPCell(nested);
+				nested.AddCell(new PdfPCell(new Phrase("TOTAL (SALARIOS):", new iText.Font(iText.Font.FontFamily.HELVETICA, 8, iText.Font.BOLD, BaseColor.BLACK)))
+				{
+					Border = Rectangle.RECTANGLE,
+					HorizontalAlignment = Element.ALIGN_RIGHT,
+					Padding = 5,
+
+				});
+				nested.AddCell(new PdfPCell(new Phrase("UMA:", new iText.Font(iText.Font.FontFamily.HELVETICA, 8, iText.Font.BOLD, BaseColor.BLACK)))
+				{
+					Border = Rectangle.RECTANGLE,
+					HorizontalAlignment = Element.ALIGN_RIGHT,
+					Padding = 5,
+
+				});
+				nested.AddCell(new PdfPCell(new Phrase("MONTO TOTAL:", new iText.Font(iText.Font.FontFamily.HELVETICA, 8, iText.Font.BOLD, BaseColor.BLACK)))
+				{   
+                    Border = Rectangle.RECTANGLE,
+					HorizontalAlignment = Element.ALIGN_RIGHT,
+					Padding = 5,
+
+				});
+
+				//nested.AddCell("");
+				PdfPCell nesthousing = new PdfPCell(nested);
                 nesthousing.Border = Rectangle.NO_BORDER;
                 nesthousing.Rowspan = 5;
                 nesthousing.PaddingBottom = 10f;
-                Invoicetable.AddCell(nesthousing);
+				Invoicetable.AddCell(nesthousing);
             }
                         
 
             {
                 int totalSalarios = 0;
-
                 if (ModelDataInfracciones.MotivosInfraccion.Any())                
                     totalSalarios = ModelDataInfracciones.MotivosInfraccion.Sum(x => x.calificacion.Value);
                 
                 PdfPTable nested = new PdfPTable(1);
                 nested.DefaultCell.Border = Rectangle.NO_BORDER;
-                nested.AddCell(FieldCellBox("TOTAL (SALARIOS): ", totalSalarios.ToString(), Rectangle.BOX));
-                nested.AddCell(FieldCellBox("UMA: ", uma.ToString(), Rectangle.BOX));
-                nested.AddCell(FieldCellBox("MONTO TOTAL: ", "$ "+(uma*totalSalarios).ToString(), Rectangle.BOX));
-                nested.AddCell("");
+				nested.AddCell(new PdfPCell(new Phrase(totalSalarios.ToString("###,###,###.00").ToString(), new iText.Font(iText.Font.FontFamily.HELVETICA, 8, iText.Font.BOLD, BaseColor.BLACK)))
+				{
+					Border = Rectangle.RECTANGLE,
+				    HorizontalAlignment = Element.ALIGN_RIGHT,
+					Padding = 5,
+
+				});
+				nested.AddCell(new PdfPCell(new Phrase("$ " + uma.ToString("###,###,###.00").ToString(), new iText.Font(iText.Font.FontFamily.HELVETICA, 8, iText.Font.BOLD, BaseColor.BLACK)))
+				{
+					Border = Rectangle.RECTANGLE,
+					HorizontalAlignment = Element.ALIGN_RIGHT,
+					Padding = 5,
+
+				});
+				nested.AddCell(new PdfPCell(new Phrase("$ " + (uma * totalSalarios).ToString("###,###,###.00").ToString(), new iText.Font(iText.Font.FontFamily.HELVETICA, 8, iText.Font.BOLD, BaseColor.BLACK)))
+				{
+					Border = Rectangle.RECTANGLE,
+					HorizontalAlignment = Element.ALIGN_RIGHT,
+					Padding = 5,
+
+				});
+
+				//nested.AddCell("");
                 PdfPCell nesthousing = new PdfPCell(nested);
                 nesthousing.Border = Rectangle.NO_BORDER;
                 nesthousing.Rowspan = 5;
                 nesthousing.PaddingBottom = 10f;
-                Invoicetable.AddCell(nesthousing);
+				nested.HorizontalAlignment = Element.ALIGN_RIGHT;
+				Invoicetable.AddCell(nesthousing);
             }
 
 
@@ -510,7 +557,8 @@ namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
             {
                 PdfPTable nested = new PdfPTable(1);
                 nested.DefaultCell.Border = Rectangle.NO_BORDER;
-                nested.AddCell(FieldCellBox("Tipo licencia: ", tipoGar == "Licencia"? ModelDataInfracciones.Garantia?.tipoLicencia:"-"));
+				nested.AddCell("   ");
+				nested.AddCell(FieldCellBox("Tipo licencia: ", tipoGar == "Licencia"? ModelDataInfracciones.Garantia?.tipoLicencia:"-"));
                 nested.AddCell(FieldCellBox("No. de licencia: ", tipoGar == "Licencia"? ModelDataInfracciones.Garantia?.numLicencia:"-"));
                 nested.AddCell(FieldCellBox("No. de tarjeta: ", tipoGar== "Tarjeta de circulación"? ModelDataInfracciones.NumTarjetaCirculacion:"-"));//VALIDAR
                 nested.AddCell("");
@@ -571,7 +619,7 @@ namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
                 if (ModelDataInfracciones.fechaPago == null || ModelDataInfracciones.fechaPago.Value == DateTime.MinValue)
                     nested.AddCell(FieldCellBox("Fecha de pago: ", ""));
                 else
-                    nested.AddCell(FieldCellBox("Fecha de pago: ", ModelDataInfracciones.fechaPago.Value.ToString("dd/MM/yyyy")));
+                    nested.AddCell(FieldCellBox("Fecha de pago: ", ModelDataInfracciones.fechaPago.Value.ToString("dd-MM-yyyy")));
 
                 nested.AddCell(FieldCellBox("Lugar de pago: ", ModelDataInfracciones.lugarPago));//VALIDAR
                 nested.AddCell("");

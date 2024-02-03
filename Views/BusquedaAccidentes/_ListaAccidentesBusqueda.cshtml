@@ -16,7 +16,7 @@
 			.Columns(columns =>
 			{
 				columns.Bound(c => c.IdAccidente).Hidden();
-				columns.Bound(c => c.Numero).Title("Número").Width(60);
+				columns.Bound(c => c.NumeroSecuencial).Title("Número").Width(60);
 				columns.Bound(c => c.numeroReporte).Title("Folio").Width(100);
 				columns.Bound(c => c.fecha).Title("Fecha").ClientTemplate("#= new Date(fecha).toLocaleDateString('en-GB') #").Width(100);
 				columns.Bound(c => c.hora).Title("Hora").Width(70);
@@ -38,25 +38,16 @@
 				).Title("Consultar").Sortable(false).Width(90);*/
 
 			}).HtmlAttributes(new { style = "height:550px" })
-			.Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }).Position(GridPagerPosition.Bottom))
-			.Sortable()
-			.Scrollable(scr => scr.Height(350))
+			.EnableCustomBinding(true)
 			.DataSource(dataSource => dataSource
 			.Ajax()
-			//.Read(read => read.Action("GetAllAccidentes", "BusquedaAccidentes"))
-			.ServerOperation(false)
+			.Read("GetAccidentesBusquedaPagination", "BusquedaAccidentes")
+			.PageSize(10)
 			)
-			.ToolBar(t => t.Search())
-			.Search(s =>
-			{
-				s.Field(c => c.numeroReporte);
-				s.Field(c => c.fecha);
-				s.Field(c => c.hora);
-				s.Field(c => c.municipio);
-				s.Field(c => c.carretera);
-				s.Field(c => c.tramo);
-				s.Field(c => c.estatusReporte);
-			})
+			.Pageable(p => p.Enabled(true).PageSizes(new[] { 10, 20, 30 }))
+			.Sortable()
+			.Scrollable(scr => scr.Enabled(true))
+			@*.ToolBar(t => t.Custom().Text("Buscar...").Name("search"))*@
 			)
 
 
@@ -158,12 +149,13 @@
 			type: 'POST',
 			data: { idAccidente: idAccidente },
 			success: function (result) {
-
+				
 				window.location.href = '/CapturaAccidentes/CapturaAaccidente/?showE=false'
 				hideLoading();
+				
 			},
 			error: function () {
-				sitteg_warning("Ocurrio un error intetnte mas tarde");
+				sitteg_warning("Ocurrio un error intente mas tarde");
 				hideLoading();
 			}
 
@@ -177,9 +169,10 @@
 			type: 'POST',
 			data: { idAccidente: idAccidente },
 			success: function (result) {
-
+				
 				window.location.href = '/CapturaAccidentes/CapturaAaccidente/?showE=true'
 				hideLoading();
+				
 			},
 			error: function () {
 				sitteg_warning("Ocurrio un error al procesar su solicitud.");

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using static GuanajuatoAdminUsuarios.Models.PadronDepositosGruasModel;
@@ -42,28 +43,33 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public IActionResult Index()
         {
-            PadronDepositosGruasBusquedaModel searchModel = new PadronDepositosGruasBusquedaModel();
-            int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+           
+                PadronDepositosGruasBusquedaModel searchModel = new PadronDepositosGruasBusquedaModel();
+                int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
 
-            List<PadronDepositosGruasModel> listPadronDepositosGruas = _padronDepositosGruasService.GetAllPadronDepositosGruas(idOficina);
-            searchModel.ListPadronDepositosGruas = listPadronDepositosGruas;
-            return View(searchModel);
+               // List<PadronDepositosGruasModel> listPadronDepositosGruas = _padronDepositosGruasService.GetAllPadronDepositosGruas(idOficina);
+                //searchModel.ListPadronDepositosGruas = listPadronDepositosGruas;
+                return View(searchModel);
+            
+          
         }
 
         [HttpPost]
         public ActionResult ajax_BuscarPadron(PadronDepositosGruasBusquedaModel model)
         {
-            int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+       
+                int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
 
-            var ListPadronDepositosGruas = _padronDepositosGruasService.GetPadronDepositosGruas(model,idOficina);
-            if (ListPadronDepositosGruas.Count == 0)
-            {
-                ViewBag.NoResultsMessage = "No se encontraron grúas que cumplan con los criterios de búsqueda.";
+                var ListPadronDepositosGruas = _padronDepositosGruasService.GetPadronDepositosGruas(model, idOficina);
+                if (ListPadronDepositosGruas.Count == 0)
+                {
+                    ViewBag.NoResultsMessage = "No se encontraron grúas que cumplan con los criterios de búsqueda.";
+                }
+
+                return PartialView("_ListadoPadron", ListPadronDepositosGruas);
             }
+  
 
-            return PartialView("_ListadoPadron", ListPadronDepositosGruas);
-
-        }
 
         public JsonResult Municipios_Read()
         {

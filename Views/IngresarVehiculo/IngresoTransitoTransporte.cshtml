@@ -199,6 +199,7 @@
             success: (data) => {
                 var grid = $("#gridBusquedIngresos").data("kendoGrid");
                 grid.dataSource.data(data);
+                grid.dataSource.page(1);
                 hideLoading();
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");

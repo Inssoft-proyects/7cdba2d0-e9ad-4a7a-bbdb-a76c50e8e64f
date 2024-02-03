@@ -52,7 +52,7 @@
 			.Read(read => read.Action("ObtVehiculosInvol", "CapturaAccidentes"))
 			.PageSize(5).Model(model => model.Id(p => p.IdVehiculo))
 			)
-			.ToolBar(t => t.Search())
+			.ToolBar(t => t.Search().Text("Buscar..."))
 			.Search(s =>
 			{
 				s.Field(c => c.ConductorInvolucrado);

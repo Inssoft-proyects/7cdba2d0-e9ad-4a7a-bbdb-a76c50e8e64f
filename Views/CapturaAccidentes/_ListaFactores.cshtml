@@ -40,7 +40,7 @@
             .Read(read => read.Action("ObtFactorOpcionAccidente", "CapturaAccidentes"))
             .PageSize(5).Model(model => model.Id(p => p.IdAccidenteFactorOpcion))
             )
-            .ToolBar(t => t.Search())
+            .ToolBar(t => t.Search().Text("Buscar..."))
             .Search(s =>
             {
                 s.Field(c => c.FactorAccidente);

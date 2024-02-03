@@ -1,5 +1,35 @@
 ﻿@model GuanajuatoAdminUsuarios.Models.BusquedaDepositoModel
+@{
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+    var listaIdsPermitidosJson = @HttpContextAccessor.HttpContext.Session.GetString("IdsPermitidos").ToString();
+    var autorizaciones = @HttpContextAccessor.HttpContext.Session.GetString("Autorizaciones").ToString();
+}
 
+<script>
+    $(document).ready(function () {
+        var access = @listaIdsPermitidosJson;
+        if (access != undefined && access != '') {
+            if (!access.toString().includes(localStorage.getItem("menuId"))) {
+                Swal.fire({
+                    icon: "error",
+                    title: "¡EL usuario no tiene acceso a esta opción!"
+                });
+                setTimeout(() => {
+                    window.location.href = "/Principal";
+                }, 200);
+            }
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "¡EL usuario no tiene acceso a esta opción!"
+            });
+            setTimeout(() => {
+                window.location.href = "/Principal";
+            }, 200);
+        }
+    });
+
+</script>
 <div class="mainContainer bg-light">
 
     <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
@@ -15,7 +45,7 @@
                         <i class="icon-deposito h1 colorPrimary"></i>
                     </div>
                     <div class="col-auto my-3">
-                        <h2 class="m-0 h3"><b>Busqueda por Depósito</b></h2>
+                        <h2 class="m-0 h3"><b>Búsqueda por Depósito</b></h2>
                     </div>
                 </div>
             </div>
@@ -75,7 +105,7 @@
                         @(Html.Kendo().TextBoxFor(t => t.propietario)
                             .HtmlAttributes(new { style = "width: 80%" })
                             .Label(l => l.Content("Propietario del vehículo:"))
-                            .Placeholder("Ingresa el número folio")
+                            .Placeholder("Ingresa nombre del propietario")
                             .HtmlAttributes(new { style = "width: 100%" })
                             )
                     </div>
@@ -107,8 +137,9 @@
             type: 'POST',
             data: Mydata,
             success: (data) => {
-                var grid = $("#gridBusquedaServicioDepositos").data("kendoGrid");
+                var grid = $("#gridBusquedaServicioDepositos2").data("kendoGrid");
                 grid.dataSource.data(data);
+                //grid.dataSource.page(1);
                 hideLoading();
             },
             error: function () {

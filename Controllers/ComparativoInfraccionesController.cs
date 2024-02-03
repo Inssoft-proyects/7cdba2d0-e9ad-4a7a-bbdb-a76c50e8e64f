@@ -34,11 +34,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 		// GET: ComparativoInfraccionesController
 		public ActionResult Index()
         {
-            int IdModulo = 709;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+         
                 var catMotivosInfraccion = _catDictionary.GetCatalog("CatAllMotivosInfraccion", "0");
                 var catTipoServicio = _catDictionary.GetCatalog("CatTipoServicio", "0");
                 var catTiposVehiculo = _catDictionary.GetCatalog("CatTiposVehiculo", "0");
@@ -67,12 +63,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                     año1 = DateTime.Now.AddYears(-1).Year, año2 = DateTime.Now.Year
                 });
             }
-            else
-            {
-                TempData["ErrorMessage"] = "Este usuario no tiene acceso a esta sección.";
-                return RedirectToAction("Principal", "Inicio", new { area = "" });
-            }
-        }
+      
 
         public IActionResult ajax_ComparativoInfracciones(ComparativoInfraccionesModel model)
         {

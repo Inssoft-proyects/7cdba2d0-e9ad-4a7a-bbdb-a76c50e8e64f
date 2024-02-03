@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace GuanajuatoAdminUsuarios.Services
 {
@@ -159,23 +160,24 @@ namespace GuanajuatoAdminUsuarios.Services
                         while (reader.Read())
                         {
                             PensionModel pensionModel = new PensionModel();
-                            pensionModel.IdPension = Convert.ToInt32(reader["idPension"].ToString());
-                            pensionModel.Indicador = Convert.ToInt32(reader["indicador"].ToString());
-                            pensionModel.Pension = reader["pension"].ToString();
-                            pensionModel.Permiso = reader["permiso"].ToString();
-                            pensionModel.IdDelegacion = Convert.ToInt32(reader["idDelegacion"].ToString());
-                            pensionModel.IdMunicipio = Convert.ToInt32(reader["idMunicipio"].ToString());
-                            pensionModel.Direccion = reader["direccion"].ToString();
-                            pensionModel.Telefono = reader["telefono"].ToString();
-                            pensionModel.Correo = reader["correo"].ToString();
-                            pensionModel.FechaActualizacion = Convert.ToDateTime(reader["fechaActualizacion"].ToString());
-                            pensionModel.ActualizadoPor = Convert.ToInt32(reader["actualizadoPor"].ToString());
-                            pensionModel.estatus = Convert.ToInt32(reader["estatus"].ToString());
-                            pensionModel.delegacion = reader["delegacion"].ToString();
-                            pensionModel.municipio = reader["municipio"].ToString();
-                            pensionModel.responsable = reader["responsable"].ToString();
-                            pensionModel.placas = reader["placas"].ToString();
-                            pensionModel.concesionario = reader["concesionario"].ToString();
+                            pensionModel.IdPension = reader["idPension"] != DBNull.Value ? Convert.ToInt32(reader["idPension"]) : 0;
+                            pensionModel.Indicador = reader["indicador"] != DBNull.Value ? Convert.ToInt32(reader["indicador"]) : 0;
+                            pensionModel.Pension = reader["pension"] != DBNull.Value ? reader["pension"].ToString() : string.Empty;
+                            pensionModel.Permiso = reader["permiso"] != DBNull.Value ? reader["permiso"].ToString() : string.Empty;
+                            pensionModel.IdDelegacion = reader["idDelegacion"] != DBNull.Value ? Convert.ToInt32(reader["idDelegacion"]) : 0;
+                            pensionModel.IdMunicipio = reader["idMunicipio"] != DBNull.Value ? Convert.ToInt32(reader["idMunicipio"]) : 0;
+                            pensionModel.Direccion = reader["direccion"] != DBNull.Value ? reader["direccion"].ToString() : string.Empty;
+                            pensionModel.Telefono = reader["telefono"] != DBNull.Value ? reader["telefono"].ToString() : string.Empty;
+                            pensionModel.Correo = reader["correo"] != DBNull.Value ? reader["correo"].ToString() : string.Empty;
+                            pensionModel.FechaActualizacion = reader["fechaActualizacion"] != DBNull.Value ? Convert.ToDateTime(reader["fechaActualizacion"]) : DateTime.MinValue;
+                            pensionModel.ActualizadoPor = reader["actualizadoPor"] != DBNull.Value ? Convert.ToInt32(reader["actualizadoPor"]) : 0;
+                            pensionModel.estatus = reader["estatus"] != DBNull.Value ? Convert.ToInt32(reader["estatus"]) : 0;
+                            pensionModel.delegacion = reader["delegacion"] != DBNull.Value ? reader["delegacion"].ToString() : string.Empty;
+                            pensionModel.municipio = reader["municipio"] != DBNull.Value ? reader["municipio"].ToString() : string.Empty;
+                            pensionModel.responsable = reader["responsable"] != DBNull.Value ? reader["responsable"].ToString() : string.Empty;
+                            pensionModel.placas = reader["placas"] != DBNull.Value ? reader["placas"].ToString() : string.Empty;
+                            pensionModel.concesionario = reader["concesionario"] != DBNull.Value ? reader["concesionario"].ToString() : string.Empty;
+
                             ListPensiones.Add(pensionModel);
 
                         }
@@ -590,10 +592,10 @@ namespace GuanajuatoAdminUsuarios.Services
                             PensionModel pension = new PensionModel();
                             pension.IdPension = Convert.ToInt32(reader["IdPension"].ToString());
                             pension.Pension = reader["Pension"].ToString();
-                            pension.IdDelegacion = Convert.ToInt32(reader["IdDelegacion"].ToString());                         
+                            pension.IdDelegacion = Convert.ToInt32(reader["IdDelegacion"].ToString());
                             pension.FechaActualizacion = Convert.ToDateTime(reader["fechaActualizacion"].ToString());
                             pension.ActualizadoPor = Convert.ToInt32(reader["actualizadoPor"].ToString());
-                            pension.estatus = Convert.ToInt32(reader["estatus"].ToString());                          
+                            pension.estatus = Convert.ToInt32(reader["estatus"].ToString());
                             ListPensiones.Add(pension);
 
                         }
@@ -612,5 +614,47 @@ namespace GuanajuatoAdminUsuarios.Services
                 }
             return ListPensiones;
         }
+
+        public string GetPensionLogin(int idPension)
+		{
+			string resultadoPension = "No Asignada";
+			using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+                try
+                {
+                    connection.Open();
+                    string SqlTransact = @"SELECT 
+                                                 p.pension 
+                                                 FROM pensiones p
+                                                 WHERE p.estatus = 1
+                                                 AND p.idPension = @idPension";
+
+
+                    SqlCommand command = new SqlCommand(SqlTransact, connection);
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.Add(new SqlParameter("@idPension", SqlDbType.Int)).Value = (object)idPension ?? DBNull.Value;
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+							resultadoPension = reader["pension"].ToString();
+
+						}
+
+                    }
+
+                }
+
+                catch (SqlException ex)
+                {
+                    //Guardar la excepcion en algun log de errores
+                    //ex
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            return resultadoPension;
+        }
     }
+
 }

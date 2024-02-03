@@ -1,4 +1,9 @@
-﻿<div class="row">
+﻿@{
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+    var listaIdsPermitidosJson = @HttpContextAccessor.HttpContext.Session.GetString("IdsPermitidos").ToString();
+    var autorizaciones = @HttpContextAccessor.HttpContext.Session.GetString("Autorizaciones").ToString();
+}
+<div class="row">
     <div class="col-12 mb-4 px-4 rounded gridCustom">
 
         @(
@@ -14,7 +19,7 @@
                     .ClientTemplate(
                         "<div style='display:flex; align-items:center;'>" +
                         "<div>#= numeroReporte #</div>" +
-                "<button onclick=\"ModalEditarFolio('#= IdAccidente #', '#= numeroReporte #')\" class='w-100 btn'>" +
+                "<button id='btnFolio' onclick=\"ModalEditarFolio('#= IdAccidente #', '#= numeroReporte #')\" class='w-100 btn'>" +
                         "<h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b></b></h6>" +
                         "</button>" +
                         "</div>"
@@ -34,27 +39,19 @@
                  columns.Bound(p => p.IdAccidente).ClientTemplate(
                 "<button onclick=\"eliminarAccidente('#= IdAccidente #', '#= numeroReporte #')\" class='w-100 btn'><h6 class='m-0 colorDanger'><i class='icon-delete me-2'></i><b>Eliminar</b></h6></button>"
                 ).Title("Eliminar").Sortable(false).Width(90);
-               
-
-
             }).HtmlAttributes(new { style = "height:550px" })
-            .Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }).Position(GridPagerPosition.Bottom))
-            .Sortable()
-            .Scrollable(scr => scr.Height(350))
+            .EnableCustomBinding(true)
             .DataSource(dataSource => dataSource
             .Ajax()
-            .ServerOperation(false)
+            .Read("GetAccidentesBusquedaPagination", "BusquedaEspecialAccidentes")
+            .PageSize(10)
+            .Events(events => events.Error("handleError"))
             )
-            .ToolBar(t => t.Search())
-            .Search(s =>
-            {
-                s.Field(c => c.fecha);
-                s.Field(c => c.hora);
-                s.Field(c => c.municipio);
-                s.Field(c => c.carretera);
-                s.Field(c => c.tramo);
-                s.Field(c => c.estatusReporte);
-            })
+
+            .Pageable(p => p.Enabled(true).PageSizes(new[] { 10, 20, 30 }))
+            .Sortable()
+            .Scrollable(scr => scr.Enabled(true))
+            @*.ToolBar(t => t.Custom().Text("Buscar...").Name("search"))*@
             )
 
     </div>
@@ -78,6 +75,23 @@
     </div>
     
 <script>
+    $(document).ready(function () {
+        var auth = @autorizaciones;
+        var grid = $("#gridBusquedaEspecialAccidentes").data("kendoGrid");
+
+        if (!auth.toString().includes("611")) {
+            grid.hideColumn(9);
+        }
+        if (!auth.toString().includes("614")) {
+            grid.hideColumn(10);
+        }
+        if (!auth.toString().includes("616")) {
+            $("#btnFolio").prop('disabled', true).css({ "opacity": "0.3" });
+
+        }
+
+    });
+
     function downLoadPdf(Id) {
         console.log("SI", Id)
         window.location = '/BusquedaAccidentes/CreatePdfUnRegistro?IdAccidente=' + Id;
@@ -89,10 +103,14 @@
             type: 'POST',
             data: { idAccidente: idAccidente },
             success: function (result) {
-
+                if (result.includes("no tiene permisos")) {
+                    sitteg_warning("El usuario no tiene permisos suficientes para esta acción.");
+                    hideLoading();
+                } else {
                 window.location.href = '/CapturaAccidentes/CapturaAaccidente/?showE=true'
                     hideLoading();
-                },
+                }
+             },
                 error: function () {
                     sitteg_warning("Ocurrio un error al procesar su solicitud.");
                     hideLoading();
@@ -109,9 +127,14 @@
                     idAccidente: idAccidente,
                     numeroReporte: numeroReporte
                 }, success: function (result) {
+                if (result.includes("no tiene permisos")) {
+                    sitteg_warning("El usuario no tiene permisos suficientes para esta acción.");
+                    hideLoading();
+                } else {
                     $('#ModalBodyEliminarAccidente').html(result);
                     $('#eliminarAccidenteModal').modal('show');
                     hideLoading();
+                }
                 },
                 error: function () {
                     sitteg_warning("Ocurrio un error al procesar su solicitud.");
@@ -142,5 +165,8 @@
         });
     }
 
-    
+    function handleError(e) {
+        console.log("Error en la solicitud al servidor:", e.errors); // Puedes personalizar el manejo de errores según tus necesidades
+    }
+
 </script>

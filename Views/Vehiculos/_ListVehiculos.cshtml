@@ -1,15 +1,25 @@
 ﻿@model List<VehiculoModel>
 
 
+@{
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+    var listaIdsPermitidosJson = @HttpContextAccessor.HttpContext.Session.GetString("IdsPermitidos").ToString();
+    var autorizaciones = @HttpContextAccessor.HttpContext.Session.GetString("Autorizaciones").ToString();
+}
+
+@*
+   <div class="row">
+
+   </div>
+*@
 <div class="row">
+    <div class="col-12 mb-4 px-4">
+        <h5><b>Listado de vehículos</b></h5>
+        <h6 class="text-muted">Edita los datos de vehículo.</h6>
+    </div>
 
     <div class="col-12 mb-4 px-4 rounded gridCustom">
-        <div class="row mb-1 titleCustom">
-            <div class="col-12 col-md-auto mt-4 mb-2">
-                <h5 class="px-4"><b>Listado de vehículos</b></h5>
-                <h6 class="px-4 text-muted">Edita los datos de vehículo.</h6>
-            </div>
-        </div>
+        
         @(Html.Kendo().Grid(Model)
             .Name("Grid")
             .Columns(columns =>
@@ -28,7 +38,7 @@
                 columns.Bound(c => c.modelo).Title("Modelo").Width(90);
                 columns.Bound(c => c.color).Title("Color").Width(90);
                 columns.Bound(c => c.entidadRegistro).Title("Entidad").Width(90);
-                columns.Bound(c => c.tipoServicio).Title("Tipo Servicio").Width(90);
+                columns.Bound(c => c.subTipoServicio).Title("SubTipo Servicio").Width(90);
                 columns.Bound(c => c.numeroEconomico).Title("Numero económico").Width(90);
 
 
@@ -37,14 +47,16 @@
                 ).Title("Acciones").Sortable(false).Width(100);
 
             }).HtmlAttributes(new { style = "height:350" })
-            .Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }))
-            .Sortable()
-            .Scrollable(scr => scr.Height(350))
+            .Pageable(p => p.Enabled(true).PageSizes(new[] { 10, 20, 30 }))
+            .EnableCustomBinding(true)
             .DataSource(dataSource => dataSource
             .Ajax()
-            .ServerOperation(false)
+            .Read("ajax_BuscarVehiculos", "Vehiculos")
+            .PageSize(10)
             )
-            .ToolBar(t => t.Search())
+            .Scrollable(scr => scr.Height(350)
+            )
+            @*.ToolBar(t => t.Search().Text("Buscar..."))
             .Search(s =>
             {
                 s.Field(c => c.placas);
@@ -58,11 +70,11 @@
                 s.Field(c => c.modelo);
                 s.Field(c => c.color);
                 s.Field(c => c.entidadRegistro);
-                s.Field(c => c.tipoServicio);
+                s.Field(c => c.subTipoServicio);
                 s.Field(c => c.numeroEconomico);
 
 
-            })
+            })*@
             )
 
         @(Html.Kendo().Tooltip()
@@ -71,6 +83,22 @@
             .Position(TooltipPosition.Top)
             .ContentHandler("tooltipContent")
             )
+
+
+        <script>
+
+            $(document).ready(function () {
+                var auth = @autorizaciones;
+                var grid = $("#Grid").data("kendoGrid");
+
+                //EDITAR
+                if (!auth.toString().includes("255")) {
+                    grid.hideColumn(16);
+                }
+
+            });
+
+        </script>
     </div>
 
 </div>

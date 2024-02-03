@@ -13,5 +13,6 @@ namespace GuanajuatoAdminUsuarios.Models.PDFModels
         public string placas { get; set; }
         public string delegacion { get; set; }
         public string estatusInfraccion { get; set; }
+        public string aplicacion { get; set; }
     }
 }

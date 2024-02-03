@@ -1,8 +1,10 @@
-﻿<div class="row">
+﻿@model List<CatMotivosInfraccionModel>
+
+<div class="row">
     <div class="col-12 mb-4 px-4 rounded gridCustom">
 
         @(
-            Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CatMotivosInfraccionModel>()
+            Html.Kendo().Grid(Model)
             .Name("gridCatMotivos")
             .Columns(columns =>
             {
@@ -30,7 +32,7 @@
             .Read(read => read.Action("GetMotInf", "MotivosInfraccion"))
             .PageSize(5).Model(model => model.Id(p => p.IdCatMotivoInfraccion))
             )
-            .ToolBar(t => t.Search())
+            .ToolBar(t => t.Search().Text("Buscar..."))
             .Search(s =>
             {
                 s.Field(c => c.Nombre);

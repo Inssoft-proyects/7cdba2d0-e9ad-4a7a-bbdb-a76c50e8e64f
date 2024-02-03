@@ -62,7 +62,7 @@
     <div class="col-12 col-md-6">
         <div class="controlForm my-3">
             <label for="shipTo">Delegación <b>(obligatorio):</b> </label>
-            @(Html.Kendo().DropDownListFor(f => f.idDelegacion).Filter(FilterType.Contains)
+            @(Html.Kendo().DropDownListFor(f=>f.idDelegacion).Filter(FilterType.Contains)
                 .BindTo((SelectList)ViewBag.CatDelegaciones)
                 .OptionLabel("-- Seleccione --")
                 .HtmlAttributes(new { style = "width:100%;" }))

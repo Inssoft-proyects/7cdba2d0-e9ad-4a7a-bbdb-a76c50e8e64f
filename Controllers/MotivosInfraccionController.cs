@@ -34,77 +34,51 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public IActionResult Index()
         {
-            int IdModulo = 944;
 			int idDependencia = (int)HttpContext.Session.GetInt32("IdDependencia");
-			string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
-                var ListMotivosInfraccionModel = _motivoInfraccionService.GetMotivos(idDependencia);
+            CatMotivosInfraccionModel searchModel = new CatMotivosInfraccionModel();
+            List<CatMotivosInfraccionModel> listMotivosInfraccion = _motivoInfraccionService.GetMotivos(idDependencia);
 
-            return View(ListMotivosInfraccionModel);
+            searchModel.ListMotivosInfraccion = listMotivosInfraccion;
+            return View(searchModel);
             }
-            else
-            {
-                TempData["ErrorMessage"] = "Este usuario no tiene acceso a esta sección.";
-                return RedirectToAction("Principal", "Inicio", new { area = "" });
-            }
-
-        }
-
-
+ 
 
         #region Modal Action
         public ActionResult IndexModal()
         {
 
-			int idDependencia = (int)HttpContext.Session.GetInt32("IdDependencia");
-			var ListMotivosInfraccionModel = _motivoInfraccionService.GetMotivos(idDependencia);
-            //return View("IndexModal");
-            return View("Index", ListMotivosInfraccionModel);
+            int idDependencia = (int)HttpContext.Session.GetInt32("IdDependencia");
+            CatMotivosInfraccionModel searchModel = new CatMotivosInfraccionModel();
+            List<CatMotivosInfraccionModel> listMotivosInfraccion = _motivoInfraccionService.GetMotivos(idDependencia);
+
+            searchModel.ListMotivosInfraccion = listMotivosInfraccion;
+            return View(searchModel);
         }
+
 
         [HttpPost]
         public ActionResult AgregarMotivoParcial()
         {
-            int IdModulo = 945;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
-                var catConcepto = _catDictionary.GetCatalog("CatConceptoInfraccion", "0");
+              
+                    var catConcepto = _catDictionary.GetCatalog("CatConceptoInfraccion", "0");
                 ViewData["CatConcepto"] = new SelectList(catConcepto.CatalogList, "Id", "Text");
                 return View("_Crear");
             }
-            else
-            {
-                TempData["ErrorMessage"] = "El usuario no tiene permisos suficientes para esta acción.";
-                return PartialView("ErrorPartial");
-            }
-        }
+    
 
         public ActionResult EditarParcial(int IdCatMotivoInfraccion)
         {
-            int IdModulo = 946;
 			int idDependencia = (int)HttpContext.Session.GetInt32("IdDependencia");
-			string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
-                var motivosInfraccionsModel = _motivoInfraccionService.GetMotivoByID(IdCatMotivoInfraccion, idDependencia);
+       
+                    var motivosInfraccionsModel = _motivoInfraccionService.GetMotivoByID(IdCatMotivoInfraccion, idDependencia);
                 
                 var catConcepto = _catDictionary.GetCatalog("CatConceptoInfraccion", "0");
                 var catSubConcepto = _catDictionary.GetCatalog("CatSubConceptoInfraccion", motivosInfraccionsModel.idConcepto+"");
                 ViewData["CatConcepto"] = new SelectList(catConcepto.CatalogList, "Id", "Text");
                 ViewData["CatSubConceptoInfraccion"] = new SelectList(catSubConcepto.CatalogList, "Id", "Text");
                 return View("_Editar", motivosInfraccionsModel);
-        }
-            else
-            {
-                TempData["ErrorMessage"] = "El usuario no tiene permisos suficientes para esta acción.";
-                return PartialView("ErrorPartial");
-    }
-}
+                 }
+
 
         public ActionResult EliminarMotivoParcial(int IdCatMotivoInfraccion)
         {
@@ -233,9 +207,21 @@ namespace GuanajuatoAdminUsuarios.Controllers
              ViewBag.Categories = new SelectList(dbContext.Color.ToList(), "IdColor", "color");
          }*/
 
-        
-        #endregion
 
+        #endregion
+       public ActionResult ajax_BuscarMotivos(CatMotivosInfraccionModel model)
+        {
+
+            int idDependencia = HttpContext.Session.GetInt32("IdDependencia") ?? 0;
+            var ListMotivos = _motivoInfraccionService.GetMotivosBusqueda(model, idDependencia);
+            if (ListMotivos.Count == 0)
+            {
+                ViewBag.NoResultsMessage = "No se encontraron registros que cumplan con los criterios de búsqueda.";
+            }
+
+            return PartialView("_ListaMotivosInfraccion", ListMotivos);
+
+        }
 
 
     }

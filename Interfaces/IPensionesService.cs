@@ -14,5 +14,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
         public int CrearPensionGruas(int idPension, List<int> gruas);
         public int EliminarPensionGruas(int idPension);
         public int EditarGrua(PensionModel model);
-    }
+		public string GetPensionLogin(int idPension);
+
+	}
 }

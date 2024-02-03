@@ -1,5 +1,9 @@
 ﻿@model List<InfraccionesModel>
 
+@{
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+    var autorizaciones = @HttpContextAccessor.HttpContext.Session.GetString("Autorizaciones").ToString();
+}
 
 <div class="row justify-content-between align-items-end mb-1">
     <div class="col-12 col-md-auto mt-4 mb-2">
@@ -12,7 +16,7 @@
                 @* <button>
                 <h6 class="m-0 d-flex align-items-center"><i class="icon-pdf h5 mb-0 me-2"></i><b>PDF de reporte de infracción</b></h6>
                 </button>*@
-                <button type="button" onclick="downLoadPdfFiltered()">
+                <button type="button" onclick="downLoadPdfFiltered()" id="btnPDFReporteBusquedaEspecial">
                     <h6 class="m-0 d-flex align-items-center"><i class="icon-pdf h5 mb-0 me-2"></i><b>PDF de reporte de infracción</b></h6>
                 </button>
             </div>
@@ -31,12 +35,12 @@
             .Columns(columns =>
             {
                 columns.Bound(p => p.folioInfraccion).ClientTemplate("#= TemplateFolio(data)#").Title("Folio").Width(180);
-                columns.Bound(p => p.PersonaInfraccion.nombreCompleto).Title("Conductor").Width(90);
-                columns.Bound(p => p.Vehiculo.Persona.nombreCompleto).Title("Propietario").Width(90);
+                columns.Bound(p => p.PersonaInfraccion.nombreCompleto).Title("Conductor").Width(150);
+                columns.Bound(p => p.Vehiculo.Persona.nombreCompleto).Title("Propietario").Width(150);
                 columns.Bound(c => c.Vehiculo.placas).Title("Placas").Width(90);
                 columns.Bound(c => c.fechaInfraccion).Title("Fecha Aplicada a").Width(100).Format("{0:dd/MM/yyyy}");
                 columns.Bound(c => c.estatusInfraccion).Title("Estatus").Width(90);
-                columns.Bound(c => c.delegacion).Title("Delegación/Oficina").Width(90);
+                columns.Bound(c => c.delegacion).Title("Delegación/Oficina").Width(150);
                 columns.Bound(p => p.idInfraccion).ClientTemplate("#= TemplateCortecia(data) #").Title("Cortesía").Sortable(false).Width(90);
                 columns.Bound(p => p.idInfraccion).ClientTemplate("#= TemplateEditar(data) #").Title("Ver Registro").Sortable(false).Width(90);
                 columns.Bound(p => p.idInfraccion).ClientTemplate("#= TemplateMostrar(data)  #").Title("Mostrar").Sortable(false).Width(90);
@@ -56,23 +60,29 @@
 
             .Sortable()
             .Scrollable(scr => scr.Height(350))
-            .ToolBar(t => t.Search())
-            .Search(s =>
-            {
-                s.Field(c => c.folioInfraccion);
-                s.Field(c => c.PersonaInfraccion.nombreCompleto);
-                s.Field(c => c.Vehiculo.Persona.nombreCompleto);
-                s.Field(c => c.Vehiculo.placas);
-                s.Field(c => c.estatusInfraccion);
-                s.Field(c => c.delegacion);
-
-
-
-
-
-            })
             )
-        @*</div>*@
+
+
+        <script>
+
+            $(document).ready(function () {
+                var auth = @autorizaciones;
+                var grid = $("#GridInf").data("kendoGrid");
+
+                // IMPRIMIR
+                if (!auth.toString().includes("482")) {
+                    $("#btnPDFReporteBusquedaEspecial").prop('disabled', true).css({ "opacity": "0.3" });
+        
+                }
+                if (!auth.toString().includes("484")) {
+                    grid.hideColumn(10);
+                }
+                //if (!auth.toString().includes("462")) {
+                //    grid.hideColumn(14);
+                //}
+            });
+
+        </script>
     </div>
 </div>
 

@@ -35,8 +35,10 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+                return View();
         }
+
+        
         public JsonResult Marcas_Drop()
         {
             var result = new SelectList(_catMarcasVehiculosService.ObtenerMarcas(), "IdMarcaVehiculo", "MarcaVehiculo");
@@ -45,7 +47,9 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public JsonResult Placas_Read()
         {
             int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
-            var result = new SelectList(_placaServices.GetPlacasByDelegacionId(idOficina), "IdDepositos", "Placa");
+            int idPension = HttpContext.Session.GetInt32("IdPension") ?? 0;
+
+            var result = new SelectList(_placaServices.GetPlacasByDelegacionId(idPension), "IdDepositos", "Placa");
             return Json(result);
         }
         public JsonResult Municipios_Drop()
@@ -86,10 +90,14 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public IActionResult ajax_BusquedaDepositos(IngresoVehiculosModel model)
         {
-            var listaDepositos = _ingresarVehiculosService.ObtenerDepositos(model);
-            return Json(listaDepositos);
-        }
-        public IActionResult GuardarRegistroSeleccionado(int idDeposito)
+           
+                int idPension = HttpContext.Session.GetInt32("IdPension") ?? 0;
+
+                var listaDepositos = _ingresarVehiculosService.ObtenerDepositos(model, idPension);
+                return Json(listaDepositos);
+            }
+      
+            public IActionResult GuardarRegistroSeleccionado(int idDeposito)
         {
             var infoDeposito = _ingresarVehiculosService.DetallesDeposito(idDeposito);
             return Json(infoDeposito);

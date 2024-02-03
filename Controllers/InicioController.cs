@@ -61,6 +61,10 @@ namespace GuanajuatoAdminUsuarios.Controllers
         [Route("/Principal")]
         public IActionResult Principal()
         {
+            if (TempData.ContainsKey("ErrorMessage"))
+            {
+                ViewData["ErrorMessage"] = TempData["ErrorMessage"].ToString();
+            }
             return View("Inicio");
         }
 

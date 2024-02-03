@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace GuanajuatoAdminUsuarios.Models
@@ -13,6 +14,7 @@ namespace GuanajuatoAdminUsuarios.Models
         public int idConcepto { get; set; }
         public string concepto { get; set; }
         public int idSubConcepto { get; set; }
+        public int IdVigencia { get; set; }        
         public string subConcepto { get;set; }
         public bool ValorEstatusMotivosInfraccion { get; set; }
         public string estatusDesc { get; set; }
@@ -22,6 +24,12 @@ namespace GuanajuatoAdminUsuarios.Models
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime fechaInicioVigencia { get; set; }
 
+        public DateTime? InicioVigenciaDesde { get; set; }
+        public DateTime? InicioVigenciaHasta { get; set; }
+        public DateTime? FinVigenciaDesde { get; set; }
+        public DateTime? FinVigenciaHasta { get; set; }
+
+        public List<CatMotivosInfraccionModel> ListMotivosInfraccion { get; set; }
 
     }
 }

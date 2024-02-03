@@ -17,7 +17,7 @@
 			columns.Bound(p => p.Numreporteaccidente).Title("Numreporteaccidente").Width(90);
 			columns.Bound(p => p.fecha).Title("Fecha").Width(90).Format("{0: dd/MM/yyyy }");
 			columns.Bound(p => p.hora).Title("Hora").Width(90);
-			columns.Bound(p => p.NumVeh).Title("NumVeh").Width(90);
+			//columns.Bound(p => p.NumVeh).Title("NumVeh").Width(90);
 			columns.Bound(p => p.PlacasVeh).Title("PlacasVeh").Width(90);
 			columns.Bound(p => p.SerieVeh).Title("SerieVeh").Width(90);
 			columns.Bound(p => p.PropietarioVeh).Title("PropietarioVeh").Width(90);
@@ -35,15 +35,15 @@
 			columns.Bound(p => p.Kilómetro).Title("Kilómetro").Width(90);
 			columns.Bound(p => p.Latitud).Title("Latitud").Width(90);
 			columns.Bound(p => p.Longitud).Title("Longitud").Width(90);
-			columns.Bound(p => p.NombredelOficial).Title("NombredelOficial").Width(90);
+			columns.Bound(p => p.NombredelOficial).Title("Nombre de Oficial").Width(90);
 			columns.Bound(p => p.Dañosalcamino).Title("Dañosalcamino").Width(90);
 			columns.Bound(p => p.DañosaCarga).Title("DañosaCarga").Width(90);
 			columns.Bound(p => p.Dañosapropietario).Title("Dañosapropietari").Width(90);
 			columns.Bound(p => p.Otrosdaños).Title("Otrosdaños").Width(90);
 			columns.Bound(p => p.Lesionados).Title("Lesionados").Width(90);
 			columns.Bound(p => p.Muertos).Title("Muertos").Width(90);
-			columns.Bound(p => p.Causas).Title("Causas").Width(90);
-			columns.Bound(p => p.CausasDescripcion).Title("CausasDescripcion").Width(90);
+			columns.Bound(p => p.Causas).Title("Causas").Width(150);
+			columns.Bound(p => p.CausasDescripcion).Title("Descipcion Causas").Width(120);
 
 		}).HtmlAttributes(new { style = "height:auto" })
 		.Pageable(pager => pager.AlwaysVisible(true).Position(GridPagerPosition.Bottom).PageSizes(true))

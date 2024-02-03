@@ -28,23 +28,13 @@ namespace GuanajuatoAdminUsuarios.Controllers
         DBContextInssoft dbContext = new DBContextInssoft();
         public IActionResult Index()
         {
-            int IdModulo = 996;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+          
 
                 var ListFactoresOpcionesAccidentesModel = GetFactoresOpcionesAccidentes();
 
             return View(ListFactoresOpcionesAccidentesModel);
             }
-            else
-            {
-                TempData["ErrorMessage"] = "Este usuario no tiene acceso a esta sección.";
-                return RedirectToAction("Principal", "Inicio", new { area = "" });
-            }
-
-        }
+      
 
 
 
@@ -59,38 +49,20 @@ namespace GuanajuatoAdminUsuarios.Controllers
         [HttpPost]
         public ActionResult AgregarFactoresOpcionesAccidenteModal()
         {
-            int IdModulo = 997;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+          
                 Factores_Drop();
             return PartialView("_Crear");
             }
-            else
-            {
-                TempData["ErrorMessage"] = "El usuario no tiene permisos suficientes para esta acción.";
-                return PartialView("ErrorPartial");
-            }
-        }
+   
 
         public ActionResult EditarFactoresOpcionesAccidenteModal(int IdFactoropcionAccidente)
         {
-            int IdModulo = 998;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+           
                 Factores_Drop();
             var factoresOpcionesAccidentesModel = GetFactorOpcionAccidenteByID(IdFactoropcionAccidente);
             return PartialView("_Editar", factoresOpcionesAccidentesModel);
         }
-            else
-            {
-                TempData["ErrorMessage"] = "El usuario no tiene permisos suficientes para esta acción.";
-                return PartialView("ErrorPartial");
-    }
-}
+
 
         public ActionResult EliminarFactoresOpcionesAccidenteModal(int IdFactoropcionAccidente)
         {

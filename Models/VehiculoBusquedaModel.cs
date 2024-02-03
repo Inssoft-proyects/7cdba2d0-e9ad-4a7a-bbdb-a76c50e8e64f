@@ -16,7 +16,8 @@ namespace GuanajuatoAdminUsuarios.Models
         public int? idMarca { get; set; }
         public int? idSubMarca { get; set; }
         public int? idTipoVehiculo { get; set; }
-        public int? idTipoServicio { get; set; }
+        //public int? idTipoServicio { get; set; }
+        public int? idSubtipoServicio { get; set; }
         public string modelo { get; set; } = null!;
         public string numeroEconomico { get; set; } = null!;
         public string propietario { get; set; } = null!;

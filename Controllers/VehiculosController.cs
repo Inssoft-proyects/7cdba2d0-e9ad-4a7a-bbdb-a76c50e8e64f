@@ -3,11 +3,15 @@ using GuanajuatoAdminUsuarios.Models;
 using GuanajuatoAdminUsuarios.RESTModels;
 using GuanajuatoAdminUsuarios.Services;
 using iTextSharp.text;
+using Kendo.Mvc;
+using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,7 +45,10 @@ namespace GuanajuatoAdminUsuarios.Controllers
         private readonly ICatTiposVehiculosService _catTiposVehiculosService;
         private readonly IRepuveService _repuveService;
         private readonly IBitacoraService _bitacoraServices;
+        private readonly ICatSubtipoServicio _subtipoServicio;
 
+        private string resultValue = string.Empty;
+        public static VehiculoBusquedaModel vehModel = new VehiculoBusquedaModel();
         public VehiculosController(IVehiculosService vehiculosService, ICatDictionary catDictionary,
             IPersonasService personasService, HttpClient httpClientFactory, IConfiguration configuration,
            ICotejarDocumentosClientService cotejarDocumentosClientService, ICatTipoLicenciasService catTipoLicenciasService,
@@ -49,7 +56,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
            IColores coloresService, ICatMarcasVehiculosService catMarcasVehiculosService, ICatSubmarcasVehiculosService catSubmarcasVehiculosService,
             ICatTiposVehiculosService catTiposVehiculosService
         , IRepuveService repuveService,
-            IBitacoraService bitacoraService
+            IBitacoraService bitacoraService,
+            ICatSubtipoServicio subtipoServicio
             )
         {
             _vehiculosService = vehiculosService;
@@ -68,6 +76,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             _catTiposVehiculosService = catTiposVehiculosService;
             _repuveService = repuveService;
             _bitacoraServices = bitacoraService;
+            _subtipoServicio = subtipoServicio;
         }
 
         public IActionResult Index()
@@ -82,18 +91,19 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public IActionResult Editar()
         {
-            var vehiculosModel = _vehiculosService.GetAllVehiculos();
+           // var vehiculosModel = _vehiculosService.GetAllVehiculos();
             VehiculoBusquedaModel vehiculoBusquedaModel = new VehiculoBusquedaModel();
             vehiculoBusquedaModel.Vehiculo = new VehiculoModel();
             vehiculoBusquedaModel.Vehiculo.PersonaMoralBusquedaModel = new PersonaMoralBusquedaModel();
             vehiculoBusquedaModel.Vehiculo.PersonaMoralBusquedaModel.PersonasMorales = new List<PersonaModel>();
-            vehiculoBusquedaModel.ListVehiculo = vehiculosModel.ToList();
+           // vehiculoBusquedaModel.ListVehiculo = vehiculosModel.ToList();
             return View(vehiculoBusquedaModel);
         }
 
         public ActionResult EditarVehiculo(int id)
         {
-            var vehiculosModel = _vehiculosService.GetVehiculoById(id);
+          
+                var vehiculosModel = _vehiculosService.GetVehiculoById(id);
             VehiculoBusquedaModel vehiculoBusquedaModel = new VehiculoBusquedaModel();
             vehiculoBusquedaModel.Vehiculo = vehiculosModel;
             vehiculoBusquedaModel.Vehiculo.idSubmarcaUpdated = vehiculosModel.idSubmarca;
@@ -102,13 +112,16 @@ namespace GuanajuatoAdminUsuarios.Controllers
             vehiculoBusquedaModel.isFromUpdate = true;
             vehiculosModel.encontradoEn = (int)EstatusBusquedaVehiculo.Sitteg;
 
+
             vehiculoBusquedaModel.Vehiculo.ErrorRepube = "No";
             vehiculoBusquedaModel.Vehiculo.showclose = false;
+            vehiculoBusquedaModel.Vehiculo.showSubTipo = (vehiculoBusquedaModel.Vehiculo.idCatTipoServicio == 1 || vehiculoBusquedaModel.Vehiculo.idCatTipoServicio == 5) ? true : false;
 
 
 
             return View("EditarVehiculo", vehiculoBusquedaModel.Vehiculo);
-        }
+            }
+    
 
         public JsonResult Entidades_Read()
         {
@@ -151,7 +164,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public JsonResult SubMarcas_Read()
         {
-            var catEntidades = _catDictionary.GetCatalog("SubMarcas_Read", "0");
+            var catEntidades = _catDictionary.GetCatalog("CatSubmarcasVehiculos", "0");
             var result = new SelectList(catEntidades.CatalogList, "Id", "Text");
             //var selected = result.Where(x => x.Value == Convert.ToString(idSubmarca)).First();
             //selected.Selected = true;
@@ -489,7 +502,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public ActionResult ajax_BuscarVehiculo(VehiculoBusquedaModel model)
         {
 
-            var vehiculosModel = new VehiculoModel();
+                var vehiculosModel = new VehiculoModel();
 
             RepuveConsgralRequestModel repuveGralModel = new RepuveConsgralRequestModel(model.PlacasBusqueda, model.SerieBusqueda);
 
@@ -679,12 +692,88 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 return 0; // O algún otro valor que indique que no es válido
             }
         }
-        [HttpPost]
-        public ActionResult ajax_BuscarVehiculos(VehiculoBusquedaModel model)
+
+        public IActionResult GetBuscarVehiculos([DataSourceRequest] DataSourceRequest request, VehiculoBusquedaModel model)
         {
-            var vehiculosModel = _vehiculosService.GetVehiculos(model);
-            return PartialView("_ListVehiculos", vehiculosModel);
+            vehModel = model;
+            return PartialView("_ListVehiculos", new List<VehiculoModel>());
         }
+        
+
+
+        [HttpPost]
+        public IActionResult ajax_BuscarVehiculos([DataSourceRequest] DataSourceRequest request, VehiculoBusquedaModel model)
+        {
+            string listaIdsPermitidosJson = HttpContext.Session.GetString("Autorizaciones");
+            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
+            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(251))
+            {
+                Pagination pagination = new Pagination();
+                pagination.PageIndex = request.Page - 1;
+                pagination.PageSize = 10;
+                pagination.Filter = resultValue;
+
+                model = vehModel;
+
+                var vehiculosModel = _vehiculosService.GetVehiculosPagination(model,pagination);
+                VehiculoBusquedaModel vehiculoBusquedaModel = new VehiculoBusquedaModel();
+                vehiculoBusquedaModel.Vehiculo = new VehiculoModel();
+                vehiculoBusquedaModel.Vehiculo.PersonaMoralBusquedaModel = new PersonaMoralBusquedaModel();
+                vehiculoBusquedaModel.Vehiculo.PersonaMoralBusquedaModel.PersonasMorales = new List<PersonaModel>();
+                vehiculoBusquedaModel.ListVehiculo = vehiculosModel.ToList();
+                var total = 0;
+                if (vehiculoBusquedaModel.ListVehiculo.Count() > 0)
+                    total = vehiculoBusquedaModel.ListVehiculo.ToList().FirstOrDefault().total;
+
+                request.PageSize = 10;
+                var result = new DataSourceResult()
+                {
+                    Data = vehiculoBusquedaModel.ListVehiculo,
+                    Total = total
+                };
+
+                return Json(result);
+            }
+            else
+            {
+                var result = new DataSourceResult()
+                {
+                    Data = new List<VehiculoModel>(),
+                    Total = 0
+                };
+
+                return Json(result);
+            }
+
+        }
+
+        private void filterValue(IEnumerable<IFilterDescriptor> filters)
+        {
+            if (filters.Any())
+            {
+                foreach (var filter in filters)
+                {
+                    var descriptor = filter as FilterDescriptor;
+                    if (descriptor != null)
+                    {
+                        resultValue = descriptor.Value.ToString();
+                        break;
+                    }
+                    else if (filter is CompositeFilterDescriptor)
+                    {
+                        if (resultValue == "")
+                            filterValue(((CompositeFilterDescriptor)filter).FilterDescriptors);
+                    }
+                }
+            }
+        }
+
+        //public ActionResult ajax_BuscarVehiculos(VehiculoBusquedaModel model)
+        //{
+        //    var vehiculosModel = _vehiculosService.GetVehiculos(model);
+        //    return PartialView("_ListVehiculos", vehiculosModel);
+        //}
+
 
 
         [HttpPost]
@@ -794,6 +883,19 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {
                 return null;
             }
+        }
+
+        public JsonResult SubTipoServicios_Read()
+        {
+            var catEntidades = _catDictionary.GetCatalog("CatSubtipoServicio", "0");
+            var result = new SelectList(catEntidades.CatalogList, "Id", "Text");
+            return Json(result);
+        }
+
+        public JsonResult GetSubtipoPorTipo(int idTipoServicio)
+        {
+            var result = new SelectList(_subtipoServicio.GetSubtipoPorTipo(idTipoServicio), "idSubTipoServicio", "subTipoServicio");
+            return Json(result);
         }
 
     }

@@ -40,11 +40,13 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public IActionResult Index()
         {
-            int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
-            TransitoTransporteBusquedaModel searchModel = new TransitoTransporteBusquedaModel();
-            List<TransitoTransporteModel> listTransitoTransporte = _transitoTransporteService.GetAllTransitoTransporte(idOficina);
-            searchModel.ListTransitoTransporte = listTransitoTransporte;
-            return View(searchModel);
+         
+                int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+                TransitoTransporteBusquedaModel searchModel = new TransitoTransporteBusquedaModel();
+                //List<TransitoTransporteModel> listTransitoTransporte = _transitoTransporteService.GetAllTransitoTransporte(idOficina);
+                //searchModel.ListTransitoTransporte = listTransitoTransporte;
+                return View(searchModel);
+            
         }
 
         [HttpGet]
@@ -102,16 +104,16 @@ namespace GuanajuatoAdminUsuarios.Controllers
         [HttpPost]
         public ActionResult ajax_BuscarTransito(TransitoTransporteBusquedaModel model)
         {
-            int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+          
+                int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+                var ListTransitoModel = _transitoTransporteService.GetTransitoTransportes(model, idOficina);
+                if (ListTransitoModel.Count == 0)
+                {
+                    ViewBag.NoResultsMessage = "No se encontraron registros que cumplan con los criterios de búsqueda.";
+                }
 
-            var ListTransitoModel = _transitoTransporteService.GetTransitoTransportes(model, idOficina);
-
-            if (ListTransitoModel.Count == 0)
-            {
-                ViewBag.NoResultsMessage = "No se encontraron registros que cumplan con los criterios de búsqueda.";
-            }
-
-            return PartialView("_ListadoTransitoTransporte", ListTransitoModel);
+                return PartialView("_ListadoTransitoTransporte", ListTransitoModel);
+            
         }
 
 

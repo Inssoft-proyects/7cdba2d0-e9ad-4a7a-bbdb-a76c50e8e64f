@@ -71,7 +71,7 @@
             .Read(read => read.Action("ObtCausasAccidente", "CapturaAccidentes"))
             .PageSize(5).Model(model => model.Id(p => p.idAccidenteCausa))
             )
-            .ToolBar(t => t.Search())
+            .ToolBar(t => t.Search().Text("Buscar..."))
             .Search(s =>
             {
                 s.Field(c => c.CausaAccidente);

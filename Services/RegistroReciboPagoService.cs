@@ -88,29 +88,9 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand(@"SELECT i.*, pveh.nombre AS nombre1, pveh.apellidoPaterno AS apellidoPaterno1,
-                                                            pveh.apellidoMaterno AS apellidoMaterno1, pinf.nombre AS nombre2,i.lugarPago, 
-                                                            pinf.apellidoPaterno AS apellidoPaterno2, pinf.apellidoMaterno AS apellidoMaterno2,
-                                                            e.estatusInfraccion, sum(mi.calificacion ) calificacion 
-                                                        FROM infracciones AS i 
-                                                        LEFT JOIN catEstatusInfraccion AS e ON i.idEstatusInfraccion = e.idEstatusInfraccion
-                                                        LEFT JOIN vehiculos AS v ON v.idVehiculo = i.idVehiculo
-                                                        LEFT JOIN motivosInfraccion mi ON mi.idInfraccion = i.idInfraccion
-                                                        LEFT JOIN personas AS pveh ON pveh.idPersona = v.idPersona
-                                                        LEFT JOIN personas AS pinf ON i.idPersona = pinf.idPersona  
-                                                        WHERE i.IdInfraccion = @Id 
-                                                        group by i.idInfraccion, i.idOficial,i.idDependencia, i.idDelegacion, i.idVehiculo,
-                                                        i.idAplicacion, i.idGarantia, i.idEstatusInfraccion, i.idMunicipio, i.idTramo,
-                                                        i.idCarretera, i.idPersona, i.idPersonaInfraccion, i.placasVehiculo, i.folioInfraccion,
-                                                        i.fechaInfraccion, i.kmCarretera, i.observaciones, i.lugarCalle, i.lugarNumero,
-                                                        i.lugarColonia, i.lugarEntreCalle, infraccionCortesia,i.NumTarjetaCirculacion,
-                                                        i.oficioRevocacion,i.estatusProceso,i.fechaActualizacion,i.actualizadoPor,
-                                                        i.estatus,i.reciboPago,i.monto,i.fechaPago,i.lugarPago,i.idEstatusEnvio,
-                                                        i.oficioEnvio,i.fechaEnvio,i.idOficinaRenta,i.inventario,i.partner,
-                                                        i.cuenta,i.objeto,i.documento,pveh.nombre , pveh.apellidoPaterno,
-                                                        pveh.apellidoMaterno , pinf.nombre , 
-                                                        pinf.apellidoPaterno, pinf.apellidoMaterno,
-                                                        e.estatusInfraccion
+                    SqlCommand command = new SqlCommand(@"SELECT i.idInfraccion,i.folioInfraccion,monto
+                                                            FROM infracciones i
+                                                            WHERE i.idInfraccion = @Id
                                                         ;", connection);
                     command.Parameters.Add(new SqlParameter("@Id", SqlDbType.Int)).Value = Id;
                     command.CommandType = CommandType.Text;
@@ -120,30 +100,8 @@ namespace GuanajuatoAdminUsuarios.Services
                         {
                             infraccion.IdInfraccion = Convert.ToInt32(reader["IdInfraccion"].ToString());
                             infraccion.FolioInfraccion = reader["FolioInfraccion"].ToString();
-                            infraccion.FechaInfraccion = Convert.ToDateTime(reader["FechaInfraccion"].ToString());
+                            infraccion.Monto = (reader["monto"] != DBNull.Value) ? float.Parse(reader["monto"].ToString()) : 0.0f;
 
-                            string nombre1 = reader["nombre1"].ToString();
-                            string apellidoPaterno1 = reader["apellidoPaterno1"].ToString();
-                            string apellidoMaterno1 = reader["apellidoMaterno1"].ToString();
-                            infraccion.Conductor = $"{nombre1} {apellidoPaterno1} {apellidoMaterno1}";
-
-                            infraccion.Placas = reader["placasVehiculo"].ToString();
-                            infraccion.LugarPago = reader["lugarPago"].ToString();
-
-                            object fechaPagoValue = reader["fechaPago"];
-                            infraccion.FechaPago = (fechaPagoValue != DBNull.Value) ? Convert.ToDateTime(fechaPagoValue) : DateTime.MinValue;
-
-                            string nombre2 = reader["nombre2"].ToString();
-                            string apellidoPaterno2 = reader["apellidoPaterno2"].ToString();
-                            string apellidoMaterno2 = reader["apellidoMaterno2"].ToString();
-                            infraccion.Propietario = $"{nombre2} {apellidoPaterno2} {apellidoMaterno2}";
-
-                            object estatusProcesoValue = reader["EstatusProceso"];
-                            infraccion.EstatusProceso = (estatusProcesoValue != DBNull.Value) ? Convert.ToInt32(estatusProcesoValue) : 0;
-
-                            infraccion.Calificacion = Convert.ToInt32(reader["calificacion"].ToString());
-
-                            infraccion.Monto = (float?)infraccion.Calificacion * (float?)_infraccionesService.GetUmas(); ;
                         }
 
                     }

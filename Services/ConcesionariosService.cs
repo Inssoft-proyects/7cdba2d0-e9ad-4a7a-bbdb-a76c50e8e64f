@@ -156,7 +156,9 @@ namespace GuanajuatoAdminUsuarios.Services
         public int CrearConcesionario(Concesionarios2Model model)
         {
             int result = 0;
-            string strQuery = @"INSERT INTO concesionarios VALUES (@concesionario
+            string strQuery = @"INSERT INTO concesionarios(concesionario,idDelegacion,idMunicipio,alias,razonSocial,fechaActualizacion,actualizadoPor,estatus)
+                                                                    VALUES
+                                                                    (@concesionario
                                                                   ,@idDelegacion
                                                                   ,@idMunicipio
                                                                   ,@alias
@@ -173,14 +175,14 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.CommandType = CommandType.Text;
 
                     //command.Parameters.Add(new SqlParameter("idConcesionario", SqlDbType.Int)).Value = (object)model.idConcesionario;
-                    command.Parameters.Add(new SqlParameter("concesionario", SqlDbType.NVarChar)).Value = (object)model.nombre;
-                    command.Parameters.Add(new SqlParameter("idDelegacion", SqlDbType.Int)).Value = (object)model.idDelegacion;
-                    command.Parameters.Add(new SqlParameter("idMunicipio", SqlDbType.Int)).Value = (object)model.idMunicipio;
-                    command.Parameters.Add(new SqlParameter("alias", SqlDbType.NVarChar)).Value = (object)model.alias;
-                    command.Parameters.Add(new SqlParameter("razonSocial", SqlDbType.NVarChar)).Value = (object)model.razonSocial;
-                    command.Parameters.Add(new SqlParameter("fechaActualizacion", SqlDbType.DateTime)).Value = (object)DateTime.Now;
-                    command.Parameters.Add(new SqlParameter("actualizadoPor", SqlDbType.Int)).Value = (object)1;
-                    command.Parameters.Add(new SqlParameter("estatus", SqlDbType.Int)).Value = (object)1;
+                    command.Parameters.Add(new SqlParameter("@concesionario", SqlDbType.NVarChar)).Value = (object)model.nombre;
+                    command.Parameters.Add(new SqlParameter("@idDelegacion", SqlDbType.Int)).Value = (object)model.idDelegacion;
+                    command.Parameters.Add(new SqlParameter("@idMunicipio", SqlDbType.Int)).Value = (object)model.idMunicipio;
+                    command.Parameters.Add(new SqlParameter("@alias", SqlDbType.NVarChar)).Value = (object)model.alias;
+                    command.Parameters.Add(new SqlParameter("@razonSocial", SqlDbType.NVarChar)).Value = (object)model.razonSocial;
+                    command.Parameters.Add(new SqlParameter("@fechaActualizacion", SqlDbType.DateTime)).Value = (object)DateTime.Now;
+                    command.Parameters.Add(new SqlParameter("@actualizadoPor", SqlDbType.Int)).Value = (object)1;
+                    command.Parameters.Add(new SqlParameter("@estatus", SqlDbType.Int)).Value = (object)1;
                     result = Convert.ToInt32(command.ExecuteScalar());
                 }
                 catch (SqlException ex)

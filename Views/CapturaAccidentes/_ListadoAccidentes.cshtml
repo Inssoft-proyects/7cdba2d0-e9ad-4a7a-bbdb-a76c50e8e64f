@@ -28,19 +28,16 @@
             .Pageable()
             .DataSource(dataSource => dataSource
             .Ajax()
-        .Read(read => read.Action("BuscarAccidentesLista", "CapturaAccidentes"))
-            .PageSize(5).Model(model => model.Id(p => p.IdAccidente))
+        .Read(read => read.Action("BuscarAccidentesListaPagination", "CapturaAccidentes"))
+            .PageSize(10).Model(model => model.Id(p => p.IdAccidente))
             )
-            .ToolBar(t => t.Search())
+            .ToolBar(t => t.Search().Text("Buscar..."))
             .Search(s =>
             {
             s.Field(c => c.EstatusReporte);
             s.Field(c => c.Municipio);
             s.Field(c => c.Carretera);
             s.Field(c => c.Tramo);
-         
-
-
             })
 
             .Selectable(selectable => selectable.Mode(GridSelectionMode.Single)
@@ -59,9 +56,12 @@
             type: 'POST',
             data: { idAccidente: idAccidente },
             success: function (result) {
-
+                if (result.includes("no tiene permisos")) {
+                    sitteg_warning("El usuario no tiene permisos suficientes para esta acción.");
+                    hideLoading();
+                }else{
                 window.location.href = '/CapturaAccidentes/CapturaAaccidente/?showE=false'
-
+                }
             },
 
         });

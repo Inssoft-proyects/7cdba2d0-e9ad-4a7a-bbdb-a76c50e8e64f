@@ -56,6 +56,38 @@
             }
         });
     }
+
+    function ChangeSubTipoServicio() {
+        var idTipoServicio = $("#ddlCatTipoServicio").data("kendoDropDownList").value();
+        //alert(idTipoServicio);
+        var DivSubTipoServicio = $("#DivSubTipoServicio");
+        
+        if (idTipoServicio == 1 || idTipoServicio == 5)
+            DivSubTipoServicio.css('display', 'block');
+        else {
+            DivSubTipoServicio.css('display', 'none');
+            idTipoServicio =0;
+        }
+
+        showLoading();
+        $.ajax({
+            url: "/Vehiculos/GetSubtipoPorTipo",
+            type: "POST",
+            data: { idTipoServicio: idTipoServicio },
+            success: function (data) {
+                var SubTipoServicio = $("#ddlCatSubTipoServicio").data("kendoDropDownList");
+                if (SubTipoServicio) 
+                    SubTipoServicio.dataSource.data(data);
+                console.log(data);
+                hideLoading();
+            },
+            error: function (xhr, status, error) {
+                hideLoading();
+            }
+        });
+    }
+
+
     function EntidadDropDownChangeAcc() {
         var entidadDDlValue = $("#EntidadMoral").data("kendoDropDownList").value();
 
@@ -235,10 +267,9 @@
                 {
                     @(Html.Kendo().DatePickerFor(t => t.vigenciaTarjeta).Format("dd/MM/yyyy")
                         .Value(dateVigencia)
-                       // .DateInput()                        
+                        .DateInput()                        
                         .Culture("es-ES")
                         .HtmlAttributes(new { style = "width: 100%", title = "datetimepicker" })
-                        .Value("")
                         )
                 }
                 else
@@ -315,7 +346,6 @@
 
                     @(Html.Kendo().DropDownListFor(d => d.idSubmarca)
                                         .Filter(FilterType.Contains)
-
                         .DataTextField("Text")
                         .DataValueField("Value")
                         .OptionLabel("Seleccione Sub-Marca...")
@@ -340,6 +370,7 @@
                                                 .Filter(FilterType.Contains)
 
                             .Filter(FilterType.Contains)
+
                             .HtmlAttributes(new { style = "width:100%;" })
                             )
 
@@ -478,8 +509,9 @@
         @Html.HiddenFor(m=> m.Persona.idCatTipoPersona, new { @id = "ddlIdCatTipoPersona" })
 
      <input type="hidden" value="@Model.idCatTipoServicio" name="idCatTipoServicio" id="hdnIdCatTipoServicio">
+     <input type="hidden" value="@Model.idSubtipoServicio" name="idSubtipoServicio" id="hdnidSubtipoServicio">
 
-
+        
         
         @Html.HiddenFor(m=> m.encontradoEn, new { @id = "hdnEncontradoEn" })
 
@@ -522,10 +554,9 @@
             <h6 class="px-4 text-muted">Completa los datos solicitados como tipo de servicio y el propietario.</h6>
         </div>
     </div>
-    <div class="row px-4 align-items-end">
 
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="controlForm my-3">
+    <div class="row align-items-end">
+            <div class="col-6 controlForm my-3" >
                 <label>Tipo de Servicio:</label>
                 @(Html.Kendo().DropDownListFor(d => d.idCatTipoServicio)
                                     .Filter(FilterType.Contains)
@@ -534,6 +565,7 @@
                     .DataValueField("Value")
                     .OptionLabel("Seleccione Tipo de Servicio...:")
                     .HtmlAttributes(new { style = "width:100%;", id = "ddlCatTipoServicio" })
+                    .Events(e => e.Change("ChangeSubTipoServicio"))
                     .DataSource(source =>
                     {
                         source.Read(read =>
@@ -543,8 +575,49 @@
                     })
                     )
             </div>
-        </div>
 
+             @if (Model.showSubTipo == true)
+            {
+                <div class="col-6 controlForm my-3" id="DivSubTipoServicio" style="display:block">
+                <label>Subtipo de Servicio:</label>
+                @(
+                Html.Kendo().DropDownListFor(d => d.idSubtipoServicio)
+                                            .Filter(FilterType.Contains)
+
+                            .DataTextField("Text")
+                            .DataValueField("Value")
+                            .OptionLabel("Seleccione Subtipo de Servicio...:")
+                            .HtmlAttributes(new { style = "width:100%;", id = "ddlCatSubTipoServicio" })
+                            .DataSource(source =>
+                            {
+                                source.Read(read =>
+                                {
+                                    read.Action("SubTipoServicios_Read", "Vehiculos");
+                                });
+                            })
+                            )
+            </div>
+            } else {
+                <div class="col-6 controlForm my-3" id="DivSubTipoServicio" style="display:none">
+                <label>Subtipo de Servicio:</label>
+                @(
+                Html.Kendo().DropDownListFor(d => d.idSubtipoServicio)
+                                            .Filter(FilterType.Contains)
+
+                            .DataTextField("Text")
+                            .DataValueField("Value")
+                            .OptionLabel("Seleccione Subtipo de Servicio...:")
+                            .HtmlAttributes(new { style = "width:100%;", id = "ddlCatSubTipoServicio" })
+                            .DataSource(source =>
+                            {
+                                source.Read(read =>
+                                {
+                                    read.Action("GetSubtipoPorTipo", "Vehiculos");
+                                });
+                            })
+                            )
+            </div>
+            }
     </div>
 
 
@@ -1584,8 +1657,14 @@ function asignarMensajeError(contenedorErrorId, mensaje) {
         var value = $(this).val();
         console.log(value);
         $('#hdnIdCatTipoServicio').val(value);
-
     });
+
+    $("#ddlCatSubTipoServicio").on("change", function () {
+        var value = $(this).val();
+        console.log(value);
+        $('#hdnidSubtipoServicio').val(value);
+    });
+
     function cerrarModalV() {
         $('#confirmacionModal').modal('show');
 

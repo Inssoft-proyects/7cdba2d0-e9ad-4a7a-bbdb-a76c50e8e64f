@@ -1,9 +1,52 @@
 ﻿@model InfraccionesBusquedaModel
 
-@*{
-    DateTime endDate = DateTime.Now;
-    endDate = endDate.AddDays(1);
-}*@
+@{
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+    var listaIdsPermitidosJson = @HttpContextAccessor.HttpContext.Session.GetString("IdsPermitidos").ToString();
+    var autorizaciones = @HttpContextAccessor.HttpContext.Session.GetString("Autorizaciones").ToString();
+}
+
+<script>
+
+    $(document).ready(function () {
+        var access = @listaIdsPermitidosJson;
+        var auth = @autorizaciones;
+
+        if (access != undefined && access != '') {
+            if (!access.toString().includes(localStorage.getItem("menuId"))) {
+                Swal.fire({
+                    icon: "error",
+                    title: "¡El usuario no tiene acceso a esta opción!"
+                });
+                setTimeout(() => {
+                    window.location.href = "/Principal";
+                }, 200);
+            } else {
+                // BUSCAR - CONSULTAR
+                if (!auth.toString().includes("461")) {
+                    $("#btnBuscar").prop('disabled', true).css({ "opacity": "0.3" });
+                }
+                //IMPRIMIR
+                if (!auth.toString().includes("462")) {
+                    $("#btnPDFReporte").prop('disabled', true).css({ "opacity": "0.3" });
+                }
+                // AGREGAR
+                if (!auth.toString().includes("463")) {
+                    $("#btnGuardarInfraccion").prop('disabled', true).css({ "opacity": "0.3" });
+                }
+            }
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "¡El usuario no tiene acceso a esta opción!"
+            });
+            setTimeout(() => {
+                window.location.href = "/Principal";
+            }, 200);
+        }
+    });
+
+</script>
 
 
 <div class="mainContainer bg-light">
@@ -232,7 +275,7 @@
 
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="controlButton my-3">
-                    <button class="btnPrimary" type="button" onclick="submitSearch()">  <h5 class="m-0"><b>Buscar</b></h5></button>
+                    <button class="btnPrimary" id="btnBuscar" type="button" onclick="submitSearch()">  <h5 class="m-0"><b>Buscar</b></h5></button>
                 </div>
             </div>
 
@@ -248,7 +291,7 @@
                         @* <button>
                         <h6 class="m-0 d-flex align-items-center"><i class="icon-pdf h5 mb-0 me-2"></i><b>PDF de reporte de infracción</b></h6>
                         </button>*@
-                        <button type="button" onclick="downLoadPdfFiltered()">
+                        <button type="button" id="btnPDFReporte" onclick="downLoadPdfFiltered()">
                             <h6 class="m-0 d-flex align-items-center"><i class="icon-pdf h5 mb-0 me-2"></i><b>PDF de reporte de infracción</b></h6>
                         </button>
                     </div>
@@ -258,18 +301,47 @@
         <div id="listadoInfracciones">
             <partial name="_ListadoInfracciones" model="Model.ListInfracciones" />
         </div>
+
+        
     </section>
 
 </div>
 
 <script>
 
+    //function submitSearch() {
+    //    var data = $("#frmSearch").serialize();
+    //    showLoading();
+    //    //console.log(Mydata);
+    //    var grid = $("#GridInf").data("kendoGrid");
+    //    var dataSource = grid.dataSource;
+    //    dataSource.data([]);//clear out old data
+    //    //dataSource.data(result.Data);//add new data
+    //    //grid.setDataSource(result.Data);//set the new data as the grids new datasource
+    //    dataSource.sync();//refresh grid
+
+    //    $.ajax({
+    //        url: './GetBuscarInfraccionesNormal',
+    //        type: 'POST',
+    //        data: data,
+    //        success: function(result) {
+    //            dataSource.sync();
+    //            hideLoading();
+    //        },
+    //        error: function (result) {
+    //            console.log(result);
+    //            hideLoading();
+    //        }
+    //    });
+    //}
+
+
     function submitSearch() {
         var Mydata = $("#frmSearch").serialize();
         showLoading();
         //console.log(Mydata);
         $.ajax({
-            url: '@Url.Action("ajax_BuscarInfracciones")',
+            url: '@Url.Action("GetBuscarInfraccionesNormal")',
             type: 'POST',
             data: Mydata,
             success: function (result) {
@@ -287,7 +359,7 @@
     function downLoadPdfFiltered() {
         var Mydata = $("#frmSearch").serialize();
         var fileName = "ReporteGeneralInfracciones.pdf";
-       showLoading();
+        showLoading();
         $.ajax({
             type: "POST",
             url: '@Url.Action("InfraccionesGeneral","PDFGenerator")',

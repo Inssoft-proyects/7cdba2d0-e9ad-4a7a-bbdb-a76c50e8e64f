@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Microsoft.IdentityModel.Tokens;
 
 namespace GuanajuatoAdminUsuarios.Services
 {
@@ -342,5 +343,110 @@ namespace GuanajuatoAdminUsuarios.Services
             }
             return result;
         }
+
+       public List<CatMotivosInfraccionModel> GetMotivosBusqueda(CatMotivosInfraccionModel model, int idDependencia)
+        {
+            List<CatMotivosInfraccionModel> motivosList = new List<CatMotivosInfraccionModel>();
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+                try
+                {
+                    connection.Open();                    
+                    string condiciones = "";
+
+                    condiciones += model.Nombre.IsNullOrEmpty() ? "" : " AND mi.nombre LIKE '%' + @Nombre + '%' ";
+                    condiciones += model.Fundamento.IsNullOrEmpty() ? "" : " AND mi.fundamento LIKE '%' + @Fundamento + '%' ";
+                    if (model.InicioVigenciaDesde.HasValue || model.InicioVigenciaHasta.HasValue ||
+                        model.FinVigenciaDesde.HasValue || model.FinVigenciaHasta.HasValue)
+                    {
+                        if (model.InicioVigenciaDesde.HasValue && model.InicioVigenciaHasta.HasValue)
+                        {
+                            condiciones += " AND mi.fechaInicio BETWEEN @InicioVigenciaDesde AND @InicioVigenciaHasta";
+                        }
+                        else if (model.InicioVigenciaDesde.HasValue && !model.InicioVigenciaHasta.HasValue)
+                        {
+                            condiciones += " AND mi.fechaInicio >= @InicioVigenciaDesde";
+                        }
+                        else if (!model.InicioVigenciaDesde.HasValue && model.InicioVigenciaHasta.HasValue)
+                        {
+                            condiciones += " AND mi.fechaInicio <= @InicioVigenciaHasta";
+                        }
+
+                        if (model.FinVigenciaDesde.HasValue && model.FinVigenciaHasta.HasValue)
+                        {
+                            condiciones += " AND mi.fechaFinVigencia BETWEEN @FinVigenciaDesde AND @FinVigenciaHasta";
+                        }
+                        else if (model.FinVigenciaDesde.HasValue && !model.FinVigenciaHasta.HasValue)
+                        {
+                            condiciones += " AND mi.fechaFinVigencia >= @FinVigenciaDesde";
+                        }
+                        else if (!model.FinVigenciaDesde.HasValue && model.FinVigenciaHasta.HasValue)
+                        {
+                            condiciones += " AND mi.fechaFinVigencia <= @FinVigenciaHasta";
+                        }
+                    }
+                    if (model.IdVigencia != 0)
+                    {
+                        if (model.IdVigencia == 1)
+                        {
+                            condiciones += " AND GETDATE() BETWEEN mi.fechaInicio AND mi.fechaFinVigencia";
+                        }
+                        else if (model.IdVigencia == 2)
+                        {
+                            condiciones += " AND NOT (GETDATE() BETWEEN mi.fechaInicio AND mi.fechaFinVigencia)";
+                        }
+                    }
+
+
+
+                    string SqlTransact =
+                                @"SELECT mi.idCatMotivoInfraccion, mi.nombre,mi.fundamento,mi.calificacionMinima,mi.calificacionMaxima,
+                                         mi.fechaInicio, mi.fechaFinVigencia,mi.estatus,e.estatusDesc
+										 FROM catMotivosInfraccion AS mi
+										 LEFT JOIN estatus AS e ON mi.estatus = e.estatus
+                                         WHERE mi.estatus = 1 AND mi.transito = @idDependencia" + condiciones;
+
+                    SqlCommand command = new SqlCommand(SqlTransact, connection);
+
+                    command.Parameters.Add(new SqlParameter("@Nombre", SqlDbType.NVarChar)).Value = (object)model.Nombre ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@Fundamento", SqlDbType.NVarChar)).Value = (object)model.Fundamento ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@idDependencia", SqlDbType.Int)).Value = (object) idDependencia;                   
+                    command.Parameters.Add(new SqlParameter("@InicioVigenciaDesde", SqlDbType.DateTime)).Value = (model.InicioVigenciaDesde != null) ? (object)model.InicioVigenciaDesde : DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@InicioVigenciaHasta", SqlDbType.DateTime)).Value = (model.InicioVigenciaHasta != null) ? (object)model.InicioVigenciaHasta : DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@FinVigenciaDesde", SqlDbType.DateTime)).Value = (model.FinVigenciaDesde != null) ? (object)model.FinVigenciaDesde : DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@FinVigenciaHasta", SqlDbType.DateTime)).Value = (model.FinVigenciaHasta != null) ? (object)model.FinVigenciaHasta : DBNull.Value;
+
+                    command.CommandType = CommandType.Text;
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            CatMotivosInfraccionModel motivo = new CatMotivosInfraccionModel();
+                            motivo.IdCatMotivoInfraccion = Convert.ToInt32(reader["idCatMotivoInfraccion"] is DBNull ? 0 : reader["idCatMotivoInfraccion"]);
+                            motivo.Nombre = reader["nombre"].ToString();
+                            motivo.Fundamento = reader["fundamento"].ToString();
+                            motivo.CalificacionMinima = reader["calificacionMinima"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["calificacionMinima"].ToString());
+                            motivo.CalificacionMaxima = reader["calificacionMaxima"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["calificacionMaxima"].ToString());
+                            motivo.estatusDesc = reader["estatusDesc"] is DBNull ? string.Empty : reader["estatusDesc"].ToString();
+                            motivo.fechaInicioVigencia = reader["fechaInicio"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["fechaInicio"]);
+                            motivo.fechaFinVigencia = reader["fechaFinVigencia"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["fechaFinVigencia"]);
+                            motivosList.Add(motivo);
+
+                        }
+
+                    }
+
+                }
+                catch (SqlException ex)
+                {
+                    //Guardar la excepcion en algun log de errores
+                    //ex
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            return motivosList;
+        }
+
     }
 }

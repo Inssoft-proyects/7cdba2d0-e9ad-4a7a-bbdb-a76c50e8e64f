@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using Microsoft.IdentityModel.Tokens;
 
 namespace GuanajuatoAdminUsuarios.Services
 {
@@ -19,9 +20,18 @@ namespace GuanajuatoAdminUsuarios.Services
         {
             _sqlClientConnectionBD = sqlClientConnectionBD;
         }
-        public List<SalidaVehiculosModel> ObtenerIngresos(SalidaVehiculosModel model)
+        public List<SalidaVehiculosModel> ObtenerIngresos(SalidaVehiculosModel model, int idPension)
         {
             List<SalidaVehiculosModel> modelList = new List<SalidaVehiculosModel>();
+            string condiciones = "";
+            condiciones += model.idMarca.HasValue ? $" AND d.idMarca = {model.idMarca}" : "";
+            condiciones += model.serie.IsNullOrEmpty() ? "" : " AND d.serie = @serie";
+            condiciones += model.folioInventario.IsNullOrEmpty() ? "" : " AND d.numeroInventario LIKE '%' + @numeroInventario + '%' ";
+            condiciones += model.placa.IsNullOrEmpty() ? "" : " AND d.placa = @placa";
+            if (model.fechaIngreso != DateTime.MinValue)
+            {
+                condiciones += " OR d.fechaIngreso = @fechaIngreso";
+            };
             string strQuery = @"SELECT d.idDeposito,d.idVehiculo,d.numeroInventario,d.idSolicitud,
 	                                    d.idMarca,d.placa,d.serie,d.idPension,d.fechaIngreso,
 	                                    v.modelo,v.idSubmarca,
@@ -31,18 +41,14 @@ namespace GuanajuatoAdminUsuarios.Services
 										pen.pension
                                     FROM depositos AS d
                                     LEFT JOIN vehiculos AS v ON d.idVehiculo = v.idVehiculo
-                                    LEFT JOIN catMarcasVehiculos AS mv ON v.idMarcaVehiculo = mv.idMarcaVehiculo
-                                    LEFT JOIN catSubmarcasVehiculos AS smv ON v.idSubmarca = smv.idSubmarca
-								    LEFT JOIN catColores AS co ON v.idColor = co.idColor
+                                    LEFT JOIN catMarcasVehiculos AS mv ON d.idMarca = mv.idMarcaVehiculo
+                                    LEFT JOIN catSubmarcasVehiculos AS smv ON d.idSubmarca = smv.idSubmarca
+								    LEFT JOIN catColores AS co ON d.idColor = co.idColor
 					   		        LEFT JOIN personas AS per ON v.idPersona = per.idPersona
                                     LEFT JOIN solicitudes AS sol ON d.idSolicitud = sol.idSolicitud
 	                                LEFT JOIN pensiones AS pen ON d.idPension = pen.idPension
-                                    WHERE d.idMarca = @idMarca OR d.serie = @serie OR d.numeroInventario = @numeroInventario
-                                    OR d.placa = @placa";
-                                    if (model.fechaIngreso != DateTime.MinValue)
-                                    {
-                                        strQuery += " OR fechaIngreso = @fechaIngreso";
-                                    }
+                                    WHERE d.idPension = @idPension" + condiciones;
+                                   
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
             {
                 try
@@ -51,6 +57,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     SqlCommand command = new SqlCommand(strQuery, connection);
                     command.CommandType = CommandType.Text;
                     command.Parameters.Add(new SqlParameter("@idDeposito", SqlDbType.Int)).Value = (object)model.idDeposito ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@idPension", SqlDbType.Int)).Value = (object)idPension ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idMarca", SqlDbType.Int)).Value = (object)model.idMarca ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@serie", SqlDbType.VarChar)).Value = (object)model.serie ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@numeroInventario", SqlDbType.VarChar)).Value = (object)model.folioInventario ?? DBNull.Value;
@@ -96,7 +103,7 @@ namespace GuanajuatoAdminUsuarios.Services
             return modelList;
 
         }
-        public SalidaVehiculosModel DetallesDeposito(int iDp)
+        public SalidaVehiculosModel DetallesDeposito(int iDp, int idPension)
         {
             SalidaVehiculosModel model = new SalidaVehiculosModel();
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
@@ -129,9 +136,11 @@ namespace GuanajuatoAdminUsuarios.Services
                                             LEFT JOIN gruasAsignadas AS ga ON d.idDeposito = ga.idDeposito
                                             LEFT JOIN gruas AS g ON ga.idGrua = g.idGrua
 										    LEFT JOIN catTipoGrua AS ctg ON g.idTipoGrua = ctg.IdTipoGrua
-											WHERE d.idDeposito = @idDeposito";
+											WHERE d.idDeposito = @idDeposito AND d.idPension = @idPension";
                     SqlCommand command = new SqlCommand(SqlTransact, connection);
                     command.Parameters.Add(new SqlParameter("@idDeposito", SqlDbType.Int)).Value = iDp;
+                    command.Parameters.Add(new SqlParameter("@idPension", SqlDbType.Int)).Value = idPension;
+
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
@@ -352,7 +361,6 @@ namespace GuanajuatoAdminUsuarios.Services
 
                     SqlCommand command = new SqlCommand(mergeQuery, connection);
 
-                    // Asigna los parámetros como lo hacías en tu consulta original
                     command.Parameters.AddWithValue("@idDeposito", model.idDeposito);
                     command.Parameters.AddWithValue("@fechaIngreso", model.fechaIngreso);
                     command.Parameters.AddWithValue("@fechaSalida", model.fechaSalida);

@@ -1,6 +1,36 @@
 ﻿
 @model GuanajuatoAdminUsuarios.Models.SalidaVehiculosModel
+@{
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+    var listaIdsPermitidosJson = @HttpContextAccessor.HttpContext.Session.GetString("IdsPermitidos").ToString();
+    var autorizaciones = @HttpContextAccessor.HttpContext.Session.GetString("Autorizaciones").ToString();
+}
 
+<script>
+    $(document).ready(function () {
+        var access = @listaIdsPermitidosJson;
+        if (access != undefined && access != '') {
+            if (!access.toString().includes(localStorage.getItem("menuId"))) {
+                Swal.fire({
+                    icon: "error",
+                    title: "¡EL usuario no tiene acceso a esta opción!"
+                });
+                setTimeout(() => {
+                    window.location.href = "/Principal";
+                }, 200);
+            }
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "¡EL usuario no tiene acceso a esta opción!"
+            });
+            setTimeout(() => {
+                window.location.href = "/Principal";
+            }, 200);
+        }
+    });
+
+</script>
 <div class="mainContainer bg-light">
 
 <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
@@ -140,6 +170,7 @@
             success: (data) => {
                 var grid = $("#gridBusquedaServiciosDeposito").data("kendoGrid");
                 grid.dataSource.data(data);
+                grid.dataSource.page(1);
                 hideLoading();
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");

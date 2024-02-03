@@ -55,7 +55,7 @@
                 </button>
             </div>
             <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-                <div class="controlButton" onclick="eliminarMotivo()">
+                <div type="button" class="controlButton" onclick="eliminarMotivo()">
                     @(Html.Kendo().Button()
                         .Name("deletMotivo")
                         .HtmlAttributes(new { @class = "btnPrimary px-3" })
@@ -72,7 +72,7 @@
 <script>
 
     function eliminarMotivo() {
-
+        event.preventDefault();
         var Mydata = $("#eliminarMotivoForm").serialize();
         showLoading();
         $.ajax({

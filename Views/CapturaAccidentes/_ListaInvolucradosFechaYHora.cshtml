@@ -42,7 +42,7 @@
         .Ajax()
         .Read(read => read.Action("ObtInvolucradosAccidente", "CapturaAccidentes"))
         )
-        .ToolBar(t => t.Search())
+            .ToolBar(t => t.Search().Text("Buscar..."))
         .Search(s =>
         {
             s.Field(c => c.nombre);

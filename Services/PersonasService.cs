@@ -1,6 +1,9 @@
-﻿using GuanajuatoAdminUsuarios.Interfaces;
+﻿using Azure;
+using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,6 +12,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using static GuanajuatoAdminUsuarios.RESTModels.ConsultarDocumentoResponseModel;
 using static GuanajuatoAdminUsuarios.Utils.CatalogosEnums;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace GuanajuatoAdminUsuarios.Services
 {
@@ -19,14 +23,14 @@ namespace GuanajuatoAdminUsuarios.Services
         public PersonasService(ISqlClientConnectionBD sqlClientConnectionBD, ICatEntidadesService catEntidadesService)
         {
             _sqlClientConnectionBD = sqlClientConnectionBD;
-            _catEntidadesService = catEntidadesService; 
+            _catEntidadesService = catEntidadesService;
         }
 
         public IEnumerable<PersonaModel> GetAllPersonas()
         {
             //quitar el top
             List<PersonaModel> modelList = new List<PersonaModel>();
-            string strQuery = @"SELECT 
+            string strQuery = @"SELECT TOP 100
                                 p.idPersona
                                ,p.numeroLicencia
                                ,p.CURP
@@ -628,7 +632,7 @@ namespace GuanajuatoAdminUsuarios.Services
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand(strQuery, connection);
-                    command.Parameters.Add(new SqlParameter("@numeroLicencia", SqlDbType.NVarChar)).Value = (object)model.numeroLicencia ?? DBNull.Value; 
+                    command.Parameters.Add(new SqlParameter("@numeroLicencia", SqlDbType.NVarChar)).Value = (object)model.numeroLicencia ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@CURP", SqlDbType.NVarChar)).Value = (object)model.CURP ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@RFC", SqlDbType.NVarChar)).Value = (object)model.RFC ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@nombre", SqlDbType.NVarChar)).Value = (object)model.nombre ?? DBNull.Value;
@@ -684,7 +688,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     if (existingRecordsCount > 0)
                     {
                         // Ya existe un registro con la misma CURP, muestra un mensaje o lanza una excepción
-                        return existingRecordsCount; 
+                        return existingRecordsCount;
                     }
                 }
                 catch (SqlException ex)
@@ -744,7 +748,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     //command.Parameters.Add(new SqlParameter("@vigenciaLicencia", SqlDbType.DateTime)).Value = (object)(model.vigenciaLicencia.HasValue? model.vigenciaLicencia.Value : null);
 
                     //DateTime vigenciaLicenciaValue = (model.vigenciaLicencia != DateTime.MinValue) ? model.vigenciaLicencia : DateTime.MinValue;
-                    command.Parameters.Add(new SqlParameter("@vigenciaLicencia", SqlDbType.DateTime)).Value = (object)vigenciaLicenciaValue ?? DBNull.Value; 
+                    command.Parameters.Add(new SqlParameter("@vigenciaLicencia", SqlDbType.DateTime)).Value = (object)vigenciaLicenciaValue ?? DBNull.Value;
 
 
                     command.Parameters.Add(new SqlParameter("@idGenero", SqlDbType.Int)).Value = (object)model.idGenero ?? DBNull.Value;
@@ -881,7 +885,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     connection.Close();
                 }
             }
-            
+
             return result;
         }
         public int CreatePersonaFisicaDireccion(PersonaDireccionModel model)
@@ -1174,14 +1178,15 @@ WHERE
 
         public int InsertarDesdeServicio(LicenciaPersonaDatos personaDatos)
         {
-            int insertedId = 0; 
+            int insertedId = 0;
             int idPersona = ExistePersona(personaDatos.NUM_LICENCIA, personaDatos.CURP);
 
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
             {
-                connection.Open(); 
+                connection.Open();
 
-                if (idPersona==0) {
+                if (idPersona == 0)
+                {
                     string query = "INSERT INTO personas (numeroLicencia,CURP,RFC,nombre,apellidoPaterno,apellidoMaterno,fechaActualizacion,actualizadoPor,estatus,idCatTipoPersona,idGenero,fechaNacimiento,idTipoLicencia,vigenciaLicencia) " +
                                          "VALUES (@NumeroLicencia,@curp,@rfc,@nombre,@apellidoPaterno,@apellidoMaterno,@fechaActualizacion,@actualizadoPor,@estatus,@tipoPersona,@genero,@fechaNacimiento,@idTipolicencia,@fechaVigencia)";
 
@@ -1195,7 +1200,7 @@ WHERE
                         command.Parameters.AddWithValue("@apellidoMaterno", string.IsNullOrEmpty(personaDatos.SEGUNDO_APELLIDO) ? "" : personaDatos.SEGUNDO_APELLIDO);
 
                         command.Parameters.AddWithValue("@tipoPersona", (int)TipoPersona.Fisica);
-                        command.Parameters.AddWithValue("@genero", personaDatos.ID_GENERO == null ? "" : personaDatos.ID_GENERO );
+                        command.Parameters.AddWithValue("@genero", personaDatos.ID_GENERO == null ? "" : personaDatos.ID_GENERO);
                         command.Parameters.AddWithValue("@fechaNacimiento", personaDatos.FECHA_NACIMIENTO == null ? "" : personaDatos.FECHA_NACIMIENTO);
                         command.Parameters.AddWithValue("@idTipolicencia", personaDatos.ID_TIPO_LICENCIA == null ? "" : personaDatos.ID_TIPO_LICENCIA);
                         command.Parameters.AddWithValue("@fechaVigencia", personaDatos.FECHA_TERMINO_VIGENCIA == null ? "" : personaDatos.FECHA_TERMINO_VIGENCIA);
@@ -1205,9 +1210,9 @@ WHERE
                         command.Parameters.Add(new SqlParameter("@estatus", SqlDbType.Int)).Value = (object)1;
 
                         command.CommandType = CommandType.Text;
-                        insertedId = Convert.ToInt32(command.ExecuteScalar());  
-                    } 
-                } 
+                        insertedId = Convert.ToInt32(command.ExecuteScalar());
+                    }
+                }
             }
             idPersona = ExistePersona(personaDatos.NUM_LICENCIA, personaDatos.CURP);
             insertarDireccion(personaDatos, idPersona);
@@ -1223,13 +1228,13 @@ WHERE
                 CatEntidadesModel entidad = _catEntidadesService.ObtenerEntidadesByNombre("Guanajuato");
                 string qryDomicilio = "INSERT INTO personasDirecciones (idEntidad,idMunicipio,codigoPostal,colonia,calle,numero,telefono,correo,idPersona,actualizadoPor,fechaActualizacion,estatus)" +
                        "VALUES(@idEntidad,@idMunicipio,@codigoPostal,@colonia,@calle,@numero,@telefono,@correo,@idPersona,@actualizadoPor,@fechaActualizacion,@estatus)";
-                
+
                 using (SqlCommand command = new SqlCommand(qryDomicilio, connection))
                 {
 
                     command.Parameters.AddWithValue("@idEntidad", entidad.idEntidad);
-                    command.Parameters.AddWithValue("@idMunicipio",personaDatos.ID_MUNICIPIO == null ? "" : personaDatos.ID_MUNICIPIO );
-                    command.Parameters.AddWithValue("@codigoPostal", string.IsNullOrEmpty(personaDatos.CP) ? "" : personaDatos.CP) ;
+                    command.Parameters.AddWithValue("@idMunicipio", personaDatos.ID_MUNICIPIO == null ? "" : personaDatos.ID_MUNICIPIO);
+                    command.Parameters.AddWithValue("@codigoPostal", string.IsNullOrEmpty(personaDatos.CP) ? "" : personaDatos.CP);
                     command.Parameters.AddWithValue("@colonia", string.IsNullOrEmpty(personaDatos.COLONIA) ? "" : personaDatos.COLONIA);
                     command.Parameters.AddWithValue("@calle", string.IsNullOrEmpty(personaDatos.CALLE) ? "" : personaDatos.CALLE);
                     command.Parameters.AddWithValue("@numero", string.IsNullOrEmpty(personaDatos.NUM_EXT) ? "" : personaDatos.NUM_EXT);
@@ -1239,7 +1244,7 @@ WHERE
                     command.Parameters.Add(new SqlParameter("@fechaActualizacion", SqlDbType.DateTime)).Value = (object)DateTime.Now;
                     command.Parameters.Add(new SqlParameter("@actualizadoPor", SqlDbType.Int)).Value = (object)1;
                     command.Parameters.Add(new SqlParameter("@estatus", SqlDbType.Int)).Value = (object)1;
-                     
+
                     command.CommandType = CommandType.Text;
                     insertedDireccion = Convert.ToInt32(command.ExecuteScalar());
                 }
@@ -1314,7 +1319,7 @@ WHERE
                "p.idPersona, " +
                "p.numeroLicencia, " +
                "p.CURP, " +
-               "p.RFC, " + 
+               "p.RFC, " +
                "p.nombre, " +
                "p.apellidoPaterno, " +
                "p.apellidoMaterno, " +
@@ -1372,7 +1377,7 @@ WHERE
 
             return personaEncontrada;
         }
-       public List<PersonaModel> ObterPersonaPorIDList(int idPersona)
+        public List<PersonaModel> ObterPersonaPorIDList(int idPersona)
         {
             //
             List<PersonaModel> ListaPersonas = new List<PersonaModel>();
@@ -1534,8 +1539,76 @@ WHERE
             }
             return modelList.FirstOrDefault();
         }
-    }
 
+
+        // HMG - 15 01 2024
+        /// <summary>
+        /// Paginado para la carga de personas
+        /// </summary>
+        /// <param name="pagination">Objeto con el numero de pagina y registros a regresar</param>
+        /// <returns></returns>
+        public IEnumerable<PersonaModel> GetAllPersonasPagination(Pagination pagination)
+        {
+            List<PersonaModel> modelList = new List<PersonaModel>();
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    connection.Open();
+                    using (SqlCommand cmd = new SqlCommand("usp_ObtieneTodasLasPersonas", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@PageIndex", pagination.PageIndex);
+                        cmd.Parameters.AddWithValue("@PageSize", pagination.PageSize);
+                        if (pagination.Filter.Trim()!="")
+                            cmd.Parameters.AddWithValue("@Filter", pagination.Filter);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+                        {
+                            while (reader.Read())
+                            {
+                                PersonaModel model = new PersonaModel();
+                                model.PersonaDireccion = new PersonaDireccionModel();
+                                model.idPersona = reader["idPersona"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idPersona"].ToString());
+                                model.numeroLicencia = reader["numeroLicencia"].ToString();
+                                model.CURP = reader["CURP"].ToString();
+                                model.RFC = reader["RFC"].ToString();
+                                model.nombre = reader["nombre"].ToString();
+                                model.apellidoPaterno = reader["apellidoPaterno"].ToString();
+                                model.apellidoMaterno = reader["apellidoMaterno"].ToString();
+                                model.fechaActualizacion = reader["fechaActualizacion"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["fechaActualizacion"].ToString());
+                                model.actualizadoPor = reader["actualizadoPor"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["actualizadoPor"].ToString());
+                                model.estatus = reader["estatus"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["estatus"].ToString());
+                                model.idCatTipoPersona = reader["idCatTipoPersona"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idCatTipoPersona"].ToString());
+                                model.tipoPersona = reader["tipoPersona"].ToString();
+                                model.idGenero = reader["idGenero"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idGenero"].ToString());
+                                model.genero = reader["genero"].ToString();
+                                model.idTipoLicencia = reader["idTipoLicencia"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idTipoLicencia"].ToString());
+                                model.tipoLicencia = reader["tipoLicencia"].ToString();
+                                model.fechaNacimiento = reader["fechaNacimiento"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["fechaNacimiento"].ToString());
+                                model.vigenciaLicencia = reader["vigenciaLicencia"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["vigenciaLicencia"].ToString());
+                                model.PersonaDireccion = GetPersonaDireccionByIdPersona((int)model.idPersona);
+                                model.total = Convert.ToInt32(reader["Total"]);
+                                modelList.Add(model);
+                            }
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    //Guardar la excepcion en algun log de errores
+                    //ex
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return modelList;
+        }
+
+
+    }
 }
 
 

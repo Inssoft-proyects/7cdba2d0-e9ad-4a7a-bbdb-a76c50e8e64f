@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace GuanajuatoAdminUsuarios.Services
 {
@@ -195,13 +196,13 @@ namespace GuanajuatoAdminUsuarios.Services
             return modelList;
         }
 
-        public List<BusquedaAccidentesModel> ObtenerAccidentes(int idDependencia)
+        public List<BusquedaAccidentesModel> ObtenerAccidentes()
         {
             //
             List<BusquedaAccidentesModel> ListaAccidentes = new List<BusquedaAccidentesModel>();
 
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
-                try 
+                try
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand(@" SELECT 
@@ -223,8 +224,9 @@ namespace GuanajuatoAdminUsuarios.Services
                                                                 MAX(acc.hora) AS hora,
                                                                 MAX(veh.idVehiculo) AS idVehiculo,
                                                                 MAX(veh.idCatTipoServicio) AS idCatTipoServicio,
+                                                                MAX(veh.idSubtipoServicio) AS idSubtipoServicio,
                                                                 MAX(veh.idTipoVehiculo) AS idTipoVehiculo,
-                                                                MAX(accau.idAccidenteCausa) AS idAccidenteCausa
+                                                                MAX(accau.idCausaAccidente) AS idCausaAccidente
                                                                 FROM accidentes AS acc
                                                                 LEFT JOIN catMunicipios AS mun ON acc.idMunicipio = mun.idMunicipio 
                                                                 LEFT JOIN catCarreteras AS car ON acc.idCarretera = car.idCarretera 
@@ -235,11 +237,10 @@ namespace GuanajuatoAdminUsuarios.Services
                                                                 LEFT JOIN catDelegaciones AS del ON acc.idOficinaDelegacion = del.idDelegacion
 										                        LEFT JOIN accidenteCausas AS accau ON acc.idAccidente = accau.idAccidente
 
-                                                                WHERE acc.estatus = 1 AND acc.transito = @idDependencia
+                                                                WHERE acc.estatus = 1
                                                                 GROUP BY acc.idAccidente;
                                                                 ", connection);
                     command.CommandType = CommandType.Text;
-                    command.Parameters.Add(new SqlParameter("@idDependencia", SqlDbType.Int)).Value = idDependencia;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
                         while (reader.Read())
@@ -249,24 +250,24 @@ namespace GuanajuatoAdminUsuarios.Services
                             accidente.IdAccidente = reader["IdAccidente"] != DBNull.Value ? Convert.ToInt32(reader["IdAccidente"]) : 0;
                             accidente.idMunicipio = reader["idMunicipio"] != DBNull.Value ? Convert.ToInt32(reader["idMunicipio"]) : 0;
                             accidente.municipio = reader["municipio"].ToString();
-							accidente.municipio = reader["delegacion"].ToString();
-							accidente.idDelegacion = reader["idOficinaDelegacion"] != DBNull.Value ? Convert.ToInt32(reader["idOficinaDelegacion"]) : 0;
+                            accidente.municipio = reader["delegacion"].ToString();
+                            accidente.idDelegacion = reader["idOficinaDelegacion"] != DBNull.Value ? Convert.ToInt32(reader["idOficinaDelegacion"]) : 0;
                             accidente.IdOficial = reader["idElabora"] != DBNull.Value ? Convert.ToInt32(reader["idElabora"]) : 0;
                             accidente.idCarretera = reader["idCarretera"] != DBNull.Value ? Convert.ToInt32(reader["idCarretera"]) : 0;
                             accidente.idTramo = reader["IdTramo"] != DBNull.Value ? Convert.ToInt32(reader["IdTramo"]) : 0;
                             accidente.idClasificacionAccidente = reader["idClasificacionAccidente"] != DBNull.Value ? Convert.ToInt32(reader["idClasificacionAccidente"]) : 0;
                             accidente.idTipoLicencia = reader["idTipoLicencia"] != DBNull.Value ? Convert.ToInt32(reader["idTipoLicencia"]) : 0;
-                            accidente.idCausaAccidente = reader["idAccidenteCausa"] != DBNull.Value ? Convert.ToInt32(reader["idAccidenteCausa"]) : 0;
+                            accidente.idCausaAccidente = reader["idCausaAccidente"] != DBNull.Value ? Convert.ToInt32(reader["idCausaAccidente"]) : 0;
                             accidente.idFactorAccidente = reader["idFactorAccidente"] != DBNull.Value ? Convert.ToInt32(reader["idFactorAccidente"]) : 0;
                             accidente.idFactorOpcionAccidente = reader["idFactorOpcionAccidente"] != DBNull.Value ? Convert.ToInt32(reader["idFactorOpcionAccidente"]) : 0;
                             accidente.IdTipoVehiculo = reader["idTipoVehiculo"] != DBNull.Value ? Convert.ToInt32(reader["idTipoVehiculo"]) : 0;
                             accidente.IdTipoServicio = reader["idCatTipoServicio"] != DBNull.Value ? Convert.ToInt32(reader["idCatTipoServicio"]) : 0;
-                            accidente.idCausaAccidente = reader["idAccidenteCausa"] != DBNull.Value ? Convert.ToInt32(reader["idAccidenteCausa"]) : 0;
+							accidente.IdSubtipoServicio = reader["idSubtipoServicio"] != DBNull.Value ? Convert.ToInt32(reader["idSubtipoServicio"]) : 0;
 
-                            accidente.numeroReporte = reader["numeroReporte"] != DBNull.Value ? reader["numeroReporte"].ToString() : string.Empty;
+							accidente.numeroReporte = reader["numeroReporte"] != DBNull.Value ? reader["numeroReporte"].ToString() : string.Empty;
                             accidente.fecha = reader["fecha"] != DBNull.Value ? Convert.ToDateTime(reader["fecha"]) : DateTime.MinValue;
                             accidente.hora = reader["hora"] != DBNull.Value ? reader.GetTimeSpan(reader.GetOrdinal("hora")) : TimeSpan.Zero;
-                             
+
 
 
                             ListaAccidentes.Add(accidente);
@@ -290,59 +291,202 @@ namespace GuanajuatoAdminUsuarios.Services
 
         }
 
-        public List<ListadoAccidentesPorAccidenteModel> AccidentesPorAccidente()
+        // public List<ListadoAccidentesPorAccidenteModel> AccidentesPorAccidente(BusquedaAccidentesModel recibido)
+        public IEnumerable<ListadoAccidentesPorAccidenteModel> AccidentesPorAccidente(BusquedaAccidentesModel recibido)
+
         {
             List<ListadoAccidentesPorAccidenteModel> modelList = new List<ListadoAccidentesPorAccidenteModel>();
-            string strQuery = @"SELECT DISTINCT
-                ac.numeroReporte as Numreporteaccidente
-                ,ac.fecha as Fecha
-                ,ac.hora as Hora
-                ,del.delegacion as Delegacion
-                ,mun.municipio
-                ,car.carretera
-                ,tram.tramo
-                ,ac.kilometro
-                ,ac.latitud
-                ,ac.longitud
-                ,veh.vehiculos as Vehiculo
-                ,CONCAT(ofic.nombre, ' ',ofic.apellidoPaterno,' ',ofic.apellidoMaterno) as NombredelOficial
-                ,ac.montoCamino as Dañosalcamino
-                ,ac.montoCarga as Dañosacarga
-                ,ac.montoPropietarios as Dañosapropietario
-                ,ac.montoOtros as Otrosdaños
-                ,inv.Lesionados as Lesionados
-                ,inv.Muertos as Muertos
-                ,fac.factorAccidente as FactoresOpciones
-                ,cauac.causaAccidente as Causas
-                ,ac.descripcionCausas as CausasDescripcion
-                FROM accidentes ac
-                LEFT JOIN catDelegaciones del on del.idDelegacion = ac.idOficinaDelegacion
-                LEFT JOIN catMunicipios mun on mun.idMunicipio = ac.idMunicipio
-                LEFT JOIN catCarreteras car on car.idCarretera = ac.idCarretera
-                LEFT JOIN catTramos tram on tram.idTramo = ac.idTramo
-                LEFT JOIN catFactoresAccidentes fac on fac.idFactorAccidente = ac.idFactorAccidente
-                LEFT JOIN catOficiales ofic on ofic.idOficial = ac.idElabora
-                LEFT JOIN catCausasAccidentes cauac on cauac.idCausaAccidente = ac.idCausaAccidente
-                LEFT JOIN (SELECT idAccidente, STRING_AGG(Vehiculos,'; \r\n ') vehiculos FROM (
-                            SELECT ac.idAccidente
-                            ,CONCAT('Vehículo ',(ROW_NUMBER() OVER (PARTITION BY ac.idAccidente Order by ac.idAccidente)),': ',mv.marcaVehiculo,' ',sm.nombreSubmarca,' ',veh.modelo,', TIPO: ',tv.tipoVehiculo,', Servicio: ',ts.tipoServicio,', Placa: ',veh.placas,', Serie: ',veh.serie,'') AS Vehiculos
-                            FROM accidentes ac
-                            left join vehiculosAccidente vehacc on vehacc.idAccidente = ac.idAccidente
-                            left join vehiculos veh on veh.idVehiculo = vehacc.idVehiculo
-                            left join catMarcasVehiculos mv ON mv.idMarcaVehiculo = veh.idMarcaVehiculo
-                            left join catSubmarcasVehiculos sm ON sm.idSubmarca = veh.idSubmarca
-                            left join catEntidades e ON e.idEntidad = veh.idEntidad
-                            left join catColores cc ON cc.idColor = veh.idColor
-                            left join catTiposVehiculo tv ON tv.idTipoVehiculo = veh.idTipoVehiculo
-                            left join catTipoServicio ts ON ts.idCatTipoServicio = veh.idCatTipoServicio) as veh
-                            GROUP by idAccidente
-                ) veh on veh.idAccidente = ac.idAccidente
-                left join (SELECT acc.idAccidente ,count(CASE WHEN invacc.idEstadoVictima = 1 THEN invacc.idEstadoVictima END) AS Lesionados,  count(CASE WHEN invacc.idEstadoVictima = 2 THEN invacc.idEstadoVictima END) AS Muertos
-                FROM accidentes acc
-                inner join involucradosAccidente invacc on invacc.idAccidente = acc.idAccidente
-                GROUP by acc.idAccidente) inv on inv.idAccidente = ac.idAccidente";
+            var condicionesFiltro = new List<string>();
 
-            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            if (recibido.idMunicipio > 0)
+                condicionesFiltro.Add($"ac.idMunicipio = {recibido.idMunicipio}");
+
+            if (recibido.idDelegacion > 0)
+                condicionesFiltro.Add($"ac.idOficinaDelegacion = {recibido.idDelegacion}");
+
+            if (recibido.IdOficial > 0)
+                condicionesFiltro.Add($"ac.idElabora = {recibido.IdOficial}");
+
+            if (recibido.idCarretera > 0)
+                condicionesFiltro.Add($"ac.idCarretera = {recibido.idCarretera}");
+
+            if (recibido.idTramo > 0)
+                condicionesFiltro.Add($"ac.idTramo = {recibido.idTramo}");
+
+            if (recibido.idClasificacionAccidente > 0)
+                condicionesFiltro.Add($"ac.idClasificacionAccidente = {recibido.idClasificacionAccidente}");      
+
+            if (recibido.idFactorAccidente > 0)
+                condicionesFiltro.Add($"facAccSub.idFactor = {recibido.idFactorAccidente}");
+
+            if (recibido.IdTipoVehiculo > 0)
+                condicionesFiltro.Add($"veh.IdTipoVehiculo = {recibido.IdTipoVehiculo}");
+
+            if (recibido.IdTipoServicio > 0)
+                condicionesFiltro.Add($"veh.IdTipoServicio = {recibido.IdTipoServicio}");
+
+			if (recibido.IdSubtipoServicio > 0)
+				condicionesFiltro.Add($"veh.IdSubtipoServicio = {recibido.IdSubtipoServicio}");
+
+			if (recibido.idCausaAccidente > 0)
+                condicionesFiltro.Add($"accCau.idCausaAccidente = {recibido.idCausaAccidente}");
+
+            if (recibido.idFactorOpcionAccidente > 0)
+                condicionesFiltro.Add($"facAccSub.idFactorOpcion = {recibido.idFactorOpcionAccidente}");
+
+			if (recibido.FechaInicio.HasValue)
+			{
+				condicionesFiltro.Add($"ac.fecha >= '{recibido.FechaInicio.Value.ToString("yyyy-MM-dd")}'");
+			}
+
+			if (recibido.FechaFin.HasValue)
+			{
+				condicionesFiltro.Add($"ac.fecha <= '{recibido.FechaFin.Value.ToString("yyyy-MM-dd")}'");
+			}
+			if (recibido.hora != TimeSpan.Zero)
+                condicionesFiltro.Add($"ac.hora = '{recibido.hora}'");
+
+			string condicionesSql = string.Join(" AND ", condicionesFiltro);
+
+            string strQuery = @"SELECT DISTINCT
+                                        ac.idAccidente,
+                                        ac.numeroReporte AS Numreporteaccidente,
+                                        CONVERT(varchar, ac.fecha, 103) AS Fecha,
+                                        ac.hora AS Hora,
+                                        ac.idMunicipio AS idMunicipio,
+                                        ac.idOficinaDelegacion AS idOficinaDelegacion,
+                                        ac.idElabora AS idOficial,
+                                        ac.idCarretera AS idCarretera,
+                                        ac.idTramo AS idTramo,
+                                        ac.idClasificacionAccidente AS idClasificacionAccidente,
+                                        del.delegacion AS Delegacion,
+                                        mun.municipio,
+                                        car.carretera,
+                                        tram.tramo,
+                                        ac.kilometro,
+                                        ac.latitud,
+                                        ac.longitud,
+                                        veh.vehiculos AS Vehiculo,
+                                        veh.idTipoVehiculo AS idTipoVehiculo,
+                                        veh.idTipoServicio AS idTipoServicio,
+                                        veh.idSubtipoServicio AS idSubtipoServicio,
+                                        CONCAT(ofic.nombre, ' ', ofic.apellidoPaterno, ' ', ofic.apellidoMaterno) AS NombredelOficial,
+                                        ac.montoCamino AS Dañosalcamino,
+                                        ac.montoCarga AS Dañosacarga,
+                                        ac.montoPropietarios AS Dañosapropietario,
+                                        ac.montoOtros AS Otrosdaños,
+                                        inv.Lesionados AS Lesionados,
+                                        inv.Muertos AS Muertos,
+                                        Factores.FactoresOpciones,
+                                        Causas.CausasAccidente,
+                                        ac.descripcionCausas AS CausasDescripcion
+                                    FROM 
+                                        accidentes ac 
+                                    LEFT JOIN 
+                                        catDelegaciones del ON del.idDelegacion = ac.idOficinaDelegacion
+                                    LEFT JOIN 
+                                        catMunicipios mun ON mun.idMunicipio = ac.idMunicipio
+                                    LEFT JOIN 
+                                        catCarreteras car ON car.idCarretera = ac.idCarretera
+                                    LEFT JOIN 
+                                        catTramos tram ON tram.idTramo = ac.idTramo
+                                    LEFT JOIN 
+                                        catOficiales ofic ON ofic.idOficial = ac.idElabora
+                                    LEFT JOIN 
+                                        accidenteCausas accCau ON accCau.idAccidente = ac.idAccidente 
+                                    LEFT JOIN 
+                                        catCausasAccidentes cauac ON cauac.idCausaAccidente = accCau.idCausaAccidente 
+                                    LEFT JOIN 
+                                        (
+                                            SELECT 
+                                                idAccidente,
+                                                STUFF((
+                                                    SELECT CHAR(13) + CHAR(10) + CONCAT(fac.factorAccidente, '/', facOp.factorOpcionAccidente) + ';'
+                                                    FROM AccidenteFactoresOpciones facAccSub
+                                                    LEFT JOIN catFactoresAccidentes fac ON fac.idFactorAccidente = facAccSub.idFactor
+                                                    LEFT JOIN catFactoresOpcionesAccidentes facOp ON facOp.idFactorOpcionAccidente = facAccSub.idFactorOpcion
+                                                    WHERE facAccSub.idAccidente = Accidentes.idAccidente AND facAccSub.estatus = 1
+                                                    FOR XML PATH(''), TYPE
+                                                ).value('.', 'VARCHAR(MAX)'), 1, 1, '') AS FactoresOpciones
+                                            FROM accidentes AS Accidentes
+                                            GROUP BY idAccidente
+                                        ) AS Factores ON Factores.idAccidente = ac.idAccidente
+                                    LEFT JOIN 
+                                        (
+                                            SELECT 
+                                                idAccidente,
+                                                STUFF((
+                                                    SELECT CHAR(13) + CHAR(10) + CONCAT(cauac.causaAccidente, ':') + ','
+                                                    FROM accidenteCausas accCau
+                                                    LEFT JOIN catCausasAccidentes cauac ON cauac.idCausaAccidente = accCau.idCausaAccidente
+                                                    WHERE accCau.idAccidente = Accidentes.idAccidente
+                                                    FOR XML PATH(''), TYPE
+                                                ).value('.', 'VARCHAR(MAX)'), 1, 1, '') AS CausasAccidente
+                                            FROM accidentes AS Accidentes
+                                            GROUP BY idAccidente
+                                        ) AS Causas ON Causas.idAccidente = ac.idAccidente
+                                    LEFT JOIN 
+                                        (
+                                            SELECT 
+                                                idAccidente,
+                                                STRING_AGG(Vehiculos, ';') AS vehiculos,
+                                                MAX(idTipoVehiculo) AS idTipoVehiculo, 
+                                                MAX(idCatTipoServicio) AS idTipoServicio,
+                                                MAX(idSubtipoServicio) AS idSubtipoServicio
+
+                                            FROM 
+                                                (
+                                                    SELECT 
+                                                        ac.idAccidente,
+                                                        veh.idTipoVehiculo,  
+                                                        veh.idCatTipoServicio,
+                                                        CONCAT(
+                                                            '  Vehículo ', 
+                                                            ROW_NUMBER() OVER (PARTITION BY ac.idAccidente ORDER BY ac.idAccidente),
+                                                            ':  ', 
+                                                            mv.marcaVehiculo, ' ', 
+                                                            sm.nombreSubmarca, ' ', 
+                                                            veh.modelo, ', TIPO: ', 
+                                                            tv.tipoVehiculo, ', Servicio: ', 
+                                                            ts.tipoServicio, ', Placa: ', 
+                                                            veh.placas, ', Serie: ', 
+                                                            veh.serie
+                                                        ) AS Vehiculos
+                                                    FROM 
+                                                        accidentes ac
+                                                        LEFT JOIN vehiculosAccidente vehacc ON vehacc.idAccidente = ac.idAccidente AND vehacc.estatus = 1 
+                                                        LEFT JOIN vehiculos veh ON veh.idVehiculo = vehacc.idVehiculo
+                                                        LEFT JOIN catMarcasVehiculos mv ON mv.idMarcaVehiculo = veh.idMarcaVehiculo
+                                                        LEFT JOIN catSubmarcasVehiculos sm ON sm.idSubmarca = veh.idSubmarca
+                                                        LEFT JOIN catEntidades e ON e.idEntidad = veh.idEntidad
+                                                        LEFT JOIN catColores cc ON cc.idColor = veh.idColor
+                                                        LEFT JOIN catTiposVehiculo tv ON tv.idTipoVehiculo = veh.idTipoVehiculo
+                                                        LEFT JOIN catTipoServicio ts ON ts.idCatTipoServicio = veh.idCatTipoServicio
+                                                ) AS veh
+                                            GROUP BY 
+                                                idAccidente
+                                        ) veh ON veh.idAccidente = ac.idAccidente
+                                    LEFT JOIN 
+                                        (
+                                            SELECT 
+                                                acc.idAccidente,
+                                                COUNT(CASE WHEN invacc.idEstadoVictima = 1 THEN invacc.idEstadoVictima END) AS Lesionados,
+                                                COUNT(CASE WHEN invacc.idEstadoVictima = 2 THEN invacc.idEstadoVictima END) AS Muertos
+                                            FROM 
+                                                accidentes acc
+                                            INNER JOIN 
+                                                involucradosAccidente invacc ON invacc.idAccidente = acc.idAccidente
+                                            GROUP BY 
+                                                acc.idAccidente
+                                        ) inv ON inv.idAccidente = ac.idAccidente
+                                    WHERE 
+                                        ac.estatus <> 0 ";
+
+			                        if (!string.IsNullOrWhiteSpace(condicionesSql))
+			                        {
+				                        strQuery += " AND " + condicionesSql;
+			                        }
+			using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
             {
                 try
                 {
@@ -356,7 +500,20 @@ namespace GuanajuatoAdminUsuarios.Services
                         {
                             ListadoAccidentesPorAccidenteModel model = new ListadoAccidentesPorAccidenteModel();
                             model.Numreporteaccidente = reader["Numreporteaccidente"] == System.DBNull.Value ? default(string) : reader["Numreporteaccidente"].ToString();
-                            model.Fecha = reader["Fecha"] == System.DBNull.Value ? default(string) : reader["Fecha"].ToString();
+							model.idMunicipio = reader["idMunicipio"] != DBNull.Value ? Convert.ToInt32(reader["idMunicipio"]) : 0;
+							model.idDelegacion = reader["idOficinaDelegacion"] != DBNull.Value ? Convert.ToInt32(reader["idOficinaDelegacion"]) : 0;
+							model.IdOficial = reader["idOficial"] != DBNull.Value ? Convert.ToInt32(reader["idOficial"]) : 0;
+							model.idCarretera = reader["idCarretera"] != DBNull.Value ? Convert.ToInt32(reader["idCarretera"]) : 0;
+							model.idTramo = reader["idTramo"] != DBNull.Value ? Convert.ToInt32(reader["idTramo"]) : 0;
+							model.idClasificacionAccidente = reader["idClasificacionAccidente"] != DBNull.Value ? Convert.ToInt32(reader["idClasificacionAccidente"]) : 0;
+							//model.idCausaAccidente = reader["idCausaAccidente"] != DBNull.Value ? Convert.ToInt32(reader["idCausaAccidente"]) : 0;
+							//model.idFactorAccidente = reader["idFactorAccidente"] != DBNull.Value ? Convert.ToInt32(reader["idFactorAccidente"]) : 0;
+							//model.idFactorOpcionAccidente = reader["idFactorOpcionAccidente"] != DBNull.Value ? Convert.ToInt32(reader["idFactorOpcionAccidente"]) : 0;
+							model.IdTipoVehiculo = reader["idTipoVehiculo"] != DBNull.Value ? Convert.ToInt32(reader["idTipoVehiculo"]) : 0;
+							model.IdTipoServicio = reader["idTipoServicio"] != DBNull.Value ? Convert.ToInt32(reader["idTipoServicio"]) : 0;
+							model.IdSubtipoServicio = reader["idSubtipoServicio"] != DBNull.Value ? Convert.ToInt32(reader["idSubtipoServicio"]) : 0;
+
+							model.Fecha = reader["Fecha"] == System.DBNull.Value ? default(string) : reader["Fecha"].ToString();
                             model.Hora = reader["Hora"] == System.DBNull.Value ? default(string) : reader["Hora"].ToString();
                             model.Delegacion = reader["Delegacion"] == System.DBNull.Value ? default(string) : reader["Delegacion"].ToString();
                             model.carretera = reader["carretera"] == System.DBNull.Value ? default(string) : reader["carretera"].ToString();
@@ -374,9 +531,30 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.Lesionados = reader["Lesionados"] == System.DBNull.Value ? default(string) : reader["Lesionados"].ToString();
                             model.Muertos = reader["Muertos"] == System.DBNull.Value ? default(string) : reader["Muertos"].ToString();
                             model.FactoresOpciones = reader["FactoresOpciones"] == System.DBNull.Value ? default(string) : reader["FactoresOpciones"].ToString();
-                            model.Causas = reader["Causas"] == System.DBNull.Value ? default(string) : reader["Causas"].ToString();
+                            model.Causas = reader["CausasAccidente"] == System.DBNull.Value ? default(string) : reader["CausasAccidente"].ToString();
                             model.CausasDescripcion = reader["CausasDescripcion"] == System.DBNull.Value ? default(string) : reader["CausasDescripcion"].ToString();
-                            model.NumeroSecuencial = numeroSecuencial;
+							if (!string.IsNullOrEmpty(model.FactoresOpciones))
+							{
+								string cleanedString = model.FactoresOpciones.Replace("\n", "").Replace("\r", "");
+
+								string[] factoresOpcionesArray = cleanedString.Split(new[] { ": ", ":" }, StringSplitOptions.RemoveEmptyEntries);
+
+                                for (int i = 0; i < factoresOpcionesArray.Length; i += 3)
+                                {
+                                    if (i + 2 < factoresOpcionesArray.Length)
+                                    {
+                                        if (int.TryParse(factoresOpcionesArray[i], out int idFactorAccidente) &&
+                                            int.TryParse(factoresOpcionesArray[i + 1], out int idFactorOpcionAccidente))
+                                        {
+                                            model.idFactorAccidente = idFactorAccidente;
+                                            model.idFactorOpcionAccidente = idFactorOpcionAccidente;
+
+
+                                        }
+                                    }
+                                }
+							}
+							model.NumeroSecuencial = numeroSecuencial;
                             modelList.Add(model);
                             numeroSecuencial++;
                         }
@@ -395,17 +573,83 @@ namespace GuanajuatoAdminUsuarios.Services
 
             return modelList;
         }
-        public List<ListadoAccidentesPorVehiculoModel> AccidentesPorVehiculo()
+        //public List<ListadoAccidentesPorVehiculoModel> AccidentesPorVehiculo(BusquedaAccidentesModel model)
+        public IEnumerable<ListadoAccidentesPorVehiculoModel> AccidentesPorVehiculo(BusquedaAccidentesModel model)
+
         {
             List<ListadoAccidentesPorVehiculoModel> modelList = new List<ListadoAccidentesPorVehiculoModel>();
-            string strQuery = @"SELECT DISTINCT
+            var condicionesFiltro = new List<string>();
+
+            if (model.idMunicipio > 0)
+                condicionesFiltro.Add($"ac.idMunicipio = {model.idMunicipio}");
+
+            if (model.idDelegacion > 0)
+                condicionesFiltro.Add($"ac.idOficinaDelegacion = {model.idDelegacion}");
+
+            if (model.IdOficial > 0)
+                condicionesFiltro.Add($"ac.idElabora = {model.IdOficial}");
+
+            if (model.idCarretera > 0)
+                condicionesFiltro.Add($"ac.idCarretera = {model.idCarretera}");
+
+            if (model.idTramo > 0)
+                condicionesFiltro.Add($"ac.idTramo = {model.idTramo}");
+
+            if (model.idClasificacionAccidente > 0)
+                condicionesFiltro.Add($"ac.idClasificacionAccidente = {model.idClasificacionAccidente}");
+
+            if (model.idCausaAccidente > 0)
+                condicionesFiltro.Add($"accCau.idCausaAccidente = {model.idCausaAccidente}");
+
+            if (model.idFactorAccidente > 0)
+                condicionesFiltro.Add($"factAcc.idFactor = {model.idFactorAccidente}");
+
+            if (model.IdTipoVehiculo > 0)
+                condicionesFiltro.Add($"veh.IdTipoVehiculo = {model.IdTipoVehiculo}");
+
+            if (model.IdTipoServicio > 0)
+                condicionesFiltro.Add($"veh.IdTipoServicio = {model.IdTipoServicio}");
+
+			if (model.IdSubtipoServicio > 0)
+				condicionesFiltro.Add($"veh.IdSubtipoServicio = {model.IdSubtipoServicio}");
+
+			if (model.idFactorOpcionAccidente > 0)
+                condicionesFiltro.Add($"factAcc.idFactorOpcion = {model.idFactorOpcionAccidente}");
+
+			if (model.FechaInicio.HasValue)
+			{
+				condicionesFiltro.Add($"ac.fecha >= '{model.FechaInicio.Value.ToString("yyyy-MM-dd")}'");
+			}
+
+			if (model.FechaFin.HasValue)
+			{
+				condicionesFiltro.Add($"ac.fecha <= '{model.FechaFin.Value.ToString("yyyy-MM-dd")}'");
+			}
+
+	
+			if (model.hora != TimeSpan.Zero)
+                condicionesFiltro.Add($"ac.hora = '{model.hora}'");
+
+            string condicionesSql = string.Join(" AND ", condicionesFiltro);
+
+            string strQuery = @"SELECT DISTINCT  
                 ac.numeroReporte		as Numreporteaccidente
                 ,ac.fecha				as Fecha
                 ,ac.hora				as Hora
                 ,ac.idMunicipio         as idMunicipio
-                ,(ROW_NUMBER() OVER (PARTITION BY ac.idAccidente Order by ac.idAccidente))					as NumVeh							
+                ,ac.idOficinaDelegacion as idOficinaDelegacion
+                ,ac.idElabora           as idOficial
+                ,ac.idCarretera         as idCarretera
+                ,ac.idTramo             as idTramo
+                ,accCau.idCausaAccidente  as idCausaAccidente
+                ,ac.idClasificacionAccidente   as idClasificacionAccidente
+                ,factAcc.idFactor       as idFactorAccidente
+                ,factAcc.idFactorOpcion  as idFactorOpcionAccidente
                 ,veh.placas				as PlacasVeh
                 ,veh.serie				as SerieVeh
+                ,veh.idTipoVehiculo     as idTipoVehiculo 
+                ,veh.idSubtipoServicio  as idSubtipoServicio
+                ,veh.idCatTipoServicio  as idTipoServicio
                 ,CONCAT(prop.nombre, ' ',prop.apellidoPaterno,' ',prop.apellidoMaterno)		as PropietarioVeh
                 ,tv.tipoVehiculo		as TipoVeh
                 ,ts.tipoServicio		as ServicioVeh
@@ -435,10 +679,13 @@ namespace GuanajuatoAdminUsuarios.Services
                 LEFT JOIN catMunicipios mun on mun.idMunicipio = ac.idMunicipio
                 LEFT JOIN catCarreteras car on car.idCarretera = ac.idCarretera
                 LEFT JOIN catTramos tram on tram.idTramo = ac.idTramo
-                LEFT JOIN catFactoresAccidentes fac on fac.idFactorAccidente = ac.idFactorAccidente
+                LEFT JOIN AccidenteFactoresOpciones factAcc on factAcc.idAccidente = ac.idAccidente
+                LEFT JOIN catFactoresAccidentes fac on fac.idFactorAccidente = factAcc.idFactor
+                LEFT JOIN catFactoresOpcionesAccidentes facOp on facOp.idFactorAccidente = factAcc.idFactorOpcion
                 LEFT JOIN catOficiales ofic on ofic.idOficial = ac.idElabora
-                LEFT JOIN catCausasAccidentes cauac on cauac.idCausaAccidente = ac.idCausaAccidente
-                left join vehiculosAccidente vehacc on vehacc.idAccidente = ac.idAccidente
+                LEFT JOIN accidenteCausas accCau on accCau.idAccidente = ac.idAccidente
+                LEFT JOIN catCausasAccidentes cauac on cauac.idCausaAccidente = accCau.idCausaAccidente
+                left join vehiculosAccidente vehacc on vehacc.idAccidente = ac.idAccidente AND vehacc.estatus = 1
                 left join vehiculos veh on veh.idVehiculo = vehacc.idVehiculo
                 left join catMarcasVehiculos mv ON mv.idMarcaVehiculo = veh.idMarcaVehiculo
                 left join catSubmarcasVehiculos sm ON sm.idSubmarca = veh.idSubmarca
@@ -452,9 +699,14 @@ namespace GuanajuatoAdminUsuarios.Services
                 GROUP by acc.idAccidente) inv on inv.idAccidente = ac.idAccidente
                 LEFT JOIN conductoresVehiculosAccidente cva ON cva.idAccidente = ac.idAccidente 
                 LEFT JOIN personas cond ON cond.idPersona = cva.idPersona
-                LEFT JOIN personas prop on prop.idPersona = veh.propietario";
+                LEFT JOIN personas prop on prop.idPersona = veh.propietario
+                WHERE ac.estatus <> 0";
+			if (!string.IsNullOrWhiteSpace(condicionesSql))
+			{
+				strQuery += " AND " + condicionesSql;
+			}
 
-            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+			using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
             {
                 try
                 {
@@ -467,40 +719,52 @@ namespace GuanajuatoAdminUsuarios.Services
                     {
                         while (reader.Read())
                         {
-                            ListadoAccidentesPorVehiculoModel model = new ListadoAccidentesPorVehiculoModel();
-							model.idMunicipio = reader["idMunicipio"] != DBNull.Value ? Convert.ToInt32(reader["idMunicipio"]) : 0;
-							model.Numreporteaccidente = reader["Numreporteaccidente"] == System.DBNull.Value ? default(string) : reader["Numreporteaccidente"].ToString();
-                            model.NumVeh = reader["NumVeh"] == System.DBNull.Value ? default(string) : reader["NumVeh"].ToString();
-                            model.PlacasVeh = reader["PlacasVeh"] == System.DBNull.Value ? default(string) : reader["PlacasVeh"].ToString();
-                            model.SerieVeh = reader["SerieVeh"] == System.DBNull.Value ? default(string) : reader["SerieVeh"].ToString();
-                            model.PropietarioVeh = reader["PropietarioVeh"] == System.DBNull.Value ? default(string) : reader["PropietarioVeh"].ToString();
-                            model.TipoVeh = reader["TipoVeh"] == System.DBNull.Value ? default(string) : reader["TipoVeh"].ToString();
-                            model.ServicioVeh = reader["ServicioVeh"] == System.DBNull.Value ? default(string) : reader["ServicioVeh"].ToString();
-                            model.Marca = reader["Marca"] == System.DBNull.Value ? default(string) : reader["Marca"].ToString();
-                            model.Submarca = reader["Submarca"] == System.DBNull.Value ? default(string) : reader["Submarca"].ToString();
-                            model.Modelo = reader["Modelo"] == System.DBNull.Value ? default(string) : reader["Modelo"].ToString();
-                            model.ConductorVeh = reader["ConductorVeh"] == System.DBNull.Value ? default(string) : reader["ConductorVeh"].ToString();
-                            model.DepositoVehículo = reader["DepositoVehículo"] == System.DBNull.Value ? default(string) : reader["DepositoVehículo"].ToString();
-                            model.Delegacion = reader["Delegacion"] == System.DBNull.Value ? default(string) : reader["Delegacion"].ToString();
-                            model.Municipio = reader["Municipio"] == System.DBNull.Value ? default(string) : reader["Municipio"].ToString();
-                            model.Carretera = reader["Carretera"] == System.DBNull.Value ? default(string) : reader["Carretera"].ToString();
-                            model.Tramo = reader["Tramo"] == System.DBNull.Value ? default(string) : reader["Tramo"].ToString();
-                            model.Kilómetro = reader["Kilómetro"] == System.DBNull.Value ? default(string) : reader["Kilómetro"].ToString();
-                            model.Latitud = reader["Latitud"] == System.DBNull.Value ? default(string) : reader["Latitud"].ToString();
-                            model.Longitud = reader["Longitud"] == System.DBNull.Value ? default(string) : reader["Longitud"].ToString();
-                            model.NombredelOficial = reader["NombredelOficial"] == System.DBNull.Value ? default(string) : reader["NombredelOficial"].ToString();
-                            model.Dañosalcamino = reader["Dañosalcamino"] == System.DBNull.Value ? default(string) : reader["Dañosalcamino"].ToString();
-                            model.DañosaCarga = reader["DañosaCarga"] == System.DBNull.Value ? default(string) : reader["DañosaCarga"].ToString();
-                            model.Dañosapropietario = reader["Dañosapropietario"] == System.DBNull.Value ? default(string) : reader["Dañosapropietario"].ToString();
-                            model.Otrosdaños = reader["Otrosdaños"] == System.DBNull.Value ? default(string) : reader["Otrosdaños"].ToString();
-                            model.Lesionados = reader["Lesionados"] == System.DBNull.Value ? default(string) : reader["Lesionados"].ToString();
-                            model.Muertos = reader["Muertos"] == System.DBNull.Value ? default(string) : reader["Muertos"].ToString();
-                            model.Causas = reader["Causas"] == System.DBNull.Value ? default(string) : reader["Causas"].ToString();
-                            model.fecha = reader["fecha"] != DBNull.Value ? Convert.ToDateTime(reader["fecha"]) : DateTime.MinValue;
-                            model.hora = reader["hora"] != DBNull.Value ? TimeSpan.Parse(reader["hora"].ToString()) : TimeSpan.MinValue;
-                            model.CausasDescripcion = reader["CausasDescripcion"] == System.DBNull.Value ? default(string) : reader["CausasDescripcion"].ToString();
-                            model.NumeroContinuo = numeroContinuo;
-                            modelList.Add(model);
+                            ListadoAccidentesPorVehiculoModel vehiculo = new ListadoAccidentesPorVehiculoModel();
+                            vehiculo.idMunicipio = reader["idMunicipio"] != DBNull.Value ? Convert.ToInt32(reader["idMunicipio"]) : 0;
+							vehiculo.idDelegacion = reader["idOficinaDelegacion"] != DBNull.Value ? Convert.ToInt32(reader["idOficinaDelegacion"]) : 0;
+							vehiculo.IdOficial = reader["idOficial"] != DBNull.Value ? Convert.ToInt32(reader["idOficial"]) : 0;
+							vehiculo.idCarretera = reader["idCarretera"] != DBNull.Value ? Convert.ToInt32(reader["idCarretera"]) : 0;
+							vehiculo.idTramo = reader["idTramo"] != DBNull.Value ? Convert.ToInt32(reader["idTramo"]) : 0;
+							vehiculo.idClasificacionAccidente = reader["idClasificacionAccidente"] != DBNull.Value ? Convert.ToInt32(reader["idClasificacionAccidente"]) : 0;
+							vehiculo.idCausaAccidente = reader["idCausaAccidente"] != DBNull.Value ? Convert.ToInt32(reader["idCausaAccidente"]) : 0;
+							vehiculo.idFactorAccidente = reader["idFactorAccidente"] != DBNull.Value ? Convert.ToInt32(reader["idFactorAccidente"]) : 0;
+							vehiculo.idFactorOpcionAccidente = reader["idFactorOpcionAccidente"] != DBNull.Value ? Convert.ToInt32(reader["idFactorOpcionAccidente"]) : 0;
+							vehiculo.IdTipoVehiculo = reader["idTipoVehiculo"] != DBNull.Value ? Convert.ToInt32(reader["idTipoVehiculo"]) : 0;
+							vehiculo.IdTipoServicio = reader["idTipoServicio"] != DBNull.Value ? Convert.ToInt32(reader["idTipoServicio"]) : 0;
+							vehiculo.IdSubtipoServicio = reader["idSubtipoServicio"] != DBNull.Value ? Convert.ToInt32(reader["idSubtipoServicio"]) : 0;
+
+							vehiculo.Numreporteaccidente = reader["Numreporteaccidente"] == System.DBNull.Value ? default(string) : reader["Numreporteaccidente"].ToString();
+                            //vehiculo.NumVeh = reader["NumVeh"] == System.DBNull.Value ? default(string) : reader["NumVeh"].ToString();
+                            vehiculo.PlacasVeh = reader["PlacasVeh"] == System.DBNull.Value ? default(string) : reader["PlacasVeh"].ToString();
+                            vehiculo.SerieVeh = reader["SerieVeh"] == System.DBNull.Value ? default(string) : reader["SerieVeh"].ToString();
+                            vehiculo.PropietarioVeh = reader["PropietarioVeh"] == System.DBNull.Value ? default(string) : reader["PropietarioVeh"].ToString();
+                            vehiculo.TipoVeh = reader["TipoVeh"] == System.DBNull.Value ? default(string) : reader["TipoVeh"].ToString();
+                            vehiculo.ServicioVeh = reader["ServicioVeh"] == System.DBNull.Value ? default(string) : reader["ServicioVeh"].ToString();
+                            vehiculo.Marca = reader["Marca"] == System.DBNull.Value ? default(string) : reader["Marca"].ToString();
+                            vehiculo.Submarca = reader["Submarca"] == System.DBNull.Value ? default(string) : reader["Submarca"].ToString();
+                            vehiculo.Modelo = reader["Modelo"] == System.DBNull.Value ? default(string) : reader["Modelo"].ToString();
+                            vehiculo.ConductorVeh = reader["ConductorVeh"] == System.DBNull.Value ? default(string) : reader["ConductorVeh"].ToString();
+                            vehiculo.DepositoVehículo = reader["DepositoVehículo"] == System.DBNull.Value ? default(string) : reader["DepositoVehículo"].ToString();
+                            vehiculo.Delegacion = reader["Delegacion"] == System.DBNull.Value ? default(string) : reader["Delegacion"].ToString();
+                            vehiculo.Municipio = reader["Municipio"] == System.DBNull.Value ? default(string) : reader["Municipio"].ToString();
+                            vehiculo.Carretera = reader["Carretera"] == System.DBNull.Value ? default(string) : reader["Carretera"].ToString();
+                            vehiculo.Tramo = reader["Tramo"] == System.DBNull.Value ? default(string) : reader["Tramo"].ToString();
+                            vehiculo.Kilómetro = reader["Kilómetro"] == System.DBNull.Value ? default(string) : reader["Kilómetro"].ToString();
+                            vehiculo.Latitud = reader["Latitud"] == System.DBNull.Value ? default(string) : reader["Latitud"].ToString();
+                            vehiculo.Longitud = reader["Longitud"] == System.DBNull.Value ? default(string) : reader["Longitud"].ToString();
+                            vehiculo.NombredelOficial = reader["NombredelOficial"] == System.DBNull.Value ? default(string) : reader["NombredelOficial"].ToString();
+                            vehiculo.Dañosalcamino = reader["Dañosalcamino"] == System.DBNull.Value ? default(string) : reader["Dañosalcamino"].ToString();
+                            vehiculo.DañosaCarga = reader["DañosaCarga"] == System.DBNull.Value ? default(string) : reader["DañosaCarga"].ToString();
+                            vehiculo.Dañosapropietario = reader["Dañosapropietario"] == System.DBNull.Value ? default(string) : reader["Dañosapropietario"].ToString();
+                            vehiculo.Otrosdaños = reader["Otrosdaños"] == System.DBNull.Value ? default(string) : reader["Otrosdaños"].ToString();
+                            vehiculo.Lesionados = reader["Lesionados"] == System.DBNull.Value ? default(string) : reader["Lesionados"].ToString();
+                            vehiculo.Muertos = reader["Muertos"] == System.DBNull.Value ? default(string) : reader["Muertos"].ToString();
+                            vehiculo.Causas = reader["Causas"] == System.DBNull.Value ? default(string) : reader["Causas"].ToString();
+                            vehiculo.fecha = reader["fecha"] != DBNull.Value ? Convert.ToDateTime(reader["fecha"]) : DateTime.MinValue;
+                            vehiculo.hora = reader["hora"] != DBNull.Value ? TimeSpan.Parse(reader["hora"].ToString()) : TimeSpan.MinValue;
+                            vehiculo.CausasDescripcion = reader["CausasDescripcion"] == System.DBNull.Value ? default(string) : reader["CausasDescripcion"].ToString();
+                            vehiculo.NumeroContinuo = numeroContinuo;
+                            modelList.Add(vehiculo);
                             numeroContinuo++;
 
                         }

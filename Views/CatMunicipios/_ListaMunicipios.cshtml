@@ -27,7 +27,7 @@
             .Read(read => read.Action("GetMun", "CatMunicipios"))
             .PageSize(5).Model(model => model.Id(p => p.IdMunicipio))
             )
-            .ToolBar(t => t.Search())
+            .ToolBar(t => t.Search().Text("Buscar..."))
             .Search(s =>
             {
                 s.Field(c => c.Municipio);

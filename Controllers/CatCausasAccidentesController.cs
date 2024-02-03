@@ -27,22 +27,12 @@ namespace GuanajuatoAdminUsuarios.Controllers
         DBContextInssoft dbContext = new  DBContextInssoft();
         public IActionResult Index()
         {
-            int IdModulo = 984;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+
                 var ListCausasAccidentesModel = GetCausasAccidentes();
 
             return View(ListCausasAccidentesModel);
             }
-            else
-            {
-                TempData["ErrorMessage"] = "Este usuario no tiene acceso a esta sección.";
-                return RedirectToAction("Principal", "Inicio", new { area = "" });
-            }
-
-        }
+ 
 
 
 
@@ -59,36 +49,18 @@ namespace GuanajuatoAdminUsuarios.Controllers
         [HttpPost]
         public ActionResult AgregarCausasAccidenteModal()
         {
-            int IdModulo = 985;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
-                 return PartialView("_Crear");
+   
+                return PartialView("_Crear");
             }
-            else
-            {
-                TempData["ErrorMessage"] = "El usuario no tiene permisos suficientes para esta acción.";
-                return PartialView("ErrorPartial");
-            }
-        }
+  
 
         public ActionResult EditarCausasAccidenteModal(int IdCausaAccidente)
         {
-            int IdModulo = 986;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+        
                 var causasAccidentesModel = GetCausaAccidenteByID(IdCausaAccidente);
             return PartialView("_Editar", causasAccidentesModel);
             }
-            else
-            {
-                TempData["ErrorMessage"] = "El usuario no tiene permisos suficientes para esta acción.";
-                return PartialView("ErrorPartial");
-            }
-        }
+   
 
         public ActionResult EliminarCausasAccidenteModal(int IdCausaAccidente)
         {

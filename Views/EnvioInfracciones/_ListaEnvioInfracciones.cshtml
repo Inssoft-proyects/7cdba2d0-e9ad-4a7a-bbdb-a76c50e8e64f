@@ -30,7 +30,7 @@
 			//.Read(read => read.Action("ObtInvolucradosAccidente", "CapturaAccidentes"))
 			.PageSize(5).Model(model => model.Id(p => p.IdInfraccion))
 			)
-			.ToolBar(t => t.Search())
+			.ToolBar(t => t.Search().Text("Buscar..."))
 			.Search(s =>
 			{
 				s.Field(c => c.nombreCompletoPropietario);
@@ -51,7 +51,7 @@
 		<div class="row pb-4 align-items-start justify-content-start footerGrid">
 			<div class="border bg-light text-center">
 				<section class="col-auto btnOutline btnOutlinePrimary my-34 mx-auto p-10 d-flex justify-content-start">
-					<button type="button" onclick="enviarIdInfraccionesSeleccionados()">
+					<button type="button" id="btnEnviarInfracciones" onclick="enviarIdInfraccionesSeleccionados()">
 						<h6 class="m-0 d-flex align-items-center"><i class="icon-addEnviar h5 mb-0 me-2"></i><b> Enviar infracciones</b></h6>
 					</button>
 				</section>

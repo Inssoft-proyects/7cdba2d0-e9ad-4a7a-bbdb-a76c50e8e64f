@@ -57,11 +57,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         {
 
 			int idDependencia = (int)HttpContext.Session.GetInt32("IdDependencia");
-			int IdModulo = 707;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+		
                 int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
 
                 var modelList = _infraccionesService.GetAllEstadisticasInfracciones(idOficina, idDependencia);
@@ -99,12 +95,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 return View();
             }
-            else
-            {
-                TempData["ErrorMessage"] = "Este usuario no tiene acceso a esta sección.";
-                return RedirectToAction("Principal", "Inicio", new { area = "" });
-            }
-        }
+     
         public JsonResult SubtipoServicio_Drop(int tipoServicioDDlValue)
         {
             var result = new SelectList(_catSubtipoServicio.GetSubtipoPorTipo(tipoServicioDDlValue), "idSubTipoServicio", "subTipoServicio");

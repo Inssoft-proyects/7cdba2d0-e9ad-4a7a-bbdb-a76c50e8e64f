@@ -1,9 +1,10 @@
 ﻿@model List<PensionModel>
+@{
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+    var autorizaciones = @HttpContextAccessor.HttpContext.Session.GetString("Autorizaciones").ToString();
+}
 
 <script>
-    
-
-
 </script>
 
 @*<div class="row justify-content-between mb-1 titleCustom">*@
@@ -29,7 +30,7 @@
             {
                 columns.Bound(c => c.estatusDesc).Title("Estatus").Width(90);
                 columns.Bound(c => c.IdPension).Width(20).Hidden();
-                columns.Bound(p => p.Pension).Hidden().ClientGroupHeaderTemplate("<label>Pensión: #=value#</label><button onclick='editarPensionByGrid()' class='btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i></h6></button>").Title("Pension").Width(150);
+                columns.Bound(p => p.Pension).Hidden().ClientGroupHeaderTemplate("<label>Pensión: #=value#</label><button id='btnEditarPension' onclick='editarPensionByGrid()' class='btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i></h6></button>").Title("Pension").Width(150);
                 columns.Bound(p => p.Permiso).Title("Permiso").Width(100);
                 columns.Bound(p => p.delegacion).Title("Delegación").Width(100);
                 columns.Bound(c => c.Direccion).Title("Dirección").Width(150);
@@ -61,7 +62,7 @@
             .ServerOperation(false)
             .Group(groups => groups.Add(p => p.Pension))
             )
-            .ToolBar(t => t.Search())
+            .ToolBar(t => t.Search().Text("Buscar..."))
             .Search(s =>
             {
                 s.Field(c => c.estatusDesc);
@@ -83,6 +84,24 @@
             .Position(TooltipPosition.Top)
             .ContentHandler("tooltipContent")
             )
+
+
+        <script>
+
+            //$(document).ready(function () {
+            //    var auth = @autorizaciones;
+            //    var grid = $("#GridP").data("kendoGrid");
+
+            //    console.log(auth);
+
+            //    // EDITAR
+            //    //if (!auth.toString().includes("275")) {
+            //    //    grid.hideColumn(1);
+            //    //}
+
+            //});
+
+        </script>
     </div>
 
 </div>
@@ -90,6 +109,20 @@
 <script>
     function editarPensionByGrid() {
         var grid = $("#GridP").data("kendoGrid");
+        var auth = @autorizaciones;
+
+
+        // EDITAR
+        if (!auth.toString().includes("275")) {
+            Swal.fire({
+                icon: "error",
+                title: "¡El usuario no tiene acceso a esta opción!",
+            });
+            setTimeout(() => {
+            }, 200);
+            return;
+        }
+
         var dataItem = grid.dataItem($(event.srcElement).closest("tr").next());
         showLoading();
         $.ajax({
@@ -117,6 +150,18 @@
         var titulo = e.target.context.dataset.title; 
         return titulo; 
     }
+
+      $(document).ready(function () {
+        var auth = @autorizaciones;
+        var grid = $("#GridP").data("kendoGrid");
+
+        if (!auth.toString().includes("275")) {
+           // grid.hideColumn(9); 
+            $("#btnEditarPension").prop('disabled', true).css({ "opacity": "0.3" });
+
+        }
+
+    });
 </script>
 
 

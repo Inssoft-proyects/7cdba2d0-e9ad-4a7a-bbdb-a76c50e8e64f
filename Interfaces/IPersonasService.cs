@@ -28,5 +28,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
         public PersonaModel BuscarPersonaSoloLicencia(string numeroLicencia);
         public int UpdatePersona(PersonaModel model);
         public int CreatePersona(PersonaModel model);
+
+        public IEnumerable<PersonaModel> GetAllPersonasPagination(Pagination pagination);
     }
 }

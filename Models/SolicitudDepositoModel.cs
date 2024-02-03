@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace GuanajuatoAdminUsuarios.Models
 {
@@ -8,6 +9,8 @@ namespace GuanajuatoAdminUsuarios.Models
         public int? idSolicitud { get; set; }
         public string folio { get; set; }
 
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime fechaSolicitud { get; set; }
         public TimeSpan horaSolicitud { get; set; }
         public int? idTipoVehiculo { get; set; }

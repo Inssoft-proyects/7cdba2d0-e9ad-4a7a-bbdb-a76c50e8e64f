@@ -400,6 +400,7 @@
 			</tr>
 		</table>
 		<br /><br />
+
 		<table class="table">
 			<thead>
 				<tr style="background-color:#e7e7e7">
@@ -414,10 +415,11 @@
 				contadorVehiculo = 0;
 			}
 			<tr>
-				<td><p class="s5">VEH.</p></td>
-				<td><p class="s5">No. DE FOLIO Y GARANTÍA</p></td>
-				<td><p class="s5">CONCEPTO</p></td>
+				<td><p style="width:10px!important">VEH.</p></td>
+				<td><p style="width:100px!important">No. DE FOLIO Y GARANTÍA</p></td>
+				<td><p style="width:100px!important">CONCEPTO</p></td>
 			</tr>
+
 			@foreach (var item in Model.Infracciones)
 			{
 				int rowspan = Model.MotivosInfraccion.Where(w => w.idInfraccion == item.IdInfraccion).SelectMany(sm => sm.Motivos).Count();
@@ -431,9 +433,9 @@
 						if (contadorInfracciones == 0)
 						{
 							<tr>
-								<td rowspan="@rowspan"><p class="s2">@contadorVehiculo</p></td>
-								<td rowspan="@rowspan"><p class="s2">@item.folioInfraccion</p></td>
-								<td><p class="s2">@motivo</p></td>
+								<td rowspan="@rowspan" style="width:10px!important"><p>@contadorVehiculo</p></td>
+								<td rowspan="@rowspan" style="width:100px!important"><p>@item.folioInfraccion (@item.garantia)</p></td>
+								<td><p style="width:100px!important">@motivo</p></td>
 							</tr>
 							contadorInfracciones++;
 						}
@@ -448,9 +450,9 @@
 				else
 				{
 					<tr>
-						<td><p class="s2">@contadorVehiculo</p></td>
-						<td><p class="s2">@item.folioInfraccion</p></td>
-						<td><p class="s2">---</p></td>
+						<td><p style="width:10px!important">@contadorVehiculo</p></td>
+						<td><p style="width:100px!important">@item.folioInfraccion (@item.garantia)</p></td>
+						<td><p  style="width:100px!important">---</p></td>
 					</tr>
 				}
 

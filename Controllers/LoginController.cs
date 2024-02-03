@@ -36,14 +36,18 @@ namespace GuanajuatoAdminUsuarios.Controllers
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IBitacoraService _bitacoraServices;
         private readonly ICatDelegacionesOficinasTransporteService _catDelegacionesOficinasTransporteService;
+		private readonly IPensionesService _pensionesService;
 
-        public LoginController(IHttpClientFactory httpClientFactory, IBitacoraService bitacoraService, ICatDelegacionesOficinasTransporteService catDelegacionesOficinasTransporteService)
+		public LoginController(IHttpClientFactory httpClientFactory, IBitacoraService bitacoraService, ICatDelegacionesOficinasTransporteService catDelegacionesOficinasTransporteService,
+		   IPensionesService pensionesService )
         {
             _httpClientFactory = httpClientFactory;
             _bitacoraServices = bitacoraService;
             _catDelegacionesOficinasTransporteService = catDelegacionesOficinasTransporteService;
-        }
-        /* [HttpPost]
+			_pensionesService = pensionesService;
+
+		}
+		/* [HttpPost]
          public async Task<IActionResult> ConsumirServicio(string usuario, string contrasena)
          {
              try
@@ -181,7 +185,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                return View("ErrorView", oReply);
            }*/
-        [HttpPost]
+		[HttpPost]
         public async Task<IActionResult> IniciarSesion(string usuario, string contrasena)
         {
             try
@@ -212,18 +216,36 @@ namespace GuanajuatoAdminUsuarios.Controllers
                         {
                             string nombre = json[0].nombre;
                             string oficina = json[0].oficina;
-                           string idDependenciaStr = json[0].tipo_oficina;
+                            string idDependenciaStr = json[0].tipo_oficina;
 
-                                if (int.TryParse(idDependenciaStr, out int idDependencia))
+                            if (int.TryParse(idDependenciaStr, out int idDependencia))
+                            {
+                                if (idDependencia == 2)
                                 {
-                                    HttpContext.Session.SetInt32("IdDependencia", idDependencia);
-
+                                    HttpContext.Session.SetInt32("IdDependencia", 0);
                                 }
                                 else
                                 {
+                                    HttpContext.Session.SetInt32("IdDependencia", idDependencia);
+                                }
+                            }
+                            else
+                            {
+                                // Manejo para el caso en que no se pueda convertir a entero
+                            }
+                            string strIdPension = json[0].clave_pension;
+							if (int.TryParse(strIdPension, out int idPension))
+							{
+								HttpContext.Session.SetInt32("IdPension", idPension);
 
-                                }                           
-                             string idOficinaStr = json[0].clave_oficina;
+							}
+							else
+							{
+
+							}
+							string pension = _pensionesService.GetPensionLogin(idPension);
+
+							string idOficinaStr = json[0].clave_oficina;
                            // string idDependenciaStr = json[0].tipo_oficina;
                             string idUsuario = json[0].idUsuario;
                             string TipoOfi = json[0].tipo_oficina;
@@ -237,31 +259,50 @@ namespace GuanajuatoAdminUsuarios.Controllers
                             {
 
                             }
-
-                            //var nombreOficina = json[0].oficina;//_catDelegacionesOficinasTransporteService.GetDelegacionOficinaById(idOficina);
-                            await SignInUser(idUsuario,nombre,TipoOfi, oficina);
+							//var nombreOficina = json[0].oficina;//_catDelegacionesOficinasTransporteService.GetDelegacionOficinaById(idOficina);
+							await SignInUser(idUsuario,nombre,oficina,pension,TipoOfi);
 
                             //BITACORA.
                             //var user = Convert.ToDecimal(User.FindFirst(CustomClaims.IdUsuario).Value);
                             _bitacoraServices.insertBitacora(Convert.ToDecimal(idUsuario), ip, "Login", "Acceso", "select", Convert.ToDecimal(idUsuario));
                             
-                            string delegacion = Regex.Match(oficina, @"\|(.+)").Groups[1].Value.Trim();
+                            string delacion = Regex.Match(oficina, @"\|(.+)").Groups[1].Value.Trim();
 
                             List<RespuestaServicio> listaRespuestas = JsonConvert.DeserializeObject<List<RespuestaServicio>>(content);
                             string vectorString = listaRespuestas.FirstOrDefault()?.Vector;
-                            if (!string.IsNullOrEmpty(vectorString))
-                            {
-                                List<int> listaIdsPermitidos = vectorString.Split(',').Select(int.Parse).ToList();
+                            string autorizacionesString = listaRespuestas.FirstOrDefault()?.autorizaciones;
+                            List<int> listaPermisos = autorizacionesString
+                                  .Split(',')
+                                  .Where(s => !string.IsNullOrWhiteSpace(s)) // Filtrar cadenas vacías o nulas
+                                  .Select(int.Parse)
+                                  .ToList();
+
+                            string listaPermisosJson = JsonConvert.SerializeObject(listaPermisos);
+
+                            HttpContext.Session.SetString("IdsPermitidos", listaPermisosJson);
+
+                            List<int> listaIdsPermitidos = vectorString.Split(',').Select(int.Parse).ToList();
                                 string listaIdsPermitidosJson = JsonConvert.SerializeObject(listaIdsPermitidos);
+                            if (!string.IsNullOrEmpty(listaIdsPermitidosJson))
+                            {
+
+                              
 
                                 // Guardar la lista en la variable de sesión
                                 HttpContext.Session.SetString("IdsPermitidos", listaIdsPermitidosJson);
+                                HttpContext.Session.SetString("Autorizaciones", listaPermisosJson);
                                 HttpContext.Session.SetString("Nombre", nombre);
                                 HttpContext.Session.SetString("Oficina", oficina);
                                // HttpContext.Session.SetInt32("IdDependencia", idDependencia);
 
                                 return Json(listaIdsPermitidosJson);
                             }
+                            else
+                            {
+                                Console.WriteLine("VACIO");
+                            }
+
+                        
                         }
                     }
 
@@ -302,16 +343,18 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 
 
-        private async Task SignInUser(string idUsuario, string nombre,string perfil,string oficina)
+        private async Task SignInUser(string idUsuario, string nombre,string oficina,string pension, string TipoOfi)
         {
             var claims = new List<Claim>
             {
                 new Claim(CustomClaims.IdUsuario, idUsuario),
                 new Claim(CustomClaims.Nombre, nombre),
-				new Claim(CustomClaims.Perfil, perfil),
-                new Claim(CustomClaims.NombreOficina, oficina)
+				//new Claim(CustomClaims.Perfil, perfil),
+                new Claim(CustomClaims.NombreOficina, oficina),
+                new Claim(CustomClaims.TipoOficina, TipoOfi),
+                new Claim(CustomClaims.Pension, pension),
 
-            };           
+			};           
             
 
             var claimsIdentity = new ClaimsIdentity(

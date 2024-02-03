@@ -8,7 +8,7 @@
 					<i class="icon-involucrado h1 colorPrimary"></i>
 				</div>
 				<div class="col-md-9 my-3">
-					<h2 class="m-0 h3"><b>Datos de persona Involucrada</b></h2>
+					<h2 class="m-0 h3"><b>Datos de persona Involucradaxxxxxxxxxxxxxxx</b></h2>
 				</div>
 				<div class="col-auto">
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -25,7 +25,7 @@
 			</div>
 		</div><div class="col-md-6">
 			<div class="btnOutline btnOutlinePrimary px-4 my-3">
-				<button onclick="busquedaPersona()">
+				<button onclick="editarPersona()">
 					<h5 class="m-0"><i class="me-2 icon-addInvolucrado"></i><b>Editar</b></h5>
 				</button>
 			</div>
@@ -47,27 +47,28 @@
 							<h5 class="px-4"><b>Datos Personales</b></h5>
 						</div>
 						<div class="col-md-6">
-							<h6 class="px-4 text-muted" id="folio_infraccion"><b>Nombre:</b>@Model.nombre</h6>
-							<h6 class="px-4 text-muted"><b>Paterno:</b> @Model.apellidoPaterno</h6>
-							<h6 class="px-4 text-muted"><b>Materno:</b>@Model.apellidoMaterno</h6>
-							<h6 class="px-4 text-muted"><b>RFC:</b>@Model.RFC</h6>
-							<h6 class="px-4 text-muted"><b>CURP:</b>@Model.CURP</h6>
-							<h6 class="px-4 text-muted"><b>Sexo:</b> @Model.Sexo</h6>
-							<h6 class="px-4 text-muted"><b>Fecha naciemiento:</b>@Model.FechaNacimientoFormateada</h6>
+							<div hidden><h6 class="px-4 text-muted" id="IdPersona">@Model.IdPersona</h6></div>
+							<h6 class="px-4 text-muted"><b>Nombre: </b>@Model.nombre</h6>
+							<h6 class="px-4 text-muted"><b>Paterno: </b> @Model.apellidoPaterno</h6>
+							<h6 class="px-4 text-muted"><b>Materno: </b>@Model.apellidoMaterno</h6>
+							<h6 class="px-4 text-muted"><b>RFC: </b>@Model.RFC</h6>
+							<h6 class="px-4 text-muted"><b>CURP: </b>@Model.CURP</h6>
+							<h6 class="px-4 text-muted"><b>Sexo: </b> @Model.Sexo</h6>
+							<h6 class="px-4 text-muted"><b>Fecha naciemiento: </b>@Model.FechaNacimientoFormateada</h6>
 						</div>
 					</div>
 					<div class="col-md-6">
 						<h5 class="px-4"><b>Domicilio</b></h5>
 
 						<div class="col-md-6">
-							<h6 class="px-4 text-muted"><b>Entidad:</b>@Model.Entidad</h6>
-							<h6 class="px-4 text-muted"><b>Municipio:</b> @Model.Municipio</h6>
-							<h6 class="px-4 text-muted"><b>Calle:</b>@Model.Calle </h6>
-							<h6 class="px-4 text-muted"><b>Número:</b>@Model.Numero</h6>
-							<h6 class="px-4 text-muted"><b>Colonia:</b>@Model.Colonia</h6>
-							<h6 class="px-4 text-muted"><b>Teléfono:</b>@Model.Telefono</h6>
-							<h6 class="px-4 text-muted"><b>Correo:</b> @Model.Correo</h6>
-							<h6 class="px-4 text-muted"><b>No. Licencia:</b> @Model.numeroLicencia</h6>
+							<h6 class="px-4 text-muted"><b>Entidad: </b>@Model.Entidad</h6>
+							<h6 class="px-4 text-muted"><b>Municipio: </b> @Model.Municipio</h6>
+							<h6 class="px-4 text-muted"><b>Calle: </b>@Model.Calle </h6>
+							<h6 class="px-4 text-muted"><b>Número: </b>@Model.Numero</h6>
+							<h6 class="px-4 text-muted"><b>Colonia: </b>@Model.Colonia</h6>
+							<h6 class="px-4 text-muted"><b>Teléfono: </b>@Model.Telefono</h6>
+							<h6 class="px-4 text-muted"><b>Correo: </b> @Model.Correo</h6>
+							<h6 class="px-4 text-muted"><b>No. Licencia: </b> @Model.numeroLicencia</h6>
 						</div>
 					</div>
 
@@ -85,7 +86,7 @@
 			<label>Vehículo donde iba el involucrado durante el accidente:</label>
 		</div>
 	</div>
-	<div>
+	
 		<nav class="tabCustom">
 			<div class="nav nav-tabs row mx-0" id="nav-tab" role="tablist">
 				<button class="nav-link col active" id="vehiculo-involucrado-tab" data-bs-toggle="tab" data-bs-target="#vehiculo-involucrado" type="button" role="tab" aria-controls="vehiculo-involucrado" aria-selected="true">
@@ -158,7 +159,7 @@
 						<div class="controlForm my-3">
 							<label>Tipo <b>(obligatorio)</b>:</label>
 							<span>
-								<input type="hidden" id="idPersonaInput" name="idPersona" />
+							@Html.HiddenFor(model => model.IdPersona, new { id = "idPersonaInput1" })
 								@Html.HiddenFor(model => model.IdVehiculo, new { id = "idVehiculoHidden" })
 								@(Html.Kendo().DropDownListFor(t => t.IdTipoInvolucrado)
 									.DataTextField("Text")
@@ -314,11 +315,42 @@
 	</div>
 </div>
 
+<div class="modal fade modalCustom" id="modalCrearPersona" aria-labelledby="modalCrearPersona" aria-hidden="true">
+	<div class="modal-dialog modal-xl boxShadow modal-dialog-centered ">
+		<div class="modal-content">
+
+			<div class="modal-body" id="modalBodyCrearPersona">
+			</div>
+		</div>
+	</div>
+</div>
+
 <script>
+	function editarPersona() {
+		var id = document.getElementById('IdPersona').innerHTML;
+		showLoading();
+		$.ajax({
+			url: '@Url.Action("ajax_ModalEditarPersona")',
+			type: 'GET',
+			data: { id: id },
+			contentType: "application/json; charset=utf-8",
+			dataType: "html",
+			success: function (value) {
+				$('#modalBodyCrearPersona').html(value);
+				$('#modalCrearPersona').modal({ backdrop: 'static', keyboard: false });
+				$('#modalCrearPersona').modal('show');
+				hideLoading();
+			}, error: function () {
+				sitteg_warning("Ocurrio un error al procesar su solicitud.");
+				hideLoading();
+			}
+		});
+		event.stopPropagation();
+	}
 	function busquedaPersona() {
 		showLoading();
 		$.ajax({
-			url: '@Url.Action("SubmodalBuscarInvolucrado", "CapturaAccidentes")',
+			url: '@Url.Action("SubmodalBuscarInvolucradoPersona", "CapturaAccidentes")',
 			type: 'GET',
 			contentType: "application/json; charset=utf-8",
 			dataType: "html",
@@ -336,8 +368,9 @@
 	}
 
 	function agregarComplementos() {
-		var idPersona = $("#idPersonaInput").val();
+		var idPersona = $("#idPersonaInput1").val();
 		if (idPersona === "") {
+			console.log("VALP",idPersona)
 			sitteg_warning("Debe seleccionar una persona involucrada");
 			return;
 			var Mydata = $("#complementoInvolucradoForm").serialize();
@@ -391,11 +424,9 @@
 			data: { idPersona: idPersona, IdVehiculoInvolucrado: IdVehiculoInvolucrado },
 			success: function (response) {
 				sitteg_success("Se ha actualizado la información");
-				// Resto del código
 				hideLoading();
 			},
 			error: function (xhr, status, error) {
-				// Manejo del error
 				hideLoading();
 			}
 		});

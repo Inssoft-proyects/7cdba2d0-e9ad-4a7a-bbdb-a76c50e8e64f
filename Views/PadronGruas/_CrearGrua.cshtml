@@ -17,12 +17,12 @@
                                 <div class="controlForm">
                                     <label>Delegación:</label>
                                     @(Html.Kendo().DropDownList()
-                                        .Name("idDelegacion")
+                                        .Name("idDelegacion2")
                                         .BindTo((SelectList)ViewBag.CatDelegaciones)
                                         .OptionLabel("-- Seleccione --")
                                         .Filter(FilterType.Contains)
 
-                                        .HtmlAttributes(new { style = "width:100%;", id = "ddlDelegaciones" })
+                                        .HtmlAttributes(new { style = "width:100%;", id = "ddlDelegaciones2" })
                                         )
                                 </div>
                             </div>
@@ -185,7 +185,7 @@
     }
 
     $(document).ready(function () {
-        $("#ddlDelegaciones").on("change", function () {
+        $("#ddlDelegaciones2").on("change", function () {
             var value = $(this).val();
             if (value == "") {
                 $("#idConcesionario option[value!='']").remove();

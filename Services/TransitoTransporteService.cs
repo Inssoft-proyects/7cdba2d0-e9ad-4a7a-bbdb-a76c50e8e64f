@@ -229,7 +229,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     string condiciones = "";
 
                     condiciones += model.Placas.IsNullOrEmpty() ? "" : " AND d.placa LIKE '%' + @Placa + '%' ";
-                    condiciones += model.FolioSolicitud.IsNullOrEmpty() ? "" : " AND sol.folio LIKE '%' + @FolioSolicitud + '%' ";
+                    condiciones += model.FolioSolicitud.IsNullOrEmpty() ? "" : " AND d.folio LIKE '%' + @FolioSolicitud + '%' ";
                     condiciones += model.FolioInfraccion.IsNullOrEmpty() ? "" : " AND inf.folioInfraccion LIKE '%' + @FolioInfraccion + '%' ";
                     condiciones += model.Propietario.IsNullOrEmpty() ? "" : " AND veh.propietario LIKE '%' + @Propietario + '%' ";
                     condiciones += model.NumeroEconomico.IsNullOrEmpty() ? "" : " AND veh.numeroEconomico LIKE '%' + @numeroEconomico + '%' ";
@@ -239,13 +239,23 @@ namespace GuanajuatoAdminUsuarios.Services
                     condiciones += model.IdDependenciaGenera.Equals(null) || model.IdDependenciaGenera == 0 ? "" : " AND d.IdDependenciaGenera = @IdDependenciaGenera ";
                     condiciones += model.IdDependenciaTransito.Equals(null) || model.IdDependenciaTransito == 0 ? "" : " AND d.IdDependenciaTransito = @IdDependenciaTransito ";
                     condiciones += model.IdDependenciaNoTransito.Equals(null) || model.IdDependenciaNoTransito == 0 ? "" : " AND d.IdDependenciaNoTransito = @IdDependenciaNoTransito ";
+                    if (model.FechaIngreso != null || model.FechaIngresoFin != null)
+                    {
+                        condiciones += " AND (";
 
-                    if (model.FechaIngreso != DateTime.MinValue && model.FechaIngresoFin != DateTime.MinValue)
-                        condiciones += " AND inf.fechaInfraccion >= @fechaInicio AND inf.fechaInfraccion  <= @fechaFin ";
-                    else if (model.FechaIngreso != DateTime.MinValue && model.FechaIngresoFin == DateTime.MinValue)
-                        condiciones += " AND inf.fechaInfraccion >= @fechaInicio ";
-                    else if (model.FechaIngreso == DateTime.MinValue && model.FechaIngresoFin != DateTime.MinValue)
-                        condiciones += " AND inf.fechaInfraccion <= @fechaFin ";
+                        if (model.FechaIngreso != null)
+                            condiciones += "inf.fechaInfraccion >= @FechaInicio";
+
+                        if (model.FechaIngreso != null && model.FechaIngresoFin != null)
+                            condiciones += " AND ";
+
+                        if (model.FechaIngresoFin != null)
+                            condiciones += "inf.fechaInfraccion <= @FechaFin";
+
+                        condiciones += ")";
+                    }
+
+
 
                     string SqlTransact =
                                 @"SELECT d.iddeposito, d.idsolicitud, d.idDelegacion, d.idmarca, d.idsubmarca, d.idpension, d.idtramo,
@@ -286,9 +296,8 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.Add(new SqlParameter("@IdDependenciaTransito", SqlDbType.Int)).Value = (object)model.IdDependenciaTransito ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@IdDependenciaNoTransito", SqlDbType.Int)).Value = (object)model.IdDependenciaNoTransito ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@Estatus", SqlDbType.Int)).Value = (object)model.IdEstatus ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@FechaInico", SqlDbType.DateTime)).Value = (model.FechaIngreso == DateTime.MinValue) ? DBNull.Value : (object)model.FechaIngreso;
-                    command.Parameters.Add(new SqlParameter("@FechaFin", SqlDbType.DateTime)).Value = (model.FechaIngresoFin == DateTime.MinValue) ? DBNull.Value : (object)model.FechaIngresoFin;
-
+                    command.Parameters.Add(new SqlParameter("@FechaInicio", SqlDbType.DateTime)).Value = (model.FechaIngreso != null) ? (object)model.FechaIngreso : DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@FechaFin", SqlDbType.DateTime)).Value = (model.FechaIngresoFin != null) ? (object)model.FechaIngresoFin : DBNull.Value;
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
@@ -344,7 +353,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             transitoList.Add(transito);
 
                         }
-
+                       
                     }
 
                 }

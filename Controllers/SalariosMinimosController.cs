@@ -20,67 +20,41 @@ namespace GuanajuatoAdminUsuarios.Controllers
         DBContextInssoft dbContext = new DBContextInssoft();
         public IActionResult Index()
         {
-            int IdModulo = 940;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+          
                 var ListSalariosModel = GetSalarios();
 
             return View(ListSalariosModel);
             }
-            else
-            {
-                TempData["ErrorMessage"] = "Este usuario no tiene acceso a esta sección.";
-                return RedirectToAction("Principal", "Inicio", new { area = "" });
-            }
-
-        }
+    
 
 
 
         #region Modal Action
         public ActionResult IndexModal()
         {
-            var ListSalariosModel = GetSalarios();
-            //return View("IndexModal");
-            return View("Index", ListSalariosModel);
-        }
+           
+                var ListSalariosModel = GetSalarios();
+                //return View("IndexModal");
+                return View("Index", ListSalariosModel);
+            }
 
-        [HttpPost]
+
+            [HttpPost]
         public ActionResult AgregarSalarioPacial()
         {
-            int IdModulo = 941;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+           
                 return PartialView("_Crear");
             }
-            else
-            {
-                TempData["ErrorMessage"] = "El usuario no tiene permisos suficientes para esta acción.";
-                return PartialView("ErrorPartial");
-            }
-        }
+      
 
         [HttpPost]
         public ActionResult EditarSalarioParcial(int IdSalario)
         {
-            int IdModulo = 942;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+          
                 var salariosModel = GetSalarioByID(IdSalario);
             return View("_Editar", salariosModel);
             }
-            else
-            {
-                TempData["ErrorMessage"] = "El usuario no tiene permisos suficientes para esta acción.";
-                return PartialView("ErrorPartial");
-            }
-        }
+      
 
         [HttpPost]
         public ActionResult EliminarSalarioParcial(int IdSalario)

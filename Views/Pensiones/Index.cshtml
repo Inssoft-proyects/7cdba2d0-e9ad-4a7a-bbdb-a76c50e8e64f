@@ -1,7 +1,49 @@
 ﻿@model List<PensionModel>
 @{
-
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+    var listaIdsPermitidosJson = @HttpContextAccessor.HttpContext.Session.GetString("IdsPermitidos").ToString();
+    var autorizaciones = @HttpContextAccessor.HttpContext.Session.GetString("Autorizaciones").ToString();
 }
+
+<script>
+    $(document).ready(function () {
+        var access = @listaIdsPermitidosJson;
+        var auth = @autorizaciones;
+
+        if (access != undefined && access != '') {
+            if (!access.toString().includes(localStorage.getItem("menuId"))) {
+                Swal.fire({
+                    icon: "error",
+                    title: "¡El usuario no tiene acceso a esta opción!"
+                });
+                setTimeout(function () {
+                    window.location.href = "/Principal";
+                }, 200);
+            } else {
+                // BUSQUEA
+                if (!auth.toString().includes("271")) {
+                    $("#btnBucarPension").prop('disabled', true).css({ "opacity": "0.3" });
+                }
+                //AGREGAR
+                if (!auth.toString().includes("273")) {
+                    $("#btnNuevaGrua").prop('disabled', true).css({ "opacity": "0.3" });
+                }
+           
+
+            }
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "¡El usuario no tiene acceso a esta opción!"
+            });
+            setTimeout(function () {
+                window.location.href = "/Principal";
+            }, 200);
+        }
+    });
+
+
+</script>
 
 <div class="mainContainer bg-light">
     <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
@@ -55,7 +97,7 @@
 
             <div class="col-12 col-md-6 col-lg-3 my-3">
                 <div class="controlButton">
-                    <button class="btnPrimary" type="button" onclick="btnBuscarPension()">  <h5 class="m-0"><b>Buscar</b></h5></button>
+                    <button id="btnBucarPension" class="btnPrimary" type="button" onclick="btnBuscarPension()">  <h5 class="m-0"><b>Buscar</b></h5></button>
 
                 </div>
             </div>
@@ -143,6 +185,19 @@
 
 
 <script>
+
+    $(document).ready(function () {
+        var auth = @autorizaciones;
+        var grid = $("#GridP").data("kendoGrid");
+
+        if (!auth.toString().includes("275")) {
+           // grid.hideColumn(9); 
+            $("#btnEditarPension").prop('disabled', true).css({ "opacity": "0.3" });
+
+        }
+
+    });
+
     $(document).ready(function () {
         $("#modalCrearPension").on("show.bs.modal shown.bs.modal", function (e) {
             $("body").removeClass("modal-open").find(".modal-backdrop").remove();
@@ -190,8 +245,9 @@
             contentType: "application/json; charset=utf-8",
             dataType: "html",
             success: function (data) {
-                if (data.error) {
-                    sitteg_warning("El usuario no tienen los permisos para esta acción");
+                if (data.includes("no tiene permisos")) {
+                    sitteg_warning("El usuario no tiene permisos suficientes para esta acción.");
+                    hideLoading();
                 } else {
                 $('#modalBodyCrearPension').html(data);
                 $('#modalCrearPension').modal({ backdrop: 'static', keyboard: false });

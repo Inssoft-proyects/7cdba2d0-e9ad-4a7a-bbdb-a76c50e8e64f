@@ -256,7 +256,7 @@ namespace GuanajuatoAdminUsuarios.Services
             return Vehiculo;
         }
 
-        public AsignacionGruaModel BuscarSolicitudPord(int iSo, int idOficina)
+        public AsignacionGruaModel BuscarSolicitudPord(string iSo, int idOficina)
         {
             AsignacionGruaModel solicitud = new AsignacionGruaModel();
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
@@ -265,9 +265,9 @@ namespace GuanajuatoAdminUsuarios.Services
                 {
                     connection.Open();
 
-                    // Consulta para buscar si el idSolicitud ya existe en la tabla depositos
-                    SqlCommand searchCommand = new SqlCommand("SELECT idSolicitud,idDeposito,folio,observaciones,numeroInventario,inventario FROM depositos WHERE idSolicitud = @idSolicitud", connection);
-                    searchCommand.Parameters.Add(new SqlParameter("@idSolicitud", SqlDbType.Int)).Value = iSo;
+                    // Consulta para buscar si el folio ya existe en la tabla depositos
+                    SqlCommand searchCommand = new SqlCommand("SELECT idSolicitud,idDeposito,folio,observaciones,numeroInventario,inventario FROM depositos WHERE folio = @FolioSolicitud", connection);
+                    searchCommand.Parameters.Add(new SqlParameter("@FolioSolicitud", SqlDbType.NVarChar)).Value = iSo;
 
                     // Ejecutar la consulta de búsqueda
                     using (SqlDataReader searchReader = searchCommand.ExecuteReader())
@@ -275,7 +275,7 @@ namespace GuanajuatoAdminUsuarios.Services
                         // ...
                         if (searchReader.Read())
                         {
-                            solicitud.idSolicitud = iSo;
+                            solicitud.idSolicitud = int.Parse(searchReader["idSolicitud"].ToString());
                             solicitud.FolioSolicitud = searchReader["folio"].ToString();
                             solicitud.observaciones = searchReader["observaciones"].ToString();
                             solicitud.numeroInventario = searchReader["numeroInventario"].ToString();
@@ -307,8 +307,8 @@ namespace GuanajuatoAdminUsuarios.Services
                     SqlCommand command = new SqlCommand("SELECT sol.idSolicitud,sol.fechaSolicitud,sol.folio,sol.idPropietarioGrua,sol.idPension,sol.idTramoUbicacion, " +
                                                         "sol.vehiculoKm " +
                                                         "FROM solicitudes AS sol " +
-                                                        "WHERE idSolicitud = @idSolicitud", connection);
-                    command.Parameters.Add(new SqlParameter("@idSolicitud", SqlDbType.Int)).Value = iSo;
+                                                        "WHERE folio = @FolioSolicitud", connection);
+                    command.Parameters.Add(new SqlParameter("@FolioSolicitud", SqlDbType.NVarChar)).Value = iSo;
 
                     command.CommandType = System.Data.CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
@@ -472,8 +472,8 @@ namespace GuanajuatoAdminUsuarios.Services
                 try
                 {
                     connection.Open();
-                    string query = "INSERT INTO gruasAsignadas (fechaArribo,fechaInicio,fechaFinal,operadorGrua,abanderamiento,arrastre,salvamento,idGrua,minutosManiobra,idSolicitud,idDeposito,actualizadoPor,fechaActualizacion,estatus)" +
-                                    "VALUES(@fechaArribo,@fechaInicio,@fechaFinal,@operadorGrua,@abanderamiento,@arrastre,@salvamento,@idGrua,@minutosManiobra,@idSolicitud,@idDeposito,@actualizadoPor,@fechaActualizacion,@estatus)";
+                    string query = "INSERT INTO gruasAsignadas (fechaArribo,fechaInicio,fechaFinal,operadorGrua,abanderamiento,arrastre,salvamento,idGrua,minutosManiobra,idDeposito,actualizadoPor,fechaActualizacion,estatus)" +
+                                    "VALUES(@fechaArribo,@fechaInicio,@fechaFinal,@operadorGrua,@abanderamiento,@arrastre,@salvamento,@idGrua,@minutosManiobra,@idDeposito,@actualizadoPor,@fechaActualizacion,@estatus)";
 
 
                     SqlCommand command = new SqlCommand(query, connection);
@@ -487,7 +487,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.AddWithValue("@salvamento", salvamento);
                     command.Parameters.AddWithValue("@minutosManiobra", int.Parse(formData["tiempoManiobras"].ToString()));
                     command.Parameters.AddWithValue("@idDeposito", iDep);
-                    command.Parameters.AddWithValue("@idSolicitud", iSo);
+                    //command.Parameters.AddWithValue("@idSolicitud", iSo);
 
                     command.Parameters.AddWithValue("@fechaActualizacion", DateTime.Now);
                     command.Parameters.AddWithValue("@actualizadoPor", 1);

@@ -30,7 +30,7 @@
             .ServerOperation(false)
             )
             .NoRecords(noRecords => noRecords.Template("No se encontrarón registros. Realice la búsqueda nuevamente."))
-            .ToolBar(t => t.Search())
+        .ToolBar(t => t.Search().Text("Buscar..."))
             .Search(s =>
             {
                 s.Field(c => c.municipio);

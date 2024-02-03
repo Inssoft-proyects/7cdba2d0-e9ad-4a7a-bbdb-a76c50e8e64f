@@ -1,7 +1,50 @@
 ﻿@model IEnumerable<Gruas2Model>
 @{
     var errorMessage = TempData["ErrorMessage"] as string;
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+    var listaIdsPermitidosJson = @HttpContextAccessor.HttpContext.Session.GetString("IdsPermitidos").ToString();
+    var autorizaciones = @HttpContextAccessor.HttpContext.Session.GetString("Autorizaciones").ToString();
 }
+
+<script>
+    $(document).ready(function () {
+        var access = @listaIdsPermitidosJson;
+        var auth = @autorizaciones;
+
+        if (access != undefined && access != '') {
+            if (!access.toString().includes(localStorage.getItem("menuId"))) {
+                Swal.fire({
+                    icon: "error",
+                    title: "¡El usuario no tiene acceso a esta opción!"
+                });
+                setTimeout(function () {
+                    window.location.href = "/Principal";
+                }, 200);
+            } else {
+                // BUSQUEDA
+                if (!auth.toString().includes("281")) {
+                    $("#btnBuscarGrua").prop('disabled', true).css({ "opacity": "0.3" });
+                }
+                //AGREGAR
+                if (!auth.toString().includes("283")) {
+                    $("#btnNuevaGrua").prop('disabled', true).css({ "opacity": "0.3" });
+                }
+
+
+            }
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "¡El usuario no tiene acceso a esta opción!"
+            });
+            setTimeout(function () {
+                window.location.href = "/Principal";
+            }, 200);
+        }
+    });
+
+
+</script>
 <head>
     <script></script>
 </head>
@@ -92,7 +135,7 @@
 
             <div class="col-12 my-3 col-md-6 col-lg-3">
                 <div class="controlButton">
-                    <button class="btnPrimary" type="button" onclick="submitSearch()">  <h5 class="m-0"><b>Buscar</b></h5></button>
+                    <button id="btnBuscarGrua" class="btnPrimary" type="button" onclick="submitSearch()">  <h5 class="m-0"><b>Buscar</b></h5></button>
 
                 </div>
             </div>
@@ -162,8 +205,9 @@
             contentType: "application/json; charset=utf-8",
             dataType: "html",
             success: function (data) {
-                if (data.error) {
-                    sitteg_warning("El usuario no tienen los permisos para esta acción");
+                if (data.includes("no tiene permisos")) {
+                    sitteg_warning("El usuario no tiene permisos suficientes para esta acción.");
+                    hideLoading();
                 } else {
                 $('#ModalBodyCreate').html(data);
                 $('#addGrua').modal('show');
@@ -190,8 +234,13 @@
                 "idConcesionario": idConcesionario
             },
             success: function (data) {
+                if (data.includes("no tiene permisos")) {
+                    sitteg_warning("El usuario no tiene permisos suficientes para esta acción.");
+                    hideLoading();
+                } else {
                 $("#listadoGruas").html(data);
                 hideLoading();
+                }
             },
             error: function (xhr, status) {
                 hideLoading();

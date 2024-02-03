@@ -69,14 +69,15 @@ namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
             if (ColumnsNames.Count == size)
             {
 
-                float[] headers = new float[(size)];
-                var porcentHeader = (float)100 / size;
-                for (int i = 0; i < size; i++)
-                {
-                    headers[i] = porcentHeader;
-                }
+				//float[] headers = new float[(size)];
+				//var porcentHeader = (float)100 / size;
+				//for (int i = 0; i < size; i++)
+				//{
+				//    headers[i] = porcentHeader;
+				//}
 
-                tableLayout.SetWidths(headers);
+				tableLayout.SetWidths(new float[] { 70f, 240f, 200f, 90f });
+				//tableLayout.SetWidths(headers);
                 tableLayout.WidthPercentage = 100;
                 tableLayout.HeaderRows = 1;
                 tableLayout.SpacingBefore = 2f;
@@ -95,9 +96,13 @@ namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
                     {
                         foreach (var item in ColumnsNames)
                         {
+                            bool isNumeric = false;
                             PropertyInfo property = type.GetProperty(item.Key);
-                            var value = property.GetValue(objectItem);
-                            AddCellToBody(tableLayout, count, Convert.ToString(value));
+                            if (item.Key.ToLower() == "calificacion")
+                                isNumeric = true;
+
+							var value = property.GetValue(objectItem);
+                            AddCellToBody(isNumeric, tableLayout, count, Convert.ToString(value));
                         }
                         count++;
                     }
@@ -115,23 +120,29 @@ namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
             });
         }
 
-        private static void AddCellToBody(PdfPTable tableLayout, int count, string cellText = null)
+        private static void AddCellToBody(bool isNumeric, PdfPTable tableLayout, int count, string cellText = null )
         {
-            if (count % 2 == 0)
+            var _value = "";
+			if (isNumeric)
+				_value = Convert.ToDecimal(cellText).ToString("###,###,###.00");
+            else 
+                _value = cellText;
+
+			if (count % 2 == 0)
             {
-                tableLayout.AddCell(new PdfPCell(new Phrase(cellText, new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL, BaseColor.BLACK)))
+                tableLayout.AddCell(new PdfPCell(new Phrase(_value, new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL, BaseColor.BLACK)))
                 {
-                    HorizontalAlignment = Element.ALIGN_CENTER,
+                    HorizontalAlignment = !isNumeric ?  Element.ALIGN_CENTER : Element.ALIGN_RIGHT,
                     Padding = 5,
 
                 });
             }
             else
             {
-                tableLayout.AddCell(new PdfPCell(new Phrase(cellText, new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL, BaseColor.BLACK)))
+                tableLayout.AddCell(new PdfPCell(new Phrase(_value, new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL, BaseColor.BLACK)))
                 {
-                    HorizontalAlignment = Element.ALIGN_CENTER,
-                    Padding = 5,
+					HorizontalAlignment = !isNumeric ? Element.ALIGN_CENTER : Element.ALIGN_RIGHT,
+					Padding = 5,
                 });
             }
         }

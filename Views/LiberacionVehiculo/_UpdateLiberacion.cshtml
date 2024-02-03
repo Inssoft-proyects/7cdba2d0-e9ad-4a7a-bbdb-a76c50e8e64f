@@ -36,11 +36,9 @@
         <div class="controlForm mb-3">
             <label><b>Fecha ingreso:</b></label>
             <span>
-                 @(Html.Kendo().DatePickerFor(t => t.FechaIngreso).Max(DateTime.Now)
-                        .Format("dd/MM/yyyy")
-                        .Culture("es-ES")
-                        .HtmlAttributes(new { style = "width: 100%"})
-                        ) 
+                 @Html.DisplayFor(t => t.FechaIngreso,new {@class=""})
+                        
+                         
             </span>
         </div>
     </div>
@@ -195,7 +193,6 @@
             <label>Nombre de quien Autoriza <b>(obligatorio)</b>:</label>
             <span>
                 @(Html.Kendo().TextBoxFor(m => m.Autoriza)
-                    .Label(l => l.Content("Nombre de quien Autoriza: <b>(obligatorio)</b>:"))
                     .HtmlAttributes(new { style = "width: 100%", type = "text", id = "txtAutoriza", required = "required" })
                     )
             </span>

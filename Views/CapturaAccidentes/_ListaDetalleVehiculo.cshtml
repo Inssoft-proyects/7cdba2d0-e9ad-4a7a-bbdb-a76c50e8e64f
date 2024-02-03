@@ -92,7 +92,7 @@
             .PageSize(5).Model(model => model.Id(p => p.IdVehiculo))
         )
             .NoRecords(noRecords => noRecords.Template("Realice una busqueda o revise los datos ingresados"))
-            .ToolBar(t => t.Search())
+            .ToolBar(t => t.Search().Text("Buscar..."))
             .Search(s =>
             {
                 s.Field(c => c.Marca);

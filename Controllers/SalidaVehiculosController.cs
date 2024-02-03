@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Intrinsics.Arm;
@@ -33,7 +34,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+                return View();
         }
         public JsonResult Marcas_Read()
         {
@@ -42,19 +43,27 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
         public JsonResult Placas_Read()
         {
-            int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
-            var result = new SelectList(_placaServices.GetPlacasByDelegacionId(idOficina), "IdDepositos", "Placa");
+            //int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+            int idPension = HttpContext.Session.GetInt32("IdPension") ?? 0;
+
+            var result = new SelectList(_placaServices.GetPlacasByDelegacionId(idPension), "IdDepositos", "Placa");
             return Json(result);
         }
         public IActionResult ajax_BusquedaIngresos(SalidaVehiculosModel model)
         {
-            var listaDepositos = _salidaVehiculosService.ObtenerIngresos(model);
-            return Json(listaDepositos);
-        }
-        public IActionResult DatosDeposito(int iDp)
+           
+                int idPension = HttpContext.Session.GetInt32("IdPension") ?? 0;
+
+                var listaDepositos = _salidaVehiculosService.ObtenerIngresos(model, idPension);
+                return Json(listaDepositos);
+            }
+           
+            public IActionResult DatosDeposito(int iDp)
         {
             HttpContext.Session.SetInt32("idDeposito", iDp);
-            var infoDeposito = _salidaVehiculosService.DetallesDeposito(iDp);
+            int idPension = HttpContext.Session.GetInt32("IdPension") ?? 0;
+
+            var infoDeposito = _salidaVehiculosService.DetallesDeposito(iDp, idPension);
 
             return View(infoDeposito);
         }

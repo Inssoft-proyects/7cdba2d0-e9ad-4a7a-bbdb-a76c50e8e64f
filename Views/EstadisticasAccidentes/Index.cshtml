@@ -1,5 +1,35 @@
 ﻿@model BusquedaAccidentesModel
+@{
+	@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+	var listaIdsPermitidosJson = @HttpContextAccessor.HttpContext.Session.GetString("IdsPermitidos").ToString();
+	var autorizaciones = @HttpContextAccessor.HttpContext.Session.GetString("Autorizaciones").ToString();
+}
 
+<script>
+	$(document).ready(function () {
+		var access = @listaIdsPermitidosJson;
+		if (access != undefined && access != '') {
+			if (!access.toString().includes(localStorage.getItem("menuId"))) {
+				Swal.fire({
+					icon: "error",
+					title: "¡EL usuario no tiene acceso a esta opción!"
+				});
+				setTimeout(() => {
+					window.location.href = "/Principal";
+				}, 200);
+			}
+		} else {
+			Swal.fire({
+				icon: "error",
+				title: "¡EL usuario no tiene acceso a esta opción!"
+			});
+			setTimeout(() => {
+				window.location.href = "/Principal";
+			}, 200);
+		}
+	});
+
+</script>
 <div class="mainContainer bg-light">
 	<section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
 		<div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
@@ -92,8 +122,20 @@
 						@(Html.Kendo().DropDownListFor(m => m.IdTipoServicio).Filter(FilterType.Contains)
 							.BindTo((SelectList)ViewBag.CatTipoServicio)
 							.OptionLabel("-- Seleccione --")
-							.HtmlAttributes(new { style = "width:100%;" })
+							.HtmlAttributes(new { style = "width:100%;", id = "ddlTipoServicio" })
 							)
+					</div>
+				</div>
+				<div class="form-group col-12 col-md-6 col-lg-3">
+					<div class="controlForm mb-3">
+						<label>Subtipo servicio:</label>
+						<div id="divSubtipo">
+						@(Html.Kendo().DropDownListFor(m => m.IdSubtipoServicio).Filter(FilterType.Contains)
+							.BindTo((SelectList)ViewBag.CatSubtipoServicio)
+							.OptionLabel("-- Seleccione --")
+							.HtmlAttributes(new { style = "width:100%;", id = "ddlSubtipoServicio" })
+							)
+						</div>
 					</div>
 				</div>
 				<div class="form-group col-12 col-md-6 col-lg-3">
@@ -110,10 +152,10 @@
 					<div class="controlForm">
 						<label>Tipo licencia:</label>
 				@(Html.Kendo().DropDownListFor(m => m.idTipoLicencia).Filter(FilterType.Contains)
-							.BindTo((SelectList)ViewBag.CatTipoLicencia)
-							.OptionLabel("-- Seleccione --")
-							.HtmlAttributes(new { style = "width:100%;" })
-							)
+								.BindTo((SelectList)ViewBag.CatTipoLicencia)
+								.OptionLabel("-- Seleccione --")
+								.HtmlAttributes(new { style = "width:100%;" })
+								)
 					</div>
 				</div>-->
 				<div class="form-group col-12 col-md-6 col-lg-3">
@@ -153,8 +195,8 @@
 						@(Html.Kendo().DatePickerFor(t => t.FechaInicio).Max(DateTime.Now)
 							.Format("dd/MM/yyyy")
 							.Culture("es-ES")
-							.HtmlAttributes(new { style = "width: 100%", title = "datepicker",id="start" })
-							.Events(e => e.Change("validarFecha")) 							)
+							.HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "start" })
+							.Events(e => e.Change("validarFecha")))
 					</div>
 					<div id="mensajeError1" style="color: red;"></div>
 				</div>
@@ -164,7 +206,7 @@
 						@(Html.Kendo().DatePickerFor(t => t.FechaFin).Max(DateTime.Now)
 							.Format("dd/MM/yyyy")
 							.Culture("es-ES")
-							.HtmlAttributes(new { style = "width: 100%", title = "datepicker", id="end" }))
+							.HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "end" }))
 					</div>
 				</div>
 
@@ -185,43 +227,70 @@
 				</div>
 			</div>
 		</form>
-			<div id="estadisticasInfracciones">
-				<partial name="_EstadisticasAccidentes" model="@ViewBag.Estadisticas" />
-			</div>
-			<div class="row my-4 px-4" id="GridAccidentesPorAccidente">
-				<partial name="_ListadoAccidentesPorAccidente" model="@ViewBag.ListadoAccidentesPorAccidente" />
-			</div>
-			<div class="row my-4 px-4" id="GridAccidentesPorVehiculo">
-				<partial name="_ListadoAccidentesPorVehiculo" model="@ViewBag.ListadoAccidentesPorVehiculo" />
-			</div>
+		<div id="estadisticasInfracciones">
+			<partial name="_EstadisticasAccidentes" model="@ViewBag.Estadisticas" />
+		</div>
+		<div class="row my-4 px-4" id="GridAccidentesPorAccidente">
+			<partial name="_ListadoAccidentesPorAccidente" model="@ViewBag.ListadoAccidentesPorAccidente" />
+		</div>
+		<div class="row my-4 px-4" id="GridAccidentesPorVehiculo">
+			<partial name="_ListadoAccidentesPorVehiculo" model="@ViewBag.ListadoAccidentesPorVehiculo" />
+		</div>
 	</section>
 </div>
 
 <script>
-
 	function submitSearch() {
 		var Mydata = $("#frmBusquedaEstadisticasIncidencias").serialize();
-		//console.log(Mydata);
 		showLoading();
+
 		$.ajax({
 			url: '@Url.Action("ajax_BusquedaAccidentes")',
 			type: 'POST',
 			data: Mydata,
 			success: function (result) {
-				$("#estadisticasInfracciones").html(result);
-				hideLoading();
-			}, error: function () {
-				sitteg_warning("Ocurrio un error al procesar su solicitud.");
+				console.log("SD",result)
+				if (result.includes("no tiene permisos")) {
+					sitteg_warning("El usuario no tiene permisos suficientes para esta acción.");
+					hideLoading();
+				} else {
+					$.ajax({
+						data: Mydata,
+						url: '@Url.Action("ajax_BusquedaParaTablas")',
+						type: 'POST',
+						dataType: 'json',
+						success: function (result) {
+							$("#gridListadoAccidentesPorAccidente").data("kendoGrid").dataSource.data(result.EstadisticasPorAccidente);
+							$("#gridListadoAccidentesPorVehiculo").data("kendoGrid").dataSource.data(result.EstadisticasPorVehiculo);
+						},
+						error: function () {
+							sitteg_warning("Ocurrió un error al obtener estadísticas.");
+						},
+						complete: function () {
+							hideLoading();
+						}
+					});
+				}
+			},
+			error: function () {
+				sitteg_warning("Ocurrió un error en la búsqueda, inténtelo de nuevo más tarde.");
 				hideLoading();
 			}
 		});
 	}
 
 
+
 	$("#ddlFactores").on("change", function () {
 		var value = $(this).val();
 		_set_combo_catalog("CatFactoresOpcionesAccidentesByFilter", value, "idFactorOpcionAccidente", "false", "divFactorOpcion", "");
 		$('#idFactorAccidente').kendoDropDownList();
+
+	});
+	$("#ddlTipoServicio").on("change", function () {
+		var value = $(this).val();
+		_set_combo_catalog("CatSubtipoServicioFilter", value, "idSubtipoServicio", "false", "divSubtipo", "");
+		$('#IdTipoServicio').kendoDropDownList();
 
 	});
 	$(document).ready(function () {
@@ -245,7 +314,7 @@
 		if (fechaInicio > currentDate || (fechaInicio && fechaFin && fechaFin < fechaInicio)) {
 			if (fechaInicio > currentDate) {
 				mostrarMensajeError("La fecha de inicio no puede ser futura. Por favor, seleccione una fecha válida.");
-				 fechaInicioPicker.value(null); 
+				fechaInicioPicker.value(null);
 			} else {
 				mostrarMensajeError("La fecha de fin no puede ser anterior a la fecha de inicio.");
 				fechaFinPicker.value(null);

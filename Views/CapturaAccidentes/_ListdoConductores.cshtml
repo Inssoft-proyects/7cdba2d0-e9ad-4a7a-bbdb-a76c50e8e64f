@@ -71,7 +71,7 @@
             .Read(read => read.Action("BuscarConductor", "CapturaAccidentes"))
             .ServerOperation(false)
             )
-            .ToolBar(t => t.Search())
+            .ToolBar(t => t.Search().Text("Buscar..."))
             .Search(s =>
             {
                 s.Field(c => c.nombre);

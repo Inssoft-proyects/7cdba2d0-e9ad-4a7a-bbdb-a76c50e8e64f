@@ -1,7 +1,50 @@
 ﻿@model TransitoTransporteBusquedaModel
+@{
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+    var listaIdsPermitidosJson = @HttpContextAccessor.HttpContext.Session.GetString("IdsPermitidos").ToString();
+    var autorizaciones = @HttpContextAccessor.HttpContext.Session.GetString("Autorizaciones").ToString();
+}
+
+<script>
+ /*   $(document).ready(function () {
+        var access = @listaIdsPermitidosJson; 
+        var auth = @autorizaciones;
+        console.log(auth);
+        if (access != undefined && access != '') {
+            if (!access.toString().includes(localStorage.getItem("menuId"))) {
+                Swal.fire({
+                    icon: "error",
+                    title: "¡El usuario no tiene acceso a esta opción!"
+                });
+                setTimeout(function () {
+                    window.location.href = "/Principal";
+                }, 200);
+            } else {
+                // BUSQUEDA
+               if (!auth.toString().includes("202")) {
+                    $("#btnBuscar").prop('disabled', true).css({ "opacity": "0.3" });
+               }
+                //IMPRIMIR
+                 if (!auth.toString().includes("203")) {
+                    $("#btnPDFTransito").prop('disabled', true).css({ "opacity": "0.3" });
+                    $("#btnExcelTransito").prop('disabled', true).css({ "opacity": "0.3" });
+                }
+
+            }
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "¡El usuario no tiene acceso a esta opción!"
+            });
+            setTimeout(function () {
+                window.location.href = "/Principal";
+            }, 200);
+        }
+    });*/
 
 
-    <script>
+
+
         function submitSearch() {
             var Mydata = $("#frmSearch").serialize();
             //console.log(Mydata);
@@ -26,6 +69,7 @@
 
 
         function downLoadPdfFiltered() {
+
             var data = {
                 Placas: $('#txtPlacas').val(),
                 FolioSolicitud: $('#txtFolioSolicitud').val(),
@@ -43,6 +87,7 @@
             };
             var json = JSON.stringify(data);
             window.location = '/TransitoTransporte/CreatePdf?data=' + json;
+     
         }
 
     </script>
@@ -294,7 +339,7 @@
 
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="controlButton my-3">
-                    <button class="btnPrimary" type="button" onclick="submitSearch()">  <h5 class="m-0"><b>Buscar</b></h5></button>
+                    <button id="btnBuscar" class="btnPrimary" type="button" onclick="submitSearch()">  <h5 class="m-0"><b>Buscar</b></h5></button>
 
                     @* @(Html.Kendo().Button()
                     .Name("BuscarVehiculo")
@@ -304,8 +349,8 @@
             </div>
 
             <div class="col-12 col-md-6 col-lg-3">
-                <div class=" btnOutline btnOutlinePrimary controlButton my-3">
-                    <button class=" " type="button" onclick="downLoadPdfFiltered()">  <h5 class="m-0"><i class='icon-data m-0'></i>&nbsp;&nbsp<b>Reporte</b></h5></button>
+                <div  class=" btnOutline btnOutlinePrimary controlButton my-3">
+                    <button id="btnPDFTransito" class=" " type="button" onclick="downLoadPdfFiltered()">  <h5 class="m-0"><i class='icon-data m-0'></i>&nbsp;&nbsp<b>Reporte</b></h5></button>
 
                     @*<button type="button" class='btnPrimary'>@Html.ActionLink("Reporte",  "CreatePdf","TransitoTransporte", new{Placas=Model.Placas}, new {@class="m-0"})</button>*@
 
@@ -331,4 +376,21 @@
         var datePicker = $("#start").data("kendoDatePicker");
         datePicker.value(null);
     });
+    $(document).ready(function () {
+        var auth = @autorizaciones; 
+        var grid = $("#Grid").data("kendoGrid");
+
+        if (!auth.toString().includes("203")) {
+            grid.hideColumn(9);
+        }
+
+        if (!auth.toString().includes("206")) {
+            grid.hideColumn(11);
+        }
+
+        if (!auth.toString().includes("205")) {
+            grid.hideColumn(12);
+        }
+    });
+
 </script>

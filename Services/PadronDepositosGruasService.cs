@@ -204,7 +204,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             inner join depositos dep on c.IdConcesionario =dep.IdConcesionario
                             inner join pensiones p on dep.idPension= p.idPension
                             inner join catMunicipios m on p.idMunicipio = m.idMunicipio
-                        where  dep.estatus=1 AND p.estatus=1 AND( m.idMunicipio=@IdMunicipio OR c.IdConcesionario=@IdConcesionario 
+                        where  dep.estatus=1 AND p.estatus=1 OR( m.idMunicipio=@IdMunicipio OR c.IdConcesionario=@IdConcesionario 
                         OR p.idPension=@IdPension OR  tg.IdTipoGrua=@IdTipoGrua)
                         order by  g.IdGrua,c.IdConcesionario";
 

@@ -49,7 +49,6 @@
 				columns.Bound(c => c.Placa).Width(90);
 				columns.Bound(c => c.Serie).Width(90);
 				columns.Bound(c => c.Color).Width(90);
-				columns.Bound(c => c.Marca).Width(90);
 				columns.Bound(c => c.montoVehiculo).Format("{0:0}").Title("Monto").Width(90);
 				//columns.Command(c => c.Custom("Agregar monto").Click("modalAgregarmonto")).Width(100);
 				columns.Template(
@@ -68,7 +67,7 @@
 			.Ajax()
 			.Read(read => read.Action("ObtVehiculosInvol", "CapturaAccidentes"))
 			)
-			.ToolBar(t => t.Search())
+			.ToolBar(t => t.Search().Text("Buscar..."))
 			.Search(s =>
 			{
 				s.Field(c => c.TipoVehiculo);

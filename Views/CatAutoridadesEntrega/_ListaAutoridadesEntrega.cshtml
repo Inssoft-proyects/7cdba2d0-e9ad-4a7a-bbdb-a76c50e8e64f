@@ -23,7 +23,7 @@
             .Read(read => read.Action("GetAutEntrega", "CatAutoridadesEntrega"))
             .PageSize(5).Model(model => model.Id(p => p.IdAutoridadEntrega))
             )
-            .ToolBar(t => t.Search())
+            .ToolBar(t => t.Search().Text("Buscar..."))
             .Search(s =>
             {
                 s.Field(c => c.AutoridadEntrega);

@@ -6,7 +6,7 @@ namespace GuanajuatoAdminUsuarios.Models
 {
     public class SalidaVehiculosModel
     {
-        public int idDeposito { get; set; }
+        public int? idDeposito { get; set; }
         public int idVehiculo { get; set; }
         public string serie { get; set; }
         public string tipoVehiculo { get; set; }
@@ -18,7 +18,7 @@ namespace GuanajuatoAdminUsuarios.Models
         public string fechaIngresoFormateada => fechaIngreso.ToString("dd/MM/yyyy");
 
         public string folioInventario { get; set; }
-        public int idMarca { get; set; }
+        public int? idMarca { get; set; }
         public int idSubMarca { get; set; }
         public int idColor { get; set; }
         public int idPropietario { get; set; }

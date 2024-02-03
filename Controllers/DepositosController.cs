@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
-
+using Newtonsoft.Json;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
@@ -58,8 +58,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
     
         public IActionResult Depositos(int? Isol)
-        {
-            if (Isol.HasValue)
+        {      
+                if (Isol.HasValue)
             {
                
                 var solicitud = _catDepositosService.ObtenerSolicitudPorID(Isol.Value);
@@ -68,7 +68,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             else
             {
                 return View("Depositos");
-            }
+            }       
         }
         public IActionResult Ubicacion(int Isol)
         {
@@ -154,36 +154,41 @@ namespace GuanajuatoAdminUsuarios.Controllers
             var result = new SelectList(_pensionesService.GetAllPensiones(idOficina), "IdPension", "Pension");
             return Json(result);
         }
-        public ActionResult ajax_EnviarSolicitudDeposito(int? Isol, SolicitudDepositoModel model)
+        public ActionResult ajax_EnviarSolicitudDeposito(int? Isol, [FromBody] SolicitudDepositoModel model)
         {
-            if (Isol.HasValue && Isol.Value > 0)
-            {
-                // Es una actualización, así que actualiza los datos en la base de datos
-                // utilizando el ID 'Isol' para identificar la solicitud existente
-                var registroActualizado = _catDepositosService.ActualizarSolicitud((int)Isol,model);
-                
-                //BITACORA
-                var ip = HttpContext.Connection.RemoteIpAddress.ToString();
-                var user = Convert.ToDecimal(User.FindFirst(CustomClaims.IdUsuario).Value);
-                _bitacoraServices.insertBitacora(registroActualizado, ip, "Depositos_EnviarSolicitudDeposito", "Actualizar", "update", user);
-                
-                return Ok(registroActualizado);
+          
+                if (Isol.HasValue && Isol.Value > 0)
+                {
+                    // Es una actualización, así que actualiza los datos en la base de datos
+                    // utilizando el ID 'Isol' para identificar la solicitud existente
+                    var registroActualizado = _catDepositosService.ActualizarSolicitud((int)Isol, model);
 
+                    //BITACORA
+                    var ip = HttpContext.Connection.RemoteIpAddress.ToString();
+                    var user = Convert.ToDecimal(User.FindFirst(CustomClaims.IdUsuario).Value);
+                    _bitacoraServices.insertBitacora(registroActualizado, ip, "Depositos_EnviarSolicitudDeposito", "Actualizar", "update", user);
+
+                    return Ok(registroActualizado);
+
+                }
+                else
+                {
+                    int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+                    var resultadoBusqueda = _catDepositosService.GuardarSolicitud(model, idOficina);
+
+                    //BITACORA
+                    //var ip = HttpContext.Connection.RemoteIpAddress.ToString();
+                    //var user = Convert.ToDecimal(User.FindFirst(CustomClaims.IdUsuario).Value);
+                    //_bitacoraServices.insertBitacora(resultadoBusqueda, ip, "Depositos_EnviarSolicitudDeposito", "Insertar", "insert", user);
+
+                    return Ok(resultadoBusqueda);
+                }
             }
-            else
-            {
-				int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
-				var resultadoBusqueda = _catDepositosService.GuardarSolicitud(model, idOficina);
+        
 
-                //BITACORA
-                //var ip = HttpContext.Connection.RemoteIpAddress.ToString();
-                //var user = Convert.ToDecimal(User.FindFirst(CustomClaims.IdUsuario).Value);
-                //_bitacoraServices.insertBitacora(resultadoBusqueda, ip, "Depositos_EnviarSolicitudDeposito", "Insertar", "insert", user);
 
-                return Ok(resultadoBusqueda);
-            }
-        }
-        public ActionResult ajax_EnviarComplementoSolicitud(SolicitudDepositoModel model)
+
+            public ActionResult ajax_EnviarComplementoSolicitud(SolicitudDepositoModel model)
         {
             var complemntarRegistro = _catDepositosService.CompletarSolicitud(model);
 

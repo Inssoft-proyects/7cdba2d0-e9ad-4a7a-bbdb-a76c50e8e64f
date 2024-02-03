@@ -4,8 +4,8 @@ namespace GuanajuatoAdminUsuarios.Models
 {
     public class BusquedaAccidentesModel
     {
-        public DateTime FechaInicio { get; set; }
-        public DateTime FechaFin { get; set; }
+        public DateTime? FechaInicio { get; set; }
+        public DateTime? FechaFin { get; set; }
 
         public int IdAccidente { get; set; }
         public int idPropietario { get; set; }
@@ -26,23 +26,23 @@ namespace GuanajuatoAdminUsuarios.Models
         ///Model Regreso/////
         ///
 
-        public int idMunicipio { get; set; }
+        public int? idMunicipio { get; set; }
         public int? idCarretera { get; set; }
         public int? idTramo { get; set; }
         public string estatusReporte { get; set; }
         public int idPersona { get; set; }
         public int idVehiculo { get; set; }
-        public int idClasificacionAccidente { get; set; }
-        public int idCausaAccidente { get; set; }
-        public int idFactorAccidente { get; set; }
-        public int idFactorOpcionAccidente { get; set; }
+        public int? idClasificacionAccidente { get; set; }
+        public int? idCausaAccidente { get; set; }
+        public int? idFactorAccidente { get; set; }
+        public int? idFactorOpcionAccidente { get; set; }
         public float montoCamino { get; set; }
         public float montoPropietarios { get; set; }
         public float montoOtros { get; set; }
         public float montoVehiculo { get; set; }
-        public int idElabora { get; set; }
-        public int idSupervisa { get; set; }
-        public int idAutoriza { get; set; }
+        public int? idElabora { get; set; }
+        public int? idSupervisa { get; set; }
+        public int? idAutoriza { get; set; }
         public int idElaboraConsignacion { get; set; }
         public int idCiudad { get; set; }
         public int idAgenciaMinisterio { get; set; }
@@ -53,7 +53,7 @@ namespace GuanajuatoAdminUsuarios.Models
         public int valores { get; set; }
         public int prendas { get; set; }
         public int otros { get; set; }
-        public int idEstatusReporte { get; set; }
+        public int? idEstatusReporte { get; set; }
         public int idConductor { get; set; }
         public int Propietario { get; set; }
         public float latitud { get; set; }
@@ -125,11 +125,15 @@ namespace GuanajuatoAdminUsuarios.Models
 		public string conductor { get; set; }
         public int? IdTipoVehiculo { get; set; }
         public int? IdTipoServicio { get; set; }
+		public int? IdSubtipoServicio { get; set; }
+		
 		public int estatus { get; set; }
+		public int total { get; set; }
+        public int NumeroSecuencial { get; set; }
+
+        
 
 
-
-
-	}
+    }
 }
 

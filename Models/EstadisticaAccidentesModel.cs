@@ -33,8 +33,23 @@ namespace GuanajuatoAdminUsuarios.Models
         public string Causas { get; set; }
         public string CausasDescripcion { get; set; }
 		public int NumeroSecuencial { get; set; }
+		public int idMunicipio { get; set; }
+		public int idDelegacion { get; set; }
 
-		
+
+		public int IdOficial { get; set; }
+		public int idCarretera { get; set; }
+		public int idTramo { get; set; }
+		public int idClasificacionAccidente { get; set; }
+		public int idTipoLicencia { get; set; }
+		public int idCausaAccidente { get; set; }
+		public int idFactorAccidente { get; set; }
+		public int IdTipoVehiculo { get; set; }
+		public int IdTipoServicio { get; set; }
+		public int IdSubtipoServicio { get; set; }
+
+		public int idFactorOpcionAccidente { get; set; }
+
 	}
 
     public class ListadoAccidentesPorVehiculoModel
@@ -83,6 +98,8 @@ namespace GuanajuatoAdminUsuarios.Models
 		public int idFactorAccidente { get; set; }
 		public int IdTipoVehiculo { get; set; }
 		public int IdTipoServicio { get; set; }
+		public int IdSubtipoServicio { get; set; }
+
 		public int idFactorOpcionAccidente { get; set; }
 
 

@@ -1,4 +1,50 @@
 ﻿@model ComparativoInfraccionesModel
+
+@{
+	@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+	var listaIdsPermitidosJson = @HttpContextAccessor.HttpContext.Session.GetString("IdsPermitidos").ToString();
+	var autorizaciones = @HttpContextAccessor.HttpContext.Session.GetString("Autorizaciones").ToString();
+}
+
+<script>
+
+	$(document).ready(function () {
+		var access = @listaIdsPermitidosJson;
+		var auth = @autorizaciones;
+
+		if (access != undefined && access != '') {
+			if (!access.toString().includes(localStorage.getItem("menuId"))) {
+				Swal.fire({
+					icon: "error",
+					title: "¡El usuario no tiene acceso a esta opción!"
+				});
+				setTimeout(() => {
+					window.location.href = "/Principal";
+				}, 200);
+			} else {
+				//// BUSCAR - CONSULTAR
+				//if (!auth.toString().includes("491")) {
+				//	$("#btnBuscar").prop('disabled', true).css({ "opacity": "0.3" });
+				//}
+
+    //            // IMPRIMIR
+    //            if (!auth.toString().includes("492")) {
+    //                $("#btnGenerarExcel").prop('disabled', true).css({ "opacity": "0.3" });
+    //            }
+			}
+		} else {
+			Swal.fire({
+				icon: "error",
+				title: "¡El usuario no tiene acceso a esta opción!"
+			});
+			setTimeout(() => {
+				window.location.href = "/Principal";
+			}, 200);
+		}
+	});
+
+</script>
+
 <script>
 	function tipoServicioDropDownChange() {
 		var tipoServicioDDlValue = $("#idTipoServicio").data("kendoDropDownList").value();
@@ -186,7 +232,7 @@
                 <div class="form-group col-md-4 my-3">
                     <div class="controlForm">
                         <div class="controlButton">
-                            <button class="btnPrimary" type="button" onclick="submitSearch()">  <h5 class="m-0"><b>Buscar</b></h5></button>
+                            <button class="btnPrimary" id="btnBuscar" type="button" onclick="submitSearch()">  <h5 class="m-0"><b>Buscar</b></h5></button>
                         </div>
                     </div>
                 </div>

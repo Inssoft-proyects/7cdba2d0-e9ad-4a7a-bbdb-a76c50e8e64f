@@ -1,5 +1,35 @@
 @model GuanajuatoAdminUsuarios.Models.SolicitudDepositoModel
-        
+        @{
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+    var listaIdsPermitidosJson = @HttpContextAccessor.HttpContext.Session.GetString("IdsPermitidos").ToString();
+    var autorizaciones = @HttpContextAccessor.HttpContext.Session.GetString("Autorizaciones").ToString();
+}
+
+<script>
+        $(document).ready(function () {
+            var access = @listaIdsPermitidosJson;
+            if (access != undefined && access != '') {
+                if (!access.toString().includes(localStorage.getItem("menuId"))) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "¡EL usuario no tiene acceso a esta opción!"
+                    });
+                    setTimeout(() => {
+                        window.location.href = "/Principal";
+                    }, 200);
+                }
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "¡EL usuario no tiene acceso a esta opción!"
+                });
+                setTimeout(() => {
+                    window.location.href = "/Principal";
+                }, 200);
+            }
+        });
+
+</script>
 <div class="mainContainer bg-light">
     <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
             @if (Model?.idSolicitud > 0)
@@ -77,10 +107,10 @@
             <div class="col-12 col-md-6 col-lg-6 col-xl-3">
                 <div class="controlForm my-3">
                     <label>Fecha <b>(obligatorio)</b>:</label>
-                        @(Html.Kendo().DateTimePickerFor(t => t.fechaSolicitud).Max(DateTime.Now)
+                        @(Html.Kendo().DateTimePickerFor(t => t.fechaSolicitud).Max(DateTime.Now).Format("dd/MM/yyyy HH:mm:ss")
                             .HtmlAttributes(new { style = "width: 100%", 
                             title = "datepicker", 
-                            required = "required", id = "fechaSolicitud" })
+                            required = "required" })
                     )
                 </div>
             </div>
@@ -101,7 +131,7 @@
                                     read.Action("TiposVehiculos_Drop", "Depositos");
                                 });
                             })
-                                .HtmlAttributes(new { style = "width:100%;", Id = "ddlDelegaciones" })
+                                .HtmlAttributes(new { style = "width:100%;" })
                             )
                     </span>
 
@@ -123,7 +153,7 @@
                                         read.Action("Concecionarios_Drop", "Depositos");
                                         });
                                     })
-                                    .HtmlAttributes(new { style = "width:100%;", Id = "ddlPropietarios" })
+                                    .HtmlAttributes(new { style = "width:100%;" })
                                     )
                     </span>
 
@@ -657,6 +687,8 @@
     }
 
     function enviarSolicitud(){
+    
+
         var validator = $("#solicitudForm").kendoValidator().data('kendoValidator');
         var controlsValidate = [];
         var isValid = true;
@@ -692,17 +724,48 @@
 
 
         if (isValid) {
-            var Mydata = $("#solicitudForm").serialize();
-            console.log(Mydata);
+            var Mydata = {
+                //fechaSolicitud: $('#fechaSolicitud').val(),
+                fechaSolicitud: kendo.toString($("#fechaSolicitud").data("kendoDateTimePicker").value(), "yyyy-MM-ddTHH:mm:ss"),
+                idTipoVehiculo: $('#ddlDelegaciones').val(),
+                idConcecionario: $('#ddlPropietarios').val(),
+                idOficial: $('#idOficial').val(),
+                idDescripcionEvento: $('#idDescripcionEvento').val(),
+                idTipoUsuario: $('#idTipoUsuario').val(),
+                nombreUsuario: $('#nombreUsuario').val(),
+                apellidoPaternoUsuario: $('#apellidoPaternoUsuario').val(),
+                apellidoMaternoUsuario: $('#apellidoMaternoUsuario').val(),
+                coloniaUsuario: $('#coloniaUsuario').val(),
+                calleUsuario: $('#calleUsuario').val(),
+                numeroUsuario: $('#numeroUsuario').val(),
+                idEntidad: $('#idEntidad').val(),
+                idMunicipio: $('#idMunicipio').val(),
+                telefonoUsuario: $('#telefonoUsuario').val(),
+                idMotivoAsignacion: $('#idMotivoAsignacion').val(),
+                numeroUbicacion: $('#numeroUbicacion').val(),
+                calleUbicacion: $('#calleUbicacion').val(),
+                coloniaUbicacion: $('#coloniaUbicacion').val(),
+                kilometroUbicacion: $('#kilometroUbicacion').val(),
+                IdCarretera: $('#IdCarretera').val(),
+                IdTramo: $('#IdTramo').val(),
+                idEntidadUbicacion: $('#idEntidadUbicacion').val(),
+                idMunicipioUbicacion: $('#idMunicipioUbicacion').val(), 
+                idPensionUbicacion: $('#idPensionUbicacion').val(),
+                interseccion: $('#interseccion').val(),
+                }
+                console.log("DATA", Mydata)
             showLoading();
             $.ajax({
                 url: '/Depositos/ajax_EnviarSolicitudDeposito',
-                type: 'GET',
-                data: Mydata,
+                type: 'POST', 
+                contentType: 'application/json', 
+                data: JSON.stringify(Mydata), 
                 success: function (data) {
+                    
                     $("#folioPlaceholder").text(data);
                     $("#solicitudModal").modal('show');
                     hideLoading();
+                    
                 },
                 error: function () {
                     sitteg_warning("Ocurrió un error, inténtelo de nuevo más tarde");

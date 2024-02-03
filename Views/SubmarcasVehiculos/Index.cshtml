@@ -41,7 +41,7 @@
         .Read(read => read.Action("GetSubmarcas", "SubmarcasVehiculos"))
             .PageSize(5).Model(model => model.Id(p => p.IdSubmarca))
         )
-     .ToolBar(t => t.Search())
+     .ToolBar(t => t.Search().Text("Buscar..."))
         .Search(s =>
         {
             s.Field(c => c.NombreSubmarca);

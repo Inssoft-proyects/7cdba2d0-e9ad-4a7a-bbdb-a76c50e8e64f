@@ -1,5 +1,6 @@
 ﻿using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -14,30 +15,38 @@ namespace GuanajuatoAdminUsuarios.Services
         {
             _sqlClientConnectionBD = sqlClientConnectionBD;
         }
-        public List<IngresoVehiculosModel> ObtenerDepositos(IngresoVehiculosModel model)
+        public List<IngresoVehiculosModel> ObtenerDepositos(IngresoVehiculosModel model, int idPension)
         {
             List<IngresoVehiculosModel> modelList = new List<IngresoVehiculosModel>();
+            string condiciones = "";
+            condiciones += model.idMarca.HasValue ? $" AND d.idMarca = {model.idMarca}" : "";
+            condiciones += model.serie.IsNullOrEmpty() ? "" : " AND d.serie = @serie";
+            condiciones += model.folioInventario.IsNullOrEmpty() ? "" : " AND d.numeroInventario LIKE '%' + @numeroInventario + '%' ";
+            condiciones += model.placa.IsNullOrEmpty() ? "" : " AND d.placa = @placa";
             string strQuery = @"SELECT d.idDeposito,d.idVehiculo,d.numeroInventario,
-	                                    d.idMarca,d.placa,d.serie,
+	                                    d.idMarca,d.placa,d.serie,d.liberado,
 	                                    v.modelo,v.motor,v.numeroEconomico,
 	                                    v.idColor,v.idTipoVehiculo,
 	                                    mv.marcaVehiculo,tv.tipoVehiculo,co.color,sol.fechaSolicitud
                                     FROM depositos AS d
                                     LEFT JOIN vehiculos AS v ON d.idVehiculo = v.idVehiculo
-                                    LEFT JOIN catMarcasVehiculos AS mv ON v.idMarcaVehiculo = mv.idMarcaVehiculo
+                                    LEFT JOIN catMarcasVehiculos AS mv ON d.idMarca = mv.idMarcaVehiculo
                                     LEFT JOIN catColores AS co ON v.idColor = co.idColor
                                     LEFT JOIN catTiposVehiculo AS tv ON v.idTipoVehiculo = tv.idTipoVehiculo
                                     LEFT JOIN solicitudes AS sol ON d.idSolicitud = sol.idSolicitud
-                                    WHERE d.idMarca = @idMarca OR d.serie = @serie OR d.numeroInventario = @numeroInventario
-                                    OR d.placa = @placa";
+                                    WHERE d.idPension = @idPension AND d.liberado = 0  " + condiciones;
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
             {
                 try
                 {
                     connection.Open();
+                 
+
                     SqlCommand command = new SqlCommand(strQuery, connection);
                     command.CommandType = CommandType.Text;
                     command.Parameters.Add(new SqlParameter("@idDeposito", SqlDbType.Int)).Value = (object)model.idDeposito ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@idPension", SqlDbType.Int)).Value = (object)idPension ?? DBNull.Value;
+
                     command.Parameters.Add(new SqlParameter("@idMarca", SqlDbType.Int)).Value = (object)model.idMarca ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@serie", SqlDbType.VarChar)).Value = (object)model.serie ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@numeroInventario", SqlDbType.VarChar)).Value = (object)model.folioInventario ?? DBNull.Value;

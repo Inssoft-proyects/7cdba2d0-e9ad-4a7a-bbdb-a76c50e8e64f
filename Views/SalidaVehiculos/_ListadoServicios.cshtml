@@ -29,8 +29,11 @@
                 columns.Bound(c => c.color).Title("Color").Width(100);
                 columns.Bound(c => c.propietario).Title("Propietario").Width(100);
                 columns.Bound(c => c.pension).Title("Pension").Width(100);
-                columns.Bound(c => c.fechaIngresoFormateada).Title("Fecha de Ingreso").Width(150);
-
+               // columns.Bound(c => c.fechaIngresoFormateada).Title("Fecha de Ingreso").Width(150);
+                columns.Bound(c => c.fechaIngresoFormateada)
+                .Title("Fecha de ingreso")
+                .Width(150)
+                .ClientTemplate("#= mostrarFecha(fechaIngresoFormateada) #");
             }).HtmlAttributes(new { style = "height:550px" })
             .Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }).Position(GridPagerPosition.Bottom))
             .Sortable()
@@ -39,7 +42,7 @@
             .Ajax()
             .ServerOperation(false)
             )
-            .ToolBar(t => t.Search())
+            .ToolBar(t => t.Search().Text("Buscar..."))
             .Search(s =>
             {
                 s.Field(c => c.submarca);
@@ -59,3 +62,12 @@
     </div>
 </div>
 
+<script>
+    function mostrarFecha(fecha) {
+        if (fecha && fecha !== "01/01/0001") {
+            return fecha;
+        } else {
+            return " ";
+        }
+    }
+</script>

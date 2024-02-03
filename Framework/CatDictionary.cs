@@ -429,6 +429,7 @@ namespace GuanajuatoAdminUsuarios.Framework
 							.OrderBy(s => s.Text)
 							.ToList();
 					break;
+
 				case "CatResponsablesPensiones":
 					catalogModel.CatalogName = catalog;
 					campos = new string[] { "idResponsable", "responsable" };
@@ -629,8 +630,23 @@ namespace GuanajuatoAdminUsuarios.Framework
 								.ToList();
 					}
 					break;
+                case "CatSubtipoServicioFilter":
+                    if (int.TryParse(parameter, out intId))
+                    {
+                        catalogModel.CatalogName = catalog;
+                        campos = new string[] { "idSubtipoServicio", "servicio" };
+                        catalogModel.CatalogList = _catalogosService.GetGenericCatalogosByFilter("catSubtipoServicio", campos, "idTipoServicio", intId)
+                                .Select(s => new SystemCatalogListModel()
+                                {
+                                    Id = Convert.ToInt32(s["idSubtipoServicio"]),
+                                    Text = Convert.ToString(s["servicio"])
+                                })
+                                .OrderBy(s => s.Text)
+                                .ToList();
+                    }
+                    break;
 
-				case "CatAplicadoA":
+                case "CatAplicadoA":
 					if (int.TryParse(parameter, out intId))
 					{
 						catalogModel.CatalogName = catalog;
@@ -645,8 +661,23 @@ namespace GuanajuatoAdminUsuarios.Framework
 								.ToList();
 					}
 					break;
+                case "CatSubtipoServicio":
+                    if (int.TryParse(parameter, out intId))
+                    {
+                        catalogModel.CatalogName = catalog;
+                        campos = new string[] { "idSubtipoServicio", "servicio" };
+                        catalogModel.CatalogList = _catalogosService.GetGenericCatalogos("catSubtipoServicio", campos)
+                                .Select(s => new SystemCatalogListModel()
+                                {
+                                    Id = Convert.ToInt32(s["idSubtipoServicio"]),
+                                    Text = Convert.ToString(s["servicio"])
+                                })
+                                .OrderBy(s => s.Text)
+                                .ToList();
+                    }
+                    break;
 
-				default:
+                default:
 					return catalogModel;
 			}
 			return catalogModel;

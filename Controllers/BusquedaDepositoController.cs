@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
@@ -27,21 +29,27 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
         public IActionResult Index()
         {
-            
-            return View();
-        }
+
+                return View();
+            }
         public JsonResult GetAllDepositos([DataSourceRequest] DataSourceRequest request)
         {
-            var listaDepositos = _busquedaDepositoService.ObtenerTodosDepositos();
+            int idPension = HttpContext.Session.GetInt32("IdPension") ?? 0;
+
+            var listaDepositos = _busquedaDepositoService.ObtenerTodosDepositos(idPension);
 
             return Json(listaDepositos.ToDataSourceResult(request));
         }
         public IActionResult ajax_BusquedaDepositos(BusquedaDepositoModel model)
         {
-            var listaDepositos = _busquedaDepositoService.ObtenerDepositos(model);
+
+                int idPension = HttpContext.Session.GetInt32("IdPension") ?? 0;
+
+            var listaDepositos = _busquedaDepositoService.ObtenerDepositos(model, idPension);
             return Json(listaDepositos);
-        }
-        public ActionResult ModalDetalleGrua(int Id)
+            }   
+
+public ActionResult ModalDetalleGrua(int Id)
         {
             var model = _gruasService.GetGruasConcesionariosByIdCocesionario(Id);
 

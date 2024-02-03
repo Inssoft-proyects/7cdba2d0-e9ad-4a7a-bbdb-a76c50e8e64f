@@ -34,21 +34,12 @@ namespace GuanajuatoAdminUsuarios.Controllers
         #region Modal Action
         public ActionResult Index()
         {
-            int IdModulo = 952;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+         
                 var ListOficinasRentaModel = GetOficinas();
 
             return View("Index", ListOficinasRentaModel);
             }
-            else
-            {
-                TempData["ErrorMessage"] = "Este usuario no tiene acceso a esta sección.";
-                return RedirectToAction("Principal", "Inicio", new { area = "" });
-            }
-        }
+     
 
         public ActionResult Index2(int idDelegacion)
         {
@@ -59,39 +50,21 @@ namespace GuanajuatoAdminUsuarios.Controllers
         [HttpPost]
         public ActionResult AgregarOficinaRentaModal()
         {
-            int IdModulo = 953;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+          
                 Delegaciones_Drop();
             return PartialView("_Crear");
             }
-            else
-            {
-                TempData["ErrorMessage"] = "El usuario no tiene permisos suficientes para esta acción.";
-                return PartialView("ErrorPartial");
-            }
-        }
+     
 
 
         public ActionResult EditarOficinaRentaModal(int IdOficinaRenta, int IdDelegacion)
         {
-            int IdModulo = 954;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+          
                 Delegaciones_Drop();
             var oficinasRentaModel = GetOficinaRentaByID(IdOficinaRenta);
             return PartialView("_Editar", oficinasRentaModel);
         }
-            else
-            {
-                TempData["ErrorMessage"] = "El usuario no tiene permisos suficientes para esta acción.";
-                return PartialView("ErrorPartial");
-    }
-}
+
 
         public ActionResult EliminarOficinaRentaModal(int IdOficinaRenta)
         {

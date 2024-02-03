@@ -21,21 +21,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
         DBContextInssoft dbContext = new DBContextInssoft();
         public IActionResult Index()
         {
-            int IdModulo = 920;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+          
                 var ListOficialesModel = GetOficiales();
 
             return View(ListOficialesModel);
             }
-            else
-            {
-                TempData["ErrorMessage"] = "Este usuario no tiene acceso a esta sección.";
-                return RedirectToAction("Principal", "Inicio", new { area = "" });
-            }
-        }
         private readonly IOficiales _oficialesService;
 
         public OficialesController(IOficiales oficialesService)
@@ -47,47 +37,32 @@ namespace GuanajuatoAdminUsuarios.Controllers
         #region Modal Action
         public ActionResult IndexModal()
         {
-            var ListOficialessModel = GetOficiales();
+       
+                var ListOficialessModel = _oficialesService.GetOficiales();
             //return View("IndexModal");
             return View("Index", ListOficialessModel);
         }
+        
 
-        [HttpPost]
+
+[HttpPost]
         public ActionResult AgregarOficialParcial()
         {
-            int IdModulo = 921;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+
                 Delegaciones_Drop();
             return PartialView("_Crear");
             }
-            else
-            {
-                TempData["ErrorMessage"] = "El usuario no tiene permisos suficientes para esta acción.";
-                return PartialView("ErrorPartial");
-            }
-        }
+
 
         [HttpPost]
         public ActionResult EditarOficialParcial(int IdOficial)
         {
-            int IdModulo = 922;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+
                 Delegaciones_Drop();
             var oficialesModel = _oficialesService.GetOficialById(IdOficial);
             return PartialView("_Editar", oficialesModel);
             }
-            else
-            {
-                TempData["ErrorMessage"] = "El usuario no tiene permisos suficientes para esta acción.";
-                return PartialView("ErrorPartial");
-            }
-        }
+ 
 
         [HttpPost]
         public ActionResult EliminarOficialParcial(int IdOficial)
@@ -114,7 +89,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {
 
                 _oficialesService.SaveOficial(model);
-                var ListOficialesModel = GetOficiales();
+                var ListOficialesModel = _oficialesService.GetOficiales();
                 return Json(ListOficialesModel);
             }
 
@@ -132,7 +107,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {
 
                 _oficialesService.UpdateOficial(model);
-                var ListOficialesModel = GetOficiales();
+                var ListOficialesModel = _oficialesService.GetOficiales();
                 return Json(ListOficialesModel);
             }
 
@@ -148,7 +123,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {
 
                 DeleteOficial(model);
-                var ListOficialesModel = GetOficiales();
+                var ListOficialesModel = _oficialesService.GetOficiales();
                 return Json(ListOficialesModel);
             }
 
@@ -157,7 +132,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public JsonResult GetOficialess([DataSourceRequest] DataSourceRequest request)
         {
-            var ListOficialesModel = GetOficiales();
+            var ListOficialesModel = _oficialesService.GetOficiales();
 
             return Json(ListOficialesModel.ToDataSourceResult(request));
         }

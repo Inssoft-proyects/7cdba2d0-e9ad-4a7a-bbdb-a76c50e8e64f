@@ -6,17 +6,9 @@
     string claseColorOtroBoton = esSoloLectura ? "colorDisabled" : "colorPrimary";
 }
 <script>
-        $(document).ready(function () {
-            var esSoloLectura = @(ViewBag.EsSoloLectura ? "true" : "false");
+    
 
-            if (esSoloLectura) {
-                $(".custom-button").addClass("colorDisabled");
-            } else {
-                $(".custom-button").addClass("colorPrimary");
-            }
-        });
-
-    var esSoloLectura = @Html.Raw(esSoloLectura.ToString().ToLower());
+    var esSoloLecturaGrid = @Html.Raw(esSoloLectura.ToString().ToLower());
 </script>
 
 <div class="row justify-content-between my-2 mb-1 titleCustom">
@@ -39,17 +31,23 @@
                 columns.Bound(p => p.CalificacionMinima).Title("Calif. Min.");
                 columns.Bound(c => c.CalificacionMaxima).Title("Calif. Max.");
             columns.Template(
-            "<input type='number' " +
+            "<div class='custom-number-input' style='height: 50px;'>" +
+            "<input type='text' " +
             "name='calificacionEditor_#=calificacion#' " +
-            "class='k-input' " +
-            "style='width: 100%;' " +
+            "class='k-input2 custom-input' " +
+            "style='width: calc(100% - 50px); height: 100%;' " +
             "value='#=calificacion#' " +
             "data-bind='value:calificacion' " +
             "min='#=CalificacionMinima#' " +
             "max='#=CalificacionMaxima#' " +
-            "# if(esSoloLectura) { # disabled='disabled' # } #" +
-            "/>"
-            ).Title("Calificación").Width(150);
+            "# if(esSoloLecturaGrid) { # disabled='disabled' # } #" +
+            "/>" +
+            "<div class='spinner-controls'>" +
+            "<button type='button' class='increase' formnovalidate>&uarr;</button>" +
+            "<button type='button' class='decrease' formnovalidate>&darr;</button>" +
+            "</div>" +
+            "</div>"
+            ).Title("Calificación").Width(190);
 
 
             @*columns.Bound(p => p.idMotivoInfraccion).ClientTemplate(
@@ -144,4 +142,45 @@
             }
         });
     }
- </script>
+    $(document).ready(function () {
+        // Maneja el clic en el botón de incremento
+        $(document).on("click", ".custom-number-input .increase", function () {
+            var input = $(this).closest('.custom-number-input').find('.custom-input');
+            validarAntesDeIncrementar(input);
+        });
+
+        // Maneja el clic en el botón de decremento
+        $(document).on("click", ".custom-number-input .decrease", function () {
+            var input = $(this).closest('.custom-number-input').find('.custom-input');
+            validarAntesDeDecrementar(input);
+        });
+
+        function validarAntesDeIncrementar(input) {
+            if ('@ViewBag.EsSoloLectura' === 'True') {
+                return;
+            }
+            var currentValue = parseInt(input.val(), 10);
+            var maxLimit = parseInt(input.attr('max'), 10);
+
+            if (isNaN(currentValue) || currentValue < maxLimit) {
+                input.val(currentValue + 1);
+            }
+        }
+
+        function validarAntesDeDecrementar(input) {
+            if ('@ViewBag.EsSoloLectura' === 'True') {
+                return;
+            }
+            var currentValue = parseInt(input.val(), 10);
+            var minLimit = parseInt(input.attr('min'), 10);
+
+            if (isNaN(currentValue) || currentValue > minLimit) {
+                input.val(currentValue - 1);
+            }
+        }
+    });
+
+</script>
+
+
+

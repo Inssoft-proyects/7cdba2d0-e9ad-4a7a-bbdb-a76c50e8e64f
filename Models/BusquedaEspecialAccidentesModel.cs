@@ -4,8 +4,8 @@ namespace GuanajuatoAdminUsuarios.Models
 {
     public class BusquedaEspecialAccidentesModel
     {
-        public DateTime FechaInicio { get; set; }
-        public DateTime FechaFin { get; set; }
+        public DateTime? FechaInicio { get; set; }
+        public DateTime? FechaFin { get; set; }
 		public int Numero { get; set; }
 		
 		public int IdAccidente { get; set; }
@@ -27,7 +27,7 @@ namespace GuanajuatoAdminUsuarios.Models
         ///Model Regreso/////
         ///
 
-        public int idMunicipio { get; set; }
+        public int? idMunicipio { get; set; }
         public int? idCarretera { get; set; }
         public int? idTramo { get; set; }
         public string estatusReporte { get; set; }
@@ -41,9 +41,9 @@ namespace GuanajuatoAdminUsuarios.Models
         public float montoPropietarios { get; set; }
         public float montoOtros { get; set; }
         public float montoVehiculo { get; set; }
-        public int idElabora { get; set; }
-        public int idSupervisa { get; set; }
-        public int idAutoriza { get; set; }
+        public int? idElabora { get; set; }
+        public int? idSupervisa { get; set; }
+        public int? idAutoriza { get; set; }
         public int idElaboraConsignacion { get; set; }
         public int idCiudad { get; set; }
         public int idAgenciaMinisterio { get; set; }
@@ -54,7 +54,7 @@ namespace GuanajuatoAdminUsuarios.Models
         public int valores { get; set; }
         public int prendas { get; set; }
         public int otros { get; set; }
-        public int idEstatusReporte { get; set; }
+        public int? idEstatusReporte { get; set; }
         public int idConductor { get; set; }
         public int Propietario { get; set; }
         public float latitud { get; set; }
@@ -118,6 +118,7 @@ namespace GuanajuatoAdminUsuarios.Models
         public string conductor { get; set; }
         public int? IdTipoVehiculo { get; set; }
         public int? IdTipoServicio { get; set; }
+        public int total { get; set; }
 
     }
 }

@@ -13,5 +13,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
         public int CrearMotivo(CatMotivosInfraccionModel motivo, int IdDependencia);
         public int UpdateMotivo(CatMotivosInfraccionModel motivo, int IdDependencia);
         public int DeleteMotivo(CatMotivosInfraccionModel model);
+        List<CatMotivosInfraccionModel> GetMotivosBusqueda(CatMotivosInfraccionModel model, int idDependencia);
+
     }
 }

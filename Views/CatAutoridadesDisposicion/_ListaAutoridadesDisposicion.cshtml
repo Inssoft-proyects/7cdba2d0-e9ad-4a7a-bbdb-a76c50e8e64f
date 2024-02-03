@@ -21,7 +21,7 @@
             .Read(read => read.Action("GetAutDisp", "CatAutoridadesDisposicion"))
             .PageSize(5)
             )
-            .ToolBar(t => t.Search())
+            .ToolBar(t => t.Search().Text("Buscar..."))
             .Search(s =>
             {
                 s.Field(c => c.NombreAutoridadDisposicion);

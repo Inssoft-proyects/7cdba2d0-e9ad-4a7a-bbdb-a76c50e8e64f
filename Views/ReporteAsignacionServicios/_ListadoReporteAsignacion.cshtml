@@ -21,8 +21,16 @@
                 columns.Bound(p => p.vehiculoCarretera).Title("Carretera").Width(110);
                 columns.Bound(p => p.vehiculoTramo).Title("Tramo").Width(90);
                 columns.Bound(p => p.vehiculoKm).Title("KM").Width(90);
-                columns.Bound(c => c.fechaSolicitud).Title("Fecha").Width(150);
-                columns.Bound(c => c.fechaLiberacion).Title("Fecha Salida").Width(150);
+               columns.Bound(c => c.fechaSolicitud)
+                        .Title("Fecha")
+                        .Width(150)
+                        .ClientTemplate("#= formatFechaSolicitud(fechaSolicitud) #");
+
+                    columns.Bound(c => c.fechaLiberacion)
+                        .Title("Fecha Salida")
+                        .Width(150)
+                        .ClientTemplate("#= formatFechaLiberacion(fechaLiberacion) #");
+
                 columns.Bound(c => c.evento).Title("Evento").Width(90);
                 columns.Bound(c => c.motivoAsignacion).Title("Motivo").Width(90);
 
@@ -44,7 +52,7 @@
             .Ajax()
             .ServerOperation(false)
             )
-            .ToolBar(t => t.Search())
+            .ToolBar(t => t.Search().Text("Buscar..."))
             .Search(s =>
             {
                 s.Field(c => c.vehiculoCarretera);
@@ -74,3 +82,26 @@
         overflow-x: scroll;
     }
 </style>
+
+                <script>
+    function formatFechaSolicitud(fechaSolicitud) {
+        if (fechaSolicitud === null || fechaSolicitud === '0001-01-01T00:00:00') {
+            return '-';
+        } else {
+            // Puedes usar una biblioteca como moment.js para formatear la fecha
+            // O simplemente devolverla en el formato deseado
+            // En este ejemplo, estoy utilizando el formato predeterminado de JavaScript
+            return new Date(fechaSolicitud).toLocaleString();
+        }
+    }
+
+    function formatFechaLiberacion(fechaLiberacion) {
+        if (fechaLiberacion === null || fechaLiberacion === '0001-01-01T00:00:00') {
+            return '-';
+        } else {
+            // Aquí también puedes usar moment.js o el formato que prefieras
+            return new Date(fechaLiberacion).toLocaleString();
+        }
+    }
+
+                </script>

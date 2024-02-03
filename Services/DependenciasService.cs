@@ -29,7 +29,7 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("Select * from catDependencias where estatus=1 ORDER BY NombreDependencia ASC", connection);
+                    SqlCommand command = new SqlCommand("Select * from catDelegacionesOficinasTransporte where estatus=1 ORDER BY nombreOficina ASC", connection);
                     command.CommandType = CommandType.Text;
                     //sqlData Reader sirve para la obtencion de datos 
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
@@ -37,8 +37,8 @@ namespace GuanajuatoAdminUsuarios.Services
                         while (reader.Read())
                         {
                             Dependencias dependencia = new Dependencias();
-                            dependencia.IdDependencia = Convert.ToInt32(reader["IdDependencia"].ToString());
-                            dependencia.NombreDependencia = reader["NombreDependencia"].ToString();
+                            dependencia.IdDependencia = Convert.ToInt32(reader["idOficinaTransporte"].ToString());
+                            dependencia.NombreDependencia = reader["nombreOficina"].ToString();
                             dependencias.Add(dependencia);
 
                         }

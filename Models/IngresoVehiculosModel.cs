@@ -7,10 +7,10 @@ namespace GuanajuatoAdminUsuarios.Models
         public string serie { get; set; }
         public DateTime fechaIngreso { get; set; }
         public string folioInventario { get; set; }
-        public int idDeposito { get; set; }
+        public int? idDeposito { get; set; }
         public int idVehiculo { get; set; }
 
-        public int idMarca { get; set; }
+        public int? idMarca { get; set; }
         public string placa { get; set; }
         public string marca { get; set; }
         public string modelo { get; set; }

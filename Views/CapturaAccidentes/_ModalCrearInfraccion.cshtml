@@ -106,16 +106,21 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
+                if(result.id){
                 sitteg_success("Se ha creado una nueva infracción, proporcione los datos requeridos");
                 $('#crearInfraccionModal').modal('hide');
 
                 sessionStorage.setItem('redirectTo', '/CapturaAccidentes/Editar/' + result.id + '?fromAcc=true');
 
                 window.setTimeout(function () {
-                    // Redirige a la página de edición con el ID de la infracción
                     window.location.href = '/Infracciones/Editar/' + result.id;
                 }, 500);
                 hideLoading();
+                }
+                else {
+                    sitteg_warning('El folio ya existe.');
+                    hideLoading();
+                }
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");
                 hideLoading();

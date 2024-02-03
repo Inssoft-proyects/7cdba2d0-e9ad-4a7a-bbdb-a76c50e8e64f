@@ -106,14 +106,14 @@
                 <label>Fecha de nacimiento <b>(obligatorio)</b>:</label>
                 @(Html.Kendo().DatePickerFor(t => t.fechaNacimiento)
                     .Culture("es-ES")
-                    .HtmlAttributes(new { style = "width: 100%;", required = "required" })
+                    .HtmlAttributes(new { style = "width: 100%;" })
 
                     )
             </div>
         </div>
         <div class="col-md-4">
             <div class="controlForm">
-                <label>CURP <b>(obligatorio)</b>:</label>
+                <label>CURP:</label>
                 @(Html.Kendo().TextBoxFor(t => t.CURP)
                     .HtmlAttributes(new { style = "width: 100%; height:58px;" })
                     )
@@ -131,7 +131,7 @@
     <div class="row my-2">
         <div class="col-md-6">
             <div class="controlForm">
-                <label>Género:</label>
+                <label>Género <b>(obligatorio)</b>:</label>
                 @(Html.Kendo().DropDownListFor(m => m.idGenero).Filter(FilterType.Contains)
                     .BindTo((SelectList)ViewBag.CatGeneros)
                     .OptionLabel("-- Seleccione --")
@@ -140,7 +140,7 @@
         </div>
         <div class="col-md-6">
             <div class="controlForm">
-                <label>Tipo persona:</label>
+                <label>Tipo persona  <b>(obligatorio)</b>:</label>
                 @(Html.Kendo().DropDownListFor(m => m.idCatTipoPersona).Filter(FilterType.Contains)
                     .BindTo((SelectList)ViewBag.CatTipoPersona)
                     .OptionLabel("-- Seleccione --")
@@ -212,7 +212,7 @@
                         source.Read(read =>
                         {
                             read.Action("Municipios_Drop", "Personas")
-                    .Data("filterMunicipios");
+                        .Data("filterMunicipios");
                         });
                     })
                     .HtmlAttributes(new { style = "width:100%;", id = "idMunicipioED" }))
@@ -220,9 +220,9 @@
         </div>
         <div class="col-md-4">
             <div class="controlForm">
-                <label>Código postal <b>(obligatorio)</b>:</label>
+                <label>Código postal :</label>
                 @(Html.Kendo().TextBoxFor(t => t.PersonaDireccion.codigoPostal)
-                    .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
+                    .HtmlAttributes(new { style = "width: 100%; height:58px;" })
                     )
             </div>
         </div>
@@ -232,7 +232,7 @@
             <div class="controlForm">
                 <label>Colonia <b>(obligatorio)</b>:</label>
                 @(Html.Kendo().TextBoxFor(t => t.PersonaDireccion.colonia)
-                    .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
+                    .HtmlAttributes(new { style = "width: 100%; height:58px;" })
                     )
             </div>
         </div>
@@ -240,7 +240,7 @@
             <div class="controlForm">
                 <label>Calle <b>(obligatorio)</b>:</label>
                 @(Html.Kendo().TextBoxFor(t => t.PersonaDireccion.calle)
-                    .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
+                    .HtmlAttributes(new { style = "width: 100%; height:58px;" })
                     )
             </div>
         </div>
@@ -248,7 +248,7 @@
             <div class="controlForm">
                 <label>Número <b>(obligatorio)</b>:</label>
                 @(Html.Kendo().TextBoxFor(t => t.PersonaDireccion.numero)
-                    .HtmlAttributes(new { style = "width: 100%; height:58px;", required = "required" })
+                    .HtmlAttributes(new { style = "width: 100%; height:58px;" })
                     )
             </div>
         </div>
@@ -301,45 +301,64 @@
         var validator = $("#frmEditarPersona").kendoValidator().data('kendoValidator');
         var idTelefono = $("#telefono");
         var idTelefonoValue = idTelefono.val();
-        if (idTelefonoValue === null || idTelefonoValue === "") {
-            idTelefono.prop("disabled", true);
-        }
-        idTelefono.off('blur');
-        if (validator.validate()) {
-            var formData = $("#frmEditarPersona").serialize();
-            showLoading();
-            $.ajax({
-                url: '@Url.Action("ajax_EditarPersona","CapturaAccidentes")',
-                type: 'POST',
-                data: formData,
-                success: function (result) {
-                    console.log("DFDF",result)
-                    var grid = $("#gridConductores").data("kendoGrid");
+        var idTipoPersona = $("#tipoPersona");
 
-                    if (result && result.data) {
-                        var dataArray = [result.data];
-                        grid.dataSource.data(dataArray);
-                    } else {
-                        console.error("La respuesta no tiene la estructura esperada:", result);
-                    }
+        controlsValidate.push({ 'controlName': 'nombre' });
+        controlsValidate.push({ 'controlName': 'fechaNacimiento' });
+        controlsValidate.push({ 'controlName': 'PersonaDireccion_colonia' });
+        controlsValidate.push({ 'controlName': 'PersonaDireccion_calle' });
+        controlsValidate.push({ 'controlName': 'PersonaDireccion_numero' });
 
-                    $('#modalCrearPersona').modal('hide');
-                    sitteg_success('Elemento guardado correctamente')
-                    hideLoading();
-                },
-                error: function (xhr, status) {
-                    var errmsg = xhr.responseText;
-                    console.log(errmsg)
-                    sitteg_warning('Lo sentimos, ha ocurrido un error.');
-                    hideLoading();
-                }
-            });
-        }
-        else {
-            idTelefono.prop("disabled", false);
-            sitteg_info('Debe llenar los campos requeridos');
+        // INPUTS
+        if (!isControlsValid(controlsValidate)) { isValid = false; }
+
+
+        // DROP DOWN LIST
+        controlsValidate = [];
+        controlsValidate.push({ 'controlName': 'idGenero' });
+        controlsValidate.push({ 'controlName': 'tipoPersona' });
+        if (!isControlsValidDropDown(controlsValidate)) { isValid = false; }
+
+
+        if (!isValid) {
+            sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
             return;
         }
+
+        var formData = $("#frmEditarPersona").serialize();
+        showLoading();
+        $.ajax({
+            url: '@Url.Action("ajax_EditarPersona","CapturaAccidentes")',
+            type: 'POST',
+            data: formData,
+            success: function (result) {
+                console.log("DFDF", result)
+                var grid = $("#gridConductores").data("kendoGrid");
+
+                if (result && result.data) {
+                    var dataArray = [result.data];
+                    grid.dataSource.data(dataArray);
+                } else {
+                    console.error("La respuesta no tiene la estructura esperada:", result);
+                }
+
+                $('#modalCrearPersona').modal('hide');
+                sitteg_success('Elemento guardado correctamente')
+                hideLoading();
+            },
+            error: function (xhr, status) {
+                var errmsg = xhr.responseText;
+                console.log(errmsg)
+                sitteg_warning('Lo sentimos, ha ocurrido un error.');
+                hideLoading();
+            }
+        });
+        //}
+        //else {
+        //    idTelefono.prop("disabled", false);
+        //    sitteg_info('Debe llenar los campos requeridos');
+        //    return;
+        //}
     }
 
 

@@ -30,21 +30,12 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
         public IActionResult Index()
         {
-            int IdModulo = 932;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+           
                 var ListTiposVehiculosModel = _catTiposVehiculoService.GetTiposVehiculos();
 
             return View(ListTiposVehiculosModel);
             }
-            else
-            {
-                TempData["ErrorMessage"] = "Este usuario no tiene acceso a esta sección.";
-                return RedirectToAction("Principal", "Inicio", new { area = "" });
-            }
-        }
+      
 
 
         #region Modal Action
@@ -59,38 +50,20 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public ActionResult AgregarTipoVehiculo()
         {
 
-            int IdModulo = 933;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+         
                 return PartialView("_Crear");
             }
-            else
-            {
-                TempData["ErrorMessage"] = "El usuario no tiene permisos suficientes para esta acción.";
-                return PartialView("ErrorPartial");
-            }
-        }
+    
 
 
         [HttpPost]
         public ActionResult EditarTipoVehiculo(int IdTipoVehiculo)
         {
-            int IdModulo = 934;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+           
                 var tiposVehiculosModel = _catTiposVehiculoService.GetTipoVehiculoByID(IdTipoVehiculo);
             return View("_Editar", tiposVehiculosModel);
             }
-            else
-            {
-                TempData["ErrorMessage"] = "El usuario no tiene permisos suficientes para esta acción.";
-                return PartialView("ErrorPartial");
-            }
-        }
+     
 
         [HttpPost]
         public ActionResult EliminarTipoVehiculoParcial(int IdTipoVehiculo)

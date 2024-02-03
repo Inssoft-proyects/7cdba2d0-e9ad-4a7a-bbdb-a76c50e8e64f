@@ -9,7 +9,7 @@
 				columns.Select().Width(50).ClientHeaderTemplate(" ");
 				columns.Bound(c => c.IdPersona).Hidden();
 				columns.Bound(c => c.IdVehiculo).Hidden();
-				columns.Bound(c => c.IdVehiculoInvolucrado).Title("No. de Vehículo").Width(100);
+				columns.Bound(c => c.numeroConsecutivo).Title("No. de Vehículo").Width(100);
 				columns.Bound(c => c.Placa).Title("Placas").Width(100);
 				columns.Bound(c => c.Tarjeta).Title("Tarjeta").Width(100);
 				columns.Bound(c => c.Serie).Title("Serie").Width(100);
@@ -28,7 +28,7 @@
 			.PageSize(5)
 			.Model(model => model.Id(p => p.IdPersona))
 			)
-			.ToolBar(t => t.Search())
+			.ToolBar(t => t.Search().Text("Buscar..."))
 			.Search(s =>
 			{
 				s.Field(c => c.IdVehiculoInvolucrado);

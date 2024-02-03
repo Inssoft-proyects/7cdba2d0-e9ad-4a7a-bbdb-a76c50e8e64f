@@ -72,8 +72,11 @@
                 columns.Bound(c => c.numeroEconomicoVehiculo).Title("No. Económico(vehículo)").Width(130);
                 columns.Bound(c => c.tipoVehiculo).Title("Tipo de vehículo").Width(100);
                 columns.Bound(c => c.color).Title("Color").Width(100);
-                columns.Bound(c => c.FechaServicioFormateada).Title("Fecha de servicio").Width(150).Format("{0:dd/MM/yyyy}"); ;
-                columns.Bound(c => c.HoraServicioFormateada).Title("Hora de servicio").Width(150).Format("{0:HH:mm}"); ;
+                columns.Bound(c => c.FechaServicioFormateada)
+                    .Title("Fecha de servicio")
+                    .Width(150)
+                    .ClientTemplate("#= mostrarFecha(FechaServicioFormateada) #");
+                columns.Bound(c => c.HoraServicioFormateada).Title("Hora de servicio").Width(150).Format("{0:HH:mm}"); 
 
             }).HtmlAttributes(new { style = "height:550px" })
             .Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }).Position(GridPagerPosition.Bottom))
@@ -83,7 +86,7 @@
             .Ajax()
             .ServerOperation(false)
             )
-            .ToolBar(t => t.Search())
+            .ToolBar(t => t.Search().Text("Buscar..."))
             .Search(s =>
             {
                 s.Field(c => c.folioInventario);
@@ -105,3 +108,12 @@
     </div>
 </div>
 
+<script>
+    function mostrarFecha(fecha) {
+        if (fecha && fecha !== "01/01/0001") {
+            return fecha;
+        } else {
+            return " ";
+        }
+    }
+</script>

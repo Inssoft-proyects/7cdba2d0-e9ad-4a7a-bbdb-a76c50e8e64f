@@ -6,14 +6,14 @@
 		var dataItem = this.dataItem(selectedRow);
 		var idPersona = dataItem.IdPersona;
 		$('#idPersonaInput').val(idPersona);
-		console.log("FEC", dataItem.FechaNacimientoFormateada)
+		console.log("FEC", dataItem.fechaNacimiento)
 		var nombre = dataItem.nombre
 		var apellidoPaterno = dataItem.apellidoPaterno
 		var apellidoMaterno = dataItem.apellidoMaterno
 		var CURP = dataItem.CURP
-		var FechaNacimientoFormateada = dataItem.FechaNacimientoFormateada;
-		console.log("FEC", FechaNacimientoFormateada)
-		FechaNacimientoFormateada = FechaNacimientoFormateada == "01/01/0001" ? "" : FechaNacimientoFormateada;
+		var fechaNacimiento = dataItem.fechaNacimiento;
+		console.log("FEC", fechaNacimiento)
+		fechaNacimiento = fechaNacimiento == "01/01/0001" ? "" : fechaNacimiento;
 		var RFC = dataItem.RFC
 
 		var nombreCompleto = nombre + " " + apellidoPaterno + " " + apellidoMaterno;
@@ -21,7 +21,7 @@
 
 		document.getElementById("nombreModal").innerText = nombreCompleto;
 		document.getElementById("curpModal").innerText = CURP;
-		document.getElementById("fechaNacimientoModal").innerText = FechaNacimientoFormateada;
+		document.getElementById("fechaNacimientoModal").innerText = fechaNacimiento;
 		document.getElementById("rfcModal").innerText = RFC;
 
 		$('#buscarInvolucradoModal').modal('hide');
@@ -95,7 +95,7 @@
 			.ServerOperation(false)
 			.PageSize(5).Model(model => model.Id(p => p.nombre))
 			)
-			.ToolBar(t => t.Search())
+			.ToolBar(t => t.Search().Text("Buscar..."))
 			.Search(s =>
 			{
 				s.Field(c => c.nombre);

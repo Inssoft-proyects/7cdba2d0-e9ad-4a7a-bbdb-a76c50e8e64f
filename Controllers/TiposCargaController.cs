@@ -28,68 +28,40 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
         public IActionResult Index()
         {
-            int IdModulo = 960;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+           
                 var ListTiposCargaModel = _tiposCargaService.GetTiposCarga();
 
             return View(ListTiposCargaModel);
             }
-            else
-            {
-                TempData["ErrorMessage"] = "Este usuario no tiene acceso a esta sección.";
-                return RedirectToAction("Principal", "Inicio", new { area = "" });
-            }
 
-        }
-       
+
 
         #region Modal Action
         public ActionResult IndexModal()
         {
-            var ListTiposCargaModel = GetTiposCarga();
+   
+                var ListTiposCargaModel = GetTiposCarga();
             //return View("IndexModal");
             return View("Index", ListTiposCargaModel);
         }
+ 
 
         [HttpPost]
         public ActionResult AgregarTipoCargaParcial()
         {
-            int IdModulo = 961;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+          
                 return PartialView("_Crear");
             }
-            else
-            {
-                TempData["ErrorMessage"] = "El usuario no tiene permisos suficientes para esta acción.";
-                return PartialView("ErrorPartial");
-            }
-            
-        }
+ 
 
         [HttpPost]
         public ActionResult EditarParcial(int IdTipoCarga)
         {
-            int IdModulo = 962;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
+           
                 var tiposCargaModel = GetTipoCargaByID(IdTipoCarga);
                 return View("_Editar", tiposCargaModel);
             }
-            else
-            {
-                TempData["ErrorMessage"] = "El usuario no tiene permisos suficientes para esta acción.";
-                return PartialView("ErrorPartial");
-            }
-        
-    }
+
 
         [HttpPost]
         public ActionResult EliminarTipoCargaParcial(int IdTipoCarga)

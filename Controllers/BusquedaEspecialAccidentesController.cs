@@ -2,7 +2,9 @@
 using GuanajuatoAdminUsuarios.Models;
 using GuanajuatoAdminUsuarios.Services;
 using GuanajuatoAdminUsuarios.Utils;
+using Kendo.Mvc;
 using Kendo.Mvc.Infrastructure.Implementation;
+using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +35,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
         private readonly ICatEstatusReporteService _catEstatusReporteService;
 
         private int idOficina = 0;
+        private string resultValue = string.Empty;
+        public static BusquedaEspecialAccidentesModel AccidentesEspecialNewModel = new BusquedaEspecialAccidentesModel();
 
         public BusquedaEspecialAccidentesController(IBusquedaEspecialAccidentesService busquedaEspecialAccidentesService, ICatCarreterasService catCarreterasService, ICatTramosService catTramosService,
             ICatDelegacionesOficinasTransporteService catDelegacionesOficinasTransporteService, IOficiales oficialesService, IPdfGenerator pdfService,
@@ -51,19 +55,16 @@ namespace GuanajuatoAdminUsuarios.Controllers
         #region DropDowns
         public IActionResult Index()
         {
-            // int IdModulo = 800;
-            //string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            // List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            // if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            // {
-            return View();
-           // }
-           /* else
+
+                int? idOficina = HttpContext.Session.GetInt32("IdOficina");
+            BusquedaEspecialAccidentesModel modelo = new BusquedaEspecialAccidentesModel
             {
-                TempData["ErrorMessage"] = "Este usuario no tiene acceso a esta sección.";
-                return RedirectToAction("Principal", "Inicio", new { area = "" });
-            }*/
+                IdDelegacionBusqueda = idOficina ?? 0,
+            };
+            return View(modelo);
+
         }
+       
         public JsonResult Delegaciones_Drop()
         {
             var result = new SelectList(_catDelegacionesOficinasTransporteService.GetDelegacionesOficinasActivos(), "IdDelegacion", "Delegacion");
@@ -187,7 +188,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             var accidenteEliminado = _busquedaEspecialAccidentesService.EliminarSeleccionado(idAccidente);
             int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
             int idDependencia = (int)HttpContext.Session.GetInt32("IdDependencia");
-            var resultadoBusqueda = _busquedaEspecialAccidentesService.ObtenerTodosAccidentes(idOficina);
+            var resultadoBusqueda = _busquedaEspecialAccidentesService.ObtenerTodosAccidentes();
             return Json(resultadoBusqueda);
         }
 
@@ -202,7 +203,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
             return PartialView("_ModalEliminarAccidente", viewModel);
         }
-        
+
         public IActionResult ModalEditarFolio(int idAccidente, string numeroReporte)
         {
 
@@ -215,13 +216,13 @@ namespace GuanajuatoAdminUsuarios.Controllers
             return PartialView("_ModalEditarFolio", viewModel);
         }
 
-        public IActionResult ajax_BusquedaAccidentes(BusquedaEspecialAccidentesModel model)
+     /*   public IActionResult ajax_BusquedaAccidentes(BusquedaEspecialAccidentesModel model)
         {
             int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
             //int idDependencia = (int)HttpContext.Session.GetInt32("IdDependencia");
 
-            var resultadoBusqueda = _busquedaEspecialAccidentesService.ObtenerTodosAccidentes(idOficina)
-                                                .Where(w => w.idMunicipio == (model.idMunicipio > 0 ? model.idMunicipio : w.idMunicipio)
+            var resultadoBusquedaEspecial = _busquedaEspecialAccidentesService.ObtenerTodosAccidentes()
+                                                  .Where(w => w.idMunicipio == (model.idMunicipio > 0 ? model.idMunicipio : w.idMunicipio)
                                                     && w.idSupervisa == (model.IdOficialBusqueda > 0 ? model.IdOficialBusqueda : w.idSupervisa)
                                                     && w.idCarretera == (model.IdCarreteraBusqueda > 0 ? model.IdCarreteraBusqueda : w.idCarretera)
                                                     && w.idTramo == (model.IdTramoBusqueda > 0 ? model.IdTramoBusqueda : w.idTramo)
@@ -236,14 +237,14 @@ namespace GuanajuatoAdminUsuarios.Controllers
                                                    && (string.IsNullOrEmpty(model.conductorBusqueda) || w.conductor.Contains(model.conductorBusqueda, StringComparison.OrdinalIgnoreCase))
                                                    && ((model.FechaInicio == default(DateTime) && model.FechaFin == default(DateTime)) || (w.fecha >= model.FechaInicio && w.fecha <= model.FechaFin))
                                                     ).ToList();
-			for (int i = 0; i < resultadoBusqueda.Count; i++)
-			{
-				resultadoBusqueda[i].Numero = i + 1;
-			}
+            for (int i = 0; i < resultadoBusquedaEspecial.Count; i++)
+            {
+                resultadoBusquedaEspecial[i].Numero = i + 1;
+            }
 
-			return Json(resultadoBusqueda);
+            return Json(resultadoBusquedaEspecial);
 
-        }
+        }*/
 
 
 
@@ -251,12 +252,72 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public ActionResult UpdateFolio(string id,string folio)
         {
 
-
-            var fol = _busquedaEspecialAccidentesService.UpdateFolio(id,folio);
-
-            return Json(true);
+            var t = _busquedaEspecialAccidentesService.validarFolio(folio);
+            if (t)
+            {
+                var fol = _busquedaEspecialAccidentesService.UpdateFolio(id, folio);
+            }
+            return Json(t);
         }
+        public IActionResult ajax_BusquedaEspecialAccidentes([DataSourceRequest] DataSourceRequest request, BusquedaEspecialAccidentesModel model)
+        {
+     
+                AccidentesEspecialNewModel = model;
+                return PartialView("_ListaAccidentesBusquedaEspecial", new List<BusquedaEspecialAccidentesModel>());
+            
+            
+          
+        }
+        
+        public ActionResult GetAccidentesBusquedaPagination([DataSourceRequest] DataSourceRequest request, BusquedaEspecialAccidentesModel model)
+        {
+			
+				// filterValue(request.Filters);
 
+				Pagination pagination = new Pagination();
+            pagination.PageIndex = request.Page - 1;
+            pagination.PageSize = 10;
+            // pagination.Filter = resultValue;
+            if (AccidentesEspecialNewModel == null)
+                AccidentesEspecialNewModel = model;
+
+            var accidentesList = _busquedaEspecialAccidentesService.GetAllAccidentesPagination(pagination, AccidentesEspecialNewModel);
+            var total = 0;
+            if (accidentesList.Count() > 0)
+                total = accidentesList.ToList().FirstOrDefault().total;
+
+            request.PageSize = 10;
+            var result = new DataSourceResult()
+            {
+                Data = accidentesList,
+                Total = total
+            };
+
+            return Json(result);
+        }
+			
+		
+
+		private void filterValue(IEnumerable<IFilterDescriptor> filters)
+        {
+            if (filters.Any())
+            {
+                foreach (var filter in filters)
+                {
+                    var descriptor = filter as FilterDescriptor;
+                    if (descriptor != null)
+                    {
+                        resultValue = descriptor.Value.ToString();
+                        break;
+                    }
+                    else if (filter is CompositeFilterDescriptor)
+                    {
+                        if (resultValue == "")
+                            filterValue(((CompositeFilterDescriptor)filter).FilterDescriptors);
+                    }
+                }
+            }
+        }
 
 
     }

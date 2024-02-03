@@ -46,24 +46,14 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public IActionResult Index()
         {
-            int IdModulo = 303;
-            string listaIdsPermitidosJson = HttpContext.Session.GetString("IdsPermitidos");
-            List<int> listaIdsPermitidos = JsonConvert.DeserializeObject<List<int>>(listaIdsPermitidosJson);
-            if (listaIdsPermitidos != null && listaIdsPermitidos.Contains(IdModulo))
-            {
                 int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
 
                 LiberacionVehiculoBusquedaModel searchModel = new LiberacionVehiculoBusquedaModel();
-                List<LiberacionVehiculoModel> ListDepositos = _liberacionVehiculoService.GetAllTopDepositos(idOficina);
-                searchModel.ListDepositosLiberacion = ListDepositos;
+               // List<LiberacionVehiculoModel> ListDepositos = _liberacionVehiculoService.GetAllTopDepositos(idOficina);
+                //searchModel.ListDepositosLiberacion = ListDepositos;
                 return View(searchModel);
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "Este usuario no tiene acceso a esta sección.";
-                return RedirectToAction("Principal", "Inicio", new { area = "" });
-            }
         }
+           
 
 
         public JsonResult Placas_Read()
@@ -82,41 +72,52 @@ namespace GuanajuatoAdminUsuarios.Controllers
         [HttpPost]
         public ActionResult ajax_BuscarVehiculo(LiberacionVehiculoBusquedaModel model)
         {
-            int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+           /* int IdModulo = 230;
+            string listaPermisosJson = HttpContext.Session.GetString("Autorizaciones");
+            List<int> listaPermisos = JsonConvert.DeserializeObject<List<int>>(listaPermisosJson);
+            if (listaPermisos != null && listaPermisos.Contains(IdModulo))
+            {*/
+                int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+                var ListVehiculosModel = _liberacionVehiculoService.GetDepositos(model, idOficina);
 
-            var ListVehiculosModel = _liberacionVehiculoService.GetDepositos(model, idOficina);
+                if (ListVehiculosModel.Count == 0)
+                {
+                    ViewBag.NoResultsMessage = "No se encontraron resultados que cumplan con los criterios de búsqueda.";
+                }
 
-            if (ListVehiculosModel.Count == 0)
-            {
-                ViewBag.NoResultsMessage = "No se encontraron resultados que cumplan con los criterios de búsqueda.";
-            }
-
-            return PartialView("_ListadoVehiculos", ListVehiculosModel);
+                return PartialView("_ListadoVehiculos", ListVehiculosModel);
+            /* }
+             else
+             {
+                 TempData["ErrorMessage"] = "Este usuario no tiene acceso a esta sección.";
+                 return PartialView("ErrorPartial");
+             }*/
         }
 
 
         [HttpGet]
         public ActionResult ajax_UpdateLiberacion(int Id)
         {
-            int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
-            var model = _liberacionVehiculoService.GetDepositoByID(Id, idOficina);
-            RepuveConsgralRequestModel repuveGralModel = new RepuveConsgralRequestModel()
-            {
-                placa = model.Placa,
-                niv = model.Serie
-            };
+           
+                int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+                var model = _liberacionVehiculoService.GetDepositoByID(Id, idOficina);
+                RepuveConsgralRequestModel repuveGralModel = new RepuveConsgralRequestModel()
+                {
+                    placa = model.Placa,
+                    niv = model.Serie
+                };
 
-            //BITACORA
-            var ip = HttpContext.Connection.RemoteIpAddress.ToString();
-            var user = Convert.ToDecimal(User.FindFirst(CustomClaims.IdUsuario).Value);
-            _bitacoraServices.insertBitacora(Id, ip, "LiberacionVehiculo_Liberacion", "Actualizar", "update", user);
+                //BITACORA
+                var ip = HttpContext.Connection.RemoteIpAddress.ToString();
+                var user = Convert.ToDecimal(User.FindFirst(CustomClaims.IdUsuario).Value);
+                _bitacoraServices.insertBitacora(Id, ip, "LiberacionVehiculo_Liberacion", "Actualizar", "update", user);
 
-            var repuveConsRoboResponse = _repuveService.ConsultaRobo(repuveGralModel).FirstOrDefault();
-            ViewBag.ReporteRobo = repuveConsRoboResponse.estatus == 1;
-            //model.FechaIngreso.ToString("dd/MM/yyyy");
-            return PartialView("_UpdateLiberacion", model);
-
-        }
+                var repuveConsRoboResponse = _repuveService.ConsultaRobo(repuveGralModel).FirstOrDefault();
+                ViewBag.ReporteRobo = repuveConsRoboResponse.estatus == 1;
+                //model.FechaIngreso.ToString("dd/MM/yyyy");
+                return PartialView("_UpdateLiberacion", model);
+            }
+       
 
         //public ActionResult UpdateLiberacion(LiberacionVehiculoModel model, IFormFile ImageAcreditacionPropiedad, IFormFile ImageAcreditacionPersonalidad, IFormFile ImageReciboPago)
         [HttpPost]
