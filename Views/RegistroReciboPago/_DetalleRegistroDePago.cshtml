@@ -1,22 +1,23 @@
 ﻿@model GuanajuatoAdminUsuarios.Models.RegistroReciboPagoModel
 
-<div>
-    <h5>Registro de Recibo de pago</h5>
+<div class="px-4 mb-4 align-items-end">
+    <h1>Registro de recibo de pago</h1>
+    <hr />
 
     @if (Model != null)
     {
 
-        <p>Folio: @(Model.FolioInfraccion ?? "-")</p>
-        <p>Monto Calificacion: @(Model.Monto.HasValue ? Model.Monto.ToString() : "-")</p>
+        <p><b>Folio:</b> @(Model.FolioInfraccion ?? "-")</p>
+        <p><b>Monto Calificacion:</b> @(Model.Monto.HasValue ? Model.Monto.ToString() : "-")</p>
 
 
     }
 </div>
 
-  <form id ="reciboPagoForm"class="row px-4 mb-4 align-items-end">
+  <form id ="reciboPagoForm" class="row px-4 mb-4 align-items-end">
       @Html.HiddenFor(m=>m.IdInfraccion)
 
-    <div class="col-12 col-md-6 col-lg-3">
+    <div class="col-12 col-md-6">
         <div class="controlForm my-3">
             @(Html.Kendo().TextBoxFor(m=>m.ReciboPago)
                 .Label(l => l.Content("Recibo:"))
@@ -25,12 +26,11 @@
                 )
 
         </div>
+        <div id="mensajeServicio" class="error-message" style="color:green"></div>
+        <div id="mensajeError" class="success-message" style="color:red"></div>
     </div>
-    <div id="mensajeServicio" class="error-message" style="color:green"></div>
-    <div id="mensajeError" class="success-message" style="color:red"></div>
-
-
-    <div class="col-12 col-md-6 col-lg-3">
+    
+    <div class="col-12 col-md-6">
         <div class="controlButton my-3">
             <button type="button" onclick="comprobarRecibo($('#ReciboPago').val())" class='btnPrimary'>
                 <h5 class="m-0"><i class='icon-data m-0'></i>&nbsp;&nbsp; <b>Comprobar Recibo</b></h5>
@@ -38,7 +38,7 @@
         </div>
     </div>
 
-    <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+    <div class="col-12 col-auto">
         <div class="controlForm my-3">
             @(Html.Kendo().TextBoxFor(m=>m.Monto)
                 .Label(l => l.Content("Monto:"))
@@ -48,7 +48,7 @@
 
         </div>
     </div>
-    <div class="col-12 col-md-6 col-lg-3">
+    <div class="col-12 col-md-5">
         <div class="controlForm my-3">
             <label>Fecha:</label>
             @(Html.Kendo().DateTimePickerFor(t => t.FechaPago)
@@ -58,16 +58,24 @@
         </div>
     </div>
 
-    <div class="col-12 col-md-6 col-lg-6">
+    <div class="col-12 col-md-5">
         <div class="controlForm my-3">
             @(Html.Kendo().TextBoxFor(m=>m.LugarPago)
-                .Label(l => l.Content("Lugar de pago"))
+                .Label(l => l.Content("Lugar de pago:"))
                 .Placeholder("Lugar de pago")
                 .HtmlAttributes(new { style = "width: 100%", @readonly = "readonly" })
                 )
         </div>
     </div>
 </form>
+<div class="row px-4 mb-4 align-items-end">
+
+<div class="controlButton my-3" id="botnCancelar" style="display: block;" onclick="cerrarModal()">
+    @(Html.Kendo().Button()
+        .Name("Cerrar")
+        .HtmlAttributes(new { @class = "btnOutline" })
+        .Content("<h5 class=\"m-0\"><b>Cancelar</b></h5>"))
+</div>
 
    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
     <div class="controlButton my-3" id="botnGuardar" style="display: block;" onclick="guardarReciboPago()">
@@ -80,14 +88,10 @@
     </div>
 <div class="col-12 col-md-6 col-lg-4 col-xl-3">
 
-<div class="controlButton my-3" id="botnCancelar" style="display: block;" onclick="cerrarModal()">
-    @(Html.Kendo().Button()
-        .Name("Cerrar")
-        .HtmlAttributes(new { @class = "btnOutline" })
-        .Content("<h5 class=\"m-0\"><b>Cancelar</b></h5>"))
-</div>
+
 
     </div>
+</div>
 <script>
     function guardarReciboPago() {
         showLoading();
