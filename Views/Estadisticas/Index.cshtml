@@ -156,12 +156,13 @@
                                 .DataValueField("Value")
                                 .HtmlAttributes(new { style = "width:100%;", Id = "ddlCortesia" })
                                 .OptionLabel("Seleccione una opción...")
-                                .BindTo(new List<SelectListItem>
-                            {
-                            new SelectListItem { Text = "No aplica cortesía", Value = "0" },
-                            new SelectListItem { Text = "Sí aplica cortesía", Value = "1" }
-                            })
-                                )
+                                .DataSource(source =>
+                                {
+                                    source.Read(read =>
+                                    {
+                                        read.Action("Cortesias_Read", "Infracciones");
+                                    });
+                                }))
 
                         </span>
                     </div>

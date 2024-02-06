@@ -53,16 +53,21 @@
     <div>
         <nav class="tabCustom">
             <div class="nav nav-tabs row mx-0" id="nav-tab" role="tablist">
-                <button class="nav-link active col" id="propietario-conductor-tab" data-bs-toggle="tab" data-bs-target="#propietario-conductor" type="button" role="tab" aria-controls="person-moral" aria-selected="true">
-                    <div class="row justify-content-center align-items-center px-3 py-2">
-                        <div class="col-auto radioCustom p-0">
-                            <div class="rounded-circle m-2"></div>
+
+                @if(Model.IdCatTipoPersona!=2){
+                    <button class="nav-link active col" id="propietario-conductor-tab" data-bs-toggle="tab" data-bs-target="#propietario-conductor" type="button" role="tab" aria-controls="person-moral" aria-selected="true">
+                        <div class="row justify-content-center align-items-center px-3 py-2">
+                            <div class="col-auto radioCustom p-0">
+                                <div class="rounded-circle m-2"></div>
+                            </div>
+                            <div class="col-auto p-0">
+                                <h5 class="m-0"><i class="icon-propietario h4"></i> <b>Propietario</b></h5>
+                            </div>
                         </div>
-                        <div class="col-auto p-0">
-                            <h5 class="m-0"><i class="icon-propietario h4"></i> <b>Propietario</b></h5>
-                        </div>
-                    </div>
-                </button>
+                    </button>
+                }
+
+                
                 <button class="nav-link col" id="busqueda-conductor-tab" data-bs-toggle="tab" data-bs-target="#busqueda-conductor" type="button" role="tab" aria-controls="busqueda-conductor" aria-selected="false">
                     <div class="row justify-content-center align-items-center px-3 py-2">
                         <div class="col-auto radioCustom p-0">
@@ -86,168 +91,178 @@
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane tabCustomConteiner fade show active" id="propietario-conductor" role="tabpanel" aria-labelledby="propietario-conductor-tab">
-                <div class="row px-4 mt-3 pb-2 align-items-end">
-                    <div class="col-12 mt-4">
-                        <h5 class="px-4"><b>Datos de conductor</b></h5>
-                        <h6 class="px-4 text-muted">Selecciona entre el propietario o búsqueda / nuevo conductor </h6>
-                    </div>
-                </div>
-                <div class="row px-4 align-items-end">
-                    <div class="col">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">Tipo de propietario:</label>
-                            <label>@Model.TipoPersona</label>
+            
+            @if (Model.IdCatTipoPersona != 2)
+            {
+                <div class="tab-pane tabCustomConteiner fade show active" id="propietario-conductor" role="tabpanel" aria-labelledby="propietario-conductor-tab">
+                    <div class="row px-4 mt-3 pb-2 align-items-end">
+                        <div class="col-12 mt-4">
+                            <h5 class="px-4"><b>Datos de conductor</b></h5>
+                            <h6 class="px-4 text-muted">Selecciona entre el propietario o búsqueda / nuevo conductor </h6>
                         </div>
                     </div>
-                    <div class="col-auto">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">Nombre:</label>
-                            <label>@Model.IdAccidente </label>
+                    <div class="row px-4 align-items-end">
+                        <div class="col">
+                            <div class="controlForm mb-3 mt-1">
+                                <label class="text-muted">Tipo de propietario:</label>
+                                <label>@Model.TipoPersona</label>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="controlForm mb-3 mt-1">
+                                <label class="text-muted">Nombre:</label>
+                                <label>@Model.IdAccidente </label>
 
-                            <label>@Model.Propietario </label>
+                                <label>@Model.Propietario </label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">RFC:</label>
-                            <label>@Model.RFC</label>
+                        <div class="col">
+                            <div class="controlForm mb-3 mt-1">
+                                <label class="text-muted">RFC:</label>
+                                <label>@Model.RFC</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">CURP:</label>
-                            <label>@Model.CURP</label>
+                        <div class="col">
+                            <div class="controlForm mb-3 mt-1">
+                                <label class="text-muted">CURP:</label>
+                                <label>@Model.CURP</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-auto">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">Fecha de nacimiento:</label>
-                            <label>@(Model.FormatDateNacimiento != null ? Model.FormatDateNacimiento : "-")</label>
+                        <div class="col-auto">
+                            <div class="controlForm mb-3 mt-1">
+                                <label class="text-muted">Fecha de nacimiento:</label>
+                                <label>@(Model.FormatDateNacimiento != null ? Model.FormatDateNacimiento : "-")</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-auto">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">Sexo:</label>
-                            <label>@Model.Genero</label>
+                        <div class="col-auto">
+                            <div class="controlForm mb-3 mt-1">
+                                <label class="text-muted">Sexo:</label>
+                                <label>@Model.Genero</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-auto">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">Teléfono:</label>
-                            <label>@Model.Telefono</label>
+                        <div class="col-auto">
+                            <div class="controlForm mb-3 mt-1">
+                                <label class="text-muted">Teléfono:</label>
+                                <label>@Model.Telefono</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">Correo electrónico:</label>
-                            <label>@Model.Correo</label>
+                        <div class="col">
+                            <div class="controlForm mb-3 mt-1">
+                                <label class="text-muted">Correo electrónico:</label>
+                                <label>@Model.Correo</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-auto">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">Modelo:</label>
-                            <label>@Model.Modelo</label>
+                        <div class="col-auto">
+                            <div class="controlForm mb-3 mt-1">
+                                <label class="text-muted">Modelo:</label>
+                                <label>@Model.Modelo</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-auto">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">Entidad:</label>
-                            <label>@Model.Entidad</label>
+                        <div class="col-auto">
+                            <div class="controlForm mb-3 mt-1">
+                                <label class="text-muted">Entidad:</label>
+                                <label>@Model.Entidad</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-auto">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">Colonia:</label>
-                            <label>@Model.Colonia</label>
+                        <div class="col-auto">
+                            <div class="controlForm mb-3 mt-1">
+                                <label class="text-muted">Colonia:</label>
+                                <label>@Model.Colonia</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-auto">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">Calle:</label>
-                            <label>@Model.Calle</label>
+                        <div class="col-auto">
+                            <div class="controlForm mb-3 mt-1">
+                                <label class="text-muted">Calle:</label>
+                                <label>@Model.Calle</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-auto">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">Número:</label>
-                            <label>@Model.Numero</label>
+                        <div class="col-auto">
+                            <div class="controlForm mb-3 mt-1">
+                                <label class="text-muted">Número:</label>
+                                <label>@Model.Numero</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-auto">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">Municipio:</label>
-                            <label>@Model.Municipio</label>
+                        <div class="col-auto">
+                            <div class="controlForm mb-3 mt-1">
+                                <label class="text-muted">Municipio:</label>
+                                <label>@Model.Municipio</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-auto">
-                        <div class="controlForm mb-3 mt-1">
+                        <div class="col-auto">
+                            <div class="controlForm mb-3 mt-1">
 
-                            <label class="text-muted">Vigencia Licencia:</label>
-                            <label>
-                                @((Model.vigenciaLicencia != new DateTime(1900, 1, 1) && Model.vigenciaLicencia != DateTime.MinValue)
-                                    ? Model.vigenciaLicencia.ToString("dd/MM/yyyy")
-                                    : "-")
-                            </label>
+                                <label class="text-muted">Vigencia Licencia:</label>
+                                <label>
+                                    @((Model.vigenciaLicencia != new DateTime(1900, 1, 1) && Model.vigenciaLicencia != DateTime.MinValue)
+                                        ? Model.vigenciaLicencia.ToString("dd/MM/yyyy")
+                                        : "-")
+                                </label>
 
 
 
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="controlForm mb-3 mt-1">
+                                <label class="text-muted">Tipo de licencia:</label>
+                                <label>@Model.TipoLicencia</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="controlForm mb-3 mt-1">
+                                <label class="text-muted">Fecha de vencimiento:</label>
+                                <label>
+                                    @((Model.VigenciaTarjeta != new DateTime(1900, 1, 1) && Model.VigenciaTarjeta != DateTime.MinValue)
+                                        ? Model.VigenciaTarjeta.ToString("dd/MM/yyyy")
+                                        : "-")
+                                </label>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-auto">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">Tipo de licencia:</label>
-                            <label>@Model.TipoLicencia</label>
+                    <form id="propietarioConductorForm">
+                        @Html.HiddenFor(m => m.IdPersona)
+                        @Html.HiddenFor(m => m.IdVehiculo, new { @id = "IdVehiculoH" })
+                    </form>
+                    <div class="row justify-content-center mb-3">
+                        <div class="col-11 col-md-auto">
+                            <div class="controlButton my-3" onclick="guardarVehiculoConductor()">
+                                @(Html.Kendo().Button()
+                                    .Name("PropietarioConductor")
+                                    .HtmlAttributes(new { @class = "btnPrimary" })
+                                    .Content("<h5 class=\"m-0\"><b>Seleccionar al propietario como conductor</b></h5>"))
+                            </div>
                         </div>
                     </div>
-                    <div class="col">
-                        <div class="controlForm mb-3 mt-1">
-                            <label class="text-muted">Fecha de vencimiento:</label>
-                            <label>
-                                @((Model.VigenciaTarjeta != new DateTime(1900, 1, 1) && Model.VigenciaTarjeta != DateTime.MinValue)
-                                    ? Model.VigenciaTarjeta.ToString("dd/MM/yyyy")
-                                    : "-")
-                            </label>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="tabCustomEnd"></div>
                         </div>
                     </div>
-                </div>
-                <form id="propietarioConductorForm">
-                    @Html.HiddenFor(m => m.IdPersona)
-                    @Html.HiddenFor(m => m.IdVehiculo, new { @id = "IdVehiculoH" })
-                </form>
-                <div class="row justify-content-center mb-3">
-                    <div class="col-11 col-md-auto">
-                        <div class="controlButton my-3" onclick="guardarVehiculoConductor()">
-                            @(Html.Kendo().Button()
-                                .Name("PropietarioConductor")
-                                .HtmlAttributes(new { @class = "btnPrimary" })
-                                .Content("<h5 class=\"m-0\"><b>Seleccionar al propietario como conductor</b></h5>"))
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="tabCustomEnd"></div>
-                    </div>
-                </div>
-                <div class="row px-4 py-5 align-items-end bg-light">
-                    <div class="col-12 col-md-10 mx-md-auto text-center">
-                        <h3><b>Aún no se carga propietario al vehículo en la plataforma del Registro de Infracciones y Accidentes</b></h3>
-                        <h4 class="fw-normal">Registra un propietario o busca un conductor</h4>
-                        <div class="row ">
-                            <div class="col-12 col-md-8 mx-md-auto col-lg-5 ">
-                                <div class="btnOutline btnOutlinePrimary my-3">
-                                    <button onclick="mostrarModalCapturarConductor()">
-                                        <h5 class="m-0"><i class="me-2 icon-addConductor"></i><b>Agregar un conductor nuevo</b></h5>
-                                    </button>
+                    <div class="row px-4 py-5 align-items-end bg-light">
+                        <div class="col-12 col-md-10 mx-md-auto text-center">
+                            <h3><b>Aún no se carga propietario al vehículo en la plataforma del Registro de Infracciones y Accidentes</b></h3>
+                            <h4 class="fw-normal">Registra un propietario o busca un conductor</h4>
+                            <div class="row ">
+                                <div class="col-12 col-md-8 mx-md-auto col-lg-5 ">
+                                    <div class="btnOutline btnOutlinePrimary my-3">
+                                        <button onclick="mostrarModalCapturarConductor()">
+                                            <h5 class="m-0"><i class="me-2 icon-addConductor"></i><b>Agregar un conductor nuevo</b></h5>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
-                
-            </div>
-            <div class="tab-pane tabCustomConteiner fade" id="busqueda-conductor" role="tabpanel" aria-labelledby="busqueda-conductor-tab">
+
+            }
+            
+      
+            
+            
+            
+            <div      class="tab-pane tabCustomConteiner fade @(Model.IdCatTipoPersona == 2?"show active":"")" id="busqueda-conductor" role="tabpanel" aria-labelledby="busqueda-conductor-tab">
                 <form id="otroConductorForm">
                     <div class="row px-4 mt-4 align-items-end">
                         <div class="col-12 col-md-6 col-lg-3">

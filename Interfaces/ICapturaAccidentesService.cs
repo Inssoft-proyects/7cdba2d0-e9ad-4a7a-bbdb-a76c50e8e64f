@@ -25,7 +25,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
 
         List<CapturaAccidentesModel> ObtenerDatosGrid(int idAccidente);
 
-        public int ClasificacionEliminar(int idAccidente);
+        public int ClasificacionEliminar(int idAccidente, int IdClasificacionAccidente);
 
         List<CapturaAccidentesModel> AccidentePorID(int idAccidente);
 

@@ -35,6 +35,34 @@
                     <div class="bg-light py-1"></div>
                 </div>
             </div>
+        <div class="row">
+            <div class="col-12 mb-4 px-4 rounded gridCustom">
+                <div class="controlForm my-3 col-12 col-md-6 col-lg-3">
+                    <label>Delegación</b>:</label>
+                    @(Html.Kendo().DropDownList()
+                        .Name("idDelegacion")
+                        .Filter(FilterType.Contains)
+                        .DataTextField("Text")
+                        .DataValueField("Value")
+                        .OptionLabel("Selecciona una delegación")
+                        .HtmlAttributes(new { @class = "CentradoList", style = "width:100%;", id = "idDelegacionFiltro" })
+                        .DataSource(source =>
+
+                        {
+                            source.Read(read =>
+                            {
+                                read.Action("DelegacionesOficinas_Drop", "Oficiales");
+                            });
+                        }))
+                </div>
+                <div class="col-12 my-3 col-md-6 col-lg-3">
+                    <div class="controlButton">
+                        <button class="btnPrimary" type="button" onclick="submitSearch()">  <h5 class="m-0"><b>Buscar</b></h5></button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
             <div class="row justify-content-between mb-1 titleCustom">
                 <div class="col-12 col-md-auto mt-4 mb-2">
                     <h5 class="px-4"><b>Listado de oficiales</b></h5>
@@ -95,5 +123,34 @@
         });
     }
 
+    function submitSearch() {
+        var idDelegacionFiltro = $("#idDelegacionFiltro").val();
+        console.log("V", idDelegacionFiltro)
 
+        showLoading();
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("ajax_BuscarDelegacion")',
+            data: {
+                "idDelegacionFiltro": idDelegacionFiltro
+            },
+            success: function (data) {
+                console.log(data);
+                var grid = $("#gridCatOficiales").data("kendoGrid");
+
+    grid.dataSource.data([]);
+
+    for (var i = 0; i < data.length; i++) {
+        grid.dataSource.add(data[i]);
+    }
+
+    grid.refresh();
+
+    hideLoading();
+            },
+            error: function (xhr, status) {
+                hideLoading();
+            }
+        });
+    }
 </script>

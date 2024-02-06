@@ -41,7 +41,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                                         LEFT JOIN personas AS pI ON pI.IdPersona = i.IdPersona 
                                                         LEFT JOIN personas AS pV ON pV.IdPersona = v.idPersona 
                                                         LEFT JOIN catDelegaciones cde ON cde.idDelegacion = i.idDelegacion  
-                                                        WHERE folioInfraccion LIKE '%' + @FolioInfraccion + '%' AND i.infraccionCortesia = 0;", connection);
+                                                        WHERE folioInfraccion LIKE '%' + @FolioInfraccion + '%' AND i.infraccionCortesia = 3;", connection);
 
                     command.Parameters.Add(new SqlParameter("@FolioInfraccion", SqlDbType.NVarChar)).Value = FolioInfraccion;
                     command.CommandType = CommandType.Text;
@@ -111,7 +111,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     LEFT JOIN garantiasInfraccion gi ON gi.idGarantia = g.idGarantia
                     LEFT JOIN catTipoPlaca AS tp ON tp.idTipoPlaca = gi.idTipoPlaca
                     LEFT JOIN catTipoLicencia AS tl ON tl.idTipoLicencia = pi.idTipoLicencia
-                    WHERE i.folioInfraccion like '%' + @id + '%' and i.infraccionCortesia = 0", connection);
+                    WHERE i.folioInfraccion like '%' + @id + '%' and i.infraccionCortesia = 3", connection);
                     command.Parameters.Add(new SqlParameter("@id", SqlDbType.NVarChar)).Value = id;
                     command.CommandType = CommandType.Text;
                     using (

@@ -190,6 +190,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
         {
             try
             {
+                HttpContext.Session.Clear();
+              
                 var handler = new HttpClientHandler
                 {
                     ServerCertificateCustomValidationCallback = (request, cert, chain, errors) =>
@@ -366,7 +368,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
 
 
-
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return Redirect("/inicio");
+        }
 
 
     }

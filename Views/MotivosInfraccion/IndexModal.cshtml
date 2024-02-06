@@ -136,50 +136,52 @@
 
                 </div>
             </div>
-            <div  class="row px-4 mb-4 align-items-end" id="elementosFecha">
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="controlForm mb-3">
-                        <label>Inicio de vigencia desde:</label>
-                        @(Html.Kendo().DatePickerFor(t => t.InicioVigenciaDesde).Max(DateTime.Now)
-                            .Format("dd/MM/yyyy")
-                            .Culture("es-ES")
-                            .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "inicioVigenciaDesde" })
-                            )
-                </div>
-            </div>
-
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="controlForm mb-3">
-                        <label>Inicio de vigencia hasta:</label>
-                        @(Html.Kendo().DatePickerFor(t => t.InicioVigenciaHasta)
-                            .Format("dd/MM/yyyy")
-                            .Culture("es-ES")
-                            .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "inicioVigenciaHasta" })
-                            )
-                </div>
-            </div>
-
-            <div class="col-12 col-md-6 col-lg-4">
-                    <div class="controlForm mb-3">
-                        <label>Fin de vigencia desde:</label>
-                        @(Html.Kendo().DatePickerFor(t => t.FinVigenciaDesde)
-                            .Format("dd/MM/yyyy")
-                            .Culture("es-ES")
-                            .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "FinVigenciaDesde" })
-                            )
+                <div class="row px-2.2 mb-4 align-items-end" id="elementosFecha">
+                    <div class="col-12 col-md-5">
+                        <div class="controlForm mb-3">
+                            <label>Inicio de vigencia desde:</label>
+                            @(Html.Kendo().DatePickerFor(t => t.InicioVigenciaDesde).Max(DateTime.Now)
+                                .Format("dd/MM/yyyy")
+                                .Culture("es-ES")
+                                .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "inicioVigenciaDesde" })
+                                )
+                        </div>
                     </div>
-            </div>
-             <div class="col-12 col-md-6 col-lg-4">
-                    <div class="controlForm mb-3">
-                        <label>Fin de vigencia hasta:</label>
-                        @(Html.Kendo().DatePickerFor(t => t.FinVigenciaHasta)
-                            .Format("dd/MM/yyyy")
-                            .Culture("es-ES")
-                            .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "FinVigenciaHasta" })
-                            )
+
+                    <div class="col-12 col-md-5">
+                        <div class="controlForm mb-3">
+                            <label>Inicio de vigencia hasta:</label>
+                            @(Html.Kendo().DatePickerFor(t => t.InicioVigenciaHasta)
+                                .Format("dd/MM/yyyy")
+                                .Culture("es-ES")
+                                .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "inicioVigenciaHasta" })
+                                )
+                        </div>
                     </div>
-            </div>
+
+                    <div class="col-12 col-md-5">
+                        <div class="controlForm mb-3">
+                            <label>Fin de vigencia desde:</label>
+                            @(Html.Kendo().DatePickerFor(t => t.FinVigenciaDesde)
+                                .Format("dd/MM/yyyy")
+                                .Culture("es-ES")
+                                .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "FinVigenciaDesde" })
+                                )
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-5">
+                        <div class="controlForm mb-3">
+                            <label>Fin de vigencia hasta:</label>
+                            @(Html.Kendo().DatePickerFor(t => t.FinVigenciaHasta)
+                                .Format("dd/MM/yyyy")
+                                .Culture("es-ES")
+                                .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "FinVigenciaHasta" })
+                                )
+                        </div>
+                    </div>
                 </div>
+
           </form>
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="controlButton my-3">

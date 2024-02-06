@@ -197,7 +197,8 @@ namespace GuanajuatoAdminUsuarios.Services
     MAX(catSubInf.subConcepto) AS subConcepto,
     MAX(catConInf.idConcepto) AS idConcepto,
     MAX(catConInf.concepto) AS concepto,
-	MAX(catMotInf.transito) AS transito
+	MAX(catMotInf.transito) AS transito,
+    MAX(ctc.nombreCortesia) AS nombreCortesia
     FROM infracciones as inf
                                 left join catDependencias dep on inf.idDependencia= dep.idDependencia
                                 left join catDelegaciones	del on inf.idDelegacion = del.idDelegacion
@@ -215,6 +216,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                 left join catMotivosInfraccion catMotInf on motInf.idCatMotivosInfraccion = catMotInf.idCatMotivoInfraccion 
                                 left join catSubConceptoInfraccion catSubInf on catMotInf.IdSubConcepto = catSubInf.idSubConcepto
                                 left join catConceptoInfraccion catConInf on  catSubInf.idConcepto = catConInf.idConcepto
+                                left join catTipoCortesia ctc ON ctc.id = inf.infraccionCortesia
                                 WHERE inf.estatus = 1 AND catMotInf.transito = @transito " + condiciones + condicionFecha + @"
                                 GROUP BY inf.idInfraccion,inf.infraccionCortesia;"; 
 
@@ -293,8 +295,8 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.lugarColonia = reader["lugarColonia"] == System.DBNull.Value ? string.Empty : reader["lugarColonia"].ToString();
                             model.lugarEntreCalle = reader["lugarEntreCalle"] == System.DBNull.Value ? string.Empty : reader["lugarEntreCalle"].ToString();
                             model.NumTarjetaCirculacion = reader["NumTarjetaCirculacion"].ToString();
-                            model.infraccionCortesia = reader["infraccionCortesia"] == System.DBNull.Value ? default(bool?) : Convert.ToBoolean(reader["infraccionCortesia"].ToString());
-
+                            //model.infraccionCortesia = reader["infraccionCortesia"] == System.DBNull.Value ? default(bool?) : Convert.ToBoolean(reader["infraccionCortesia"].ToString());
+                            model.infraccionCortesiaString = reader["NumTarjetaCirculacion"].ToString();
                             model.Persona = _personasService.GetPersonaById((int)model.idPersona);
                             model.PersonaInfraccion = model.idPersonaInfraccion == null ? new PersonaInfraccionModel() : _infraccionesService.GetPersonaInfraccionById((int)model.idPersonaInfraccion);
                             model.Vehiculo = _vehiculosService.GetVehiculoById((int)model.idVehiculo);

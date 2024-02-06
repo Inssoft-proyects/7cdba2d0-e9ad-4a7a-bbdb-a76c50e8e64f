@@ -1528,16 +1528,23 @@ function asignarMensajeError(contenedorErrorId, mensaje) {
             console.log("Id vehiculo: ", idVeh)
             showLoading();
             $.ajax({
-                url: '@Url.Action("ajax_CrearVehiculo_Ejemplo")',
+                url: '@Url.Action("ajax_CrearVehiculo_Ejemplo2")',
                 type: 'POST',
                 data: formData,
                 success: function (result) {
                     sitteg_success('Elemento guardado correctamente')
                     $('#VehiculoServiceModal').modal('hide');
                     $('#agregarVehiculoModal').modal('hide');
-                    var gridVehiculos = $("#listadoVehiculos").html(result);
-                    hideLoading();
-                },
+                     var grid = $("#gridInfraccionesVehiculo").data("kendoGrid");
+                        if (result && result.data) {
+                            var dataArray = Array.isArray(result.data) ? result.data : [result.data];
+
+                            grid.dataSource.data(dataArray);
+                        } else {
+                            console.error("La respuesta no tiene la estructura esperada:", result);
+                        }
+                        hideLoading();
+                    },
                 error: function (xhr, status) {
                     var errmsg = xhr.responseText;
                     console.log(errmsg)

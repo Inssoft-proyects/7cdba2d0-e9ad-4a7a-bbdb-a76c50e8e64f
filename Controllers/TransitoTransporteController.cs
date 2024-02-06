@@ -130,18 +130,20 @@ namespace GuanajuatoAdminUsuarios.Controllers
             return Json(result);
         }
 
-        public JsonResult Dependencia_Read()
+        public JsonResult DependenciaEnvia_Read()
         {
-            var CatDependencias = _catDictionary.GetCatalog("CatDependencias", "0");
+            var CatDependencias = _catDictionary.GetCatalog("DependenciaEnvia_Read", "0");
             var result = new SelectList(CatDependencias.CatalogList, "Id", "Text");
             return Json(result);
         }
 
         public JsonResult Estatus_Read()
         {
-            var directions = from EstatusTransitoTransporte d in Enum.GetValues(typeof(EstatusTransitoTransporte))
-                             select new { ID = (int)d, Name = d.ToString() };
-            var result = new SelectList(directions, "ID", "Name");
+            /* var directions = from EstatusTransitoTransporte d in Enum.GetValues(typeof(EstatusTransitoTransporte))
+                              select new { ID = (int)d, Name = d.ToString() };
+             var result = new SelectList(directions, "ID", "Name");*/
+            var CatEstatusTransitoTransporte = _catDictionary.GetCatalog("CatEstatusTransitoTransporte", "0");
+            var result = new SelectList(CatEstatusTransitoTransporte.CatalogList, "Id", "Text");
 
             //var result = new SelectList(_transitoTransporteService.GetPensiones(), "IdPension", "Pension");
             return Json(result);

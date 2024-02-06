@@ -4,9 +4,13 @@
     {
         public enum EstatusTransitoTransporte
         {
-            En_Curso = 1,
-            Ingreso = 2,
-            Salida = 3
+            Captura_de_solicitud = 1,
+            Captura_solicitud_sin_grúa = 2,
+            captura_grúas = 3,
+            Ingreso_a_depósitos = 4,
+            Liberación_autorizada = 5,
+            Salida_registrada = 6
+
         }
 
         public enum EstatusBusquedaVehiculo

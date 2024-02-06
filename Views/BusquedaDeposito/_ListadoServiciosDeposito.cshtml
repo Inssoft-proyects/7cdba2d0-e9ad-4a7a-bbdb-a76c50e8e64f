@@ -25,7 +25,7 @@
                 .ClientTemplate("#= mostrarFecha(FechaSalidaFormateada) #");
                 columns.Bound(c => c.pension).Title("Pensión").Width(100);
                 columns.Bound(c => c.grua).Title("Nombre Grúa").Width(200);
-                columns.Template("<button data-bs-toggle='modal' class='w-100 btn'><h6 class='m-0 colorPrimary' onclick='detalleGrua(event)'><i class='h5 icon-edit me-2'></i><b>Detalle Grua(s)</b></h6></button>").Width(120);
+                columns.Template("<button data-bs-toggle='modal' class='w-100 btn'><h6 class='m-0 colorPrimary' onclick='detalleGrua(event)'><i class='h5 icon-edit me-2'></i><b>Detalle Grúa(s)</b></h6></button>").Width(120);
 
             }).HtmlAttributes(new { style = "height:550px" })
             .Sortable()

@@ -205,28 +205,28 @@ namespace GuanajuatoAdminUsuarios.Services
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand(@" SELECT 
+                    SqlCommand command = new SqlCommand(@" SELECT TOP 
                                                                 acc.idAccidente, 
-                                                                MAX(acc.idMunicipio) AS idMunicipio,
-                                                                MAX(mun.municipio) AS municipio,
-                                                                MAX(acc.idOficinaDelegacion) AS idOficinaDelegacion,
-                                                                MAX(acc.idElabora) AS idElabora,
-                                                                MAX(acc.idCarretera) AS idCarretera, 
-                                                                MAX(acc.idTramo) AS idTramo, 
-                                                                MAX(acc.idClasificacionAccidente) AS idClasificacionAccidente,
-                                                                MAX(cond.idTipoLicencia) AS idTipoLicencia,
-                                                                MAX(acc.idFactorAccidente) AS idFactorAccidente,
-                                                                MAX(acc.idFactorOpcionAccidente) AS idFactorOpcionAccidente,
-                                                                MAX(acc.estatus) AS estatus,
-																MAX(del.delegacion) AS delegacion,
-                                                                MAX(acc.numeroReporte) AS numeroReporte,
-                                                                MAX(acc.fecha) AS fecha,
-                                                                MAX(acc.hora) AS hora,
-                                                                MAX(veh.idVehiculo) AS idVehiculo,
-                                                                MAX(veh.idCatTipoServicio) AS idCatTipoServicio,
-                                                                MAX(veh.idSubtipoServicio) AS idSubtipoServicio,
-                                                                MAX(veh.idTipoVehiculo) AS idTipoVehiculo,
-                                                                MAX(accau.idCausaAccidente) AS idCausaAccidente
+                                                                acc.idMunicipio AS idMunicipio,
+                                                                mun.municipio AS municipio,
+                                                                acc.idOficinaDelegacion AS idOficinaDelegacion,
+                                                                acc.idElabora AS idElabora,
+                                                                acc.idCarretera AS idCarretera, 
+                                                                acc.idTramo AS idTramo, 
+                                                                acc.idClasificacionAccidente AS idClasificacionAccidente,
+                                                                cond.idTipoLicencia AS idTipoLicencia,
+                                                                acc.idFactorAccidente AS idFactorAccidente,
+                                                                acc.idFactorOpcionAccidente AS idFactorOpcionAccidente,
+                                                                acc.estatus AS estatus,
+                                                                del.delegacion AS delegacion,
+                                                                acc.numeroReporte AS numeroReporte,
+                                                                acc.fecha AS fecha,
+                                                                acc.hora AS hora,
+                                                                veh.idVehiculo AS idVehiculo,
+                                                                veh.idCatTipoServicio AS idCatTipoServicio,
+                                                                veh.idSubtipoServicio AS idSubtipoServicio,
+                                                                veh.idTipoVehiculo AS idTipoVehiculo,
+                                                                accau.idCausaAccidente AS idCausaAccidente
                                                                 FROM accidentes AS acc
                                                                 LEFT JOIN catMunicipios AS mun ON acc.idMunicipio = mun.idMunicipio 
                                                                 LEFT JOIN catCarreteras AS car ON acc.idCarretera = car.idCarretera 
@@ -237,9 +237,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                                                 LEFT JOIN catDelegaciones AS del ON acc.idOficinaDelegacion = del.idDelegacion
 										                        LEFT JOIN accidenteCausas AS accau ON acc.idAccidente = accau.idAccidente
 
-                                                                WHERE acc.estatus = 1
-                                                                GROUP BY acc.idAccidente;
-                                                                ", connection);
+                                                                WHERE acc.estatus = 1", connection);
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
@@ -440,6 +438,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                                         ac.idAccidente,
                                                         veh.idTipoVehiculo,  
                                                         veh.idCatTipoServicio,
+                                                        veh.idSubtipoServicio,
                                                         CONCAT(
                                                             '  Vehículo ', 
                                                             ROW_NUMBER() OVER (PARTITION BY ac.idAccidente ORDER BY ac.idAccidente),

@@ -305,5 +305,41 @@ namespace GuanajuatoAdminUsuarios.Services
             }
             return ListItems;
         }
+
+        public List<PensionModel> GetPensionesNoFilter()
+        {
+            List<PensionModel> ListPensiones = new List<PensionModel>();
+
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("Select * from pensiones where estatus=1", connection);
+                    command.CommandType = CommandType.Text;
+                   // command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = idOficina;
+
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            PensionModel pension = new PensionModel();
+                            pension.IdPension = Convert.ToInt32(reader["IdPension"].ToString());
+                            pension.Pension = reader["Pension"].ToString();
+                            ListPensiones.Add(pension);
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    //Guardar la excepcion en algun log de errores
+                    //ex
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            return ListPensiones;
+        }
+
     }
 }

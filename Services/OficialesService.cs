@@ -30,7 +30,8 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("Select * from oficiales", connection);
+                    SqlCommand command = new SqlCommand(@"Select *, cd.nombreOficina from catOficiales co
+                                                            LEFT JOIN catDelegacionesOficinasTransporte cd ON cd.idOficinaTransporte = co.idOficina", connection);
                     command.CommandType = CommandType.Text;
                     //sqlData Reader sirve para la obtencion de datos 
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
@@ -43,6 +44,12 @@ namespace GuanajuatoAdminUsuarios.Services
                             oficial.Nombre = reader["Nombre"].ToString();
                             oficial.ApellidoPaterno = reader["ApellidoPaterno"].ToString();
                             oficial.ApellidoMaterno = reader["ApellidoMaterno"].ToString();
+                            oficial.nombreOficina = reader["nombreOficina"].ToString();
+
+                            object idOficinaValue = reader["idOficina"];
+                            oficial.IdOficina = Convert.IsDBNull(idOficinaValue) ? 0 : Convert.ToInt32(idOficinaValue);
+
+
 
 
                             oficiales.Add(oficial);

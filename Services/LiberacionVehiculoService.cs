@@ -255,6 +255,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             deposito.solicitanteAm = reader["solicitanteAm"] is DBNull ? string.Empty : reader["solicitanteAm"].ToString();
                             deposito.Color = reader["Color"] is DBNull ? string.Empty : reader["Color"].ToString();
                             deposito.pension = reader["pension"] is DBNull ? string.Empty : reader["pension"].ToString();
+                            deposito.carretera = reader["carretera"] is DBNull ? string.Empty : reader["carretera"].ToString();
                             deposito.tramo = reader["tramo"] is DBNull ? string.Empty : reader["tramo"].ToString();
                             deposito.nombrePropietario = reader["nombre"]?.ToString();
                             deposito.apPaternoPropietario = reader["apellidoPaterno"]?.ToString();

@@ -125,11 +125,18 @@
                 <label>Concesionario:</label>
                 @(Html.Kendo().DropDownList()
                     .Name("idConcesionario")
-                    .BindTo((SelectList)ViewBag.CatConcesionario)
-                    .OptionLabel("-- Seleccione --")
-
-                    .HtmlAttributes(new { style = "width:100%;", id = "ddlConcesionario" })
-                    .Filter(FilterType.Contains))
+                    .DataTextField("Text")
+                    .DataValueField("Value")
+                    .OptionLabel("Selecciona un concesionario")
+                    .Filter(FilterType.Contains)
+                    .HtmlAttributes(new { @class = "CentradoList", style = "width:100%;", id = "ddlConcesionario" })
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("Concesionarios_Drop", "PadronGruas");
+                        });
+                    }))
             </div>
 
 

@@ -43,15 +43,15 @@
 		"# } #")
 		.Width(90);*@
 
-				columns.Bound(p => p.idInfraccion)
+		@*		columns.Bound(p => p.idInfraccion)
 			.ClientTemplate(
 			"# if (infraccionCortesia == 1) { #" +
 			"<button disabled onclick=\"ShowCortesia('#= idInfraccion #')\" class='w-100 btn'><h6 class='m-0 colorWarning'><i class='icon-edit me-2'></i><b> Cortesía</b></h6></button>" +
 			"# } else { #" +
 			"<button onclick=\"ShowCortesia('#= idInfraccion #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b> Cortesía</b></h6></button>" +
 			"# } #")
-			.Title("Cortesía").Sortable(false).Width(90);
-
+		.Title("Cortesía").Sortable(false).Width(90);*@
+				columns.Bound(c => c.infraccionCortesiaString).Title("Cortesia").Width(90);
 				columns.Bound(p => p.idInfraccion).ClientTemplate(
 				"<button onclick=\"ShowUpdate('#= idInfraccion #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>"
 				).Title("Editar").Sortable(false).Width(90);
@@ -101,21 +101,23 @@
 
 
 		<script>
-				$(document).ready(function () {
-					var auth = @autorizaciones;
-					var grid = $("#GridInf").data("kendoGrid");
-					if (!auth.toString().includes("461")) {
-						grid.hideColumn(13);
-					}
+			$(document).ready(function () {
+				var auth = @autorizaciones;
+				var grid = $("#GridInf").data("kendoGrid");
 
-					if (!auth.toString().includes("465")) {
-						grid.hideColumn(11);
-						grid.hideColumn(12);
-					}
-					if (!auth.toString().includes("462")) {
-						grid.hideColumn(14);
-					}
-				});
+				if (!auth.toString().includes("461")) {
+					grid.hideColumn(14);
+				}
+
+				if (!auth.toString().includes("465")) {
+					grid.hideColumn(12);
+					grid.hideColumn(13);
+				}
+
+				if (!auth.toString().includes("462")) {
+					grid.hideColumn(15);
+				}
+			});		
 		</script>
 	</div>
 </div>

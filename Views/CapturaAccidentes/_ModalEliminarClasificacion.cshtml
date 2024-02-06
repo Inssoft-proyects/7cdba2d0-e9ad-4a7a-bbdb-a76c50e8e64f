@@ -12,6 +12,8 @@
                     <h4>¿Esta seguro que quiere eliminar esta clasificación para el accidente?</h4>
                     <form id="idForm">
                         @Html.HiddenFor(m => m.IdAccidente)
+                        @Html.HiddenFor(m => m.IdClasificacionAccidente)
+
                     </form>
                 </div>
             </div>
@@ -41,7 +43,14 @@
 </section>
 <script>
     function eliminarClasBD(IdAccidente) {
-        var Mydata = $("#idForm").serialize();
+        
+        var Mydata = {
+            IdAccidente : window.IdAccidente ,
+            IdClasificacionAccidente: window.idClasif
+
+        }
+
+
         showLoading();
         $.ajax({
             url: "/CapturaAccidentes/EliminaClasificacion",

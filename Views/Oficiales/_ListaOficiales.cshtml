@@ -2,7 +2,7 @@
     <div class="col-12 mb-4 px-4 rounded gridCustom">
 
 @(
-    Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.OficialesModel>()
+    Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CatOficialesModel>()
         .Name("gridCatOficiales")
         .Columns(columns =>
         {
@@ -10,6 +10,7 @@
             columns.Bound(c => c.Nombre).Width(100);
             columns.Bound(c => c.ApellidoPaterno).Width(190);
             columns.Bound(c => c.ApellidoMaterno).Width(190);
+            columns.Bound(c => c.nombreOficina).Width(190);
             columns.Bound(c => c.estatusDesc).Width(100).Title("Estatus en sistema").Width(100); ;
             columns.Command(c => c.Custom("Editar").Click("getId")).Width(100);
                 //columns.Command(c => c.Custom("Eliminar").Click("eliminar")).Width(100);

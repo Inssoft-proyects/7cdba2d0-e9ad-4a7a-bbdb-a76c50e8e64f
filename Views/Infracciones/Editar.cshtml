@@ -882,8 +882,8 @@ function serviceCrearInfraccion(idInfraccion) {
             if (response.success) {
                 sitteg_success("Infracción actualizada en secretaría de finanzas.");
                 shouldGoBack = true;
-            } else if (response.success === false && response.message === "Registro actualizado en SITTEG") {
-                sitteg_info("El registro fue actualizado en SITTEG.");
+            } else if (response.success === false && response.message === "Registro actualizado en RIAG") {
+                sitteg_info("El registro fue actualizado en RIAG.");
                 shouldGoBack = true;
 				} else if (response.success === false && response.message === "Infraccion Guardada, no enviada") {
                 sitteg_warning("El número de placa excede la longitud máxima, la infracción no se envió a finanzas.");

@@ -575,7 +575,20 @@ namespace GuanajuatoAdminUsuarios.Framework
 							.OrderBy(s => s.Text)
 							.ToList();
 					break;
-				case "CatClasificacionAccidentes":
+                case "DependenciaEnvia_Read":
+                    catalogModel.CatalogName = catalog;
+                    campos = new string[] { "idDependenciaEnvia", "nombreDependencia" };
+                    catalogModel.CatalogList = _catalogosService.GetGenericCatalogos("catDependenciasEnvian", campos)
+                            .Select(s =>
+                            new SystemCatalogListModel()
+                            {
+                                Id = Convert.ToInt32(s["idDependenciaEnvia"]),
+                                Text = Convert.ToString(s["nombreDependencia"])
+                            })
+                            .OrderBy(s => s.Text)
+                            .ToList();
+                    break;
+                case "CatClasificacionAccidentes":
 					catalogModel.CatalogName = catalog;
 					campos = new string[] { "idClasificacionAccidente", "nombreClasificacion" };
 					catalogModel.CatalogList = _catalogosService.GetGenericCatalogos("catClasificacionAccidentes", campos)
@@ -644,6 +657,18 @@ namespace GuanajuatoAdminUsuarios.Framework
                                 .OrderBy(s => s.Text)
                                 .ToList();
                     }
+                    break;
+                case "CatEstatusTransitoTransporte":
+                    catalogModel.CatalogName = catalog;
+                    campos = new string[] { "idEstatusTransitoTransporte", "nombreEstatus" };
+                    catalogModel.CatalogList = _catalogosService.GetGenericCatalogos("catEstatusTransitoTransporte", campos)
+                            .Select(s => new SystemCatalogListModel()
+                            {
+                                Id = Convert.ToInt32(s["idEstatusTransitoTransporte"]),
+                                Text = Convert.ToString(s["nombreEstatus"])
+                            })
+                            .OrderBy(s => s.Text)
+                            .ToList();
                     break;
 
                 case "CatAplicadoA":

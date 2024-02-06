@@ -10,6 +10,8 @@ namespace GuanajuatoAdminUsuarios.Interfaces
         public int CrearConcesionario(Concesionarios2Model model);
         public int EditarConcesionario(Concesionarios2Model model);
         public List<Concesionarios2Model> GetAllConcesionarios(int idOficina);
+        public List<ConcesionariosModel> GetAllConcesionariosConMunicipio();
+
         public Concesionarios2Model GetConcesionarioById(int idConcesionario);
         public IEnumerable<Concesionarios2Model> GetConcecionariosBusqueda(int? idMunicipio, int idOficina, int? idDelegacion, int? idConcesionario);
 

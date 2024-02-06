@@ -71,7 +71,7 @@
                         </div>
                     </div>
                 </button>
-                <button class="nav-link col" id="folio-G-01-tab" data-bs-toggle="tab" data-bs-target="#folio-G-01" type="button" role="tab" aria-controls="folio-G-01" aria-selected="false">
+@*                <button class="nav-link col" id="folio-G-01-tab" data-bs-toggle="tab" data-bs-target="#folio-G-01" type="button" role="tab" aria-controls="folio-G-01" aria-selected="false">
                     <div class="row justify-content-center align-items-center px-3 py-2">
                         <div class="col-auto radioCustom p-0">
                             <div class="rounded-circle m-2"></div>
@@ -80,7 +80,7 @@
                             <h5 class="m-0"><i class="icon-data h4"></i> <b>Folio de formato G-01</b></h5>
                         </div>
                     </div>
-                </button>
+                </button>*@
 
             </div>
         </nav>
@@ -127,7 +127,7 @@
                     </div>
                 </div>
                 
-                <div class="tab-pane tabCustomConteiner fade" id="folio-G-01" role="tabpanel" aria-labelledby="folio-G-01-tab">
+@*                <div class="tab-pane tabCustomConteiner fade" id="folio-G-01" role="tabpanel" aria-labelledby="folio-G-01-tab">
                     <div class="row px-4 mt-4 pb-4 align-items-end">
                         <div class="col-12 col-md-6 col-lg-4">
                             <div class="controlForm my-3">
@@ -146,7 +146,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+*@            </div>
             
         </form>
         <div class="row justify-content-center align-items-center">
@@ -181,7 +181,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="errorModalLabel">Vehículo no registrado en SITTEG</h5>
+                        <h5 class="modal-title" id="errorModalLabel">Vehículo no registrado en RIAG</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cierraModal()">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -201,8 +201,8 @@
     <script>
 	function abrirModalVehiculo(partial) {
 		$('#ModalBodyVehiculoService').html(partial);
-		$('#errorMessage').text("Se han encontrado datos en el Registo Estatal, complete o corrija para importar los datos a SITTEG");
-		$('#errorModal').modal('show');
+        $('#errorMessage').text("Vehículo sin captura en el Registro de Infracciones y Accidentes de Guanajuato");
+        $('#errorModal').modal('show');
 		//$('#VehiculoServiceModal').modal({ backdrop: 'static', keyboard: false });
 		$('#VehiculoServiceModal').modal('show');
 

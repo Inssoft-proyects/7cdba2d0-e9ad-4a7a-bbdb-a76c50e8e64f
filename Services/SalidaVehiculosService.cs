@@ -30,7 +30,7 @@ namespace GuanajuatoAdminUsuarios.Services
             condiciones += model.placa.IsNullOrEmpty() ? "" : " AND d.placa = @placa";
             if (model.fechaIngreso != DateTime.MinValue)
             {
-                condiciones += " OR d.fechaIngreso = @fechaIngreso";
+                condiciones += " AND CONVERT (date,d.fechaIngreso) = @fechaIngreso";
             };
             string strQuery = @"SELECT d.idDeposito,d.idVehiculo,d.numeroInventario,d.idSolicitud,
 	                                    d.idMarca,d.placa,d.serie,d.idPension,d.fechaIngreso,
@@ -64,7 +64,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.Add(new SqlParameter("@placa", SqlDbType.VarChar)).Value = (object)model.placa ?? DBNull.Value;
                     if (model.fechaIngreso != DateTime.MinValue)
                     {
-                        command.Parameters.Add(new SqlParameter("@fechaIngreso", SqlDbType.DateTime)).Value = model.fechaIngreso;
+                        command.Parameters.Add(new SqlParameter("@fechaIngreso", SqlDbType.DateTime)).Value = model.fechaIngreso.Date;
                     }
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {

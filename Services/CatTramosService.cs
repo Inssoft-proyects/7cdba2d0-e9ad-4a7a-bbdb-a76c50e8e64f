@@ -73,7 +73,7 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT t.*, e.estatusDesc,car.carretera FROM catTramos AS t INNER JOIN estatus AS e ON t.estatus = e.estatus INNER JOIN catCarreteras AS car ON t.idCarretera = car.idCarretera;", connection);
+                    SqlCommand command = new SqlCommand("SELECT t.*, e.estatusDesc,car.carretera FROM catTramos AS t LEFT JOIN estatus AS e ON t.estatus = e.estatus INNER JOIN catCarreteras AS car ON t.idCarretera = car.idCarretera;", connection);
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {

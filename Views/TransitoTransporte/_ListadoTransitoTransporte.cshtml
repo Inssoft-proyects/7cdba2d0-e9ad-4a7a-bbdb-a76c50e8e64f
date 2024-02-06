@@ -86,8 +86,18 @@
         window.location = '/TransitoTransporte/CreatePdfUnRegistro?IdDeposito=' + Id;
     }
 </script>
+<div class="row">
+    <div class="col-md-12">
+        @if (ViewBag.NoResultsMessage != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag.NoResultsMessage
+            </div>
+        }
+    </div>
+</div>
 
-<div class="row mb-2">
+<div class="row">
     <div class="col-12 col-md-auto mt-4">
         <h5 class="px-4"><b>Listado de Tránsito/Transporte</b></h5>
         <h6 class="px-4 text-muted">Edita los datos de tránsito.</h6>
@@ -95,13 +105,7 @@
 </div>
 
 <div class="row">
-    @if (ViewBag.NoResultsMessage != null)
-    {
-        <div class="alert alert-info">
-            @ViewBag.NoResultsMessage
-        </div>
-    }
-
+     
     <!-- Aquí continúa el contenido del listado de tránsito y transporte -->
     @*<column template="<button data-bs-toggle=modal data-bs-target=\#editVehiculo class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>" width="100" />*@
 
@@ -120,8 +124,10 @@
                 .Columns(columns =>
                 {
                     columns.Bound(c => c.IdSolicitud).Hidden();
-                    columns.Bound(p => p.IdDeposito).Title("Número").Width(90);
-                    columns.Bound(p => p.fullSolicitudfolioInfraccion).Title("Fecha_Evento/Folio_Solicitud/Folio_Infracción").Width(190);
+                    columns.Bound(c => c.cons).Title("Número").Width(90);
+                    columns.Bound(p => p.IdDeposito).Hidden();//.Title("Número").Width(90);
+                    columns.Bound(p => p.fullSolicitudfolioInfraccion)/*.ClientTemplate("#=TemplateEvPolInf(data)#")*/.Title("Fecha_Evento/Folio_Solicitud/Folio_Infracción").Width(190);
+
                     columns.Bound(p => p.fullVehiculo).Title("Vehículo").Width(150);
                     columns.Bound(c => c.FechaIngreso).ClientTemplate("#= convertDate(FechaIngreso) #").Title("Fecha de ingreso").Width(110);
                     columns.Bound(c => c.FechaLiberacion).ClientTemplate("#= convertDate(FechaLiberacion) #").Title("Fecha de salida").Width(110);
@@ -430,4 +436,19 @@
         var idSolicitud = document.getElementById('hdnIdDeposito').value;
         window.location.href = '@Url.Action("DatosGruas", "AsignacionGruas")?iSo=' + idSolicitud;
     }
+
+    function TemplateEvPolInf(data){
+
+
+        return `
+            <p><b>Fecha: </b>${data.FechaIngresoDesc}</p>
+        <p><b>test: </b>${data.colonia}</p>
+        <p><b>test: </b>${data.colonia}</p>
+                    
+        `
+    }
+
+
+
+
 </script>

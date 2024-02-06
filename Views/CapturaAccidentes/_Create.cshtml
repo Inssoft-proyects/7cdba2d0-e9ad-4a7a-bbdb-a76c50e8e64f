@@ -260,20 +260,20 @@
                 <label>Vigencia de tarjeta:</label>
                 @if (disableInput)
                 {
-                    @(Html.Kendo().DatePickerFor(t => t.vigenciaTarjeta).Format("dd/MM/yyyy")
-                        .Value(dateVigencia)
-                        .DateInput()
-                        
+                    var t = dateVigencia.HasValue ? dateVigencia.Value.ToString("dd/MM/yyyy") : "";
+                    @(                        
+                        Html.Kendo().DatePickerFor(t => t.vigenciaTarjeta).Format("dd/MM/yyyy")
+                        .Value("")                                                                        
                         .Culture("es-ES")
                         .HtmlAttributes(new { style = "width: 100%", title = "datetimepicker" })
-                        .Value("")
+                        
                         )
                 }
                 else
                 {
                     @(Html.Kendo().DatePickerFor(t => t.vigenciaTarjeta).Format("dd/MM/yyyy")
                         //.Value(dateVigencia)
-                        .DateInput()
+                        .DateInput()                        
                         .Culture("es-ES")
                         .HtmlAttributes(new { style = "width: 100%", title = "datetimepicker" })
                         .Value("")

@@ -10,28 +10,20 @@ namespace GuanajuatoAdminUsuarios.Models
         public int pensionEstatus { get; set; }
 
         public string vehiculoCarretera { get; set; }
+        public string carretera { get; set; }
+        public string tramo { get; set; }
+
         public string vehiculoTramo { get; set; }
         public string vehiculoKm { get; set; }
         public string descripcionEstatus { get; set; }
 
-        
-        /// <summary>
-        /// Filtro tbl solicitudes
-        /// </summary>
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime fechaSolicitud { get; set; }
 
-        //ToDo:no  esta Fecha Salida de donde lo tomo se agrega a tabla depositos
-        //Este campo es Join de Depositos
-        /// <summary>
-        /// tbl Depositos
-        /// </summary>
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? fechaLiberacion { get; set; }
 
-        /// <summary>
-        /// Filtro por textfield no por id sobre mismo solicitudes
-        /// </summary>
+      
         public string evento { get; set; }
 
         public string solicitanteNombre { get; set; }
@@ -69,12 +61,12 @@ namespace GuanajuatoAdminUsuarios.Models
         //este se mostrara para  el filtro de grua
         //tbl gruas
         public string noEconomico { get; set; }
-        public int IdGrua { get; set; }
+        public int IdGrua { get; set; } 
+        
         public string propietarioGrua { get; set; }
 
         //ToDo no esta alias seria sacarlo de la tabla que cree con join de Concesionario
         public string Alias { get; set; }
-        public string oficial { get; set; }
         public string folio { get; set; }
 
 
@@ -116,8 +108,19 @@ namespace GuanajuatoAdminUsuarios.Models
         public int idMotivo { get; set; }
         public string motivoAsignacion { get; set; }
         public string numeroIventario { get; set; }
+        public string apellidoPaternoOficial { get; set; }
+        public string apellidoMaternoOficial { get; set; }
+        public string nombreOficial { get; set; }
+        public string oficial
+        { 
+             get
+        {
+            // Concatena los valores de los tres campos
+            return $"{apellidoPaternoOficial} {apellidoMaternoOficial} {nombreOficial}";
+        }
+       }
 
-        
+
 
     }
 }
