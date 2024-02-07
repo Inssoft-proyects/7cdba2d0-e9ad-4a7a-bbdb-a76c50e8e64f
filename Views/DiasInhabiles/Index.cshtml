@@ -48,12 +48,19 @@
                         <label>Municipio</b>:</label>
                         @(Html.Kendo().DropDownList()
                             .Name("idMunicipio")
-                            .BindTo((SelectList)ViewBag.CatMunicipios)
-                            .OptionLabel("-- Seleccione --")
                             .Filter(FilterType.Contains)
+                            .DataTextField("Text")
+                            .DataValueField("Value")
+                            .OptionLabel("Selecciona un Municipio")
+                            .HtmlAttributes(new { @class = "CentradoList", style = "width:100%;", id = "idMunicipioFiltro" })
+                            .DataSource(source =>
 
-                            .HtmlAttributes(new { style = "width:100%;", id = "idMunicipioFiltro" })
-                            .Filter(FilterType.Contains))
+                            {
+                                source.Read(read =>
+                                {
+                                    read.Action("Municipios_Drop", "DiasInhabiles");
+                                });
+                            }))
                     </div>
 
                     

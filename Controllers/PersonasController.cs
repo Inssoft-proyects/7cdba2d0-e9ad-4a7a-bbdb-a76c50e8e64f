@@ -13,8 +13,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.AspNetCore.Authorization;
-
-
+using Kendo.Mvc.UI;
+using static GuanajuatoAdminUsuarios.RESTModels.ConsultarDocumentoResponseModel;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
@@ -29,7 +29,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         private readonly IBitacoraService _bitacoraServices;
         public PersonasController(ICatDictionary catDictionary, IPersonasService personasService, IHttpClientFactory httpClientFactory, ICatEntidadesService catEntidadesService
             , ICatMunicipiosService catMunicipiosService
-,            IBitacoraService bitacoraServices            )
+, IBitacoraService bitacoraServices)
         {
             _catDictionary = catDictionary;
             _personasService = personasService;
@@ -50,60 +50,126 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
             return View("_DetalleLicencia");
         }
-      public async Task<IActionResult> BuscarPorParametro(PersonaModel model)
-{
-    // Realizar la búsqueda de personas
-    var personasList = _personasService.BusquedaPersona(model);
-
-    // Verificar si se encontraron resultados en la búsqueda de personas
-    if (personasList.Any())
-    {
-        return Json(new { encontrada = true, data = personasList });
-    }
-
-    // Si no se encontraron resultados en la búsqueda de personas, realizar la búsqueda por licencia
-    string parametros = "";
-    parametros += string.IsNullOrEmpty(model.numeroLicenciaBusqueda) ? "" : "licencia=" + model.numeroLicenciaBusqueda;
-    parametros += string.IsNullOrEmpty(model.CURPBusqueda) ? "" : "curp=" + model.CURPBusqueda + "&";
-    parametros += string.IsNullOrEmpty(model.RFCBusqueda) ? "" : "rfc=" + model.RFCBusqueda + "&";
-    parametros += string.IsNullOrEmpty(model.nombreBusqueda) ? "" : "nombre=" + model.nombreBusqueda + "&";
-    parametros += string.IsNullOrEmpty(model.apellidoPaternoBusqueda) ? "" : "primer_apellido=" + model.apellidoPaternoBusqueda + "&";
-    parametros += string.IsNullOrEmpty(model.apellidoMaternoBusqueda) ? "" : "segundo_apellido=" + model.apellidoMaternoBusqueda;
-
-    string ultimo = parametros.Substring(parametros.Length - 1);
-    if (ultimo.Equals("&"))
-        parametros = parametros.Substring(0, parametros.Length - 1);
-
-    try
-    {
-        string urlServ = Request.GetDisplayUrl();
-        Uri uri = new Uri(urlServ);
-        string requested = uri.Scheme + Uri.SchemeDelimiter + uri.Host + ":" + uri.Port;
-
-        var url = requested + $"/api/Licencias/datos_generales?" + parametros;
-
-        var httpClient = _httpClientFactory.CreateClient();
-        var response = await httpClient.GetAsync(url);
-
-        if (response.IsSuccessStatusCode)
+        public async Task<IActionResult> BuscarPorParametro(PersonaModel model)
         {
-            var content = await response.Content.ReadAsStringAsync();
-            LicenciaRespuestaPersona respuesta = JsonConvert.DeserializeObject<LicenciaRespuestaPersona>(content);
+            //buscarConductorPaginado
+            // Realizar la búsqueda de personas
+            var personasList = _personasService.BusquedaPersona(model);
 
-            return Json(respuesta);
+            // Verificar si se encontraron resultados en la búsqueda de personas
+            if (personasList.Any())
+            {
+                return Json(new { encontrada = true, data = personasList });
+            }
+
+            // Si no se encontraron resultados en la búsqueda de personas, realizar la búsqueda por licencia
+            string parametros = "";
+            parametros += string.IsNullOrEmpty(model.numeroLicenciaBusqueda) ? "" : "licencia=" + model.numeroLicenciaBusqueda;
+            parametros += string.IsNullOrEmpty(model.CURPBusqueda) ? "" : "curp=" + model.CURPBusqueda + "&";
+            parametros += string.IsNullOrEmpty(model.RFCBusqueda) ? "" : "rfc=" + model.RFCBusqueda + "&";
+            parametros += string.IsNullOrEmpty(model.nombreBusqueda) ? "" : "nombre=" + model.nombreBusqueda + "&";
+            parametros += string.IsNullOrEmpty(model.apellidoPaternoBusqueda) ? "" : "primer_apellido=" + model.apellidoPaternoBusqueda + "&";
+            parametros += string.IsNullOrEmpty(model.apellidoMaternoBusqueda) ? "" : "segundo_apellido=" + model.apellidoMaternoBusqueda;
+
+            string ultimo = parametros.Substring(parametros.Length - 1);
+            if (ultimo.Equals("&"))
+                parametros = parametros.Substring(0, parametros.Length - 1);
+
+            try
+            {
+                string urlServ = Request.GetDisplayUrl();
+                Uri uri = new Uri(urlServ);
+                string requested = uri.Scheme + Uri.SchemeDelimiter + uri.Host + ":" + uri.Port;
+
+                var url = requested + $"/api/Licencias/datos_generales?" + parametros;
+
+                var httpClient = _httpClientFactory.CreateClient();
+                var response = await httpClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    LicenciaRespuestaPersona respuesta = JsonConvert.DeserializeObject<LicenciaRespuestaPersona>(content);
+
+                    return Json(respuesta);
+                }
+            }
+            catch (Exception ex)
+            {
+                // En caso de errores, devolver una respuesta JSON con licencia no encontrada
+                return Json(new { encontrada = false, data = personasList, message = "Ocurrió un error al obtener los datos. " + ex.Message + "; " + ex.InnerException });
+            }
+
+            // Si no se cumple la condición anterior, devolver una respuesta JSON indicando que no se encontraron resultados
+            return Json(new { encontrada = false, data = personasList, message = "No se encontraron resultados." });
         }
-    }
-    catch (Exception ex)
-    {
-        // En caso de errores, devolver una respuesta JSON con licencia no encontrada
-        return Json(new { encontrada = false, data = personasList,message = "Ocurrió un error al obtener los datos. " + ex.Message + "; " + ex.InnerException });
-    }
-
-    // Si no se cumple la condición anterior, devolver una respuesta JSON indicando que no se encontraron resultados
-    return Json(new { encontrada = false, data = personasList, message = "No se encontraron resultados." });
-}
 
 
+        public async Task<IActionResult> BuscarPorParametroPaginado([DataSourceRequest] DataSourceRequest request, PersonaModel model)
+        {
+            // Realizar la búsqueda de personas
+            Pagination pagination = new Pagination();
+            pagination.PageIndex = request.Page - 1;
+            pagination.PageSize = 100000;
+            var personasList = _personasService.BusquedaPersonaPagination(model, pagination);
+
+            // Verificar si se encontraron resultados en la búsqueda de personas
+            if (personasList.Any())
+            {
+                //var total = 0;
+                //if (personasList.Count() > 0)
+                //    total = personasList.ToList().FirstOrDefault().total;
+                //request.PageSize = 10;
+                //var result = new DataSourceResult()
+                //{
+                //    Data = personasList,
+                //    Total = total
+                //};
+                return Json(new { encontrada = true, data = personasList });
+            }
+            //return Json(new { encontrada = true, data = result });
+
+            // Si no se encontraron resultados en la búsqueda de personas, realizar la búsqueda por licencia
+            string parametros = "";
+            parametros += string.IsNullOrEmpty(model.numeroLicenciaBusqueda) ? "" : "licencia=" + model.numeroLicenciaBusqueda;
+            parametros += string.IsNullOrEmpty(model.CURPBusqueda) ? "" : "curp=" + model.CURPBusqueda + "&";
+            parametros += string.IsNullOrEmpty(model.RFCBusqueda) ? "" : "rfc=" + model.RFCBusqueda + "&";
+            parametros += string.IsNullOrEmpty(model.nombreBusqueda) ? "" : "nombre=" + model.nombreBusqueda + "&";
+            parametros += string.IsNullOrEmpty(model.apellidoPaternoBusqueda) ? "" : "primer_apellido=" + model.apellidoPaternoBusqueda + "&";
+            parametros += string.IsNullOrEmpty(model.apellidoMaternoBusqueda) ? "" : "segundo_apellido=" + model.apellidoMaternoBusqueda;
+
+            string ultimo = parametros.Substring(parametros.Length - 1);
+            if (ultimo.Equals("&"))
+                parametros = parametros.Substring(0, parametros.Length - 1);
+
+            try
+            {
+                string urlServ = Request.GetDisplayUrl();
+                Uri uri = new Uri(urlServ);
+                string requested = uri.Scheme + Uri.SchemeDelimiter + uri.Host + ":" + uri.Port;
+
+                var url = requested + $"/api/Licencias/datos_generales?" + parametros;
+
+                var httpClient = _httpClientFactory.CreateClient();
+                var response = await httpClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    LicenciaRespuestaPersona respuesta = JsonConvert.DeserializeObject<LicenciaRespuestaPersona>(content);
+
+                    return Json(respuesta);
+                }
+            }
+            catch (Exception ex)
+            {
+                // En caso de errores, devolver una respuesta JSON con licencia no encontrada
+                return Json(new { encontrada = false, data = personasList, message = "Ocurrió un error al obtener los datos. " + ex.Message + "; " + ex.InnerException });
+            }
+
+            // Si no se cumple la condición anterior, devolver una respuesta JSON indicando que no se encontraron resultados
+            return Json(new { encontrada = false, data = personasList, message = "No se encontraron resultados." });
+        }
 
 
 
@@ -112,11 +178,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
         {
             var catTipoPersona = _catDictionary.GetCatalog("CatTipoPersona", "0");
             var catTipoLicencia = _catDictionary.GetCatalog("CatTipoLicencia", "0");
-           // var catEntidades = _catDictionary.GetCatalog("CatEntidades", "0");
+            // var catEntidades = _catDictionary.GetCatalog("CatEntidades", "0");
             var catGeneros = _catDictionary.GetCatalog("CatGeneros", "0");
-           // var catMunicipios = (_catMunicipiosService.GetMunicipiosPorEntidad(entidadDDlValue), "IdMunicipio", "Municipio");
+            // var catMunicipios = (_catMunicipiosService.GetMunicipiosPorEntidad(entidadDDlValue), "IdMunicipio", "Municipio");
 
-           // ViewBag.CatMunicipios = new SelectList(catMunicipios.CatalogList, "Id", "Text");
+            // ViewBag.CatMunicipios = new SelectList(catMunicipios.CatalogList, "Id", "Text");
             ViewBag.CatGeneros = new SelectList(catGeneros.CatalogList, "Id", "Text");
             //ViewBag.CatEntidades = new SelectList(catEntidades.CatalogList, "Id", "Text");
             ViewBag.CatTipoPersona = new SelectList(catTipoPersona.CatalogList, "Id", "Text");
@@ -194,7 +260,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 var modelList = _personasService.GetPersonaById((int)model.idPersona);
                 var ip = HttpContext.Connection.RemoteIpAddress.ToString();
                 var user = Convert.ToDecimal(User.FindFirst(CustomClaims.IdUsuario).Value);
-                
+
                 //BITACORA
                 _bitacoraServices.insertBitacora((int)model.idPersona, ip, "Personas_PersonaMoral", "Actualizar", "Update", user);
                 //var listPadronGruas = _concesionariosService.GetAllConcesionarios();

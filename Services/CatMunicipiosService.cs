@@ -290,6 +290,51 @@ finally
 
 
         }
+
+        public List<CatMunicipiosModel> GetMunicipiosGuanajuato()
+        {
+            //
+            List<CatMunicipiosModel> ListaMunicipios = new List<CatMunicipiosModel>();
+
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+                try
+
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(@"SELECT cm.idMunicipio,cm.municipio,e.estatusDesc
+                                                            FROM catMunicipios cm
+                                                            LEFT JOIN estatus e ON e.estatus =cm.estatus
+                                                            WHERE cm.idEntidad = 11", connection);
+                    command.CommandType = CommandType.Text;
+
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            CatMunicipiosModel municipio = new CatMunicipiosModel();
+                            municipio.IdMunicipio = Convert.ToInt32(reader["IdMunicipio"].ToString());
+                            municipio.Municipio = reader["Municipio"].ToString();
+                          
+                            ListaMunicipios.Add(municipio);
+
+                        }
+
+                    }
+
+                }
+                catch (SqlException ex)
+                {
+                    //Guardar la excepcion en algun log de errores
+                    //ex
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            return ListaMunicipios;
+
+
+        }
     }
 }
 

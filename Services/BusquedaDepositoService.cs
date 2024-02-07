@@ -83,16 +83,19 @@ namespace GuanajuatoAdminUsuarios.Services
         public List<BusquedaDepositoModel> ObtenerDepositos(BusquedaDepositoModel model, int idPension)
         {
             List<BusquedaDepositoModel> modelList = new List<BusquedaDepositoModel>();
-            string condiciones = "";
-            condiciones += model.propietario.IsNullOrEmpty() ? "" : " AND p.nombre = @nombre OR p.apellidoPaterno = @apellidoPaterno OR p.apellidoMaterno = @apellidoMaterno";
-           // condiciones += model.apellidoPaterno.IsNullOrEmpty() ? "" : " AND p.apellidoPaterno = @apellidoPaterno";
-            //condiciones += model.apellidoMaterno.IsNullOrEmpty() ? "" : " AND p.apellidoMaterno = @apellidoMaterno";
+            string condiciones = "";                      
             condiciones += model.folioInfraccion.IsNullOrEmpty() ? "" : " AND inf.folioInfraccion LIKE '%' + @folioInfraccion + '%' ";
             condiciones += model.placa.IsNullOrEmpty() ? "" : " AND d.placa = @placa";
+
+
+
             if (model.fechaIngreso != DateTime.MinValue)
             {
-                condiciones += " OR d.fechaIngreso = @fechaIngreso";
+                condiciones += " and d.fechaIngreso between @fechaIngresoIn   and  @fechaIngresoFn ";
+
             };
+            condiciones += model.propietario.IsNullOrEmpty() ? "" : " AND (p.nombre + isnull(' '+p.apellidoPaterno,'')+ isnull(' '+p.apellidoMaterno,'')  like '%'+ @nombre + '%'  )";
+
             string strQuery = @"SELECT d.idDeposito,d.idSolicitud,d.idInfraccion,d.idVehiculo,d.fechaIngreso,
                                         d.idPension,d.idGrua,sol.fechaSolicitud,inf.folioInfraccion,d.placa,
                                         p.nombre,p.apellidoPaterno,p.apellidoMaterno,sd.fechaSalida,ga.idGrua,C.concesionario,
@@ -118,13 +121,14 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.CommandType = CommandType.Text;
                     if (model.fechaIngreso != DateTime.MinValue)
                     {
-                        command.Parameters.Add(new SqlParameter("@fechaIngreso", SqlDbType.DateTime)).Value = model.fechaIngreso;
+                        var ffin = model.fechaIngreso.AddDays(1);
+                        command.Parameters.Add(new SqlParameter("@fechaIngresoIn", SqlDbType.DateTime)).Value = model.fechaIngreso;
+                        command.Parameters.Add(new SqlParameter("@fechaIngresoFn", SqlDbType.DateTime)).Value = ffin;
+
                     }
                     command.Parameters.Add(new SqlParameter("@folioInfraccion", SqlDbType.VarChar)).Value = (object)model.folioInfraccion ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@placa", SqlDbType.VarChar)).Value = (object)model.placa ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@nombre", SqlDbType.VarChar)).Value = (object)model.propietario ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@apellidoPaterno", SqlDbType.VarChar)).Value = (object)model.propietario ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@apellidoMaterno", SqlDbType.VarChar)).Value = (object)model.propietario ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idPension", SqlDbType.VarChar)).Value = (object)idPension ?? DBNull.Value;
 
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))

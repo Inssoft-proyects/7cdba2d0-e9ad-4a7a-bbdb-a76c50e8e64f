@@ -1,5 +1,7 @@
 ﻿using GuanajuatoAdminUsuarios.Entity;
+using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
+using GuanajuatoAdminUsuarios.Services;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Authorization;
@@ -14,14 +16,23 @@ using System.Linq;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
+
     [Authorize]
     public class DiasInhabilesController : BaseController
     {
-        DBContextInssoft dbContext = new DBContextInssoft();
+        private readonly IDiasInhabiles _diasInhabiles;
+        private readonly ICatMunicipiosService _catMunicipiosService;
+
+
+        public DiasInhabilesController(IDiasInhabiles diasInhabiles, ICatMunicipiosService catMunicipiosService)
+        {
+            _diasInhabiles = diasInhabiles;
+            _catMunicipiosService = catMunicipiosService;
+        }
         public IActionResult Index()
         {
          
-                var ListDiasInhabilesModel = GetDiasInhabiles();
+                var ListDiasInhabilesModel = _diasInhabiles.GetDiasInhabiles();
 
             return View(ListDiasInhabilesModel);
             }
@@ -31,42 +42,36 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 
         #region Modal Action
-        public ActionResult IndexModal()
-        {
-            var ListDiasInhabilesModel = GetDiasInhabiles();
-            //return View("IndexModal");
-              return View("Index", ListDiasInhabilesModel);
-        }
-
+       
         [HttpPost]
         public ActionResult AgregarParcialDiaInhabil()
         {
-         
-                Municipios_Drop();
+
+            Municipios_Read();
             return PartialView("_Crear");
             }
      
 
-        public ActionResult EditarParcial(int IdDiaInhabil)
+        public ActionResult EditarParcial(int IdDia)
         {
           
-                var diasInhabilesModel = GetDiaInhabilByID(IdDiaInhabil);
-            Municipios_Drop();
+             var diasInhabilesModel = _diasInhabiles.GetDiasById(IdDia);
+            Municipios_Read();
             return View("_Editar", diasInhabilesModel);
          }
        
 
-        public ActionResult EliminarDiaInhabilParcial(int IdDiaInhabil)
+/*public ActionResult EliminarDiaInhabilParcial(int IdDiaInhabil)
         {
             var diasInhabilesModel = GetDiaInhabilByID(IdDiaInhabil);
             Municipios_Drop();
             return View("_Eliminar", diasInhabilesModel);
-        }
+        }*/
 
         public JsonResult Municipios_Read()
         {
-            var dataSource = new SelectList(dbContext.CatMunicipios.ToList(), "IdMunicipio", "Municipio");
-            return Json(dataSource);
+            var result = new SelectList(_catMunicipiosService.GetMunicipios(), "IdMunicipio", "Municipio");
+            return Json(result);
         }
 
 
@@ -80,8 +85,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {
 
 
-                CreateDiaInhabil(model);
-                var ListDiasInhabilesModel = GetDiasInhabiles();
+                _diasInhabiles.CrearDiaInhabil(model);
+                var ListDiasInhabilesModel = _diasInhabiles.GetDiasInhabiles();
                 return Json(ListDiasInhabilesModel);
             }
             Municipios_Drop();
@@ -98,7 +103,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             if (ModelState.IsValid)
             {
                 UpdateDiaInhabil(model);
-                var ListDiasInhabilesModel = GetDiasInhabiles();
+                var ListDiasInhabilesModel = _diasInhabiles.GetDiasInhabiles();
                 return Json(ListDiasInhabilesModel);
             }
             Municipios_Drop();
@@ -115,7 +120,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 
                 DeleteDiaInhabil(model);
-                var ListDiasInhabilesModel = GetDiasInhabiles();
+                var ListDiasInhabilesModel = _diasInhabiles.GetDiasInhabiles();
                 return Json(ListDiasInhabilesModel);
             }
             Municipios_Drop();
@@ -124,7 +129,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
         public JsonResult GetDiasIn([DataSourceRequest] DataSourceRequest request)
         {
-            var ListDiasInhabilesModel = GetDiasInhabiles();
+            var ListDiasInhabilesModel = _diasInhabiles.GetDiasInhabiles();
 
             return Json(ListDiasInhabilesModel.ToDataSourceResult(request));
         }
@@ -146,8 +151,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             diaInhabil.todosMunicipiosDesc = model.todosMunicipiosDesc;
             diaInhabil.Estatus = 1;
             diaInhabil.FechaActualizacion = DateTime.Now;
-            dbContext.DiasInhabiles.Add(diaInhabil);
-            dbContext.SaveChanges();
+            //dbContext.DiasInhabiles.Add(diaInhabil);
+            //dbContext.SaveChanges();
         }
 
         public void UpdateDiaInhabil(DiasInhabilesModel model)
@@ -160,8 +165,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             diaInhabil.Estatus = model.Estatus;
             diaInhabil.FechaActualizacion = DateTime.Now;
 
-            dbContext.Entry(diaInhabil).State = EntityState.Modified;
-            dbContext.SaveChanges();
+            //dbContext.Entry(diaInhabil).State = EntityState.Modified;
+            //dbContext.SaveChanges();
 
         }
 
@@ -174,8 +179,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             diaInhabil.todosMunicipiosDesc = model.todosMunicipiosDesc;
             diaInhabil.Estatus = 0;
             diaInhabil.FechaActualizacion = DateTime.Now;
-            dbContext.Entry(diaInhabil).State = EntityState.Modified;
-            dbContext.SaveChanges();
+           // dbContext.Entry(diaInhabil).State = EntityState.Modified;
+            //dbContext.SaveChanges();
 
         }
 
@@ -183,58 +188,58 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public JsonResult Municipios_Drop()
         {
-            var result = new SelectList(dbContext.CatMunicipios.ToList(), "IdMunicipio", "Municipio");
+            var result = new SelectList(_catMunicipiosService.GetMunicipios(), "IdMunicipio", "Municipio");
             ViewBag.CatMunicipios = result;
             return Json(result);
         }
 
-        public DiasInhabilesModel GetDiaInhabilByID(int IdDiaInhabil)
-        {
+        /*  public DiasInhabilesModel GetDiaInhabilByID(int IdDiaInhabil)
+          {
 
-            var productEnitity = dbContext.DiasInhabiles.Find(IdDiaInhabil);
+              var productEnitity = dbContext.DiasInhabiles.Find(IdDiaInhabil);
 
-            var diaInhabilModel = (from diasInhabiles in dbContext.DiasInhabiles.ToList()
-                                   select new DiasInhabilesModel
+              var diaInhabilModel = (from diasInhabiles in dbContext.DiasInhabiles.ToList()
+                                     select new DiasInhabilesModel
 
-                                   {
-                                       idDiaInhabil = diasInhabiles.idDiaInhabil,
-                                       fecha =  diasInhabiles.fecha,
-                                       idMunicipio = diasInhabiles.idMunicipio,
-                                       todosMunicipiosDesc = diasInhabiles.todosMunicipiosDesc,
-
-
-
-                                   }).Where(w => w.idDiaInhabil == IdDiaInhabil).FirstOrDefault();
-
-            return diaInhabilModel;
-        }
-
-        public List<DiasInhabilesModel> GetDiasInhabiles()
-        {
-            var ListDiasInhabilesModel = (from diasInhabiles in dbContext.DiasInhabiles.ToList()
-                                          join municipio in dbContext.CatMunicipios.ToList()
-                                          on diasInhabiles.idMunicipio equals municipio.IdMunicipio
-                                          join estatus in dbContext.Estatus.ToList()
-                                          on diasInhabiles.Estatus equals estatus.estatus
+                                     {
+                                         idDiaInhabil = diasInhabiles.idDiaInhabil,
+                                         fecha =  diasInhabiles.fecha,
+                                         idMunicipio = diasInhabiles.idMunicipio,
+                                         todosMunicipiosDesc = diasInhabiles.todosMunicipiosDesc,
 
 
 
-                                          select new DiasInhabilesModel
-                                          {
-                                              idDiaInhabil = diasInhabiles.idDiaInhabil,
-                                              fecha = diasInhabiles.fecha,
-                                              idMunicipio = diasInhabiles.idMunicipio,
-                                              todosMunicipiosDesc = diasInhabiles.todosMunicipiosDesc,
-                                              Estatus = diasInhabiles.Estatus,
-                                              EstatusDesc = estatus.estatusDesc,
-                                              Municipio = municipio.Municipio
+                                     }).Where(w => w.idDiaInhabil == IdDiaInhabil).FirstOrDefault();
 
-                                          }).ToList();
-            return ListDiasInhabilesModel;
-        }
+              return diaInhabilModel;
+          }
+
+          public List<DiasInhabilesModel> GetDiasInhabiles()
+          {
+              var ListDiasInhabilesModel = (from diasInhabiles in dbContext.DiasInhabiles.ToList()
+                                            join municipio in dbContext.CatMunicipios.ToList()
+                                            on diasInhabiles.idMunicipio equals municipio.IdMunicipio
+                                            join estatus in dbContext.Estatus.ToList()
+                                            on diasInhabiles.Estatus equals estatus.estatus
+
+
+
+                                            select new DiasInhabilesModel
+                                            {
+                                                idDiaInhabil = diasInhabiles.idDiaInhabil,
+                                                fecha = diasInhabiles.fecha,
+                                                idMunicipio = diasInhabiles.idMunicipio,
+                                                todosMunicipiosDesc = diasInhabiles.todosMunicipiosDesc,
+                                                Estatus = diasInhabiles.Estatus,
+                                                EstatusDesc = estatus.estatusDesc,
+                                                Municipio = municipio.Municipio
+
+                                            }).ToList();
+              return ListDiasInhabilesModel;
+          }
+          #
+        */
         #endregion
-
-
         [HttpGet]
         public ActionResult ajax_BuscarDiasInhabiles(string fecha, int idMunicipio)
         {
@@ -245,11 +250,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
                     fecha = null;
             }
 
-            ListDiasInhabilesModel = (from diasInhabiles in dbContext.DiasInhabiles.ToList()
-                                          join municipio in dbContext.CatMunicipios.ToList()
-                                          on diasInhabiles.idMunicipio equals municipio.IdMunicipio
-                                          join estatus in dbContext.Estatus.ToList()
-                                          on diasInhabiles.Estatus equals estatus.estatus
+            ListDiasInhabilesModel = (from diasInhabiles in _diasInhabiles.GetDiasInhabiles().ToList()
+                                          //join municipio in _catMunicipiosService.GetMunicipios().ToList()
+                                          //on diasInhabiles.idMunicipio equals municipio.IdMunicipio
+                                         // join estatus in dbContext.Estatus.ToList()
+                                          //on diasInhabiles.Estatus equals estatus.estatus
 
                                           select new DiasInhabilesModel
                                           {
@@ -258,8 +263,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
                                               idMunicipio = diasInhabiles.idMunicipio,
                                               todosMunicipiosDesc = diasInhabiles.todosMunicipiosDesc,
                                               Estatus = diasInhabiles.Estatus,
-                                              EstatusDesc = estatus.estatusDesc,
-                                              Municipio = municipio.Municipio
+                                             // EstatusDesc = estatus.estatusDesc,
+                                              Municipio = diasInhabiles.Municipio
                                           }).ToList();
 
             if (!String.IsNullOrEmpty(fecha) && idMunicipio > 0)

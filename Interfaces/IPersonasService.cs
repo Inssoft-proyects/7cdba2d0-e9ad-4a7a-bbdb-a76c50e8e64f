@@ -8,6 +8,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
     {
         public IEnumerable<PersonaModel> GetAllPersonas();
         List<PersonaModel> BusquedaPersona(PersonaModel model);
+        List<PersonaModel> BusquedaPersonaPagination(PersonaModel model, Pagination pagination);
         public bool VerificarLicenciaSitteg(string numeroLicencia);
         public int InsertarDesdeServicio(LicenciaPersonaDatos personaDatos);
         public PersonaDireccionModel GetPersonaDireccionByIdPersona(int idPersona);

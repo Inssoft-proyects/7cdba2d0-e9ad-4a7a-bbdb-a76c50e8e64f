@@ -1,6 +1,7 @@
 ﻿using GuanajuatoAdminUsuarios.Entity;
 using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
+using GuanajuatoAdminUsuarios.Services;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Authorization;
@@ -27,10 +28,12 @@ namespace GuanajuatoAdminUsuarios.Controllers
             return View(ListOficialesModel);
             }
         private readonly IOficiales _oficialesService;
+        private readonly ICatDelegacionesOficinasTransporteService _catDelegacionesOficinasTransporteService;
 
-        public OficialesController(IOficiales oficialesService)
+        public OficialesController(IOficiales oficialesService, ICatDelegacionesOficinasTransporteService catDelegacionesOficinasTransporteService)
         {
             _oficialesService = oficialesService;
+            _catDelegacionesOficinasTransporteService = catDelegacionesOficinasTransporteService;
         }
 
 
@@ -137,7 +140,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
             return Json(ListOficialesModel.ToDataSourceResult(request));
         }
 
-
+        public JsonResult DelegacionesOficinas_Drop()
+        {
+            var result = new SelectList(_catDelegacionesOficinasTransporteService.GetDelegacionesOficinasActivos(), "IdDelegacion", "Delegacion");
+            return Json(result);
+        }
 
 
         #endregion
@@ -245,8 +252,44 @@ namespace GuanajuatoAdminUsuarios.Controllers
             return ListOficialessModel;
         }
         #endregion
+        [HttpGet]
+        public ActionResult ajax_BuscarDelegacion(int idDelegacionFiltro)
+        {
+            List<CatOficialesModel> ListOfcialesDelegacion = new List<CatOficialesModel>();
 
 
+            ListOfcialesDelegacion = (from oficiales in _oficialesService.GetOficiales().ToList()
+                                         // join delegacion in _catDelegacionesOficinasTransporteService.GetDelegacionesOficinasActivos().ToList()
+                                          //on oficiales.IdOficina equals delegacion.IdOficinaTransporte
+                                          // join estatus in dbContext.Estatus.ToList()
+                                          //on diasInhabiles.Estatus equals estatus.estatus
+
+                                      select new CatOficialesModel
+                                      {
+                                          IdOficial = oficiales.IdOficial,
+                                          Nombre = oficiales.Nombre,
+                                          ApellidoPaterno = oficiales.ApellidoPaterno,
+                                          ApellidoMaterno = oficiales.ApellidoMaterno,
+                                          IdOficina = oficiales.IdOficina,
+                                          Estatus = oficiales.Estatus,
+                                          nombreOficina = oficiales.nombreOficina,
+                                          // EstatusDesc = estatus.estatusDesc,
+                                          // = diasInhabiles.Municipio
+                                      }).ToList();
+
+      
+             if (idDelegacionFiltro > 0)
+            {
+                ListOfcialesDelegacion = (from s in ListOfcialesDelegacion
+                                          where s.IdOficina == idDelegacionFiltro
+                                          select s).ToList();
+            }
+
+            return Json(ListOfcialesDelegacion);
+        }
 
     }
 }
+
+
+

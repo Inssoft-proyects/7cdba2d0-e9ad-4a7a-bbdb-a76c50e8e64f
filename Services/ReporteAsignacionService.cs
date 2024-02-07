@@ -1,6 +1,8 @@
 ﻿using GuanajuatoAdminUsuarios.Entity;
 using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -113,7 +115,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             ReporteAsignacion.motivoAsignacion = reader["tipoAsignacion"] != DBNull.Value ? reader["tipoAsignacion"].ToString() : string.Empty;
 
                             ReporteAsignacion.propietarioGrua = reader["propietarioGrua"] != DBNull.Value ? reader["propietarioGrua"].ToString() : string.Empty;
-                            ReporteAsignacion.oficial = reader["oficial"] != DBNull.Value ? reader["oficial"].ToString() : string.Empty;
+                           // ReporteAsignacion.oficial = reader["oficial"] != DBNull.Value ? reader["oficial"].ToString() : string.Empty;
                             ReporteAsignacion.folio = reader["folio"] != DBNull.Value ? reader["folio"].ToString() : string.Empty;
                             ReporteAsignacion.vehiculoPension = reader["pension"] != DBNull.Value ? reader["pension"].ToString() : string.Empty;
                             ReporteAsignacion.fechaLiberacion = reader["fechaLiberacion"] != DBNull.Value ? Convert.ToDateTime(reader["fechaLiberacion"].ToString()) : DateTime.MinValue;
@@ -148,79 +150,55 @@ namespace GuanajuatoAdminUsuarios.Services
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
                 try
                 {
+
                     connection.Open();
-                    const string SqlTransact =
-                                     @"SELECT  MAX(dep.iddeposito) AS iddeposito,
-                                       MAX(dep.idsolicitud) AS idsolicitud,
-                                       MAX(dep.idDelegacion) AS idDelegacion,
-                                       MAX(dep.idmarca) AS idmarca,
-                                       MAX(dep.idsubmarca) AS idsubmarca,
-                                       MAX(dep.idpension) AS idpension,
-                                       MAX(dep.idtramo) AS idtramo,
-                                       MAX(dep.idcolor) AS idcolor,
-                                       MAX(dep.serie) AS serie,
-                                       MAX(dep.placa) AS placa,
-                                       MAX(dep.fechaingreso) AS fechaingreso,
-                                       MAX(dep.folio) AS folio,
-                                       MAX(dep.km) AS km,
-                                       MAX(dep.liberado) AS liberado,
-                                       MAX(dep.autoriza) AS autoriza,
-                                       MAX(dep.fechaactualizacion) AS fechaactualizacion,
-                                       MAX(del.delegacion) AS delegacion,
-                                       MAX(dep.actualizadopor) AS actualizadopor,
-                                       MAX(dep.estatus) AS estatus,
-                                       MAX(dep.FechaLiberacion) AS FechaLiberacion,
-                                       MAX(dep.IdDependenciaGenera) AS IdDependenciaGenera,
-                                       MAX(dep.IdDependenciaTransito) AS IdDependenciaTransito,
-                                       MAX(dep.IdDependenciaNoTransito) AS IdDependenciaNoTransito,
-                                       MAX(sol.solicitantenombre) AS solicitantenombre,
-                                       MAX(sol.solicitanteap) AS solicitanteap,
-                                       MAX(sol.solicitanteam) AS solicitanteam,
-                                       MAX(pen.pension) AS pension,
-                                       MAX(carrV.carretera) AS vehiculoCarretera,
-                                       MAX(traV.tramo) AS vehiculoTramo,
-                                       MAX(sol.vehiculoKm) AS vehiculoKm,
-                                       MAX(sol.fechasolicitud) AS fechasolicitud,
-                                       MAX(sol.folio) AS FolioSolicitud,
-                                       MAX(eve.descripcionEvento) AS evento,
-                                       MAX(sol.solicitanteColonia) AS solicitanteColonia,
-                                       MAX(sol.solicitanteCalle) AS solicitanteCalle,
-                                       MAX(sol.solicitanteNumero) AS solicitanteNumero,
-                                       MAX(tv.tipoVehiculo) AS tipoVehiculo,
-                                       MAX(cOfi.nombre + ' '+cOfi.apellidoPaterno+' '+cOfi.apellidoMaterno) AS oficial,
-                                       MAX(sol.folio) AS folio,
-                                       MAX(sol.propietarioGrua) AS propietarioGrua,
-                                       MAX(g.IdGrua) AS IdGrua,
-                                       MAX(g.noEconomico) AS noEconomico,
-                                       MAX(con.IdConcesionario) AS IdConcesionario,
-                                       MAX(con.concesionario) AS concesionario
-                                        FROM depositos dep
-                                        LEFT JOIN catDelegaciones del ON dep.idDelegacion = del.idDelegacion
-                                        LEFT JOIN pensiones pen ON dep.idpension = pen.idpension
-                                        LEFT JOIN solicitudes sol ON dep.idsolicitud = sol.idsolicitud
-                                        LEFT JOIN concesionarios con ON con.IdConcesionario = dep.IdConcesionario
-                                        LEFT JOIN gruas g ON g.idConcesionario = con.idConcesionario
-										LEFT JOIN catCarreteras carrV ON carrV.idCarretera = sol.vehiculoCarretera
-										LEFT JOIN catTramos traV ON traV.idTramo = sol.vehiculoTramo
-					                    LEFT JOIN catDescripcionesEvento eve ON eve.idDescripcion = sol.idEvento
-									    LEFT JOIN catTiposVehiculo tv ON tv.idTipoVehiculo= sol.tipoVehiculo
-										LEFT JOIN catOficiales cOfi ON cOfi.idOficial = sol.oficial
-                             WHERE  
-                                    dep.idDelegacion = CASE WHEN @idOficina IS NOT NULL THEN @idOficina ELSE dep.idDelegacion END
-                                    AND (g.IdGrua = CASE WHEN @IdGrua IS NOT NULL THEN @IdGrua ELSE g.IdGrua END
-                                    OR pen.idPension = CASE WHEN @IdPension IS NOT NULL THEN @IdPension ELSE pen.idPension END
-                                    OR (dep.fechaIngreso != '1753-01-01' AND dep.fechaIngreso != '9999-12-31' 
-                                        AND dep.fechaIngreso BETWEEN 
-                                            CASE WHEN @FechaIngreso IS NOT NULL THEN @FechaIngreso ELSE '1753-01-01' END 
-                                            AND 
-                                            CASE WHEN @FechaIngresoFin IS NOT NULL THEN @FechaIngresoFin ELSE '9999-12-31' END)
-                                    OR (UPPER(sol.evento) = CASE WHEN @Evento IS NOT NULL THEN @Evento ELSE UPPER(sol.evento) END))
-                                GROUP BY dep.iddeposito, del.delegacion";
+                    string condiciones = "";
+               
+                    condiciones += model.IdGrua.Equals(null) || model.IdGrua == 0 ? "" : " AND ga.IdGrua = @IdGrua ";
+                    condiciones += model.IdPension.Equals(null) || model.IdPension == 0 ? "" : " AND d.idPension = @IdPension ";
+                    condiciones += model.IdEvento.Equals(null) || model.IdEvento == 0 ? "" : " AND sol.idEvento = @IdEvento ";
+
+
+                    if (model.FechaInicio != DateTime.MinValue || model.FechaFin != DateTime.MinValue)
+                    {
+                        condiciones += @" AND (CONVERT(VARCHAR,sol.fechasolicitud,112)
+                                           BETWEEN CONVERT(VARCHAR,ISNULL(@FechaIngreso,sol.fechasolicitud),112)
+                                            AND CONVERT(VARCHAR,ISNULL(@FechaIngresoFin,sol.fechasolicitud),112)) ";
+                    }                   
+                        condiciones += model.Evento.IsNullOrEmpty() ? "" : "UPPER(t.evento) = UPPER(@Evento)";
+                    if (string.IsNullOrEmpty(condiciones.Trim()))
+                    {
+                        condiciones = "";
+                    }
+                    string SqlTransact =
+                                     @"SELECT sol.idSolicitud,sol.vehiculoCarretera, sol.vehiculoTramo,sol.fechaSolicitud,
+                                    sol.vehiculoKm, sol.idEvento,sol.idMotivoAsignacion,sol.solicitanteNombre,sol.idPension,
+                                    sol.solicitanteAp,sol.solicitanteAm,sol.solicitanteEntidad,sol.solicitanteMunicipio,sol.solicitanteColonia,
+                                    sol.solicitanteCalle,sol.solicitanteNumero,sol.idTipoVehiculo,sol.folio,ga.idGrua,g.idConcesionario,
+                                    d.fechaLiberacion,d.inventario,c.concesionario,c.alias,cOfi.nombre,cOfi.apellidoPaterno,cOfi.apellidoMaterno,p.pension,
+                                    carr.carretera,tra.tramo,mot.tipoAsignacion,ev.descripcionEvento,mun.municipio,tve.tipoVehiculo,cdel.nombreOficina
+
+                                    FROM solicitudes sol
+                                    LEFT JOIN depositos d on d.idSolicitud = sol.idSolicitud
+                                    LEFT JOIN gruasAsignadas ga ON ga.idDeposito = d.idDeposito
+                                    LEFT JOIN gruas g ON g.idGrua = ga.idGrua
+                                    LEFT JOIN concesionarios c ON c.idConcesionario = g.idConcesionario
+                                    LEFT JOIN catOficiales cOfi ON cOfi.idOficial = sol.idOficial
+                                    LEFT JOIN pensiones p ON p.idPension = sol.idPension
+                                    LEFT JOIN catDelegacionesOficinasTransporte cdel ON cdel.idOficinaTransporte = d.idDelegacion
+                                    LEFT JOIN catCarreteras carr ON carr.idCarretera = sol.idCarreteraUbicacion
+                                    LEFT JOIN catTramos tra ON tra.idTramo = sol.idTramoUbicacion
+                                    LEFT JOIN tipoMotivoAsignacion mot ON mot.idTipoAsignacion = sol.idMotivoAsignacion
+                                    LEFT JOIN  catDescripcionesEvento ev ON ev.idDescripcion = sol.idEvento
+                                    LEFT JOIN catMunicipios mun ON mun.idMunicipio = sol.solicitanteMunicipio
+                                    LEFT JOIN catTiposVehiculo tve ON tve.idTipoVehiculo = sol.idTipoVehiculo
+                                    WHERE d.idDelegacion = @idOficina " + condiciones;                          
+
 
                     SqlCommand command = new SqlCommand(SqlTransact, connection);
                     command.Parameters.Add(new SqlParameter("@IdGrua", SqlDbType.Int)).Value = (object)model.IdGrua ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@IdPension", SqlDbType.Int)).Value = (object)model.IdPension ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@Evento", SqlDbType.NVarChar)).Value = (object)model.Evento != null ? model.Evento.ToUpper() : DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@IdEvento", SqlDbType.NVarChar)).Value = (object)model.Evento != null ? model.Evento.ToUpper() : DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@FechaIngreso", SqlDbType.DateTime)).Value = (model.FechaInicio == DateTime.MinValue) ? DBNull.Value : (object)model.FechaInicio;
                     command.Parameters.Add(new SqlParameter("@FechaIngresoFin", SqlDbType.DateTime)).Value = (model.FechaFin == DateTime.MinValue) ? DBNull.Value : (object)model.FechaFin;
                     command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = (object)idOficina ?? DBNull.Value;
@@ -233,13 +211,19 @@ namespace GuanajuatoAdminUsuarios.Services
                             ReporteAsignacionModel ReporteAsignacion = new ReporteAsignacionModel();
                             ReporteAsignacion.idSolicitud = reader["idSolicitud"] != DBNull.Value ? Convert.ToInt32(reader["idSolicitud"].ToString()) : 0;
                             ReporteAsignacion.vehiculoCarretera = reader["vehiculoCarretera"] != DBNull.Value ? reader["vehiculoCarretera"].ToString() : string.Empty;
+
+                            ReporteAsignacion.carretera = reader["carretera"] != DBNull.Value ? reader["carretera"].ToString() : string.Empty;
+                            ReporteAsignacion.tramo = reader["tramo"] != DBNull.Value ? reader["tramo"].ToString() : string.Empty;
+
                             ReporteAsignacion.vehiculoTramo = reader["vehiculoTramo"] != DBNull.Value ? reader["vehiculoTramo"].ToString() : string.Empty;
                             ReporteAsignacion.vehiculoKm = reader["vehiculoKm"] != DBNull.Value ? reader["vehiculoKm"].ToString() : string.Empty;
                             ReporteAsignacion.fechaSolicitud = (DateTime)(reader["fechaSolicitud"] != DBNull.Value
-      ? Convert.ToDateTime(reader["fechaSolicitud"])
-      : (DateTime?)DateTime.MinValue);
+                          ? Convert.ToDateTime(reader["fechaSolicitud"])
+                          : (DateTime?)DateTime.MinValue);
 
-                            ReporteAsignacion.evento = reader["evento"] != DBNull.Value ? reader["evento"].ToString() : string.Empty;
+                            ReporteAsignacion.evento = reader["descripcionEvento"] != DBNull.Value ? reader["descripcionEvento"].ToString() : string.Empty;
+                            ReporteAsignacion.motivoAsignacion = reader["tipoAsignacion"] != DBNull.Value ? reader["tipoAsignacion"].ToString() : string.Empty;
+
                             ReporteAsignacion.solicitanteNombre = reader["solicitanteNombre"] != DBNull.Value ? reader["solicitanteNombre"].ToString() : string.Empty;
                             ReporteAsignacion.solicitanteAp = reader["solicitanteAp"] != DBNull.Value ? reader["solicitanteAp"].ToString() : string.Empty;
                             ReporteAsignacion.solicitanteAm = reader["solicitanteAm"] != DBNull.Value ? reader["solicitanteAm"].ToString() : string.Empty;
@@ -247,15 +231,19 @@ namespace GuanajuatoAdminUsuarios.Services
                             ReporteAsignacion.solicitanteCalle = reader["solicitanteCalle"] != DBNull.Value ? reader["solicitanteCalle"].ToString() : string.Empty;
                             ReporteAsignacion.solicitanteNumero = reader["solicitanteNumero"] != DBNull.Value ? reader["solicitanteNumero"].ToString() : string.Empty;
                             ReporteAsignacion.tipoVehiculo = reader["tipoVehiculo"] != DBNull.Value ? reader["tipoVehiculo"].ToString() : string.Empty;
-                            ReporteAsignacion.propietarioGrua = reader["propietarioGrua"] != DBNull.Value ? reader["propietarioGrua"].ToString() : string.Empty;
-                            ReporteAsignacion.oficial = reader["oficial"] != DBNull.Value ? reader["oficial"].ToString() : string.Empty;
+                            ReporteAsignacion.Alias = reader["alias"] != DBNull.Value ? reader["alias"].ToString() : string.Empty;
+                            //ReporteAsignacion.oficial = reader["oficial"] != DBNull.Value ? reader["oficial"].ToString() : string.Empty;
                             ReporteAsignacion.folio = reader["folio"] != DBNull.Value ? reader["folio"].ToString() : string.Empty;
                             ReporteAsignacion.vehiculoPension = reader["pension"] != DBNull.Value ? reader["pension"].ToString() : string.Empty;
                             ReporteAsignacion.fechaLiberacion = reader["fechaLiberacion"] != DBNull.Value ? Convert.ToDateTime(reader["fechaLiberacion"].ToString()) : (DateTime?)null;
                             ReporteAsignacion.IdGrua = reader["IdGrua"] != DBNull.Value ? Convert.ToInt32(reader["IdGrua"].ToString()) : 0;
-                            ReporteAsignacion.noEconomico = reader["noEconomico"] != DBNull.Value ? reader["noEconomico"].ToString() : string.Empty;
-                            ReporteAsignacion.Delegacion = reader["Delegacion"] != DBNull.Value ? reader["Delegacion"].ToString() : string.Empty;
-                            ReporteAsignacion.Alias = reader["concesionario"] != DBNull.Value ? reader["concesionario"].ToString() : string.Empty;
+                           // ReporteAsignacion.grua = reader["noEconomico"] != DBNull.Value ? reader["noEconomico"].ToString() : string.Empty;
+                            ReporteAsignacion.Delegacion = reader["nombreOficina"] != DBNull.Value ? reader["nombreOficina"].ToString() : string.Empty;
+                            ReporteAsignacion.propietarioGrua = reader["concesionario"] != DBNull.Value ? reader["concesionario"].ToString() : string.Empty;
+                            ReporteAsignacion.numeroIventario = reader["inventario"] != DBNull.Value ? reader["inventario"].ToString() : string.Empty;
+                            ReporteAsignacion.nombreOficial = reader["nombre"] != DBNull.Value ? reader["nombre"].ToString() : string.Empty;
+                            ReporteAsignacion.apellidoPaternoOficial = reader["apellidoPaterno"] != DBNull.Value ? reader["apellidoPaterno"].ToString() : string.Empty;
+                            ReporteAsignacion.apellidoMaternoOficial = reader["apellidoMaterno"] != DBNull.Value ? reader["apellidoMaterno"].ToString() : string.Empty;
 
                             ReporteAsignacionesList.Add(ReporteAsignacion);
                         }

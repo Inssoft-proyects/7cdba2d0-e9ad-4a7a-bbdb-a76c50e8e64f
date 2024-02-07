@@ -306,7 +306,7 @@ namespace GuanajuatoAdminUsuarios.Services
 
         public IEnumerable<Concesionarios2Model> GetConcecionariosBusqueda(int? idMunicipio, int idOficina, int? idDelegacion, int? idConcesionario)
         {
-           
+
             string strWhereidMunicipio = idMunicipio != null ? idMunicipio.ToString() : "c.idMunicipio";
             string strWhereidDelegacion = idDelegacion != null ? $"c.idDelegacion = {idDelegacion}" : "";
             string strWhereidConcesionario = idConcesionario != null ? $"c.idConcesionario = {idConcesionario}" : "";
@@ -385,5 +385,60 @@ namespace GuanajuatoAdminUsuarios.Services
                 return ListConcesionarios;
             }
         }
+        public List<ConcesionariosModel> GetAllConcesionariosConMunicipio()
+        {
+            //
+            List<ConcesionariosModel> ListaConcesionarios = new List<ConcesionariosModel>();
+
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+                try
+
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(@"SELECT 
+                                                                CASE 
+                                                                    WHEN (
+                                                                        SELECT COUNT(*)
+                                                                        FROM concesionarios c2
+                                                                        WHERE c2.concesionario = c.concesionario
+                                                                    ) > 1 THEN c.concesionario + '_' + cm.municipio
+                                                                    ELSE c.concesionario
+                                                                END AS concesionario,
+                                                                c.idConcesionario
+                                                            FROM 
+                                                                concesionarios c
+                                                            INNER JOIN 
+                                                                catMunicipios cm ON c.idMunicipio = cm.idMunicipio", connection);
+                    command.CommandType = CommandType.Text;
+
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            ConcesionariosModel concesionario = new ConcesionariosModel();
+                            concesionario.IdConcesionario = Convert.ToInt32(reader["idConcesionario"].ToString());
+                            concesionario.Concesionario = reader["concesionario"].ToString();
+
+                            ListaConcesionarios.Add(concesionario);
+
+                        }
+
+                    }
+
+                }
+                catch (SqlException ex)
+                {
+                    //Guardar la excepcion en algun log de errores
+                    //ex
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            return ListaConcesionarios;
+
+
+        }
     }
 }
+

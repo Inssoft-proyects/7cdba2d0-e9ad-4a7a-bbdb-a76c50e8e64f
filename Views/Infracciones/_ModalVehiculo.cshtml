@@ -140,7 +140,7 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="errorModalLabel">Vehículo no registrado en SITTEG</h5>
+                            <h5 class="modal-title" id="errorModalLabel">Vehículo no registrado en RIAG</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cierraModal()">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -166,11 +166,11 @@
             data: { placa: placa },
             success: function (data) {
                 if (data.success) {
-                    $('#errorMessage').text("Se han encontrado datos en el Registo Estatal, complete o corrija para importar los datos a SITTEG");
+                    $('#errorMessage').text("Vehículo sin captura en el Registro de Infracciones y Accidentes de Guanajuato");
                     $('#errorModal').modal('show');
                     // $('#VehiculoServiceModal').modal('show');
                 } else {
-                    $('#errorMessage').text("Complete o ingrese la información necesaria para agregar este vehículo a SITTEG");
+                    $('#errorMessage').text("Complete o ingrese la información necesaria para agregar este vehículo en RIAG");
                     $('#errorModal').modal('show');
 
                     $('#ModalBodyVehiculoService').html(data);
@@ -197,9 +197,7 @@
             type: 'POST',
             data: formData,
             success: function (response) {
-                console.log("WW", response);
 
-                // Comprobar si es una respuesta de error debido a problemas de conexión
                 if (response.success === false) {
                     sitteg_warning("No se encontraron resultados");
                     return;
@@ -207,13 +205,13 @@
 
                 if (response.noResults) {
                     alert("IF")
-                    $('#errorMessage').text("Se han encontrado datos en el Registo Estatal, complete o corrija para importar los datos a SITTEG");
+                    $('#errorMessage').text("Se han encontrado datos en el Registo Estatal, complete o corrija para importar los datos a RIAG");
                     $('#errorModal').modal('show');
                     $('#ModalBodyVehiculoService').html(response);
                     $('#VehiculoServiceModal').modal({ backdrop: 'static', keyboard: false });
                     $('#VehiculoServiceModal').modal('show');
                 } else {
-                    $('#errorMessage').text(" Por favor complete o corrija para importar los datos a SITTEG");
+                    $('#errorMessage').text("Vehículo sin captura en el Registro de Infracciones y Accidentes de Guanajuato");
                     $('#errorModal').modal('show');
                     $('#ModalBodyVehiculoService').html(response);
                     $('#VehiculoServiceModal').modal({ backdrop: 'static', keyboard: false });

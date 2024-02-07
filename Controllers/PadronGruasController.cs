@@ -38,14 +38,19 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 var listGruas = new List<Gruas2Model>();
                 var catTipoGruas = _catDictionary.GetCatalog("CatTiposGrua", "0");
                 var catDelegaciones = _catDictionary.GetCatalog("CatDelegaciones", "0");
-                var catConcesionario = _catDictionary.GetCatalog("CatConcesionarios", "0");
+               // var catConcesionario = _concesionariosService.GetAllConcesionariosConMunicipio(idOficina);
 
                 ViewBag.CatTipoGruas = new SelectList(catTipoGruas.CatalogList, "Id", "Text");
                 ViewBag.CatDelegaciones = new SelectList(catDelegaciones.CatalogList, "Id", "Text");
-                ViewBag.CatConcesionario = new SelectList(catConcesionario.CatalogList, "Id", "Text");
+               // ViewBag.CatConcesionario = new SelectList(catConcesionario, "Id", "Text");
 
                 return View(listGruas);
             
+        }
+        public JsonResult Concesionarios_Drop()
+        {
+            var result = new SelectList(_concesionariosService.GetAllConcesionariosConMunicipio(), "IdConcesionario", "Concesionario");
+            return Json(result);
         }
         public JsonResult Delegaciones_Drop()
         {

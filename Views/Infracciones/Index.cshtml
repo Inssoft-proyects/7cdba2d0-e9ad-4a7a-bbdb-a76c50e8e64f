@@ -153,14 +153,16 @@
                         @(Html.Kendo().DropDownListFor(d => d.IdTipoCortesia).Filter(FilterType.Contains)
                             .DataTextField("Text")
                             .DataValueField("Value")
+                             .OptionLabel("Seleccione una opción...")
                             .HtmlAttributes(new { style = "width:100%;", Id = "ddlCortesia" })
-                            .OptionLabel("Seleccione una opción...")
-                            .BindTo(new List<SelectListItem>
-                        {
-                        new SelectListItem { Text = "No aplica cortesía", Value = "0" },
-                        new SelectListItem { Text = "Sí aplica cortesía", Value = "1" }
-                        })
-                            )
+                            .Filter(FilterType.Contains)
+                            .DataSource(source =>
+                            {
+                                source.Read(read =>
+                                {
+                                    read.Action("Cortesias_Read", "Infracciones");
+                                });
+                            }))
                     </span>
                 </div>
             </div>
@@ -175,13 +177,12 @@
                             .OptionLabel("Seleccione Dependencia...")
                             .HtmlAttributes(new { style = "width:100%;", Id = "ddlDependencia" })
                             .Filter(FilterType.Contains)
-                            .DataSource(source =>
-                            {
-                                source.Read(read =>
-                                {
-                                    read.Action("Dependencias_Read", "Infracciones");
-                                });
-                            }))
+                            .BindTo(new List<SelectListItem>
+                        {
+                        new SelectListItem { Text = "De Movilidad", Value = "0" },
+                        new SelectListItem { Text = "De Tránsito", Value = "1" }
+                        })
+                            )
                     </span>
                 </div>
             </div>

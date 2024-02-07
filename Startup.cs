@@ -140,6 +140,8 @@ namespace GuanajuatoAdminUsuarios
             services.AddScoped<ICatFactoresOpcionesAccidentesService, CatFactoresOpcionesAccidentesService>();
             services.AddScoped<ICatCausasAccidentesService, CatCausasAccidentesService>();
             services.AddScoped<ICatHospitalesService, CatHospitalesService>();
+            services.AddScoped<IDiasInhabiles, DiasInhabilesService>();
+
             services.AddScoped<ICatClasificacionAccidentes, CatClasificacionAccidentesService>();
             services.AddScoped<ICatMarcasVehiculosService, CatMarcasVehiculosService>();
             services.AddScoped<ICatSubmarcasVehiculosService, CatSubmarcasVehiculosService>();

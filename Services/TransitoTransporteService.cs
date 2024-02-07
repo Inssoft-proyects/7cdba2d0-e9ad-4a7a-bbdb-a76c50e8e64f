@@ -194,38 +194,7 @@ namespace GuanajuatoAdminUsuarios.Services
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
                 try
                 {
-                    connection.Open();
-                    #region QueryBase
-                    //const string SqlTransact =
-                    //    @"select d.iddeposito,d.idsolicitud,d.iddelegacion,d.idmarca,d.idsubmarca,d.idpension,d.idtramo,
-                    //        d.idcolor,d.serie,d.placa,d.fechaingreso,d.folio,d.km,d.liberado,d.autoriza,d.fechaactualizacion,
-                    //        del.delegacion, d.actualizadopor, d.estatus, m.marcavehiculo,subm.nombresubmarca,sol.solicitantenombre,
-                    //        sol.solicitanteap,sol.solicitanteam, col.color,pen.pension,ctra.tramo,                       
-                    //        sol.fechasolicitud, sol.folio as FolioSolicitud, inf.idinfraccion,inf.folioinfraccion,
-                    //        veh.idvehiculo,veh.propietario,veh.numeroeconomico,veh.modelo,
-                    //        con.IdConcesionario, con.concesionario,d.FechaLiberacion
-                    //        ,d.IdDependenciaGenera,d.IdDependenciaTransito,d.IdDependenciaNoTransito
-                    //        ,dep.idDependencia,dep.nombreDependencia
-                    //        from depositos d inner join catDelegaciones del on d.iddelegacion= del.iddelegacion
-                    //        inner join catMarcasVehiculos m on d.idmarca=m.idmarcavehiculo
-                    //        inner join colores col on d.idcolor = col.idcolor
-                    //        inner join pensiones pen on d.idpension	= pen.idpension
-                    //        inner join catTramos ctra  on d.idtramo=ctra.idtramo
-                    //        inner join catSubmarcasVehiculos  subm on m.idmarcavehiculo=subm.idmarcavehiculo
-                    //        inner join solicitudes sol on d.idsolicitud = sol.idsolicitud
-                    //        inner join infracciones inf on sol.idinfraccion = inf.idinfraccion
-                    //        inner join	vehiculos  veh on sol.idvehiculo =veh.idvehiculo 
-                    //        inner join Concesionarios con on con.IdConcesionario =d.IdConcesionario
-                    //        left join dependencias dep on ((dep.idDependencia=d.IdDependenciaTransito) OR (dep.idDependencia=d.IdDependenciaNoTransito))
-                    //        where  sol.estatus !=0 and d.estatus!=0
-                    //        and
-                    //        (d.placa LIKE '%' + @Placa + '%'  OR sol.folio LIKE '%' + @FolioSolicitud + '%'  
-                    //        OR inf.FolioInfraccion LIKE '%' + @FolioInfraccion + '%' OR veh.propietario LIKE '%' + @Propietario + '%'
-                    //        OR veh.numeroEconomico LIKE '%' + @numeroEconomico + '%' OR del.idDelegacion=@IdDelegacion
-                    //        OR pen.idpension=@IdPension	OR d.IdDependenciaGenera=@IdDependenciaGenera OR d.IdDependenciaTransito=@IdDependenciaTransito 
-                    //        OR  d.IdDependenciaNoTransito=@IdDependenciaNoTransito OR d.fechaIngreso between @FechaIngreso and  @FechaIngresoFin)";
-                    #endregion
-
+                    
                     string condiciones = "";
 
                     condiciones += model.Placas.IsNullOrEmpty() ? "" : " AND d.placa LIKE '%' + @Placa + '%' ";
@@ -235,38 +204,47 @@ namespace GuanajuatoAdminUsuarios.Services
                     condiciones += model.NumeroEconomico.IsNullOrEmpty() ? "" : " AND veh.numeroEconomico LIKE '%' + @numeroEconomico + '%' ";
                     condiciones += model.IdDelegacion.Equals(null) || model.IdDelegacion == 0 ? "" : " AND del.idDelegacion = @IdDelegacion ";
                     condiciones += model.IdPension.Equals(null) || model.IdPension == 0 ? "" : " AND pen.idpension = @IdPension ";
-                    condiciones += model.IdEstatus.Equals(null) || model.IdEstatus == 0 ? "" : " AND CASE WHEN @Estatus = 2 AND d.liberado = 0 THEN 1 WHEN @Estatus = 3 AND d.liberado = 1 THEN 1 ELSE 1 END ";
+                    condiciones += model.IdEstatus.Equals(null) || model.IdEstatus == 0 ? "" : " AND d.estatusSolicitud = @idEstatus ";
                     condiciones += model.IdDependenciaGenera.Equals(null) || model.IdDependenciaGenera == 0 ? "" : " AND d.IdDependenciaGenera = @IdDependenciaGenera ";
                     condiciones += model.IdDependenciaTransito.Equals(null) || model.IdDependenciaTransito == 0 ? "" : " AND d.IdDependenciaTransito = @IdDependenciaTransito ";
                     condiciones += model.IdDependenciaNoTransito.Equals(null) || model.IdDependenciaNoTransito == 0 ? "" : " AND d.IdDependenciaNoTransito = @IdDependenciaNoTransito ";
                     if (model.FechaIngreso != null || model.FechaIngresoFin != null)
                     {
-                        condiciones += " AND (";
-
-                        if (model.FechaIngreso != null)
-                            condiciones += "inf.fechaInfraccion >= @FechaInicio";
+                        condiciones += @" AND (CONVERT(VARCHAR,d.fechaIngreso,112)
+                                           BETWEEN CONVERT(VARCHAR,ISNULL(@FechaInicio,d.fechaIngreso),112)
+                                            AND CONVERT(VARCHAR,ISNULL(@FechaFin,d.fechaIngreso),112)) ";
 
                         if (model.FechaIngreso != null && model.FechaIngresoFin != null)
-                            condiciones += " AND ";
+                            condiciones += " fechaingreso between @FechaInicio and @FechaFin";
 
-                        if (model.FechaIngresoFin != null)
-                            condiciones += "inf.fechaInfraccion <= @FechaFin";
+                        else if (model.FechaIngreso != null)
+                            condiciones += "fechaingreso >= @FechaInicio";
+                                                                                               
+                        else if (model.FechaIngresoFin != null)
+                            condiciones += "d.fechaingreso <= @FechaFin";
+
+                        else
+                            condiciones += "1 = 1";
 
                         condiciones += ")";
+
                     }
 
 
 
                     string SqlTransact =
-                                @"SELECT d.iddeposito, d.idsolicitud, d.idDelegacion, d.idmarca, d.idsubmarca, d.idpension, d.idtramo,
+                                @"SELECT 
+                                         ROW_NUMBER() over (order by d.fechaIngreso desc ) cons ,
+                                         d.iddeposito, d.idsolicitud, d.idDelegacion, d.idmarca, d.idsubmarca, d.idpension, d.idtramo,
                                          d.idcolor, d.serie, d.placa, d.fechaingreso, d.folio, d.km, d.liberado, d.autoriza, d.fechaactualizacion,
                                          del.delegacion, d.actualizadopor, d.estatus, m.marcavehiculo, subm.nombresubmarca, sol.solicitantenombre,
                                          sol.solicitanteap, sol.solicitanteam, col.color, pen.pension, ctra.tramo,                       
                                          sol.fechasolicitud, sol.folio AS FolioSolicitud, inf.idinfraccion, inf.folioinfraccion,
-                                         veh.idvehiculo, veh.propietario, veh.numeroeconomico, veh.modelo,
+                                         veh.idvehiculo, veh.numeroeconomico, veh.modelo,
                                          con.IdConcesionario, con.concesionario, d.FechaLiberacion,
                                          d.IdDependenciaGenera, d.IdDependenciaTransito, d.IdDependenciaNoTransito,
-                                         dep.idDependencia, dep.nombreDependencia
+                                         dep.idDependencia, dep.nombreDependencia,
+                                         CONCAT(ISNULL(per.nombre,''), ' ', ISNULL(per.apellidoMaterno,''),  ' ', ISNULL(per.apellidoMaterno,'')) Propietario 
                                 FROM depositos d
                                 LEFT JOIN catDelegaciones del ON d.idDelegacion = del.idDelegacion
                                 LEFT JOIN catMarcasVehiculos m ON d.idMarca = m.idMarcaVehiculo
@@ -278,8 +256,12 @@ namespace GuanajuatoAdminUsuarios.Services
                                 LEFT JOIN infracciones inf ON sol.idinfraccion = inf.idinfraccion
                                 LEFT JOIN vehiculos veh ON sol.idvehiculo = veh.idvehiculo 
                                 LEFT JOIN concesionarios con ON con.IdConcesionario = d.IdConcesionario
+                                LEFT JOIN personas per ON per.idPersona = d.idPropietario
                                 LEFT JOIN catDependencias dep ON (dep.idDependencia = d.IdDependenciaTransito OR dep.idDependencia = d.IdDependenciaNoTransito)
                                 WHERE d.estatus != 0 and d.idDelegacion = @idOficina " + condiciones;
+
+
+                    
 
                     SqlCommand command = new SqlCommand(SqlTransact, connection);
 
@@ -289,21 +271,43 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.Add(new SqlParameter("@Propietario", SqlDbType.NVarChar)).Value = (object)model.Propietario ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@numeroEconomico", SqlDbType.NVarChar)).Value = (object)model.NumeroEconomico ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = (object)idOficina ?? DBNull.Value;
-
                     command.Parameters.Add(new SqlParameter("@IdDelegacion", SqlDbType.Int)).Value = (object)model.IdDelegacion ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@IdPension", SqlDbType.Int)).Value = (object)model.IdPension ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@IdDependenciaGenera", SqlDbType.Int)).Value = (object)model.IdDependenciaGenera ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@IdDependenciaTransito", SqlDbType.Int)).Value = (object)model.IdDependenciaTransito ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@IdDependenciaNoTransito", SqlDbType.Int)).Value = (object)model.IdDependenciaNoTransito ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@Estatus", SqlDbType.Int)).Value = (object)model.IdEstatus ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@FechaInicio", SqlDbType.DateTime)).Value = (model.FechaIngreso != null) ? (object)model.FechaIngreso : DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@FechaFin", SqlDbType.DateTime)).Value = (model.FechaIngresoFin != null) ? (object)model.FechaIngresoFin : DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@idEstatus", SqlDbType.Int)).Value = (object)model.IdEstatus ?? DBNull.Value;
+
+                    
+
+
+                    if (model.FechaIngreso != null || model.FechaIngresoFin != null)
+                    {
+
+                        if (model.FechaIngreso != null && model.FechaIngresoFin != null)
+                        {
+                            command.Parameters.Add(new SqlParameter("@FechaInicio", SqlDbType.DateTime)).Value = (object)model.FechaIngreso ?? DBNull.Value;
+                            command.Parameters.Add(new SqlParameter("@FechaFin", SqlDbType.DateTime)).Value = (object)model.FechaIngresoFin ?? DBNull.Value;
+
+                        }
+
+                        else if (model.FechaIngreso != null)
+                            command.Parameters.Add(new SqlParameter("@FechaInicio", SqlDbType.DateTime)).Value = (object)model.FechaIngreso ?? DBNull.Value;
+
+                        else if (model.FechaIngresoFin != null)
+                            command.Parameters.Add(new SqlParameter("@FechaFin", SqlDbType.DateTime)).Value = (object)model.FechaIngresoFin ?? DBNull.Value;
+
+
+                    }
+
                     command.CommandType = CommandType.Text;
+                    connection.Open();
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
                         while (reader.Read())
                         {
                             TransitoTransporteModel transito = new TransitoTransporteModel();
+                            transito.cons = Convert.ToInt32(reader["cons"].ToString());
                             transito.IdDeposito = Convert.ToInt32(reader["IdDeposito"] is DBNull ? 0 : reader["IdDeposito"]);
                             transito.IdSolicitud = Convert.ToInt32(reader["IdSolicitud"] is DBNull ? 0 : reader["IdSolicitud"]);
                             transito.IdDelegacion = Convert.ToInt32(reader["IdDelegacion"] is DBNull ? 0 : reader["IdDelegacion"]);
@@ -349,7 +353,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             transito.IdDependenciaGenera = reader["IdDependenciaGenera"] is DBNull ? 0 : (int)reader["IdDependenciaGenera"];
                             transito.IdDependenciaTransito = reader["IdDependenciaTransito"] is DBNull ? 0 : (int)reader["IdDependenciaTransito"];
                             transito.IdDependenciaNoTransito = reader["IdDependenciaNoTransito"] is DBNull ? 0 : (int)reader["IdDependenciaNoTransito"];
-
+                            //transito.propietario  = reader["modelo"].ToString();
                             transitoList.Add(transito);
 
                         }

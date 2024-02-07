@@ -18,26 +18,26 @@
             .Name("Grid")
             .Columns(columns =>
             {
-                columns.Bound(p => p.vehiculoCarretera).Title("Carretera").Width(110);
-                columns.Bound(p => p.vehiculoTramo).Title("Tramo").Width(90);
+                columns.Bound(p => p.carretera).Title("Carretera").Width(110);
+                columns.Bound(p => p.tramo).Title("Tramo").Width(90);
                 columns.Bound(p => p.vehiculoKm).Title("KM").Width(90);
                columns.Bound(c => c.fechaSolicitud)
                         .Title("Fecha")
                         .Width(150)
-                        .ClientTemplate("#= formatFechaSolicitud(fechaSolicitud) #");
-
-                    columns.Bound(c => c.fechaLiberacion)
+                        .ClientTemplate("#= formatFechaSolicitud(fechaSolicitud) #")
+    .Format("{0:dd/MM/yyyy}");                   
+    columns.Bound(c => c.fechaLiberacion)
                         .Title("Fecha Salida")
                         .Width(150)
-                        .ClientTemplate("#= formatFechaLiberacion(fechaLiberacion) #");
-
+                        .ClientTemplate("#= formatFechaLiberacion(fechaLiberacion) #")
+                .Format("{0:dd/MM/yyyy}");
                 columns.Bound(c => c.evento).Title("Evento").Width(90);
                 columns.Bound(c => c.motivoAsignacion).Title("Motivo").Width(90);
 
                 columns.Bound(c => c.fullName).Title("Nombre Solicitante").Width(200);
                 columns.Bound(c => c.fullcolonia).Title("Dirección").Width(200);
                 columns.Bound(c => c.tipoVehiculo).Title("Tipo Vehículo").Width(160);
-                columns.Bound(c => c.noEconomico).Title("Grúa").Width(90);
+                columns.Bound(c => c.propietarioGrua).Title("Grúa").Width(90);
                 columns.Bound(c => c.Alias).Title("Alias de la grúa").Width(180);
                 columns.Bound(c => c.oficial).Title("Oficial").Width(150);
                 columns.Bound(c => c.folio).Title("Folio").Width(100);
@@ -88,9 +88,7 @@
         if (fechaSolicitud === null || fechaSolicitud === '0001-01-01T00:00:00') {
             return '-';
         } else {
-            // Puedes usar una biblioteca como moment.js para formatear la fecha
-            // O simplemente devolverla en el formato deseado
-            // En este ejemplo, estoy utilizando el formato predeterminado de JavaScript
+   
             return new Date(fechaSolicitud).toLocaleString();
         }
     }

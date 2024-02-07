@@ -26,16 +26,16 @@
 			columns.Bound(p => p.Marca).Title("Marca").Width(90);
 			columns.Bound(p => p.Submarca).Title("Submarca").Width(90);
 			columns.Bound(p => p.Modelo).Title("Modelo").Width(90);
-			columns.Bound(p => p.ConductorVeh).Title("ConductorVeh").Width(90);
+			columns.Bound(p => p.ConductorVeh).Title("ConductorVeh").Width(900);
 			columns.Bound(p => p.DepositoVehículo).Title("DepositoVehículo").Width(90);
 			columns.Bound(p => p.Delegacion).Title("Delegacion").Width(90);
 			columns.Bound(p => p.Municipio).Title("Municipio").Width(90);
-			columns.Bound(p => p.Carretera).Title("Carretera").Width(90);
-			columns.Bound(p => p.Tramo).Title("Tramo").Width(90);
+			columns.Bound(p => p.Carretera).Title("Carretera").Width(900);
+			columns.Bound(p => p.Tramo).Title("Tramo").Width(900);
 			columns.Bound(p => p.Kilómetro).Title("Kilómetro").Width(90);
 			columns.Bound(p => p.Latitud).Title("Latitud").Width(90);
 			columns.Bound(p => p.Longitud).Title("Longitud").Width(90);
-			columns.Bound(p => p.NombredelOficial).Title("Nombre de Oficial").Width(90);
+			columns.Bound(p => p.NombredelOficial).Title("Nombre de Oficial").Width(300);
 			columns.Bound(p => p.Dañosalcamino).Title("Dañosalcamino").Width(90);
 			columns.Bound(p => p.DañosaCarga).Title("DañosaCarga").Width(90);
 			columns.Bound(p => p.Dañosapropietario).Title("Dañosapropietari").Width(90);
@@ -43,7 +43,7 @@
 			columns.Bound(p => p.Lesionados).Title("Lesionados").Width(90);
 			columns.Bound(p => p.Muertos).Title("Muertos").Width(90);
 			columns.Bound(p => p.Causas).Title("Causas").Width(150);
-			columns.Bound(p => p.CausasDescripcion).Title("Descipcion Causas").Width(120);
+			columns.Bound(p => p.CausasDescripcion).Title("Descipcion Causas").Width(3000);
 
 		}).HtmlAttributes(new { style = "height:auto" })
 		.Pageable(pager => pager.AlwaysVisible(true).Position(GridPagerPosition.Bottom).PageSizes(true))

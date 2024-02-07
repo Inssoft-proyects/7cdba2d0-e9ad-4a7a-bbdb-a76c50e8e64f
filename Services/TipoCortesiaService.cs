@@ -32,8 +32,8 @@ namespace GuanajuatoAdminUsuarios.Services
                         while (reader.Read())
                         {
                             TipoCortesiaModel tipoCortesia = new TipoCortesiaModel();
-                            tipoCortesia.idTipoCortesia = Convert.ToInt32(reader["idTipoCortesia"].ToString());
-                            tipoCortesia.tipoCortesia = reader["tipoCortesia"].ToString();
+                            tipoCortesia.idTipoCortesia = Convert.ToInt32(reader["id"].ToString());
+                            tipoCortesia.tipoCortesia = reader["nombreCortesia"].ToString();
                             ListTipoCortesias.Add(tipoCortesia);
                         }
                     }

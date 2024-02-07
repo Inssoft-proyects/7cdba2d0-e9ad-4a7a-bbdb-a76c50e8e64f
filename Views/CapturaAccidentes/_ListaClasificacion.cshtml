@@ -13,14 +13,9 @@
             columns.Bound(c => c.IdAccidente).Hidden();
             //columns.Command(c => c.Custom("Eliminar").Click("eliminarClasificacion")).Width(80);
             columns.Bound(c => c.NombreClasificacion).Width(90);
-                columns.Template(
-                "<button class='w-100 btn " + claseColor + "'>" +
-                "<h6 class='m-0' onclick='eliminarClasificacion(event)'>" +
-                "<i class='h5 icon-delete me-2'></i><b>Eliminar</b>" +
-                "</h6></button>"
-                ).Width(150);
+                columns.Bound(c=>c.IdAccidente).ClientTemplate("#=  EliminarBtnClacificatoria(data) #").Width(150);
 
-        }).HtmlAttributes(new { style = "height:300px" })
+        }).HtmlAttributes(new { style = "height:500px" })
         .Sortable()
         .Groupable()
         .Scrollable()
@@ -53,20 +48,25 @@
     </div>
 </div>
 <script>
-    function eliminarClasificacion(event) {
+    function eliminarClasificacion(d,q) {
           if ('@ViewBag.EsSoloLectura' === 'True') {
             return;
         }
-        var grid = $("#gridClasificacion").data("kendoGrid");
-        var row = $(event.target).closest("tr");
-        var dataItem = grid.dataItem(row);
-        var IdAccidente = dataItem.IdAccidente
+        var IdAccidente = d
+        var IdClasf = q
+
+
+        window.IdAccidente= IdAccidente
+        window.idClasif= IdClasf
+
         showLoading();
         $.ajax({
             url: '@Url.Action("ModalEliminarClasificacion", "CapturaAccidentes")',
             type: 'POST',           
             data: {
-                IdAccidente: IdAccidente},
+                IdAccidente: IdAccidente,
+                idClasif: IdClasf
+            },
             success: (data) => {
                 $('#ModalBodyEliminarClasificacion').html(data);
                 $('#eliminarClasificacionModal').modal('show');
@@ -77,5 +77,16 @@
             }
         });
     }
+
+
+    function EliminarBtnClacificatoria(data) {
+
+        return `<button class='w-100 btn @claseColor'>
+                    <h6 class='m-0' onclick="eliminarClasificacion('${data.IdAccidente}','${data.IdClasificacionAccidente}')">
+            <i class='h5 icon-delete me-2'></i><b>Eliminar</b>
+            </h6></button>`
+
+    }
+
 
 </script>

@@ -41,7 +41,8 @@
                 columns.Bound(c => c.fechaInfraccion).Title("Fecha Aplicada a").Width(100).Format("{0:dd/MM/yyyy}");
                 columns.Bound(c => c.estatusInfraccion).Title("Estatus").Width(90);
                 columns.Bound(c => c.delegacion).Title("Delegación/Oficina").Width(150);
-                columns.Bound(p => p.idInfraccion).ClientTemplate("#= TemplateCortecia(data) #").Title("Cortesía").Sortable(false).Width(90);
+                columns.Bound(c => c.infraccionCortesiaString).Title("Delegación/Oficina").Width(150);               
+                //columns.Bound(p => p.idInfraccion).ClientTemplate("#= TemplateCortecia(data) #").Title("Cortesía").Sortable(false).Width(90);
                 columns.Bound(p => p.idInfraccion).ClientTemplate("#= TemplateEditar(data) #").Title("Ver Registro").Sortable(false).Width(90);
                 columns.Bound(p => p.idInfraccion).ClientTemplate("#= TemplateMostrar(data)  #").Title("Mostrar").Sortable(false).Width(90);
                 columns.Template(
