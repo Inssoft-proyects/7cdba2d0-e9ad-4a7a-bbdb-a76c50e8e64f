@@ -47,7 +47,7 @@ namespace GuanajuatoAdminUsuarios.Models
                 indextest["Editar2"] = $"Se modificó la infracción con folio: {folio}. La segunda parte de la captura";
                 indextest["Registrar"] = $"Se llamó proceso de cancelación en finanzas para la infracción folio: {folio} ; a través de WS; Sin confirmación";
                 indextest["Registrarcd"] = $"Se registró en finanzas la infracción folio: {folio} se obtuvo No. de documento = {documento}; a través de WS";
-                indextest["Registrarer"] = $"No se pudo registrar en finanzas la infracción folio: {folio} Se guardó como pendiente de registro ; a través de WS;";
+                indextest["Registrarer"] = $"No se pudo capturar en finanzas la infracción folio: {folio} Se guardó como pendiente de registro ; a través de WS;";
                 indextest["ConsultaP"] = $"Se registró pago de la infracción con folio: {folio}. En registro de recibo de pago";
                 indextest["Cancelar"] = $"Se revocó(canceló) la infracción con folio: {folio}. En cancelación de infracción";
                 indextest["Pagar"] = $"Se revocó(canceló) la infracción con folio: {folio}. En cancelación de infracción";

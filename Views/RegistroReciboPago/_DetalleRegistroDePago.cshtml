@@ -1,14 +1,14 @@
 ﻿@model GuanajuatoAdminUsuarios.Models.RegistroReciboPagoModel
 
-<div class="px-4 mb-4 align-items-end">
+<div class="px-4 mb-4 align-items-end mt-1">
     <h1>Registro de recibo de pago</h1>
     <hr />
 
     @if (Model != null)
     {
 
-        <p>Folio: @(Model.FolioInfraccion ?? "-")</p>
-        <p>Monto Calificacion:$ @(Model.Monto.HasValue ? Model.Monto.ToString() : "-")</p>
+        <p><b>Folio:</b> @(Model.FolioInfraccion ?? "-")</p>
+        <p><b>Monto Calificacion:</b> $@(Model.Monto.HasValue ? Model.Monto.ToString() : "-")</p>
 
 
     }
@@ -38,7 +38,7 @@
         </div>
     </div>
 
-    <div class="col-12 col-auto">
+    <div class="col-12 col-2">
         <div class="controlForm my-3">
             @(Html.Kendo().TextBoxFor(m=>m.Monto)
                 .Label(l => l.Content("Monto:"))
@@ -70,13 +70,14 @@
     </div>
 </form>
 <div class="row px-4 mb-4 align-items-end">
-
-<div class="controlButton my-3" id="botnCancelar" style="display: block;" onclick="cerrarModal()">
-    @(Html.Kendo().Button()
-        .Name("Cerrar")
-        .HtmlAttributes(new { @class = "btnOutline" })
-        .Content("<h5 class=\"m-0\"><b>Cancelar</b></h5>"))
-</div>
+    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+        <div class="controlButton my-3" id="botnCancelar" style="display: block;" onclick="cerrarModal()">
+            @(Html.Kendo().Button()
+                .Name("Cerrar")
+                .HtmlAttributes(new { @class = "btnOutline" })
+                .Content("<h5 class=\"m-0\"><b>Cancelar</b></h5>"))
+        </div>
+    </div>
 
    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
     <div class="controlButton my-3" id="botnGuardar" style="display: block;" onclick="guardarReciboPago()">
@@ -87,11 +88,7 @@
         </div>
 
     </div>
-<div class="col-12 col-md-6 col-lg-4 col-xl-3">
 
-
-
-    </div>
 </div>
 <script>
     function guardarReciboPago() {

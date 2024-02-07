@@ -63,7 +63,7 @@
         </div>
         <div class="col-12 col-md-auto mt-4 mb-2">
             <h5 class="px-4"><b>Captura de accidentes</b></h5>
-            <h6 class="px-4 text-muted">Registra el accidente en <b class="colorPrimary">Registro de Infracciones y Accidentes</b></h6>
+            <h6 class="px-4 text-muted">Captura de accidente en <b class="colorPrimary">Registro de Infracciones y Accidentes de Guanajuato.</b></h6>
         </div>
         <form id="nuevoAccidente1Form" class="row px-4 align-items-end">
             <div class="col-12">
@@ -248,7 +248,7 @@
             data: Mydata,
             success: function (result) {
                 if (result.success) {
-                    sitteg_success("Se ha creado un registro de accidente, continue registrando la información solicitada");
+                    sitteg_success("Se ha creado un registro de accidente, continue capturando la información solicitada");
                     //$('#VehiculosInvolucrados').show();
                     window.location.href = '/CapturaAccidentes/CapturaAaccidente/'
                 } else {

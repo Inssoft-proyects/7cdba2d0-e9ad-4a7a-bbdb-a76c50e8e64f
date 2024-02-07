@@ -53,7 +53,7 @@ namespace GuanajuatoAdminUsuarios.Services
             {
                 Response.HasError = true;
                 Response.CodigoRespuesta = 4;
-                Response.Mensaje = "FOLIO NO ENCONTRADO. (Pago registrado para cuando se capture folio)";
+                Response.Mensaje = "FOLIO NO ENCONTRADO. (Pago capturado para cuando se capture folio)";
                 return Response;
             }
 
