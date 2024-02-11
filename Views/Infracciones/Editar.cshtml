@@ -1102,10 +1102,13 @@ function serviceCrearInfraccion(idInfraccion) {
 			processData: false,
 			contentType: false,
 			success: function (response) {
-				sitteg_success("Se ha anexado el archivo exitosamente");
+                hideLoading();
+                if (response.success)
+                    sitteg_success(response.message);
+                else
+                    sitteg_error(response.message);
 
-				console.log(response);
-				hideLoading();
+                console.log(response);
 			},
 			error: function (xhr, status, error) {
 				// Manejo de errores

@@ -2805,11 +2805,11 @@ namespace GuanajuatoAdminUsuarios.Services
 			}
 			return result;
 		}
-		public int InsertarImagenEnInfraccion(byte[] imageData, int idInfraccion)
+		public int InsertarImagenEnInfraccion(string rutaInventario, int idInfraccion)
 		{
 			int result = 0;
 			string strQuery = @"UPDATE infracciones
-                       SET inventario = @inventario
+                       SET archivoInventario = @inventario
                        WHERE idInfraccion = @idInfraccion";
 			using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
 			{
@@ -2819,7 +2819,7 @@ namespace GuanajuatoAdminUsuarios.Services
 					SqlCommand command = new SqlCommand(strQuery, connection);
 					command.CommandType = CommandType.Text;
 					command.Parameters.Add(new SqlParameter("@idInfraccion", SqlDbType.Int)).Value = idInfraccion;
-					command.Parameters.Add(new SqlParameter("@inventario", SqlDbType.VarBinary)).Value = imageData;
+					command.Parameters.Add(new SqlParameter("@inventario", SqlDbType.VarChar)).Value = rutaInventario;
 
 					result = command.ExecuteNonQuery();
 				}

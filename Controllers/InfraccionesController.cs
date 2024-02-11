@@ -38,6 +38,7 @@ using static System.Formats.Asn1.AsnWriter;
 using iTextSharp.tool.xml.html;
 using Kendo.Mvc;
 using static GuanajuatoAdminUsuarios.Controllers.PDFExampleController;
+using Microsoft.Extensions.Configuration;
 //using Telerik.SvgIcons;
 
 namespace GuanajuatoAdminUsuarios.Controllers
@@ -67,6 +68,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         private readonly IRepuveService _repuveService;
         private readonly ICatCarreterasService _catCarreterasService;
         private readonly IBitacoraService _bitacoraServices;
+        private readonly string _rutaArchivo;
 
 
         private readonly AppSettings _appSettings;
@@ -87,7 +89,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             ICapturaAccidentesService capturaAccidentesService,
             ICotejarDocumentosClientService cotejarDocumentosClientService, ICatMunicipiosService catMunicipiosService, ICatEntidadesService catEntidadesService,
            IColores coloresService, ICatMarcasVehiculosService catMarcasVehiculosService, ICatSubmarcasVehiculosService catSubmarcasVehiculosService
-            , IRepuveService repuveService, ICatCarreterasService catCarreterasService, IBitacoraService bitacoraService
+            , IRepuveService repuveService, ICatCarreterasService catCarreterasService, IBitacoraService bitacoraService, IConfiguration configuration
 
             )
         {
@@ -114,6 +116,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             _catSubmarcasVehiculosService = catSubmarcasVehiculosService;
             _repuveService = repuveService;
             _bitacoraServices = bitacoraService;
+            _rutaArchivo = configuration.GetValue<string>("AppSettings:RutaArchivoInventarioInfracciones");
         }
 
         public IActionResult Index()
@@ -1176,23 +1179,44 @@ namespace GuanajuatoAdminUsuarios.Controllers
         {
             if (file != null && file.Length > 0)
             {
-                // Obtener los datos de la imagen
-                byte[] imageData;
-                using (var memoryStream = new MemoryStream())
+                //Se crea el nombre del archivo de la garantia
+                string nombreArchivo = _rutaArchivo + "/" + idInfraccion + "_" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss").Replace("/", "").Replace(":", "").Replace(" ", "") + System.IO.Path.GetExtension(file.FileName);
+
+                try
+                {
+                    //Se escribe el archivo en disco
+                    using (Stream fileStream = new FileStream(nombreArchivo, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+                    // Llamar al método del servicio para guardar la imagen
+                    int resultado =_infraccionesService.InsertarImagenEnInfraccion(nombreArchivo, idInfraccion);
+                    if(resultado==0)
+                        return Json(new { success = false, message = "Ocurrió un error al actualizar infracción" });
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    return Json(new { success = false, message = "Ocurrió un error al guardar el archivo" });
+                }
+
+
+
+
+                /*using (var memoryStream = new MemoryStream())
                 {
                     file.CopyTo(memoryStream);
                     imageData = memoryStream.ToArray();
-                }
+                }*/
 
-                // Llamar al método del servicio para guardar la imagen
-                _infraccionesService.InsertarImagenEnInfraccion(imageData, idInfraccion);
-
-                return Json(new { success = true, message = "Imagen subida exitosamente" });
+                return Json(new { success = true, message = "El archivó se agregó exitosamente" });
             }
             else
             {
-                return Json(new { success = false, message = "No se seleccionó ninguna imagen" });
-            }
+                return Json(new { success = false, message = "Selecciona una imagen antes de continuar" });
+                }
+
         }
 
         public IActionResult ServiceCrearInfraccion(int idInfraccion)
