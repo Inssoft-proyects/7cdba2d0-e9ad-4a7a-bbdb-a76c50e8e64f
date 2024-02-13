@@ -193,20 +193,25 @@ namespace GuanajuatoAdminUsuarios.Services
                 try
                 {
                     connection.Open();
-                    const string SqlTransact =
-                        @"select tg.TipoGrua, tg.IdTipoGrua, g.IdGrua,g.noEconomico,g.Placas,g.Modelo,
-                            c.IdConcesionario,c.Concesionario,g.noEconomico,g.placas,g.modelo,g.capacidad,
-                            c.Concesionario,dep.IdDeposito,dep.IdPension,dep.IdConcesionario,p.Pension,
-                            p.Direccion, p.Telefono,  p.IdMunicipio, m.Municipio
-                            from gruas g 
-                            inner join concesionarios c on g.IdConcesionario= c.IdConcesionario
-                            inner join catTipoGrua tg on g.IdTipoGrua= tg.IdTipoGrua
-                            inner join depositos dep on c.IdConcesionario =dep.IdConcesionario
-                            inner join pensiones p on dep.idPension= p.idPension
-                            inner join catMunicipios m on p.idMunicipio = m.idMunicipio
-                        where  dep.estatus=1 AND p.estatus=1 OR( m.idMunicipio=@IdMunicipio OR c.IdConcesionario=@IdConcesionario 
-                        OR p.idPension=@IdPension OR  tg.IdTipoGrua=@IdTipoGrua)
-                        order by  g.IdGrua,c.IdConcesionario";
+                    string condiciones = "";
+                    condiciones += model.IdMunicipio.Equals(null) || model.IdMunicipio == 0 ? "" : " AND c.IdMunicipio = @IdMunicipio ";
+                    condiciones += model.IdConcesionario.Equals(null) || model.IdConcesionario == 0 ? "" : " AND c.idConcesionario = @IdConcesionario ";
+                    condiciones += model.IdPension.Equals(null) || model.IdPension == 0 ? "" : " AND p.idPension = @IdPension ";
+                    condiciones += model.IdTipoGrua.Equals(null) || model.IdTipoGrua == 0 ? "" : " AND g.idTipoGrua = @IdTipoGrua ";
+                    if (string.IsNullOrEmpty(condiciones.Trim()))
+                    {
+                        condiciones = "";
+                    }
+                    string SqlTransact =
+                        @"select m.municipio,c.concesionario,c.idMunicipio,p.idPension,p.pension,p.direccion,p.telefono,g.idGrua,
+                                    g.idTipoGrua,g.noEconomico,g.modelo,g.placas,ctg.TipoGrua
+                                    FROM concesionarios c
+                                    LEFT JOIN gruas g ON g.idConcesionario = c.idConcesionario
+                                    LEFT JOIN pensionGruas pg ON pg.idGrua = g.idGrua
+                                    LEFT JOIN pensiones p ON p.idPension = pg.idPension
+                                    LEFT JOIN catMunicipios m ON m.idMunicipio = c.idMunicipio
+                                    LEFT JOIN catTipoGrua ctg ON ctg.IdTipoGrua = g.idTipoGrua
+                                    WHERE c.estatus = 1 " + condiciones;
 
                     SqlCommand command = new SqlCommand(SqlTransact, connection);
                     command.Parameters.Add(new SqlParameter("@IdMunicipio", SqlDbType.Int)).Value = (object)model.IdMunicipio ?? DBNull.Value;
@@ -220,20 +225,21 @@ namespace GuanajuatoAdminUsuarios.Services
                         {
                             PadronDepositosGruasModel padronDepositosGruas = new PadronDepositosGruasModel();
 
-                            padronDepositosGruas.IdTipoGrua = Convert.ToInt32(reader["IdTipoGrua"].ToString());
+                            padronDepositosGruas.IdTipoGrua = reader["IdTipoGrua"] != DBNull.Value ? Convert.ToInt32(reader["IdTipoGrua"]) : 0;
+                            padronDepositosGruas.IdGrua = reader["IdGrua"] != DBNull.Value ? Convert.ToInt32(reader["IdGrua"]) : 0;
+                            padronDepositosGruas.IdMunicipio = reader["IdMunicipio"] != DBNull.Value ? Convert.ToInt32(reader["IdMunicipio"]) : 0;
+
                             padronDepositosGruas.TipoGrua = reader["TipoGrua"].ToString();
-                            padronDepositosGruas.IdGrua = Convert.ToInt32(reader["IdGrua"].ToString());
                             padronDepositosGruas.noEconomico = reader["noEconomico"].ToString();
                             padronDepositosGruas.Placas = reader["placas"].ToString();
                             padronDepositosGruas.Modelo = reader["modelo"].ToString();
                             padronDepositosGruas.Concesionario = reader["Concesionario"].ToString();
-                            padronDepositosGruas.IdDeposito = Convert.ToInt32(reader["IdDeposito"].ToString());
-                            padronDepositosGruas.IdConcesionario = Convert.ToInt32(reader["IdConcesionario"].ToString());
-                            padronDepositosGruas.IdPension = Convert.ToInt32(reader["IdPension"].ToString());
-                            padronDepositosGruas.Pension = reader["Pension"].ToString();
-                            padronDepositosGruas.Direccion = reader["Direccion"].ToString();
-                            padronDepositosGruas.Telefono = reader["Telefono"].ToString();
-                            padronDepositosGruas.IdMunicipio = Convert.ToInt32(reader["IdMunicipio"].ToString());
+                            //padronDepositosGruas.IdDeposito = Convert.ToInt32(reader["IdDeposito"].ToString());
+                            // padronDepositosGruas.IdConcesionario = Convert.ToInt32(reader["IdConcesionario"].ToString());
+                            padronDepositosGruas.IdPension = reader["IdPension"] != DBNull.Value ? Convert.ToInt32(reader["IdPension"]) : 0;
+                            padronDepositosGruas.Pension = reader["pension"].ToString();
+                            padronDepositosGruas.Direccion = reader["direccion"].ToString();
+                            padronDepositosGruas.Telefono = reader["telefono"].ToString();
                             padronDepositosGruas.Municipio = reader["Municipio"].ToString();
                             PadronDepositosGruasList.Add(padronDepositosGruas);
                         }
@@ -254,59 +260,33 @@ namespace GuanajuatoAdminUsuarios.Services
         }
 
 
-        public List<PadronDepositosGruasModel> GetPadronDepositosGruas(PadronDepositosGruasBusquedaModel model,int idOficina)
+        public List<PadronDepositosGruasModel> GetPadronDepositosGruas(PadronDepositosGruasBusquedaModel model, int idOficina)
         {
-            var modelList = GetJoinsPadronDepositosGruas(model,idOficina);
-            var indices = modelList
-                         .Select((s, i) => new { index = i, item = s })
-                         .GroupBy(grp => grp.item.IdPension)
-                         //.Where(w => !string.IsNullOrEmpty(w.))
-                         .SelectMany(sm => sm.Select(s => s.index))
-                         .ToList();
-
-            var ListaAgrupada = modelList.Select((s, i) => new { index = i, items = s })
-                             .GroupBy(x => indices.FirstOrDefault(r => r > x.index))
-                             .Select(s => s.Select(ss => ss.items).ToList())
-                             .ToList();
+            var modelList = GetJoinsPadronDepositosGruas(model, idOficina);
 
             List<PadronDepositosGruasModel> ListItems = new List<PadronDepositosGruasModel>();
-            List<PensionPadronModel> padronPension = new List<PensionPadronModel>();
-            foreach (var item in ListaAgrupada)
+
+            foreach (var item in modelList)
             {
+                List<PensionPadronModel> padronPension = new List<PensionPadronModel>();
 
-                if (item.Count() > 1)
-                {
+                PensionPadronModel pension = new PensionPadronModel();
+                pension.IdPension = item.IdPension;
+                pension.Pension = item.Pension;
+                pension.Telefono = item.Telefono;
+                pension.Direccion = item.Direccion;
+                pension.IdMunicipio = item.IdMunicipio;
+                padronPension.Add(pension);
 
-                    foreach (var itemInside in item)
-                    {
-                        PensionPadronModel pension = new PensionPadronModel();
-                        pension.IdPension = itemInside.IdPension;
-                        pension.Pension = itemInside.Pension;
-                        pension.Telefono = itemInside.Telefono;
-                        pension.Direccion = itemInside.Direccion;
-                        pension.IdMunicipio = itemInside.IdMunicipio;
-                        padronPension.Add(pension);
-                    }
-
-                    foreach (var itemInside in item)
-                    {
-                        itemInside.Pensiones = padronPension;
-                        ListItems.Add(itemInside);
-                    }
-
-                    //var one = item.FirstOrDefault();
-                    //one.Pensiones = padronPension;
-                    //ListItems.Add(one);
-                }
-                else
-                {
-                    ListItems.Add(item.First());
-                }
+                item.Pensiones = padronPension;
+                ListItems.Add(item);
             }
+
             return ListItems;
         }
 
-        public List<PensionModel> GetPensionesNoFilter()
+
+            public List<PensionModel> GetPensionesNoFilter()
         {
             List<PensionModel> ListPensiones = new List<PensionModel>();
 

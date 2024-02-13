@@ -1,12 +1,8 @@
-﻿
-@*<div class="row justify-content-between my-4 mb-1 titleCustom">
-    <div class="offset-1 col-12 mt-4 mb-2">
-        <h5 class="px-4"><b>Listado de personas</b></h5>
-    </div>
-</div>*@
+﻿@model List<PersonaModel>
+
 <div class="col-12 mb-4 px-4 rounded gridCustom">
     @(
-        Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.PersonaModel>()
+        Html.Kendo().Grid(Model)
         .Name("gridPersonas")
         .Columns(columns =>
         {
@@ -15,20 +11,46 @@
             columns.Bound(p => p.CURP).Title("CURP");
             columns.Bound(p => p.RFC).Title("RFC");
             columns.Bound(p => p.numeroLicencia).Title("No. Licencia");
-           columns.Bound(p => p.tipoLicencia).Title("Tipo de Licencia");
+            columns.Bound(p => p.tipoLicencia).Title("Tipo de Licencia");
             columns.Bound(c => c.tipoPersona).Title("Tipo persona");
             columns.Bound(p => p.idPersona).ClientTemplate(
             "<button onclick=\"btnModalEditarPersona('#= idPersona #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>"
             ).Title("Acciones").Sortable(false).Width(100);
         })
         .Pageable(pager => pager.AlwaysVisible(true).Position(GridPagerPosition.Bottom).PageSizes(true))
-        .Sortable()
-        .Scrollable(scr => scr.Enabled(true))
+        .EnableCustomBinding(true)
         .DataSource(dataSource => dataSource
         .Ajax()
-        .ServerOperation(false)
+        .Read("BuscarPorParametroPaginado", "Personas")
         .PageSize(10)
         )
-        .ToolBar(t => t.Custom().Text("Buscar...").Name("search"))
+        .Scrollable(scr => scr.Height(350)
+        )
+
+
+        @*.Pageable(pager => pager.AlwaysVisible(true).Position(GridPagerPosition.Bottom).PageSizes(true))
+    .Sortable()
+    .Scrollable(scr => scr.Enabled(true))
+    .DataSource(dataSource => dataSource
+    .Ajax()
+    .ServerOperation(false)
+    .PageSize(10)
+    )*@
+        @*.ToolBar(t => t.Custom().Text("Buscar...").Name("search"))*@
         )
 </div>
+
+
+<script>
+    $(document).ready(function () {
+
+        $("#gridPersonas").on("change", function () {
+            alert("Handler for `change` called.");
+        });
+    });
+
+    $("#gridPersonas").on("change", function () {
+        alert("Handler for `change` called.");
+    });
+</script>
+

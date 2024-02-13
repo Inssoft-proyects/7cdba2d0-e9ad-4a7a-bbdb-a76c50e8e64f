@@ -23,6 +23,7 @@ using GuanajuatoAdminUsuarios.Utils;
 using GuanajuatoAdminUsuarios.Models.PDFModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Globalization;
+using System.Collections;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
@@ -70,7 +71,15 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 			var ListInvolucrados = _capturaAccidentesService.InvolucradosAccidente(idAccidente);
 
-			var ParteNombre = _appSettingsService.GetAppSetting("ParteNombre").SettingValue;
+			foreach (var invo in ListVehiculosInvolucrados) 
+			{
+				foreach (var lst in ListInvolucrados.Where(r => r.IdVehiculo == invo.IdVehiculo))
+				{
+					lst.numeroConsecutivo = invo.numeroConsecutivo;
+				} 
+			}
+
+            var ParteNombre = _appSettingsService.GetAppSetting("ParteNombre").SettingValue;
 			var PartePuesto = _appSettingsService.GetAppSetting("PartePuesto").SettingValue;
 			List<PDFMotivosInfracciones> motivosInfraccion = ListInfracciones.Select(s => new PDFMotivosInfracciones { idInfraccion = s.IdInfraccion, Motivos = _infraccionesService.GetMotivosInfraccionByIdInfraccion((int)s.IdInfraccion).Select(ss => ss.Concepto+"-"+ss.Fundamento).ToList() }).ToList();
 

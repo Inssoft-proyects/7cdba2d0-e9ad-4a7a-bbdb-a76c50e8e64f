@@ -17,7 +17,7 @@ namespace GuanajuatoAdminUsuarios.Services
         {
             _sqlClientConnectionBD = sqlClientConnectionBD;
         }
-        public string GuardarSolicitud(SolicitudDepositoModel model, int idOficina)
+        public string GuardarSolicitud(SolicitudDepositoModel model, int idOficina, string nombreOficina)
 
         {
             int result = 0;
@@ -55,7 +55,8 @@ namespace GuanajuatoAdminUsuarios.Services
                                         ,[vehiculoInterseccion]  
                                         ,[fechaActualizacion]
                                         ,[actualizadoPor]
-                                        ,[estatus])
+                                        ,[estatus]
+                                        ,[idServicioRequiere])
                                 VALUES (
                                         @fechaSolicitud
                                         ,@idTipoVehiculo
@@ -85,7 +86,8 @@ namespace GuanajuatoAdminUsuarios.Services
                                         ,@interseccion
                                         ,@fechaActualizacion
                                         ,@actualizadoPor
-                                        ,@estatus);
+                                        ,@estatus
+                                        ,@idServicioRequiere);
                                     SELECT SCOPE_IDENTITY();"; // Obtener el último ID insertado
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
             {
@@ -110,10 +112,11 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.Add(new SqlParameter("@idMunicipio", SqlDbType.Int)).Value = (object)model.idMunicipio ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@telefonoUsuario", SqlDbType.NVarChar)).Value = (object)model.telefonoUsuario ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idMotivoAsignacion", SqlDbType.Int)).Value = (object)model.idMotivoAsignacion ?? DBNull.Value;
-					//command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = idOficina;
-					command.Parameters.Add(new SqlParameter("@fechaActualizacion", SqlDbType.DateTime)).Value = DateTime.Now.ToString("yyyy-MM-dd");
+                    //command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = idOficina;
+                    command.Parameters.Add(new SqlParameter("@fechaActualizacion", SqlDbType.DateTime)).Value = DateTime.Now.ToString("yyyy-MM-dd");
                     command.Parameters.Add(new SqlParameter("@actualizadoPor", SqlDbType.Int)).Value = 1;
                     command.Parameters.Add(new SqlParameter("@estatus", SqlDbType.Int)).Value = 1;
+                    command.Parameters.Add(new SqlParameter("@idServicioRequiere", SqlDbType.Int)).Value = (object)model.idServicioRequiere ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@numeroUbicacion", SqlDbType.NVarChar)).Value = (object)model.numeroUbicacion ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@calleUbicacion", SqlDbType.NVarChar)).Value = (object)model.calleUbicacion ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@coloniaUbicacion", SqlDbType.NVarChar)).Value = (object)model.coloniaUbicacion ?? DBNull.Value;
@@ -125,42 +128,61 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.Add(new SqlParameter("@idMunicipioUbicacion", SqlDbType.Int)).Value = (object)model.idMunicipioUbicacion ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idPensionUbicacion", SqlDbType.Int)).Value = (object)model.idPensionUbicacion ?? DBNull.Value;
                     result = Convert.ToInt32(command.ExecuteScalar()); // Valor de Id de este mismo registro
-                    idSolicitudInsert = result; // Almacena el valor en la variable idSolicitudInsert
-                    folioSolicitud = ObtenerFolioSolicitud(connection, idSolicitudInsert);
-                }
+                    var ofi = nombreOficina.Trim().Substring(0, 3).ToUpper();
 
+                    var newFolio = $"{ofi}{result}{DateTime.Now.Year}";
+
+                    SqlCommand command2 = new SqlCommand(@"
+                            update solicitudes set folio=@folio where idSolicitud=@id
+                                        ", connection);
+                    command2.Parameters.Add(new SqlParameter("@id", SqlDbType.Int)).Value = (object)result ?? DBNull.Value;
+                    command2.Parameters.Add(new SqlParameter("@folio", SqlDbType.VarChar)).Value = (object)newFolio ?? DBNull.Value;
+                    command2.CommandType = CommandType.Text;
+                    int rowsAffected = command2.ExecuteNonQuery();
+
+                    if (rowsAffected > 0)
+                    {
+                        return newFolio;
+                    }
+                    else
+                    {
+                        throw new Exception("No se pudo crear el folio.");
+                    }
+                }
                 catch (SqlException ex)
                 {
-                    return folioSolicitud;
-                }
 
+                    Console.WriteLine("Error de SQL: " + ex.Message);
+                    return null;
+                }
                 finally
                 {
+                    // Cerrar la conexión en el bloque finally
                     connection.Close();
                 }
             }
-            return folioSolicitud;
         }
-        private string ObtenerFolioSolicitud(SqlConnection connection, int solicitudId)
-        {
-            string folioSolicitud = "";
-            string query = "SELECT folio FROM solicitudes WHERE idSolicitud = @solicitudId";
-
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            private string ObtenerFolioSolicitud(SqlConnection connection, int solicitudId)
             {
-                cmd.Parameters.Add(new SqlParameter("@solicitudId", SqlDbType.Int)).Value = solicitudId;
+                string folioSolicitud = "";
+                string query = "SELECT folio FROM solicitudes WHERE idSolicitud = @solicitudId";
 
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    if (reader.Read())
+                    cmd.Parameters.Add(new SqlParameter("@solicitudId", SqlDbType.Int)).Value = solicitudId;
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        folioSolicitud = reader["folio"].ToString();
+                        if (reader.Read())
+                        {
+                            folioSolicitud = reader["folio"].ToString();
+                        }
                     }
                 }
-            }
 
-            return folioSolicitud;
-        }
+                return folioSolicitud;
+            }
+        
 
         public int ActualizarSolicitud(int? Isol, SolicitudDepositoModel model)
 
@@ -171,6 +193,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                 SET fechaSolicitud = @fechaSolicitud,
                                     idTipoVehiculo = @idTipoVehiculo,
                                     idPropietarioGrua = @idPropietarioGrua,
+                                    idServicioRequiere = @idServicioRequiere,
                                     idOficial = @idOficial,
                                     idEvento = @idDescripcionEvento,
                                     idTipoUsuario = @idTipoUsuario,
@@ -201,6 +224,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.Add(new SqlParameter("@fechaSolicitud", SqlDbType.DateTime)).Value = (object)model.fechaSolicitud ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idTipoVehiculo", SqlDbType.Int)).Value = (object)model.idTipoVehiculo ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idPropietarioGrua", SqlDbType.Int)).Value = (object)model.idConcecionario ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@idServicioRequiere", SqlDbType.Int)).Value = (object)model.idServicioRequiere ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idOficial", SqlDbType.Int)).Value = (object)model.idOficial ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idDescripcionEvento", SqlDbType.Int)).Value = (object)model.idDescripcionEvento ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idTipoUsuario", SqlDbType.Int)).Value = (object)model.idTipoUsuario ?? DBNull.Value;
@@ -218,6 +242,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.Add(new SqlParameter("@actualizadoPor", SqlDbType.Int)).Value = 1;
                     command.Parameters.Add(new SqlParameter("@estatus", SqlDbType.Int)).Value = 1;
                     command.ExecuteNonQuery();
+
                 }
                 catch (SqlException ex)
                 {
@@ -467,6 +492,50 @@ namespace GuanajuatoAdminUsuarios.Services
             return model;
         }
 
+        public List<SolicitudDepositoModel> ObtenerServicios()
+
+        {
+            //
+            List<SolicitudDepositoModel> ListaServicios = new List<SolicitudDepositoModel>();
+
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+                try
+
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(@"SELECT sr.idServicio,sr.nombreServicio, e.estatusdesc 
+                                                          FROM catServicioRequiere AS sr 
+                                                          LEFT JOIN estatus AS e ON sr.estatus = e.estatus
+                                                            WHERE sr.estatus = 1;", connection);
+                    command.CommandType = CommandType.Text;
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            SolicitudDepositoModel servicio = new SolicitudDepositoModel();
+                            servicio.idServicioRequiere = reader["idServicio"] != DBNull.Value ? Convert.ToInt32(reader["idServicio"]) : 0;
+                            servicio.servicioRequiere = reader["nombreServicio"] != DBNull.Value ? reader["nombreServicio"].ToString() : string.Empty;
+
+
+                            ListaServicios.Add(servicio);
+                        }
+
+                    }
+
+                }
+                catch (SqlException ex)
+                {
+                    //Guardar la excepcion en algun log de errores
+                    //ex
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            return ListaServicios;
+
+
+        }
 
 
     }

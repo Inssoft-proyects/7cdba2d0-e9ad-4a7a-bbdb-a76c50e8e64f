@@ -1,4 +1,4 @@
-﻿using GuanajuatoAdminUsuarios.Interfaces;
+using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
 using GuanajuatoAdminUsuarios.Services;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -15,6 +15,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.AspNetCore.Authorization;
 using Kendo.Mvc.UI;
 using static GuanajuatoAdminUsuarios.RESTModels.ConsultarDocumentoResponseModel;
+using static GuanajuatoAdminUsuarios.Models.LicenciaTipoRespuesta;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
@@ -27,6 +28,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         private readonly ICatEntidadesService _catEntidadesService;
         private readonly ICatMunicipiosService _catMunicipiosService;
         private readonly IBitacoraService _bitacoraServices;
+        private static PersonasModel perModel = new PersonasModel();
         public PersonasController(ICatDictionary catDictionary, IPersonasService personasService, IHttpClientFactory httpClientFactory, ICatEntidadesService catEntidadesService
             , ICatMunicipiosService catMunicipiosService
 , IBitacoraService bitacoraServices)
@@ -40,10 +42,13 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
         public IActionResult Index()
         {
+            perModel = new PersonasModel();
             var catTipoPersona = _catDictionary.GetCatalog("CatTipoPersona", "0");
+            var personaModel = new PersonasModel();
+            personaModel.ListadoPersonas = new List<PersonaModel>();
 
             ViewBag.CatTipoPersona = new SelectList(catTipoPersona.CatalogList, "Id", "Text");
-            return View();
+            return View(personaModel);
         }
         public IActionResult DetallesLicencia()
         {
@@ -104,39 +109,76 @@ namespace GuanajuatoAdminUsuarios.Controllers
             return Json(new { encontrada = false, data = personasList, message = "No se encontraron resultados." });
         }
 
+        public IActionResult GetBuscar([DataSourceRequest] DataSourceRequest request, PersonasModel model)
+        {
+            perModel = model;
+            return PartialView("_ListadoPersonas", new List<PersonaModel>());
+        }
 
-        public async Task<IActionResult> BuscarPorParametroPaginado([DataSourceRequest] DataSourceRequest request, PersonaModel model)
+        [HttpPost]
+        public async Task<IActionResult> BuscarPorParametroPaginado([DataSourceRequest] DataSourceRequest request, PersonasModel model)
         {
             // Realizar la búsqueda de personas
+            if (model.PersonaModel != null)
+                perModel = model;
+            else
+                model = perModel;
+
+            var findAll = false;
+            var personas = new PersonasModel();
             Pagination pagination = new Pagination();
             pagination.PageIndex = request.Page - 1;
-            pagination.PageSize = 100000;
+            if (model.PersonaModel != null)
+            {
+                if (model.PersonaModel.apellidoMaternoBusqueda == null &&
+                    model.PersonaModel.apellidoPaternoBusqueda == null &&
+                    model.PersonaModel.CURPBusqueda == null &&
+                    model.PersonaModel.RFCBusqueda == null &&
+                    model.PersonaModel.numeroLicenciaBusqueda == null &&
+                    model.PersonaModel.nombreBusqueda == null)
+                {
+                    pagination.PageSize = (request.PageSize > 0) ? request.PageSize : 10;
+                }
+                else
+                {
+                    findAll = true;
+                    pagination.PageSize = 1000000;
+                }
+            } else
+            {
+                pagination.PageSize = (request.PageSize > 0) ? request.PageSize : 10;
+            }
+
+            //model = perModel;
             var personasList = _personasService.BusquedaPersonaPagination(model, pagination);
 
             // Verificar si se encontraron resultados en la búsqueda de personas
             if (personasList.Any())
             {
-                //var total = 0;
-                //if (personasList.Count() > 0)
-                //    total = personasList.ToList().FirstOrDefault().total;
-                //request.PageSize = 10;
-                //var result = new DataSourceResult()
-                //{
-                //    Data = personasList,
-                //    Total = total
-                //};
-                return Json(new { encontrada = true, data = personasList });
+                personas.ListadoPersonas = personasList;
+                var total = 0;
+                if (personasList.Count() > 0)
+                    total = personasList.ToList().FirstOrDefault().total;
+                
+                //if (findAll)
+                request.PageSize = pagination.PageSize;
+                
+                var result = new DataSourceResult()
+                {
+                    Data = personas.ListadoPersonas,
+                    Total = total
+                };
+                return Json(result);
             }
-            //return Json(new { encontrada = true, data = result });
 
             // Si no se encontraron resultados en la búsqueda de personas, realizar la búsqueda por licencia
             string parametros = "";
-            parametros += string.IsNullOrEmpty(model.numeroLicenciaBusqueda) ? "" : "licencia=" + model.numeroLicenciaBusqueda;
-            parametros += string.IsNullOrEmpty(model.CURPBusqueda) ? "" : "curp=" + model.CURPBusqueda + "&";
-            parametros += string.IsNullOrEmpty(model.RFCBusqueda) ? "" : "rfc=" + model.RFCBusqueda + "&";
-            parametros += string.IsNullOrEmpty(model.nombreBusqueda) ? "" : "nombre=" + model.nombreBusqueda + "&";
-            parametros += string.IsNullOrEmpty(model.apellidoPaternoBusqueda) ? "" : "primer_apellido=" + model.apellidoPaternoBusqueda + "&";
-            parametros += string.IsNullOrEmpty(model.apellidoMaternoBusqueda) ? "" : "segundo_apellido=" + model.apellidoMaternoBusqueda;
+            parametros += string.IsNullOrEmpty(model.PersonaModel.numeroLicenciaBusqueda) ? "" : "licencia=" + model.PersonaModel.numeroLicenciaBusqueda;
+            parametros += string.IsNullOrEmpty(model.PersonaModel.CURPBusqueda) ? "" : "curp=" + model.PersonaModel.CURPBusqueda + "&";
+            parametros += string.IsNullOrEmpty(model.PersonaModel.RFCBusqueda) ? "" : "rfc=" + model.PersonaModel.RFCBusqueda + "&";
+            parametros += string.IsNullOrEmpty(model.PersonaModel.nombreBusqueda) ? "" : "nombre=" + model.PersonaModel.nombreBusqueda + "&";
+            parametros += string.IsNullOrEmpty(model.PersonaModel.apellidoPaternoBusqueda) ? "" : "primer_apellido=" + model.PersonaModel.apellidoPaternoBusqueda + "&";
+            parametros += string.IsNullOrEmpty(model.PersonaModel.apellidoMaternoBusqueda) ? "" : "segundo_apellido=" + model.PersonaModel.apellidoMaternoBusqueda;
 
             string ultimo = parametros.Substring(parametros.Length - 1);
             if (ultimo.Equals("&"))
@@ -158,17 +200,18 @@ namespace GuanajuatoAdminUsuarios.Controllers
                     var content = await response.Content.ReadAsStringAsync();
                     LicenciaRespuestaPersona respuesta = JsonConvert.DeserializeObject<LicenciaRespuestaPersona>(content);
 
-                    return Json(respuesta);
+                    return Json(new { encontrada = false, Data = respuesta.datos, message = respuesta.mensaje });
+                    //return Json(respuesta);
                 }
             }
             catch (Exception ex)
             {
                 // En caso de errores, devolver una respuesta JSON con licencia no encontrada
-                return Json(new { encontrada = false, data = personasList, message = "Ocurrió un error al obtener los datos. " + ex.Message + "; " + ex.InnerException });
+                return Json(new { encontrada = false, Data = personasList, message = "Ocurrió un error al obtener los datos. " + ex.Message + "; " + ex.InnerException });
             }
 
-            // Si no se cumple la condición anterior, devolver una respuesta JSON indicando que no se encontraron resultados
-            return Json(new { encontrada = false, data = personasList, message = "No se encontraron resultados." });
+            //Si no se cumple la condición anterior, devolver una respuesta JSON indicando que no se encontraron resultados
+            return Json(new { encontrada = false, Data = personasList, message = "No se encontraron resultados." });
         }
 
 

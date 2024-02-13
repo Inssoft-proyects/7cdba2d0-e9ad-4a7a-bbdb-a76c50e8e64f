@@ -8,7 +8,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
     {
         public IEnumerable<PersonaModel> GetAllPersonas();
         List<PersonaModel> BusquedaPersona(PersonaModel model);
-        List<PersonaModel> BusquedaPersonaPagination(PersonaModel model, Pagination pagination);
+        List<PersonaModel> BusquedaPersonaPagination(PersonasModel model, Pagination pagination);
         public bool VerificarLicenciaSitteg(string numeroLicencia);
         public int InsertarDesdeServicio(LicenciaPersonaDatos personaDatos);
         public PersonaDireccionModel GetPersonaDireccionByIdPersona(int idPersona);
@@ -19,6 +19,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
 
         IEnumerable<PersonaModel> GetAllPersonasMorales();
         IEnumerable<PersonaModel> GetAllPersonasFisicas();
+        IEnumerable<PersonaModel> GetAllPersonasFisicasPagination(Pagination pagination);
 
         IEnumerable<PersonaModel> GetAllPersonasMorales(PersonaMoralBusquedaModel model);
         int CreatePersonaMoral(PersonaModel model);

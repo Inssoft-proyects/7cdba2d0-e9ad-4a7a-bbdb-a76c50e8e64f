@@ -50,12 +50,19 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public IActionResult Index()
         {
 
-                int? idOficina = HttpContext.Session.GetInt32("IdOficina");
+            int? idOficina = HttpContext.Session.GetInt32("IdOficina");
+            if (idOficina != 1)
+            {
                 BusquedaAccidentesModel modelo = new BusquedaAccidentesModel
                 {
                     IdDelegacionBusqueda = idOficina ?? 0,
                 };
                 return View(modelo);
+            }else
+            {
+                return View(new BusquedaAccidentesModel());
+            }
+               
             }
 
         public JsonResult GetAllAccidentes([DataSourceRequest] DataSourceRequest request)

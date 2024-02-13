@@ -159,6 +159,28 @@
 
                 </div>
             </div>
+                <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                    <div class="controlForm my-3">
+                        <label>Servicio que requiere:</label>
+                        <span>
+                            @(Html.Kendo().DropDownListFor(t => t.idServicioRequiere)
+                                .Label(l => l.Content("Servicio que requiere:")).Filter(FilterType.Contains)
+                                .DataTextField("Text")
+                                .DataValueField("Value")
+                                .OptionLabel("Selecciona una opción")
+                                .DataSource(source =>
+                                {
+                                    source.Read(read =>
+                                    {
+                                        read.Action("Servicios_Drop", "Depositos");
+                                    });
+                                })
+                                .HtmlAttributes(new { style = "width:100%;" })
+                                )
+                        </span>
+
+                    </div>
+                </div>
             <div class="col-12 col-md-6 col-lg-4 col-xl-3">
                 <div class="controlForm my-3">
                     <label>Oficial/Inspector <b>(obligatorio)</b>:</label>
@@ -704,7 +726,7 @@
         // DROP DOWN LIST
         controlsValidate = [];
         
-        controlsValidate.push({ 'controlName': 'ddlDelegaciones' });
+        controlsValidate.push({ 'controlName': 'idTipoVehiculo' });
         controlsValidate.push({ 'controlName': 'idOficial' });
         controlsValidate.push({ 'controlName': 'idDescripcionEvento' });
         controlsValidate.push({ 'controlName': 'idTipoUsuario' });
@@ -727,8 +749,9 @@
             var Mydata = {
                 //fechaSolicitud: $('#fechaSolicitud').val(),
                 fechaSolicitud: kendo.toString($("#fechaSolicitud").data("kendoDateTimePicker").value(), "yyyy-MM-ddTHH:mm:ss"),
-                idTipoVehiculo: $('#ddlDelegaciones').val(),
-                idConcecionario: $('#ddlPropietarios').val(),
+                idTipoVehiculo: $('#idTipoVehiculo').val(),
+                idConcecionario: $('#idConcecionario').val(),
+                idServicioRequiere: $("#idServicioRequiere").val(),
                 idOficial: $('#idOficial').val(),
                 idDescripcionEvento: $('#idDescripcionEvento').val(),
                 idTipoUsuario: $('#idTipoUsuario').val(),

@@ -38,6 +38,7 @@ using static System.Formats.Asn1.AsnWriter;
 using iTextSharp.tool.xml.html;
 using Kendo.Mvc;
 using static GuanajuatoAdminUsuarios.Controllers.PDFExampleController;
+using Microsoft.Extensions.Configuration;
 //using Telerik.SvgIcons;
 
 namespace GuanajuatoAdminUsuarios.Controllers
@@ -67,6 +68,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         private readonly IRepuveService _repuveService;
         private readonly ICatCarreterasService _catCarreterasService;
         private readonly IBitacoraService _bitacoraServices;
+        private readonly string _rutaArchivo;
 
 
         private readonly AppSettings _appSettings;
@@ -87,7 +89,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             ICapturaAccidentesService capturaAccidentesService,
             ICotejarDocumentosClientService cotejarDocumentosClientService, ICatMunicipiosService catMunicipiosService, ICatEntidadesService catEntidadesService,
            IColores coloresService, ICatMarcasVehiculosService catMarcasVehiculosService, ICatSubmarcasVehiculosService catSubmarcasVehiculosService
-            , IRepuveService repuveService, ICatCarreterasService catCarreterasService, IBitacoraService bitacoraService
+            , IRepuveService repuveService, ICatCarreterasService catCarreterasService, IBitacoraService bitacoraService, IConfiguration configuration
 
             )
         {
@@ -114,6 +116,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             _catSubmarcasVehiculosService = catSubmarcasVehiculosService;
             _repuveService = repuveService;
             _bitacoraServices = bitacoraService;
+            _rutaArchivo = configuration.GetValue<string>("AppSettings:RutaArchivoInventarioInfracciones");
         }
 
         public IActionResult Index()
@@ -557,7 +560,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 niv = model.SerieBusqueda
             };
             var repuveConsRoboResponse = _repuveService.ConsultaRobo(repuveGralModel)?.FirstOrDefault() ?? new RepuveConsRoboResponseModel();
-            ViewBag.ReporteRobo = repuveConsRoboResponse.estatus == 1;
+            ViewBag.ReporteRobo = repuveConsRoboResponse.estatus =="1";
             if (_appSettings.AllowWebServices)
             {
                 var vehiculosModel = _vehiculosService.GetVehiculoToAnexo(model);
@@ -645,8 +648,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
                                     nombre = vehiculoInterlocutorData.es_per_moral?.name_org1,
                                     PersonaDireccion = new PersonaDireccionModel
                                     {
-                                        telefonoFisico = telefonoValido,
-                                        telefono = telefonoValido,
+                                        telefonoFisico = telefonoValido.ToString(),
+                                        telefono = telefonoValido.ToString(),
                                         colonia = vehiculoDireccionData.colonia,
                                         coloniaFisico = vehiculoDireccionData.colonia,
                                         calleFisico = vehiculoDireccionData.calle,
@@ -722,7 +725,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
             var repuveConsRoboResponse = _repuveService.ConsultaRobo(repuveGralModel)?.FirstOrDefault() ?? new RepuveConsRoboResponseModel();
 
-            estatus = repuveConsRoboResponse.estatus == 1;
+            estatus = repuveConsRoboResponse.estatus =="1";
 
             return estatus;
         }
@@ -796,8 +799,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
                     nombre = vehiculoInterlocutorData.es_per_moral?.name_org1,
                     PersonaDireccion = new PersonaDireccionModel
                     {
-                        telefonoFisico = telefonoValido,
-                        telefono = telefonoValido,
+                        telefonoFisico = telefonoValido.ToString(),
+                        telefono = telefonoValido.ToString(),
                         colonia = vehiculoDireccionData.colonia,
                         coloniaFisico = vehiculoDireccionData.colonia,
                         calleFisico = vehiculoDireccionData.calle,
@@ -1176,23 +1179,44 @@ namespace GuanajuatoAdminUsuarios.Controllers
         {
             if (file != null && file.Length > 0)
             {
-                // Obtener los datos de la imagen
-                byte[] imageData;
-                using (var memoryStream = new MemoryStream())
+                //Se crea el nombre del archivo de la garantia
+                string nombreArchivo = _rutaArchivo + "/" + idInfraccion + "_" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss").Replace("/", "").Replace(":", "").Replace(" ", "") + System.IO.Path.GetExtension(file.FileName);
+
+                try
+                {
+                    //Se escribe el archivo en disco
+                    using (Stream fileStream = new FileStream(nombreArchivo, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+                    // Llamar al método del servicio para guardar la imagen
+                    int resultado =_infraccionesService.InsertarImagenEnInfraccion(nombreArchivo, idInfraccion);
+                    if(resultado==0)
+                        return Json(new { success = false, message = "Ocurrió un error al actualizar infracción" });
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    return Json(new { success = false, message = "Ocurrió un error al guardar el archivo" });
+                }
+
+
+
+
+                /*using (var memoryStream = new MemoryStream())
                 {
                     file.CopyTo(memoryStream);
                     imageData = memoryStream.ToArray();
-                }
+                }*/
 
-                // Llamar al método del servicio para guardar la imagen
-                _infraccionesService.InsertarImagenEnInfraccion(imageData, idInfraccion);
-
-                return Json(new { success = true, message = "Imagen subida exitosamente" });
+                return Json(new { success = true, message = "El archivó se agregó exitosamente" });
             }
             else
             {
-                return Json(new { success = false, message = "No se seleccionó ninguna imagen" });
-            }
+                return Json(new { success = false, message = "Selecciona una imagen antes de continuar" });
+                }
+
         }
 
         public IActionResult ServiceCrearInfraccion(int idInfraccion)
@@ -1206,82 +1230,88 @@ namespace GuanajuatoAdminUsuarios.Controllers
                     var infraccionBusqueda = _infraccionesService.GetInfraccionById(idInfraccion, idDependencia);
                     var unicoMotivo = infraccionBusqueda.MotivosInfraccion?.FirstOrDefault();
                     int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
-
-                    CrearMultasTransitoRequestModel crearMultasRequestModel = new CrearMultasTransitoRequestModel();
-                    crearMultasRequestModel.CR1RFC = infraccionBusqueda.Persona?.RFC ?? "";
-                    crearMultasRequestModel.CR1APAT = infraccionBusqueda.Persona?.apellidoPaterno ?? "";
-                    crearMultasRequestModel.CR1AMAT = infraccionBusqueda.Persona?.apellidoMaterno ?? "";
-                    crearMultasRequestModel.CR1NAME = infraccionBusqueda.Persona?.nombre ?? "";
-                    crearMultasRequestModel.CR2NAME = "";
-                    crearMultasRequestModel.CR1RAZON = "";
-                    crearMultasRequestModel.CR2RAZON = "";
-                    crearMultasRequestModel.CR3RAZON = "";
-                    crearMultasRequestModel.CR4RAZON = "";
-                    crearMultasRequestModel.BIRTHDT = "";
-                    crearMultasRequestModel.CR1CALLE = infraccionBusqueda.lugarCalle;
-                    crearMultasRequestModel.CR1NEXT = infraccionBusqueda.lugarNumero;
-                    crearMultasRequestModel.CR1NINT = "";
-                    crearMultasRequestModel.CR1ENTRE = "";
-                    crearMultasRequestModel.CR2ENTRE = "";
-                    crearMultasRequestModel.CR1COLONIA = infraccionBusqueda.lugarColonia;
-                    crearMultasRequestModel.CR1LOCAL = "";
-                    crearMultasRequestModel.CR1MPIO = infraccionBusqueda.municipio;
-                    crearMultasRequestModel.CR1CP = "00000";
-                    crearMultasRequestModel.CR1TELE = "";
-                    crearMultasRequestModel.CR1EDO = "GTO";
-                    crearMultasRequestModel.CR1EMAIL = "";
-                    crearMultasRequestModel.XSEXF = "";
-                    crearMultasRequestModel.XSEXM = "";
-                    crearMultasRequestModel.LZONE = "";
-                    crearMultasRequestModel.L_OFN_IOFICINA = "";
-                    crearMultasRequestModel.IMPORTE_MULTA = infraccionBusqueda.totalInfraccion.ToString("F2");
-                    crearMultasRequestModel.FEC_IMPOSICION = infraccionBusqueda.fechaInfraccion.ToString("yyyy-MM-dd");
-                    crearMultasRequestModel.FEC_VENCIMIENTO = infraccionBusqueda.fechaVencimiento.ToString("yyyy-MM-dd");
-                    crearMultasRequestModel.INF_PROP = "";
-                    crearMultasRequestModel.NOM_INFRACTOR = infraccionBusqueda.PersonaInfraccion?.nombreCompleto ?? "";
-                    crearMultasRequestModel.DOM_INFRACTOR = infraccionBusqueda.Persona?.PersonaDireccion.calle ?? "" + " " + infraccionBusqueda.Persona?.PersonaDireccion.numero ?? "" + ", " + infraccionBusqueda.Persona?.PersonaDireccion.colonia ?? "";
-                    crearMultasRequestModel.NUM_PLACA = infraccionBusqueda.placasVehiculo;
-                    crearMultasRequestModel.DOC_GARANTIA = "4";
-                    crearMultasRequestModel.NOM_RESP_SOLI = "";
-                    crearMultasRequestModel.DOM_RESP_SOLI = "";
-                    if (infraccionBusqueda != null)
+                    if (infraccionBusqueda.cortesiaInt == 2)
                     {
-                        string prefijo = (idOficina == 1) ? "TTO-PEC" : (idOficina == 2) ? "TTE-M" : "";
-                        crearMultasRequestModel.FOLIO_MULTA = prefijo + infraccionBusqueda.folioInfraccion;
-                    }
-                    crearMultasRequestModel.OBS_GARANT = "";
-                    crearMultasRequestModel.ZMOTIVO1 = unicoMotivo?.Motivo ?? "";
-                    crearMultasRequestModel.ZMOTIVO2 = "";
-                    crearMultasRequestModel.ZMOTIVO3 = "";
-                    var result = _crearMultasTransitoClientService.CrearMultasTransitoCall(crearMultasRequestModel);
-                    ViewBag.Pension = result;
-                    var ip = HttpContext.Connection.RemoteIpAddress.ToString();
-                    var user = Convert.ToDecimal(User.FindFirst(CustomClaims.IdUsuario).Value);
-
-                    if (result != null && result.MT_CrearMultasTransito_res != null && "S".Equals(result.MT_CrearMultasTransito_res.ZTYPE, StringComparison.OrdinalIgnoreCase))
-                    {
-                        _infraccionesService.ModificarEstatusInfraccion(idInfraccion, (int)CatEnumerator.catEstatusInfraccion.Enviada);
-                        _infraccionesService.GuardarReponse(result.MT_CrearMultasTransito_res, idInfraccion);
-                        _bitacoraServices.insertBitacora(idInfraccion, ip, "EditarInfraccion", "Registrarcd", "WS", user);
-                        return Json(new { success = true });
-                    }
-                    else if (result != null && result.MT_CrearMultasTransito_res != null && "E".Equals(result.MT_CrearMultasTransito_res.ZTYPE, StringComparison.OrdinalIgnoreCase))
-                    {
-                        _bitacoraServices.insertBitacora(idInfraccion, ip, "EditarInfraccion", "Registrar", "WS", user);
-                        return Json(new { success = false, message = "Registro actualizado en RIAG", id = idInfraccion });
-
-
-                    }
-                    else if (result != null && result.MT_CrearMultasTransito_res != null && "A".Equals(result.MT_CrearMultasTransito_res.ZTYPE, StringComparison.OrdinalIgnoreCase))
-                    {
-                        _bitacoraServices.insertBitacora(idInfraccion, ip, "EditarInfraccion", "Registrarer", "WS", user);
-                        return Json(new { success = false, message = "Infraccion anteriormente registrada en finanzas", id = idInfraccion });
+                        _infraccionesService.ModificarEstatusInfraccion(idInfraccion, (int)CatEnumerator.catEstatusInfraccion.Capturada);
+                        return Json(new { success = false, message = "Infracción guardada, no enviada a finanzas", id = idInfraccion });
                     }
                     else
                     {
-                        return Json(new { success = false, message = "Infraccion Guardada, no enviada" });
-                    }
+                        CrearMultasTransitoRequestModel crearMultasRequestModel = new CrearMultasTransitoRequestModel();
+                        crearMultasRequestModel.CR1RFC = infraccionBusqueda.Persona?.RFC ?? "";
+                        crearMultasRequestModel.CR1APAT = infraccionBusqueda.Persona?.apellidoPaterno ?? "";
+                        crearMultasRequestModel.CR1AMAT = infraccionBusqueda.Persona?.apellidoMaterno ?? "";
+                        crearMultasRequestModel.CR1NAME = infraccionBusqueda.Persona?.nombre ?? "";
+                        crearMultasRequestModel.CR2NAME = "";
+                        crearMultasRequestModel.CR1RAZON = "";
+                        crearMultasRequestModel.CR2RAZON = "";
+                        crearMultasRequestModel.CR3RAZON = "";
+                        crearMultasRequestModel.CR4RAZON = "";
+                        crearMultasRequestModel.BIRTHDT = "";
+                        crearMultasRequestModel.CR1CALLE = infraccionBusqueda.lugarCalle;
+                        crearMultasRequestModel.CR1NEXT = infraccionBusqueda.lugarNumero;
+                        crearMultasRequestModel.CR1NINT = "";
+                        crearMultasRequestModel.CR1ENTRE = "";
+                        crearMultasRequestModel.CR2ENTRE = "";
+                        crearMultasRequestModel.CR1COLONIA = infraccionBusqueda.lugarColonia;
+                        crearMultasRequestModel.CR1LOCAL = "";
+                        crearMultasRequestModel.CR1MPIO = infraccionBusqueda.municipio;
+                        crearMultasRequestModel.CR1CP = "00000";
+                        crearMultasRequestModel.CR1TELE = "";
+                        crearMultasRequestModel.CR1EDO = "GTO";
+                        crearMultasRequestModel.CR1EMAIL = "";
+                        crearMultasRequestModel.XSEXF = "";
+                        crearMultasRequestModel.XSEXM = "";
+                        crearMultasRequestModel.LZONE = "";
+                        crearMultasRequestModel.L_OFN_IOFICINA = "";
+                        crearMultasRequestModel.IMPORTE_MULTA = infraccionBusqueda.totalInfraccion.ToString("F2");
+                        crearMultasRequestModel.FEC_IMPOSICION = infraccionBusqueda.fechaInfraccion.ToString("yyyy-MM-dd");
+                        crearMultasRequestModel.FEC_VENCIMIENTO = infraccionBusqueda.fechaVencimiento.ToString("yyyy-MM-dd");
+                        crearMultasRequestModel.INF_PROP = "";
+                        crearMultasRequestModel.NOM_INFRACTOR = infraccionBusqueda.PersonaInfraccion?.nombreCompleto ?? "";
+                        crearMultasRequestModel.DOM_INFRACTOR = infraccionBusqueda.Persona?.PersonaDireccion.calle ?? "" + " " + infraccionBusqueda.Persona?.PersonaDireccion.numero ?? "" + ", " + infraccionBusqueda.Persona?.PersonaDireccion.colonia ?? "";
+                        crearMultasRequestModel.NUM_PLACA = infraccionBusqueda.placasVehiculo;
+                        crearMultasRequestModel.DOC_GARANTIA = "4";
+                        crearMultasRequestModel.NOM_RESP_SOLI = "";
+                        crearMultasRequestModel.DOM_RESP_SOLI = "";
+                        if (infraccionBusqueda != null)
+                        {
+                            string prefijo = (idDependencia == 1) ? "TTO-" : (idDependencia == 0) ? "TTE" : "";
+                            crearMultasRequestModel.FOLIO_MULTA = prefijo + infraccionBusqueda.folioInfraccion;
+                        }
+                        crearMultasRequestModel.OBS_GARANT = "";
+                        crearMultasRequestModel.ZMOTIVO1 = unicoMotivo?.Motivo ?? "";
+                        crearMultasRequestModel.ZMOTIVO2 = "";
+                        crearMultasRequestModel.ZMOTIVO3 = "";
+                        var result = _crearMultasTransitoClientService.CrearMultasTransitoCall(crearMultasRequestModel);
+                        ViewBag.Pension = result;
+                        var ip = HttpContext.Connection.RemoteIpAddress.ToString();
+                        var user = Convert.ToDecimal(User.FindFirst(CustomClaims.IdUsuario).Value);
 
+                        if (result != null && result.MT_CrearMultasTransito_res != null && "S".Equals(result.MT_CrearMultasTransito_res.ZTYPE, StringComparison.OrdinalIgnoreCase))
+                        {
+                            _infraccionesService.ModificarEstatusInfraccion(idInfraccion, (int)CatEnumerator.catEstatusInfraccion.Enviada);
+                            _infraccionesService.GuardarReponse(result.MT_CrearMultasTransito_res, idInfraccion);
+                            _bitacoraServices.insertBitacora(idInfraccion, ip, "EditarInfraccion", "Registrarcd", "WS", user);
+                            return Json(new { success = true });
+                        }
+                        else if (result != null && result.MT_CrearMultasTransito_res != null && "E".Equals(result.MT_CrearMultasTransito_res.ZTYPE, StringComparison.OrdinalIgnoreCase))
+                        {
+                            _bitacoraServices.insertBitacora(idInfraccion, ip, "EditarInfraccion", "Registrar", "WS", user);
+                            return Json(new { success = false, message = "Registro actualizado en RIAG", id = idInfraccion });
+
+
+                        }
+                        else if (result != null && result.MT_CrearMultasTransito_res != null && "A".Equals(result.MT_CrearMultasTransito_res.ZTYPE, StringComparison.OrdinalIgnoreCase))
+                        {
+                            _bitacoraServices.insertBitacora(idInfraccion, ip, "EditarInfraccion", "Registrarer", "WS", user);
+                            return Json(new { success = false, message = "Infraccion anteriormente registrada en finanzas", id = idInfraccion });
+                        }
+                        else
+                        {
+                            return Json(new { success = false, message = "Infraccion Guardada, no enviada" });
+                        }
+                    }
                 }
                 catch (SqlException ex)
                 {
@@ -1326,7 +1356,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public ActionResult ajax_CrearPersonaMoral(PersonaModel Persona)
         {
             Persona.idCatTipoPersona = (int)TipoPersona.Moral;
-            Persona.PersonaDireccion.telefono = (String.IsNullOrEmpty(Persona.telefono)) ? 0 : Convert.ToInt64(Persona.telefono);
+            Persona.PersonaDireccion.telefono = String.IsNullOrEmpty(Persona.telefono) ? null : Persona.telefono;
             var IdPersonaMoral = _personasService.CreatePersonaMoral(Persona);
             if (IdPersonaMoral == 0)
                 return Json(new { success = false, message = "Ocurrió un error al procesar su solicitud." });
@@ -1361,7 +1391,10 @@ namespace GuanajuatoAdminUsuarios.Controllers
         {
             if (!string.IsNullOrEmpty(model.numeroLicenciaFisico)) model.numeroLicencia = model.numeroLicenciaFisico;
             if (model.idTipoLicenciaInfraccion != null) model.idTipoLicencia = model.idTipoLicenciaInfraccion;
-            if (!string.IsNullOrEmpty(model.telefonoInfraccion)) model.PersonaDireccion.telefono = Convert.ToInt64(model.telefonoInfraccion);
+            if (!string.IsNullOrEmpty(model.telefonoInfraccion))
+            {
+                model.PersonaDireccion.telefono = model.telefonoInfraccion;
+            }
             if (!string.IsNullOrEmpty(model.correoInfraccion)) model.PersonaDireccion.correo = model.correoInfraccion;
             if (model.vigenciaLicenciaFisico != null)
             {
@@ -1651,7 +1684,24 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
             return Json(true);
         }
+        public IActionResult ModalEditarCortesia(int idInfraccion)
+        {
 
+            var viewCortesiaModel = new EditarCortesiaModel
+            {
+                idInfraccion = idInfraccion,
+            };
+
+            return PartialView("_ModalCambiarCortesia", viewCortesiaModel);
+        }
+        public ActionResult UpdateCortesia(int idInfraccion, int cortesiaInt)
+        {
+
+           
+                var cambioCortesia = _infraccionesService.ActualizarEstatusCortesia(idInfraccion, cortesiaInt);
+
+            return Json(cambioCortesia);
+        }
 
         /*****************************************************************************************************/
         #endregion

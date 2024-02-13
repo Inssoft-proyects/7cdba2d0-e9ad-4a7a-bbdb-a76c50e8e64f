@@ -276,7 +276,7 @@ namespace GuanajuatoAdminUsuarios.Services
                         "left JOIN catColores cc ON v.idColor = cc.idColor " +
                         "left JOIN catTiposVehiculo tv ON v.idTipoVehiculo = tv.idTipoVehiculo " +
                         "left JOIN catTipoServicio ts ON v.idCatTipoServicio = ts.idCatTipoServicio " +
-                        "JOIN personas p ON v.idPersona = p.idPersona " +
+                        "LEFT JOIN personas p ON v.idPersona = p.idPersona " +
                         "WHERE v.estatus = 1 AND v.serie LIKE '%' + @Serie + '%';", connection);
 
                         command.Parameters.AddWithValue("@Serie", Serie);
@@ -292,7 +292,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             "left JOIN catColores cc ON v.idColor = cc.idColor " +
                             "left JOIN catTiposVehiculo tv ON v.idTipoVehiculo = tv.idTipoVehiculo " +
                             "left JOIN catTipoServicio ts ON v.idCatTipoServicio = ts.idCatTipoServicio " +
-                            "JOIN personas p ON v.idPersona = p.idPersona " +
+                            "LEFT JOIN personas p ON v.idPersona = p.idPersona " +
                             "WHERE v.estatus = 1 AND v.placas LIKE '%' + @Placa + '%';", connection);
                         command.Parameters.AddWithValue("@Placa", Placa);
                     }
@@ -306,7 +306,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             "left JOIN catColores cc ON v.idColor = cc.idColor " +
                             "left JOIN catTiposVehiculo tv ON v.idTipoVehiculo = tv.idTipoVehiculo " +
                             "left JOIN catTipoServicio ts ON v.idCatTipoServicio = ts.idCatTipoServicio " +
-                            "JOIN personas p ON v.idPersona = p.idPersona " +
+                            "LEFT JOIN personas p ON v.idPersona = p.idPersona " +
                             "WHERE v.estatus = 1 AND v.placas LIKE '%' + @Folio + '%';", connection);
                         command.Parameters.AddWithValue("@Folio", Folio);
                     }

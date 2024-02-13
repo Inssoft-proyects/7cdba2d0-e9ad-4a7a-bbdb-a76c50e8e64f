@@ -20,7 +20,7 @@
                     window.location.href = "/Principal";
                 }, 200);
             } else {
-                //IMPRIMIR
+                IMPRIMIR
                 if (!auth.toString().includes("203")) {
                     $("#btnExcelTransito").prop('disabled', true).css({ "opacity": "0.3" });
                 }
@@ -76,8 +76,9 @@
         });
     }
 
-    function ShowUpdatePopUp(Id) {
+    function ShowUpdatePopUp(Id,IdDeposito) {
         $('#hdnIdDeposito').val(Id);
+        $('#hdnIdDepositoInv').val(IdDeposito);
         $('#myUpdateModal').modal('show');
     }
 
@@ -139,10 +140,10 @@
                     columns.Bound(p => p.IdDependencia).ClientTemplate(
                     "<button onclick=\"downLoadPdf('#= IdDeposito #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-pdf me-2'></i></h6></button>"
                     ).Title("Descargar detalle").Sortable(false).Width(100);
-                    columns.Bound(c => c.fullDependencia).Title("Estatus").Width(100);
+                    columns.Bound(c => c.fullDependencia).Title("Estatus").Width(190);
 
                     columns.Bound(p => p.IdGrua).ClientTemplate(
-                    "<button onclick=\"ShowUpdatePopUp('#= IdSolicitud #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i></h6></button>"
+                    "<button onclick=\"ShowUpdatePopUp('#= IdSolicitud #','#= IdDeposito#')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i></h6></button>"
                     ).Title("Editar").Sortable(false).Width(100);
 
                     columns.Bound(p => p.IdDeposito).ClientTemplate(
@@ -215,7 +216,6 @@
                 if (!auth.toString().includes("203")) {
                     grid.hideColumn(9);
                 }
-
                 //CONSULTAR
                 if (!auth.toString().includes("202")) {
                     grid.hideColumn(8);
@@ -369,6 +369,7 @@
 
                 <div class="modal-body" id="ModalBodyUpdate">
                     <input type="hidden" id="hdnIdDeposito" />
+                    <input type="hidden" id="hdnIdDepositoInv" />
                     <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
                         <div class="controlButton">
                             <button type="button" class="btn btn-primary btn-sm" data-id="solicitud" onclick="datosSolicitud()">
@@ -434,7 +435,8 @@
     }
     function datosGruas() {
         var idSolicitud = document.getElementById('hdnIdDeposito').value;
-        window.location.href = '@Url.Action("DatosGruas", "AsignacionGruas")?iSo=' + idSolicitud;
+        var idDeposito = document.getElementById('hdnIdDepositoInv').value;
+        window.location.href = '@Url.Action("DatosGruas", "AsignacionGruas")?iSo=' + idSolicitud + '&idDeposito=' + idDeposito;
     }
 
     function TemplateEvPolInf(data){

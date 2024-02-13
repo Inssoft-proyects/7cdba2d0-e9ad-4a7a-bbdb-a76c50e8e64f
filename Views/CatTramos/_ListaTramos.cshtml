@@ -1,8 +1,8 @@
-﻿<div class="row">
+﻿@model List<CatTramosModel>
+<div class="row">
     <div class="col-12 mb-4 px-4 rounded gridCustom">
 
-        @(
-            Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.CatTramosModel>()
+        @(Html.Kendo().Grid(Model)
             .Name("gridTramos")
             .Columns(columns =>
             {
@@ -15,15 +15,15 @@
 
 
             }).HtmlAttributes(new { style = "height:550px" })
+            .Pageable(pager => pager.AlwaysVisible(true).Position(GridPagerPosition.Bottom).PageSizes(true))
             .Sortable()
-            .Groupable()
-            .Scrollable()
-            .Pageable()
+            .Scrollable(scr => scr.Enabled(true))
             .DataSource(dataSource => dataSource
             .Ajax()
-            .Read(read => read.Action("GetTra", "CatTramos"))
-            .PageSize(5).Model(model => model.Id(p => p.IdTramo))
+            .ServerOperation(false)
+            .PageSize(5)
             )
+
             .ToolBar(t => t.Search().Text("Buscar..."))
             .Search(s =>
             {

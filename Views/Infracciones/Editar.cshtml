@@ -829,7 +829,7 @@
 			return;
 		}
 
-		$("#idCortesia").val(cortesia ? 1 : 0);
+		$("#idCortesia").val(cortesia ? 2 : 1);
 		if (!idVehiculo) {
 			sitteg_info('Debe seleccionar un vehículo');
 			return;
@@ -888,7 +888,12 @@ function serviceCrearInfraccion(idInfraccion) {
 				} else if (response.success === false && response.message === "Infraccion Guardada, no enviada") {
                 sitteg_warning("El número de placa excede la longitud máxima, la infracción no se envió a finanzas.");
 			    shouldGoBack = true;
-            } else {
+            } 
+			 else if (response.success === false && response.message === "Infracción guardada, no enviada a finanzas") {
+                sitteg_warning("La infracción no fue enviada a Secretaría de Finanzas.");
+			    shouldGoBack = true;
+            }
+			else {
                 sitteg_warning(response.message);
             }
 
@@ -1097,10 +1102,13 @@ function serviceCrearInfraccion(idInfraccion) {
 			processData: false,
 			contentType: false,
 			success: function (response) {
-				sitteg_success("Se ha anexado el archivo exitosamente");
+                hideLoading();
+                if (response.success)
+                    sitteg_success(response.message);
+                else
+                    sitteg_error(response.message);
 
-				console.log(response);
-				hideLoading();
+                console.log(response);
 			},
 			error: function (xhr, status, error) {
 				// Manejo de errores

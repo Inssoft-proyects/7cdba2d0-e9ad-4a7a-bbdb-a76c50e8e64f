@@ -12,6 +12,7 @@
         var access = @listaIdsPermitidosJson;
         var auth = @autorizaciones;
 
+        console.log("Autorizaciones:", auth);
         if (access != undefined && access != '') {
             if (!access.toString().includes(localStorage.getItem("menuId"))) {
                 Swal.fire({

@@ -13,7 +13,7 @@
             columns.Bound(c => c.IdAccidente).Hidden();
             //columns.Command(c => c.Custom("Eliminar").Click("eliminarClasificacion")).Width(80);
             columns.Bound(c => c.NombreClasificacion).Width(90);
-                columns.Bound(c=>c.IdAccidente).ClientTemplate("#=  EliminarBtnClacificatoria(data) #").Width(150);
+            columns.Bound(c=>c.IdAccidente).ClientTemplate("#=  EliminarBtnClacificatoria(data) #").Width(150).Title("Acción");
 
         }).HtmlAttributes(new { style = "height:500px" })
         .Sortable()

@@ -233,7 +233,9 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.colonia = reader["colonia"].ToString();
                             model.calle = reader["calle"].ToString();
                             model.numero = reader["numero"].ToString();
-                            model.telefono = reader["telefono"] == System.DBNull.Value ? default(int) : Convert.ToInt64(reader["telefono"].ToString());
+                            model.telefono = reader["telefono"].ToString();
+
+                           // model.telefono = reader["telefono"] == System.DBNull.Value ? default(int) : Convert.ToInt64(reader["telefono"].ToString());
                             model.correo = reader["correo"].ToString();
                             model.fechaActualizacion = reader["fechaActualizacion"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["fechaActualizacion"].ToString());
                             model.actualizadoPor = reader["actualizadoPor"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["actualizadoPor"].ToString());
@@ -325,7 +327,9 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.PersonaDireccion.colonia = reader["colonia"].ToString();
                             model.PersonaDireccion.calle = reader["calle"].ToString();
                             model.PersonaDireccion.numero = reader["numero"].ToString();
-                            model.PersonaDireccion.telefono = reader["telefono"] == System.DBNull.Value ? default(int) : Convert.ToInt64(reader["telefono"].ToString());
+                            model.PersonaDireccion.telefono = reader["telefono"].ToString();
+
+                            //model.PersonaDireccion.telefono = reader["telefono"] == System.DBNull.Value ? default(int) : Convert.ToInt64(reader["telefono"].ToString());
                             model.PersonaDireccion.correo = reader["correo"].ToString();
 
                             modelList.Add(model);
@@ -412,7 +416,9 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.PersonaDireccion.colonia = reader["colonia"].ToString();
                             model.PersonaDireccion.calle = reader["calle"].ToString();
                             model.PersonaDireccion.numero = reader["numero"].ToString();
-                            model.PersonaDireccion.telefono = reader["telefono"] == System.DBNull.Value ? default(int) : Convert.ToInt64(reader["telefono"].ToString());
+                            model.PersonaDireccion.telefono = reader["telefono"].ToString();
+
+                           // model.PersonaDireccion.telefono = reader["telefono"] == System.DBNull.Value ? default(int) : Convert.ToInt64(reader["telefono"].ToString());
                             model.PersonaDireccion.correo = reader["correo"].ToString();
 
                             modelList.Add(model);
@@ -500,7 +506,9 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.PersonaDireccion.colonia = reader["colonia"].ToString();
                             model.PersonaDireccion.calle = reader["calle"].ToString();
                             model.PersonaDireccion.numero = reader["numero"].ToString();
-                            model.PersonaDireccion.telefono = reader["telefono"] == System.DBNull.Value ? default(int) : Convert.ToInt64(reader["telefono"].ToString());
+                            model.PersonaDireccion.telefono = reader["telefono"].ToString();
+
+                           // model.PersonaDireccion.telefono = reader["telefono"] == System.DBNull.Value ? default(int) : Convert.ToInt64(reader["telefono"].ToString());
                             model.PersonaDireccion.correo = reader["correo"].ToString();
 
                             modelList.Add(model);
@@ -587,7 +595,9 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.PersonaDireccion.colonia = reader["colonia"].ToString();
                             model.PersonaDireccion.calle = reader["calle"].ToString();
                             model.PersonaDireccion.numero = reader["numero"].ToString();
-                            model.PersonaDireccion.telefono = reader["telefono"] == System.DBNull.Value ? default(int) : Convert.ToInt64(reader["telefono"].ToString());
+                            model.PersonaDireccion.telefono = reader["telefono"].ToString();
+
+                            //model.PersonaDireccion.telefono = reader["telefono"] == System.DBNull.Value ? default(int) : Convert.ToInt64(reader["telefono"].ToString());
                             model.PersonaDireccion.correo = reader["correo"].ToString();
 
                             modelList.Add(model);
@@ -1608,10 +1618,12 @@ WHERE
         }
 
 
-        public List<PersonaModel> BusquedaPersonaPagination(PersonaModel model, Pagination pagination)
+        public List<PersonaModel> BusquedaPersonaPagination(PersonasModel model, Pagination pagination)
         {
             //
             List<PersonaModel> ListaPersonas = new List<PersonaModel>();
+            if (model.PersonaModel == null)
+                model.PersonaModel = new PersonaModel();
 
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
             {
@@ -1620,26 +1632,26 @@ WHERE
                     connection.Open();
                     using (SqlCommand cmd = new SqlCommand("[usp_ObtieneBusquedaPersonas]", connection))
                     {
-                        if (model.CURPBusqueda != null)
-                            model.CURPBusqueda = model.CURPBusqueda.Trim();
-                        if (model.RFCBusqueda != null)
-                            model.RFCBusqueda = model.RFCBusqueda.Trim();
-                        if (model.nombreBusqueda != null)
-                            model.nombreBusqueda = model.nombreBusqueda.Trim();
-                        if (model.apellidoPaternoBusqueda != null)
-                            model.apellidoPaternoBusqueda = model.apellidoPaternoBusqueda.Trim();
-                        if (model.apellidoMaternoBusqueda != null)
-                            model.apellidoMaternoBusqueda = model.apellidoMaternoBusqueda.Trim();
+                        if (model.PersonaModel.CURPBusqueda != null)
+                            model.PersonaModel.CURPBusqueda = model.PersonaModel.CURPBusqueda.Trim();
+                        if (model.PersonaModel.RFCBusqueda != null)
+                            model.PersonaModel.RFCBusqueda = model.PersonaModel.RFCBusqueda.Trim();
+                        if (model.PersonaModel.nombreBusqueda != null)
+                            model.PersonaModel.nombreBusqueda = model.PersonaModel.nombreBusqueda.Trim();
+                        if (model.PersonaModel.apellidoPaternoBusqueda != null)
+                            model.PersonaModel.apellidoPaternoBusqueda = model.PersonaModel.apellidoPaternoBusqueda.Trim();
+                        if (model.PersonaModel.apellidoMaternoBusqueda != null)
+                            model.PersonaModel.apellidoMaternoBusqueda = model.PersonaModel.apellidoMaternoBusqueda.Trim();
 
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@PageIndex", pagination.PageIndex);
                         cmd.Parameters.AddWithValue("@PageSize", pagination.PageSize);
-                        cmd.Parameters.Add(new SqlParameter("@numeroLicencia", SqlDbType.NVarChar)).Value = (object)model.numeroLicenciaBusqueda ?? DBNull.Value;
-                        cmd.Parameters.Add(new SqlParameter("@curp", SqlDbType.NVarChar)).Value = (object)model.CURPBusqueda ?? DBNull.Value;
-                        cmd.Parameters.Add(new SqlParameter("@rfc", SqlDbType.NVarChar)).Value = (object)model.RFCBusqueda ?? DBNull.Value;
-                        cmd.Parameters.Add(new SqlParameter("@nombre", SqlDbType.NVarChar)).Value = (object)model.nombreBusqueda ?? DBNull.Value;
-                        cmd.Parameters.Add(new SqlParameter("@apellidoPaterno", SqlDbType.NVarChar)).Value = (object)model.apellidoPaternoBusqueda ?? DBNull.Value;
-                        cmd.Parameters.Add(new SqlParameter("@apellidoMaterno", SqlDbType.NVarChar)).Value = (object)model.apellidoMaternoBusqueda ?? DBNull.Value;
+                        cmd.Parameters.Add(new SqlParameter("@numeroLicencia", SqlDbType.NVarChar)).Value = (object)model.PersonaModel.numeroLicenciaBusqueda ?? DBNull.Value;
+                        cmd.Parameters.Add(new SqlParameter("@curp", SqlDbType.NVarChar)).Value = (object)model.PersonaModel.CURPBusqueda ?? DBNull.Value;
+                        cmd.Parameters.Add(new SqlParameter("@rfc", SqlDbType.NVarChar)).Value = (object)model.PersonaModel.RFCBusqueda ?? DBNull.Value;
+                        cmd.Parameters.Add(new SqlParameter("@nombre", SqlDbType.NVarChar)).Value = (object)model.PersonaModel.nombreBusqueda ?? DBNull.Value;
+                        cmd.Parameters.Add(new SqlParameter("@apellidoPaterno", SqlDbType.NVarChar)).Value = (object)model.PersonaModel.apellidoPaternoBusqueda ?? DBNull.Value;
+                        cmd.Parameters.Add(new SqlParameter("@apellidoMaterno", SqlDbType.NVarChar)).Value = (object)model.PersonaModel.apellidoMaternoBusqueda ?? DBNull.Value;
                         using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
                         {
                             while (reader.Read())
@@ -1685,6 +1697,82 @@ WHERE
                 return ListaPersonas;
 
             }
+        }
+
+
+        public IEnumerable<PersonaModel> GetAllPersonasFisicasPagination(Pagination pagination)
+        {
+            List<PersonaModel> modelList = new List<PersonaModel>();
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    connection.Open();
+                    using (SqlCommand cmd = new SqlCommand("[usp_ObtieneTodasLasPersonasFisicas]", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@PageIndex", pagination.PageIndex);
+                        cmd.Parameters.AddWithValue("@PageSize", pagination.PageSize);
+                        if (pagination.Filter.Trim() != "")
+                            cmd.Parameters.AddWithValue("@Filter", pagination.Filter);
+                        using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+                        {
+                            while (reader.Read())
+                            {
+                                PersonaModel model = new PersonaModel();
+                                model.PersonaDireccion = new PersonaDireccionModel();
+                                model.idPersona = reader["idPersona"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idPersona"].ToString());
+                                model.numeroLicencia = reader["numeroLicencia"].ToString();
+                                model.CURP = reader["CURP"].ToString();
+                                model.RFC = reader["RFC"].ToString();
+                                model.nombre = reader["nombre"].ToString();
+                                model.apellidoPaterno = reader["apellidoPaterno"].ToString();
+                                model.apellidoMaterno = reader["apellidoMaterno"].ToString();
+                                model.fechaActualizacion = reader["fechaActualizacion"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["fechaActualizacion"].ToString());
+                                model.actualizadoPor = reader["actualizadoPor"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["actualizadoPor"].ToString());
+                                model.estatus = reader["estatus"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["estatus"].ToString());
+                                model.idCatTipoPersona = reader["idCatTipoPersona"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idCatTipoPersona"].ToString());
+                                model.tipoPersona = reader["tipoPersona"].ToString();
+                                model.idGenero = reader["idGenero"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idGenero"].ToString());
+                                model.genero = reader["genero"].ToString();
+                                model.idTipoLicencia = reader["idTipoLicencia"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idTipoLicencia"].ToString());
+                                model.tipoLicencia = reader["tipoLicencia"].ToString();
+                                model.fechaNacimiento = reader["fechaNacimiento"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["fechaNacimiento"].ToString());
+                                model.vigenciaLicencia = reader["vigenciaLicencia"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["vigenciaLicencia"].ToString());
+
+                                model.PersonaDireccion.idPersonasDirecciones = reader["idPersonasDirecciones"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idPersonasDirecciones"].ToString());
+                                model.PersonaDireccion.idEntidad = reader["idEntidad"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idEntidad"].ToString());
+                                model.PersonaDireccion.idMunicipio = reader["idMunicipio"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idMunicipio"].ToString());
+                                model.PersonaDireccion.idPersona = reader["idPersona"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idPersona"].ToString());
+                                model.PersonaDireccion.entidad = reader["nombreEntidad"].ToString();
+                                model.PersonaDireccion.municipio = reader["municipio"].ToString();
+                                model.PersonaDireccion.codigoPostal = reader["codigoPostal"].ToString();
+                                model.PersonaDireccion.colonia = reader["colonia"].ToString();
+                                model.PersonaDireccion.calle = reader["calle"].ToString();
+                                model.PersonaDireccion.numero = reader["numero"].ToString();
+                                model.PersonaDireccion.telefono = reader["telefono"].ToString();
+
+                               // model.PersonaDireccion.telefono = reader["telefono"] == System.DBNull.Value ? default(int) : Convert.ToInt64(reader["telefono"].ToString());
+                                model.PersonaDireccion.correo = reader["correo"].ToString();
+                                model.total = Convert.ToInt32(reader["Total"]);
+
+                                modelList.Add(model);
+                            }
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    //Guardar la excepcion en algun log de errores
+                    //ex
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return modelList;
+
         }
 
 

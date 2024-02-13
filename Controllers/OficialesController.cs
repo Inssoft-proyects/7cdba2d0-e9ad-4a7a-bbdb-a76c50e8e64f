@@ -22,10 +22,10 @@ namespace GuanajuatoAdminUsuarios.Controllers
         DBContextInssoft dbContext = new DBContextInssoft();
         public IActionResult Index()
         {
-          
-                var ListOficialesModel = GetOficiales();
+            var ListOficialesModel = _oficialesService.GetOficiales();
+            ViewBag.ListadoOficiales = ListOficialesModel;
 
-            return View(ListOficialesModel);
+            return View();
             }
         private readonly IOficiales _oficialesService;
         private readonly ICatDelegacionesOficinasTransporteService _catDelegacionesOficinasTransporteService;
@@ -40,15 +40,16 @@ namespace GuanajuatoAdminUsuarios.Controllers
         #region Modal Action
         public ActionResult IndexModal()
         {
-       
-                var ListOficialessModel = _oficialesService.GetOficiales();
-            //return View("IndexModal");
-            return View("Index", ListOficialessModel);
+
+            var ListOficialesModel = _oficialesService.GetOficiales();
+            ViewBag.ListadoOficiales = ListOficialesModel;
+
+            return View("Index");
         }
-        
 
 
-[HttpPost]
+
+        [HttpPost]
         public ActionResult AgregarOficialParcial()
         {
 

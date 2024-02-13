@@ -76,7 +76,7 @@
 				contadorVehiculo++;
 				@*Columnas*@
 				<tr>
-					<td style="background-color:azure" rowspan="2"><p class="s3">VEH.@contadorVehiculo</p></td>
+					<td style="background-color:azure" rowspan="2"><p class="s3">VEH.@item.numeroConsecutivo</p></td>
 					<td><p class="s5">TIPO</p></td>
 					<td><p class="s5">MARCA</p></td>
 					<td><p class="s5">SUBMARCA</p></td>
@@ -258,7 +258,7 @@
 				@if (Model.Involucrados.Count() > 0)
 				{
 					<tr>
-						<td><p class="s2">@contadorVehiculo</p></td>
+						<td><p class="s2">@item.numeroConsecutivo</p></td>
 						<td><p class="s2">@item.TipoVehiculo</p></td>
 						<td><p class="s2">@item.nombre</p></td>
 						<td><p class="s2">@item.Sexo</p></td>

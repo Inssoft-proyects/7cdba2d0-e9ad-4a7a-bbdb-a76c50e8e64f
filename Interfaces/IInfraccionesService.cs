@@ -38,6 +38,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
         public InfraccionesModel GetInfraccion2ById(int idInfraccion, int idDependencia);
 
         public bool CancelTramite(string id);
+        public int ActualizarEstatusCortesia(int idInfraccion,int  cortesiaInt);
 
 
         public NuevaInfraccionModel GetInfraccionAccidenteById(int idInfraccion, int idDependencia);
@@ -48,7 +49,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
 		public int ModificarInfraccion(InfraccionesModel model);
         int ModificarInfraccionPorCortesia(InfraccionesModel model);
 
-        public int InsertarImagenEnInfraccion( byte[] imageData, int idInfraccion);
+        public int InsertarImagenEnInfraccion( string rutaInventario, int idInfraccion);
         public List<InfraccionesResumen> GetInfraccionesLicencia(string numLicencia, string CURP);
         public List<InfraccionesModel> GetAllAccidentes2();
 

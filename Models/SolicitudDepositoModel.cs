@@ -15,7 +15,8 @@ namespace GuanajuatoAdminUsuarios.Models
         public TimeSpan horaSolicitud { get; set; }
         public int? idTipoVehiculo { get; set; }
         public string tipoVehiculo { get; set; }
-
+        public int? idServicioRequiere { get; set; }
+        public string servicioRequiere { get; set; }
         public int? idConcecionario { get; set; }
         public string propietarioGrua { get; set; }
 

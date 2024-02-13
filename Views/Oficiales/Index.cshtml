@@ -71,7 +71,7 @@
             </div>
         <div class="row">
             <div id="tablaOficiales">
-                <partial name="_ListaOficiales" model="Model" />
+                <partial name="_ListaOficiales" model="@ViewBag.ListadoOficiales" />
 <!--/////////////////////////////////////////////////////////////////////********AGREGAR*********////////////////////////////////////////////////////////////////////-->
 
       <div class="modal fade modalCustom" id="agregarOficial"  aria-labelledby="agregarOficialLabel" aria-hidden="true">
@@ -143,8 +143,8 @@
     for (var i = 0; i < data.length; i++) {
         grid.dataSource.add(data[i]);
     }
+                grid.dataSource.page(1);
 
-    grid.refresh();
 
     hideLoading();
             },

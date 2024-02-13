@@ -198,21 +198,19 @@ namespace GuanajuatoAdminUsuarios.Services
                     string condiciones = "";
 
                     condiciones += model.Placas.IsNullOrEmpty() ? "" : " AND d.placa LIKE '%' + @Placa + '%' ";
-                    condiciones += model.FolioSolicitud.IsNullOrEmpty() ? "" : " AND d.folio LIKE '%' + @FolioSolicitud + '%' ";
+                    condiciones += model.FolioSolicitud.IsNullOrEmpty() ? "" : " AND sol.folio LIKE '%' + @FolioSolicitud + '%' ";
                     condiciones += model.FolioInfraccion.IsNullOrEmpty() ? "" : " AND inf.folioInfraccion LIKE '%' + @FolioInfraccion + '%' ";
-                    condiciones += model.Propietario.IsNullOrEmpty() ? "" : " AND veh.propietario LIKE '%' + @Propietario + '%' ";
+                    condiciones += model.Propietario.IsNullOrEmpty() ? "" : " AND Propietario  LIKE '%' + @Propietario + '%' ";
                     condiciones += model.NumeroEconomico.IsNullOrEmpty() ? "" : " AND veh.numeroEconomico LIKE '%' + @numeroEconomico + '%' ";
-                    condiciones += model.IdDelegacion.Equals(null) || model.IdDelegacion == 0 ? "" : " AND del.idDelegacion = @IdDelegacion ";
-                    condiciones += model.IdPension.Equals(null) || model.IdPension == 0 ? "" : " AND pen.idpension = @IdPension ";
+                    condiciones += model.IdDelegacion.Equals(null) || model.IdDelegacion == 0 ? "" : " AND d.idDelegacion = @IdDelegacion ";
+                    condiciones += model.IdPension.Equals(null) || model.IdPension == 0 ? "" : " AND d.idpension = @IdPension ";
                     condiciones += model.IdEstatus.Equals(null) || model.IdEstatus == 0 ? "" : " AND d.estatusSolicitud = @idEstatus ";
                     condiciones += model.IdDependenciaGenera.Equals(null) || model.IdDependenciaGenera == 0 ? "" : " AND d.IdDependenciaGenera = @IdDependenciaGenera ";
                     condiciones += model.IdDependenciaTransito.Equals(null) || model.IdDependenciaTransito == 0 ? "" : " AND d.IdDependenciaTransito = @IdDependenciaTransito ";
                     condiciones += model.IdDependenciaNoTransito.Equals(null) || model.IdDependenciaNoTransito == 0 ? "" : " AND d.IdDependenciaNoTransito = @IdDependenciaNoTransito ";
                     if (model.FechaIngreso != null || model.FechaIngresoFin != null)
                     {
-                        condiciones += @" AND (CONVERT(VARCHAR,d.fechaIngreso,112)
-                                           BETWEEN CONVERT(VARCHAR,ISNULL(@FechaInicio,d.fechaIngreso),112)
-                                            AND CONVERT(VARCHAR,ISNULL(@FechaFin,d.fechaIngreso),112)) ";
+                        condiciones += "and (";
 
                         if (model.FechaIngreso != null && model.FechaIngresoFin != null)
                             condiciones += " fechaingreso between @FechaInicio and @FechaFin";
@@ -236,15 +234,16 @@ namespace GuanajuatoAdminUsuarios.Services
                                 @"SELECT 
                                          ROW_NUMBER() over (order by d.fechaIngreso desc ) cons ,
                                          d.iddeposito, d.idsolicitud, d.idDelegacion, d.idmarca, d.idsubmarca, d.idpension, d.idtramo,
-                                         d.idcolor, d.serie, d.placa, d.fechaingreso, d.folio, d.km, d.liberado, d.autoriza, d.fechaactualizacion,
+                                         d.idcolor,d.estatusSolicitud, d.serie, d.placa, d.fechaingreso, d.folio, d.km, d.liberado, d.autoriza, d.fechaactualizacion,
                                          del.delegacion, d.actualizadopor, d.estatus, m.marcavehiculo, subm.nombresubmarca, sol.solicitantenombre,
                                          sol.solicitanteap, sol.solicitanteam, col.color, pen.pension, ctra.tramo,                       
                                          sol.fechasolicitud, sol.folio AS FolioSolicitud, inf.idinfraccion, inf.folioinfraccion,
-                                         veh.idvehiculo, veh.numeroeconomico, veh.modelo,
+                                         veh.idvehiculo, veh.numeroeconomico, veh.modelo,cett.nombreEstatus,
                                          con.IdConcesionario, con.concesionario, d.FechaLiberacion,
                                          d.IdDependenciaGenera, d.IdDependenciaTransito, d.IdDependenciaNoTransito,
                                          dep.idDependencia, dep.nombreDependencia,
-                                         CONCAT(ISNULL(per.nombre,''), ' ', ISNULL(per.apellidoMaterno,''),  ' ', ISNULL(per.apellidoMaterno,'')) Propietario 
+                                         CONCAT(ISNULL(per.nombre,''), ' ', ISNULL(per.apellidoMaterno,''),  ' ', ISNULL(per.apellidoMaterno,'')) Propietario,
+                                         ISNULL(evt.DescripcionEvento,'') Evento
                                 FROM depositos d
                                 LEFT JOIN catDelegaciones del ON d.idDelegacion = del.idDelegacion
                                 LEFT JOIN catMarcasVehiculos m ON d.idMarca = m.idMarcaVehiculo
@@ -257,6 +256,8 @@ namespace GuanajuatoAdminUsuarios.Services
                                 LEFT JOIN vehiculos veh ON sol.idvehiculo = veh.idvehiculo 
                                 LEFT JOIN concesionarios con ON con.IdConcesionario = d.IdConcesionario
                                 LEFT JOIN personas per ON per.idPersona = d.idPropietario
+                                LEFT JOIN catDescripcionesEvento evt ON sol.evento = evt.idDescripcion
+                                LEFT JOIN catEstatusTransitoTransporte cett ON cett.idEstatusTransitoTransporte = d.estatusSolicitud
                                 LEFT JOIN catDependencias dep ON (dep.idDependencia = d.IdDependenciaTransito OR dep.idDependencia = d.IdDependenciaNoTransito)
                                 WHERE d.estatus != 0 and d.idDelegacion = @idOficina " + condiciones;
 
@@ -349,11 +350,12 @@ namespace GuanajuatoAdminUsuarios.Services
                             transito.numeroEconomico = reader["numeroEconomico"].ToString();
                             transito.FolioSolicitud = reader["FolioSolicitud"].ToString();
                             transito.IdConcesionario = Convert.ToInt32(reader["IdConcesionario"] is DBNull ? 0 : reader["IdConcesionario"]);
+                            transito.estatusSolicitud = reader["nombreEstatus"].ToString();
                             transito.Concesionario = reader["concesionario"].ToString();
                             transito.IdDependenciaGenera = reader["IdDependenciaGenera"] is DBNull ? 0 : (int)reader["IdDependenciaGenera"];
                             transito.IdDependenciaTransito = reader["IdDependenciaTransito"] is DBNull ? 0 : (int)reader["IdDependenciaTransito"];
                             transito.IdDependenciaNoTransito = reader["IdDependenciaNoTransito"] is DBNull ? 0 : (int)reader["IdDependenciaNoTransito"];
-                            //transito.propietario  = reader["modelo"].ToString();
+                            transito.evento  = reader["Evento"].ToString();
                             transitoList.Add(transito);
 
                         }

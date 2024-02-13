@@ -613,7 +613,7 @@
                                     {
                                         source.Read(read =>
                                         {
-                                            read.Action("Oficiales_Drop", "CapturaAccidentes");
+                                    read.Action("Oficiales_Drop", "CapturaAccidentes");
                                         });
                                     })
                                     .HtmlAttributes(new { style = "width:100%;" })
@@ -849,6 +849,8 @@
                 $("#IdElabora").data("kendoDropDownList").dataSource.data(data);
                 $("#IdSupervisa").data("kendoDropDownList").dataSource.data(data);
                 $("#IdAutoriza").data("kendoDropDownList").dataSource.data(data);
+                $("#IdElaboraConsignacion").data("kendoDropDownList").dataSource.data(data);
+
                 hideLoading();
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");

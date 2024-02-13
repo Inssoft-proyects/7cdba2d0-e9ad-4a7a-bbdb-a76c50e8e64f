@@ -135,8 +135,8 @@ namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
                 nested.DefaultCell.Border = Rectangle.NO_BORDER;                
                 nested.AddCell(FieldCellEmptyBox());
                 nested.AddCell(FieldCellBox("Estatus: ", ModelDataInfracciones.estatusInfraccion));             
-                nested.AddCell(FieldCellBox("Oficial: ", ModelDataInfracciones.nombreOficial.ToString()));
-                nested.AddCell(FieldCellBox("Municipio: ", ModelDataInfracciones.municipio));
+                nested.AddCell(FieldCellBox("Oficial: ", (ModelDataInfracciones.nombreOficial == null) ? "" : ModelDataInfracciones.nombreOficial.ToString()));
+                nested.AddCell(FieldCellBox("Municipio: ", (ModelDataInfracciones.municipio == null) ? "" : ModelDataInfracciones.municipio));
                 nested.AddCell(FieldCellBox("",""));
                 PdfPCell nesthousing = new PdfPCell(nested);
                 nesthousing.Border = Rectangle.NO_BORDER;
@@ -169,8 +169,8 @@ namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
                 PdfPTable nested = new PdfPTable(1);
                 nested.DefaultCell.Border = Rectangle.NO_BORDER;
                 nested.AddCell(FieldCellTitleBox("Lugar"));
-                nested.AddCell(FieldCellBox("Carretera: ", ModelDataInfracciones.carretera.ToString()));                
-                nested.AddCell(FieldCellBox("Tramo: ", ModelDataInfracciones.tramo.ToString()));
+                nested.AddCell(FieldCellBox("Carretera: ", (ModelDataInfracciones.carretera==null) ? "" : ModelDataInfracciones.carretera.ToString()));                
+                nested.AddCell(FieldCellBox("Tramo: ", (ModelDataInfracciones.tramo == null) ? "" : ModelDataInfracciones.tramo.ToString()));
                 nested.AddCell("");
                 PdfPCell nesthousing = new PdfPCell(nested);
                 nesthousing.Border = Rectangle.NO_BORDER;
@@ -183,7 +183,7 @@ namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
                 nested.DefaultCell.Border = Rectangle.NO_BORDER;
                 nested.AddCell(FieldCellEmptyBox());
                 nested.AddCell(FieldCellEmptyBox());
-                nested.AddCell(FieldCellBox("Kilómetro: ", ModelDataInfracciones.kmCarretera));
+                nested.AddCell(FieldCellBox("Kilómetro: ", (ModelDataInfracciones.kmCarretera == null) ? "" : ModelDataInfracciones.kmCarretera));
                 nested.AddCell("");
                 PdfPCell nesthousing = new PdfPCell(nested);
                 nesthousing.Border = Rectangle.NO_BORDER;
@@ -224,14 +224,14 @@ namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
                 PdfPTable nested = new PdfPTable(1);
                 nested.DefaultCell.Border = Rectangle.NO_BORDER;
                 nested.AddCell(FieldCellTitleBox("Conductor"));
-                nested.AddCell(FieldCellBox("Nombre: ", ModelDataInfracciones.nombreConductor));
+                nested.AddCell(FieldCellBox("Nombre: ", (ModelDataInfracciones.nombreConductor == null) ? "" : ModelDataInfracciones.nombreConductor));
                 if (ModelDataInfracciones.fechaNacimientoConductor == null || ModelDataInfracciones.fechaNacimientoConductor.Value == DateTime.MinValue)                
                     nested.AddCell(FieldCellBox("Fecha de nacimiento: ", ""));
                 else
                     nested.AddCell(FieldCellBox("Fecha de nacimiento: ", ModelDataInfracciones.fechaNacimientoConductor?.ToString("dd-MM-yyyy")));
 
-                nested.AddCell(FieldCellBox("Edad: ", ModelDataInfracciones.edadConductor.ToString()));
-                nested.AddCell(FieldCellBox("Sexo: ", ModelDataInfracciones.generoConductor.ToString()));
+                nested.AddCell(FieldCellBox("Edad: ", (ModelDataInfracciones.edadConductor == null) ? "" : ModelDataInfracciones.edadConductor.ToString()));
+                nested.AddCell(FieldCellBox("Sexo: ", (ModelDataInfracciones.generoConductor == null) ? "" : ModelDataInfracciones.generoConductor.ToString()));
 
                 PdfPCell nesthousing = new PdfPCell(nested);
                 nesthousing.Border = Rectangle.NO_BORDER;
@@ -243,9 +243,9 @@ namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
                 PdfPTable nested = new PdfPTable(1);
                 nested.DefaultCell.Border = Rectangle.NO_BORDER;
                 nested.AddCell(FieldCellEmptyBox());
-                nested.AddCell(FieldCellBox("Télefono: ", ModelDataInfracciones.telefonoConductor));
-                nested.AddCell(FieldCellBox("No. Licencia: ", ModelDataInfracciones.numLicenciaConductor));
-                nested.AddCell(FieldCellBox("Tipo de licencia: ", ModelDataInfracciones.tipoLicenciaConductor));
+                nested.AddCell(FieldCellBox("Télefono: ", (ModelDataInfracciones.telefonoConductor == null) ? "" : ModelDataInfracciones.telefonoConductor));
+                nested.AddCell(FieldCellBox("No. Licencia: ", (ModelDataInfracciones.numLicenciaConductor == null) ? "" : ModelDataInfracciones.numLicenciaConductor));
+                nested.AddCell(FieldCellBox("Tipo de licencia: ", (ModelDataInfracciones.tipoLicenciaConductor == null) ? "" : ModelDataInfracciones.tipoLicenciaConductor));
                 if (ModelDataInfracciones.vencimientoLicConductor == null || ModelDataInfracciones.vencimientoLicConductor.Value == DateTime.MinValue  || ModelDataInfracciones.vencimientoLicConductor.Value.Year == 1900)
                     nested.AddCell(FieldCellBox("Vencimiento: ", ""));
                 else 
@@ -258,7 +258,7 @@ namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
                 Invoicetable.AddCell(nesthousing);
             }
 
-			PdfPCell domicilio = new PdfPCell(FieldCellBox("Domicilio: ", ModelDataInfracciones.domicilioConductor.ToString()));
+			PdfPCell domicilio = new PdfPCell(FieldCellBox("Domicilio: ", (ModelDataInfracciones.domicilioConductor == null) ? "" : ModelDataInfracciones.domicilioConductor.ToString()));
 			domicilio.Colspan = 2;
 			Invoicetable.AddCell(domicilio);
 
@@ -395,30 +395,33 @@ namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
         }
         public Document BodyMotivosInfraccion(Document doc, InfraccionesReportModel ModelDataInfracciones)
         {
-            if (ModelDataInfracciones.MotivosInfraccion.Any())
+            if (ModelDataInfracciones.MotivosInfraccion != null)
             {
-                Paragraph tituloMotivoInfParagraph = new Paragraph("MOTIVOS DE INFRACCIÓN", _titleFont);
-                tituloMotivoInfParagraph.Alignment = Element.ALIGN_CENTER;
-                doc.Add(tituloMotivoInfParagraph);
-                var uma = ModelDataInfracciones.Uma;
-                int i = 1;
-                foreach (var item in ModelDataInfracciones.MotivosInfraccion)
+                if (ModelDataInfracciones.MotivosInfraccion.Any())
                 {
-                    item.prioridad = i;
-                    i++;
-                }                
+                    Paragraph tituloMotivoInfParagraph = new Paragraph("MOTIVOS DE INFRACCIÓN", _titleFont);
+                    tituloMotivoInfParagraph.Alignment = Element.ALIGN_CENTER;
+                    doc.Add(tituloMotivoInfParagraph);
+                    var uma = ModelDataInfracciones.Uma;
+                    int i = 1;
+                    foreach (var item in ModelDataInfracciones.MotivosInfraccion)
+                    {
+                        item.prioridad = i;
+                        i++;
+                    }
 
-                Dictionary<string, string> ColumnsNames = new Dictionary<string, string>()
+                    Dictionary<string, string> ColumnsNames = new Dictionary<string, string>()
                 {
                     {"prioridad","PRIORIDAD"},
                     {"Motivo","MOTIVO"},
                     {"Fundamento","FUNDAMENTO LEGAL"},
                     {"calificacion","CALIFICACIÓN"},
                 };
-                PdfPTable tableLayout = new PdfPTable(ColumnsNames.Count);
+                    PdfPTable tableLayout = new PdfPTable(ColumnsNames.Count);
 
-                doc.Add(GenericTable(tableLayout, ModelDataInfracciones.MotivosInfraccion, ColumnsNames, ColumnsNames.Count));
-                doc = WritteTotalesMotivosInfraccion(doc, ModelDataInfracciones,uma);
+                    doc.Add(GenericTable(tableLayout, ModelDataInfracciones.MotivosInfraccion, ColumnsNames, ColumnsNames.Count));
+                    doc = WritteTotalesMotivosInfraccion(doc, ModelDataInfracciones, uma);
+                }
             }
             
             return doc;

@@ -1,6 +1,7 @@
 ﻿﻿@using static GuanajuatoAdminUsuarios.Utils.CatalogosEnums;
 @model VehiculoModel
 
+
 @{
 
 
@@ -726,8 +727,12 @@
             @*PERSONA FISICA*@
             <div class="tab-pane tabCustomConteiner fade" id="person-fisica" role="tabpanel" aria-labelledby="person-fisica-tab">
                 <div class="row px-4 mt-4 pb-4 align-items-end">
-
+@*
                     <div id="personasFisicasAcc">
+                    </div>*@
+
+                    <div id="ListPersonasFisicas">
+                        <partial name="_PersonasFisicas" model="Model.PersonasFisicas" />
                     </div>
 
                 </div>
@@ -1345,12 +1350,11 @@
     }
 
     function buscarPersonasFisicas() {
-
         $.ajax({
-            url: '@Url.Action("ajax_BuscarPersonasFiscas")',
+            url: '@Url.Action("ajax_BuscarPersonasFiscasPagination")',
             type: 'POST',
             success: function (result) {
-                $("#personasFisicasAcc").html(result);
+                $("#ListPersonasFisicas").html(result);
             }
         });
     }
@@ -1562,6 +1566,7 @@ function asignarMensajeError(contenedorErrorId, mensaje) {
 }
 
     function submitCreateVehiculo() {
+
         var carga = $("#cargaSwitch").prop("checked");
         $("#idCarga").val(carga ? 1 : 0);
 
@@ -1602,19 +1607,16 @@ function asignarMensajeError(contenedorErrorId, mensaje) {
                     hideLoading();
                 }
             });
-        }
-        else {
-            sitteg_info('Debe llenar los campos requeridos');
-            return;
-        }
-
-    }
+        }      
+    } 
+    
     $("#ddlCatTipoServicio").on("change", function () {
         var value = $(this).val();
         console.log(value);
         $('#hdnIdCatTipoServicio').val(value);
 
     });
+    
     function cerrarModalV() {
         $('#confirmacionModal').modal('show');
 

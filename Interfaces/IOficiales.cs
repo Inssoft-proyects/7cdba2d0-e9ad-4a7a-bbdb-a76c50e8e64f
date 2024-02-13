@@ -10,8 +10,8 @@ namespace GuanajuatoAdminUsuarios.Interfaces
 
     {
         List<CatOficialesModel> GetOficiales();
-        List<CatOficialesModel> GetOficialesActivos();
-
+        List<CatOficialesModel> GetOficialesActivos(); 
+        List<CatOficialesModel> GetOficialesFiltrados(int idOficina, int idDependencia);
         CatOficialesModel GetOficialById(int IdOficial);
 
         int SaveOficial(CatOficialesModel oficial);

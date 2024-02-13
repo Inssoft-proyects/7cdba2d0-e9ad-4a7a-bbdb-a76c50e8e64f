@@ -1,4 +1,4 @@
-﻿@model GuanajuatoAdminUsuarios.Models.PersonaModel
+@model PersonasModel
 
 
 @{
@@ -63,11 +63,13 @@
                 </div>
             </div>
         </div>
+
+
         <form id="buscarConductorForm">
             <div class="row px-4 mt-4 align-items-end">
                 <div class="col-12 col-md-6 col-lg-3">
                     <div class="controlForm my-3">
-                        @(Html.Kendo().TextBoxFor(t => t.numeroLicenciaBusqueda)
+                        @(Html.Kendo().TextBoxFor(t => t.PersonaModel.numeroLicenciaBusqueda)
                             .Label(l => l.Content("No. de licencia:"))
                             .Placeholder("Ingresa el número de licencia válido")
                             .HtmlAttributes(new {@class = "trimmable", style = "width: 100%" })
@@ -76,7 +78,7 @@
                 </div>
                 <div class="col-12 col-md-6 col-lg-3">
                     <div class="controlForm my-3">
-                        @(Html.Kendo().TextBoxFor(t => t.CURPBusqueda)
+                        @(Html.Kendo().TextBoxFor(t => t.PersonaModel.CURPBusqueda)
                             .Label(l => l.Content("CURP:"))
                             .Placeholder("Ingresa el CURP del propietario")
                             .HtmlAttributes(new {@class = "trimmable", style = "width: 100%" })
@@ -85,7 +87,7 @@
                 </div>
                 <div class="col-12 col-md-6 col-lg-3">
                     <div class="controlForm my-3">
-                        @(Html.Kendo().TextBoxFor(t => t.RFCBusqueda)
+                        @(Html.Kendo().TextBoxFor(t => t.PersonaModel.RFCBusqueda)
                             .Label(l => l.Content("RFC:"))
                             .Placeholder("Ingresa el RFC del propietario")
                             .HtmlAttributes(new {@class = "trimmable", style = "width: 100%" })
@@ -96,7 +98,7 @@
 
                 <div class="col-12 col-md-6 col-lg-3">
                     <div class="controlForm my-3">
-                        @(Html.Kendo().TextBoxFor(t => t.nombreBusqueda)
+                        @(Html.Kendo().TextBoxFor(t => t.PersonaModel.nombreBusqueda)
                             .Label(l => l.Content("Nombre(s):"))
                             .Placeholder("Ingresa el nombre(s) del propietario")
                             .HtmlAttributes(new {@class = "trimmable", style = "width: 100%" })
@@ -106,7 +108,7 @@
                 </div>
                 <div class="col-12 col-md-6 col-lg-3">
                     <div class="controlForm my-3">
-                        @(Html.Kendo().TextBoxFor(t => t.apellidoPaternoBusqueda)
+                        @(Html.Kendo().TextBoxFor(t => t.PersonaModel.apellidoPaternoBusqueda)
                             .Label(l => l.Content("Apellido paterno:"))
                             .Placeholder("Ingresa el apellido paterno")
                             .HtmlAttributes(new {@class = "trimmable", style = "width: 100%" })
@@ -116,7 +118,7 @@
                 </div>
                 <div class="col-12 col-md-6 col-lg-3">
                     <div class="controlForm my-3">
-                        @(Html.Kendo().TextBoxFor(t => t.apellidoMaternoBusqueda)
+                        @(Html.Kendo().TextBoxFor(t => t.PersonaModel.apellidoMaternoBusqueda)
                             .Label(l => l.Content("Apellido materno:"))
                             .Placeholder("Ingresa el apellido materno")
                             .HtmlAttributes(new {@class = "trimmable", style = "width: 100%" })
@@ -163,17 +165,33 @@
                 </div>
             </div>
         </div>
-        
 
         @*Table*@
         <div id="listadoPersonas">
-            <partial name="_ListadoPersonas" model="Model" />
+            <partial name="_ListadoPersonas" model="Model.ListadoPersonas" />
         </div>
 
+        @if (Model.ListadoPersonas.Count() > 0)
+        {
+            <div>
+                SE ENCONTRARON PERSONAS
+            </div>
+           
+        }
+        @*<script>
+            $(document).ready(function () {
 
+                $("#gridPersonas").on("change", function () {
+                    alert("Handler for `change` called.");
+                });
+            });
+
+            $("#gridPersonas").on("change", function () {
+                alert("Handler for `change` called.");
+            });
+        </script>*@
     </section>
 </div>
-
 
 <div class="modal fade modalCustom" id="modalCrearPersona" aria-labelledby="modalCrearPersona" aria-hidden="true">
     <div class="modal-dialog modal-xl boxShadow modal-dialog-centered ">
@@ -203,7 +221,6 @@
 <div class="modal fade modalCustom" id="modalEditarPersona" aria-labelledby="modalEditarPersona" aria-hidden="true">
     <div class="modal-dialog modal-xl boxShadow modal-dialog-centered">
         <div class="modal-content">
-
             <div class="modal-body" id="modalBodyEditarPersona">
             </div>
         </div>
@@ -238,6 +255,10 @@
         });
         $("#modalEditarPersona").on('hide.bs.modal', function () {
             $('#modalBodyEditarPersona').html('');
+        });
+
+        $("gridPersonas").on("change", function () {
+            alert("Handler for `change` called.");
         });
     });
 
@@ -283,6 +304,8 @@
 
            
     function buscarConductor() {
+        // HMG: Se cambian funcionalidades por lentitud en la carga y se hace el paginado.
+
         // Obtén los datos del formulario
         var formData = $("#buscarConductorForm").serializeArray();
 
@@ -293,35 +316,46 @@
 
         // Convierte de nuevo a objeto
         var trimmedData = {};
+        var findData = false;
         $.each(formData, function (index, field) {
             trimmedData[field.name] = field.value;
+            if (!findData) {
+                if (field.value != '' && field.value != undefined) {
+                   findData = true;
+               }
+            }
         });
 
+        // Refrescar en caso de no existir busqueda.
         var grid = $("#gridPersonas").data("kendoGrid");
-        grid.dataSource.data([]);
+        if (!findData) {
+            grid.dataSource.read();
+            grid.dataSource.refresh();
+            return;
+        } 
 
         showLoading();
-
+        console.log(trimmedData);
         $.ajax({
-            url: '/Personas/BuscarPorParametroPaginado',
+            url: '@Url.Action("BuscarPorParametroPaginado")',
             type: 'POST',
-            data: Mydata,
+            data: trimmedData,
             success: function (response) {
-
-                if (response.tipo === "success") {
-                    mostrarModal(response.datos);
-                    hideLoading();
-                }
-                console.log(response.data);
-                var personasList = response.data;
-                var grid = $("#gridPersonas").data("kendoGrid");
-                grid.dataSource.data(response.data);
                 
+                if (response.tipo === "success") {
+                    mostrarModal(response.Data);
+                    hideLoading();
+                    return;
+                }
+                var personasList = response.Data;
+                var grid = $("#gridPersonas").data("kendoGrid");
+                grid.dataSource.data(response.Data);
+                grid.dataSource._total = response.Total;
 
-                //$("#listadoPersonas").html(response.data);
-
-                if (personasList.count === 0 && response.tipo !== "success") {
+                console.log(personasList.length)
+                if (personasList.length == 0) {
                     sitteg_warning("La búsqueda no arrojó resultados.");
+                    var grid = $("#gridPersonas").data("kendoGrid");
                     grid.dataSource.data([]);
                 }
 

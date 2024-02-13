@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+//using Telerik.SvgIcons;
 
 namespace GuanajuatoAdminUsuarios.Services
 {
@@ -613,11 +614,11 @@ namespace GuanajuatoAdminUsuarios.Services
                 return result;
             }
         }
-        public int InsertarInventario(byte[] imageData, int iDep, string numeroInventario)
+        public int InsertarInventario(string archivoInventario, int iDep, string numeroInventario)
         {
             int result = 0;
             string strQuery = @"UPDATE depositos
-                   SET inventario = @inventario,
+                   SET archivoInventario = @inventario,
                        numeroInventario = @numeroInventario
                    WHERE idDeposito = @idDeposito";
 
@@ -628,14 +629,15 @@ namespace GuanajuatoAdminUsuarios.Services
                     connection.Open();
                     SqlCommand command = new SqlCommand(strQuery, connection);
                     command.CommandType = CommandType.Text;
-                    command.Parameters.Add(new SqlParameter("@idSolicitud", SqlDbType.Int)).Value = iDep;
-                    command.Parameters.Add(new SqlParameter("@numeroInventario", SqlDbType.NVarChar)).Value = numeroInventario;
-                    command.Parameters.Add(new SqlParameter("@inventario", SqlDbType.VarBinary)).Value = imageData;
+                    command.Parameters.Add(new SqlParameter("@idDeposito", SqlDbType.Int)).Value = iDep;
+                    command.Parameters.AddWithValue("@numeroInventario",numeroInventario==null? DBNull.Value:numeroInventario);
+                    command.Parameters.Add(new SqlParameter("@inventario", SqlDbType.VarChar)).Value = archivoInventario;
 
                     result = command.ExecuteNonQuery();
                 }
                 catch (SqlException ex)
                 {
+                    Console.WriteLine(ex);
                     return result;
                 }
                 finally

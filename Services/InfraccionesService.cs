@@ -1866,7 +1866,7 @@ namespace GuanajuatoAdminUsuarios.Services
 					           LEFT JOIN catMunicipios AS mun ON inf.idMunicipio = mun.idMunicipio
 				               LEFT JOIN personasDirecciones AS pdir ON inf.idPersona = pdir.idPersona
                                WHERE inf.estatus = 1
-                               AND inf.idInfraccion = @idInfraccion and inf.transito = @idDependencia";
+                               AND inf.idInfraccion = @idInfraccion";
 
 			using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
 			{
@@ -2631,8 +2631,10 @@ namespace GuanajuatoAdminUsuarios.Services
 					command.Parameters.Add(new SqlParameter("fechaInfraccion", SqlDbType.DateTime)).Value = (object)model.fechaInfraccion;
                     DateTime fechaInfraccion = model.fechaInfraccion;
                     TimeSpan horaInfraccion = fechaInfraccion.TimeOfDay;
-                    int horaInfraccionInt = (horaInfraccion.Hours * 100) + horaInfraccion.Minutes;
-                    command.Parameters.Add(new SqlParameter("horaInfraccion", SqlDbType.Int)).Value = horaInfraccionInt;
+
+                    string horaFormateada = horaInfraccion.ToString("hhmm");
+                    string horaInfraccionString = horaFormateada;
+                    command.Parameters.Add(new SqlParameter("horaInfraccion", SqlDbType.NVarChar)).Value = horaInfraccionString;
                     command.Parameters.Add(new SqlParameter("folioInfraccion", SqlDbType.NVarChar)).Value = (object)model.folioInfraccion;
 					command.Parameters.Add(new SqlParameter("idOficial", SqlDbType.Int)).Value = (object)model.idOficial;
 					command.Parameters.Add(new SqlParameter("idDelegacion", SqlDbType.Int)).Value = (object)model.idDelegacion;
@@ -2803,11 +2805,11 @@ namespace GuanajuatoAdminUsuarios.Services
 			}
 			return result;
 		}
-		public int InsertarImagenEnInfraccion(byte[] imageData, int idInfraccion)
+		public int InsertarImagenEnInfraccion(string rutaInventario, int idInfraccion)
 		{
 			int result = 0;
 			string strQuery = @"UPDATE infracciones
-                       SET inventario = @inventario
+                       SET archivoInventario = @inventario
                        WHERE idInfraccion = @idInfraccion";
 			using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
 			{
@@ -2817,7 +2819,7 @@ namespace GuanajuatoAdminUsuarios.Services
 					SqlCommand command = new SqlCommand(strQuery, connection);
 					command.CommandType = CommandType.Text;
 					command.Parameters.Add(new SqlParameter("@idInfraccion", SqlDbType.Int)).Value = idInfraccion;
-					command.Parameters.Add(new SqlParameter("@inventario", SqlDbType.VarBinary)).Value = imageData;
+					command.Parameters.Add(new SqlParameter("@inventario", SqlDbType.VarChar)).Value = rutaInventario;
 
 					result = command.ExecuteNonQuery();
 				}
@@ -3208,7 +3210,48 @@ namespace GuanajuatoAdminUsuarios.Services
 			}
 			return InfraccionesList;
 		}
+        public int ActualizarEstatusCortesia(int idInfraccion, int cortesiaInt)
+        {
+            var result = 0;
 
-	}
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    connection.Open();
+                    string updateQuery = "UPDATE infracciones SET infraccionCortesia = @cortesiaInt WHERE idInfraccion = @idInfraccion";
+
+                    SqlCommand updateCommand = new SqlCommand(updateQuery, connection);
+
+                    updateCommand.Parameters.AddWithValue("@idInfraccion", idInfraccion);
+                    updateCommand.Parameters.AddWithValue("@cortesiaInt", cortesiaInt);
+                    updateCommand.ExecuteNonQuery();
+
+                    string selectQuery = "SELECT infraccionCortesia FROM infracciones WHERE idInfraccion = @idInfraccion";
+                    SqlCommand selectCommand = new SqlCommand(selectQuery, connection);
+                    selectCommand.Parameters.AddWithValue("@idInfraccion", idInfraccion);
+
+                    object infraccionCortesia = selectCommand.ExecuteScalar();
+                    if (infraccionCortesia != DBNull.Value)
+                    {
+                        result = (int)infraccionCortesia; // o cualquier otro tratamiento necesario
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    // Manejar la excepción
+                }
+                finally
+                {
+                    connection.Close();
+                }
+
+                return result;
+
+            }
+
+
+        }
+    }
 }
 

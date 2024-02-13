@@ -4,7 +4,7 @@ namespace GuanajuatoAdminUsuarios.RESTModels
 {
 	public class RepuveConsRoboResponseModel
 	{
-		public int? estatus { get; set; }
+		public string estatus { get; set; }
 		public DateTime? fecha { get; set; }
 		public string placa { get; set; }
 		public string niv { get; set; }

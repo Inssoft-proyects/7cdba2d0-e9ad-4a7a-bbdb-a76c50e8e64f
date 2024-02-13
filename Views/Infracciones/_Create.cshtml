@@ -745,7 +745,7 @@ $(document).ready(()=>{
                     <div class="col-auto">
                         <div class="row">
                             <div class="col-auto my-3">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button"onclick="cerrarModalMoral()" >X</button>
                             </div>
                         </div>
                     </div>
@@ -885,7 +885,7 @@ $(document).ready(()=>{
                     <div class="col-12 col-md-6 mx-md-auto">
                         <div class="row justify-content-around">
                             <div class="col-auto btnOutline my-2 mx-auto mx-xl-2 p-0">
-                                <button type="button" data-bs-dismiss="modal" aria-label="Close">
+                                <button type="button" onclick ="cerrarModalMoral()">
                                     <h6 class="m-0 px-3"><b>Cerrar</b></h6>
                                 </button>
                             </div>
@@ -1593,6 +1593,10 @@ function asignarMensajeError(contenedorErrorId, mensaje) {
 function cerrarModalFisica(){
    $('#addFisico').modal('hide');
  
+}
+function cerrarModalMoral(){
+   $('#addMoral').modal('hide');
+
 }
 
 </script>

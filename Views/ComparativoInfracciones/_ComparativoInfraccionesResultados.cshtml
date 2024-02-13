@@ -127,7 +127,7 @@
 								)
 								)
 						</div>
-						<div class="col-md-6">
+						<div id="divDinamico" class="col-md-6">
 							@(Html.Kendo().Chart(Model.detallesPorCausa)
 								.Name("chartDetallesPorCausa")
 								.Title("Detalles Por Causa")
@@ -157,6 +157,13 @@
 								)
 								)
 						</div>
+						<script>
+						$(document).ready(function () {
+						var c = $("#divDinamico");
+						c.css("height", "2200px")
+						//.data("kendoChart").resize();
+						});
+						</script>
 					</div>
 				</div>
 				<div class="tab-pane tabCustomConteiner fade " id="desgloseTotalDeInfracciones-container" role="tabpanel" aria-labelledby="desgloseTotalDeInfracciones-tab">

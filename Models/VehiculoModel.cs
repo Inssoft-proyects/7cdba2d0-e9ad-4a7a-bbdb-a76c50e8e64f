@@ -1,5 +1,6 @@
 ﻿using GuanajuatoAdminUsuarios.Entity;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 
@@ -72,5 +73,7 @@ namespace GuanajuatoAdminUsuarios.Models
         //public virtual PersonaModel PersonaUpdate { get; set; }
         public bool? showSubTipo { get; set; } = false;
         public int total { get; set; }
+        public List<PersonaModel> PersonasFisicas { get; set; }
+        
     }
 }

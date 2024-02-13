@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -22,13 +23,15 @@ namespace GuanajuatoAdminUsuarios.Controllers
         private readonly IAsignacionGruasService _asignacionGruasService;
         private readonly IGruasService _gruasService;
         private readonly IBitacoraService _bitacoraServices;
+        private readonly string _rutaArchivo;
 
-        public AsignacionGruasController(IAsignacionGruasService asignacionGruasService, IGruasService gruasService, IBitacoraService bitacoraServices)
+        public AsignacionGruasController(IAsignacionGruasService asignacionGruasService, IGruasService gruasService, IBitacoraService bitacoraServices, IConfiguration configuration)
 
         {
             _asignacionGruasService = asignacionGruasService;
             _gruasService = gruasService;
             _bitacoraServices = bitacoraServices;
+            _rutaArchivo = configuration.GetValue<string>("AppSettings:RutaArchivoInventarioDeposito");
         }
         public IActionResult Index()
         {
@@ -44,7 +47,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 return Json(resultadoSolicitudes);
             }
-            public IActionResult DatosGruas(string iSo, int iPg)
+            public IActionResult DatosGruas(string iSo, int iPg,int idDeposito)
         {
             HttpContext.Session.SetString("iSo", iSo);
             HttpContext.Session.SetInt32("iPg", iPg);
@@ -52,7 +55,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
 
             var solicitud = _asignacionGruasService.BuscarSolicitudPord(iSo, idOficina);
-            HttpContext.Session.SetInt32("idDeposito", solicitud.IdDeposito);
+            HttpContext.Session.SetInt32("idDeposito", solicitud.IdDeposito==0?idDeposito: solicitud.IdDeposito);
             int iDep = HttpContext.Session.GetInt32("idDeposito") ?? 0;
 
             var DatosTabla = _asignacionGruasService.BusquedaGruaTabla(iDep);
@@ -180,16 +183,21 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {
                 if (model.MyFile != null && model.MyFile.Length > 0)
                 {
-                    byte[] imageData;
-                    using (var memoryStream = new MemoryStream())
+                    int iDep = HttpContext.Session.GetInt32("idDeposito") ?? 0;
+
+                    //Se crea el nombre del archivo del inventario
+                    string nombreArchivo = _rutaArchivo + "/" + iDep + "_" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss").Replace("/", "").Replace(":", "").Replace(" ", "") + System.IO.Path.GetExtension(model.MyFile.FileName);
+                    //Se escribe el archivo en disco
+                    using (Stream fileStream = new FileStream(nombreArchivo, FileMode.Create))
                     {
-                        model.MyFile.CopyTo(memoryStream);
-                        imageData = memoryStream.ToArray();
+                        await model.MyFile.CopyToAsync(fileStream);
                     }
 
-                    int iDep = HttpContext.Session.GetInt32("idDeposito") ?? 0;
-                    _asignacionGruasService.InsertarInventario(imageData, iDep, model.numeroInventario);
-                    
+    
+                    int resultado= _asignacionGruasService.InsertarInventario(nombreArchivo, iDep, model.numeroInventario);
+                    if (resultado == 0)
+                        return Json(new { success = false, message = "Ocurrió un error al actualizar depósito" });
+
                     //BITACORA
                     var ip = HttpContext.Connection.RemoteIpAddress.ToString();
                     var user = Convert.ToDecimal(User.FindFirst(CustomClaims.IdUsuario).Value);

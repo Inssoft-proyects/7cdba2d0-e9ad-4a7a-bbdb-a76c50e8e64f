@@ -21,24 +21,27 @@ namespace GuanajuatoAdminUsuarios.Controllers
     {
         private readonly ICatTramosService _catTramosService;
         private readonly ICatCarreterasService _catCarreterasService;
+        private readonly ICatDelegacionesOficinasTransporteService _catDelegacionesOficinasTransporteService;
 
 
-        public CatTramosController(ICatTramosService catTramosService, ICatCarreterasService catCarreterasService)
+        public CatTramosController(ICatTramosService catTramosService, ICatCarreterasService catCarreterasService, ICatDelegacionesOficinasTransporteService catDelegacionesOficinasTransporteService)
         {
             _catTramosService = catTramosService;
             _catCarreterasService = catCarreterasService;
+            _catDelegacionesOficinasTransporteService = catDelegacionesOficinasTransporteService;
         }
         public IActionResult Index()
         {
-        
-                var ListTramosModel = _catTramosService.ObtenerTramos();
-                return View(ListTramosModel);
-            }
+               var ListTramosModel = _catTramosService.ObtenerTramos();
+            ViewBag.ListadoTramos = ListTramosModel;
+
+            return View();
+        }
       
 
-        public JsonResult Carreteras_Drop()
+        public JsonResult Carreteras_Drop(int idDelegacion)
         {
-            var result = new SelectList(_catCarreterasService.ObtenerCarreteras(), "IdCarretera", "Carretera");
+            var result = new SelectList(_catCarreterasService.GetCarreterasPorDelegacion(idDelegacion), "IdCarretera", "Carretera");
             return Json(result);
         }
         [HttpPost]
@@ -94,6 +97,45 @@ namespace GuanajuatoAdminUsuarios.Controllers
             var ListtramosModel = _catTramosService.ObtenerTramos();
 
             return Json(ListtramosModel.ToDataSourceResult(request));
+        }
+
+        public JsonResult DelegacionesOficinas_Drop()
+        {
+            var result = new SelectList(_catDelegacionesOficinasTransporteService.GetDelegacionesOficinasActivos(), "IdDelegacion", "Delegacion");
+            return Json(result);
+        }
+
+        [HttpGet]
+        public ActionResult ajax_BuscarTramos(int idCarreteraFiltro)
+        {
+            List<CatTramosModel> ListTramos = new List<CatTramosModel>();
+
+
+            ListTramos = (from tramos in _catTramosService.ObtenerTramos().ToList()
+                                          // join delegacion in _catDelegacionesOficinasTransporteService.GetDelegacionesOficinasActivos().ToList()
+                                          //on oficiales.IdOficina equals delegacion.IdOficinaTransporte
+                                          // join estatus in dbContext.Estatus.ToList()
+                                          //on diasInhabiles.Estatus equals estatus.estatus
+
+                                      select new CatTramosModel
+                                      {
+                                          IdTramo = tramos.IdTramo,
+                                          Tramo = tramos.Tramo,
+                                          Carretera = tramos.Carretera,
+                                          IdCarretera = tramos.IdCarretera,
+                                          estatusDesc = tramos.estatusDesc,
+                                        // = diasInhabiles.Municipio
+                                      }).ToList();
+
+
+            if (idCarreteraFiltro > 0)
+            {
+                ListTramos = (from s in ListTramos
+                              where s.IdCarretera == idCarreteraFiltro
+                              select s).ToList();
+            }
+
+            return Json(ListTramos);
         }
     }
 }

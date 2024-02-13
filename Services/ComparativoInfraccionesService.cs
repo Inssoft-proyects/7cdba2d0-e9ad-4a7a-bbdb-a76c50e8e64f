@@ -32,7 +32,7 @@ namespace GuanajuatoAdminUsuarios.Services
             condiciones += modelBusqueda.idTipoLicencia.Equals(null) || modelBusqueda.idTipoLicencia == 0 ? "" : " AND gar.idTipoLicencia = @idTipoLicencia ";
             condiciones += modelBusqueda.idMunicipio.Equals(null) || modelBusqueda.idMunicipio == 0 ? "" : " AND inf.idMunicipio =@idMunicipio ";
 
-            string query = @"SELECT YEAR(inf.fechaInfraccion) AS ANIO, COUNT(*) AS TOTAL
+           /* string query = @"SELECT YEAR(inf.fechaInfraccion) AS ANIO, COUNT(*) AS TOTAL
                 FROM infracciones inf
                 left join catDependencias dep on inf.idDependencia= dep.idDependencia
                 left join catDelegaciones	del on inf.idDelegacion = del.idDelegacion
@@ -52,7 +52,13 @@ namespace GuanajuatoAdminUsuarios.Services
                 left join catConceptoInfraccion catConInf on  catSubInf.idConcepto = catConInf.idConcepto
                 WHERE inf.estatus = 1 @WHERES
                 GROUP BY YEAR(inf.fechaInfraccion)"
-            ;
+            ;*/
+            string query = @"SELECT YEAR(inf.fechaInfraccion) AS ANIO, COUNT(*) AS TOTAL
+                FROM infracciones inf
+               
+                WHERE inf.estatus = 1 @WHERES
+                GROUP BY YEAR(inf.fechaInfraccion)"
+           ;
 
             string strQuery = query.Replace("@WHERES", condiciones);
 
@@ -131,7 +137,7 @@ namespace GuanajuatoAdminUsuarios.Services
             condiciones += modelBusqueda.idTipoLicencia.Equals(null) || modelBusqueda.idTipoLicencia == 0 ? "" : " AND gar.idTipoLicencia = @idTipoLicencia ";
             condiciones += modelBusqueda.idMunicipio.Equals(null) || modelBusqueda.idMunicipio == 0 ? "" : " AND inf.idMunicipio =@idMunicipio ";
 
-            string query = @"SELECT catac.causaAccidente AS CAUSA, COUNT(*) AS CANTIDAD, YEAR(inf.fechaInfraccion) AS ANIO 
+          /*  string query = @"SELECT catac.causaAccidente AS CAUSA, COUNT(*) AS CANTIDAD, YEAR(inf.fechaInfraccion) AS ANIO 
                 FROM infracciones inf
                 INNER JOIN infraccionesAccidente ia on ia.idInfraccion = inf.idInfraccion
                 INNER JOIN accidenteCausas ac on ac.idAccidente = ia.idAccidente
@@ -155,6 +161,16 @@ namespace GuanajuatoAdminUsuarios.Services
                 WHERE inf.estatus = 1 AND YEAR(inf.fechaInfraccion) in (2000,2023) 
                 GROUP BY catac.causaAccidente, YEAR(inf.fechaInfraccion)"
             ;
+
+            string strQuery = query.Replace("@WHERES", condiciones);*/
+
+            string query = @"SELECT catMotInf.nombre AS CAUSA, COUNT(*) AS CANTIDAD, YEAR(inf.fechaInfraccion) AS ANIO 
+                FROM infracciones inf
+                left join motivosInfraccion motInf on inf.IdInfraccion = motInf.idInfraccion
+                left join catMotivosInfraccion catMotInf on motInf.idCatMotivosInfraccion = catMotInf.idCatMotivoInfraccion 
+                WHERE inf.estatus = 1 AND YEAR(inf.fechaInfraccion) in (2000,2024) 
+                GROUP BY catMotInf.nombre, YEAR(inf.fechaInfraccion)";
+ 
 
             string strQuery = query.Replace("@WHERES", condiciones);
 

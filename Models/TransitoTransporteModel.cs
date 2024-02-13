@@ -190,6 +190,9 @@ namespace GuanajuatoAdminUsuarios.Models
         #region Concesionario
         public int IdConcesionario { get; set; }
         public string Concesionario { get; set; }
+        public string estatusSolicitud { get; set; }
+
+        
 
         #endregion
         //p.FolioSolicitud + " " + p.FechaSolicitud + " " + p.FolioInfraccion
@@ -197,14 +200,10 @@ namespace GuanajuatoAdminUsuarios.Models
         {
             get
             {
-                return @"Fecha: " + FechaSolicitud.ToString("dd/MM/yyyy") + "\r\n\n " +
+                return @"Fecha: " + ((FechaSolicitud.Year <= 1900) ? "" : FechaSolicitud.ToString("dd/MM/yyyy")) + "\r\n\n " +
                 "Solicitud: " + FolioSolicitud + "\r\n\n " +
-                "Infracción: " + FolioInfraccion + "\r\n\n " +
-                "Descripción del evento: " + evento + "\r\n\n " +
-                "Tipo usuario: " + tipoUsuario + "\r\n\n " +
-                "Propietario de la grua: " + propietario + "\r\n\n " +
-                "Oficial: " + fullOficial + "\r\n\n " +
-                "Motivo Asignación: " + motivoAsignacion;
+                "Infracción: " + FolioInfraccion + "\r\n\n ";
+               
             }
          }
         //p => p.Placa + " " + p.submarca + " " + p.modelo
@@ -213,8 +212,7 @@ namespace GuanajuatoAdminUsuarios.Models
             get
             {
                 return @"Placas: " + Placa + "\r\n\n " +
-                    "Serie: " + serie + "\r\n\n " +
-                "Prop: " + fullPropietario + "\r\n\n " +
+                "Prop: " + propietario + "\r\n\n " +
                 "Descr: " + marcaVehiculo + " " + nombreSubmarca + " " + modelo + "\r\n\n " +
                 tipoVehiculo;
             }
@@ -284,7 +282,8 @@ namespace GuanajuatoAdminUsuarios.Models
         {
             get
             {
-                return @"Envia: " + NombreDependencia;
+                return @"Envia: " + NombreDependencia + "\r\n\n " +
+                     "Estatus: " + estatusSolicitud;
             }
         }
         public string propietarioNombre { get; set; }
