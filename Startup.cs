@@ -45,9 +45,7 @@ namespace GuanajuatoAdminUsuarios
 
             var mvcBuilder = services.AddControllersWithViews();
 
-            services.AddSingleton<ILoggerManager, LoggerManager>();
-
-#if DEBUG
+            #if DEBUG
             mvcBuilder.AddRazorRuntimeCompilation();
 #endif
             //Connection Strings
