@@ -418,8 +418,8 @@ namespace GuanajuatoAdminUsuarios.Framework
 					break;
 				case "CatDelegaciones":
 					catalogModel.CatalogName = catalog;
-					campos = new string[] { "idDelegacion", "delegacion" };
-					catalogModel.CatalogList = _catalogosService.GetGenericCatalogos("catDelegaciones", campos)
+					campos = new string[] { "idOficinaTransporte", "nommbreOficina" };
+					catalogModel.CatalogList = _catalogosService.GetGenericCatalogos("catDelegacionesOficinasTransporte", campos)
 							.Select(s =>
 							new SystemCatalogListModel()
 							{

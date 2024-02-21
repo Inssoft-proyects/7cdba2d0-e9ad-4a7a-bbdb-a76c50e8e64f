@@ -2186,7 +2186,89 @@ namespace GuanajuatoAdminUsuarios.Services
 			}
 			return modelList;
 		}
-		public List<EstadisticaInfraccionMotivosModel> GetAllMotivosPorInfraccion(int idOficina,int idDependencia)
+
+        public List<EstadisticaInfraccionMotivosModel> GetBusquedaEstadisticasInfracciones(IncidenciasBusquedaModel modelBusqueda, int idDependencia)
+        {
+            string condiciones = "";
+
+            condiciones += modelBusqueda.idDelegacion.Equals(null) || modelBusqueda.idDelegacion == 0 ? "" : " AND inf.idDelegacion = @idDelegacion ";
+            condiciones += modelBusqueda.idOficial.Equals(null) || modelBusqueda.idOficial == 0 ? "" : " AND inf.idOficial =@idOficial ";
+            condiciones += modelBusqueda.idCarretera.Equals(null) || modelBusqueda.idCarretera == 0 ? "" : " AND inf.idCarretera = @idCarretera ";
+            condiciones += modelBusqueda.idTramo.Equals(null) || modelBusqueda.idTramo == 0 ? "" : " AND inf.idTramo = @idTramo ";
+            condiciones += modelBusqueda.idTipoVehiculo.Equals(null) || modelBusqueda.idTipoVehiculo == 0 ? "" : " AND veh.idTipoVehiculo = @idTipoVehiculo ";
+            condiciones += modelBusqueda.idTipoServicio.Equals(null) || modelBusqueda.idTipoServicio == 0 ? "" : " AND veh.idCatTipoServicio  = @idCatTipoServicio ";
+            condiciones += modelBusqueda.idSubTipoServicio.Equals(null) || modelBusqueda.idSubTipoServicio == 0 ? "" : " AND veh.idSubtipoServicio  = @idSubTipoServicio ";
+            condiciones += modelBusqueda.idTipoLicencia.Equals(null) || modelBusqueda.idTipoLicencia == 0 ? "" : " AND gar.idTipoLicencia = @idTipoLicencia ";
+            condiciones += modelBusqueda.idMunicipio.Equals(null) || modelBusqueda.idMunicipio == 0 ? "" : " AND inf.idMunicipio =@idMunicipio ";
+            condiciones += modelBusqueda.IdTipoCortesia.Equals(null) || modelBusqueda.IdTipoCortesia == 0 ? "" : " AND inf.infraccionCortesia=@IdTipoCortesia ";
+
+            string condicionFecha = "";
+
+            if (modelBusqueda.fechaInicio != DateTime.MinValue && modelBusqueda.fechaFin != DateTime.MinValue)
+                condiciones += " AND inf.fechaInfraccion >= @fechaInicio AND inf.fechaInfraccion  <= @fechaFin ";
+            else if (modelBusqueda.fechaInicio != DateTime.MinValue && modelBusqueda.fechaFin == DateTime.MinValue)
+                condiciones += " AND inf.fechaInfraccion >= @fechaInicio ";
+            else if (modelBusqueda.fechaInicio == DateTime.MinValue && modelBusqueda.fechaFin != DateTime.MinValue)
+                condiciones += " AND inf.fechaInfraccion <= @fechaFin ";
+            else
+                condiciones += "";
+
+            List<EstadisticaInfraccionMotivosModel> modelList = new List<EstadisticaInfraccionMotivosModel>();
+            string strQuery = @"SELECT ci.nombre Motivo, COUNT(m.idMotivoInfraccion) Contador
+                               FROM infracciones inf
+                                INNER JOIN motivosInfraccion m
+                                ON m.idInfraccion = inf.idInfraccion
+                                INNER JOIN catMotivosInfraccion ci
+                                on m.idCatMotivosInfraccion = ci.idCatMotivoInfraccion 
+                                AND ci.estatus = 1
+                                LEFT JOIN catSubConceptoInfraccion csi
+                                on ci.IdSubConcepto = csi.idSubConcepto
+                                AND csi.estatus = 1
+                                LEFT JOIN catConceptoInfraccion cci
+                                on csi.idConcepto = cci.idConcepto
+                                AND cci.estatus = 1
+                               LEFT JOIN catMunicipios mun
+                               ON inf.idMunicipio = mun.idMunicipio
+                                WHERE m.estatus = 1
+                               AND inf.estatus = 1 AND inf.transito = @idDependencia " + condiciones + condicionFecha + @"
+                               group by ci.nombre"
+           ;
+
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(strQuery, connection);
+                    command.CommandType = CommandType.Text;
+                   // command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = (object)idOficina ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@idDependencia", SqlDbType.Int)).Value = (object)idDependencia ?? DBNull.Value;
+
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            EstadisticaInfraccionMotivosModel model = new EstadisticaInfraccionMotivosModel();
+                            model.Contador = reader["Contador"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["Contador"].ToString());
+                            model.Motivo = reader["Motivo"].ToString();
+
+                            modelList.Add(model);
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    //Guardar la excepcion en algun log de errores
+                    //ex
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return modelList;
+        }
+        public List<EstadisticaInfraccionMotivosModel> GetAllMotivosPorInfraccion(int idOficina,int idDependencia)
 		{
 			List<EstadisticaInfraccionMotivosModel> modelList = new List<EstadisticaInfraccionMotivosModel>();
 			string strQuery = @"SELECT numeroMotivos, COUNT(idInfraccion) AS CantidadInfracciones
@@ -2214,7 +2296,7 @@ namespace GuanajuatoAdminUsuarios.Services
 					{
 						while (reader.Read())
 						{
-							EstadisticaInfraccionMotivosModel model = new EstadisticaInfraccionMotivosModel();
+                            EstadisticaInfraccionMotivosModel model = new EstadisticaInfraccionMotivosModel();
 							model.NumeroMotivos = reader["numeroMotivos"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["numeroMotivos"].ToString());
 							model.ContadorMotivos = reader["CantidadInfracciones"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["CantidadInfracciones"].ToString());
 							model.ResultadoMultiplicacion = model.NumeroMotivos * model.ContadorMotivos;
@@ -2234,8 +2316,58 @@ namespace GuanajuatoAdminUsuarios.Services
 			}
 			return modelList;
 		}
-		//TODO: Borrar esta consulta ya no sirve para estadisticas
-		public List<InfraccionesModel> GetAllInfracciones2()
+
+        public List<EstadisticaInfraccionMotivosModel> GetAllMotivosPorInfraccionBusqueda(IncidenciasBusquedaModel modelBusqueda, int idDependencia)
+        {
+            List<EstadisticaInfraccionMotivosModel> modelList = new List<EstadisticaInfraccionMotivosModel>();
+            string strQuery = @"SELECT numeroMotivos, COUNT(idInfraccion) AS CantidadInfracciones
+                                    FROM (
+                                        SELECT mi.idInfraccion, COUNT(mi.idMotivoInfraccion) AS numeroMotivos
+                                        FROM infracciones i
+                                        LEFT JOIN motivosInfraccion mi ON i.idInfraccion = mi.idInfraccion
+                                        WHERE i.transito = @idDependencia AND i.estatus = 1
+                                        GROUP BY mi.idInfraccion
+                                    ) AS InfraccionesConMotivos
+                                    GROUP BY numeroMotivos
+                                    HAVING numeroMotivos > 0;";
+
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(strQuery, connection);
+                    command.CommandType = CommandType.Text;
+                    //command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = (object)idOficina ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@idDependencia", SqlDbType.Int)).Value = (object)idDependencia ?? DBNull.Value;
+
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            EstadisticaInfraccionMotivosModel model = new EstadisticaInfraccionMotivosModel();
+                            model.NumeroMotivos = reader["numeroMotivos"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["numeroMotivos"].ToString());
+                            model.ContadorMotivos = reader["CantidadInfracciones"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["CantidadInfracciones"].ToString());
+                            model.ResultadoMultiplicacion = model.NumeroMotivos * model.ContadorMotivos;
+
+                            modelList.Add(model);
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    //Guardar la excepcion en algun log de errores
+                    //ex
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return modelList;
+        }
+        //TODO: Borrar esta consulta ya no sirve para estadisticas
+        public List<InfraccionesModel> GetAllInfracciones2()
 		{
 			List<InfraccionesModel> modelList = new List<InfraccionesModel>();
 			string strQuery = @"SELECT inf.idInfraccion
@@ -2339,18 +2471,51 @@ namespace GuanajuatoAdminUsuarios.Services
 			return modelList;
 		}
 
-		public List<InfoInfraccion> GetAllInfraccionesEstadisticasGrid(int idDependencia)
-		{
-			List<InfoInfraccion> modelList = new List<InfoInfraccion>();
+		public List<InfoInfraccion> GetAllInfraccionesEstadisticasGrid(IncidenciasBusquedaModel modelBusqueda,int idDependencia)
+        {
+            string condiciones = "";
+
+            condiciones += modelBusqueda.idDelegacion.Equals(null) || modelBusqueda.idDelegacion == 0 ? "" : " AND inf.idDelegacion = @idDelegacion ";
+            condiciones += modelBusqueda.idOficial.Equals(null) || modelBusqueda.idOficial == 0 ? "" : " AND inf.idOficial =@idOficial ";
+            condiciones += modelBusqueda.idCarretera.Equals(null) || modelBusqueda.idCarretera == 0 ? "" : " AND inf.idCarretera = @idCarretera ";
+            condiciones += modelBusqueda.idTramo.Equals(null) || modelBusqueda.idTramo == 0 ? "" : " AND inf.idTramo = @idTramo ";
+            condiciones += modelBusqueda.idTipoVehiculo.Equals(null) || modelBusqueda.idTipoVehiculo == 0 ? "" : " AND veh.idTipoVehiculo = @idTipoVehiculo ";
+            condiciones += modelBusqueda.idTipoServicio.Equals(null) || modelBusqueda.idTipoServicio == 0 ? "" : " AND veh.idCatTipoServicio  = @idCatTipoServicio ";
+            condiciones += modelBusqueda.idSubTipoServicio.Equals(null) || modelBusqueda.idSubTipoServicio == 0 ? "" : " AND veh.idSubtipoServicio  = @idSubTipoServicio ";
+            condiciones += modelBusqueda.idTipoLicencia.Equals(null) || modelBusqueda.idTipoLicencia == 0 ? "" : " AND gar.idTipoLicencia = @idTipoLicencia ";
+            condiciones += modelBusqueda.idMunicipio.Equals(null) || modelBusqueda.idMunicipio == 0 ? "" : " AND inf.idMunicipio =@idMunicipio ";
+            condiciones += modelBusqueda.IdTipoCortesia.Equals(null) || modelBusqueda.IdTipoCortesia == 0 ? "" : " AND inf.infraccionCortesia=@IdTipoCortesia ";
+
+            string condicionFecha = "";
+
+            if (modelBusqueda.fechaInicio != DateTime.MinValue && modelBusqueda.fechaFin != DateTime.MinValue)
+                condiciones += " AND inf.fechaInfraccion >= @fechaInicio AND inf.fechaInfraccion  <= @fechaFin ";
+            else if (modelBusqueda.fechaInicio != DateTime.MinValue && modelBusqueda.fechaFin == DateTime.MinValue)
+                condiciones += " AND inf.fechaInfraccion >= @fechaInicio ";
+            else if (modelBusqueda.fechaInicio == DateTime.MinValue && modelBusqueda.fechaFin != DateTime.MinValue)
+                condiciones += " AND inf.fechaInfraccion <= @fechaFin ";
+            else
+                condiciones += "";
+
+
+            List<InfoInfraccion> modelList = new List<InfoInfraccion>();
 			string strQuery = @"SELECT DISTINCT inf.folioInfraccion as Folio
                         ,inf.folioInfraccion FolioTXT
                         ,'' AS TTOTTE
-                        ,estIn.estatusInfraccion AS Estatus
-                        ,CASE WHEN inf.infraccionCortesia = 1 THEN 'Cortesia' ELSE 'No Cortesia' END TipoCortesia
-                        ,del.nombreOficina Delegacion
+						,inf.idCarretera,inf.idTramo,inf.idMunicipio
+						,inf.infraccionCortesia
+                        ,estIn.estatusInfraccion AS Estatus,
+						   CASE 
+								WHEN inf.infraccionCortesia = 1 THEN 'No Cortesia'
+								WHEN inf.infraccionCortesia = 2 THEN 'Cortesia'
+								WHEN inf.infraccionCortesia = 3 THEN 'No Aplicada'
+								WHEN inf.infraccionCortesia = 4 THEN 'Aplicada'
+								ELSE 'Otro'
+							END AS TipoCortesia                  
+						,del.nombreOficina Delegacion
                         ,catMun.municipio as Municipio
                         ,CONVERT(varchar, inf.fechaInfraccion, 103) AS FechaInfraccion
-                        ,CONVERT(varchar, inf.fechaInfraccion, 8) AS HoraInfraccion
+                        ,inf.horaInfraccion AS HoraInfraccion
                         ,'' as FechaVencimiento
                         ,catCarre.carretera as Carretera
                         ,catTra.tramo as Tramo
@@ -2364,6 +2529,7 @@ namespace GuanajuatoAdminUsuarios.Services
                         ,CASE WHEN pers.idCatTipoPersona = 2 THEN 'x' ELSE '' END AS TipoPersMoral
                         ,CONCAT(persProp.nombre, ' ', persProp.apellidoPaterno, ' ', persProp.apellidoMaterno) as Propietario
                         ,CONCAT(persOfi.nombre, ' ', persOfi.apellidoPaterno, ' ', persOfi.apellidoMaterno) as OficialInfraccion
+						,inf.idOficial
                         ,motInf.calificacion as CalifSalarios
                         ,inf.monto AS MontoCalif
                         ,COALESCE(inf.monto,'0') AS MontoPago
@@ -2372,11 +2538,15 @@ namespace GuanajuatoAdminUsuarios.Services
                         ,veh.placas AS Placas
                         ,veh.serie AS SerieVeh
                         ,veh.tarjeta AS TarjetadeCirculacion
+						,veh.idTipoVehiculo
+						,veh.idCatTipoServicio
                         ,mv.marcaVehiculo AS Marca
                         ,sm.nombreSubmarca AS Submarca
                         ,veh.modelo AS Modelo
                         ,veh.numeroEconomico
+						,veh.idSubtipoServicio
                         ,cc.color AS Color
+						,gar.idTipoLicencia
                         ,e.nombreEntidad AS EntidaddeReg
                         ,tv.tipoVehiculo AS TipodeVehículo
                         ,ts.tipoServicio AS TipodeServicio
@@ -2413,10 +2583,8 @@ namespace GuanajuatoAdminUsuarios.Services
                         left join catTiposVehiculo tv ON tv.idTipoVehiculo = veh.idTipoVehiculo
                         left join catTipoServicio ts ON ts.idCatTipoServicio = veh.idCatTipoServicio
                         WHERE 
-                        inf.estatus= 1 {0}"
-			;
+                        inf.estatus = 1" + condiciones + condicionFecha;
 			
-
 			using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
 			{
 				try
@@ -2426,7 +2594,45 @@ namespace GuanajuatoAdminUsuarios.Services
 					command.CommandType = CommandType.Text;
 					int numeroSecuencial = 1;
 
-					using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    if (!modelBusqueda.idDelegacion.Equals(null) && modelBusqueda.idDelegacion != 0)
+                        command.Parameters.Add(new SqlParameter("@idDelegacion", SqlDbType.Int)).Value = (object)modelBusqueda.idDelegacion ?? DBNull.Value;
+
+                    if (!modelBusqueda.idOficial.Equals(null) && modelBusqueda.idOficial != 0)
+                        command.Parameters.Add(new SqlParameter("@idOficial", SqlDbType.Int)).Value = (object)modelBusqueda.idOficial ?? DBNull.Value;
+
+                    if (!modelBusqueda.idCarretera.Equals(null) && modelBusqueda.idCarretera != 0)
+                        command.Parameters.Add(new SqlParameter("@idCarretera", SqlDbType.Int)).Value = (object)modelBusqueda.idCarretera ?? DBNull.Value;
+
+                    if (!modelBusqueda.idTramo.Equals(null) && modelBusqueda.idTramo != 0)
+                        command.Parameters.Add(new SqlParameter("@idTramo", SqlDbType.Int)).Value = (object)modelBusqueda.idTramo ?? DBNull.Value;
+
+                    if (!modelBusqueda.idTipoVehiculo.Equals(null) && modelBusqueda.idTipoVehiculo != 0)
+                        command.Parameters.Add(new SqlParameter("@idTipoVehiculo", SqlDbType.Int)).Value = (object)modelBusqueda.idTipoVehiculo ?? DBNull.Value;
+
+                    if (!modelBusqueda.idTipoServicio.Equals(null) && modelBusqueda.idTipoServicio != 0)
+                        command.Parameters.Add(new SqlParameter("@idCatTipoServicio", SqlDbType.NVarChar)).Value = (object)modelBusqueda.idTipoServicio ?? DBNull.Value;
+
+                    if (!modelBusqueda.idSubTipoServicio.Equals(null) && modelBusqueda.idSubTipoServicio != 0)
+                        command.Parameters.Add(new SqlParameter("@idSubtipoServicio", SqlDbType.NVarChar)).Value = (object)modelBusqueda.idSubTipoServicio ?? DBNull.Value;
+
+                    if (!modelBusqueda.idTipoLicencia.Equals(null) && modelBusqueda.idTipoLicencia != 0)
+                        command.Parameters.Add(new SqlParameter("@idTipoLicencia", SqlDbType.Int)).Value = (object)modelBusqueda.idTipoLicencia ?? DBNull.Value;
+                    if (!modelBusqueda.IdTipoCortesia.Equals(null) && modelBusqueda.IdTipoCortesia != 0)
+                        command.Parameters.Add(new SqlParameter("@IdTipoCortesia", SqlDbType.Int)).Value = (object)modelBusqueda.IdTipoCortesia ?? DBNull.Value;
+
+                    if (!modelBusqueda.idMunicipio.Equals(null) && modelBusqueda.idMunicipio != 0)
+                        command.Parameters.Add(new SqlParameter("@idMunicipio", SqlDbType.Int)).Value = (object)modelBusqueda.idMunicipio ?? DBNull.Value;
+
+                    if (modelBusqueda.fechaInicio != DateTime.MinValue)
+                        command.Parameters.Add(new SqlParameter("@fechaInicio", SqlDbType.DateTime)).Value = (object)modelBusqueda.fechaInicio ?? DBNull.Value;
+
+                    if (modelBusqueda.fechaFin != DateTime.MinValue)
+                        command.Parameters.Add(new SqlParameter("@fechaFin", SqlDbType.DateTime)).Value = (object)modelBusqueda.fechaFin ?? DBNull.Value;
+
+                    command.Parameters.Add(new SqlParameter("@transito", SqlDbType.Int)).Value = (object)idDependencia ?? DBNull.Value;
+
+
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
 					{
 						while (reader.Read())
 						{

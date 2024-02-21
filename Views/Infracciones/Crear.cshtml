@@ -4,6 +4,7 @@
 	@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
 	var listaIdsPermitidosJson = @HttpContextAccessor.HttpContext.Session.GetString("IdsPermitidos").ToString();
 	var autorizaciones = @HttpContextAccessor.HttpContext.Session.GetString("Autorizaciones").ToString();
+	var regreso = ViewBag.Regreso;
 }
 
 <script>
@@ -527,7 +528,7 @@
 
 						sitteg_success('Elemento guardado correctamente')
 						window.setTimeout(function () {
-							window.location.href = '/Infracciones/Editar/' + result.id
+						window.location.href = '/Infracciones/Editar/?id=' + result.id + '&regreso='+@regreso
 						}, 500);
 						hideLoading();
 					}

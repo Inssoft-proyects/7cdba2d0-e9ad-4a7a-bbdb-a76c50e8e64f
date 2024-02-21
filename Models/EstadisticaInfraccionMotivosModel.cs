@@ -1,4 +1,6 @@
-﻿namespace GuanajuatoAdminUsuarios.Models
+﻿using System.Collections.Generic;
+
+namespace GuanajuatoAdminUsuarios.Models
 {
     public class EstadisticaInfraccionMotivosModel
     {
@@ -10,6 +12,7 @@
         public int TotalReal { get; set; }
         public int Total { get; set; }
         public int totalp { get; set; }
+        public virtual IEnumerable<MotivosInfraccionVistaModel> MotivosInfraccion { get; set; }
 
 
 

@@ -85,12 +85,11 @@
         .Sortable()
         .Groupable()
         .Scrollable()
-        .Pageable()
-        .DataSource(dataSource => dataSource
-        .Ajax()
-        //.Read(read => read.Action("ObtVehiculosInvol", "CapturaAccidentes"))
-            .PageSize(5).Model(model => model.Id(p => p.IdVehiculo))
-        )
+            .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(5) // Número de botones de página
+            )
             .NoRecords(noRecords => noRecords.Template("Realice una busqueda o revise los datos ingresados"))
             .ToolBar(t => t.Search().Text("Buscar..."))
             .Search(s =>

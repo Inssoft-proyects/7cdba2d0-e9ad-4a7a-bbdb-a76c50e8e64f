@@ -93,7 +93,7 @@ namespace GuanajuatoAdminUsuarios.Services
             return modelList;
         }
 
-        public List<InfraccionesModel> GetAllInfraccionesEstadisticas(IncidenciasBusquedaModel modelBusqueda)
+        public List<InfraccionesModel> GetAllInfraccionesEstadisticas(IncidenciasBusquedaModel modelBusqueda,int idDependencia)
         {
             string condiciones = "";
              
@@ -217,7 +217,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                 left join catSubConceptoInfraccion catSubInf on catMotInf.IdSubConcepto = catSubInf.idSubConcepto
                                 left join catConceptoInfraccion catConInf on  catSubInf.idConcepto = catConInf.idConcepto
                                 left join catTipoCortesia ctc ON ctc.id = inf.infraccionCortesia
-                                WHERE inf.estatus = 1 AND catMotInf.transito = @transito " + condiciones + condicionFecha + @"
+                                WHERE inf.estatus = 1 AND inf.transito = @transito " + condiciones + condicionFecha + @"
                                 GROUP BY inf.idInfraccion,inf.infraccionCortesia;"; 
 
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
@@ -263,7 +263,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     if (modelBusqueda.fechaFin != DateTime.MinValue)
                         command.Parameters.Add(new SqlParameter("@fechaFin", SqlDbType.DateTime)).Value = (object)modelBusqueda.fechaFin ?? DBNull.Value;
                    
-                    command.Parameters.Add(new SqlParameter("@transito", SqlDbType.Int)).Value = (object)modelBusqueda.idTipoMotivo ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@transito", SqlDbType.Int)).Value = (object) idDependencia ?? DBNull.Value;
 
 
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
@@ -323,5 +323,7 @@ namespace GuanajuatoAdminUsuarios.Services
             } 
             return modelList;
         }
+
+       
     }
 }

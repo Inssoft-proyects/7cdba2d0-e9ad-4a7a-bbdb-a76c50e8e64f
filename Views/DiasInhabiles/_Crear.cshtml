@@ -37,7 +37,7 @@
                             <label>Día inhábil <b>(obligatorio)</b>:</label>
                             <span>
                                 @(Html.Kendo().DatePickerFor(t => t.fecha)
-                        .Culture("es-ES")
+                                     .Culture("es-ES")
                                     .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "end" })
                                     )
                             </span>
@@ -139,6 +139,7 @@
             data: Mydata,
             success: function (result) {
                 $("#gridCatDiasInhabiles").data("kendoGrid").dataSource.data(result);
+                sitteg_success("Información guardada correctamente.");
                 hideLoading();
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");

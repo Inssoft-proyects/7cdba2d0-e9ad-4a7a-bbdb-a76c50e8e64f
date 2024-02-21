@@ -83,14 +83,17 @@ namespace GuanajuatoAdminUsuarios.Services
 		                                            m.municipio,e.estatusDesc
 		                                            from catDiasInhabiles ctd 
 		                                            LEFT JOIN catMunicipios m ON m.idMunicipio = ctd.idMunicipio
-		                                            LEFT JOIN estatus e ON e.estatus = ctd.estatus", connection);
-                command.Parameters.Add(new SqlParameter("@IdOficial", SqlDbType.Int)).Value = IdDia;
+		                                            LEFT JOIN estatus e ON e.estatus = ctd.estatus
+                                                    WHERE ctd.idDiaInhabil= @idDiaInhabil", connection);
+                command.Parameters.Add(new SqlParameter("@idDiaInhabil", SqlDbType.Int)).Value = IdDia;
                 command.CommandType = CommandType.Text;
                 using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                 {
                     while (reader.Read())
                     {
                             dia.idDiaInhabil = Convert.ToInt32(reader["idDiaInhabil"].ToString());
+                            dia.idMunicipio = Convert.ToInt32(reader["idMunicipio"].ToString());
+                            dia.Estatus = Convert.ToInt32(reader["estatus"].ToString());
                             dia.fecha = Convert.ToDateTime(reader["fecha"].ToString());
                             dia.todosMunicipiosDesc = reader["todosMunicipiosDesc"].ToString();
                             dia.Municipio = reader["municipio"].ToString();
@@ -119,12 +122,15 @@ namespace GuanajuatoAdminUsuarios.Services
             {
                 connection.Open();
                 SqlCommand sqlCommand = new SqlCommand(@"Insert into catDiasInhabiles
-                                                      (fecha,idMunicipio,todosMunicipiosDesc, estatus,) 
-                                                        values(@Fecha,@idMunicipio,@todosMunicipiosDesc,@estatus)", connection);
+                                                      (fecha,idMunicipio,todosMunicipiosDesc, estatus,fechaActualizacion,actualizadoPor) 
+                                                     values(@Fecha,@idMunicipio,@todosMunicipiosDesc,@estatus,@fechaActualizacion,@actualizadoPor)", connection);
                     sqlCommand.Parameters.Add(new SqlParameter("@fecha", SqlDbType.DateTime)).Value = Dia.fecha;
                     sqlCommand.Parameters.Add(new SqlParameter("@idMunicipio", SqlDbType.Int)).Value = Dia.idMunicipio;
-                sqlCommand.Parameters.Add(new SqlParameter("@todosMunicipiosDesc", SqlDbType.VarChar)).Value = Dia.todosMunicipiosDesc;
-                sqlCommand.Parameters.Add(new SqlParameter("@estatus", SqlDbType.Int)).Value = 1;
+                    sqlCommand.Parameters.Add(new SqlParameter("@todosMunicipiosDesc", SqlDbType.VarChar)).Value = Dia.todosMunicipiosDesc;
+                    sqlCommand.Parameters.Add(new SqlParameter("@estatus", SqlDbType.Int)).Value = 1;
+                    sqlCommand.Parameters.Add(new SqlParameter("@fechaActualizacion", SqlDbType.DateTime)).Value = DateTime.Now;
+                    sqlCommand.Parameters.Add(new SqlParameter("@actualizadoPor", SqlDbType.Int)).Value = 1;
+
 
                     sqlCommand.CommandType = CommandType.Text;
                 result = sqlCommand.ExecuteNonQuery();

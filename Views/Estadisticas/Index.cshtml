@@ -256,10 +256,18 @@
                         <label>Municipio:</label>
                         <div id="divTramo">
                             @(Html.Kendo().DropDownListFor(f => f.idMunicipio).Filter(FilterType.Contains)
-                                .BindTo((SelectList)ViewBag.CatMunicipios)
-                                .OptionLabel("-- Seleccione --")
-                                .HtmlAttributes(new { style = "width:100%;" })
-                                )
+                                    .DataTextField("Text")
+                            .DataValueField("Value")
+                            .OptionLabel("Seleccione Municipio...")
+                            .HtmlAttributes(new { style = "width:100%;" })
+                            .Filter(FilterType.Contains)
+                            .DataSource(source =>
+                            {
+                                source.Read(read =>
+                                {
+                                    read.Action("Municipios_Guanajuato", "Estadisticas");
+                                });
+                            }))
                         </div>
                     </div>
                 </div>
@@ -309,7 +317,6 @@
     function submitSearch() {
         var Mydata = $("#frmBusquedaEstadisticasIncidencias").serialize();
         showLoading();
-        // Realiza la llamada a la primera acción ajax_BusquedaParaMotivos
         $.ajax({
             url: '@Url.Action("ajax_BusquedaParaMotivos")',
             type: 'POST',
@@ -317,22 +324,38 @@
             success: function (result) {
                 $("#estadisticasInfracciones2").html(result);
 
-                // Llama a la segunda acción ajax_BusquedaIncidenciasInfracciones
                 $.ajax({
                     url: '@Url.Action("ajax_BusquedaIncidenciasInfracciones")',
                     type: 'POST',
                     data: Mydata,
                     success: function (result) {
                         $("#estadisticasInfracciones").html(result);
+
+                        $.ajax({
+                            url: '@Url.Action("ActualizarViewBag")',
+                            type: 'POST',
+                            data: Mydata,
+                            success: function (result) {
+                                 $("#estadisticasInfracciones3").html(result);
+                                hideLoading();
+                            },
+                            error: function () {
+                                // Maneja errores
+                                sitteg_warning("Ocurrió un error al actualizar el ViewBag.");
+                                hideLoading();
+                            }
+                        });
                     }
                 });
-                hideLoading();
-            }, error: function () {
-                sitteg_warning("Ocurrio un error al procesar su solicitud.");
+            },
+            error: function () {
+                // Maneja errores
+                sitteg_warning("Ocurrió un error al procesar su solicitud.");
                 hideLoading();
             }
         });
     }
+
 
     function startChange() {
         var endPicker = $("#end").data("kendoDatePicker"),

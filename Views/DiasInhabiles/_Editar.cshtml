@@ -42,13 +42,12 @@
             <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
         </div>
             <div class="col-12 col-lg-6 my-4 btnToggleActive">
-            @(Html.Kendo().SwitchFor(t => t.ValorEstatusDiasInhabiles)
-                .Name("diasInhabilesSwitch")
-                .Checked(true)
-                .Messages(c => c.Checked("Activo").Unchecked("Inactivo"))
-                .HtmlAttributes(new { data_valor = 1 })
-
-                )
+                @(Html.Kendo().SwitchFor(t => t.ValorEstatusDiasInhabiles)
+                    .Name("diasInhabilesSwitch")
+                    .Checked(Model.Estatus == 1) 
+                    .Messages(c => c.Checked("Activo").Unchecked("Inactivo"))
+                    .HtmlAttributes(new { data_valor = Model.Estatus }) 
+                    )
         </div>
     </div>
         <div class="col-12 col-md-6">
@@ -134,6 +133,7 @@
             data: Mydata,
             success: function (result) {
                 $("#gridCatDiasInhabiles").data("kendoGrid").dataSource.read();
+                sitteg_success("Información modificada correctamente.");
                 hideLoading();
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");

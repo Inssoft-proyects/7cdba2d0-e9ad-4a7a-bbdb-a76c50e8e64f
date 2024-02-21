@@ -7,6 +7,7 @@
     @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
     var listaIdsPermitidosJson = @HttpContextAccessor.HttpContext.Session.GetString("IdsPermitidos").ToString();
     var autorizaciones = @HttpContextAccessor.HttpContext.Session.GetString("Autorizaciones").ToString();
+    var regreso = ViewBag.Regreso.ToString();
 }
 
 <script>
@@ -921,6 +922,9 @@
                 var redirectTo = sessionStorage.getItem('redirectTo');
                 console.log("RED", redirectTo);
                 if (shouldGoBack && redirectTo) {
+                    if (@regreso == "1")
+                        window.location.href = "/Infracciones/Crear";
+                    else
                     setTimeout(function () {
                         window.location.href = '/CapturaAccidentes/CapturaAccidenteC';
                     }, 2000);
@@ -1168,6 +1172,10 @@
 }
 
 	function goBack() {
+        console.log("regreso: " + @regreso)
+        if(@regreso == "1")
+            window.location.href = "/Infracciones/Crear";
+        else
 		window.history.back();
 	}
 
