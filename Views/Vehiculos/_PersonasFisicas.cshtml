@@ -35,6 +35,8 @@
             .Scrollable(scr => scr.Height(250))
             .DataSource(dataSource => dataSource
             .Ajax()
+            .Read(ev => ev.Action("ajax_BuscarPersonasFiscasPagination", "Vehiculos"))
+
             .ServerOperation(false)
             .PageSize(5)
             )

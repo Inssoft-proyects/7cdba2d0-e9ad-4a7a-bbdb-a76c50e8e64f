@@ -151,12 +151,12 @@
                     ).Title("Eliminar").Sortable(false).Width(100);
                     columns.Bound(p => p.IdDependenciaGenera).ClientTemplate(
                     "<div class='turno-captura'>" +
-                    "<div class='tto-marked'>TTO:</div>" +
-                    "#= IdDependenciaGenera === 1 ? '✓' : '' #" +
-                    "<div class='dep-marked'>Dep:</div>" +
-                    "#= IdDependenciaGenera === 2 ? '✓' : '' #" +
+                    "<div class='tto-marked'>TTO: #= IdDependenciaGenera === 1 ? '✓' : '' #</div>" +
+                    
+                    "<div class='dep-marked'>Dep: #= IdDependenciaGenera === 0 ? '✓' : '' #</div>" +
+                 
                     "</div>"
-                    ).Title("Turno Captura").Width(150);
+                    ).Title("Turno Captura").Width(250);
 
 
 

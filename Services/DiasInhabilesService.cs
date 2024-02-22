@@ -43,8 +43,18 @@ namespace GuanajuatoAdminUsuarios.Services
                             DiasInhabilesModel dia = new DiasInhabilesModel();
                             dia.idDiaInhabil = Convert.ToInt32(reader["idDiaInhabil"].ToString());
                             dia.idMunicipio = Convert.ToInt32(reader["idMunicipio"].ToString());
-
-                            dia.fecha = Convert.ToDateTime(reader["fecha"].ToString());
+                            if (reader["fecha"] != DBNull.Value)
+                            {
+                                if (DateTime.TryParse(reader["fecha"].ToString(), out DateTime parsedDate))
+                                {
+                                    dia.fecha = parsedDate; 
+                                }
+                                else
+                                {
+                              
+                                   dia.fecha = DateTime.MinValue;
+                                }
+                            }
                             dia.todosMunicipiosDesc = reader["todosMunicipiosDesc"].ToString();
                             dia.Municipio = reader["municipio"].ToString();
                             dia.EstatusDesc = reader["estatusDesc"].ToString();

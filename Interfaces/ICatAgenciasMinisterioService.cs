@@ -6,6 +6,9 @@ namespace GuanajuatoAdminUsuarios.Interfaces
     public interface ICatAgenciasMinisterioService
     {
         List<CatAgenciasMinisterioModel> ObtenerAgenciasActivas();
+        List<CatAgenciasMinisterioModel> ObtenerAgenciasActivasPorDelegacion(int idOficina);
+
+        
 
     }
 }

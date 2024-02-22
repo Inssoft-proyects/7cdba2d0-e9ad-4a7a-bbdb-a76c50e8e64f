@@ -55,8 +55,9 @@ namespace GuanajuatoAdminUsuarios.Controllers
             HttpContext.Session.SetInt32("iPg", iPg);
 
             int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+            int idDependencia = HttpContext.Session.GetInt32("IdDependencia") ?? 0;
 
-            var solicitud = _asignacionGruasService.BuscarSolicitudPord(iSo, idOficina);
+            var solicitud = _asignacionGruasService.BuscarSolicitudPord(iSo, idOficina, idDependencia);
             HttpContext.Session.SetInt32("idDeposito", solicitud.IdDeposito==0?idDeposito: solicitud.IdDeposito);
             int iDep = HttpContext.Session.GetInt32("idDeposito") ?? 0;
 

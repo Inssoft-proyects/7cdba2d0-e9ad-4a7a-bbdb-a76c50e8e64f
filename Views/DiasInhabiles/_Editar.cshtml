@@ -44,9 +44,9 @@
             <div class="col-12 col-lg-6 my-4 btnToggleActive">
                 @(Html.Kendo().SwitchFor(t => t.ValorEstatusDiasInhabiles)
                     .Name("diasInhabilesSwitch")
-                    .Checked(Model.Estatus == 1) 
+                    .Checked(Model.Estatus == 1)
                     .Messages(c => c.Checked("Activo").Unchecked("Inactivo"))
-                    .HtmlAttributes(new { data_valor = Model.Estatus }) 
+                    .HtmlAttributes(new { data_valor = Model.Estatus })
                     )
         </div>
     </div>
@@ -132,8 +132,10 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#gridCatDiasInhabiles").data("kendoGrid").dataSource.read();
-                sitteg_success("Información modificada correctamente.");
+                var grid = $("#gridCatDiasInhabiles").data("kendoGrid");
+        grid.dataSource.read();
+        sitteg_success("Información actualizada correctamente.");
+
                 hideLoading();
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");

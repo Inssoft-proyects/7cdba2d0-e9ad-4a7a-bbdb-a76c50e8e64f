@@ -77,14 +77,17 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {
                 //Crear el producto
 
-                _catSubmarcasVehiculosService.GuardarSubmarca(model);
-                var ListSubmarcasModel = _catSubmarcasVehiculosService.ObtenerSubarcas();
-                return Json(ListSubmarcasModel);
+                var can = _catSubmarcasVehiculosService.ValidarExistenciaSubmarca(model.IdMarcaVehiculo.Value, model.NombreSubmarca);
+
+                if(can) {
+					_catSubmarcasVehiculosService.GuardarSubmarca(model);
+				}
             }
-            Marcas_Drop();
-            //return View("Create");
-            return PartialView("_Crear");
-        }
+
+			var ListSubmarcasModel2 = _catSubmarcasVehiculosService.ObtenerSubarcas();
+			return Json(ListSubmarcasModel2);
+
+		}
 
         [HttpPost]
         public ActionResult EditarSubmarca(CatSubmarcasVehiculosModel model)

@@ -138,8 +138,10 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#gridCatDiasInhabiles").data("kendoGrid").dataSource.data(result);
-                sitteg_success("Información guardada correctamente.");
+                var grid = $("#gridCatDiasInhabiles").data("kendoGrid");
+        grid.dataSource.read();
+        sitteg_success("Información guardada correctamente.");
+
                 hideLoading();
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");

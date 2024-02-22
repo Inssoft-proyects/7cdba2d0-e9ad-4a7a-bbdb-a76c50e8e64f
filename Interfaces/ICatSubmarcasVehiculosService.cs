@@ -7,7 +7,9 @@ namespace GuanajuatoAdminUsuarios.Interfaces
     {
         List<CatSubmarcasVehiculosModel> ObtenerSubarcas();
         public CatSubmarcasVehiculosModel GetSubmarcaByID(int IdSubmarca);
-        public int GuardarSubmarca(CatSubmarcasVehiculosModel model);
+        bool ValidarExistenciaSubmarca(int idMarca, string descripcion);
+
+		public int GuardarSubmarca(CatSubmarcasVehiculosModel model);
         public int UpdateSubmarca(CatSubmarcasVehiculosModel model);
         public int obtenerIdPorSubmarca(string submarcaLimpio);
         

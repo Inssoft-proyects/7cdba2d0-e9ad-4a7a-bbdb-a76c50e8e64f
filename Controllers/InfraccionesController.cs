@@ -260,7 +260,15 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public JsonResult Delegaciones_Read()
         {
-            var result = new SelectList(_catDelegacionesOficinasTransporteService.GetDelegacionesOficinasActivos(), "IdDelegacion", "Delegacion");
+
+            var result2 = _catDelegacionesOficinasTransporteService.GetDelegacionesOficinasActivos();
+            result2 = result2.Where(s => !s.Delegacion.Contains("Centro de Gobierno")).ToList();
+
+
+			var result = new SelectList(result2, "IdDelegacion", "Delegacion");
+
+            
+
             return Json(result);
         }
 

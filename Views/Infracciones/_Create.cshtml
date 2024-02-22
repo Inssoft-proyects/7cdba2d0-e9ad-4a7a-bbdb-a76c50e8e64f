@@ -804,10 +804,10 @@ $(document).ready(()=>{
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="controlForm my-3">
-                            @(Html.Kendo().TextBoxFor(t => t.Persona.telefono)
-                                .Label(l => l.Content("Teléfono:"))
+                           <label>Teléfono:</label>
+                            @(Html.Kendo().TextBoxFor(t => t.Persona.PersonaDireccion.telefono)
                                 .Placeholder("Ingresa Teléfono")
-                                .HtmlAttributes(new { style = "width: 100%" })
+                                .HtmlAttributes(new { style = "width: 100%" ,onkeypress = "return validarNumero(event)"})
                                 )
                         </div>
                     </div>
@@ -1307,6 +1307,19 @@ $(document).ready(()=>{
         }
         buscarPersonasFisicas();
     });
+
+     function validarNumero(event) {
+            var charCode = (event.which) ? event.which : event.keyCode;
+
+            if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 8 && charCode !== 46) {
+                mostrarError("Solo se permiten números.");
+                event.preventDefault();
+                return false;
+            }
+
+            ocultarError();
+            return true;
+        }
 
     function buscarPersonasFisicas() {
         showLoading();

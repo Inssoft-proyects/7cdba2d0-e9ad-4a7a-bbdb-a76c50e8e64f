@@ -98,7 +98,50 @@ namespace GuanajuatoAdminUsuarios.Services
 
             return tipoVehiculo;
         }
-        public int CreateTipoVehiculo(TiposVehiculosModel model)
+
+
+
+		public bool ValidarExistenciaTipoVehiculo(string descripcion)
+		{
+			var result = false;
+
+			using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+			{
+				try
+				{
+					connection.Open();
+					SqlCommand sqlCommand = new SqlCommand("select count(*) result from catTiposVehiculo where  TipoVehiculo=@descripcion", connection);
+					sqlCommand.Parameters.Add(new SqlParameter("@descripcion", SqlDbType.VarChar)).Value = descripcion;
+
+					sqlCommand.CommandType = CommandType.Text;
+					var read = sqlCommand.ExecuteReader();
+
+					while (read.Read())
+					{
+
+						result = (0 == (int)read["result"]);
+
+
+					}
+
+
+
+				}
+				catch (SqlException ex)
+				{
+					return result;
+				}
+				finally
+				{
+					connection.Close();
+				}
+			}
+			return result;
+
+
+		}
+
+		public int CreateTipoVehiculo(TiposVehiculosModel model)
         {
             int result = 0;
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))

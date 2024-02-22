@@ -100,9 +100,9 @@
 				<label>Tipo persona <b>(obligatorio):</label>
 				@(Html.Kendo().DropDownListFor(m => m.idCatTipoPersona)
 					.BindTo((SelectList)ViewBag.CatTipoPersona)
-
+					.Value("1")
 					.OptionLabel("-- Seleccione --")
-					.HtmlAttributes(new { style = "width:100%;", id="tipoPersona" }))
+					.HtmlAttributes(new { style = "width:100%;", @readonly = "readonly", id = "tipoPersona" }))
 			</div>
 		</div>
 	</div>

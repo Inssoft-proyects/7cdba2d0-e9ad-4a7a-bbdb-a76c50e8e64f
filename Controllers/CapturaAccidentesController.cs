@@ -927,7 +927,14 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         private int ObtenerIdMunicipioDesdeBD(string municipio)
         {
-            var idMunicipio = _catMunicipiosService.obtenerIdPorNombre(municipio);
+            int idMunicipio = 0;
+
+            var municipioStr = _catDictionary.GetCatalog("CatMunicipios", "0");
+
+            idMunicipio = municipioStr.CatalogList
+                            .Where(w => RemoveDiacritics(w.Text.ToLower()).Contains(RemoveDiacritics(municipio.ToLower())))
+                            .Select(s => s.Id)
+                            .FirstOrDefault();
             return (idMunicipio);
         }
         private int ObtenerIdEntidadDesdeBD(string entidad)
@@ -1514,6 +1521,13 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public JsonResult AgMinisterio_Drop()
         {
             var result = new SelectList(_catAgenciasMinisterioService.ObtenerAgenciasActivas(), "IdAgenciaMinisterio", "NombreAgencia");
+            return Json(result);
+        }
+        public JsonResult AgMinisterioDelegacion_Drop()
+        {
+            int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+
+            var result = new SelectList(_catAgenciasMinisterioService.ObtenerAgenciasActivasPorDelegacion(idOficina), "IdAgenciaMinisterio", "NombreAgencia");
             return Json(result);
         }
         public JsonResult Oficiales_Drop()
