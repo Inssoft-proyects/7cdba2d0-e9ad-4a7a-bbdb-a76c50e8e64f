@@ -160,7 +160,18 @@ namespace GuanajuatoAdminUsuarios.Services
         public int CrearGrua(Gruas2Model model)
         {
             int result = 0;
-            string strQuery = @"INSERT INTO gruas VALUES(@idConcesionario
+            string strQuery = @"INSERT INTO gruas (idConcesionario
+                                                        ,idClasificacion
+                                                        ,idTipoGrua
+                                                        ,idSituacion
+                                                        ,noEconomico
+                                                        ,placas
+                                                        ,modelo
+                                                        ,capacidad
+                                                        ,fechaActualizacion
+                                                        ,actualizadoPor
+                                                        ,estatus
+                                                    ) VALUES(@idConcesionario
                                                         ,@idClasificacion
                                                         ,@idTipoGrua
                                                         ,@idSituacion
