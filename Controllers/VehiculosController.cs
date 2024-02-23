@@ -706,11 +706,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 filterValue(request.Filters);
                 Pagination pagination = new Pagination();
                 pagination.PageIndex = request.Page - 1;
-                pagination.PageSize = 10;
+                pagination.PageSize = request.PageSize;
                 pagination.Filter = resultValue;
 
                 var personasFisicas = _personasService.GetAllPersonasFisicasPagination(pagination);
-                request.PageSize = 10;
+                request.PageSize = pagination.PageSize;
                 var total = 0;
                 if (personasFisicas.Count() > 0)
                     total = personasFisicas.ToList().FirstOrDefault().total;

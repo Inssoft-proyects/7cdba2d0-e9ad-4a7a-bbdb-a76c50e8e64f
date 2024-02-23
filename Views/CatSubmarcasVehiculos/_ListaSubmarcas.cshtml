@@ -1,4 +1,11 @@
-﻿<div class="row">
+﻿<script>
+    function filtoMarca() {
+        return{
+            idMarca: $("#idMarcaFiltro").val()
+        }
+    }
+    </script>
+<div class="row">
         <div class="col-12 mb-4 px-4 rounded gridCustom">
 
         @(
@@ -21,7 +28,7 @@
             .Pageable()
             .DataSource(dataSource => dataSource
             .Ajax()
-            .Read(read => read.Action("GetSubs", "CatSubmarcasVehiculos"))
+            .Read(read => read.Action("GetSubs", "CatSubmarcasVehiculos").Data("filtoMarca"))
             .PageSize(5).Model(model => model.Id(p => p.IdSubmarca))
             )
             .ToolBar(t => t.Search().Text("Buscar..."))

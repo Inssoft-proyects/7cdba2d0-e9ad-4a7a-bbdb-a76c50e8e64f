@@ -34,7 +34,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                     LEFT JOIN catColores AS co ON v.idColor = co.idColor
                                     LEFT JOIN catTiposVehiculo AS tv ON v.idTipoVehiculo = tv.idTipoVehiculo
                                     LEFT JOIN solicitudes AS sol ON d.idSolicitud = sol.idSolicitud
-                                    WHERE d.idPension = @idPension AND d.liberado = 0  " + condiciones;
+                                    WHERE d.idPension = @idPension AND d.liberado = 0 AND d.estatusSolicitud = 4 " + condiciones;
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
             {
                 try

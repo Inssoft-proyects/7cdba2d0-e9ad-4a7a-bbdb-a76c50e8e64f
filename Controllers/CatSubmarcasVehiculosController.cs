@@ -112,10 +112,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
    
 
 
-        public JsonResult GetSubs([DataSourceRequest] DataSourceRequest request)
+        public JsonResult GetSubs([DataSourceRequest] DataSourceRequest request, int idMarca)
         {
             var ListSubmarcasModel = _catSubmarcasVehiculosService.ObtenerSubarcas();
-
+           if(idMarca!=0)
+            ListSubmarcasModel = ListSubmarcasModel.Where(s => s.IdMarcaVehiculo == idMarca).ToList();
             return Json(ListSubmarcasModel.ToDataSourceResult(request));
         }
 
@@ -127,6 +128,39 @@ namespace GuanajuatoAdminUsuarios.Controllers
             return Json(result);
         }
 
+        [HttpGet]
+        public ActionResult ajax_BuscarPorMarca(int idMarcaFiltro)
+        {
+            List<CatSubmarcasVehiculosModel> ListAgencias = new List<CatSubmarcasVehiculosModel>();
+
+
+            ListAgencias = (from catSubmarcasVehiculos in _catSubmarcasVehiculosService.ObtenerSubarcas().ToList()
+                                //join municipio in _catMunicipiosService.GetMunicipios().ToList()
+                                //on diasInhabiles.idMunicipio equals municipio.IdMunicipio
+                                // join estatus in dbContext.Estatus.ToList()
+                                //on diasInhabiles.Estatus equals estatus.estatus
+
+                            select new CatSubmarcasVehiculosModel
+                            {
+                                IdSubmarca = catSubmarcasVehiculos.IdSubmarca,
+                                NombreSubmarca = catSubmarcasVehiculos.NombreSubmarca,
+                                IdMarcaVehiculo = catSubmarcasVehiculos.IdMarcaVehiculo,
+                                MarcaVehiculo = catSubmarcasVehiculos.MarcaVehiculo,
+                                Estatus = catSubmarcasVehiculos.Estatus,
+                                estatusDesc = catSubmarcasVehiculos.estatusDesc,
+                                // EstatusDesc = estatus.estatusDesc,
+                            }).ToList();
+
+
+            if (idMarcaFiltro > 0)
+            {
+                ListAgencias = (from s in ListAgencias
+                                where s.IdMarcaVehiculo == idMarcaFiltro
+                                select s).ToList();
+            }
+
+            return Json(ListAgencias);
+        }
 
     }
 }

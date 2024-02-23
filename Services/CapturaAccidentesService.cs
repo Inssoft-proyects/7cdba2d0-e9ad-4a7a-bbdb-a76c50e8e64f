@@ -1034,7 +1034,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             factorOpcion.IdFactorOpcionAccidente = Convert.ToInt32(reader["idFactorOpcion"].ToString());
                             factorOpcion.FactorAccidente = reader["FactorAccidente"].ToString();
                             factorOpcion.FactorOpcionAccidente = reader["FactorOpcionAccidente"].ToString();
-
+ 
 
                             ListaGridFactor.Add(factorOpcion);
 
@@ -1698,8 +1698,9 @@ namespace GuanajuatoAdminUsuarios.Services
 							vehiculo.ConductorInvolucrado = $"{reader["nombreConductor"]} {reader["apellidoPConductor"]} {reader["apellidoMConductor"]}";
                             vehiculo.vigenciaLicencia = reader["vigenciaLicencia"].GetType() == typeof(DBNull) ? DateTime.MinValue : (DateTime)reader["vigenciaLicencia"];
                             vehiculo.NumeroEconomico = reader["numeroeconomico"].GetType() == typeof(DBNull) ? "" : reader["numeroeconomico"].ToString();
+                            vehiculo.IdVehiculo = Convert.IsDBNull(reader["idVehiculo"]) ? 0 : Convert.ToInt32(reader["idVehiculo"]);
 
-							string montoVehiculoString = reader["montoVehiculo"].ToString();
+                            string montoVehiculoString = reader["montoVehiculo"].ToString();
                             float montoVehiculo;
 
                             if (!string.IsNullOrEmpty(montoVehiculoString) && float.TryParse(montoVehiculoString, out montoVehiculo))
@@ -2006,8 +2007,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             elemnto.garantia = reader["garantia"].ToString();
 							// elemnto.EstatusReporte = reader["estatusReporte"].ToString();
 							elemnto.Vehiculo = $"{reader["marcaVehiculo"]} {reader["nombreSubmarca"]} {reader["placas"]} {reader["modelo"]}";
-
-
+                            elemnto.IdVehiculo = Convert.IsDBNull(reader["IdVehiculo"]) ? 0 : Convert.ToInt32(reader["IdVehiculo"]);
 
 
                             ListaInfracciones.Add(elemnto);
@@ -2196,7 +2196,8 @@ namespace GuanajuatoAdminUsuarios.Services
 											 "MAX(va.idAccidente) AS NoAccidente," +
 											 "MAX(ct.tipoInvolucrado) AS tipoInvolucrado," +
 											 "MAX(p.numeroLicencia) AS numeroLicencia," +
-											 "MAX(cc.cinturon) AS cinturon " +
+											 "MAX(cc.cinturon) AS cinturon, " +
+                                             "MAX(ct.idTipoInvolucrado) as idTipoInvolucrado " +
 											 "FROM involucradosAccidente ia " +
 											 "LEFT JOIN accidentes a ON ia.idAccidente = a.idAccidente " +
                                              "LEFT JOIN personas p ON ia.idPersona = p.idPersona " +
@@ -2263,8 +2264,9 @@ namespace GuanajuatoAdminUsuarios.Services
 							involucrado.Cinturon = reader["cinturon"] == System.DBNull.Value ? string.Empty : Convert.ToString(reader["cinturon"].ToString());
 							involucrado.NumeroEconomico = reader["cinturon"] == System.DBNull.Value ? string.Empty : Convert.ToString(reader["cinturon"].ToString());
 							involucrado.NoAccidente = reader["NoAccidente"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["NoAccidente"].ToString());
+                            involucrado.IdTipoInvolucrado = reader["idCinturon"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idTipoInvolucrado"].ToString()); 
 
-							involucrado.FormatDateNacimiento = reader["fechaNacimiento"] == System.DBNull.Value ? string.Empty : Convert.ToString(reader["fechaNacimiento"].ToString());
+                            involucrado.FormatDateNacimiento = reader["fechaNacimiento"] == System.DBNull.Value ? string.Empty : Convert.ToString(reader["fechaNacimiento"].ToString());
 
                             
                             if (reader["fechaIngreso"] != System.DBNull.Value)
@@ -2534,7 +2536,46 @@ namespace GuanajuatoAdminUsuarios.Services
                 return result;
             }
         }
-		public bool ValidarFolio(string folioInfraccion, int idDependencia)
+
+        public int GuardarDatosPrevioInfraccion(int idAccidente, string montoCamino, string montoCarga, string montoPropietarios, string montoOtros)
+        {
+            int result = 0;       
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    connection.Open();
+                    string query = @"UPDATE accidentes 
+                                            SET montoCamino = @MontoCamino, 
+                                                montoCarga = @MontoCarga, 
+                                                montoPropietarios = @MontoPropietarios, 
+                                                montoOtros = @MontoOtros
+                                            WHERE idAccidente = @idAccidente
+                                            ";
+
+                    SqlCommand command = new SqlCommand(query, connection);
+
+                    command.Parameters.AddWithValue("@idAccidente", idAccidente);
+                    command.Parameters.AddWithValue("@MontoCamino", montoCamino ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@MontoCarga", montoCarga ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@MontoPropietarios", montoPropietarios ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@MontoOtros", montoOtros ?? (object)DBNull.Value);
+                                     
+                    result = command.ExecuteNonQuery();
+                }
+                catch (SqlException ex)
+                {
+                    return result;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+
+                return result;
+            }
+        }
+        public bool ValidarFolio(string folioInfraccion, int idDependencia)
 		{
 			int folio = 0;
 

@@ -14,7 +14,9 @@ namespace GuanajuatoAdminUsuarios.Models
         public int idConcepto { get; set; }
         public string concepto { get; set; }
         public int idSubConcepto { get; set; }
-        public int IdVigencia { get; set; }        
+        public int IdVigencia { get; set; }
+        public int Estatus { get; set; }
+
         public string subConcepto { get;set; }
         public bool ValorEstatusMotivosInfraccion { get; set; }
         public string estatusDesc { get; set; }

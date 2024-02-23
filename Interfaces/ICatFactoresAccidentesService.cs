@@ -7,6 +7,9 @@ namespace GuanajuatoAdminUsuarios.Interfaces
     {
         List<CatFactoresAccidentesModel> GetFactoresAccidentes();
         List<CatFactoresAccidentesModel> GetFactoresAccidentesActivos();
+        CatFactoresAccidentesModel GetFactorByID(int IdFactorAccidente);
+        public int GuardarFactor(CatFactoresAccidentesModel factor);
+        public int UpdateFactor(CatFactoresAccidentesModel factor);
 
     }
 }

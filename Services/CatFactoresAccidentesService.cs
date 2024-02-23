@@ -25,7 +25,7 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT f.*, e.estatus FROM catFactoresAccidentes AS f INNER JOIN estatus AS e ON c.estatus = e.estatus ORDER BY FactorAccidente ASC;", connection);
+                    SqlCommand command = new SqlCommand("SELECT f.*, e.estatusDesc FROM catFactoresAccidentes AS f INNER JOIN estatus AS e ON f.estatus = e.estatus ORDER BY FactorAccidente ASC;", connection);
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
@@ -34,7 +34,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             CatFactoresAccidentesModel factor = new CatFactoresAccidentesModel();
                             factor.IdFactorAccidente = Convert.ToInt32(reader["IdFactorAccidente"].ToString());
                             factor.FactorAccidente = reader["FactorAccidente"].ToString();
-                            factor.estatusDesc = reader["estatus"].ToString();
+                            factor.estatusDesc = reader["estatusDesc"].ToString();
                             factor.FechaActualizacion = Convert.ToDateTime(reader["FechaActualizacion"].ToString());
                             factor.Estatus = Convert.ToInt32(reader["estatus"].ToString());
                             factor.ActualizadoPor = Convert.ToInt32(reader["ActualizadoPor"].ToString());
@@ -78,7 +78,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             CatFactoresAccidentesModel factor = new CatFactoresAccidentesModel();
                             factor.IdFactorAccidente = Convert.ToInt32(reader["IdFactorAccidente"].ToString());
                             factor.FactorAccidente = reader["FactorAccidente"].ToString();
-                            factor.estatusDesc = reader["estatus"].ToString();
+                            factor.estatusDesc = reader["estatusDesc"].ToString();
                             factor.FechaActualizacion = Convert.ToDateTime(reader["FechaActualizacion"].ToString());
                             factor.Estatus = Convert.ToInt32(reader["estatus"].ToString());
                            // factor.ActualizadoPor = Convert.ToInt32(reader["ActualizadoPor"].ToString());
@@ -102,8 +102,100 @@ namespace GuanajuatoAdminUsuarios.Services
 
 
         }
+        public CatFactoresAccidentesModel GetFactorByID(int IdFactorAccidente)
+        {
+            CatFactoresAccidentesModel clasificacion = new CatFactoresAccidentesModel();
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("Select * from catFactoresAccidentes where idFactorAccidente=@IdFactorAccidente", connection);
+                    command.Parameters.Add(new SqlParameter("@IdFactorAccidente", SqlDbType.Int)).Value = IdFactorAccidente;
+                    command.CommandType = CommandType.Text;
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            clasificacion.IdFactorAccidente = Convert.ToInt32(reader["IdFactorAccidente"].ToString());
+                            clasificacion.Estatus = Convert.ToInt32(reader["estatus"].ToString());
 
+                            clasificacion.FactorAccidente = reader["FactorAccidente"].ToString();
+
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                }
+                finally
+                {
+                    connection.Close();
+                }
+
+            return clasificacion;
+        }
+        public int GuardarFactor(CatFactoresAccidentesModel model)
+        {
+            int result = 0;
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand sqlCommand = new SqlCommand("Insert into catFactoresAccidentes(FactorAccidente,estatus,fechaActualizacion,actualizadoPor) values(@FactorAccidente,@estatus,@fechaActualizacion,@actualizadoPor)", connection);
+                    sqlCommand.Parameters.Add(new SqlParameter("@FactorAccidente", SqlDbType.VarChar)).Value = model.FactorAccidente;
+                    sqlCommand.Parameters.Add(new SqlParameter("@estatus", SqlDbType.Int)).Value = 1;
+                    sqlCommand.Parameters.Add(new SqlParameter("@fechaActualizacion", SqlDbType.DateTime)).Value = DateTime.Now;
+                    sqlCommand.Parameters.Add(new SqlParameter("@actualizadoPor", SqlDbType.Int)).Value = 1;
+
+                    sqlCommand.CommandType = CommandType.Text;
+                    result = sqlCommand.ExecuteNonQuery();
+                }
+                catch (SqlException ex)
+                {
+                    return result;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return result;
+
+        }
+        public int UpdateFactor(CatFactoresAccidentesModel model)
+        {
+            int result = 0;
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand sqlCommand = new
+                        SqlCommand("Update catFactoresAccidentes set FactorAccidente=@FactorAccidente, estatus = @estatus,fechaActualizacion = @fechaActualizacion, actualizadoPor =@actualizadoPor where idFactorAccidente=@IdFactorAccidente",
+                        connection);
+                    sqlCommand.Parameters.Add(new SqlParameter("@IdFactorAccidente", SqlDbType.Int)).Value = model.IdFactorAccidente;
+
+                    sqlCommand.Parameters.Add(new SqlParameter("@FactorAccidente", SqlDbType.NVarChar)).Value = model.FactorAccidente;
+                    sqlCommand.Parameters.Add(new SqlParameter("@estatus", SqlDbType.VarChar)).Value = model.Estatus;
+                    sqlCommand.Parameters.Add(new SqlParameter("@fechaActualizacion", SqlDbType.DateTime)).Value = DateTime.Now;
+                    sqlCommand.Parameters.Add(new SqlParameter("@actualizadoPor", SqlDbType.Int)).Value = 1;
+                    sqlCommand.CommandType = CommandType.Text;
+                    result = sqlCommand.ExecuteNonQuery();
+                }
+                catch (SqlException ex)
+                {
+                    //---Log
+                    return result;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return result;
+        }
 
     }
-
 }
+

@@ -140,6 +140,8 @@
             success: function (result) {
                 var grid = $("#gridCatDiasInhabiles").data("kendoGrid");
         grid.dataSource.read();
+                        $('#addDateInhabil').modal('hide');
+
         sitteg_success("Información guardada correctamente.");
 
                 hideLoading();

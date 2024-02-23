@@ -1,4 +1,5 @@
 using GuanajuatoAdminUsuarios.Entity;
+using GuanajuatoAdminUsuarios.Models;
 using System.Collections.Generic;
 
 
@@ -7,13 +8,13 @@ namespace GuanajuatoAdminUsuarios.Interfaces
     public interface IDependencias
 
     {
-        List<Dependencias> GetDependencias();
+        List<DependenciasModel> GetDependencias();
 
-        Dependencias GetDependenciaById(int IdDependencia);
+        DependenciasModel GetDependenciaById(int IdDependencia);
 
-        int SaveDependencia(Dependencias dependencia);
+        int SaveDependencia(DependenciasModel dependencia);
 
-        int UpdateDependencia(Dependencias dependencia);
+        int UpdateDependencia(DependenciasModel dependencia);
 
         int DeleteDependencia(int dependencia);
 

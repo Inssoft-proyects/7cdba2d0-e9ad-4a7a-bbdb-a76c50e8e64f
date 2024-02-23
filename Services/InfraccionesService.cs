@@ -2530,7 +2530,7 @@ namespace GuanajuatoAdminUsuarios.Services
                         ,CONCAT(persProp.nombre, ' ', persProp.apellidoPaterno, ' ', persProp.apellidoMaterno) as Propietario
                         ,CONCAT(persOfi.nombre, ' ', persOfi.apellidoPaterno, ' ', persOfi.apellidoMaterno) as OficialInfraccion
 						,inf.idOficial
-                        ,motInf.calificacion as CalifSalarios
+                        --,motInf.calificacion as CalifSalarios
                         ,inf.monto AS MontoCalif
                         ,COALESCE(inf.monto,'0') AS MontoPago
                         ,COALESCE(inf.reciboPago,'') AS ReciboPago
@@ -2546,14 +2546,14 @@ namespace GuanajuatoAdminUsuarios.Services
                         ,veh.numeroEconomico
 						,veh.idSubtipoServicio
                         ,cc.color AS Color
-						,gar.idTipoLicencia
+						--,gar.idTipoLicencia
                         ,e.nombreEntidad AS EntidaddeReg
                         ,tv.tipoVehiculo AS TipodeVehículo
                         ,ts.tipoServicio AS TipodeServicio
                         ,ts.tipoServicio AS SubtipodeServicio
-                        ,catGar.garantia AS TipoGarantia
+                        --,catGar.garantia AS TipoGarantia
                         ,'' AS TipoAplicacion
-                        ,catMotInf.nombre AS Motivo
+                        --,catMotInf.nombre AS Motivo
                         ,inf.observaciones AS MotivoDesc
                         FROM infracciones as inf
                         left join motivosInfraccion motInf on inf.IdInfraccion = motInf.idInfraccion
@@ -2659,7 +2659,7 @@ namespace GuanajuatoAdminUsuarios.Services
 							model.TipoPersMoral = reader["TipoPersMoral"] == System.DBNull.Value ? default(string) : reader["TipoPersMoral"].ToString();
 							model.Propietario = reader["Propietario"] == System.DBNull.Value ? default(string) : reader["Propietario"].ToString();
 							model.OficialInfraccion = reader["OficialInfraccion"] == System.DBNull.Value ? default(string) : reader["OficialInfraccion"].ToString();
-							model.CalifSalarios = reader["CalifSalarios"] == System.DBNull.Value ? default(string) : reader["CalifSalarios"].ToString();
+							//model.CalifSalarios = reader["CalifSalarios"] == System.DBNull.Value ? default(string) : reader["CalifSalarios"].ToString();
 							model.MontoCalif = reader["MontoCalif"] == System.DBNull.Value ? default(string) : reader["MontoCalif"].ToString();
 							model.MontoPago = reader["MontoPago"] == System.DBNull.Value ? default(string) : reader["MontoPago"].ToString();
 							model.ReciboPago = reader["ReciboPago"] == System.DBNull.Value ? default(string) : reader["ReciboPago"].ToString();
@@ -2676,9 +2676,9 @@ namespace GuanajuatoAdminUsuarios.Services
 							model.TipodeVehículo = reader["TipodeVehículo"] == System.DBNull.Value ? default(string) : reader["TipodeVehículo"].ToString();
 							model.TipodeServicio = reader["TipodeServicio"] == System.DBNull.Value ? default(string) : reader["TipodeServicio"].ToString();
 							model.SubtipodeServicio = reader["SubtipodeServicio"] == System.DBNull.Value ? default(string) : reader["SubtipodeServicio"].ToString();
-							model.TipoGarantia = reader["TipoGarantia"] == System.DBNull.Value ? default(string) : reader["TipoGarantia"].ToString();
+							//model.TipoGarantia = reader["TipoGarantia"] == System.DBNull.Value ? default(string) : reader["TipoGarantia"].ToString();
 							model.TipoAplicacion = reader["TipoAplicacion"] == System.DBNull.Value ? default(string) : reader["TipoAplicacion"].ToString();
-							model.Motivo = reader["Motivo"] == System.DBNull.Value ? default(string) : reader["Motivo"].ToString();
+							//model.Motivo = reader["Motivo"] == System.DBNull.Value ? default(string) : reader["Motivo"].ToString();
 							model.MotivoDesc = reader["MotivoDesc"] == System.DBNull.Value ? default(string) : reader["MotivoDesc"].ToString();
 							model.NumeroSecuencial = numeroSecuencial;
 							modelList.Add(model);
@@ -3387,7 +3387,8 @@ INSERT INTO infracciones
 								 ? default(string)
 								 : reader["nombreCortesia"].ToString();
 								infraccionModel.NumTarjetaCirculacion = reader["NumTarjetaCirculacion"].ToString();
-								infraccionModel.Persona = _personasService.GetPersonaById((int)infraccionModel.idPersona);
+								if (infraccionModel.idPersona!=null)
+									infraccionModel.Persona = _personasService.GetPersonaById((int)infraccionModel.idPersona);
 								infraccionModel.PersonaInfraccion = GetPersonaInfraccionById((int)infraccionModel.idInfraccion);
 								infraccionModel.Vehiculo = _vehiculosService.GetVehiculoById((int)infraccionModel.idVehiculo);
 								//infraccionModel.MotivosInfraccion = GetMotivosInfraccionByIdInfraccion(infraccionModel.idInfraccion);

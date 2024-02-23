@@ -92,10 +92,12 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#gridAutoridadesDisp").data("kendoGrid").dataSource.data(result);
+                var grid = $("#gridAutoridadesDisp").data("kendoGrid");
+                  grid.dataSource.read();
+                $('#agregarAutoridadDisp').modal('hide');
+                  sitteg_success("Información guardada correctamente.");
 
-               // $("#tablaAutoridadesDisposicion").html(result);
-               hideLoading();
+                hideLoading();
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");
                 hideLoading();

@@ -114,8 +114,11 @@
                 type: 'POST',
                 data: Mydata,
                 success: function (result) {
-                    $("#tablaMotivosInfraccion").html(result);
-                    hideLoading();
+                var grid = $("#gridCatMotivos").data("kendoGrid");
+                grid.dataSource.read();
+                $('#addMotivo').modal('hide');
+
+                sitteg_success("Información guardada correctamente.");
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");
                 hideLoading();

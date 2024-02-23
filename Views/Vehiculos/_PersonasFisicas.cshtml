@@ -1,5 +1,10 @@
 ﻿@model List<PersonaModel>
-
+<script>
+    function onDataBound() {
+        var grid = $("#gridPersonasFisicas").data("kendoGrid");
+       
+    }
+</script>
 <div class="row justify-content-between mb-1">
     <div class="col-12 col-lg-6 mt-4 mb-2">
         <h5 class="px-4"><b>Listado de personas físicas</b></h5>
@@ -29,15 +34,23 @@
                 columns.Bound(p => p.numeroLicencia).Title("No. Licencia");
                 columns.Bound(c => c.tipoPersona).Title("Tipo persona");
             }).HtmlAttributes(new { style = "height:250" })
-            .Pageable(pager => pager.AlwaysVisible(true).Position(GridPagerPosition.Bottom).PageSizes(true))
-            .Sortable()
-            .Scrollable(scr => scr.Enabled(true))
-            .Scrollable(scr => scr.Height(250))
+
+            .Events(events => events
+            .DataBound("onDataBound")
+            )
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single).Type(GridSelectionType.Row))
+            .Pageable(p => p.Enabled(true).PageSizes(new[] { 10, 20, 30 }))
+            .EnableCustomBinding(false)
             .DataSource(dataSource => dataSource
             .Ajax()
             .Read(ev => ev.Action("ajax_BuscarPersonasFiscasPagination", "Vehiculos"))
-
-            .ServerOperation(false)
+            .PageSize(10)
+            )
+            .Scrollable(scr => scr.Height(350)
+            )
+            .ToolBar(t => t.Custom().Text("Buscar...").Name("search"))
+            )
+            @*.ServerOperation(false)
             .PageSize(5)
             )
             .ToolBar(t => t.Custom().Text("Buscar...").Name("search"))
@@ -49,7 +62,7 @@
                 s.Field(c => c.numeroLicencia);
 
             })
-            )
+            )*@
     </div>
 
 </div>

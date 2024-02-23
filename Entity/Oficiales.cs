@@ -21,4 +21,5 @@ public partial class Oficiales
 
     public int? Estatus { get; set; }
 
+    public int? IdOficina { get; set; }
 }

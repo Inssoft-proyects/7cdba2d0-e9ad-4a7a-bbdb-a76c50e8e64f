@@ -28,7 +28,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public IActionResult Index()
         {
 
-                var ListCausasAccidentesModel = GetCausasAccidentes();
+                var ListCausasAccidentesModel = _catCausasAccidentesService.ObtenerCausasActivas();
 
             return View(ListCausasAccidentesModel);
             }
@@ -41,7 +41,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public ActionResult IndexModal()
         {
            
-                var ListCausasAccidentesModel = GetCausasAccidentes();
+                var ListCausasAccidentesModel = _catCausasAccidentesService.ObtenerCausasActivas();
             return View("Index", ListCausasAccidentesModel);
             
         }
@@ -57,14 +57,14 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public ActionResult EditarCausasAccidenteModal(int IdCausaAccidente)
         {
         
-                var causasAccidentesModel = GetCausaAccidenteByID(IdCausaAccidente);
+                var causasAccidentesModel = _catCausasAccidentesService.ObtenerCausaByID(IdCausaAccidente);
             return PartialView("_Editar", causasAccidentesModel);
             }
    
 
         public ActionResult EliminarCausasAccidenteModal(int IdCausaAccidente)
         {
-            var causasAccidentesModel = GetCausaAccidenteByID(IdCausaAccidente);
+            var causasAccidentesModel = _catCausasAccidentesService.ObtenerCausaByID(IdCausaAccidente);
             return PartialView("_Eliminar", causasAccidentesModel);
         }
 
@@ -79,8 +79,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {
 
 
-                CrearCausaAccidente(model);
-                var ListCausasAccidentesModel = GetCausasAccidentes();
+                _catCausasAccidentesService.CrearCausa(model);
+                var ListCausasAccidentesModel = _catCausasAccidentesService.ObtenerCausasActivas();
                 return Json(ListCausasAccidentesModel);
             }
 
@@ -97,30 +97,17 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {
 
 
-                EditarCausaAccidente(model);
-                var ListCausasAccidentesModel = GetCausasAccidentes();
+                _catCausasAccidentesService.EditarCausa(model);
+                var ListCausasAccidentesModel = _catCausasAccidentesService.ObtenerCausasActivas();
                 return Json(ListCausasAccidentesModel);
             }
             return PartialView("_Editar");
         }
 
-        public ActionResult EliminarCausaAccidenteMod(CatCausasAccidentesModel model)
-        {
-            var errors = ModelState.Values.Select(s => s.Errors);
-            ModelState.Remove("CausaAccidente");
-            if (ModelState.IsValid)
-            {
-
-
-                EliminaCausaAccidente(model);
-                var ListCausasAccidentesModel = GetCausasAccidentes();
-                return PartialView("_ListaCausasAccidentes", ListCausasAccidentesModel);
-            }
-            return PartialView("_Eliminar");
-        }
+      
         public JsonResult GetCausas([DataSourceRequest] DataSourceRequest request)
         {
-            var ListCausasAccidentesModel = GetCausasAccidentes();
+            var ListCausasAccidentesModel = _catCausasAccidentesService.ObtenerCausasActivas();
 
             return Json(ListCausasAccidentesModel.ToDataSourceResult(request));
         }
@@ -129,84 +116,6 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 
         #endregion
-
-
-        #region Acciones a base de datos
-
-        public void CrearCausaAccidente(CatCausasAccidentesModel model)
-        {
-            CatCausasAccidentes causa = new CatCausasAccidentes();
-            causa.IdCausaAccidente = model.IdCausaAccidente;
-            causa.CausaAccidente = model.CausaAccidente;
-            causa.Estatus = 1;
-            causa.FechaActualizacion = DateTime.Now;
-            dbContext.CatCausasAccidentes.Add(causa);
-            dbContext.SaveChanges();
-        }
-
-        public void EditarCausaAccidente(CatCausasAccidentesModel model)
-        {
-            CatCausasAccidentes causa = new CatCausasAccidentes();
-            causa.IdCausaAccidente = model.IdCausaAccidente;
-            causa.CausaAccidente = model.CausaAccidente;
-            causa.Estatus = model.Estatus;
-            causa.FechaActualizacion = DateTime.Now;
-            dbContext.Entry(causa).State = EntityState.Modified;
-            dbContext.SaveChanges();
-
-        }
-
-        public void EliminaCausaAccidente(CatCausasAccidentesModel model)
-        {
-
-            CatCausasAccidentes causa = new CatCausasAccidentes();
-            causa.IdCausaAccidente = model.IdCausaAccidente;
-            causa.CausaAccidente = model.CausaAccidente;
-            causa.Estatus = 0;
-            causa.FechaActualizacion = DateTime.Now;
-            dbContext.Entry(causa).State = EntityState.Modified;
-            dbContext.SaveChanges();
-
-        }
-
-
-
-
-        public CatCausasAccidentesModel GetCausaAccidenteByID(int IdCausaAccidente)
-        {
-
-            var productEnitity = dbContext.CatCausasAccidentes.Find(IdCausaAccidente);
-
-            var causasAccidentesModel = (from catCausasAccidentes in dbContext.CatCausasAccidentes.ToList()
-                                         select new CatCausasAccidentesModel
-
-                                         {
-                                             IdCausaAccidente = catCausasAccidentes.IdCausaAccidente,
-                                             CausaAccidente = catCausasAccidentes.CausaAccidente,
-
-
-                                         }).Where(w => w.IdCausaAccidente == IdCausaAccidente).FirstOrDefault();
-
-            return causasAccidentesModel;
-        }
-
-
-        public List<CatCausasAccidentesModel> GetCausasAccidentes()
-        {
-            var ListCausasAccidentesModel = (from catCausasAccidentes in dbContext.CatCausasAccidentes.ToList()
-                                             join estatus in dbContext.Estatus.ToList()
-                                             on catCausasAccidentes.Estatus equals estatus.estatus
-                                             select new CatCausasAccidentesModel
-                                             {
-                                                 IdCausaAccidente = catCausasAccidentes.IdCausaAccidente,
-                                                 CausaAccidente = catCausasAccidentes.CausaAccidente,
-                                                 estatusDesc = estatus.estatusDesc,
-
-                                             }).ToList();
-            return ListCausasAccidentesModel;
-        }
-        #endregion
-
 
 
     }

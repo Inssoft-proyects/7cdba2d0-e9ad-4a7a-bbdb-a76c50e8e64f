@@ -35,18 +35,17 @@
             <h5 class="px-4"><b>Datos de Oficinas-Transporte</b></h5>
             <h6 class="px-4 text-muted">Completa los datos obligatorios para guardar.</h6>
         </div>
-            <div class="col-12 col-lg-6 my-4 btnToggleActive">
+          <!--  <div class="col-12 col-lg-6 my-4 btnToggleActive">
             @(Html.Kendo().SwitchFor(t => t.ValorEstatusDelegacionOfTrasporte)
                 .Name("delegacionOficinaSwitch")
-                .Checked(true)
-                .Messages(c => c.Checked("Activo").Unchecked("Inactivo"))
-                .HtmlAttributes(new { data_valor = 1 })
-
-                )
-        </div>
+                    .Checked(Model.Estatus == 1)
+                    .Messages(c => c.Checked("Activo").Unchecked("Inactivo"))
+                    .HtmlAttributes(new { data_valor = Model.Estatus })
+                    )
+            </div>-->
     </div>
-        <div class="col-12 col-md-4">
-            <div class="controlForm my-3">
+        <div>
+           <!-- <div class="controlForm my-3">
                 <label>Sede / Municipio <b>(obligatorio)</b>:</label>
                 <span>
                     @Html.HiddenFor(m=>m.IdOficinaTransporte)
@@ -75,7 +74,7 @@
                     )
 
             </div>
-        </div>
+            </div>-->
         <div class="col-12 col-md-4">
             <div class="controlForm my-3">
                 @(Html.Kendo().TextBoxFor(t=>t.JefeOficina)
@@ -85,6 +84,7 @@
                     )
 
             </div>
+        </div>
         </div>
     </form>
     <div class="row my-4">
@@ -125,8 +125,10 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#gridCatOficinasTransporte").data("kendoGrid").dataSource.data(result);
-                sitteg_info('Se ha actualizado la información');
+                var grid = $("#gridCatOficinasTransporte").data("kendoGrid");
+                grid.dataSource.read();
+                $('#agregarDelegacionOficina').modal('hide');
+                sitteg_success("Información guardada correctamente.");
                 hideLoading();
             },
             error: function (error) { 

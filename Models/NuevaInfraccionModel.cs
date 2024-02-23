@@ -25,6 +25,11 @@ namespace GuanajuatoAdminUsuarios.Models
         public int? idGarantia { get; set; }
         public int? idEstatusInfraccion { get; set; }
         public int? idPersonaInfraccion { get; set; }
+        public string MontoCamino { get; set; }
+        public string MontoCarga { get; set; }
+        public string MontoPropietarios { get; set; }
+        public string MontoOtros { get; set; }
+
 
         public DateTime fechaInfraccion { get; set; } = DateTime.Now;
         public string observaciones { get; set; }

@@ -196,7 +196,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             oficial.Nombre = reader["Nombre"].ToString();
                             oficial.ApellidoPaterno = reader["ApellidoPaterno"].ToString();
                             oficial.ApellidoMaterno = reader["ApellidoMaterno"].ToString();
-
+                            oficial.IdOficina = Convert.ToInt32(reader["idOficina"]);
                         }
                     }
                 }
@@ -219,12 +219,12 @@ namespace GuanajuatoAdminUsuarios.Services
                 try
                 {
                     connection.Open();
-                    SqlCommand sqlCommand = new SqlCommand("Insert into catOficiales(Nombre, estatus,ApellidoPaterno,ApellidoMaterno,transito) values(@Nombre,@estatus,@ApellidoPaterno,@ApellidoMaterno,@idDependencia)", connection);
+                    SqlCommand sqlCommand = new SqlCommand("Insert into catOficiales(Nombre, estatus,ApellidoPaterno,ApellidoMaterno,idOficina) values(@Nombre,@estatus,@ApellidoPaterno,@ApellidoMaterno,@idDependencia)", connection);
                     sqlCommand.Parameters.Add(new SqlParameter("@Nombre", SqlDbType.VarChar)).Value = oficial.Nombre;
                     sqlCommand.Parameters.Add(new SqlParameter("@estatus", SqlDbType.Int)).Value = 1;
-                    sqlCommand.Parameters.Add(new SqlParameter("@ApellidoPaterno", SqlDbType.VarChar)).Value = oficial.ApellidoPaterno;
-                    sqlCommand.Parameters.Add(new SqlParameter("@ApellidoMaterno", SqlDbType.VarChar)).Value = oficial.ApellidoMaterno;
-                    sqlCommand.Parameters.Add(new SqlParameter("@idDependencia", SqlDbType.Int)).Value = (object)idDependencia ?? DBNull.Value;
+                    sqlCommand.Parameters.Add(new SqlParameter("@ApellidoPaterno", SqlDbType.VarChar)).Value = oficial.ApellidoPaterno==null ? "": oficial.ApellidoPaterno;
+                    sqlCommand.Parameters.Add(new SqlParameter("@ApellidoMaterno", SqlDbType.VarChar)).Value = oficial.ApellidoMaterno==null ? "": oficial.ApellidoMaterno;
+                    sqlCommand.Parameters.Add(new SqlParameter("@idDependencia", SqlDbType.Int)).Value = oficial.IdOficina == null ? 0 : oficial.IdOficina;
 
                     sqlCommand.CommandType = CommandType.Text;
                     result = sqlCommand.ExecuteNonQuery();
@@ -250,14 +250,14 @@ namespace GuanajuatoAdminUsuarios.Services
                 {
                     connection.Open();
                     SqlCommand sqlCommand = new
-                        SqlCommand("Update catOficiales set Nombre = @Nombre, ApellidoPaterno=@ApellidoPaterno, ApellidoMaterno=@ApellidoMaterno, estatus = @estatus where idOficial=@idOficial",
+                        SqlCommand("Update catOficiales set Nombre = @Nombre, ApellidoPaterno=@ApellidoPaterno, ApellidoMaterno=@ApellidoMaterno, estatus = @estatus, idOficina=@idDependencia where idOficial=@idOficial",
                         connection);
                     sqlCommand.Parameters.Add(new SqlParameter("@idOficial", SqlDbType.Int)).Value = oficial.IdOficial;
                     sqlCommand.Parameters.Add(new SqlParameter("@estatus", SqlDbType.Int)).Value = oficial.Estatus;
                     sqlCommand.Parameters.Add(new SqlParameter("@Nombre", SqlDbType.VarChar)).Value = oficial.Nombre;
-                    sqlCommand.Parameters.Add(new SqlParameter("@ApellidoPaterno", SqlDbType.VarChar)).Value = oficial.ApellidoPaterno;
-                    sqlCommand.Parameters.Add(new SqlParameter("@ApellidoMaterno", SqlDbType.VarChar)).Value = oficial.ApellidoMaterno;
-                   // sqlCommand.Parameters.Add(new SqlParameter("@idDependencia", SqlDbType.Int)).Value = (object)idDependencia ?? DBNull.Value;
+                    sqlCommand.Parameters.Add(new SqlParameter("@ApellidoPaterno", SqlDbType.VarChar)).Value = oficial.ApellidoPaterno == null ? "" : oficial.ApellidoPaterno;
+                    sqlCommand.Parameters.Add(new SqlParameter("@ApellidoMaterno", SqlDbType.VarChar)).Value = oficial.ApellidoMaterno == null ? "" : oficial.ApellidoMaterno;
+                    sqlCommand.Parameters.Add(new SqlParameter("@idDependencia", SqlDbType.Int)).Value = oficial.IdOficina == null ? 0 : oficial.IdOficina;
 
                     sqlCommand.CommandType = CommandType.Text;
                     result = sqlCommand.ExecuteNonQuery();

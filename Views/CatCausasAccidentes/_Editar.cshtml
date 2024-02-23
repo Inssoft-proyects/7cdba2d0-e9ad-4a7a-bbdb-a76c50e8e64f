@@ -37,10 +37,9 @@
 
                     @(Html.Kendo().SwitchFor(t => t.SwitchEstatusCausaAccidente)
                         .Name("causaAccidenteSwitch")
-                        .Checked(true)
+                        .Checked(Model.Estatus == 1)
                         .Messages(c => c.Checked("Activo").Unchecked("Inactivo"))
-                        .HtmlAttributes(new { data_valor = 1 })
-
+                        .HtmlAttributes(new { data_valor = Model.Estatus })
                         )
                 </div>
                 </div>
@@ -109,8 +108,10 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#gridCatCausasAccidente").data("kendoGrid").dataSource.data(result);
-                sitteg_info('Se ha actualizado la información');
+                var grid = $("#gridCatCausasAccidente").data("kendoGrid");
+                grid.dataSource.read();
+                $('#agregarCausaAccidente').modal('hide');
+                sitteg_success("Información guardada correctamente.");
                 hideLoading();
             },
             error: function (error) { 

@@ -39,12 +39,10 @@
                     @(Html.Kendo().SwitchFor(t => t.valorEstatusDep)
                     .Name("switchDependencias")
                     .Checked(true)
-                      .ThumbRounded(Rounded.None)
-                        .Size(ComponentSize.Large)
-                        .TrackRounded(Rounded.None)
-                        .Messages(c=>c.Checked("Activo").Unchecked("Inactivo"))
-
-                        )
+                       .Checked(Model.Estatus == 1)
+                    .Messages(c => c.Checked("Activo").Unchecked("Inactivo"))
+                    .HtmlAttributes(new { data_valor = Model.Estatus })
+                    )
                 </div>
             </div>
         </div>
@@ -98,8 +96,10 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#gridCatDependencias").data("kendoGrid").dataSource.data(result);
-                sitteg_success('Se ha actualizado la información');
+                var grid = $("#gridCatDependencias").data("kendoGrid");
+                grid.dataSource.read();
+                $('#addDependencia').modal('hide');
+                sitteg_success("Información actualizada correctamente.");
                 hideLoading();
             },
             error: function (error) {

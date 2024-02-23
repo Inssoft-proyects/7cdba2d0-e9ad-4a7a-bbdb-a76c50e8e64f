@@ -254,11 +254,15 @@
 				int rowspan = Model.Involucrados.Where(w => w.Placa == item.Placa).Count();
 				contadorVehiculo++;
 
-
 				@if (Model.Involucrados.Count() > 0)
 				{
 					<tr>
-						<td><p class="s2">@item.numeroConsecutivo</p></td>
+						@if (item.IdTipoInvolucrado!=3) {
+							<td><p class="s2">@item.numeroConsecutivo</p></td>
+						}else
+						{
+							<td><p class="s2"></p></td>
+						}
 						<td><p class="s2">@item.TipoVehiculo</p></td>
 						<td><p class="s2">@item.nombre</p></td>
 						<td><p class="s2">@item.Sexo</p></td>

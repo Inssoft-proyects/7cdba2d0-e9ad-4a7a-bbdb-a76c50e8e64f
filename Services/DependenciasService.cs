@@ -1,5 +1,6 @@
 ﻿using GuanajuatoAdminUsuarios.Entity;
 using GuanajuatoAdminUsuarios.Interfaces;
+using GuanajuatoAdminUsuarios.Models;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -19,26 +20,30 @@ namespace GuanajuatoAdminUsuarios.Services
         /// Consulta de Categorias con SQLClient
         /// </summary>
         /// <returns></returns>
-        public List<Dependencias> GetDependencias()
+        public List<DependenciasModel> GetDependencias()
         {
             //
-            List<Dependencias> dependencias = new List<Dependencias>();
+            List<DependenciasModel> dependencias = new List<DependenciasModel>();
 
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
                 try
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("Select * from catDelegacionesOficinasTransporte where estatus=1 ORDER BY nombreOficina ASC", connection);
+                    SqlCommand command = new SqlCommand(@"Select catDep.*, e.estatusDesc from catDependenciasEnvian catDep
+                                                            LEFT JOIN estatus AS e ON e.estatus = catDep.estatus
+                                                            ORDER BY nombreDependencia ASC", connection);
                     command.CommandType = CommandType.Text;
                     //sqlData Reader sirve para la obtencion de datos 
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
                         while (reader.Read())
                         {
-                            Dependencias dependencia = new Dependencias();
-                            dependencia.IdDependencia = Convert.ToInt32(reader["idOficinaTransporte"].ToString());
-                            dependencia.NombreDependencia = reader["nombreOficina"].ToString();
+                            DependenciasModel dependencia = new DependenciasModel();
+                            dependencia.IdDependencia = Convert.ToInt32(reader["idDependenciaEnvia"].ToString());
+                            dependencia.NombreDependencia = reader["nombreDependencia"].ToString();
+                            dependencia.estatusDesc = reader["estatusDesc"].ToString();
+
                             dependencias.Add(dependencia);
 
                         }
@@ -60,22 +65,24 @@ namespace GuanajuatoAdminUsuarios.Services
 
         }
 
-        public Dependencias GetDependenciaById(int idDependencia)
+        public DependenciasModel GetDependenciaById(int idDependencia)
         {
-            Dependencias dependencia = new Dependencias();
+            DependenciasModel dependencia = new DependenciasModel();
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("Select * from dependencias where idDependencia=@idDependencia", connection);
+                    SqlCommand command = new SqlCommand("Select * from catDependenciasEnvian where idDependenciaEnvia=@idDependencia", connection);
                     command.Parameters.Add(new SqlParameter("@idDependencia", SqlDbType.Int)).Value = idDependencia;
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
                         while (reader.Read())
                         {
-                            dependencia.IdDependencia = Convert.ToInt32(reader["idDependencia"].ToString());
-                            dependencia.NombreDependencia = reader["NombreDependencia"].ToString();
+                            dependencia.IdDependencia = Convert.ToInt32(reader["idDependenciaEnvia"].ToString());
+                            dependencia.Estatus = Convert.ToInt32(reader["estatus"].ToString());
+
+                            dependencia.NombreDependencia = reader["nombreDependencia"].ToString();
                         }
                     }
                 }
@@ -90,7 +97,7 @@ namespace GuanajuatoAdminUsuarios.Services
             return dependencia;
         }
 
-        public int SaveDependencia(Dependencias dependencia)
+        public int SaveDependencia(DependenciasModel dependencia)
         {
             int result = 0;
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
@@ -98,8 +105,12 @@ namespace GuanajuatoAdminUsuarios.Services
                 try
                 {
                     connection.Open();
-                    SqlCommand sqlCommand = new SqlCommand("Insert into dependencias(nombreDependencia) values(@NombreDependencia)", connection);
+                    SqlCommand sqlCommand = new SqlCommand(@"Insert into catDependenciasEnvian(nombreDependencia,fechaActualizacion,actualizadoPor,estatus) 
+                                                    values(@NombreDependencia,@fechaActualizacion,@actualizadoPor,@estatus)", connection);
                     sqlCommand.Parameters.Add(new SqlParameter("@NombreDependencia", SqlDbType.VarChar)).Value = dependencia.NombreDependencia;
+                    sqlCommand.Parameters.Add(new SqlParameter("@fechaActualizacion", SqlDbType.DateTime)).Value = DateTime.Now;
+                    sqlCommand.Parameters.Add(new SqlParameter("@actualizadoPor", SqlDbType.Int)).Value = 1;
+                    sqlCommand.Parameters.Add(new SqlParameter("@estatus", SqlDbType.Int)).Value = 1;
                     sqlCommand.CommandType = CommandType.Text;
                     result = sqlCommand.ExecuteNonQuery();
                 }
@@ -115,7 +126,7 @@ namespace GuanajuatoAdminUsuarios.Services
             return result;
 
         }
-        public int UpdateDependencia(Dependencias dependencia)
+        public int UpdateDependencia(DependenciasModel dependencia)
         {
             int result = 0;
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
@@ -124,10 +135,13 @@ namespace GuanajuatoAdminUsuarios.Services
                 {
                     connection.Open();
                     SqlCommand sqlCommand = new
-                        SqlCommand("Update dependencias set NombreDependencia=@NombreDependencia where idDependencia=@idDependencia",
+                        SqlCommand("Update catDependenciasEnvian set nombreDependencia=@NombreDependencia,estatus= @estatus where idDependenciaEnvia=@idDependencia",
                         connection);
                     sqlCommand.Parameters.Add(new SqlParameter("@idDependencia", SqlDbType.Int)).Value = dependencia.IdDependencia;
                     sqlCommand.Parameters.Add(new SqlParameter("@NombreDependencia", SqlDbType.VarChar)).Value = dependencia.NombreDependencia;
+                    sqlCommand.Parameters.Add(new SqlParameter("@estatus", SqlDbType.Int)).Value = dependencia.Estatus;
+                    sqlCommand.Parameters.Add(new SqlParameter("@fechaActualizacion", SqlDbType.DateTime)).Value = DateTime.Now;
+                    sqlCommand.Parameters.Add(new SqlParameter("@actualizadoPor", SqlDbType.Int)).Value = 1;
                     sqlCommand.CommandType = CommandType.Text;
                     result = sqlCommand.ExecuteNonQuery();
                 }

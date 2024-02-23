@@ -1,4 +1,11 @@
-﻿<div class="row">
+﻿<script>
+    function filtroCarretera() {
+        return {
+            idDelegacion: $("#idDelegacionFiltro").val()
+        }
+    }
+</script>
+<div class="row">
     <div class="col-12 mb-4 px-4 rounded gridCustom">
 
         @(
@@ -8,7 +15,7 @@
             {
                 columns.Bound(c => c.IdCarretera).Width(20).Title("Id");
                 columns.Bound(c => c.Carretera).Width(80).Title("Carretera");
-                columns.Bound(c => c.nombreOficina).Title("Nombre oficina").Width(100);
+                columns.Bound(c => c.nombreOficina).Title("Delegación").Width(100);
                 columns.Bound(c => c.estatusDesc).Title("Estatus en sistema").Width(100);
                 columns.Command(c => c.Custom("Editar").Click("editarCarretera")).Width(100);
                 // columns.Command(c => c.Custom("Eliminar").Click("eliminar")).Width(100);
@@ -21,7 +28,7 @@
             .Pageable()
             .DataSource(dataSource => dataSource
             .Ajax()
-            .Read(read => read.Action("GetCarr", "CatCarreteras"))
+            .Read(read => read.Action("GetCarr", "CatCarreteras").Data("filtroCarretera"))
             .PageSize(5).Model(model => model.Id(p => p.IdCarretera))
             )
             .ToolBar(t => t.Search().Text("Buscar..."))

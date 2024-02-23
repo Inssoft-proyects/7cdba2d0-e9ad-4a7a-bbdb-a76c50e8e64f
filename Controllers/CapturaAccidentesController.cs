@@ -1689,8 +1689,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
             return Json(ListVehiculosInfracciones.ToDataSourceResult(request));
         }
-        public ActionResult ModalInfraccionesVehiculos()
+        public ActionResult ModalInfraccionesVehiculos(string montoCamino, string montoCarga, string montoPropietarios, string montoOtros)
         {
+            int idAccidente = HttpContext.Session.GetInt32("LastInsertedId") ?? 0;
+           var DatosMontos = _capturaAccidentesService.GuardarDatosPrevioInfraccion(idAccidente,montoCamino, montoCarga, montoPropietarios, montoOtros);
+
             return PartialView("_ModalAsignarInfracciones");
         }
         public IActionResult VincularInfraccionAccidente(int IdVehiculo, int IdInfraccion)

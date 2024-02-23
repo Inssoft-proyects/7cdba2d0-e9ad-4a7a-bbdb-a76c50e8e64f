@@ -70,8 +70,8 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT c.*, e.estatus,e.estatusDesc FROM catClasificacionAccidentes AS c LEFT JOIN estatus AS e ON c.estatus = e.estatus" +
-                                                        " WHERE c.estatus = 1 ORDER BY NombreClasificacion ASC;", connection);
+                    SqlCommand command = new SqlCommand(@"SELECT c.*, e.estatus,e.estatusDesc FROM catClasificacionAccidentes AS c LEFT JOIN estatus AS e ON c.estatus = e.estatus
+                                                         ORDER BY NombreClasificacion ASC;", connection);
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
@@ -121,6 +121,8 @@ namespace GuanajuatoAdminUsuarios.Services
                         while (reader.Read())
                         {
                             clasificacion.IdClasificacionAccidente = Convert.ToInt32(reader["idClasificacionAccidente"].ToString());
+                            clasificacion.Estatus = Convert.ToInt32(reader["estatus"].ToString());
+
                             clasificacion.NombreClasificacion = reader["nombreClasificacion"].ToString();
 
                         }

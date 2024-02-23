@@ -70,7 +70,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public JsonResult Municipios_Read()
         {
-            var result = new SelectList(_catMunicipiosService.GetMunicipios(), "IdMunicipio", "Municipio");
+            var result = new SelectList(_catMunicipiosService.GetMunicipiosGuanajuato(), "IdMunicipio", "Municipio");
             return Json(result);
         }
 

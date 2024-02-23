@@ -268,29 +268,28 @@ namespace GuanajuatoAdminUsuarios.Controllers
             return ListOficialessModel;
         }
         #endregion
-        [HttpGet]
-        public ActionResult ajax_BuscarDelegacion(int idDelegacionFiltro)
+     //   [HttpGet]
+        public ActionResult ajax_BuscarDelegacion(int idDelegacionFiltro, string nombre, string apellidoPaterno, string apellidoMaterno)
         {
             List<CatOficialesModel> ListOfcialesDelegacion = new List<CatOficialesModel>();
 
 
-            ListOfcialesDelegacion = (from oficiales in _oficialesService.GetOficiales().ToList()
-                                         // join delegacion in _catDelegacionesOficinasTransporteService.GetDelegacionesOficinasActivos().ToList()
-                                          //on oficiales.IdOficina equals delegacion.IdOficinaTransporte
-                                          // join estatus in dbContext.Estatus.ToList()
-                                          //on diasInhabiles.Estatus equals estatus.estatus
+            ListOfcialesDelegacion = (from oficiales in dbContext.Oficiales.ToList()
+                                      join estatus in dbContext.Estatus.ToList()
+                                      on oficiales.Estatus equals estatus.estatus
+                                      join oficinas in dbContext.CatDelegacionesOficinasTransporte.ToList()
+                                      on oficiales.IdOficina equals oficinas.IdOficinaTransporte 
 
                                       select new CatOficialesModel
                                       {
                                           IdOficial = oficiales.IdOficial,
-                                          Nombre = oficiales.Nombre,
-                                          ApellidoPaterno = oficiales.ApellidoPaterno,
-                                          ApellidoMaterno = oficiales.ApellidoMaterno,
-                                          IdOficina = oficiales.IdOficina,
-                                          Estatus = oficiales.Estatus,
-                                          nombreOficina = oficiales.nombreOficina,
-                                          // EstatusDesc = estatus.estatusDesc,
-                                          // = diasInhabiles.Municipio
+                                          Nombre = oficiales.Nombre.ToUpper(),
+                                          ApellidoPaterno = oficiales.ApellidoPaterno.ToUpper(),
+                                          ApellidoMaterno = oficiales.ApellidoMaterno.ToUpper(),
+                                          estatusDesc = estatus.estatusDesc,
+                                          nombreOficina = oficinas.NombreOficina,
+                                          IdOficina = oficinas.IdOficinaTransporte,
+                                          
                                       }).ToList();
 
       
@@ -298,6 +297,24 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {
                 ListOfcialesDelegacion = (from s in ListOfcialesDelegacion
                                           where s.IdOficina == idDelegacionFiltro
+                                          select s).ToList();
+            }
+            if (nombre != null)
+            {
+                ListOfcialesDelegacion = (from s in ListOfcialesDelegacion
+                                          where s.Nombre == nombre.ToUpper()
+                                          select s).ToList();
+            }
+            if (apellidoPaterno != null)
+            {
+                ListOfcialesDelegacion = (from s in ListOfcialesDelegacion
+                                          where s.ApellidoPaterno == apellidoPaterno.ToUpper()
+                                          select s).ToList();
+            }
+            if (apellidoMaterno != null)
+            {
+                ListOfcialesDelegacion = (from s in ListOfcialesDelegacion
+                                          where s.ApellidoMaterno == apellidoMaterno.ToUpper()
                                           select s).ToList();
             }
 

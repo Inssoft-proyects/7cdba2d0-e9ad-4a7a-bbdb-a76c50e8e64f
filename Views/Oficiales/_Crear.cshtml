@@ -72,7 +72,7 @@
             <div class="col-12 col-md-4">
                 <div class="controlForm my-3">
                     @(Html.Kendo().TextBoxFor(t=>t.ApellidoPaterno)
-                        .Label(l => l.Content("Apellido paterno <b>(obligatorio)</b>:"))
+                        .Label(l => l.Content("Apellido paterno:"))
                         .Placeholder("Ingresa el apellido paterno del oficial")
                         .HtmlAttributes(new { style = "width: 100%" })
                         )
@@ -82,11 +82,29 @@
             <div class="col-12 col-md-4">
                 <div class="controlForm my-3">
                     @(Html.Kendo().TextBoxFor(t=>t.ApellidoMaterno)
-                        .Label(l => l.Content("Apellido materno <b>(obligatorio)</b>:"))
+                        .Label(l => l.Content("Apellido materno:"))
                         .Placeholder("Ingresa el apellido materno del oficial")
                         .HtmlAttributes(new { style = "width: 100%" })
                         )
 
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="controlForm my-3">
+                    <label>Oficina</b>:</label>
+                    @(Html.Kendo().DropDownListFor(t=>t.IdOficina)                        
+                        .Filter(FilterType.Contains)
+                        .DataTextField("Text")
+                        .DataValueField("Value")
+                        .OptionLabel("Selecciona una oficina")
+                        .HtmlAttributes(new { style = "width:100%;"})
+                        .DataSource(source =>
+                        {
+                            source.Read(read =>
+                            {
+                                read.Action("DelegacionesOficinas_Drop", "Oficiales");
+                            });
+                        }))
                 </div>
             </div>
         </div>
@@ -117,7 +135,11 @@
 
 <script>
     function agregarOficial() {
-
+        if ($("#Nombre").val().length < 3) {
+            sitteg_warning("Debe ingresar el nombre.");
+            return;
+        }
+        
         var Mydata = $("#agregarOficialForm").serialize();
         console.log(Mydata);
         $('#agregarOficial').modal('hide');

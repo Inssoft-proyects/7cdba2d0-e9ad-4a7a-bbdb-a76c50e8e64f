@@ -82,7 +82,10 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#gridCatFactoresAccidentes").data("kendoGrid").dataSource.data(result);
+                var grid = $("#gridCatFactoresAccidentes").data("kendoGrid");
+                grid.dataSource.read();
+                $('#agregarFactornAccidente').modal('hide');
+                sitteg_success("Información actualizada correctamente.");
                 hideLoading();
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");

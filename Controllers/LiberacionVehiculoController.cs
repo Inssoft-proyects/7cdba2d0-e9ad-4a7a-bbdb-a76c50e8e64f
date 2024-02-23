@@ -112,8 +112,9 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 var user = Convert.ToDecimal(User.FindFirst(CustomClaims.IdUsuario).Value);
                 _bitacoraServices.insertBitacora(Id, ip, "LiberacionVehiculo_Liberacion", "Actualizar", "update", user);
 
-                var repuveConsRoboResponse = _repuveService.ConsultaRobo(repuveGralModel).FirstOrDefault();
-                ViewBag.ReporteRobo = repuveConsRoboResponse.estatus == "1";
+                  var repuveConsRoboResponse = _repuveService.ConsultaRobo(repuveGralModel).FirstOrDefault();
+                 ViewBag.ReporteRobo = repuveConsRoboResponse.estatus == "1";
+           
                 //model.FechaIngreso.ToString("dd/MM/yyyy");
                 return PartialView("_UpdateLiberacion", model);
             }

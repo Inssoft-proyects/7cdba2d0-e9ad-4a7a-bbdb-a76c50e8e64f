@@ -27,7 +27,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public IActionResult Index()
         {
    
-                var ListAutoridadesDisposicionModel = GetAutoridadesDisposicion();
+                var ListAutoridadesDisposicionModel = _catAutoridadesDisposicionservice.ObtenerAutoridadesActivas();
 
             return View(ListAutoridadesDisposicionModel);
             }
@@ -43,8 +43,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {
                 //Crear el producto
 
-                CrearAutoridadDisp(model);
-                var ListAutoridadesDisposicionModel = GetAutoridadesDisposicion();
+                _catAutoridadesDisposicionservice.GuardarAutoridad(model);
+                var ListAutoridadesDisposicionModel = _catAutoridadesDisposicionservice.ObtenerAutoridadesActivas();
 
                 return Json(ListAutoridadesDisposicionModel);
             }
@@ -55,7 +55,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         [HttpGet]
         public IActionResult Editar(int IdAutoridadDisposicion)
         {
-            var autoridadesDisposicionModel = GetAutoridadDispByID(IdAutoridadDisposicion);
+            var autoridadesDisposicionModel = _catAutoridadesDisposicionservice.GetAutoridadesByID(IdAutoridadDisposicion);
             return View(autoridadesDisposicionModel);
         }
 
@@ -71,8 +71,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {
 
 
-                EditarAutoridadDisp(model);
-                var ListAutoridadesDisposicionModel = GetAutoridadesDisposicion();
+                _catAutoridadesDisposicionservice. UpdateAutoridad(model);
+                var ListAutoridadesDisposicionModel = _catAutoridadesDisposicionservice.ObtenerAutoridadesActivas();
                 return Json(ListAutoridadesDisposicionModel);
             }
 
@@ -83,7 +83,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public IActionResult Eliminar(int IdAutoridadDisposicion)
         {
 
-            var autoridadesDisposicionModel = GetAutoridadDispByID(IdAutoridadDisposicion);
+            var autoridadesDisposicionModel = _catAutoridadesDisposicionservice.GetAutoridadesByID(IdAutoridadDisposicion);
             return View(autoridadesDisposicionModel);
         }
 
@@ -95,7 +95,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             if (ModelState.IsValid)
             {
                 //Modificiacion del registro
-                EliminarAutoridadDisp(autoridadesDisposicionModel);
+               // EliminarAutoridadDisp(autoridadesDisposicionModel);
                 return RedirectToAction("Index");
             }
             return View("Delete");
@@ -121,14 +121,14 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public ActionResult EditarAutoridadDisposicionParcial(int IdAutoridadDisposicion)
         {
      
-                var autoridadesDisposicionModel = GetAutoridadDispByID(IdAutoridadDisposicion);
+                var autoridadesDisposicionModel = _catAutoridadesDisposicionservice.GetAutoridadesByID(IdAutoridadDisposicion);
             return PartialView("_Editar", autoridadesDisposicionModel);
             }
   
 
         public ActionResult EliminarAutoridadDisposicionParcial(int IdAutoridadDisposicion)
         {
-            var autoridadesDisposicionModel = GetAutoridadDispByID(IdAutoridadDisposicion);
+            var autoridadesDisposicionModel = _catAutoridadesDisposicionservice.GetAutoridadesByID(IdAutoridadDisposicion);
             return PartialView("_Eliminar", autoridadesDisposicionModel);
         }
 
@@ -147,8 +147,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {
 
 
-                CrearAutoridadDisp(model);
-                var ListAutoridadesDisposicionModel = GetAutoridadesDisposicion();
+                _catAutoridadesDisposicionservice.GuardarAutoridad(model);
+                var ListAutoridadesDisposicionModel = _catAutoridadesDisposicionservice.ObtenerAutoridadesActivas();
                 return PartialView("_ListaAutoridadesDisposicion", ListAutoridadesDisposicionModel);
             }
 
@@ -157,7 +157,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public JsonResult GetAutDisp([DataSourceRequest] DataSourceRequest request)
         {
-            var ListAutoridadesDisposicionModel = GetAutoridadesDisposicion();
+            var ListAutoridadesDisposicionModel = _catAutoridadesDisposicionservice.ObtenerAutoridadesActivas();
 
             return Json(ListAutoridadesDisposicionModel.ToDataSourceResult(request));
         }
@@ -166,89 +166,6 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 
         #endregion
-
-
-        #region Acciones a base de datos
-
-        public void CrearAutoridadDisp(CatAutoridadesDisposicionModel model)
-        {
-            CatAutoridadesDisposicion autoridad = new CatAutoridadesDisposicion();
-            autoridad.IdAutoridadDisposicion = model.IdAutoridadDisposicion;
-            autoridad.NombreAutoridadDisposicion = model.NombreAutoridadDisposicion;
-            autoridad.Estatus = 1;
-            autoridad.FechaActualizacion = DateTime.Now;
-            dbContext.CatAutoridadesDisposicion.Add(autoridad);
-            dbContext.SaveChanges();
-        }
-
-        public void EditarAutoridadDisp(CatAutoridadesDisposicionModel model)
-        {
-            CatAutoridadesDisposicion autoridad = new CatAutoridadesDisposicion();
-            autoridad.IdAutoridadDisposicion = model.IdAutoridadDisposicion;
-            autoridad.NombreAutoridadDisposicion = model.NombreAutoridadDisposicion;
-            autoridad.Estatus = model.Estatus;
-            autoridad.FechaActualizacion = DateTime.Now;
-            dbContext.Entry(autoridad).State = EntityState.Modified;
-            dbContext.SaveChanges();
-
-        }
-
-        public void EliminarAutoridadDisp(CatAutoridadesDisposicionModel model)
-        {
-
-            CatAutoridadesDisposicion autoridad = new CatAutoridadesDisposicion();
-            autoridad.IdAutoridadDisposicion = model.IdAutoridadDisposicion;
-            autoridad.NombreAutoridadDisposicion = model.NombreAutoridadDisposicion;
-            autoridad.Estatus = 0;
-            autoridad.FechaActualizacion = DateTime.Now;
-            dbContext.Entry(autoridad).State = EntityState.Modified;
-            dbContext.SaveChanges();
-
-        }
-
-
-
-
-        public CatAutoridadesDisposicionModel GetAutoridadDispByID(int IdAutoridadDisposicion)
-        {
-
-            var productEnitity = dbContext.CatAutoridadesDisposicion.Find(IdAutoridadDisposicion);
-
-            var autoridadesDisposicionModel = (from catAutoridadesDisposicion in dbContext.CatAutoridadesDisposicion.ToList()
-                                               select new CatAutoridadesDisposicionModel
-
-                                               {
-                                                   IdAutoridadDisposicion = catAutoridadesDisposicion.IdAutoridadDisposicion,
-                                                   NombreAutoridadDisposicion = catAutoridadesDisposicion.NombreAutoridadDisposicion,
-
-
-                                               }).Where(w => w.IdAutoridadDisposicion == IdAutoridadDisposicion).FirstOrDefault();
-
-            return autoridadesDisposicionModel;
-        }
-
-        /// <summary>
-        /// Linq es una tecnologia de control de datos (excel, txt,EF,sqlclient etc)
-        /// para la gestion un mejor control de la info
-        /// </summary>
-        /// <returns></returns>
-        public List<CatAutoridadesDisposicionModel> GetAutoridadesDisposicion()
-        {
-            var ListAutoridadesDisposicionModel = (from catAutoridadesDisposicion in dbContext.CatAutoridadesDisposicion.ToList()
-                                                   join estatus in dbContext.Estatus.ToList()
-                                                   on catAutoridadesDisposicion.Estatus equals estatus.estatus
-                                                   select new CatAutoridadesDisposicionModel
-                                                   {
-                                                       IdAutoridadDisposicion = catAutoridadesDisposicion.IdAutoridadDisposicion,
-                                                       NombreAutoridadDisposicion = catAutoridadesDisposicion.NombreAutoridadDisposicion,
-                                                       estatusDesc = estatus.estatusDesc
-
-                                                   }).ToList();
-            return ListAutoridadesDisposicionModel;
-        }
-        #endregion
-
-
 
     }
 }

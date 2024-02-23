@@ -118,7 +118,11 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#gridAgenciasMinisterio").data("kendoGrid").dataSource.data(result);
+                var grid = $("#gridAgenciasMinisterio").data("kendoGrid");
+                grid.dataSource.read();
+
+                $('#editarAgenciaministerio').modal('hide');
+
                 hideLoading();
                // $("#tablaAgenciasMinisterio").html(result);
             }, error: function () {

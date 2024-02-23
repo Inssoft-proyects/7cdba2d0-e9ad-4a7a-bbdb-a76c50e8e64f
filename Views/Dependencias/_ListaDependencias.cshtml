@@ -1,13 +1,13 @@
 ﻿<div class="row">
     <div class="col-12 mb-4 px-4 rounded gridCustom">
         @(
-            Html.Kendo().Grid<GuanajuatoAdminUsuarios.Entity.Dependencias>()
+            Html.Kendo().Grid<GuanajuatoAdminUsuarios.Models.DependenciasModel>()
             .Name("gridCatDependencias")
                     .Columns(columns =>
                     {
                         columns.Bound(c => c.IdDependencia).Width(20).Title("Id");
                         columns.Bound(c => c.NombreDependencia).Width(100);
-                        columns.Bound(c => c.Estatus).ClientTemplate("#=calculateField(data)#").Width(50);
+                        columns.Bound(c => c.estatusDesc).Title("Estatus").Width(50);
                         //columns.Template(c => { }).ClientTemplate("#=calculateField(data)#");
                         columns.Command(c => c.Custom("Editar").Click("getId")).Width(80);
                 //columns.Command(c => c.Custom("Eliminar").Click("eliminar")).Width(80);

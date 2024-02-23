@@ -205,8 +205,7 @@ namespace GuanajuatoAdminUsuarios.Services
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand(@" SELECT TOP 
-                                                                acc.idAccidente, 
+                    SqlCommand command = new SqlCommand(@" SELECT acc.idAccidente, 
                                                                 acc.idMunicipio AS idMunicipio,
                                                                 mun.municipio AS municipio,
                                                                 acc.idOficinaDelegacion AS idOficinaDelegacion,

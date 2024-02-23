@@ -35,11 +35,12 @@
             <div class="col-12 col-lg-6 my-4 btnToggleActive">
             @(Html.Kendo().SwitchFor(t => t.ValorEstatusAutEntrega)
                 .Name("autEntregaSwitch")
-                .Checked(true)
-                .Messages(c => c.Checked("Activo").Unchecked("Inactivo"))
-                .HtmlAttributes(new { data_valor = 1 })
+                    .Checked(Model.Estatus == 1)
+                    .Messages(c => c.Checked("Activo").Unchecked("Inactivo"))
+                    .HtmlAttributes(new { data_valor = Model.Estatus })
+                    )
 
-                )
+                
         </div>
     </div>
         <div class="col-12 col-md-6">
@@ -104,8 +105,12 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#tablaAutoridadesEntrega").html(result); 
-                sitteg_info('Se ha actualizado la información');
+                var grid = $("#gridAutoridadesEntrega").data("kendoGrid");
+                grid.dataSource.read();
+                $('#agregarAutEntrega').modal('hide');
+
+                sitteg_success("Información guardada correctamente.");
+
                 hideLoading();
             },
             error: function (error) {

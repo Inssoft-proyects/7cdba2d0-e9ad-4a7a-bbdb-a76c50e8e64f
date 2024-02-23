@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace GuanajuatoAdminUsuarios.Models
 {
@@ -20,7 +21,9 @@ namespace GuanajuatoAdminUsuarios.Models
         public string estatusDesc { get; set; }
         
         public bool ValorEstatusSalarios { get; set; }
+		[Display(Name = "Año")]
+		public int? Anio { get; set; }
 
 
-    }
+	}
 }

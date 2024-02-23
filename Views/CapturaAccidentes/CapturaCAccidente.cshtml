@@ -2,6 +2,7 @@
 @{
     bool esSoloLectura = ViewBag.EsSoloLectura ?? false;
 }
+
 <div class="mainContainer bg-light">
 <form id="detalleAccidenteForm">
     <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
@@ -45,7 +46,7 @@
                                 .Label(l => l.Content("Daños al camino:"))
                                 .Placeholder("Ingresa el monto al que ascienden los daños al camino")
                                 .Enable(!ViewBag.EsSoloLectura)
-                                .HtmlAttributes(new { style = "width: 100%" })
+                                .HtmlAttributes(new { style = "width: 100%",id = "montoCamino" })
                                 )
 
                 </div>
@@ -56,7 +57,7 @@
                                 .Label(l => l.Content("Daños a la carga:"))
                                 .Placeholder("Ingresa el monto al que ascienden los daños a la carga")
                                 .Enable(!ViewBag.EsSoloLectura)
-                                .HtmlAttributes(new { style = "width: 100%" })
+                            .HtmlAttributes(new { style = "width: 100%", id = "montoCarga" })
                                 )
 
                 </div>
@@ -67,7 +68,7 @@
                                 .Label(l => l.Content("Daños a propietarios:"))
                                 .Placeholder("Ingresa el monto al que ascienden los daños a los propietarios")
                                     .Enable(!ViewBag.EsSoloLectura)
-                                .HtmlAttributes(new { style = "width: 100%" })
+                                .HtmlAttributes(new { style = "width: 100%", id="montoPropietarios" })
                                 )
 
                 </div>
@@ -79,7 +80,7 @@
                                 .Label(l => l.Content("Otros daños:"))
                                 .Placeholder("Ingresa el monto al que ascienden los daños bajo el concepto de otros")
                                     .Enable(!ViewBag.EsSoloLectura)
-                                .HtmlAttributes(new { style = "width: 100%" })
+                                .HtmlAttributes(new { style = "width: 100%",id="montoOtros"})
                                 )
 
                 </div>
@@ -122,7 +123,7 @@
             </div>
             <div class="col-12 col-lg-auto text-center">
                 <div class="btnOutline btnOutlinePrimary px-4 my-3">
-                    <button onclick="mostrarModalAgregarInfraccion()" @(ViewBag.EsSoloLectura ? "disabled" : "")>
+                    <button onclick="mostrarModalAgregarInfraccion(event)" @(ViewBag.EsSoloLectura ? "disabled" : "")>
                         <h5 class="m-0"><i class="me-2 icon-addInfracion"></i><b>Agregar infracción</b></h5>
                     </button>
                 </div>
@@ -795,20 +796,31 @@
         </div>
 </div>
 <script>
+    function mostrarModalAgregarInfraccion(event) {
+    event.preventDefault();
+    showLoading();
 
-    function mostrarModalAgregarInfraccion() {
-        event.preventDefault();
-        $.ajax({
-            url: '@Url.Action("ModalInfraccionesVehiculos")',
-            type: 'POST',
-            contentType: "application/json; charset=utf-8",
-            dataType: "html",
-            success: function (data) {
-                $('#ModalBodyAgregarInfraccion').html(data);
-                $('#agregarInfraccionModal').modal('show');
-            }
-        });
-    }
+    var montoCamino = $('#montoCamino').val();
+    var montoCarga = $('#montoCarga').val();
+    var montoPropietarios = $('#montoPropietarios').val();
+    var montoOtros = $('#montoOtros').val();
+
+    $.ajax({
+        url: '@Url.Action("ModalInfraccionesVehiculos")',
+        type: 'POST',
+        data: {
+            montoCamino: montoCamino,
+            montoCarga: montoCarga,
+            montoPropietarios: montoPropietarios,
+            montoOtros: montoOtros
+        },
+        success: function (data) {
+            $('#ModalBodyAgregarInfraccion').html(data);
+            $('#agregarInfraccionModal').modal('show');
+            hideLoading(); // Ocultar el indicador de carga solo después de que la solicitud AJAX tenga éxito
+        }
+    });
+}
 
     function enviarDatos() {
 

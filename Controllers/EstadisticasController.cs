@@ -92,8 +92,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 //ViewBag.CatMunicipios = new SelectList(catMunicipios.CatalogList, "Id", "Text");
                 ViewBag.CatCarreteras = new SelectList(catCarreteras.CatalogList, "Id", "Text");
                 ViewBag.CatGarantias = new SelectList(catGarantias.CatalogList, "Id", "Text");
-                ViewBag.Estadisticas = modelList;
-                ViewBag.GridPorMotivos = modelListProMotivos;
+                //ViewBag.Estadisticas = modelList;
+                //ViewBag.GridPorMotivos = modelListProMotivos;
 
 
                // var modelGridInfracciones = _infraccionesService.GetAllInfraccionesEstadisticasGrid(idDependencia);

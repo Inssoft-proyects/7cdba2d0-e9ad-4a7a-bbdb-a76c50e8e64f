@@ -39,9 +39,9 @@
 
                         @(Html.Kendo().SwitchFor(t=>t.EstatusValue)
                         .Name("agenciasSwitch")
-                            .Checked(true)
+                            .Checked(Model.Estatus == 1)
                             .Messages(c => c.Checked("Activo").Unchecked("Inactivo"))
-                            .HtmlAttributes(new { data_valor = 1 })
+                            .HtmlAttributes(new { data_valor = Model.Estatus })
 
                             )
                     </div>
@@ -136,8 +136,11 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#gridAgenciasMinisterio").data("kendoGrid").dataSource.data(result);
+                var grid = $("#gridAgenciasMinisterio").data("kendoGrid");
+                grid.dataSource.read();
                 sitteg_info('Se ha actualizado la información');
+                $('#editarAgenciaministerio').modal('hide');
+
                 hideLoading();
             },
             error: function (error) { 

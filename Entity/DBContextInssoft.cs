@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 using GuanajuatoAdminUsuarios.Models;
+using GuanajuatoAdminUsuarios.Interfaces;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace GuanajuatoAdminUsuarios.Entity;
 
@@ -70,12 +73,11 @@ public partial class DBContextInssoft : DbContext
     public virtual DbSet<CatConceptoInfraccion> CatConceptosInfraccion { get; set; }
     public virtual DbSet<CatSubConceptoInfraccion> CatSubConceptosInfraccion { get; set; }
 
-
-    //=> optionsBuilder.UseSqlServer("Data Source=inssoft-sqlserver.database.windows.net;Database=sitteg-qa;User Id=sqladmin;Password=Inss0f7#2023;Trusted_Connection=False;TrustServerCertificate=True");
-    //=> optionsBuilder.UseSqlServer("Data Source=10.16.158.17;Database=sitteg;User Id=Soporte;Password=Seguritech123;Trusted_Connection=False;TrustServerCertificate=True");
-    //=> optionsBuilder.UseSqlServer("Data Source=10.16.157.141;Database=sitteg;User Id=sa;Password=2023Jun10.;Trusted_Connection=False;TrustServerCertificate=True");
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    => optionsBuilder.UseSqlServer("Data Source=10.16.158.17;Database=sitteg-qa;User Id=Soporte;Password=Seguritech123;Trusted_Connection=False;TrustServerCertificate=True");
+   => optionsBuilder.UseSqlServer(  new ConfigurationBuilder()
+                                    .AddJsonFile("appsettings.json")
+                                    .AddEnvironmentVariables()
+                                    .Build().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Dependencias>(entity =>
@@ -259,6 +261,9 @@ public partial class DBContextInssoft : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("fechaActualizacion");
             entity.Property(e => e.Estatus).HasColumnName("Estatus");
+            entity.Property(e => e.Anio)
+               .HasColumnType("int")
+                .HasColumnName("anio");
 
         });
 

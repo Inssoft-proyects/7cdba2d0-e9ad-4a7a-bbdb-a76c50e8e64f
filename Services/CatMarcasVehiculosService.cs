@@ -79,6 +79,8 @@ namespace GuanajuatoAdminUsuarios.Services
                         while (reader.Read())
                         {
                             marca.IdMarcaVehiculo = Convert.ToInt32(reader["IdMarcaVehiculo"].ToString());
+                            marca.Estatus = Convert.ToInt32(reader["estatus"].ToString());
+
                             marca.MarcaVehiculo = reader["MarcaVehiculo"].ToString();
                         }
                     }

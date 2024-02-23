@@ -60,6 +60,9 @@ namespace GuanajuatoAdminUsuarios.Services
                         {
                             CatMotivosInfraccionModel model = new CatMotivosInfraccionModel();
                             model.IdCatMotivoInfraccion = reader["idCatMotivoInfraccion"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idCatMotivoInfraccion"].ToString());
+                            model.Estatus = reader["idCatMotivoInfraccion"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idCatMotivoInfraccion"].ToString());
+                            model.estatusDesc = reader["ValorEstatusMotivosInfraccion"].ToString();
+
                             model.Nombre = reader["nombre"].ToString();
                             model.Fundamento = reader["fundamento"].ToString();
                             model.CalificacionMinima = reader["calificacionMinima"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["calificacionMinima"].ToString());
@@ -95,6 +98,7 @@ namespace GuanajuatoAdminUsuarios.Services
             string query = @"SELECT 
 	                            cmi.idCatMotivoInfraccion ,
 	                            cmi.nombre,
+	                            cmi.estatus,
 	                            cmi.fundamento , 
 	                            cmi.calificacionMinima , 
 	                            cmi.calificacionMaxima , 
@@ -127,6 +131,8 @@ namespace GuanajuatoAdminUsuarios.Services
                         {
                             CatMotivosInfraccionModel model = new CatMotivosInfraccionModel();
                             model.IdCatMotivoInfraccion = reader["idCatMotivoInfraccion"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idCatMotivoInfraccion"].ToString());
+                            model.Estatus = reader["estatus"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idCatMotivoInfraccion"].ToString());
+
                             model.Nombre = reader["nombre"].ToString();
                             model.Fundamento = reader["fundamento"].ToString();
                             model.CalificacionMinima = reader["calificacionMinima"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["calificacionMinima"].ToString());
@@ -297,6 +303,8 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.AddWithValue("@calificacionMinima",motivo.CalificacionMinima);
                     command.Parameters.AddWithValue("@calificacionMaxima", motivo.CalificacionMaxima);
                     command.Parameters.AddWithValue("@fundamento", motivo.Fundamento);
+                    command.Parameters.AddWithValue("@estatus", motivo.estatus);
+
 
                     command.Parameters.AddWithValue("@fechaActualizacion", DateTime.Now);
                     command.Parameters.AddWithValue("@actualizadoPor", 1);

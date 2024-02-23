@@ -35,11 +35,10 @@
         <div class="col-12 col-lg-6 my-4 btnToggleActive">
             @(Html.Kendo().SwitchFor(t => t.ValorEstatusClasificacionAccidentes)
                 .Name("clasificacionAccidentesSwitch")
-                .Checked(true)
-                .Messages(c => c.Checked("Activo").Unchecked("Inactivo"))
-                .HtmlAttributes(new { data_valor = 1 })
-
-                )
+                    .Checked(Model.Estatus == 1)
+                    .Messages(c => c.Checked("Activo").Unchecked("Inactivo"))
+                    .HtmlAttributes(new { data_valor = Model.Estatus })
+                    )
         </div>
     </div>
         <div class="col-12 col-md-6">
@@ -93,8 +92,12 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#gridCatClasificacionAccidente").data("kendoGrid").dataSource.data(result);
-                sitteg_success('Elemento modificado correctamente')
+                var grid = $("#gridCatClasificacionAccidente").data("kendoGrid");
+                grid.dataSource.read();
+                $('#agregarClasificacionAccidente').modal('hide');
+
+                sitteg_success("Información guardada correctamente.");
+
                 hideLoading();
             },
             error: function (error) {

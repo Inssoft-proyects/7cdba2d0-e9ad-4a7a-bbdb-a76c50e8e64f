@@ -121,11 +121,12 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 return PartialView("_Eliminar");
             }
 
-            public JsonResult GetAgenciasM([DataSourceRequest] DataSourceRequest request)
+            public JsonResult GetAgenciasM([DataSourceRequest] DataSourceRequest request, int idDelegacion)
             {
                 var ListAgenciasMinisterioModel = GetAgenciasministerio();
-
-                return Json(ListAgenciasMinisterioModel.ToDataSourceResult(request));
+            if (idDelegacion != 0)
+                ListAgenciasMinisterioModel = ListAgenciasMinisterioModel.Where(s => s.IdDelegacion == idDelegacion).ToList();
+            return Json(ListAgenciasMinisterioModel.ToDataSourceResult(request));
             }
 
             public JsonResult Delegaciones_Drop()
@@ -222,6 +223,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
                                                    on catAgenciasMinisterio.Estatus equals estatus.estatus
                                                    select new CatAgenciasMinisterioModel
                                                    {
+                                                       IdDelegacion = catAgenciasMinisterio.IdDelegacion,
+
                                                        IdAgenciaMinisterio = catAgenciasMinisterio.IdAgenciaMinisterio,
                                                        NombreAgencia = catAgenciasMinisterio.NombreAgencia,
                                                        DelegacionDesc = delegaciones.Delegacion,
@@ -230,10 +233,42 @@ namespace GuanajuatoAdminUsuarios.Controllers
                                                    }).ToList();
                 return ListAgenciasMinisterioModel;
             }
-            #endregion
+        #endregion
+
+        [HttpGet]
+        public ActionResult ajax_BuscarAgencias( int idDelegacionFiltro)
+        {
+            List<CatAgenciasMinisterioModel> ListAgencias = new List<CatAgenciasMinisterioModel>();
 
 
+            ListAgencias = (from catAgenciasMinisterio in GetAgenciasministerio().ToList()
+                                          //join municipio in _catMunicipiosService.GetMunicipios().ToList()
+                                          //on diasInhabiles.idMunicipio equals municipio.IdMunicipio
+                                          // join estatus in dbContext.Estatus.ToList()
+                                          //on diasInhabiles.Estatus equals estatus.estatus
 
+                                      select new CatAgenciasMinisterioModel
+                                      {
+                                          IdAgenciaMinisterio = catAgenciasMinisterio.IdAgenciaMinisterio,
+                                          NombreAgencia = catAgenciasMinisterio.NombreAgencia,
+                                          IdDelegacion = catAgenciasMinisterio.IdDelegacion,
+                                          DelegacionDesc = catAgenciasMinisterio.DelegacionDesc,
+                                          Estatus = catAgenciasMinisterio.Estatus,
+                                          // EstatusDesc = estatus.estatusDesc,
+                                      }).ToList();
+
+           
+           if (idDelegacionFiltro > 0)
+            {
+                ListAgencias = (from s in ListAgencias
+                                where s.IdDelegacion == idDelegacionFiltro
+                                select s).ToList();
+            }
+
+            return Json(ListAgencias);
         }
-    }
 
+    }
+}
+
+    

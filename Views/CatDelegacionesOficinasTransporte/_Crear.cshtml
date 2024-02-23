@@ -109,7 +109,10 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#gridCatOficinasTransporte").data("kendoGrid").dataSource.data(result);
+                var grid = $("#gridCatOficinasTransporte").data("kendoGrid");
+                grid.dataSource.read();
+                $('#agregarDelegacionOficina').modal('hide');
+                sitteg_success("Información guardada correctamente.");
                 hideLoading();
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");

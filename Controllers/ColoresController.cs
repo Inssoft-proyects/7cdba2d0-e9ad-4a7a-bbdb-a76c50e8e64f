@@ -1,4 +1,5 @@
 ﻿using GuanajuatoAdminUsuarios.Entity;
+using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
@@ -62,7 +63,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public ActionResult EditarParcial(int Id)
         {
           
-                var coloresModel = GetColorByID(Id);
+            var coloresModel = GetColorByID(Id);
+            coloresModel.ValorEstatusColores = (coloresModel.Estatus == 1) ? true : false;
             return View("_Editar", coloresModel);
         }
 
@@ -202,7 +204,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
                               {
                                   IdColor = colores.IdColor,
                                   color = colores.color,
-
+                                  Estatus = colores.Estatus,
+                                  ValorEstatusColores = (colores.Estatus == 1) ? true : false
 
                               }).Where(w => w.IdColor == Id).FirstOrDefault();
 
@@ -214,7 +217,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             var ListColoresModel = (from colores in dbContext.Colores.ToList()
                                     join estatus in dbContext.Estatus.ToList()
                                     on colores.Estatus equals estatus.estatus
-                                    where colores.Estatus == 1
+                                    //where colores.Estatus == 1
                                     select new ColoresModel
                                     {
                                         IdColor = colores.IdColor,

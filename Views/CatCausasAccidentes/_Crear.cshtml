@@ -95,7 +95,10 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#gridCatCausasAccidente").data("kendoGrid").dataSource.data(result);
+                var grid = $("#gridCatCausasAccidente").data("kendoGrid");
+                 grid.dataSource.read();
+                       $('#agregarCausaAccidente').modal('hide');
+                sitteg_success("Información guardada correctamente.");
                 hideLoading();
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");

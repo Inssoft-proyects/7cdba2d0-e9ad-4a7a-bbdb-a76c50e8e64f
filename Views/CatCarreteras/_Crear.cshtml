@@ -91,7 +91,10 @@
 
 <script>
     function agregarCarretera() {
+        var Mydata = $("#agregarCarreteraForm").serialize();
+
         var controlsValidate = [];
+        var isValid = true;
 
         controlsValidate.push({ 'controlName': 'Carretera' });
 
@@ -108,7 +111,7 @@
             return;
         }
 
-        var Mydata = $("#agregarCarreteraForm").serialize();
+       // var Mydata = $("#agregarCarreteraForm").serialize();
         console.log(Mydata);
         $('#agregarCarretera').modal('hide');
         $('body').removeClass('model-open');
@@ -119,7 +122,10 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#gridCatCarreteras").data("kendoGrid").dataSource.data(result);
+                var grid = $("#gridCatCarreteras").data("kendoGrid");
+                grid.dataSource.read();
+                $('#agregarCarretera').modal('hide');
+                sitteg_success("Información guardada correctamente.");
                 hideLoading();
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");

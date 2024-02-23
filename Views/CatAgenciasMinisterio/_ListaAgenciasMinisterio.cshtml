@@ -1,4 +1,11 @@
-﻿<div class="row">
+﻿<script>
+    function filtroAgencia() {
+        return {
+            idDelegacion: $("#idDelegacionFiltro").val()
+        }
+    }
+</script>
+<div class="row">
     <div class="col-12 mb-4 px-4 rounded gridCustom">
 
         @(
@@ -21,7 +28,7 @@
             .Pageable()
             .DataSource(dataSource => dataSource
             .Ajax()
-            .Read(read => read.Action("GetAgenciasM", "CatAgenciasMinisterio"))
+            .Read(read => read.Action("GetAgenciasM", "CatAgenciasMinisterio").Data("filtroAgencia"))
             .PageSize(5).Model(model => model.Id(p => p.IdAgenciaMinisterio))
             )
             .ToolBar(t => t.Search().Text("Buscar..."))

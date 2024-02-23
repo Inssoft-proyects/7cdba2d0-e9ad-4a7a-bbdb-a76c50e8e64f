@@ -86,10 +86,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
             return PartialView("_Editar");
         }
 
-        public JsonResult GetCarr([DataSourceRequest] DataSourceRequest request)
+        public JsonResult GetCarr([DataSourceRequest] DataSourceRequest request, int idDelegacion)
         {
             var ListCarreterasModel = _catCarreterasService.ObtenerCarreteras();
-
+            if (idDelegacion != 0)
+            ListCarreterasModel = ListCarreterasModel.Where(s => s.idOficinaTransporte == idDelegacion).ToList();
             return Json(ListCarreterasModel.ToDataSourceResult(request));
         }
 
@@ -98,6 +99,40 @@ namespace GuanajuatoAdminUsuarios.Controllers
             int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
             var result = new SelectList(_catCarreterasService.GetCarreterasPorDelegacion(idOficina), "IdCarretera", "Carretera");
             return Json(result);
+        }
+
+        [HttpGet]
+        public ActionResult ajax_BuscarCarreteras(int idDelegacionFiltro)
+        {
+            List<CatCarreterasModel> ListAgencias = new List<CatCarreterasModel>();
+
+
+            ListAgencias = (from catCarreteras in _catCarreterasService.ObtenerCarreteras().ToList()
+                                //join municipio in _catMunicipiosService.GetMunicipios().ToList()
+                                //on diasInhabiles.idMunicipio equals municipio.IdMunicipio
+                                // join estatus in dbContext.Estatus.ToList()
+                                //on diasInhabiles.Estatus equals estatus.estatus
+
+                            select new CatCarreterasModel
+                            {
+                                IdCarretera = catCarreteras.IdCarretera,
+                                Carretera = catCarreteras.Carretera,
+                                idOficinaTransporte = catCarreteras.idOficinaTransporte,
+                                nombreOficina = catCarreteras.nombreOficina,
+                                Estatus = catCarreteras.Estatus,
+                                estatusDesc = catCarreteras.estatusDesc,
+                                // EstatusDesc = estatus.estatusDesc,
+                            }).ToList();
+
+
+            if (idDelegacionFiltro > 0)
+            {
+                ListAgencias = (from s in ListAgencias
+                                where s.idOficinaTransporte == idDelegacionFiltro
+                                select s).ToList();
+            }
+
+            return Json(ListAgencias);
         }
     }
 }

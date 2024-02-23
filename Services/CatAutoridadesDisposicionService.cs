@@ -26,8 +26,8 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT catAutoridadesDisposicion.*, estatus.estatusdesc FROM catAutoridadesDisposicion JOIN estatus ON catAutoridadesDisposicion.estatus = estatus.estatus" +
-                                                        " WHERE catAutoridadesDisposicion.estatus = 1  ORDER BY NombreAutoridadDisposicion ASC", connection);
+                    SqlCommand command = new SqlCommand(@"SELECT catAutoridadesDisposicion.*, estatus.estatusdesc FROM catAutoridadesDisposicion JOIN estatus ON catAutoridadesDisposicion.estatus = estatus.estatus
+                                                        ORDER BY nombreAutoridadDisposicion ASC", connection);
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
@@ -60,5 +60,95 @@ namespace GuanajuatoAdminUsuarios.Services
 
         }
 
+        public CatAutoridadesDisposicionModel GetAutoridadesByID(int IdAutoridad)
+        {
+            CatAutoridadesDisposicionModel autoridad = new CatAutoridadesDisposicionModel();
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(@"Select * from catAutoridadesDisposicion where idAutoridadDisposicion=@IdAutoridad", connection);
+                    command.Parameters.Add(new SqlParameter("@IdAutoridad", SqlDbType.Int)).Value = IdAutoridad;
+                    command.CommandType = CommandType.Text;
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            autoridad.IdAutoridadDisposicion = Convert.ToInt32(reader["idAutoridadDisposicion"].ToString());
+                            autoridad.Estatus = Convert.ToInt32(reader["estatus"].ToString());
+                            autoridad.NombreAutoridadDisposicion = reader["nombreAutoridadDisposicion"].ToString();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                }
+                finally
+                {
+                    connection.Close();
+                }
+
+            return autoridad;
+        }
+
+        public int GuardarAutoridad(CatAutoridadesDisposicionModel autoridad)
+        {
+            int result = 0;
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand sqlCommand = new SqlCommand("Insert into catAutoridadesDisposicion(nombreAutoridadDisposicion,estatus,fechaActualizacion) values(@nombreAutoridadDisposicion,@Estatus,@FechaActualizacion)", connection);
+                    sqlCommand.Parameters.Add(new SqlParameter("@nombreAutoridadDisposicion", SqlDbType.VarChar)).Value = autoridad.NombreAutoridadDisposicion;
+                    sqlCommand.Parameters.Add(new SqlParameter("@Estatus", SqlDbType.Int)).Value = 1;
+                    sqlCommand.Parameters.Add(new SqlParameter("@FechaActualizacion", SqlDbType.DateTime)).Value = DateTime.Now;
+
+                    sqlCommand.CommandType = CommandType.Text;
+                    result = sqlCommand.ExecuteNonQuery();
+                }
+                catch (SqlException ex)
+                {
+                    return result;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return result;
+
+        }
+        public int UpdateAutoridad(CatAutoridadesDisposicionModel autoridad)
+        {
+            int result = 0;
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand sqlCommand = new
+                        SqlCommand("Update catAutoridadesDisposicion set nombreAutoridadDisposicion=@nombreAutoridadDisposicion, estatus = @Estatus where idAutoridadDisposicion=@idAutoridadDisposicion",
+                        connection);
+                    sqlCommand.Parameters.Add(new SqlParameter("@idAutoridadDisposicion", SqlDbType.Int)).Value = autoridad.IdAutoridadDisposicion;
+                    sqlCommand.Parameters.Add(new SqlParameter("@nombreAutoridadDisposicion", SqlDbType.VarChar)).Value = autoridad.NombreAutoridadDisposicion;
+                    sqlCommand.Parameters.Add(new SqlParameter("@Estatus", SqlDbType.Int)).Value = autoridad.Estatus;
+
+                    sqlCommand.CommandType = CommandType.Text;
+                    result = sqlCommand.ExecuteNonQuery();
+                }
+                catch (SqlException ex)
+                {
+                    //---Log
+                    return result;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return result;
+        }
+      
     }
 }

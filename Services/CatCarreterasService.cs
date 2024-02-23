@@ -80,6 +80,8 @@ namespace GuanajuatoAdminUsuarios.Services
                         {
                             carretera.IdCarretera = Convert.ToInt32(reader["IdCarretera"].ToString());
                             carretera.idOficinaTransporte = Convert.ToInt32(reader["idOficinaTransporte"].ToString());
+                            carretera.Estatus = Convert.ToInt32(reader["estatus"].ToString());
+
                             carretera.Carretera = reader["Carretera"].ToString();
                             carretera.nombreOficina = reader["nombreOficina"].ToString();
 

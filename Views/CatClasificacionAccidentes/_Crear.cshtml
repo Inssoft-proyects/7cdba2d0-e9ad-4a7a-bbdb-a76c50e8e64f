@@ -95,9 +95,12 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                sitteg_success('Elemento guardado correctamente')
+                var grid = $("#gridCatClasificacionAccidente").data("kendoGrid");
+                grid.dataSource.read();
+                $('#agregarClasificacionAccidente').modal('hide');
 
-                $("#gridCatClasificacionAccidente").data("kendoGrid").dataSource.data(result);
+                sitteg_success("Información guardada correctamente.");
+
                 hideLoading();
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");

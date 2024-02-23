@@ -80,8 +80,11 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#gridCatDependencias").data("kendoGrid").dataSource.data(result);
-                hideLoading();
+                var grid = $("#gridCatDependencias").data("kendoGrid");
+                grid.dataSource.read();
+                $('#addDependencia').modal('hide');
+                sitteg_success("Información actualizada correctamente.");
+                hideLoading();           
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");
                 hideLoading();

@@ -193,7 +193,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                         LEFT JOIN
                                             catCarreteras car ON car.idCarretera = sol.idCarreteraUbicacion
                                         WHERE
-                                            d.liberado = 0 AND d.estatus = 1 AND d.idDelegacion = @idOficina" + condiciones +
+                                            d.liberado = 0 AND d.estatusSolicitud = 4 AND d.idDelegacion = @idOficina" + condiciones +
                                         @" GROUP BY
                                             d.IdDeposito,
                                             sol.solicitanteNombre,
@@ -364,7 +364,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     const string SqlTransact =
                         @"Update depositos set AcreditacionPropiedad=@AcreditacionPropiedad,AcreditacionPersonalidad=@AcreditacionPersonalidad,
                           ReciboPago=@ReciboPago, Observaciones=@Observaciones, Autoriza=@Autoriza,Liberado=@liberado,FechaActualizacion=@FechaActualizacion,
-                          FechaLiberacion=@FechaLiberacion
+                          FechaLiberacion=@FechaLiberacion, estatusSolicitud = 5 
                           where IdDeposito=@IdDeposito";
                     SqlCommand command = new SqlCommand(SqlTransact, connection);
                     command.Parameters.Add(new SqlParameter("@IdDeposito", SqlDbType.Int)).Value = (object)model.IdDeposito ?? DBNull.Value;
