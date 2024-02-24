@@ -46,7 +46,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             //int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
             int idPension = HttpContext.Session.GetInt32("IdPension") ?? 0;
 
-            var result = new SelectList(_placaServices.GetPlacasByDelegacionId(idPension), "IdDepositos", "Placa");
+            var result = new SelectList(_placaServices.GetPlacasByDelegacionId(idPension,false), "IdDepositos", "Placa");
             return Json(result);
         }
         public IActionResult ajax_BusquedaIngresos(SalidaVehiculosModel model)

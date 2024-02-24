@@ -28,12 +28,16 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <div class="controlForm">
-                                    <label>Concesionario:</label>
+                                    <label>Concesionario <b>(obligatorio)</b>:</label>
                                     <div id="divConcesionario">
-                                        @(Html.Kendo().DropDownListFor(f => f.idConcesionario).Filter(FilterType.Contains)
-                                            .OptionLabel("-- Seleccione --")
-                                            .HtmlAttributes(new { style = "width:100%;" })
-                                            )
+                                        @(Html.Kendo().DropDownList()
+                                        .Name("idConcesionario")
+                                        .BindTo((SelectList)ViewBag.CatConcesionario)
+                                        .OptionLabel("-- Seleccione --")
+                                        .Filter(FilterType.Contains)
+
+                                        .HtmlAttributes(new { style = "width:100%;", id = "idConcesionario" })
+                                        )
                                     </div>
                                 </div>
                             </div>

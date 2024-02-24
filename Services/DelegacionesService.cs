@@ -25,7 +25,7 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("Select * from catDelegaciones where estatus=1 ORDER BY delegacion ASC", connection);
+                    SqlCommand command = new SqlCommand("Select idDelegacion, delegacion, fechaActualizacion, actualizadoPor, estatus, ISNULL(transito,0) transito from catDelegaciones where estatus=1 ORDER BY delegacion ASC", connection);
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
@@ -34,6 +34,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             Delegaciones delegacion = new Delegaciones();
                             delegacion.IdDelegacion = Convert.ToInt32(reader["idDelegacion"].ToString());
                             delegacion.Delegacion = reader["delegacion"].ToString();
+                            delegacion.Transito = Convert.ToBoolean(reader["transito"]);
                             delegaciones.Add(delegacion);
                         }
                     }

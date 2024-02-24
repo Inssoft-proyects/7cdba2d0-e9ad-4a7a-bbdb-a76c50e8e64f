@@ -332,8 +332,8 @@ namespace GuanajuatoAdminUsuarios.Services
                     {
                         insertConnection.Open();
                         SqlCommand insertCommand = new SqlCommand("INSERT INTO depositos " +
-                                                                "(idSolicitud,folio,idTramo,idPension,km,liberado,IdConcesionario,idDelegacion,idDependenciaGenera,estatus) " +
-                                                                "VALUES (@idSolicitud,@folio,@idTramo,@idPension,@km,@liberado,@idPropietarioGruas,@idDelegacion,@idDependencia,@estatus);" +
+                                                                "(idSolicitud,folio,idTramo,idPension,km,liberado,IdConcesionario,idDelegacion,idDependenciaGenera,estatus,esExterno) " +
+                                                                "VALUES (@idSolicitud,@folio,@idTramo,@idPension,@km,@liberado,@idPropietarioGruas,@idDelegacion,@idDependencia,@estatus,@esExterno);" +
                                                                 "SELECT SCOPE_IDENTITY()", insertConnection);
                         insertCommand.Parameters.Add(new SqlParameter("@idSolicitud", SqlDbType.Int)).Value = solicitud.idSolicitud;
                         insertCommand.Parameters.Add(new SqlParameter("@idDelegacion", SqlDbType.Int)).Value = idOficina;
@@ -344,6 +344,7 @@ namespace GuanajuatoAdminUsuarios.Services
                         insertCommand.Parameters.Add(new SqlParameter("@km", SqlDbType.NVarChar)).Value = solicitud.kilometro;
                         insertCommand.Parameters.Add(new SqlParameter("@liberado", SqlDbType.Int)).Value = 0;
                         insertCommand.Parameters.Add(new SqlParameter("@estatus", SqlDbType.Int)).Value = 1;
+                        insertCommand.Parameters.Add(new SqlParameter("@esExterno", SqlDbType.Bit)).Value = 0;
                         insertCommand.Parameters.Add(new SqlParameter("@idDependencia", SqlDbType.Int)).Value = idDependencia;
 
                         idDeposito = Convert.ToInt32(insertCommand.ExecuteScalar());

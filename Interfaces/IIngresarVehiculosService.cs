@@ -9,6 +9,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
         // public int GuardarDeposito(int idDeposito);
         public IngresoVehiculosModel DetallesDeposito(int idDeposito);
         public int GuardarFechaIngreso(DatosIngresoModel model);
+        public int GuardarDepositoOtraDependencia(SolicitudDepositoOtraDependenciaModel model, int idOficina, int idPension);
 
         
     }

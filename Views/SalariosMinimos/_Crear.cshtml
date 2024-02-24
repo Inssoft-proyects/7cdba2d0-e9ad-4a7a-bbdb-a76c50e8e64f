@@ -33,32 +33,47 @@
         </div>
     </div>
     <form id="ProductForm" novalidate class="row needs-validation justify-content-center">
-        <div class="col-12 col-md-6">
-            <div class="controlForm my-3">
-                @(Html.Kendo().TextBoxFor(t => t.Anio)
-                    .Label(l => l.Content("Año <b>(obligatorio)</b>:"))
-                    .Placeholder("Ingresa el año de UMA")                    
-                    .HtmlAttributes(new { style = "width: 100%", type = "number" })
-                    )
 
-            </div>
-        </div>
-        <div class="col-12 col-md-3">
-            <div class="controlForm my-3">
-                @(Html.Kendo().TextBoxFor(t => t.Salario)
-                    .Label(l => l.Content("UMA <b>(obligatorio)</b>:"))
-                    .Placeholder("Valor en $")
-                    .HtmlAttributes(new { style = "width: 100%", type = "number" })
-                    )
-
-            </div>
-        </div>
         <div class="row">
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-md-6">
+                <div class="controlForm my-3">
+                    @(Html.Kendo().TextBoxFor(t => t.Area)
+                        .Label(l => l.Content("Nombre <b>(obligatorio)</b>:"))
+                        .Placeholder("Ingresa el nombre del área salarial")
+                        .HtmlAttributes(new { style = "width: 100%" })
+                        )
+
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <div class="controlForm my-3">
+                    @(Html.Kendo().TextBoxFor(t => t.Anio)
+                        .Label(l => l.Content("Año <b>(obligatorio)</b>:"))
+                        .Placeholder("Ingresa el año de UMA")
+                        .HtmlAttributes(new { style = "width: 100%", type = "number" })
+                        )
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="controlForm my-3">
+                    @(Html.Kendo().TextBoxFor(t => t.Salario)
+                        .Label(l => l.Content("UMA <b>(obligatorio)</b>:"))
+                        .Placeholder("Valor en $")
+                        .HtmlAttributes(new { style = "width: 100%", type = "number" })
+                        )
+
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6">
                 <div class="controlForm my-3">
                     <label class="control-label">"Fecha Vigencia <b>(obligatorio)</b>:"</label>
                     @(Html.Kendo().DatePickerFor(t => t.Fecha)
-                        //   .Label(l => l.Content("Fecha Vigencia <b>(obligatorio)</b>:"))
                         .Culture("es-ES")
                         .Value(DateTime.Now)
                         .HtmlAttributes(new { style = "width: 100%" })
@@ -93,16 +108,16 @@
 <script>
     function agregarSalario() {
         var anio = $("#Anio").val();
-        var importe = $("#Salario").val();       
-        if(anio < 1){
+        var importe = $("#Salario").val();
+        if (anio < 1) {
             sitteg_warning("Debe ingresar el año.");
             return;
-        }            
-        if (importe < 1){
+        }
+        if (importe < 1) {
             sitteg_warning("Debe ingresar el valor de UMA.");
             return;
         }
-            
+
 
         var Mydata = $("#ProductForm").serialize();
         console.log(Mydata);
@@ -115,8 +130,8 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#gridCatUmas").data("kendoGrid").dataSource.data(result);               
-                sitteg_info('Se ha actualizado la información');
+                $("#gridCatUmas").data("kendoGrid").dataSource.data(result);
+                sitteg_info('Se ha registrado la información exitosamente.');
                 hideLoading();
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");

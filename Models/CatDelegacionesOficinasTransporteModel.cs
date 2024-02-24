@@ -27,6 +27,8 @@ namespace GuanajuatoAdminUsuarios.Models
 
         public bool ValorEstatusDelegacionOfTrasporte { get; set; }
 
+        public int Transito { get; set; }
+
 
     }
 }

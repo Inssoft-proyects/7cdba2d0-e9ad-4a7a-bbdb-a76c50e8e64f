@@ -49,7 +49,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
             int idPension = HttpContext.Session.GetInt32("IdPension") ?? 0;
 
-            var result = new SelectList(_placaServices.GetPlacasByDelegacionId(idPension), "IdDepositos", "Placa");
+            var result = new SelectList(_placaServices.GetPlacasByDelegacionId(idPension,false), "IdDepositos", "Placa");
             return Json(result);
         }
         public JsonResult Municipios_Drop()
@@ -71,7 +71,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             }
             else if (tipoIngreso == "OtraDependencia")
             {
-                return Json(new { redirectTo = Url.Action("IngresoOtraDependencia") });
+                return Json(new { redirectTo = Url.Action("Depositos","DepositosOtraDependencia") });
             }
             else
             {

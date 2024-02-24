@@ -259,7 +259,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                 LEFT JOIN catDescripcionesEvento evt ON sol.evento = evt.idDescripcion
                                 LEFT JOIN catEstatusTransitoTransporte cett ON cett.idEstatusTransitoTransporte = d.estatusSolicitud
                                 LEFT JOIN catDependencias dep ON (dep.idDependencia = d.IdDependenciaTransito OR dep.idDependencia = d.IdDependenciaNoTransito)
-                                WHERE d.estatus != 0 and d.idDelegacion = @idOficina " + condiciones;
+                                WHERE d.estatus != 0  AND (esExterno<>1 OR esExterno IS NULL)  and d.idDelegacion = @idOficina " + condiciones;
 
 
                     

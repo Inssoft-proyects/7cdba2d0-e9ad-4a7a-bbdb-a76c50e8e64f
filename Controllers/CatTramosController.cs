@@ -10,8 +10,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
-
-
+using System;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
@@ -41,7 +40,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public JsonResult Carreteras_Drop(int idDelegacion)
         {
-            var result = new SelectList(_catCarreterasService.GetCarreterasPorDelegacion(idDelegacion), "IdCarretera", "Carretera");
+            var tipo = Convert.ToInt32(HttpContext.Session.GetInt32("IdDependencia").ToString());
+            var result = new SelectList(_catCarreterasService.GetCarreterasPorDelegacion(idDelegacion).Where(x=>x.Transito == tipo), "IdCarretera", "Carretera");
             return Json(result);
         }
         [HttpPost]
@@ -101,7 +101,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public JsonResult DelegacionesOficinas_Drop()
         {
-            var result = new SelectList(_catDelegacionesOficinasTransporteService.GetDelegacionesOficinasActivos(), "IdDelegacion", "Delegacion");
+            var tipo = Convert.ToInt32(HttpContext.Session.GetInt32("IdDependencia").ToString());
+            var result = new SelectList(_catDelegacionesOficinasTransporteService.GetDelegacionesOficinasActivos().Where(x=>x.Transito == tipo), "IdDelegacion", "Delegacion");
             return Json(result);
         }
 

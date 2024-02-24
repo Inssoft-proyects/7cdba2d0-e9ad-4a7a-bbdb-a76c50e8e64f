@@ -67,25 +67,44 @@ function isControlsValidDropDown(controlsValidate) {
 function isControlsValidWithFocus(controlsValidate, withFocus = true) {
     var isValid = true;
     var firstElementWithError;
-
     controlsValidate.forEach(x => {
         var element = $('#' + x.controlName);
+        var validElement = true;
+        var validators = x.validators ?? ['required'];
         //Si el campo es un input remueve el estilo de error
         if (x.isInput)
             element.removeClass("errorData");
         //Si el campo es tipo dropdown se remueve el estilo de error
         if (x.isDropDown)
             element.closest('.k-dropdown').removeClass("errorData");
-        if (element.val() === '' || element.val() === undefined) {
+
+        if (validators.includes('required')) {
+            if (element.val() === '' || element.val() === undefined) {
+                isValid = false;
+                validElement = false;
+            }
+        }
+        if (validators.includes('phoneValidator') && element.val() != '' && element.val() != undefined) {
+            if (!isValidPhone(element.val())) {
+                isValid = false;
+                validElement = false;
+            }
+        }
+        if (validators.includes('emailValidator') && element.val() != '' && element.val() != undefined) {
+            if (!isValidEmail(element.val())) {
+                isValid = false;
+                validElement = false;
+
+            }
+        }
+        if (!validElement) {
             //Se agrega el estilo de error en caso no se haya encontrado un valor
             if (x.isInput)
                 element.addClass("errorData");
             if (x.isDropDown)
                 element.closest('.k-dropdown').addClass("errorData");
-            isValid = false;
             if (!firstElementWithError)
                 firstElementWithError = x;
-
         }
     });
 
@@ -104,24 +123,41 @@ function isControlsValidWithFocus(controlsValidate, withFocus = true) {
 }
 
 function addOnLostFocusRequiredControls(controlsValidate) {
-
     controlsValidate.forEach(x => {
         var element = $('#' + x.controlName);
-        element.on('focusout',()=>{
-            //Si el control no tiene valor se agrega el estilo de error
-            if (element.val() === '' || element.val() === undefined) {
-                if (x.isInput)
-                element.addClass("errorData");
-            if (x.isDropDown)
-                element.closest('.k-dropdown').addClass("errorData");
+        var validators = x.validators ?? ['required'];
+        element.on('focusout', () => {
+            var isValid = true;
+
+            if (validators.includes('required')) {
+                //Si el control no tiene valor se agrega el estilo de error
+                if (element.val() === '' || element.val() === undefined) {
+                    isValid = false;
+                }
             }
-            else{
-                        //Si el campo es un input remueve el estilo de error
+            if (validators.includes('phoneValidator') && element.val() != '' && element.val() != undefined) {
+                if (!isValidPhone(element.val())) {
+                    isValid = false;
+                }
+            }
+            if (validators.includes('emailValidator') && element.val() != '' && element.val() != undefined) {
+                if (!isValidEmail(element.val())) {
+                    isValid = false;
+                }
+            }
+            if (!isValid) {
                 if (x.isInput)
-                element.removeClass("errorData");
-            //Si el campo es tipo dropdown se remueve el estilo de error
-            if (x.isDropDown)
-                element.closest('.k-dropdown').removeClass("errorData");
+                    element.addClass("errorData");
+                if (x.isDropDown)
+                    element.closest('.k-dropdown').addClass("errorData");
+            }
+            else {
+                //Si el campo es un input remueve el estilo de error
+                if (x.isInput)
+                    element.removeClass("errorData");
+                //Si el campo es tipo dropdown se remueve el estilo de error
+                if (x.isDropDown)
+                    element.closest('.k-dropdown').removeClass("errorData");
             }
         })
     });

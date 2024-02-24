@@ -170,11 +170,16 @@ namespace GuanajuatoAdminUsuarios.Services
                 try
 
                 {
+                    //c.idOficinaTransporte = @idOficina OR c.idOficinaTransporte = 1 AND
                     connection.Open();
                     SqlCommand command = new SqlCommand(@"SELECT c.idCarretera,c.idOficinaTransporte,UPPER(c.carretera) AS carretera,
-                                                        c.estatus,c.FechaActualizacion,c.ActualizadoPor,e.estatus 
+                                                        c.estatus,c.FechaActualizacion,c.ActualizadoPor,e.estatus, ISNULL(d.Transito,0) Transito 
                                                         FROM catCarreteras AS c LEFT JOIN estatus AS e ON c.estatus = e.estatus 
-                                                        WHERE c.idOficinaTransporte = @idOficina OR c.idOficinaTransporte = 1 AND c.estatus = 1", connection);
+                                                        inner join catDelegacionesOficinasTransporte b on c.idOficinaTransporte = b.idOficinaTransporte
+                                                        INNER JOIN catDelegaciones d ON b.idOficinaTransporte = d.idDelegacion
+                                                        WHERE c.estatus = 1
+
+                                                        ", connection);
                     command.CommandType = CommandType.Text;
                     command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = (object)idOficina ?? DBNull.Value;
 
@@ -190,6 +195,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             carretera.FechaActualizacion = Convert.ToDateTime(reader["FechaActualizacion"] is DBNull ? DateTime.MinValue : reader["FechaActualizacion"]);
                             carretera.Estatus = Convert.ToInt32(reader["estatus"] is DBNull ? 0 : reader["estatus"]);
                             carretera.ActualizadoPor = Convert.ToInt32(reader["ActualizadoPor"] is DBNull ? 0 : reader["ActualizadoPor"]);
+                            carretera.Transito = Convert.ToBoolean(reader["Transito"]) ? 1 : 0;
                             ListaCarreteras.Add(carretera);
 
                         }

@@ -1,4 +1,7 @@
 ﻿@model GuanajuatoAdminUsuarios.Models.CatOficinasRentaModel
+@{
+    bool activo = (Model.Estatus == 1) ? true : false;
+}
 <section class=" bg-white rounded">
     <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
         <div class="col-auto pe-0">
@@ -34,7 +37,7 @@
             <div class="col-12 col-lg-6 my-4 btnToggleActive">
             @(Html.Kendo().SwitchFor(t => t.ValorEstatusOficinasRenta)
                 .Name("oficinasRentaSwitch")
-                .Checked(true)
+                    .Checked(activo)
                 .Messages(c => c.Checked("Activo").Unchecked("Inactivo"))
                 .HtmlAttributes(new { data_valor = 1 })
 

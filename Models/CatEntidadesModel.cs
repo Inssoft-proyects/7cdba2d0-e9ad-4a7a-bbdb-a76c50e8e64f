@@ -17,5 +17,7 @@ namespace GuanajuatoAdminUsuarios.Models
         public string estatusDesc { get; set; }
         public bool ValorEstatusEntidad { get; set; }
 
+        public static int GUANAJUATO=11;
+
     }
 }

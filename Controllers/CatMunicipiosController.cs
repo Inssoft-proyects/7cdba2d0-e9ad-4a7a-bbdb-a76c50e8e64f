@@ -33,20 +33,20 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
         public IActionResult Index()
         {
-          
-                var ListMunicipiosModel = _catMunicipiosService.GetMunicipios();
+
+            var ListMunicipiosModel = _catMunicipiosService.GetMunicipios();
 
             return View(ListMunicipiosModel);
-            }
-   
+        }
+
 
         [HttpPost]
         public ActionResult AgregarMunicipioModal()
         {
-       
-                return PartialView("_Crear");
-            }
-    
+
+            return PartialView("_Crear");
+        }
+
         public JsonResult Entidades_Drop()
         {
             var result = new SelectList(_catEntidadesService.ObtenerEntidades(), "idEntidad", "nombreEntidad");
@@ -54,16 +54,17 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
         public JsonResult Delegaciones_Drop()
         {
-            var result = new SelectList(_catDelegacionesOficinasTransporteService.GetDelegacionesOficinas(), "IdOficinaTransporte", "NombreOficina");
+            var tipo = Convert.ToInt32(HttpContext.Session.GetInt32("IdDependencia").ToString());
+            var result = new SelectList(_catDelegacionesOficinasTransporteService.GetDelegacionesOficinas().Where(x => x.Transito == tipo), "IdOficinaTransporte", "NombreOficina");
             return Json(result);
         }
         public ActionResult EditarMunicipioModal(int IdMunicipio)
         {
-    
-                var municipiosModel = _catMunicipiosService.GetMunicipioByID(IdMunicipio);
+
+            var municipiosModel = _catMunicipiosService.GetMunicipioByID(IdMunicipio);
             return View("_Editar", municipiosModel);
-            }
-   
+        }
+
 
 
 

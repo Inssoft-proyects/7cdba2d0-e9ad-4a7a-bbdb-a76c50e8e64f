@@ -164,6 +164,7 @@
             data: Mydata,
             success: function (result) {
                 $("#gridCatOficiales").data("kendoGrid").dataSource.data(result);
+                sitteg_info('Se ha actualizado la información exitosamente.');
                 hideLoading();
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");

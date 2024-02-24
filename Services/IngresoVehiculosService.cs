@@ -1,10 +1,12 @@
 ﻿using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
+using GuanajuatoAdminUsuarios.Util;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace GuanajuatoAdminUsuarios.Services
 {
@@ -40,7 +42,7 @@ namespace GuanajuatoAdminUsuarios.Services
                 try
                 {
                     connection.Open();
-                 
+
 
                     SqlCommand command = new SqlCommand(strQuery, connection);
                     command.CommandType = CommandType.Text;
@@ -196,6 +198,80 @@ namespace GuanajuatoAdminUsuarios.Services
             }
 
             return depositoModificado;
+        }
+
+        public int GuardarDepositoOtraDependencia(SolicitudDepositoOtraDependenciaModel model, int idOficina, int idPension)
+        {
+            int resultado = -1;
+
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+
+                    //Folio
+                    var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                    var allNumbers = "0123456789";
+
+
+                    Random random = new();
+
+                    var letters = new string(
+                                Enumerable.Repeat(chars, 2)
+                                .Select(s => s[random.Next(s.Length)])
+                                .ToArray());
+
+
+                    var numbers = new string(
+                                    Enumerable.Repeat(allNumbers, 3)
+                                    .Select(s => s[random.Next(s.Length)])
+                                    .ToArray());
+
+                    string anio = "/" + (DateTime.Now.Year % 100);
+                    string primeraParte = "EX-";
+                    string segundaParte = letters + numbers;
+
+                    string folio = $"{primeraParte}{segundaParte}{anio}";
+
+                    connection.Open();
+                    SqlCommand insertCommand = new SqlCommand("INSERT INTO depositos " +
+                                                            "(idTramo,idPension,km,liberado,idDelegacion,estatus,esExterno,idMarca,idSubmarca,idVehiculo,idColor,placa,serie,fechaIngreso,idPropietario,idEnviaVehiculo,idMotivoIngreso,folio,fechaActualizacion,estatusSolicitud) " +
+                                                            "VALUES (@idTramo,@idPension,@km,@liberado,@idDelegacion,@estatus,@esExterno,@idMarca,@idSubmarca,@idVehiculo,@idColor,@placa,@serie,@fechaIngreso,@idPropietario,@idEnviaVehiculo,@idMotivoIngreso,@folio,@fechaActualizacion,@estatusSolicitud);" +
+                                                            "SELECT SCOPE_IDENTITY()", connection);
+                    insertCommand.Parameters.Add(new SqlParameter("@idDelegacion", SqlDbType.Int)).Value = idOficina;
+                    insertCommand.Parameters.Add(new SqlParameter("@idTramo", SqlDbType.Int)).Value = (object)model.IdTramo ?? DBNull.Value;
+                    insertCommand.Parameters.Add(new SqlParameter("@idPension", SqlDbType.Int)).Value = idPension;
+                    insertCommand.Parameters.Add(new SqlParameter("@km", SqlDbType.NVarChar)).Value = (object)model.KilometroUbicacion ?? DBNull.Value;
+                    insertCommand.Parameters.Add(new SqlParameter("@liberado", SqlDbType.Int)).Value = 1;
+                    insertCommand.Parameters.Add(new SqlParameter("@estatus", SqlDbType.Int)).Value = 1;
+                    insertCommand.Parameters.Add(new SqlParameter("@esExterno", SqlDbType.Bit)).Value = 1;
+                    insertCommand.Parameters.Add(new SqlParameter("@idMarca", SqlDbType.Int)).Value = model.Vehiculo.idMarcaVehiculo;
+                    insertCommand.Parameters.Add(new SqlParameter("@idSubmarca", SqlDbType.Int)).Value = model.Vehiculo.idSubmarca;
+                    insertCommand.Parameters.Add(new SqlParameter("@idVehiculo", SqlDbType.Int)).Value = model.Vehiculo.idVehiculo;
+                    insertCommand.Parameters.Add(new SqlParameter("@idColor", SqlDbType.Int)).Value = (object)model.Vehiculo.idColor ?? DBNull.Value;
+                    insertCommand.Parameters.Add(new SqlParameter("@placa", SqlDbType.VarChar)).Value = (object)model.Vehiculo.placas ?? DBNull.Value;
+                    insertCommand.Parameters.Add(new SqlParameter("@serie", SqlDbType.VarChar)).Value = (object)model.Vehiculo.serie ?? DBNull.Value;
+                    insertCommand.Parameters.Add(new SqlParameter("@fechaIngreso", SqlDbType.DateTime)).Value = model.FechaSolicitud;
+                    insertCommand.Parameters.Add(new SqlParameter("@idPropietario", SqlDbType.Int)).Value = model.Vehiculo.idPersona;
+                    insertCommand.Parameters.Add(new SqlParameter("@idEnviaVehiculo", SqlDbType.Int)).Value = model.IdDependenciaEnvia;
+                    insertCommand.Parameters.Add(new SqlParameter("@idMotivoIngreso", SqlDbType.Int)).Value = model.IdTipoMotivoIngreso;
+                    insertCommand.Parameters.Add(new SqlParameter("@folio", SqlDbType.VarChar)).Value = folio;
+                    insertCommand.Parameters.Add(new SqlParameter("@fechaActualizacion", SqlDbType.DateTime)).Value = DateTime.Now;
+                    insertCommand.Parameters.Add(new SqlParameter("@estatusSolicitud", SqlDbType.Int)).Value = 5;
+
+                    resultado = Convert.ToInt32(insertCommand.ExecuteScalar());
+                }
+                catch (SqlException ex)
+                {
+                    Logger.Error("Ocurrió un error al guardar deposito de otra dependencia:" + ex);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+
+            }
+            return resultado;
         }
     }
 }

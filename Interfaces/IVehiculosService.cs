@@ -1,4 +1,5 @@
 ﻿using GuanajuatoAdminUsuarios.Models;
+using GuanajuatoAdminUsuarios.RESTModels;
 using System.Collections.Generic;
 
 namespace GuanajuatoAdminUsuarios.Interfaces
@@ -15,5 +16,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
         public VehiculoModel GetVehiculoToAnexo(VehiculoBusquedaModel model);
         public int CreateVehiculo(VehiculoModel model);
         public int UpdateVehiculo(VehiculoModel model);
+
+        public List<VehiculoModel> GetVehiculoPropietario(VehiculoBusquedaModel model);
     }
 }

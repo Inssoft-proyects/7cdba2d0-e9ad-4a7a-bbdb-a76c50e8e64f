@@ -14,6 +14,7 @@ namespace GuanajuatoAdminUsuarios.Entity
         public int? ActualizadoPor { get; set; }
 
         public int? Estatus { get; set; }
+        public bool Transito { get; set; }
 
         public virtual ICollection<CatOficinasRenta> OficinasRenta { get; } = new List<CatOficinasRenta>();
 

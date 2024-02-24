@@ -3,10 +3,12 @@
         .Name("gridCatUmas")
         .Columns(columns =>
         {
-            columns.Bound(c => c.IdSalario).Title("Id").Hidden();           
+            columns.Bound(c => c.IdSalario).Title("Id").Hidden();  
+            columns.Bound(c => c.Area).Title("Area").Width(190);
             columns.Bound(c => c.Salario).Title("Valor").Width(190);
             columns.Bound(c => c.Anio).Width(190);
             columns.Bound(c => c.Fecha).Width(190).Format("{0:dd/MM/yyyy}");
+            columns.Command(c => c.Custom("Editar").Click("editarSalarioMinimo")).Width(100);
             //columns.Bound(c => c.estatusDesc).Title("Estatus en sistema").Width(100);
             //columns.Command(c => c.Custom("Editar").Click("getId")).Width(80);
            // columns.Command(c => c.Custom("Eliminar").Click("eliminar")).Width(80);
@@ -62,6 +64,26 @@
             url: '@Url.Action("EditarSalarioParcial", "SalariosMinimos")', // URL de la acción del controlador
             type: 'POST', // Tipo de solicitud HTTP (POST o GET)
             data: { IdSalario: IdSalario }, // Datos que se enviarán al controlador
+            success: function (result) {
+                $('#ModalBodyCreate').html(result);
+                $('#addUdiSalario').modal('show');
+                hideLoading();
+            }, error: function () {
+                sitteg_warning("Ocurrio un error al procesar su solicitud.");
+                hideLoading();
+            }
+        })
+    }
+
+    function editarSalarioMinimo(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var IdSalario = dataItem.IdSalario;
+        console.log(IdSalario);
+        showLoading();
+        $.ajax({
+            url: '@Url.Action("EditarSalarioParcial", "SalariosMinimos")',
+            type: 'POST',
+            data: { IdSalario: IdSalario },
             success: function (result) {
                 $('#ModalBodyCreate').html(result);
                 $('#addUdiSalario').modal('show');

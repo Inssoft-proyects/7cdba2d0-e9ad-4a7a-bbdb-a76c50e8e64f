@@ -86,6 +86,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             var catClasificacionGruas = _catDictionary.GetCatalog("CatClasificacionGruas", "0");
             var catTipoGruas = _catDictionary.GetCatalog("CatTiposGrua", "0");
             var catSituacionGruas = _catDictionary.GetCatalog("CatSituacionGruas", "0");
+            var catConcesionario = _concesionariosService.GetAllConcesionariosConMunicipio();
+            ViewBag.CatConcesionario = new SelectList(catConcesionario, "IdConcesionario", "Concesionario");
             ViewBag.CatDelegaciones = new SelectList(catDelegaciones.CatalogList, "Id", "Text");
             ViewBag.CatClasificacionGruas = new SelectList(catClasificacionGruas.CatalogList, "Id", "Text");
             ViewBag.CatTipoGruas = new SelectList(catTipoGruas.CatalogList, "Id", "Text");
@@ -106,7 +108,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 var listPadronGruas = _gruasService.GetAllGruas(idOficina);
                 return PartialView("_ListadoGruas", listPadronGruas);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("_ListadoGruas");
         }
         /// <summary>
         /// Accion que redirige a la vista

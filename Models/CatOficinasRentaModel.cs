@@ -20,6 +20,7 @@ namespace GuanajuatoAdminUsuarios.Models
         public string DelegacionDesc { get; set; }
 
          public bool ValorEstatusOficinasRenta { get; set; }
+        public int Transito { get; set; }
 
     }
 }

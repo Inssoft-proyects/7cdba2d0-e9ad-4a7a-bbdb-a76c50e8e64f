@@ -19,7 +19,8 @@ namespace GuanajuatoAdminUsuarios.Models
 
         public string estatusDesc { get; set; }
         public bool ValorEstatusCarretera { get; set; }
+        public int Transito { get; set; }
 
-        
+
     }
 }

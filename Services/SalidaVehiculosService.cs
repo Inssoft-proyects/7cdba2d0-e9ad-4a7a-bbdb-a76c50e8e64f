@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
+using GuanajuatoAdminUsuarios.Util;
 
 namespace GuanajuatoAdminUsuarios.Services
 {
@@ -379,15 +380,10 @@ namespace GuanajuatoAdminUsuarios.Services
 
 
                   //  connection.Open();
-                    SqlCommand sqlCommand = new
-                        SqlCommand("Update depositos set " +
-                                   "estatusSolicitud=6, " +
-                                    "fechaActualizacion = @fechaActualizacion" +
-                                   "where idDeposito=@idDeposito",
-                        connection);
+                    SqlCommand sqlCommand = new(@"update depositos set estatusSolicitud=6,fechaActualizacion=@fechaAct where idDeposito=@idDeposito;",connection);
 
                     sqlCommand.Parameters.Add(new SqlParameter("@idDeposito", SqlDbType.Int)).Value = model.idDeposito;
-                    command.Parameters.AddWithValue("@fechaActualizacion", DateTime.Now);
+                    sqlCommand.Parameters.Add(new SqlParameter("@fechaAct", SqlDbType.DateTime)).Value = DateTime.Now;
                     sqlCommand.CommandType = CommandType.Text;
                     result = sqlCommand.ExecuteNonQuery();
 
@@ -395,6 +391,7 @@ namespace GuanajuatoAdminUsuarios.Services
                 }
                 catch (SqlException ex)
                 {
+                    Logger.Error("Ocurrió un error al proporcionar salida de vehiculo:" + ex);
                     return result;
                 }
                 finally
