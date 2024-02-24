@@ -62,6 +62,20 @@
             $("#elementosFecha").show();
         }
     }
+
+    function mostrarModal() {
+        $.ajax({
+            url: '@Url.Action("AgregarMotivoParcial")',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                $('#addMotivoBody').html(data);
+                $('#addMotivo').modal('show');
+            }
+        });
+    }
+
 </script>
 <div class="mainContainer bg-light">
 
@@ -252,18 +266,7 @@
 
 @*<script src="~/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.min.js"></script>*@
 <script>
-    function mostrarModal() {
-        $.ajax({
-            url: '@Url.Action("AgregarMotivoParcial")',
-            type: 'POST',
-            contentType: "application/json; charset=utf-8",
-            dataType: "html",
-            success: function (data) {
-                $('#addMotivoBody').html(data);
-                $('#addMotivo').modal('show');
-            }
-        });
-    }
+
 
     $(document).ready(function () {
         var datePicker = $("#inicioVigenciaDesde").data("kendoDatePicker");

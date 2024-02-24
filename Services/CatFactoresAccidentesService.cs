@@ -69,19 +69,20 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT f.*, e.estatus FROM catFactoresAccidentes AS f INNER JOIN estatus AS e ON f.estatus = e.estatus WHERE f.estatus = 1 ORDER BY FactorAccidente ASC;", connection);
+                    SqlCommand command = new SqlCommand("SELECT f.*, e.estatusDesc FROM catFactoresAccidentes AS f INNER JOIN estatus AS e ON f.estatus = e.estatus WHERE f.estatus = 1 ORDER BY FactorAccidente ASC;", connection);
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
                         while (reader.Read())
                         {
                             CatFactoresAccidentesModel factor = new CatFactoresAccidentesModel();
-                            factor.IdFactorAccidente = Convert.ToInt32(reader["IdFactorAccidente"].ToString());
-                            factor.FactorAccidente = reader["FactorAccidente"].ToString();
-                            factor.estatusDesc = reader["estatusDesc"].ToString();
-                            factor.FechaActualizacion = Convert.ToDateTime(reader["FechaActualizacion"].ToString());
-                            factor.Estatus = Convert.ToInt32(reader["estatus"].ToString());
-                           // factor.ActualizadoPor = Convert.ToInt32(reader["ActualizadoPor"].ToString());
+                            factor.IdFactorAccidente = Convert.ToInt32(reader["IdFactorAccidente"]?.ToString() ?? "0");
+                            factor.FactorAccidente = reader["FactorAccidente"]?.ToString() ?? "";
+                            factor.estatusDesc = reader["estatusDesc"]?.ToString() ?? "";
+                            factor.FechaActualizacion = Convert.ToDateTime(reader["FechaActualizacion"]?.ToString() ?? DateTime.MinValue.ToString());
+                            factor.Estatus = Convert.ToInt32(reader["estatus"]?.ToString() ?? "0");
+
+                            // factor.ActualizadoPor = Convert.ToInt32(reader["ActualizadoPor"].ToString());
                             ListaFactores.Add(factor);
 
                         }

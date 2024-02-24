@@ -9,7 +9,7 @@ namespace GuanajuatoAdminUsuarios.Models
     public class VehiculoModel : EntityModel
     {
 
-
+        public bool ReporteRobo { get; set; }  
         public string ErrorRepube { get; set; } = ""; 
         public bool showclose { get; set; } = true;
 

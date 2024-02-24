@@ -10,6 +10,8 @@ namespace GuanajuatoAdminUsuarios.Interfaces
         List<VehiculoModel> GetVehiculos(VehiculoBusquedaModel modelSearch);
         List<VehiculoModel> GetVehiculosPagination(VehiculoBusquedaModel modelSearch, Pagination pagination);
         public VehiculoModel GetVehiculoById(int idVehiculo);
+        int BuscarPorParametro(string Placa, string Serie, string Folio);
+        VehiculoModel GetModles(VehiculoBusquedaModel model);
         public VehiculoModel GetVehiculoToAnexo(VehiculoBusquedaModel model);
         public int CreateVehiculo(VehiculoModel model);
         public int UpdateVehiculo(VehiculoModel model);

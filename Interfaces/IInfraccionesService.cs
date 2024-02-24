@@ -1,5 +1,6 @@
 ﻿using GuanajuatoAdminUsuarios.Entity;
 using GuanajuatoAdminUsuarios.Models;
+
 using GuanajuatoAdminUsuarios.RESTModels;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
 		List<InfraccionesModel> GetAllInfraccionesBusquedaEspecial(InfraccionesBusquedaEspecialModel model, int idOficina, int idDependencia);
 		List<InfraccionesModel> GetAllInfraccionesBusquedaEspecialPagination(InfraccionesBusquedaEspecialModel model, int idOficina, int idDependencia, Pagination pagination);
 
+		List<SystemCatalogListModel> GetFilterCatalog(FilterCatalogTramoModel Filters);
 		InfraccionesModel GetInfraccionById(int IdInfraccion, int idDependencia);
         public InfraccionesReportModel GetInfraccionReportById(int IdInfraccion, int idDependencia);
         public List<MotivosInfraccionVistaModel> GetMotivosInfraccionByIdInfraccion(int idInfraccion);

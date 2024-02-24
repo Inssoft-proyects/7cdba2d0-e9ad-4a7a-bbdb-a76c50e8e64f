@@ -39,7 +39,7 @@
             <div class="col-12 col-lg-6 my-4 btnToggleActive">
                 @(Html.Kendo().SwitchFor(t => t.ValorEstatusMotivosInfraccion)
                         .Name("motivosInfraccionSwitch")
-                    .Checked(Model.estatus == 1)
+                    .Checked(Model.Estatus == 1)
                     .Messages(c => c.Checked("Activo").Unchecked("Inactivo"))
                     .HtmlAttributes(new { data_valor = Model.Estatus })
                     )
@@ -171,12 +171,10 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                var grid = $("#gridCatMotivos").data("kendoGrid");
+              var grid = $("#gridCatMotivos").data("kendoGrid");
                 grid.dataSource.read();
                 $('#addMotivo').modal('hide');
-
-                sitteg_success("Información guardada correctamente.");
-
+                sitteg_success("Información actualizada correctamente.");
                 hideLoading();
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");

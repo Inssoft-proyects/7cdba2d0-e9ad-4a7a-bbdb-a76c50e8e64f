@@ -39,9 +39,27 @@
 
 	function DataFilterCatalogTramo(){
 		
-		var value = $("#idCarretera").val()
+		var value = $("#ddlCarreteras").val()
 		return { idCarretera: value }
 	}
+
+	function OnChangeCarreteras() {
+		var ddl = $("#idTramo").data("kendoDropDownList")
+		ddl.dataSource.read()
+	}
+
+
+
+	//$("#ddlCarreteras").on("change", function () {
+	//	var value = $(this).val();
+	//	if (value == "") {
+	//		$("#idTramo option[value!='']").remove();
+	//	}
+	//	else {
+	//		_set_combo_catalog("CatTramosByFilter", value, "idTramo", "false", "divTramo", "");
+	//		$('#idTramo').kendoDropDownList();
+	//	}
+	//});
 
 
 </script>
@@ -256,11 +274,16 @@
 								<div class="form-group col-md-4">
 									<div class="controlForm">
 										<label>Carretera <b>(obligatorio):</b></label>
-										@(Html.Kendo().DropDownList()
-											.Name("idCarretera")
-											.BindTo((SelectList)ViewBag.CatCarreteras)
-											.Filter(FilterType.Contains)
+										@(
+											Html.Kendo().DropDownList()
+													.Name("idCarretera")
+													.BindTo((SelectList)ViewBag.CatCarreteras)
+													.Filter(FilterType.Contains)
+													.Events(ev =>
+													{
+														ev.Change("OnChangeCarreteras");											
 
+												})
 											.OptionLabel("-- Seleccione --")
 											.HtmlAttributes(new { style = "width:100%;", id = "ddlCarreteras", required = "required" })
 											)
@@ -274,10 +297,13 @@
 												Html.Kendo().DropDownListFor(f => f.idTramo)
 															.Filter(FilterType.Contains)												
 															.OptionLabel("-- Seleccione --")
+															.DataTextField("Text")
+															.DataValueField("Id")
+															
 															.DataSource(s=> {
 																s.Read(r =>
 																{
-																	r.Action("GetCatalogTramoFilter", "CatalogManager").Data("DataFilterCatalogTramo");
+																	r.Action("GetCatalogTramoFilter", "infracciones").Data("DataFilterCatalogTramo");
 																});
 													
 													})
@@ -399,6 +425,16 @@
 								<div class="col-12 col-md-6 col-lg-7 col-xl-auto">
 									<div class="row">
 										<div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+											<button type="button" href="#" id="btnNuevoConductor" onclick="ProPietarioConductor()">
+												<h6 class="m-0 d-flex align-items-center"><i class="icon-addConductor h5 mb-0 me-2"></i><b>Propietario Como Conductor</b></h6>
+											</button>
+										</div>
+																				<div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+											<button type="button" href="#" id="btnNuevoConductor" onclick="OmitirConductor()">
+												<h6 class="m-0 d-flex align-items-center"><i class="icon-addConductor h5 mb-0 me-2"></i><b>Omitir Conductor</b></h6>
+											</button>
+										</div>
+										<div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
 											<button type="button" href="#" id="btnNuevoConductor" onclick="mostrarModalAgregarConductor()">
 												<h6 class="m-0 d-flex align-items-center"><i class="icon-addConductor h5 mb-0 me-2"></i><b>Agregar nuevo conductor</b></h6>
 											</button>
@@ -453,16 +489,63 @@
 <script>
 
 
-	$("#ddlCarreteras").on("change", function () {
-		var value = $(this).val();
-		if (value == "") {
-			$("#idTramo option[value!='']").remove();
+
+
+	function OmitirConductor(){
+
+		showLoading();
+
+		$.ajax({
+			url: '@Url.Action("ajax_OmitirConductor")',
+			type: 'POST',
+			data: {},
+			dataType: "json",
+			success: function (result) {
+
+				if (result) {
+
+					sitteg_success('Elemento guardado correctamente')
+					$("#idPersona").val(result)
+				}
+				hideLoading();
+
+			},
+			error: function (xhr, status) {
+				var errmsg = xhr.responseText;
+				console.log(errmsg)
+				sitteg_warning('Lo sentimos, ha ocurrido un error.');
+				hideLoading();
+			}
+		});
+
+
+
+	}
+
+
+
+	function ProPietarioConductor() {
+
+		var result =$("#Persona_idPersona").val()
+
+		if(result){
+			$("#idPersona").val()
+			sitteg_success('Elemento guardado correctamente')
 		}
-		else {
-			_set_combo_catalog("CatTramosByFilter", value, "idTramo", "false", "divTramo", "");
-			$('#idTramo').kendoDropDownList();
+		else{
+			sitteg_warning('Debes seleccionar un vehiculo con un propietario asignado');
 		}
-	});
+
+
+
+		
+
+		
+
+
+	}
+
+
 
 	function btnGuardarInfraccion() {
 		var controlsValidate = [];

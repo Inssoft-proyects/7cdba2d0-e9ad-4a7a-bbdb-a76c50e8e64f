@@ -4,6 +4,7 @@ namespace GuanajuatoAdminUsuarios.Models
 {
     public class VehiculoBusquedaModel
     {
+        public bool ReporteRobo { get; set; }
         public int? IdEntidadBusqueda { get; set; }
         public string PlacasBusqueda { get; set; } = null!;
         public string SerieBusqueda { get; set; } = null!;

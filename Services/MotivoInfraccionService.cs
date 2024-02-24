@@ -29,7 +29,8 @@ namespace GuanajuatoAdminUsuarios.Services
 								cmi.fechaFinVigencia,
 	                            cmi.idCatMotivoInfraccion ,
 	                            cmi.nombre,
-	                            cmi.fundamento , 
+	                            cmi.fundamento ,
+                                cmi.estatus,
 	                            cmi.calificacionMinima , 
 	                            cmi.calificacionMaxima , 
 	                            cmi.IdConcepto , 
@@ -60,7 +61,7 @@ namespace GuanajuatoAdminUsuarios.Services
                         {
                             CatMotivosInfraccionModel model = new CatMotivosInfraccionModel();
                             model.IdCatMotivoInfraccion = reader["idCatMotivoInfraccion"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idCatMotivoInfraccion"].ToString());
-                            model.Estatus = reader["idCatMotivoInfraccion"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idCatMotivoInfraccion"].ToString());
+                            model.Estatus = reader["estatus"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["estatus"].ToString());
                             model.estatusDesc = reader["ValorEstatusMotivosInfraccion"].ToString();
 
                             model.Nombre = reader["nombre"].ToString();
@@ -220,7 +221,8 @@ namespace GuanajuatoAdminUsuarios.Services
                                 , calificacionMaxima
                                 , fundamento
                                 , fechaInicio
-                                , fechaFinVigencia)
+                                , fechaFinVigencia
+                                 ,transito)
                             VALUES(@nombre
                                 , @IdSubConcepto
                                 , @fechaActualizacion
@@ -308,7 +310,6 @@ namespace GuanajuatoAdminUsuarios.Services
 
                     command.Parameters.AddWithValue("@fechaActualizacion", DateTime.Now);
                     command.Parameters.AddWithValue("@actualizadoPor", 1);
-                    command.Parameters.AddWithValue("@estatus", 1);
 
                     result = command.ExecuteNonQuery();
                 }

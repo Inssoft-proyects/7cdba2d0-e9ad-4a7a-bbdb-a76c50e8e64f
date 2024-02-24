@@ -113,7 +113,7 @@ namespace GuanajuatoAdminUsuarios.Services
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT TOP 1 nombreOficina FROM catDelegacionesOficinasTransporte WHERE idOficinaTransporte = @IdOficina AND estatus = 1 ORDER BY nombreOficina ASC;", connection);
+                    SqlCommand command = new SqlCommand("SELECT TOP 1 nombreOficina FROM catDelegacionesOficinasTransporte WHERE idOficinaTransporte = @IdOficina  ORDER BY nombreOficina ASC;", connection);
                     command.Parameters.AddWithValue("@IdOficina", idOficina);
                     command.CommandType = CommandType.Text;
 
@@ -133,7 +133,36 @@ namespace GuanajuatoAdminUsuarios.Services
                 }
             }
         }
-
+       
+        public int EditarDelegacion(CatDelegacionesOficinasTransporteModel model)
+        {
+            int result = 0;
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand sqlCommand = new
+                        SqlCommand("Update catDelegacionesOficinasTransporte set jefeOficina=@jefeOficina WHERE idOficinaTransporte = @idOficinaTransporte",connection);
+                    sqlCommand.Parameters.Add(new SqlParameter("@idOficinaTransporte", SqlDbType.Int)).Value = model.IdOficinaTransporte;
+                    sqlCommand.Parameters.Add(new SqlParameter("@jefeOficina", SqlDbType.NVarChar)).Value = model.JefeOficina;        
+                    sqlCommand.Parameters.Add(new SqlParameter("@fechaActualizacion", SqlDbType.DateTime)).Value = DateTime.Now;
+                    sqlCommand.Parameters.Add(new SqlParameter("@actualizadoPor", SqlDbType.Int)).Value = 1;
+                    sqlCommand.CommandType = CommandType.Text;
+                    result = sqlCommand.ExecuteNonQuery();
+                }
+                catch (SqlException ex)
+                {
+                    //---Log
+                    return result;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return result;
+        }
     }
 
 }

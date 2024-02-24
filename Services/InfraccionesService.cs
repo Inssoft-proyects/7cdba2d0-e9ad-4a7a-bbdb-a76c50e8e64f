@@ -1292,6 +1292,54 @@ namespace GuanajuatoAdminUsuarios.Services
 			return model;
 		}
 
+
+		public List<SystemCatalogListModel> GetFilterCatalog(FilterCatalogTramoModel Filters)
+		{
+
+			var result = new List<SystemCatalogListModel>();
+
+			string strQuery = @"SELECT 
+                                idTramo,
+								tramo
+                                FROM catTramos
+                                WHERE estatus = 1 and idCarretera=@carretera ";
+			strQuery = string.Format(strQuery);
+			
+			using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+				try
+				{
+					connection.Open();
+					SqlCommand command = new SqlCommand(strQuery, connection);
+					command.Parameters.Add(new SqlParameter("@carretera", SqlDbType.Int)).Value = (object)Filters.idCarretera ?? DBNull.Value;
+
+
+
+					command.CommandType = CommandType.Text;
+					using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+					{
+						while (reader.Read())
+						{
+							var item = new SystemCatalogListModel();
+							item.Id = (int)reader["idTramo"];
+							item.Text = (string)reader["tramo"];
+							result.Add(item);
+						}
+					}
+				}
+				catch (SqlException ex)
+				{
+					//Guardar la excepcion en algun log de errores
+					//ex
+				}
+				finally
+				{
+					connection.Close();
+				}
+
+			return result;
+		}
+
+
 		public List<MotivosInfraccionVistaModel> GetMotivosInfraccionByIdInfraccion(int idInfraccion)
 		{
             int numeroContinuo = 1;
@@ -2875,7 +2923,7 @@ INSERT INTO infracciones
 					command.Parameters.Add(new SqlParameter("idVehiculo", SqlDbType.Int)).Value = (object)model.idVehiculo;
 					//command.Parameters.Add(new SqlParameter("idPersona", SqlDbType.Int)).Value = (object)model.idPersona;
 					command.Parameters.Add(new SqlParameter("idPersonaInfraccion", SqlDbType.Int)).Value = (object)model.idPersona;
-					command.Parameters.Add(new SqlParameter("placasVehiculo", SqlDbType.NVarChar)).Value = (object)model.placasVehiculo.Trim(new Char[] { ' ', '-' });
+					command.Parameters.Add(new SqlParameter("placasVehiculo", SqlDbType.NVarChar)).Value = (object)(String.IsNullOrEmpty(model.placasVehiculo)?"": model.placasVehiculo.Trim(new Char[] { ' ', '-' }));
 					command.Parameters.Add(new SqlParameter("NumTarjetaCirculacion", SqlDbType.NVarChar)).Value =
 						!string.IsNullOrEmpty(model.NumTarjetaCirculacion) ? (object)model.NumTarjetaCirculacion : DBNull.Value;
 					command.Parameters.Add(new SqlParameter("idEstatusInfraccion", SqlDbType.Int)).Value = (object)model.idEstatusInfraccion;

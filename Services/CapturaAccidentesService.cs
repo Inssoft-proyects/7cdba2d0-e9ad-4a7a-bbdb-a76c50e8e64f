@@ -373,7 +373,15 @@ namespace GuanajuatoAdminUsuarios.Services
                 try
                 {
                     connection.Open();
-                    string query = "INSERT INTO vehiculosAccidente (idAccidente, idVehiculo, idPersona, placa, serie) OUTPUT INSERTED.idVehiculo VALUES (@idAccidente, @idVehiculo,@idPersona, @Placa ,@Serie)";
+                    string query = @"
+                                        declare 
+                                            @exist int
+                                           set  @exist  = (select count(*) from vehiculosAccidente where placa= @Placa and idAccidente= @idAccidente and estatus=1  )
+                                    if @exist=0
+                                        begin
+                                    INSERT INTO vehiculosAccidente (idAccidente, idVehiculo, idPersona, placa, serie) OUTPUT INSERTED.idVehiculo VALUES (@idAccidente, @idVehiculo,@idPersona, @Placa ,@Serie)
+                                        end
+                                        select @exist result";
 
                     SqlCommand command = new SqlCommand(query, connection);
                     command.Parameters.AddWithValue("@idVehiculo", idVehiculo);
@@ -382,12 +390,14 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.AddWithValue("@Placa", Placa);
                     command.Parameters.AddWithValue("@Serie", Serie);
 
-                    object insertedId = command.ExecuteScalar();
+                    var insertedId = command.ExecuteReader();
 
-                    if (insertedId != null && int.TryParse(insertedId.ToString(), out idVehiculoInsertado))
-                    {
-                        // El valor de idVehiculoInsertado es el ID del vehículo insertado en la tabla
+                    while(insertedId.Read()){
+                        idVehiculoInsertado = (int)insertedId["result"];
                     }
+
+
+                    
                 }
                 catch (SqlException ex)
                 {

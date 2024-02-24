@@ -48,7 +48,7 @@
            <!-- <div class="controlForm my-3">
                 <label>Sede / Municipio <b>(obligatorio)</b>:</label>
                 <span>
-                    @Html.HiddenFor(m=>m.IdOficinaTransporte)
+                    
                     @(Html.Kendo().DropDownListFor(t => t.IdMunicipio)
                         .DataTextField("Text")
                         .DataValueField("Value")
@@ -82,7 +82,7 @@
                     .Placeholder("Ingresa el nombre del jefe de oficina")
                     .HtmlAttributes(new { style = "width: 100%" })
                     )
-
+                    @Html.HiddenFor(m=>m.IdOficinaTransporte)
             </div>
         </div>
         </div>

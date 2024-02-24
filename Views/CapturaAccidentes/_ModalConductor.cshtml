@@ -456,7 +456,7 @@
         var formData = $("#sinConductorForm").serialize();
         showLoading();
         $.ajax({
-            url: '@Url.Action("ActualizarConConductor")',
+            url: '@Url.Action("ActualizarSinConductor")',
             type: 'POST',
             data: formData,
             success: function (response) {

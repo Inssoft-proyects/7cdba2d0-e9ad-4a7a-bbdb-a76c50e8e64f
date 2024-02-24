@@ -17,6 +17,14 @@
                 type: 'POST',
                 data: { IdVehiculo: IdVehiculo, IdPersona: IdPersona, Placa : Placa, Serie :Serie },
                 success: function (result) { 
+
+
+                    ir(result.error){
+                        hideLoading();
+                        $('#ModalBodyAgregarVehiculo').html("");
+                        $('#agregarVehiculoModal').modal('hide');
+                    }
+
                     console.log("FER",result)
                     abrirModalConductor(IdPersona, result.IdVehiculoH);
                     hideLoading();

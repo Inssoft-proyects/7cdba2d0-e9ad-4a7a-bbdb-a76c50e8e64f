@@ -92,7 +92,7 @@
                         </button>
                     </div>
                     <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-                        <div type="button" class="controlButton" onclick="editarAgencia()">
+                        <div type="button" class="controlButton" onclick="editarAgencia(event)">
                             @(Html.Kendo().Button()
                             .Name("EditMinisterio")
                             .HtmlAttributes(new { @class = "btnPrimary px-3" })
@@ -109,6 +109,7 @@
 
 <script>
     function editarAgencia() {
+        event.preventDefault();
         var Mydata = $("#editarAgenciaministerioForm").serialize();
         var controlsValidate = [];
         var isValid = true;
@@ -138,7 +139,7 @@
             success: function (result) {
                 var grid = $("#gridAgenciasMinisterio").data("kendoGrid");
                 grid.dataSource.read();
-                sitteg_info('Se ha actualizado la información');
+                sitteg_success('Se ha actualizado la información');
                 $('#editarAgenciaministerio').modal('hide');
 
                 hideLoading();

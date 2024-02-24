@@ -1,5 +1,19 @@
 ﻿@model List<GuanajuatoAdminUsuarios.Models.DiasInhabilesModel>
 @*RazorCoder*@
+<script>
+    function mostrarModal() {
+        $.ajax({
+            url: '@Url.Action("AgregarParcialDiaInhabil")',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                $('#ModalBodyCreateDiaInhabil').html(data);
+                $('#addDateInhabil').modal('show');
+            }
+        });
+    }
+</script>
 <div class="mainContainer bg-light">
 
         <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">

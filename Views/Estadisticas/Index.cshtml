@@ -47,14 +47,14 @@
 </script>
 
 <script>
- function tipoServicioDropDownChange() {
+    function tipoServicioDropDownChange() {
         var tipoServicioDDlValue = $("#idTipoServicio").data("kendoDropDownList").value();
 
         showLoading();
         $.ajax({
             url: "/Estadisticas/SubtipoServicio_Drop",
             type: "POST",
-            data: { tipoServicioDDlValue: tipoServicioDDlValue }, 
+            data: { tipoServicioDDlValue: tipoServicioDDlValue },
             success: function (data) {
                 var subtipoDropDown = $("#idSubTipoServicio").data("kendoDropDownList");
                 subtipoDropDown.dataSource.data(data);
@@ -65,7 +65,7 @@
             }
         });
     }
- </script>
+</script>
 <div class="mainContainer bg-light">
     <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
         <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
@@ -121,20 +121,20 @@
                     <div class="controlForm">
                         <label>Oficial:</label>
                         @(Html.Kendo().DropDownListFor(f => f.idOficial).Filter(FilterType.Contains)
-											.DataTextField("Text")
-											.DataValueField("Value")
-											.DataSource(source =>
-											{
-												source.Read(read =>
-												{
-													read.Action("OficialesDependencia_Drop", "Oficiales");
-												});
-											})
-											.OptionLabel("-- Seleccione --")
-											.Filter(FilterType.Contains)
+                            .DataTextField("Text")
+                            .DataValueField("Value")
+                            .DataSource(source =>
+                            {
+                                source.Read(read =>
+                                {
+                                    read.Action("OficialesDependencia_Drop", "Oficiales");
+                                });
+                            })
+                            .OptionLabel("-- Seleccione --")
+                            .Filter(FilterType.Contains)
 
-											.HtmlAttributes(new { style = "width:100%;"})
-											)
+                            .HtmlAttributes(new { style = "width:100%;" })
+                            )
                     </div>
                 </div>
                 <div class="form-group col-12 col-md-6 col-lg-4 my-3">
@@ -208,7 +208,7 @@
                                 )
                         </div>
                     </div>
-                </div>           
+                </div>
                 <div class="form-group col-12 col-md-6 col-lg-4 my-3">
                     <div class="controlForm">
                         <label>Tipo servicio:</label>
@@ -256,18 +256,18 @@
                         <label>Municipio:</label>
                         <div id="divTramo">
                             @(Html.Kendo().DropDownListFor(f => f.idMunicipio).Filter(FilterType.Contains)
-                                    .DataTextField("Text")
-                            .DataValueField("Value")
-                            .OptionLabel("Seleccione Municipio...")
-                            .HtmlAttributes(new { style = "width:100%;" })
-                            .Filter(FilterType.Contains)
-                            .DataSource(source =>
-                            {
-                                source.Read(read =>
+                                .DataTextField("Text")
+                                .DataValueField("Value")
+                                .OptionLabel("Seleccione Municipio...")
+                                .HtmlAttributes(new { style = "width:100%;" })
+                                .Filter(FilterType.Contains)
+                                .DataSource(source =>
                                 {
-                                    read.Action("Municipios_Guanajuato", "Estadisticas");
-                                });
-                            }))
+                                    source.Read(read =>
+                                    {
+                                        read.Action("Municipios_Guanajuato", "Estadisticas");
+                                    });
+                                }))
                         </div>
                     </div>
                 </div>
@@ -307,7 +307,7 @@
         <div id="estadisticasInfracciones3">
             <partial name="_GridInfracciones" model="@ViewBag.GridInfracciones" />
         </div>
-      
+
 
     </section>
 
@@ -318,25 +318,26 @@
         var Mydata = $("#frmBusquedaEstadisticasIncidencias").serialize();
         showLoading();
         $.ajax({
-            url: '@Url.Action("ajax_BusquedaParaMotivos")',
+            url: '@Url.Action("ActualizarViewBag")',
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#estadisticasInfracciones2").html(result);
+                $("#estadisticasInfracciones3").html(result);
 
+                // Esta es la primera llamada AJAX, por lo que no la comentamos
                 $.ajax({
                     url: '@Url.Action("ajax_BusquedaIncidenciasInfracciones")',
                     type: 'POST',
                     data: Mydata,
                     success: function (result) {
                         $("#estadisticasInfracciones").html(result);
-
+                        
                         $.ajax({
-                            url: '@Url.Action("ActualizarViewBag")',
+                            url: '@Url.Action("ajax_BusquedaParaMotivos")',
                             type: 'POST',
                             data: Mydata,
                             success: function (result) {
-                                 $("#estadisticasInfracciones3").html(result);
+                                 $("#estadisticasInfracciones2").html(result);
                                 hideLoading();
                             },
                             error: function () {
@@ -345,16 +346,23 @@
                                 hideLoading();
                             }
                         });
+                        
+                    },
+                    error: function () {
+                        // Maneja errores
+                        sitteg_warning("Ocurrió un error al procesar su solicitud.");
+                        hideLoading();
                     }
                 });
             },
             error: function () {
                 // Maneja errores
-                sitteg_warning("Ocurrió un error al procesar su solicitud.");
+                sitteg_warning("Ocurrió un error al actualizar el ViewBag.");
                 hideLoading();
             }
         });
     }
+
 
 
     function startChange() {

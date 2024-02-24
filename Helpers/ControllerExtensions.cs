@@ -55,7 +55,7 @@ namespace GuanajuatoAdminUsuarios.Helpers
             using (var writer = new StringWriter())
             {
                 IViewEngine viewEngine = controller.HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
-                ViewEngineResult viewResult = viewEngine.FindView(controller.ControllerContext, viewName, !partial);
+                ViewEngineResult viewResult = viewEngine.GetView("", "Views/infracciones/_Create.cshtml", false);// controller.ControllerContext, viewName, !partial);
 
                 if (viewResult.Success == false)
                 {

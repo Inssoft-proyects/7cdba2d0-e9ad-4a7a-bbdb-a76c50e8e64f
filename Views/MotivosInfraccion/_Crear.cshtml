@@ -161,7 +161,10 @@
                 type: 'POST',
                 data: Mydata,
                 success: function (result) {
-                $("#gridCatMotivos").data("kendoGrid").dataSource.data(result);
+                var grid = $("#gridCatMotivos").data("kendoGrid");
+                grid.dataSource.read();
+                $('#addMotivo').modal('hide');
+                sitteg_success("Información actualizada correctamente.");
                 hideLoading();
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");

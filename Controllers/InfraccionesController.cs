@@ -237,8 +237,19 @@ namespace GuanajuatoAdminUsuarios.Controllers
             var result = new SelectList(_catCarreterasService.GetCarreterasPorDelegacion(idOficina), "idCarretera", "carretera");
             return Json(result);
         }
+        public IActionResult ajax_OmitirConductor()
+        {
+            var personamodel = new PersonaModel();
+            personamodel.nombre = "SE Ignora";
+            personamodel.idCatTipoPersona = 1;
+            personamodel.PersonaDireccion=new PersonaDireccionModel();
 
-        public JsonResult Cortesias_Read()
+            var result = _personasService.CreatePersona(personamodel);
+
+            return Json(result);
+        }
+
+		public JsonResult Cortesias_Read()
         {
             //catTipoCortesia
             var result = new SelectList(_tipoCortesiaService.GetTipoCortesias(), "idTipoCortesia", "tipoCortesia");
@@ -272,14 +283,16 @@ namespace GuanajuatoAdminUsuarios.Controllers
             return Json(result);
         }
 
-        public ActionResult Crear()
+        public async Task<ActionResult> Crear()
         {
 
             int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
             ViewBag.CatCarreteras = new SelectList(_catCarreterasService.GetCarreterasPorDelegacion(idOficina), "IdCarretera", "Carretera");
             ViewBag.EditarVehiculo = false;
             ViewBag.Regreso= 1;
-            return View(new InfraccionesModel());
+                       
+            var q = View(new InfraccionesModel());
+            return q;
         }
 
 
@@ -937,11 +950,29 @@ namespace GuanajuatoAdminUsuarios.Controllers
         {
             try
             {
-                var SeleccionVehiculo = _capturaAccidentesService.BuscarPorParametro(model.PlacasBusqueda, model.SerieBusqueda, model.FolioBusqueda);
+                //var SeleccionVehiculo = _capturaAccidentesService.BuscarPorParametro(model.PlacasBusqueda, model.SerieBusqueda, model.FolioBusqueda);
+                var SeleccionVehiculo = _vehiculosService.BuscarPorParametro(model.PlacasBusqueda??"", model.SerieBusqueda??"", model.FolioBusqueda);
 
-                if (SeleccionVehiculo.Count > 0)
+                if (SeleccionVehiculo > 0)
                 {
-                    return Json(new { noResults = false, data = SeleccionVehiculo });
+                    var text = "";
+                    var value = "";
+
+                    if(!string.IsNullOrEmpty(model.SerieBusqueda))
+                    {
+                         text = "serie";
+                         value = model.SerieBusqueda;
+
+                    }
+                    else if (!string.IsNullOrEmpty(model.PlacasBusqueda))
+                    {
+                        text = "placas";
+                        value = model.PlacasBusqueda;
+                    }
+
+
+
+                    return Json(new { noResults = false, data = value , field=text });
                 }
                 else
                 {
@@ -953,13 +984,13 @@ namespace GuanajuatoAdminUsuarios.Controllers
                     }
                     else
                     {
-                        return Json(new { noResults = true, data = new { } });
+                        return Json(new { noResults = true, data = "" });
                     }
                 }
             }
             catch (Exception ex)
             {
-                return Json(new { noResults = true, error = "Se produjo un error al procesar la solicitud", data = new { } });
+                return Json(new { noResults = true, error = "Se produjo un error al procesar la solicitud", data = "" });
             }
         }
 
@@ -968,117 +999,13 @@ namespace GuanajuatoAdminUsuarios.Controllers
         {
             try
             {
-               
-               var request = JsonConvert.SerializeObject(model);
-                Logger.Debug("Infracciones - ajax_BuscarVehiculo - Request:" + request);
-                var vehiculosModel = new VehiculoModel();
+                
+                var models = _vehiculosService.GetModles(model);
 
-                RepuveConsgralRequestModel repuveGralModel = new RepuveConsgralRequestModel(model.PlacasBusqueda, model.SerieBusqueda);
-                Logger.Debug("Infracciones - ajax_BuscarVehiculo - ValidarRobo ");
-                ViewBag.ReporteRobo = ValidarRobo(repuveGralModel);
-
-                var allowSistem = _appSettings.AllowWebServicesRepuve;
-
-                Logger.Debug("Infracciones - ajax_BuscarVehiculo - GetVehiculoToAnexo");
-                vehiculosModel = _vehiculosService.GetVehiculoToAnexo(model);
-                vehiculosModel.idSubmarcaUpdated = vehiculosModel.idSubmarca;
-                vehiculosModel.PersonaMoralBusquedaModel = new PersonaMoralBusquedaModel();
-                vehiculosModel.PersonaMoralBusquedaModel.PersonasMorales = new List<PersonaModel>();
-
-                if (vehiculosModel.idVehiculo > 0)
-                {
-                    return await this.RenderViewAsync("_Create", vehiculosModel,true);
-
-                }
-
-                if (allowSistem )
-                {
-                    CotejarDatosRequestModel cotejarDatosRequestModel = new CotejarDatosRequestModel();
-                    cotejarDatosRequestModel.Tp_folio = "4";
-                    cotejarDatosRequestModel.Folio = model.PlacasBusqueda;
-                    cotejarDatosRequestModel.tp_consulta = "3";
-                    var endPointName = "CotejarDatosEndPoint";
-                    Logger.Debug("Infracciones - ajax_BuscarVehiculo - CotejarDatos");
-                    var result = _cotejarDocumentosClientService.CotejarDatos(cotejarDatosRequestModel, endPointName);
-                    if (result.MT_CotejarDatos_res != null && result.MT_CotejarDatos_res.Es_mensaje != null && result.MT_CotejarDatos_res.Es_mensaje.TpMens.ToString().Equals("I", StringComparison.OrdinalIgnoreCase))
-                    {
-                        Logger.Debug("Infracciones - ajax_BuscarVehiculo - GetVEiculoModelFromFinanzas - Response - " + JsonConvert.SerializeObject(result));
-                        vehiculosModel = GetVEiculoModelFromFinanzas(result);
-
-                        vehiculosModel.ErrorRepube = string.IsNullOrEmpty(vehiculosModel.placas) ? "No" : "";
-                        //Se establece el origen de datos
-                        vehiculosModel.origenDatos="Padrón Estatal";
-
-                        return await this.RenderViewAsync("_Create", vehiculosModel,true);
-                    }
-                }
-
-                if (allowSistem)
-                {
-                    Logger.Debug("Infracciones - ajax_BuscarVehiculo - ConsultaGeneral - REPUVE");
-                    var repuveConsGralResponse = _repuveService.ConsultaGeneral(repuveGralModel).FirstOrDefault();
-                    Logger.Debug(" - Response - " + JsonConvert.SerializeObject(repuveConsGralResponse));
-                    var idEntidad = !string.IsNullOrEmpty(repuveConsGralResponse.entidad_expide)
-                          ? ObtenerIdEntidadRepuve(repuveConsGralResponse.entidad_expide)
-                          : 0;
-                    var idColor = !string.IsNullOrEmpty(repuveConsGralResponse.color)
-                        ? ObtenerIdColor(repuveConsGralResponse.color)
-                        : 0;
-
-                    var idMarca = !string.IsNullOrEmpty(repuveConsGralResponse.marca_padron)
-                        ? ObtenerIdMarcaRepuve(repuveConsGralResponse.marca_padron)
-                        : 0;
-
-                    var idSubmarca = !string.IsNullOrEmpty(repuveConsGralResponse.submarca_padron)
-                        ? ObtenerIdSubmarcaRepuve(repuveConsGralResponse.submarca_padron)
-                        : 0;
-                    var submarcaLimpio = !string.IsNullOrEmpty(repuveConsGralResponse.submarca_padron)
-                        ? ObtenerIdSubmarcaRepuve(repuveConsGralResponse.submarca_padron)
-                        : 0;
-                   
-                    var idTipo = !string.IsNullOrEmpty(repuveConsGralResponse.tipo_vehiculo_padron)
-                     ? ObtenerIdTipoVehiculo(repuveConsGralResponse.tipo_vehiculo_padron)
-                     : 0;
-                    var idTipoServicio = !string.IsNullOrEmpty(repuveConsGralResponse.tipo_uso_padron)
-                    ? ObtenerIdTipoServicioRepuve(repuveConsGralResponse.tipo_uso_padron)
-                    : 0;
-                    var vehiculoEncontrado = new VehiculoModel
-                    {
-                        placas = repuveConsGralResponse.placa,
-                        serie = repuveConsGralResponse.niv_padron,
-                       // numeroEconomico = repuveConsGralResponse.tnia,
-                        motor = repuveConsGralResponse.motor,
-                        //otros = repuveConsGralResponse.
-                        idColor = idColor,
-                        idEntidad = idEntidad,
-                        idMarcaVehiculo = idMarca,
-                        idSubmarca = idSubmarca,
-                        //submarca = submarcaLimpio,
-                        idTipoVehiculo = idTipo,
-                        modelo = repuveConsGralResponse.modelo,
-                        idCatTipoServicio = idTipoServicio,
-                        //carga = repuveConsGralResponse.ca,
-
-                        Persona = new PersonaModel(),
-
-                        PersonaMoralBusquedaModel = new PersonaMoralBusquedaModel(),
-                    };
-
-                    vehiculoEncontrado.ErrorRepube = string.IsNullOrEmpty(vehiculoEncontrado.placas) ? "No" : "";
-
-                    //Se establece el origen de datos
-                    vehiculoEncontrado.origenDatos=string.IsNullOrEmpty(vehiculoEncontrado.placas)?null:"REPUVE";
-                    return await this.RenderViewAsync("_Create", vehiculoEncontrado,true);
-
-                }
-                else
-                {
-                    Logger.Debug("Infracciones - ajax_BuscarVehiculo - ConsultaGeneral - REPUVE (BANDERA DESACTIVADA)");
-                }
-                vehiculosModel.ErrorRepube = string.IsNullOrEmpty(vehiculosModel.placas) ? "No" : "";
+                var test = await this.RenderViewAsync2("", models);
 
 
-                return await this.RenderViewAsync("_Create", vehiculosModel,true);
+                return test;
             }
             catch (Exception ex)
             {
@@ -1161,6 +1088,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
             return 0; // Valor predeterminado en caso de no encontrar el guión
         }
+
+
+
+
+
         private int ObtenerIdSubmarca(string submarca)
         {
             string[] partes = submarca.Split(new[] { '-' }, 2);
@@ -1962,6 +1894,22 @@ namespace GuanajuatoAdminUsuarios.Controllers
             return RedirectToAction("Editar", new { modoSoloLectura = true, idInfraccion = Id });
         }
 
-    }
+
+        public ActionResult GetCatalogTramoFilter(FilterCatalogTramoModel filter)
+        {
+
+            var dat = _infraccionesService.GetFilterCatalog(filter);
+
+            dat.Add(new SystemCatalogListModel() { Id = 1, Text = "No aplica" });
+			dat.Add(new SystemCatalogListModel() { Id = 2, Text = "No especificado" });
+
+
+
+			return Json(dat);
+
+		}
+
+
+	}
 }
 

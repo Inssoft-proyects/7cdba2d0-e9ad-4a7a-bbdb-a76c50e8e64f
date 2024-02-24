@@ -120,6 +120,7 @@
             success: function (result) {
                 var grid = $("#gridAgenciasMinisterio").data("kendoGrid");
                 grid.dataSource.read();
+                sitteg_success('Se ha actualizado la información');
 
                 $('#editarAgenciaministerio').modal('hide');
 

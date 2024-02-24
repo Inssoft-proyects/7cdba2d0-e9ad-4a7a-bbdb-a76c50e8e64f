@@ -1,6 +1,7 @@
 ﻿using GuanajuatoAdminUsuarios.Entity;
 using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
+using GuanajuatoAdminUsuarios.Services;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Authorization;
@@ -43,7 +44,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         #region Modal Action
         public ActionResult IndexModal()
         {
-            var ListDelegacionesOficinasTModel = GetDelegacionesOficinas();
+            var ListDelegacionesOficinasTModel = _catDelegacionesOficinasTransporteService.GetDelegacionesOficinas();
             return View("Index", ListDelegacionesOficinasTModel);
         }
 
@@ -101,8 +102,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {
 
 
-                EditarDelegacionOficina(model);
-                var ListDelegacionesOficinasTModel = GetDelegacionesOficinas();
+                _catDelegacionesOficinasTransporteService.EditarDelegacion(model);
+                var ListDelegacionesOficinasTModel = _catDelegacionesOficinasTransporteService.GetDelegacionesOficinas();
                 return Json(ListDelegacionesOficinasTModel);
             }
             return PartialView("_Editar");

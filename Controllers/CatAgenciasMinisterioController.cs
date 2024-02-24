@@ -202,7 +202,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                                                    IdAgenciaMinisterio = catAgenciasMinisterio.IdAgenciaMinisterio,
                                                    NombreAgencia = catAgenciasMinisterio.NombreAgencia,
                                                    IdDelegacion = catAgenciasMinisterio.IdDelegacion,
-
+                                                   Estatus = catAgenciasMinisterio.Estatus,
 
                                                }).Where(w => w.IdAgenciaMinisterio == IdAgenciaMinisterio).FirstOrDefault();
 

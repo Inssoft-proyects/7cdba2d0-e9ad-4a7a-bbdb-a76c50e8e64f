@@ -10,6 +10,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
         List<CatDelegacionesOficinasTransporteModel> GetDelegacionesOficinasActivos();
 
        public string GetDelegacionOficinaById(int idOficina);
+        public int EditarDelegacion(CatDelegacionesOficinasTransporteModel model);
 
 
 
