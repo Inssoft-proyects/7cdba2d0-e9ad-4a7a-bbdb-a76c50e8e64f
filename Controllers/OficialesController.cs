@@ -1,4 +1,5 @@
 ﻿using GuanajuatoAdminUsuarios.Entity;
+using GuanajuatoAdminUsuarios.Framework;
 using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
 using GuanajuatoAdminUsuarios.Services;
@@ -25,16 +26,17 @@ namespace GuanajuatoAdminUsuarios.Controllers
         {
             var ListOficialesModel = _oficialesService.GetOficiales();
             ViewBag.ListadoOficiales = ListOficialesModel;
-
+            var catDelegaciones = _catDictionary.GetCatalog("CatDelegaciones", "0");
             return View();
             }
         private readonly IOficiales _oficialesService;
         private readonly ICatDelegacionesOficinasTransporteService _catDelegacionesOficinasTransporteService;
-
-        public OficialesController(IOficiales oficialesService, ICatDelegacionesOficinasTransporteService catDelegacionesOficinasTransporteService)
+        private readonly ICatDictionary _catDictionary;
+        public OficialesController(IOficiales oficialesService, ICatDelegacionesOficinasTransporteService catDelegacionesOficinasTransporteService, ICatDictionary catDictionary)
         {
             _oficialesService = oficialesService;
             _catDelegacionesOficinasTransporteService = catDelegacionesOficinasTransporteService;
+            _catDictionary = catDictionary;
         }
 
 		public JsonResult OficialesDependencia_Drop()
@@ -69,8 +71,10 @@ namespace GuanajuatoAdminUsuarios.Controllers
         #region Modal Action
         public ActionResult IndexModal()
         {
+            int idDependencia = (int)HttpContext.Session.GetInt32("IdOficina");
 
-            var ListOficialesModel = _oficialesService.GetOficiales();
+            // var ListOficialesModel = _oficialesService.GetOficiales();
+            var ListOficialesModel = _oficialesService.GetCatalogoOficialesDependencia(idDependencia);
             ViewBag.ListadoOficiales = ListOficialesModel;
 
             return View("Index");
@@ -235,7 +239,9 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public JsonResult Delegaciones_Drop()
         {
-            var result = new SelectList(dbContext.Delegaciones.ToList(), "IdDelegacion", "Delegacion");
+            // var result = new SelectList(dbContext.Delegaciones.ToList(), "IdDelegacion", "Delegacion");
+            var catDelegaciones = _catDictionary.GetCatalog("CatDelegaciones", "0");
+            var result = ViewBag.CatDelegaciones = new SelectList(catDelegaciones.CatalogList, "Id", "Text");
             return Json(result);
         }
 

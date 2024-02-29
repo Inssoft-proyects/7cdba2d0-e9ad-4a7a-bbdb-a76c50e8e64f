@@ -10,6 +10,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
 
     {
         List<CatOficialesModel> GetOficiales();
+
         List<CatOficialesModel> GetCatalogoOficialesDependencia(int idDependencia);
 
         List<CatOficialesModel> GetOficialesActivos();

@@ -87,7 +87,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     SqlCommand command = new SqlCommand(@"Select *, cd.nombreOficina,e.estatusDesc from catOficiales co
                                                             LEFT JOIN catDelegacionesOficinasTransporte cd ON cd.idOficinaTransporte = co.idOficina
                                                             LEFT JOIN estatus e ON e.estatus = co.estatus
-                                                            WHERE co.transito = @idDependencia", connection);
+                                                            WHERE co.idOficina = @idDependencia", connection);
                     command.CommandType = CommandType.Text;
                     command.Parameters.Add(new SqlParameter("@idDependencia", SqlDbType.Int)).Value = (object)idDependencia ?? DBNull.Value;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
