@@ -480,9 +480,11 @@ namespace GuanajuatoAdminUsuarios.Services
                                     catConceptoInfraccion c ON cmi.idConcepto = c.idConcepto
                                 LEFT JOIN 
                                     catSubConceptoInfraccion sc ON cmi.idSubConcepto = sc.idSubConcepto 
-                                WHERE 
-                                    cmi.transito = @idDependencia
-                                    AND cmi.estatus = 1 AND cmi.fechaFinVigencia >= GETDATE() OR cmi.fechaFinVigencia IS NULL;
+                               WHERE 
+                                cmi.transito = @idDependencia
+                                AND cmi.estatus = 1 
+                                AND (cmi.fechaFinVigencia >= GETDATE() OR cmi.fechaFinVigencia IS NULL);
+
                                     {0}
                                 ";
 
