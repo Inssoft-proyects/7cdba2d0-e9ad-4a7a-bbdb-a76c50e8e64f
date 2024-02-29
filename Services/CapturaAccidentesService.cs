@@ -173,7 +173,7 @@ namespace GuanajuatoAdminUsuarios.Services
 
 
 
-        public int GuardarParte1(CapturaAccidentesModel model,int idOficina, string nombreOficina = "NRA")
+        public int GuardarParte1(CapturaAccidentesModel model,int idOficina, string oficina = "NRA")
         
         {
             int result = 0;
@@ -226,7 +226,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.Add(new SqlParameter("@estatus", SqlDbType.Int)).Value = 1;
                     result = Convert.ToInt32(command.ExecuteScalar());
 
-                    var ofi = nombreOficina.Trim().Substring(0, 3).ToUpper();
+                    var ofi = oficina.Trim().Substring(0, 3).ToUpper();
 
                     var newFolio = $"{ofi}{result}{DateTime.Now.Year}";
 
