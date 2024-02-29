@@ -1550,7 +1550,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public ActionResult ModalAgregarConductor()
         {
-            PersonasModel model = new PersonasModel();
+            BusquedaPersonaModel model = new BusquedaPersonaModel();
             return View("_ModalBusquedaPersonas", model);
         }
 

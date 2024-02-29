@@ -1,0 +1,25 @@
+@model List<PersonaLicenciaModel>
+   <div class="row  my-2 mb-3">
+    <div class="col-12 mt-4 mb-2">
+        <h5 class="px-4"><b>Personas encontradas en Licencias</b></h5>
+        <h6 class="px-4 colorDanger d-flex align-items-center"><b class="text-white bgDanger mb-1 me-2 rounded-circle px-2 h6">i</b><b>Selecciona una persona para agregarla a RIAG</b></h6>
+    </div>
+</div>
+    
+<div class="col-12 mb-4 px-4 rounded gridCustom">
+@(
+        Html.Kendo().Grid(Model)
+        .Name("gridPersonasLicencia")
+        .Events(events => events.Change("guadarPersonaLicenciasEnRiag"))
+        .Columns(columns =>
+        {
+            columns.Select().Width(50).ClientHeaderTemplate(" ");
+            columns.Bound(c => c.NombreCompleto).Title("Nombre");
+            columns.Bound(c => c.Curp).Title("CURP");
+            columns.Bound(c => c.Rfc).Title("RFC");
+            columns.Bound(c => c.NumeroLicencia).Title("No. Licencia");
+            columns.Bound(c => c.TipoLicencia).Title("Tipo de Licencia");
+        })
+
+        )
+</div>

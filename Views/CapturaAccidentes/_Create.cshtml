@@ -783,23 +783,23 @@ function mostrarMensajeRobado() {
             @*PERSONA FISICA*@
             <div class="tab-pane tabCustomConteiner fade" id="person-fisica" role="tabpanel" aria-labelledby="person-fisica-tab">
                 <div class="row px-4 mt-4 pb-4 align-items-end">
-@*
-                    <div id="personasFisicasAcc">
-                    </div>*@
 
-
-
-                    
-
-                    <div id="ListPersonasFisicas">
-                        @*<partial name="_PersonasFisicas"  />*@
-
-                    </div>
+                    @await Component.InvokeAsync("BusquedaPersonaFisica",false)
 
                 </div>
-                <div class="row">
+               <div class="row">
                     <div class="col-12">
                         <div class="tabCustomEnd">
+                            <div class="row ">
+                                        <div class="col-12 col-md-8 mx-md-auto col-lg-5 ">
+                                            <div class="controlButton my-3" onclick="submitCreateVehiculo()">
+                                                @(Html.Kendo().Button()
+                                                    .Name("buscarFisica")
+                                                    .HtmlAttributes(new { @class = "btnPrimary" })
+                                                    .Content("<h5 class=\"m-0\"><b>Finalizar captura</b></h5>"))
+                                            </div>
+                                        </div>
+                                    </div>
                         </div>
                     </div>
                 </div>
@@ -1387,7 +1387,7 @@ function mostrarMensajeRobado() {
     </div>
 </div>
 
-<div class="modal fade" id="confirmacionModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirmacionModalA" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -1398,8 +1398,8 @@ function mostrarMensajeRobado() {
                 ¿Está seguro de que desea cerrar la ventana y perder la información ingresada?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
-                <button type="button" class="btn btn-secondary" id="confirmarCerrar">Cancelar</button>
+                <button type="button" class="btn btn-primary"  id="confirmarCerrar" data-bs-dismiss="modal">Aceptar</button>
+                <button type="button" class="btn btn-secondary" id="cancelarConfirmacion" onclick="cancelarConfirmacionA()">Cancelar</button>
             </div>
         </div>
     </div>
@@ -1729,12 +1729,16 @@ function asignarMensajeError(contenedorErrorId, mensaje) {
     });
     
     function cerrarModalV() {
-        $('#confirmacionModal').modal('show');
+        $('#confirmacionModalA').modal('show');
 
         $('#confirmarCerrar').on('click', function () {
-            $('#confirmacionModal').modal('hide');
+            $('#confirmacionModalA').modal('hide');
             window.close(); 
         });
+    }
+      function cancelarConfirmacionA() {
+        $('#confirmacionModalA').modal('hide');
+
     }
 
     $(document).ready(function () {

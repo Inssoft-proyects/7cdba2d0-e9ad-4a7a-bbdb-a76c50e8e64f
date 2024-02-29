@@ -85,5 +85,6 @@ namespace GuanajuatoAdminUsuarios.Models
 
         [JsonProperty("email")]
         public string? EMAIL { get; set; }
+
     }
 }

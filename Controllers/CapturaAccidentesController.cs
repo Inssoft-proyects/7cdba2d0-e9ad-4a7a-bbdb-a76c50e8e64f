@@ -2341,7 +2341,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             //    perModel = model;
             //else
             //   model = perModel;
-            PersonasModel  model= new PersonasModel();
+            BusquedaPersonaModel  model= new BusquedaPersonaModel();
             PersonaModel personaM = new PersonaModel();
             personaM.CURPBusqueda =capturaModel.CURPBusqueda;
             personaM.RFCBusqueda = capturaModel.RFCBusqueda;
@@ -2353,7 +2353,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             model.PersonaModel = personaM;
 
            var findAll = false;
-            var personas = new PersonasModel();
+            var personas = new BusquedaPersonaModel();
             Pagination pagination = new Pagination();
             pagination.PageIndex = request.Page - 1;
             if (model != null)

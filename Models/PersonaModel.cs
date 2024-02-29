@@ -60,7 +60,7 @@ namespace GuanajuatoAdminUsuarios.Models
         public string correo { get; set; }
         public string correoInfraccion { get; set; }
         public bool generoBool { get; set; }
-        
+      
         public DateTime? vigenciaLicencia { get; set; }
         public DateTime? vigenciaLicenciaFisico { get; set; }
 

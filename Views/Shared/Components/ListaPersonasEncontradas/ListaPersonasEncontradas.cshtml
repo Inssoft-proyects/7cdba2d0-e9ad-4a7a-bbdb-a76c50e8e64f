@@ -1,0 +1,69 @@
+@model List<GuanajuatoAdminUsuarios.Models.PersonaModel>
+        <div class="row justify-content-between my-2 mb-3 titleCustom">
+    <div class="offset-1 col-12 mt-4 mb-2">
+        <h5 class="px-4"><b>Personas encontradas en RIAG</b></h5>
+        <h6 class="px-4 text-muted">Puedes selecciona y/o editar un registro</h6>
+    </div>
+</div>
+<div class="col-12 mb-4 px-4 rounded gridCustom">
+    @(Html.Kendo().Grid(Model)
+        .Name("gridPersonas")
+            .EnableCustomBinding(true)
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.idPersona).Hidden();
+            columns.Select().ClientHeaderTemplate(" ");
+            columns.Bound(c => c.nombreCompleto).Title("Nombre");
+            columns.Bound(p => p.CURP).Title("CURP");
+            columns.Bound(p => p.RFC).Title("RFC");
+            columns.Bound(p => p.numeroLicencia).Title("No. Licencia");
+            columns.Bound(p => p.tipoLicencia).Title("Tipo de Licencia");
+            columns.Bound(c => c.tipoPersona).Title("Tipo persona");
+            columns.Bound(p => p.idPersona).ClientTemplate(
+            "<button onclick=\"abrirModalPersonaFisica('#: idPersona #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>"
+            ).Title("Acciones").Sortable(false).Width(100);
+        })
+        .Pageable(pager => pager.AlwaysVisible(true).Position(GridPagerPosition.Bottom).PageSizes(true))
+        .Sortable()
+        .Scrollable(scr => scr.Enabled(true))
+         .DataSource(dataSource => dataSource
+         .Custom().PageSize(5))
+        .ToolBar(t => t.Custom().Text("Buscar...").Name("search"))
+        .Search(s =>
+        {
+            s.Field(c => c.nombreCompleto);
+            s.Field(c => c.CURP);
+            s.Field(c => c.RFC);
+            s.Field(c => c.numeroLicencia);
+            s.Field(c => c.tipoPersona);
+            s.Field(c => c.tipoLicencia);
+
+        })
+        )
+</div>
+
+<script>
+    $(document).ready(function () {
+        var grid = $("#gridPersonas").data("kendoGrid");
+        grid.tbody.on("click", ".k-checkbox", onClickPersonas);
+
+        function onClickPersonas(e) {
+            var grid = $("#gridPersonas").data("kendoGrid");
+            var row = $(e.target).closest("tr");
+            var dataItem = grid.dataItem(row);
+            var idPersona = dataItem.idPersona;
+            if (row.hasClass("k-selected")) {
+                setTimeout(function (e) {
+                    var grid = $("#gridPersonas").data("kendoGrid");
+                    grid.clearSelection();
+                })
+            } else {
+                grid.clearSelection();
+            };
+            //Se asigna el valor al id de persona
+            $('#ddlIdPersona').val(idPersona);
+             $('#ddlIdPersona').change();
+            $('#agregarConductorModal').modal('hide');
+        };
+    })
+</script>

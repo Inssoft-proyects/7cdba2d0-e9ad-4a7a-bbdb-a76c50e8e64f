@@ -29,7 +29,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         private readonly ICatEntidadesService _catEntidadesService;
         private readonly ICatMunicipiosService _catMunicipiosService;
         private readonly IBitacoraService _bitacoraServices;
-        private static PersonasModel perModel = new PersonasModel();
+        private static BusquedaPersonaModel perModel = new BusquedaPersonaModel();
         public PersonasController(ICatDictionary catDictionary, IPersonasService personasService, IHttpClientFactory httpClientFactory, ICatEntidadesService catEntidadesService
             , ICatMunicipiosService catMunicipiosService
 , IBitacoraService bitacoraServices)
@@ -43,9 +43,9 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
         public IActionResult Index()
         {
-            perModel = new PersonasModel();
+            perModel = new BusquedaPersonaModel();
             var catTipoPersona = _catDictionary.GetCatalog("CatTipoPersona", "0");
-            var personaModel = new PersonasModel();
+            var personaModel = new BusquedaPersonaModel();
             personaModel.ListadoPersonas = new List<PersonaModel>();
 
             ViewBag.CatTipoPersona = new SelectList(catTipoPersona.CatalogList, "Id", "Text");
@@ -110,14 +110,14 @@ namespace GuanajuatoAdminUsuarios.Controllers
             return Json(new { encontrada = false, data = personasList, message = "No se encontraron resultados." });
         }
 
-        public IActionResult GetBuscar([DataSourceRequest] DataSourceRequest request, PersonasModel model)
+        public IActionResult GetBuscar([DataSourceRequest] DataSourceRequest request, BusquedaPersonaModel model)
         {
             perModel = model;
             return PartialView("_ListadoPersonas", new List<PersonaModel>());
         }
 
         [HttpPost]
-        public async Task<IActionResult> BuscarPorParametroPaginado([DataSourceRequest] DataSourceRequest request, PersonasModel model)
+        public async Task<IActionResult> BuscarPorParametroPaginado([DataSourceRequest] DataSourceRequest request, BusquedaPersonaModel model)
         {
             // Realizar la búsqueda de personas
             if (model.PersonaModel != null)
@@ -126,7 +126,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 model = perModel;
 
             var findAll = false;
-            var personas = new PersonasModel();
+            var personas = new BusquedaPersonaModel();
             Pagination pagination = new Pagination();
             pagination.PageIndex = request.Page - 1;
             if (model.PersonaModel != null)
@@ -366,7 +366,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 
 
-        public async Task<IActionResult> PersonasEnLicencias([DataSourceRequest] DataSourceRequest request, PersonasModel model)
+        public async Task<IActionResult> PersonasEnLicencias([DataSourceRequest] DataSourceRequest request, BusquedaPersonaModel model)
         {
            
 

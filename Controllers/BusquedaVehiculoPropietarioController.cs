@@ -4,8 +4,8 @@
  * Fecha de creación: Tuesday, February 20th 2024 5:06:14 pm
  * Autor: Osvaldo S. (osvaldo.sanchez@zeitek.net)
  * -----
- * Última modificación: Tue Feb 27 2024
- * Última modificación: Tue Feb 27 2024
+ * Última modificación: Thu Feb 29 2024
+ * Última modificación: Thu Feb 29 2024
  * Modificado por: Osvaldo S.
  * -----
  * Copyright (c) 2023 - 2024 Accesos Holográficos
@@ -29,6 +29,11 @@ using GuanajuatoAdminUsuarios.Helpers;
 using GuanajuatoAdminUsuarios.Util;
 using Microsoft.IdentityModel.Tokens;
 using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http.Extensions;
+using System.Net.Http;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
@@ -37,6 +42,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
     {
         #region Variables
         private readonly ICatDictionary _catDictionary;
+
         #endregion
         #region Constructor
         public BusquedaVehiculoPropietarioController(ICatDictionary catDictionary)
@@ -193,18 +199,15 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
         #endregion
 
-        #region Propietarios
+        #region Propietario, Conductor, Persona
         /// <summary>
         /// Muestra vista para crear persona fisica
         /// </summary>
         /// <returns></returns>
-        public ActionResult MostrarPersonaFisica()
+        public ActionResult MostrarPersonaFisica(int idPersona)
         {
-            var model = new PersonaModel
-            {
-                PersonaDireccion = new PersonaDireccionModel()
-            };
-            return PartialView("_PersonaFisica", model);
+
+            return ViewComponent("CrearPersona", new { idPersona });
         }
         /// <summary>
         /// Muestra vista para crear persona moral
@@ -243,6 +246,107 @@ namespace GuanajuatoAdminUsuarios.Controllers
             var personasFisicas = personasService.GetAllPersonas();
             return PartialView("_PersonasFisicas", personasFisicas);
         }
+
+        [HttpPost]
+        public IActionResult BuscarPersonaFisicaWithPaginado([FromServices] IPersonasService personasService, [DataSourceRequest] DataSourceRequest request, BusquedaPersonaModel model)
+        {
+            //Se eliminan espacios en blanco de los campos de busqueda
+            model.PersonaModel ??= new();
+            model.CURPBusqueda = model.CURPBusqueda?.Trim();
+            model.RFCBusqueda = model.RFCBusqueda?.Trim();
+            model.NombreBusqueda = model.NombreBusqueda?.Trim();
+            model.ApellidoPaternoBusqueda = model.ApellidoPaternoBusqueda?.Trim();
+            model.ApellidoMaternoBusqueda = model.ApellidoMaternoBusqueda?.Trim();
+            model.NumeroLicenciaBusqueda = model.NumeroLicenciaBusqueda?.Trim();
+
+            //Logger.Info("Buscar persona fisica en RIAG por :" + model);
+            Pagination pagination = new()
+            {
+                PageIndex = request.Page - 1
+            };
+            if (model.PersonaModel != null)
+            {
+                if (model.PersonaModel.apellidoMaternoBusqueda == null &&
+                    model.PersonaModel.apellidoPaternoBusqueda == null &&
+                    model.PersonaModel.CURPBusqueda == null &&
+                    model.PersonaModel.RFCBusqueda == null &&
+                    model.PersonaModel.numeroLicenciaBusqueda == null &&
+                    model.PersonaModel.nombreBusqueda == null)
+                {
+                    pagination.PageSize = (request.PageSize > 0) ? request.PageSize : 10;
+                }
+                else
+                {
+                    pagination.PageSize = 1000000;
+                }
+            }
+            else
+            {
+                pagination.PageSize = (request.PageSize > 0) ? request.PageSize : 10;
+            }
+
+            var personasList = personasService.BuscarPersonasWithPagination(model, pagination);
+
+            // Verificar si se encontraron resultados en la búsqueda de personas
+            if (personasList.Any())
+            {
+                List<PersonaModel> personas = personasList;
+                var total = 0;
+                if (personasList.Count > 0)
+                    total = personasList.ToList().FirstOrDefault().total;
+
+                //if (findAll)
+                request.PageSize = pagination.PageSize;
+
+                /* var result = new DataSourceResult()
+                 {
+                     Data = personas,
+                     Total = total
+                 };*/
+                model.ListadoPersonas = personasList;
+                return Json(new { encontrada = true, result = model });
+            }
+
+            // Si no se encontraron resultados en la búsqueda de personas, realizar la búsqueda por licencia
+            return Json(new { encontrada = false, tipo = "sin datos", message = "busca en licencias" });
+        }
+
+        public IActionResult MostrarListaPersonasRiagEncontradas(BusquedaPersonaModel model)
+        {
+            return ViewComponent("ListaPersonasEncontradas", new { listaPersonas = model.ListadoPersonas });
+        }
+
+        public IActionResult MostrarListaPersonasLicenciasEncontradas(BusquedaPersonaModel model)
+        {
+            return ViewComponent("ListaPersonasEncontradasLicencias", new { listaPersonas = model.ListadoPersonasLicencia });
+        }
+
+        public IActionResult GuardaPersonaLicenciasEnRiag([FromServices] IPersonasService personasService, [FromServices] IBitacoraService bitacoraServices, PersonaLicenciaModel personaLicencia)
+        {
+
+            //Se busca a la persona por licencia o curp
+            int idPersona = personasService.ExistePersona(personaLicencia.NumeroLicencia, personaLicencia.Curp);
+
+            //Si no existe la persona se inserta
+            if (idPersona <= 0)
+                idPersona = personasService.InsertarPersonaDeLicencias(personaLicencia);
+
+            //Se obtienen los datos de la persona por id
+            PersonaModel persona = personasService.GetPersonaById(idPersona);
+
+
+            //BITACORA
+            var ip = HttpContext.Connection.RemoteIpAddress.ToString();
+            var user = Convert.ToDecimal(User.FindFirst(CustomClaims.IdUsuario).Value);
+            bitacoraServices.insertBitacora(idPersona, ip, "Personas_DesdeServicio", "Insertar", "insert", user);
+
+            BusquedaPersonaModel modelo = new()
+            {
+                ListadoPersonas = new List<PersonaModel>()
+            };
+            modelo.ListadoPersonas.Add(persona);
+            return Json(new { data = modelo });
+        }
         /// <summary>
         /// Crea un nuevo registro en la bd de una persona fisica
         /// </summary>
@@ -252,29 +356,29 @@ namespace GuanajuatoAdminUsuarios.Controllers
         /// <exception cref="Exception"></exception>
         public ActionResult CrearPersonaFisica([FromServices] IPersonasService personasService, PersonaModel Persona)
         {
-            Persona.nombre = Persona.nombreFisico;
-            Persona.apellidoMaterno = Persona.apellidoMaternoFisico;
-            Persona.apellidoPaterno = Persona.apellidoPaternoFisico;
-            Persona.CURP = Persona.CURPFisico;
-            Persona.RFC = Persona.RFCFisico;
-            Persona.numeroLicencia = Persona.numeroLicenciaFisico;
-            Persona.idTipoLicencia = Persona.idTipoLicencia;
-            Persona.vigenciaLicencia = Persona.vigenciaLicencia;
-            Persona.PersonaDireccion.idEntidad = Persona.PersonaDireccion.idEntidadFisico;
-            Persona.PersonaDireccion.idMunicipio = Persona.PersonaDireccion.idMunicipioFisico;
-            Persona.PersonaDireccion.correo = Persona.PersonaDireccion.correoFisico;
-            Persona.PersonaDireccion.telefono = Persona.PersonaDireccion.telefonoFisico;
-            Persona.PersonaDireccion.colonia = Persona.PersonaDireccion.coloniaFisico;
-            Persona.PersonaDireccion.calle = Persona.PersonaDireccion.calleFisico;
-            Persona.PersonaDireccion.numero = Persona.PersonaDireccion.numeroFisico;
-            Persona.idCatTipoPersona = (int)TipoPersona.Fisica;
-            var IdPersonaFisica = personasService.CreatePersona(Persona);
+            int IdPersonaFisica=0;
+            if (Persona.idPersona > 0)
+            {
+                Persona.idCatTipoPersona = (int)TipoPersona.Fisica;
+                int result = personasService.UpdatePersona(Persona);
+                if(result>0)
+                IdPersonaFisica = (int)Persona.idPersona;
+            }
+            else
+            {
+                Persona.idCatTipoPersona = (int)TipoPersona.Fisica;
+                IdPersonaFisica = personasService.CreatePersona(Persona);
+            }
             if (IdPersonaFisica == 0)
             {
                 throw new Exception("Ocurrio un error al dar de alta la persona");
             }
-            var modelList = personasService.ObterPersonaPorIDList(IdPersonaFisica); ;
-            return PartialView("_PersonasFisicas", modelList);
+            var modelList = personasService.ObterPersonaPorIDList(IdPersonaFisica);
+            BusquedaPersonaModel model = new()
+            {
+                ListadoPersonas = modelList
+            };
+            return Json(new { success = true, data = model });
         }
         /// <summary>
         /// Crea un nuevo registro en la bd de una persona moral
@@ -299,6 +403,56 @@ namespace GuanajuatoAdminUsuarios.Controllers
             //var personasMoralesModel = _personasService.GetAllPersonasMorales();
 
         }
+        /// <summary>
+        /// Busca personas en el sistema de licencias a través de un servicio web publicado
+        /// </summary>
+        /// <param name="_httpClientFactory"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> BuscarPersonasEnLicencias([FromServices] IHttpClientFactory _httpClientFactory, BusquedaPersonaModel model)
+        {
+            string parametros = "";
+            parametros += string.IsNullOrEmpty(model.NumeroLicenciaBusqueda) ? "" : "licencia=" + model.NumeroLicenciaBusqueda + "&";
+            parametros += string.IsNullOrEmpty(model.CURPBusqueda) ? "" : "curp=" + model.CURPBusqueda + "&";
+            parametros += string.IsNullOrEmpty(model.RFCBusqueda) ? "" : "rfc=" + model.RFCBusqueda + "&";
+            parametros += string.IsNullOrEmpty(model.NombreBusqueda) ? "" : "nombre=" + model.NombreBusqueda + "&";
+            parametros += string.IsNullOrEmpty(model.ApellidoPaternoBusqueda) ? "" : "primer_apellido=" + model.ApellidoPaternoBusqueda + "&";
+            parametros += string.IsNullOrEmpty(model.ApellidoMaternoBusqueda) ? "" : "segundo_apellido=" + model.ApellidoMaternoBusqueda;
+            string ultimo = parametros[^1..];
+            if (ultimo.Equals("&"))
+                parametros = parametros[..^1];
+
+            string urlServ = Request.GetDisplayUrl();
+            Uri uri = new(urlServ);
+            string requested = uri.Scheme + Uri.SchemeDelimiter + uri.Host + ":" + uri.Port;
+
+            var url = requested + $"/api/Licencias/datos_generales?" + parametros;
+
+            var httpClient = _httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+
+
+                List<LicenciaPersonaDatos> respuesta = JsonConvert.DeserializeObject<List<LicenciaPersonaDatos>>(content);
+
+                List<PersonaLicenciaModel> resultado = new();
+
+                foreach (LicenciaPersonaDatos p in respuesta)
+                {
+                    PersonaLicenciaModel pm = new();
+                    pm.ConvertirModelo(p);
+                    resultado.Add(pm);
+                }
+
+                return Json(new { success = true, data = resultado });
+            }
+
+            return Json(new { success = true, message = "No se pudo conectar al servicio de licencias" });
+        }
+
 
         #endregion
         #region Catalogos

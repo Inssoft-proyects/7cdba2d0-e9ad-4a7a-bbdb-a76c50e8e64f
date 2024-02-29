@@ -99,8 +99,8 @@ namespace GuanajuatoAdminUsuarios.Services
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("Select * from catEntidades where nombreEntidad LIKE '%' + @entidad + '%'", connection);
-                    command.Parameters.AddWithValue("@entidad", nombre); 
+                    SqlCommand command = new SqlCommand("Select * from catEntidades where lower(nombreEntidad) LIKE '%' + @entidad + '%'", connection);
+                    command.Parameters.AddWithValue("@entidad", nombre.ToLower()); 
                     command.CommandType = CommandType.Text;
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
