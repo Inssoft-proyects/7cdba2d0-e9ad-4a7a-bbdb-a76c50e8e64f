@@ -25,7 +25,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
         
         public IActionResult Index()
         {
-            var ListOficialesModel = _oficialesService.GetOficiales();
+            var corp = HttpContext.Session.GetInt32("IdDependencia").Value;
+            var ListOficialesModel = _oficialesService.GetOficialesByCorporacion(corp);
             ViewBag.ListadoOficiales = ListOficialesModel;
             var catDelegaciones = _catDictionary.GetCatalog("CatDelegaciones", "0");
 
@@ -74,8 +75,9 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public ActionResult IndexModal()
         {
 
-            var ListOficialesModel = _oficialesService.GetOficiales();
-            ViewBag.ListadoOficiales = ListOficialesModel;
+            int idDependencia = (int)HttpContext.Session.GetInt32("IdDependencia");
+            var oficiales = _oficialesService.GetOficialesPorDependencia(idDependencia);
+           ViewBag.ListadoOficiales = oficiales;
 
             return View("Index");
         }
@@ -293,30 +295,15 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
         #endregion
      //   [HttpGet]
-        public ActionResult ajax_BuscarDelegacion(int idDelegacionFiltro, string nombre, string apellidoPaterno, string apellidoMaterno)
+        public ActionResult ajax_BuscarDelegacion ([DataSourceRequest] DataSourceRequest request, int idDelegacionFiltro, string nombre, string apellidoPaterno, string apellidoMaterno)
         {
             List<CatOficialesModel> ListOfcialesDelegacion = new List<CatOficialesModel>();
+            int idDependencia = (int)HttpContext.Session.GetInt32("IdDependencia");
 
+            ListOfcialesDelegacion = _oficialesService.GetOficialesByCorporacion(idDependencia);
 
-            ListOfcialesDelegacion = (from oficiales in dbContext.Oficiales.ToList()
-                                      join estatus in dbContext.Estatus.ToList()
-                                      on oficiales.Estatus equals estatus.estatus
-                                      join oficinas in dbContext.CatDelegacionesOficinasTransporte.ToList()
-                                      on oficiales.IdOficina equals oficinas.IdOficinaTransporte 
+          
 
-                                      select new CatOficialesModel
-                                      {
-                                          IdOficial = oficiales.IdOficial,
-                                          Nombre = oficiales.Nombre.ToUpper(),
-                                          ApellidoPaterno = oficiales.ApellidoPaterno.ToUpper(),
-                                          ApellidoMaterno = oficiales.ApellidoMaterno.ToUpper(),
-                                          estatusDesc = estatus.estatusDesc,
-                                          nombreOficina = oficinas.NombreOficina,
-                                          IdOficina = oficinas.IdOficinaTransporte,
-                                          
-                                      }).ToList();
-
-      
              if (idDelegacionFiltro > 0)
             {
                 ListOfcialesDelegacion = (from s in ListOfcialesDelegacion
@@ -342,7 +329,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                                           select s).ToList();
             }
 
-            return Json(ListOfcialesDelegacion);
+            return Json(ListOfcialesDelegacion.ToDataSourceResult(request));
         }
 
     }

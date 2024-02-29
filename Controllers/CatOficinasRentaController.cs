@@ -198,7 +198,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public JsonResult Delegaciones_Drop()
         {
-            var tipo = Convert.ToInt32(HttpContext.Session.GetInt32("IdDependencia").ToString());
+            var tipo = 1; //Convert.ToInt32(HttpContext.Session.GetInt32("IdDependencia").ToString());
             var result = new SelectList(_delegacionesService.GetDelegaciones().Where(x => x.Transito == (tipo == 1) ? true : false), "IdDelegacion", "Delegacion");
             return Json(result);
         }

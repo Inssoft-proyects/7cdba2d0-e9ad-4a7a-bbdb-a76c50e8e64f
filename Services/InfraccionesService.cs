@@ -3449,6 +3449,7 @@ namespace GuanajuatoAdminUsuarios.Services
 							while (reader.Read())
 							{
 								InfraccionesModel infraccionModel = new InfraccionesModel();
+								infraccionModel.transito = reader["transito"].GetType() == typeof(DBNull) ? null : (int)reader["transito"];
 								infraccionModel.idInfraccion = reader["idInfraccion"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idInfraccion"].ToString());
 								infraccionModel.idOficial = reader["idOficial"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idOficial"].ToString());
 								infraccionModel.idDependencia = reader["idDependencia"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idDependencia"].ToString());

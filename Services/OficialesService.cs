@@ -74,6 +74,66 @@ namespace GuanajuatoAdminUsuarios.Services
 
 
         }
+
+        public List<CatOficialesModel> GetOficialesByCorporacion(int corporacion)
+        {
+            //
+            List<CatOficialesModel> oficiales = new List<CatOficialesModel>();
+
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+                try
+
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(@"
+Select *, cd.nombreOficina,e.estatusDesc from catOficiales co
+                                                            LEFT JOIN catDelegacionesOficinasTransporte cd ON cd.idOficinaTransporte = co.idOficina
+                                                            LEFT JOIN estatus e ON e.estatus = co.estatus
+															where co.transito=@corp", connection);
+                    command.CommandType = CommandType.Text;
+                    //sqlData Reader sirve para la obtencion de datos 
+                    command.Parameters.Add(new SqlParameter("@corp", SqlDbType.Int)).Value = (object)corporacion ?? DBNull.Value;
+
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            CatOficialesModel oficial = new CatOficialesModel();
+                            oficial.IdOficial = Convert.ToInt32(reader["IdOficial"].ToString());
+                            oficial.Rango = reader["Rango"].ToString();
+                            oficial.Nombre = reader["Nombre"].ToString();
+                            oficial.ApellidoPaterno = reader["ApellidoPaterno"].ToString();
+                            oficial.ApellidoMaterno = reader["ApellidoMaterno"].ToString();
+                            oficial.nombreOficina = reader["nombreOficina"].ToString();
+                            oficial.estatusDesc = reader["estatusDesc"].ToString();
+                            object idOficinaValue = reader["idOficina"];
+                            oficial.IdOficina = Convert.IsDBNull(idOficinaValue) ? 0 : Convert.ToInt32(idOficinaValue);
+
+
+
+
+                            oficiales.Add(oficial);
+
+                        }
+
+                    }
+
+                }
+                catch (SqlException ex)
+                {
+                    //Guardar la excepcion en algun log de errores
+                    //ex
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            return oficiales;
+
+
+        }
+
+
         public List<CatOficialesModel> GetCatalogoOficialesDependencia(int idDependencia)
         {
             //
@@ -383,7 +443,6 @@ namespace GuanajuatoAdminUsuarios.Services
                             oficial.estatusDesc = reader["estatusDesc"].ToString();
                             //oficial.FechaActualizacion = Convert.ToDateTime(reader["fechaActualizacion"].ToString());
                             oficial.Estatus = Convert.ToInt32(reader["Estatus"].ToString());
-
 
                             oficiales.Add(oficial);
 

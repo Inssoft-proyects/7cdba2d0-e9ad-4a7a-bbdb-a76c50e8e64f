@@ -41,7 +41,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public JsonResult Carreteras_Drop(int idDelegacion)
         {
-            var tipo = Convert.ToInt32(HttpContext.Session.GetInt32("IdDependencia").ToString());
+            var tipo = 1;// Convert.ToInt32(HttpContext.Session.GetInt32("IdDependencia").ToString());
             var result = new SelectList(_catCarreterasService.GetCarreterasPorDelegacion(idDelegacion).Where(x=>x.Transito == tipo), "IdCarretera", "Carretera");
             return Json(result);
         }
@@ -102,7 +102,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public JsonResult DelegacionesOficinas_Drop()
         {
-            var tipo = Convert.ToInt32(HttpContext.Session.GetInt32("IdDependencia").ToString());
+            var tipo = 1;// Convert.ToInt32(HttpContext.Session.GetInt32("IdDependencia").ToString());
             var result = new SelectList(_catDelegacionesOficinasTransporteService.GetDelegacionesOficinasActivos().Where(x=>x.Transito == tipo), "IdDelegacion", "Delegacion");
             return Json(result);
         }

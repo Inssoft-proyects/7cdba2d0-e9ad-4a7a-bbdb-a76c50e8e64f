@@ -1,9 +1,26 @@
 @model List<CatOficialesModel>
 
+
+
+    <script>
+        function GetdataOficialesGrid(){
+
+        return {
+            idDelegacionFiltro: $("#idDelegacionFiltro").val(),
+            nombre: $("#NombreB").val(),
+            apellidoPaterno: $("#ApellidoPaternoB").val(),
+            apellidoMaterno: $("#ApellidoMaternoB").val()
+
+            }
+            }
+
+        </script>
+
+
 <div class="row">
     <div class="col-12 mb-4 px-4 rounded gridCustom">
 
-        @(Html.Kendo().Grid(Model)
+        @(Html.Kendo().Grid<CatOficialesModel>()
         .Name("gridCatOficiales")
         .Columns(columns =>
         {
@@ -23,8 +40,8 @@
             .Scrollable(scr => scr.Enabled(true))
             .DataSource(dataSource => dataSource
             .Ajax()
-            .ServerOperation(false)
-            .PageSize(5)
+            .Read(r => r.Action("ajax_BuscarDelegacion", "Oficiales").Data("GetdataOficialesGrid"))
+            .PageSize(50)
         )
             .ToolBar(t => t.Search().Text("Buscar..."))
         .Search(s =>

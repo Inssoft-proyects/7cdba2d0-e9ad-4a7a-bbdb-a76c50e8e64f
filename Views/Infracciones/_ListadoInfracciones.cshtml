@@ -2,16 +2,28 @@
 @{
 	@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
 	var listaIdsPermitidosJson = @HttpContextAccessor.HttpContext.Session.GetString("IdsPermitidos").ToString();
+
 	var autorizaciones = @HttpContextAccessor.HttpContext.Session.GetString("Autorizaciones").ToString();
-	
+
+
+	var modificar = autorizaciones.Contains("465")?1:0;
+	var modificarP = autorizaciones.Contains("466")?1:0;
+
 
 	var dependencia = @HttpContextAccessor.HttpContext.Session.GetInt32("IdDependencia");
-	var Oficina = User.FindFirst(CustomClaims.Oficina);
+	var Oficina = @HttpContextAccessor.HttpContext.Session.GetInt32("IdOficina");
+	 
 	
 
 }
 
 <script>
+
+
+	window.modificar =  "@modificar";
+	window.modificarP = "@modificarP"
+	window.dependencia = "@dependencia"
+	window.Oficina = "@Oficina"
 
 	$(document).ready(function () {
 		var access = @listaIdsPermitidosJson;
@@ -50,6 +62,40 @@
 			}, 200);
 		}
 	});
+
+	function TemplateVer(a) {
+
+		if (a.transito == window.dependencia)
+			return `<button onclick="ConsultarInfraccion('${a.idInfraccion}')" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-research me-2'></i><b>Editar</b></h6></button>`
+		//			return `<button onclick="ConsultarInfraccion('${a.idInfraccion}')" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-research me-2'></i><b>Mostrar</b></h6></button>`
+				else if(window.modificar==1)
+					return `<button onclick="ConsultarInfraccion('${a.idInfraccion}')" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-research me-2'></i><b>Mostrar</b></h6></button>`
+		else
+			return ''
+	}
+
+	function TemplateEditar(a){
+		console.log(a)
+		if ((a.idEstatusInfraccion == 1 || a.idEstatusInfraccion == 2 || a.idEstatusInfraccion == 7) && a.idDelegacion == window.Oficina && a.transito == window.dependencia)
+			return `<button onclick="ShowUpdate('${a.idInfraccion}')" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>`
+		else if (modificarP == 1 && (a.idEstatusInfraccion == 3 || a.idEstatusInfraccion == 4 || a.idEstatusInfraccion == 5 || a.idEstatusInfraccion == 6))
+			return `<button onclick="ShowUpdate('${a.idInfraccion}')" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>`
+			else
+			return ''
+	}
+
+	function TemplateExcel(a){
+		`<button onclick="downLoadPdf('${a.idInfraccion}')" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='h5 icon-pdf me-2'></i><b>Descargar</b></h6></button>`
+		if ((a.idEstatusInfraccion == 1 || a.idEstatusInfraccion == 2 || a.idEstatusInfraccion == 7) && a.idDelegacion == window.Oficina && a.transito == window.dependencia)
+			return `<button onclick="downLoadPdf('${a.idInfraccion}')" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='h5 icon-pdf me-2'></i><b>Descargar</b></h6></button>`
+		else if (modificarP == 1 && (a.idEstatusInfraccion == 3 || a.idEstatusInfraccion == 4 || a.idEstatusInfraccion == 5 || a.idEstatusInfraccion == 6))
+			return `<button onclick="downLoadPdf('${a.idInfraccion}')" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='h5 icon-pdf me-2'></i><b>Descargar</b></h6></button>`
+		else
+			return ''
+
+	}
+
+
 
 
 
@@ -106,17 +152,11 @@
 			"# } #")
 		.Title("Cortesía").Sortable(false).Width(90);*@
 				columns.Bound(c => c.infraccionCortesiaString).Title("Cortesia").Width(90);
-				columns.Bound(p => p.idInfraccion).ClientTemplate(
-				"<button onclick=\"ShowUpdate('#= idInfraccion #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>"
-				).Title("Editar").Sortable(false).Width(90);
-				columns.Bound(p => p.idInfraccion).ClientTemplate(
-				"<button onclick=\"ConsultarInfraccion('#= idInfraccion #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-research me-2'></i><b>Mostrar</b></h6></button>"
-				).Title("Mostrar").Sortable(false).Width(120);
+				columns.Bound(p => p.idInfraccion).ClientTemplate("#= TemplateEditar(data) #").Title("Editar").Sortable(false).Width(90);
+				columns.Bound(p => p.idInfraccion).ClientTemplate("#= TemplateVer(data) #").Title("Mostrar").Sortable(false).Width(120);
 
 
-				columns.Bound(p => p.idInfraccion).ClientTemplate(
-			"<button onclick=\"downLoadPdf('#= idInfraccion #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='h5 icon-pdf me-2'></i><b>Descargar</b></h6></button>"
-			).Title("Exportar").Sortable(false).Width(90);
+				columns.Bound(p => p.idInfraccion).ClientTemplate("#= TemplateExcel(data) #").Title("Exportar").Sortable(false).Width(90);
 
 			}).HtmlAttributes(new { style = "height:450" })
 			.Pageable(p => p.Enabled(true).PageSizes(new[] { 10, 20, 30 }))

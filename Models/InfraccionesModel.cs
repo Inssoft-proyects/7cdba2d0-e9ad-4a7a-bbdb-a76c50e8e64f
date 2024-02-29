@@ -9,6 +9,9 @@ namespace GuanajuatoAdminUsuarios.Models
     public class InfraccionesModel : EntityModel
     {
 
+
+
+        public int? transito { get; set; }
         public string ObsevacionesApl { get; set; }
         public int idInfraccion { get; set; }
         public int? idOficial { get; set; }
