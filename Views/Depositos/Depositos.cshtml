@@ -28,6 +28,13 @@
                     window.location.href = "/Principal";
                 }, 200);
             }
+
+
+            //Preset entidad
+                   /* var dropdownlist = $("#idEntidad").data("kendoDropDownList");
+                    dropdownlist.value(11);
+                    dropdownlist.refresh(); */
+
         });
 
 </script>
@@ -362,6 +369,7 @@
                                                     });
                                                 })
                                                 .HtmlAttributes(new { style = "width:100%;" })
+                                                .Value("11")
                                                 )
                                         </span>
 
@@ -483,22 +491,24 @@
             </div>
         </div>
             <div class="row justify-content-around align-items-end px-4">
+                
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="controlForm my-3">
+                        @(Html.Kendo().TextBoxFor(t => t.calleUbicacion)
+                            .Label(l => l.Content("Calle:"))
+                            .Placeholder("Ingrese la calle de recoleción")
+                            .HtmlAttributes(new { style = "width: 100%" })
+                            )
+
+                    </div>
+                </div>
+
                 <div class="col-12 col-md-6 col-lg-2">
                     <div class="controlForm my-3">
                         @Html.HiddenFor(t=>t.idSolicitud)
                         @(Html.Kendo().TextBoxFor(t => t.numeroUbicacion)
                             .Label(l => l.Content("Número:"))
                             .Placeholder("Número de recoleción")
-                            .HtmlAttributes(new { style = "width: 100%" })
-                            )
-
-                    </div>
-                </div>
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="controlForm my-3">
-                        @(Html.Kendo().TextBoxFor(t => t.calleUbicacion)
-                            .Label(l => l.Content("Calle:"))
-                            .Placeholder("Ingrese la calle de recoleción")
                             .HtmlAttributes(new { style = "width: 100%" })
                             )
 
@@ -590,6 +600,7 @@
                                         read.Action("Entidades_Drop", "Depositos");
                                     });
                                 })
+                                .SelectedIndex(12)
                                 .HtmlAttributes(new { style = "width:100%;" })
                                 )
                         </span>
@@ -691,10 +702,13 @@
 
 <script>
     function EntidadDropDownChange() {
-        var entidadDDlValue = $("#idEntidad").data("kendoDropDownList").value();
+        var entidadDDlValue = $("#idEntidad").data("kendoDropDownList").value() || 11; 
 
         showLoading();
-        $.ajax({
+        
+
+        setTimeout(() => {
+                        $.ajax({
             url: "/Depositos/Municipios_Drop",
             type: "POST",
             data: { entidadDDlValue: entidadDDlValue },
@@ -707,6 +721,13 @@
                 hideLoading();
             }
         });
+                    }, 5000);
+
+                    console.log("ya paso");
+
+
+
+        
     }
 
     function enviarSolicitud(){
@@ -797,8 +818,8 @@
     }
 
     function EntidadDropDownChange2() {
-        var entidadDDlValue = $("#idEntidadUbicacion").data("kendoDropDownList").value();
-
+        var entidadDDlValue = $("#idEntidadUbicacion").data("kendoDropDownList").value() ||11;
+        console.log("entidadDDlValue",entidadDDlValue);
         showLoading();
         $.ajax({
             url: "/Depositos/Municipios_Drop",
@@ -905,6 +926,10 @@
         });
     }
     $(document).ready(function () {
+
+    console.log("ready");
+    EntidadDropDownChange2();
+
         $("#kilometroUbicacion").on("input", function () {
             var value = this.value;
             if (value !== "") {

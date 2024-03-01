@@ -69,7 +69,12 @@ namespace GuanajuatoAdminUsuarios.Controllers
             }
             else
             {
-                return View("Depositos");
+                SolicitudDepositoModel modelo = new SolicitudDepositoModel
+                {
+                    idEntidad = 11,
+                    entidad = "Guanajuato",
+                };
+                return View(modelo);
             }       
         }
 
@@ -140,6 +145,10 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public JsonResult Municipios_Drop(int entidadDDlValue)
         {
 
+            if (entidadDDlValue == 0)
+            {
+                entidadDDlValue = 11;
+            }
 
             var tt = _catMunicipiosService.GetMunicipiosPorEntidad(entidadDDlValue);
 
