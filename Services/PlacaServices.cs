@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Numerics;
-using Telerik.SvgIcons;
+//using Telerik.SvgIcons;
 using CommandType = System.Data.CommandType;
 
 namespace GuanajuatoAdminUsuarios.Services

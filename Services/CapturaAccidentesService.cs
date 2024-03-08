@@ -1508,11 +1508,12 @@ namespace GuanajuatoAdminUsuarios.Services
 				{
 					connection.Open();
 					SqlCommand command = new SqlCommand(@"SELECT p.idPersona,p.nombre,p.apellidoPaterno,p.apellidoMaterno,p.RFC,p.CURP
-                                                        ,p.numeroLicencia,p.fechaNacimiento,pd.calle,pd.numero,pd.colonia,pd.correo,inv.idTipoInvolucrado,
+                                                        ,p.numeroLicencia,p.fechaNacimiento,pd.calle,pd.numero,pd.colonia,pd.telefono,pd.correo,inv.idTipoInvolucrado,
 														inv.idEstadoVictima,inv.idHospital,inv.idInstitucionTraslado,inv.idAsiento,inv.idCinturon, inv.idVehiculo,inv.idInvolucradosAccidente
 														,v.placas,v.tarjeta,v.serie,v.idTipoVehiculo,tv.tipoVehiculo,v.idMarcaVehiculo,mv.marcaVehiculo
 														,v.idSubmarca,sm.nombreSubmarca,v.modelo,v.idPersona AS Prop,prop.nombre AS propietarioNombre
 														,prop.apellidoPaterno AS apPaternoPropietario,prop.apellidoMaterno AS apMaternoPropietario
+														,cm.municipio,ce.nombreEntidad,gen.genero
                                                         From personas p														
                                                         LEFT JOIN personasDirecciones AS pd ON pd.idPersona = p.idPersona
 														LEFT JOIN involucradosAccidente AS inv ON inv.idPersona = p.idPersona
@@ -1521,6 +1522,9 @@ namespace GuanajuatoAdminUsuarios.Services
 														LEFT JOIN catTiposVehiculo tv ON  tv.idTipoVehiculo = v.idTipoVehiculo
 														LEFT JOIN catMarcasVehiculos mv ON  mv.idMarcaVehiculo = v.idMarcaVehiculo
 														LEFT JOIN catSubmarcasVehiculos sm ON  sm.idSubmarca = v.idSubmarca
+														LEFT JOIN catMunicipios cm ON cm.idMunicipio= pd.idMunicipio
+														LEFT JOIN catEntidades ce ON ce.idEntidad = pd.idEntidad
+														LEFT JOIN catGeneros gen ON gen.idGenero = p.idGenero
                                                         WHERE p.idPersona = @idpersona AND inv.idAccidente = @idAccidente AND inv.idInvolucradosAccidente = @idInvolucradosAccidente", connection);
 
 					command.Parameters.Add(new SqlParameter("@idpersona", SqlDbType.NVarChar)).Value = id;
@@ -1535,6 +1539,9 @@ namespace GuanajuatoAdminUsuarios.Services
 						{
 							involucrado.IdInvolucrado = reader["idInvolucradosAccidente"] != DBNull.Value ?
 								Convert.ToInt32(reader["idInvolucradosAccidente"]) :
+								0;
+							involucrado.IdVehiculo = reader["idVehiculo"] != DBNull.Value ?
+								Convert.ToInt32(reader["idVehiculo"]) :
 								0;
 							involucrado.IdPersona = Convert.ToInt32(reader["idPersona"].ToString());
 							involucrado.nombre = reader["nombre"].ToString();
@@ -1552,10 +1559,15 @@ namespace GuanajuatoAdminUsuarios.Services
 							involucrado.TipoVehiculo = reader["tipoVehiculo"].ToString();
 							involucrado.Marca = reader["marcaVehiculo"].ToString();
 							involucrado.Submarca = reader["nombreSubmarca"].ToString();
+							involucrado.Municipio = reader["municipio"].ToString();
+							involucrado.Entidad = reader["nombreEntidad"].ToString();
+							involucrado.Genero = reader["genero"].ToString();
+							involucrado.Telefono = reader["telefono"].ToString();
+
 							involucrado.Modelo = reader["modelo"].ToString();
 							involucrado.Propietario = $"{reader["propietarioNombre"]} {reader["apPaternoPropietario"]} {reader["apMaternoPropietario"]}";					
 							involucrado.Correo = reader["correo"].ToString();
-							involucrado.FormatDateNacimiento = reader["fechaNacimiento"].ToString();
+							involucrado.FormatDateNacimiento = reader.GetDateTime(reader.GetOrdinal("fechaNacimiento")).ToString("dd/MM/yyyy");
 							involucrado.IdAsiento = Convert.ToInt32(reader["idAsiento"].ToString());
 							involucrado.IdInstitucionTraslado = Convert.ToInt32(reader["idInstitucionTraslado"].ToString());
 							involucrado.IdTipoInvolucrado = Convert.ToInt32(reader["idTipoInvolucrado"].ToString());

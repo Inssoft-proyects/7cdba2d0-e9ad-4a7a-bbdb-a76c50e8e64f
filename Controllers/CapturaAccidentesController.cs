@@ -1814,8 +1814,16 @@ namespace GuanajuatoAdminUsuarios.Controllers
                     apellidoMaterno = modelList.apellidoMaterno,
                     RFC = modelList.RFC,
                     CURP = modelList.CURP,
-                    fechaNacimiento = modelList.fechaNacimiento,
-                    numeroLicencia = modelList.numeroLicencia
+					fechaNacimiento = modelList.fechaNacimiento != null ? ((DateTime)modelList.fechaNacimiento).ToString("dd/MM/yyyy") : "" ,                   
+                    numeroLicencia = modelList.numeroLicencia,
+                    entidad = modelList.PersonaDireccion.entidad,
+                    municipio = modelList.PersonaDireccion.municipio,
+                    calle= modelList.PersonaDireccion.calle,
+                    numero = modelList.PersonaDireccion.numero,
+                    colonia = modelList.PersonaDireccion.colonia,
+                    telefono = modelList.PersonaDireccion.telefono,
+                    correo = modelList.PersonaDireccion.correo,
+                    genero = modelList.genero
                 };
                 return Json(new { data = formattedModelList });
             }

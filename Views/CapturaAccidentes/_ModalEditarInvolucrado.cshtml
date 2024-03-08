@@ -42,7 +42,7 @@
 		{
 			<div>
 
-				<div class="row">
+				<div id="datosIniciales" class="row">
 					<div class="col-md-6">
 						<div class="col-md-6">
 							<h5 class="px-4"><b>Datos Personales</b></h5>
@@ -54,8 +54,8 @@
 							<h6 class="px-4 text-muted"><b>Materno: </b>@Model.apellidoMaterno</h6>
 							<h6 class="px-4 text-muted"><b>RFC: </b>@Model.RFC</h6>
 							<h6 class="px-4 text-muted"><b>CURP: </b>@Model.CURP</h6>
-							<h6 class="px-4 text-muted"><b>Sexo: </b> @Model.Sexo</h6>
-							<h6 class="px-4 text-muted"><b>Fecha nacimiento: </b>@Model.FechaNacimientoFormateada</h6>
+							<h6 class="px-4 text-muted"><b>Sexo: </b> @Model.Genero</h6>
+							<h6 class="px-4 text-muted"><b>Fecha nacimiento: </b>@Model.FormatDateNacimiento</h6>
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -78,6 +78,40 @@
 			
 		}
 	</div>
+	<div id="involucradoSeleccionado" class="row" style="display:none">
+		<div class="col-md-6">
+			<div class="col-md-12">
+				<h5 class="px-4"><b>Datos Personales</b></h5>
+			</div>
+			<div class="col-md-12">
+				<h6 class="px-4 text-muted"><b>Nombre: </b><span id="nombreModal"></span></h6>
+				
+								<h6 class="px-4 text-muted"><b>Apellido Paterno: </b><span id="apellidoPaternotxt"></span></h6>
+																<h6 class="px-4 text-muted"><b>Apellido Materno: </b><span id="apellidoMaternotxt"></span></h6>
+
+				<h6 class="px-4 text-muted"><b>RFC: </b><span id="rfcModal"></span></h6>
+				<h6 class="px-4 text-muted"><b>CURP: </b><span id="curpModal"></span></h6>
+				<h6 class="px-4 text-muted"><b>Sexo: </b><span id="sexoModal"></span></h6>
+				<h6 class="px-4 text-muted"><b>Fecha nacimiento: </b><span id="fechaNacimientoModal"></span></h6>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="col-md-12">
+				<h5 class="px-4"><b>Domicilio</b></h5>
+			</div>
+			<div class="col-md-12">
+				<h6 class="px-4 text-muted"><b>Entidad: </b><span id="entidadtxt"></span></h6>
+				<h6 class="px-4 text-muted"><b>Municipio: </b><span id="municipiotxt"></span></h6>
+				<h6 class="px-4 text-muted"><b>Calle: </b><span id="calletxt"> </span></h6>
+				<h6 class="px-4 text-muted"><b>Número: </b><span id="numerotxt"></span></h6>
+				<h6 class="px-4 text-muted"><b>Colonia: </b><span id="coloniatxt"></span></h6>
+				<h6 class="px-4 text-muted"><b>Teléfono: </b><span id="telefonotxt"></span></h6>
+				<h6 class="px-4 text-muted"><b>Correo: </b> <span id="correotxt"></span></h6>
+				<h6 class="px-4 text-muted"><b>No. Licencia: </b> <span id="licenciatxt"><</span></h6>
+			</div>
+		</div>
+	</div>
+
 
 
 
@@ -182,10 +216,9 @@
 					<div class="controlForm my-3">
 						<label>Tipo <b>(obligatorio)</b>:</label>
 						<span>
-													@Html.HiddenFor(model => model.IdPersona, new { id = "idPersonaInput" })
-						@Html.HiddenFor(model => model.IdVehiculo, new { id = "idVehiculoHidden" })
+							@Html.HiddenFor(model => model.IdPersona, new { id = "idPersonaInput" })
+						@Html.HiddenFor(model => model.IdVehiculo)
 						<input type="hidden" id="IdInvolucradoHidden" value="@Model.IdInvolucrado" />
-						<input type="hidden" id="idPersonaInput2" />
 
 							@(Html.Kendo().DropDownListFor(t => t.IdTipoInvolucrado)
 								.DataTextField("Text")
@@ -274,7 +307,8 @@
 						<span>
 							@(Html.Kendo().NumericTextBoxFor(t => t.IdAsiento)
 								.HtmlAttributes(new { style = "width: 100%", Id = "IdAsiento", type = "number" })
-								.Spinners(true)
+							.Decimals(0)
+							.Format("0")
 								)
 						</span>
 					</div>
@@ -452,4 +486,5 @@
 	function SelecionVehiculo(){
 		$('#seccionVehiculo').show();
 	}
+
 </script>

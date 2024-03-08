@@ -351,9 +351,30 @@
             data: formData,
             success: function (result) {
                 console.log("DFDF", result)
-                var grid = $("#gridConductores").data("kendoGrid");
+                //var grid = $("#gridConductores").data("kendoGrid");
 
                 if (result && result.data) {
+                    $("#datosIniciales").hide();
+                    $("#involucradoSeleccionado").show();
+                    $("#IdPersona").text(result.data.IdPersona);
+                    $("#nombreModal").text(result.data.nombre);
+                    $("#apellidoPaternotxt").text(result.data.apellidoPaterno);
+                    $("#apellidoMaternotxt").text(result.data.apellidoMaterno);
+                    $("#rfcModal").text(result.data.RFC);
+                    $("#curpModal").text(result.data.CURP);
+                    $("#sexoModal").text(result.data.genero);
+                    $("#fechaNacimientoModal").text(result.data.fechaNacimiento);
+                    $("#entidadtxt").text(result.data.entidad);
+                    $("#municipiotxt").text(result.data.municipio);
+                    $("#calletxt").text(result.data.calle);
+                    $("#numerotxt").text(result.data.numero);
+                    $("#coloniatxt").text(result.data.colonia);
+                    $("#telefonotxt").text(result.data.telefono);
+                    $("#correotxt").text(result.data.correo);
+                    $("#licenciatxt").text(result.data.numeroLicencia);
+
+
+
                   sitteg_success("Información actualizada correctamente")
                 } else {
                     console.error("La respuesta no tiene la estructura esperada:", result);
