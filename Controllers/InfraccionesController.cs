@@ -1876,7 +1876,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         {
             int contador = 0;
             DateTime fechavigencia = fechaInfraccion;
-            while (contador < 10)
+            while (contador < 9)
             {
                 fechavigencia= fechaInfraccion.AddDays(1);
                 Console.WriteLine(fechavigencia.ToString("dddd"));

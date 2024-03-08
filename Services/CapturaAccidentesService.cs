@@ -2112,7 +2112,7 @@ namespace GuanajuatoAdminUsuarios.Services
                         "LEFT JOIN catSubmarcasVehiculos AS sv ON v.idSubmarca = sv.idSubmarca " +
 						"LEFT JOIN garantiasInfraccion AS gi ON gi.idInfraccion = ia.idInfraccion " +
 						"LEFT JOIN catGarantias AS gr ON gr.idGarantia = gi.idCatGarantia " +
-						"WHERE ia.idAccidente = @idAccidente AND ia.estatus != 0 ;", connection);
+						"WHERE ia.idAccidente = @idAccidente AND ia.estatus != 0 ORDER BY  ia.idInf_Acc DESC;", connection);
 
 
 

@@ -99,6 +99,11 @@ c
         } else {
             //alert('dddsa asdfasdfasdf');
             $("#btnSelect1").prop("disabled", true);
+
+            $("#btnNewConductor").prop("disabled", true);
+            $("#btnOmitirConductor").prop("disabled", true);
+            $("#btnPropConductor").prop("disabled", true);
+            
             $("#btnEditarConductor").prop("disabled", true);
             $("#btnNuevoMotivo").prop("disabled", true);
 
@@ -567,7 +572,7 @@ c
                                 <div class="row">
 
                                         <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-                                            <button href="#" id="btnOmitirConductor" onclick="PropietarioConductor()">
+                                            <button href="#" id="btnPropConductor" onclick="PropietarioConductor()">
                                                 <h6 class="m-0 d-flex align-items-center"><i class="icon-addConductor h5 mb-0 me-2"></i><b>Propietario como Conductor</b></h6>
                                             </button>
                                         </div>
@@ -581,7 +586,7 @@ c
 
 
                                          <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-                                            <button href="#" id="btnOmitirConductor" onclick="AgregarConductor2()">
+                                            <button href="#" id="btnNewConductor" onclick="AgregarConductor2()">
                                                 <h6 class="m-0 d-flex align-items-center"><i class="icon-addConductor h5 mb-0 me-2"></i><b>Agregar Conductor</b></h6>
                                             </button>
                                         </div>
@@ -987,6 +992,7 @@ c
 
         showLoading();
 
+
         $.ajax({
             url: '@Url.Action("ajax_PropietarioConductor2")',
             type: 'POST',
@@ -999,6 +1005,8 @@ c
                     return
                 }
                 else{
+
+                    window.idPersona=window.propietario
                     sitteg_success("Informacion Actualizada");
                     $("#detallePersonas").empty().append(result)
                     hideLoading();
@@ -1306,12 +1314,18 @@ function  OmitirConductor() {
     });
 
     function btnEditarInfraccion() {
+
+
+        $("#idPersonaInfraccion").val(window.idPersona);
+
         var validator = $("#frmEditarInfraccion").kendoValidator().data('kendoValidator');
         var idVehiculo = $("#idVehiculo").val();
         var idPersona = $("#idPersonaInfraccion").val();
         var cortesia = $("#cortesiaSwitch").prop("checked");
         var controlsValidate = [];
         var isValid = true;
+
+
 
         controlsValidate.push({ 'controlName': 'folioInfraccion' });
         controlsValidate.push({ 'controlName': 'kmCarretera' });

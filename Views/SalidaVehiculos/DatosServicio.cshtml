@@ -260,6 +260,7 @@
             data: Mydata,
             success: function (data) {
                 sitteg_success('Se ha actualizado la información');
+                window.location.href='/salidavehiculos/index';
                hideLoading();
             },
             error: function (error) {

@@ -1,5 +1,9 @@
 ﻿@model GuanajuatoAdminUsuarios.Models.SeleccionGruaModel
-
+@{
+    var abanderamiento = Model.AbanderamientoBool;
+    var arrastre = Model.ArrastreBool;
+    var salvamento = Model.SalvamentoBool;
+}
 <div class="modal-dialog modal-xl boxShadow modal-dialog-centered">
     <div class="modal-content">
         <section class=" bg-white rounded">
@@ -102,7 +106,7 @@
                             <div class="btnToggleActive">
                             @(Html.Kendo().SwitchFor(t => t.AbanderamientoBool)
                                 .Name("abanderamientoSwitch")
-                                .Checked(false)
+                                .Checked(abanderamiento)
                                 .Messages(c => c.Checked("Si").Unchecked("No"))
                                 .HtmlAttributes(new { data_checked = "true" })
                                 )
@@ -115,7 +119,7 @@
                             <div class="btnToggleActive">
                             @(Html.Kendo().SwitchFor(t => t.SalvamentoBool)
                                 .Name("salvamentoSwitch")
-                                .Checked(false)
+                                .Checked(salvamento)
                                 .Messages(c => c.Checked("Si").Unchecked("No"))
                                 .HtmlAttributes(new { data_valor = 1 })
                                 )
@@ -128,7 +132,7 @@
                             <div class="btnToggleActive">
                             @(Html.Kendo().SwitchFor(t => t.ArrastreBool)
                                 .Name("arrastreSwitch")
-                                .Checked(false)
+                                .Checked(arrastre)
                                 .Messages(c => c.Checked("Si").Unchecked("No"))
                                 .HtmlAttributes(new { data_checked = "true" })
                                 )
@@ -197,6 +201,7 @@
                 success: function (data) {
                     sitteg_success("Se ha actualizado la información");
                     $('#modalAgregarGrua').modal('hide');
+                    $('#editarGruaModal').modal('hide');
                     var grid = $("#gridGruas").data("kendoGrid");
                     grid.dataSource.data(data);
                     grid.refresh();
