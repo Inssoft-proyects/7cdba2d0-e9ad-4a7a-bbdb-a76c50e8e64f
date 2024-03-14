@@ -110,9 +110,10 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 var ip = HttpContext.Connection.RemoteIpAddress.ToString();
                 var user = Convert.ToDecimal(User.FindFirst(CustomClaims.IdUsuario).Value);
                 _bitacoraServices.insertBitacora(Id, ip, "LiberacionVehiculo_Liberacion", "Actualizar", "update", user);
+                
 
                   var repuveConsRoboResponse = _repuveService.ConsultaRobo(repuveGralModel).FirstOrDefault();
-                 ViewBag.ReporteRobo = repuveConsRoboResponse.EsRobado;
+                 ViewBag.ReporteRobo = repuveConsRoboResponse.EsRobado ? repuveConsRoboResponse.EsRobado : false;
            
                 //model.FechaIngreso.ToString("dd/MM/yyyy");
                 return PartialView("_UpdateLiberacion", model);

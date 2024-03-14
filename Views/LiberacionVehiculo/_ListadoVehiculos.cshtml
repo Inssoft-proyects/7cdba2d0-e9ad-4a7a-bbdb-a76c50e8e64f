@@ -23,6 +23,7 @@
             contentType: "application/json; charset=utf-8",
             dataType: "html",
             success: function (value) {
+                console.log("si es success", value);
                 $('#ModalBodyUpdate').html(value);
                 $('#modalUpdateLiberacion').modal('show');
             }

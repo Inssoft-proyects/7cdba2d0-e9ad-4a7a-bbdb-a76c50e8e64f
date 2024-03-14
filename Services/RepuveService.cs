@@ -32,7 +32,14 @@ namespace GuanajuatoAdminUsuarios.Services
             model.niv = model.niv?.ToUpper();
 			var token = _appSettingsService.GetAppSetting("RepuveToken").SettingValue;
 			model.token = token;
-			var response = _clientDatabaseService.HttpPost<List<RepuveRoboModel>, RepuveConsgralRequestModel, RepuveWebServicesEnum>(model, (int)RepuveWebServicesEnum.RepuveConsrobo);
+
+            List<RepuveRoboModel> response = new List<RepuveRoboModel>();
+            try
+            {
+                response = _clientDatabaseService.HttpPost<List<RepuveRoboModel>, RepuveConsgralRequestModel, RepuveWebServicesEnum>(model, (int)RepuveWebServicesEnum.RepuveConsrobo);
+            }
+            catch { }
+
 			return response;
 		}
 	}
