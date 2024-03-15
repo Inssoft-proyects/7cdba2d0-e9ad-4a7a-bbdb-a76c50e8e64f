@@ -41,6 +41,8 @@
             type: 'POST',
             data: { IdPersona: IdPersona, IdVehiculo : IdVehiculo},
             success: function (data) {
+                console.log("este modal?");
+                $('#ModalBodyVehiculoService').html("");
                // $('#agregarVehiculoModal').modal('hide');
                 $('.modal-backdrop').remove();
                 $('#modalAgregarConductor').modal('show');
