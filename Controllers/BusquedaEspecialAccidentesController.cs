@@ -279,8 +279,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             pagination.PageIndex = request.Page - 1;
             pagination.PageSize = 10;
 
-            model.FechaInicio = String.IsNullOrEmpty(model.FechaInicioStr) ? null : DateTime.ParseExact(model.FechaInicioStr, "dd/MM/yyyy",CultureInfo.InvariantCulture);
-            model.FechaFin = String.IsNullOrEmpty(model.FechaFinStr) ? null : DateTime.ParseExact(model.FechaFinStr, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            //model.FechaInicio = String.IsNullOrEmpty(model.FechaInicioStr) ? null : DateTime.ParseExact(model.FechaInicioStr, "dd/MM/yyyy",CultureInfo.InvariantCulture);
+            //model.FechaFin = String.IsNullOrEmpty(model.FechaFinStr) ? null : DateTime.ParseExact(model.FechaFinStr, "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
 
             // pagination.Filter = resultValue;

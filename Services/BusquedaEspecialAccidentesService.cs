@@ -638,23 +638,51 @@ GROUP BY
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@PageIndex", pagination.PageIndex);
                         cmd.Parameters.AddWithValue("@PageSize", pagination.PageSize);
-                        cmd.Parameters.AddWithValue("@IdMunicipio", model.idMunicipio);
-                        cmd.Parameters.AddWithValue("@IdSupervisa", model.idSupervisa);
-                        cmd.Parameters.AddWithValue("@IdCarretera", model.IdCarreteraBusqueda);
-                        cmd.Parameters.AddWithValue("@IdTramo", model.IdTramoBusqueda);
-                        cmd.Parameters.AddWithValue("@IdElabora", model.idElabora);
-                        cmd.Parameters.AddWithValue("@IdAutoriza", model.idAutoriza);
-                        cmd.Parameters.AddWithValue("@IdEstatusAccidente", model.idEstatusReporte);
-                        cmd.Parameters.AddWithValue("@IdDelegacionBusqueda", model.IdDelegacionBusqueda);
-                        cmd.Parameters.AddWithValue("@FolioBusqueda", model.folioBusqueda);
-                        cmd.Parameters.AddWithValue("@PlacasBusqueda", model.placasBusqueda);
-                        cmd.Parameters.AddWithValue("@PropietarioBusqueda", model.propietarioBusqueda);
-                        cmd.Parameters.AddWithValue("@SerieBusqueda", model.serieBusqueda);
-                        cmd.Parameters.AddWithValue("@ConductorBusqueda", model.conductorBusqueda);
-                        cmd.Parameters.AddWithValue("@FechaInicio", model.FechaInicio);
-                        cmd.Parameters.AddWithValue("@FechaFin", model.FechaFin);
+                        if (model.idMunicipio != null)
+                            cmd.Parameters.AddWithValue("@IdMunicipio", (object)model.idMunicipio ?? DBNull.Value);
+                        if (model.IdOficialBusqueda != null)
+                            cmd.Parameters.AddWithValue("@IdSupervisa", (object)model.IdOficialBusqueda ?? DBNull.Value);
+                        if (model.IdCarreteraBusqueda != null)
+                            cmd.Parameters.AddWithValue("@IdCarretera", (object)model.IdCarreteraBusqueda ?? DBNull.Value);
+                        if (model.IdTramoBusqueda != null)
+                            cmd.Parameters.AddWithValue("@IdTramo", (object)model.IdTramoBusqueda ?? DBNull.Value);
+                        if (model.IdOficialBusqueda != null)
+                            cmd.Parameters.AddWithValue("@IdElabora", (object)model.IdOficialBusqueda ?? DBNull.Value);
+                        if (model.IdOficialBusqueda != null)
+                            cmd.Parameters.AddWithValue("@IdAutoriza", (object)model.IdOficialBusqueda ?? DBNull.Value);
+                        if (model.IdEstatusAccidente != 0)
+                            cmd.Parameters.AddWithValue("@IdEstatusAccidente", (object)model.IdEstatusAccidente ?? DBNull.Value);
+                        if (model.IdDelegacionBusqueda != null)
+                            cmd.Parameters.AddWithValue("@IdDelegacionBusqueda", (object)model.IdDelegacionBusqueda ?? DBNull.Value);
+                        if (model.folioBusqueda != null)
+                            cmd.Parameters.AddWithValue("@FolioBusqueda", (object)model.folioBusqueda ?? DBNull.Value);
+                        if (model.placasBusqueda != null)
+                            cmd.Parameters.AddWithValue("@PlacasBusqueda", (object)model.placasBusqueda ?? DBNull.Value);
+                        if (model.propietarioBusqueda != null)
+                            cmd.Parameters.AddWithValue("@PropietarioBusqueda", (object)model.propietarioBusqueda ?? DBNull.Value);
+                        if (model.serieBusqueda != null)
+                            cmd.Parameters.AddWithValue("@SerieBusqueda", (object)model.serieBusqueda ?? DBNull.Value);
+                        if (model.conductorBusqueda != null)
+                            cmd.Parameters.AddWithValue("@ConductorBusqueda", (object)model.conductorBusqueda ?? DBNull.Value);
+                        if (model.FechaInicio != null)
+                        {
+                            cmd.Parameters.AddWithValue("@FechaInicio", model.FechaInicio);
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@FechaInicio", DBNull.Value);
 
+                        }
 
+                        if (model.FechaFin != null)
+                        {
+                            cmd.Parameters.AddWithValue("@FechaFin", model.FechaFin);
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@FechaFin", DBNull.Value);
+
+                        }
                         /*if (pagination.Filter.Trim() != "")
                             cmd.Parameters.AddWithValue("@Filter", pagination.Filter);*/
 
