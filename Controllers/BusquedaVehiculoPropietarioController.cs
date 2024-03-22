@@ -81,19 +81,28 @@ namespace GuanajuatoAdminUsuarios.Controllers
             }
             catch (Exception ex) { }
 
-            if (!string.IsNullOrEmpty(model.PlacaBusqueda))
+            try
+            {
+                if (!string.IsNullOrEmpty(model.PlacaBusqueda))
                 {
                     busquedaModel.PlacasBusqueda = model.PlacaBusqueda.ToUpper();
                 }
-                if (!string.IsNullOrEmpty(model.SerieBusqueda))
+            }
+            catch (Exception ex) { }
+
+            try
+                {
+                    if (!string.IsNullOrEmpty(model.SerieBusqueda))
                 {
                     busquedaModel.SerieBusqueda = model.SerieBusqueda.ToUpper();
                 }
+            }
+            catch (Exception ex) { }
 
-       
 
 
-            List<VehiculoModel> listaVehiculos = vehiculoService.GetVehiculoPropietario(busquedaModel);
+
+           List<VehiculoModel> listaVehiculos = vehiculoService.GetVehiculoPropietario(busquedaModel);
 
 
 
@@ -109,8 +118,25 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 return Json(new { listaVehiculos.FirstOrDefault().idVehiculo });
             }
 
+            //Esto es una bandera para busqueda sin serie y placa - asi nos permitira obtener el objeto vehiculo preinicializado
+            if (busquedaModel.PlacasBusqueda == null && busquedaModel.SerieBusqueda==null)
+            {
+                busquedaModel.PlacasBusqueda = "flag1";
+            }
+            
             VehiculoModel vehiculo = vehiculoPlataformaService.BuscarVehiculoEnPlataformas(busquedaModel);
+            if (vehiculo == null)
+            {
+                vehiculo = new VehiculoModel();
+                vehiculo.Persona = new PersonaModel();
+                vehiculo.Persona.PersonaDireccion = new PersonaDireccionModel();
+            }
 
+            //Se remueve la bandera antes descrita
+            if (busquedaModel.PlacasBusqueda == "flag1")
+            {
+                vehiculo.placas = "";
+            }
             var view = this.RenderViewAsync("_Vehiculo", vehiculo, true);
             return Json(new { crearVehiculo = true, view });
         }
