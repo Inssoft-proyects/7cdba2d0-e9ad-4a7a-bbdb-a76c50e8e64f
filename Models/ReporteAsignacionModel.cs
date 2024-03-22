@@ -15,6 +15,8 @@ namespace GuanajuatoAdminUsuarios.Models
 
         public string vehiculoTramo { get; set; }
         public string vehiculoKm { get; set; }
+        public string fechaSolicitud2 { get; set; }
+        public string fechaLiberacion2 { get; set; }
         public string descripcionEstatus { get; set; }
 
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]

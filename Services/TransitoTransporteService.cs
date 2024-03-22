@@ -215,7 +215,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.Add(new SqlParameter("@FechaIngreso", SqlDbType.DateTime)).Value = (object)model.FechaIngreso ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@FechaIngresoFin", SqlDbType.DateTime)).Value = (object)model.FechaIngresoFin ?? DBNull.Value;
 
-                    command.CommandTimeout = 0;
+                    //command.CommandTimeout = 8000;
                     command.CommandType = CommandType.StoredProcedure;
                     connection.Open();
                     

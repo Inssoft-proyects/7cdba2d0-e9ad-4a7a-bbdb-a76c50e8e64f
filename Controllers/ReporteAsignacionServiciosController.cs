@@ -80,6 +80,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 {
                     if (item.vehiculoKm.Trim()!="")
                         item.vehiculoKm = Convert.ToDecimal(item.vehiculoKm).ToString("G29");
+                item.fechaSolicitud2 = Convert.ToDateTime(item.fechaSolicitud).ToString("dd/MM/yyyy");
+                item.fechaLiberacion2 = Convert.ToDateTime(item.fechaLiberacion).ToString("dd/MM/yyyy");
                 }
 
                 if (listReporteAsignacion.Count == 0)
@@ -106,15 +108,38 @@ namespace GuanajuatoAdminUsuarios.Controllers
             model.idDelegacion = model2.idDelegacion;
             model.Evento = model2.Evento;
 
-            if (String.IsNullOrEmpty(model2.FechaInicio))
+            //if (String.IsNullOrEmpty(model2.FechaInicio))
+            //{
+            //    model.FechaInicio = DateTime.MinValue;
+            //}
+            //else
+            //{
+            //    var axudate1 = DateTime.ParseExact(model2.FechaInicio, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+            //    model.FechaInicio = axudate1;
+            //}
+
+            //if (String.IsNullOrEmpty( model2.FechaFin ))
+            //{
+
+            //    model.FechaFin = DateTime.MinValue;
+            //}
+            //else
+            //{
+            //    var axudate2 = DateTime.ParseExact(model2.FechaFin, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+            //    model.FechaFin = axudate2;
+            //}
+
+
+            if (model.FechaInicio == null)
             {
                 model.FechaInicio = DateTime.MinValue;
             }
-            else
-            {
-                var axudate1 = DateTime.ParseExact(model2.FechaInicio, "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
-                model.FechaInicio = axudate1;
+            if (model.FechaFin == null)
+            {
+                model.FechaFin = DateTime.MaxValue;
             }
 
             if (String.IsNullOrEmpty( model2.FechaFin ))
