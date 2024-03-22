@@ -80,8 +80,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 {
                     if (item.vehiculoKm.Trim()!="")
                         item.vehiculoKm = Convert.ToDecimal(item.vehiculoKm).ToString("G29");
-                item.fechaSolicitud2 = Convert.ToDateTime(item.fechaSolicitud).ToString("dd/MM/yyyy");
-                item.fechaLiberacion2 = Convert.ToDateTime(item.fechaLiberacion).ToString("dd/MM/yyyy");
+                item.fechaSolicitud2 = Convert.ToDateTime(item.fechaSolicitud) == DateTime.MinValue  ?"" : Convert.ToDateTime(item.fechaSolicitud).ToString("dd/MM/yyyy");
+                item.fechaLiberacion2 = Convert.ToDateTime(item.fechaLiberacion) == DateTime.MinValue?"": Convert.ToDateTime(item.fechaLiberacion).ToString("dd/MM/yyyy");
                 }
 
                 if (listReporteAsignacion.Count == 0)
