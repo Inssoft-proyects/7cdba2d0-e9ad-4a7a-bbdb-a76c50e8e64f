@@ -460,6 +460,8 @@ namespace GuanajuatoAdminUsuarios.Services
                                                     ,inf.idOficial
                                                     ,inf.idDependencia
                                                     ,inf.idDelegacion
+                                                    ,inf.archivoInventario
+                                                    ,inf.nombreArchivo
                                                     ,inf.idVehiculo
                                                     ,inf.idAplicacion
                                                     ,inf.idGarantia
@@ -536,6 +538,10 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.numeroUbicacion = reader["lugarNumero"] == System.DBNull.Value ? string.Empty : reader["lugarNumero"].ToString();
                             model.coloniaUbicacion = reader["lugarColonia"] == System.DBNull.Value ? string.Empty : reader["lugarColonia"].ToString();
                             model.interseccion = reader["lugarEntreCalle"] == System.DBNull.Value ? string.Empty : reader["lugarEntreCalle"].ToString();
+                            
+                            model.pathArchivo = reader["archivoInventario"] == System.DBNull.Value ? string.Empty : reader["archivoInventario"].ToString();
+                            model.NombreArchivo = reader["nombreArchivo"] == System.DBNull.Value ? string.Empty : reader["nombreArchivo"].ToString();
+                           
                             model.folio = reader["folioInfraccion"] == System.DBNull.Value ? string.Empty : reader["folioInfraccion"].ToString();
                             model.municipio = reader["municipio"].ToString();
                             model.idEntidadUbicacion = reader["idEntidadUbicacion"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idEntidadUbicacion"].ToString());

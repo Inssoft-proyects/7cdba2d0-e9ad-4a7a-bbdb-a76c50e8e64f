@@ -247,7 +247,8 @@ namespace GuanajuatoAdminUsuarios.Services
         {
             AsignacionGruaModel solicitud = new AsignacionGruaModel();
             string whereDeposito = " WHERE A.idSolicitud = @FolioIdSolicitud";
-            if (!folio.IsNullOrEmpty()) {
+            if (!folio.IsNullOrEmpty())
+            {
                 whereDeposito = " WHERE A.folio = @FolioIdSolicitud";
             }
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
@@ -533,7 +534,7 @@ namespace GuanajuatoAdminUsuarios.Services
             return result;
         }
 
-    public List<AsignacionGruaModel> ObtenerInfracciones(string folioInfraccion)
+        public List<AsignacionGruaModel> ObtenerInfracciones(string folioInfraccion)
         {
             List<AsignacionGruaModel> modelList = new List<AsignacionGruaModel>();
             string strQuery = @"SELECT inf.idInfraccion, inf.idVehiculo,inf.idPersona,inf.folioInfraccion,inf.fechaInfraccion,
@@ -567,8 +568,9 @@ namespace GuanajuatoAdminUsuarios.Services
                         {
                             AsignacionGruaModel model = new AsignacionGruaModel();
 
-                            model.NombreArchivo = reader["nombreArchivo"] is null ? "" : (string)reader["nombreArchivo"];
-                            model.PathArchivo = reader["archivoInventario"] is null ? "" : (string)reader["archivoInventario"];
+                            model.NombreArchivo = reader["nombreArchivo"] is DBNull ? "" : (string)reader["nombreArchivo"];
+                            model.PathArchivo = reader["archivoInventario"] is DBNull ? "" : (string)reader["archivoInventario"];
+
 
                             model.idInfraccion = reader["idInfraccion"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idInfraccion"].ToString());
                             model.IdVehiculo = (int)(reader["idVehiculo"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idVehiculo"].ToString()));
@@ -665,10 +667,10 @@ namespace GuanajuatoAdminUsuarios.Services
                     }
                     else
                     {
-                      
 
 
-                        command.Parameters.AddWithValue("@idGrua", DBNull.Value); 
+
+                        command.Parameters.AddWithValue("@idGrua", DBNull.Value);
                     }
 
                     command.ExecuteNonQuery();
@@ -712,7 +714,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.AddWithValue("@fechaArribo", fechaHoraArribo);
 
                     DateTime fechaFinal = DateTime.Parse(formData["fechaFinal"]);
-                    TimeSpan horaTermino = TimeSpan.Parse(Convert.ToDateTime(formData["horaTerminoInsert"].ToString().Split("GMT")[0].Trim()).ToString("HH:mm")) ;
+                    TimeSpan horaTermino = TimeSpan.Parse(Convert.ToDateTime(formData["horaTerminoInsert"].ToString().Split("GMT")[0].Trim()).ToString("HH:mm"));
                     DateTime fechaHoraFinal = fechaFinal.Date.Add(horaTermino);
                     command.Parameters.AddWithValue("@fechaFinal", fechaHoraFinal);
 
@@ -723,7 +725,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.AddWithValue("@abanderamiento", abanderamiento);
                     command.Parameters.AddWithValue("@arrastre", arrastre);
                     command.Parameters.AddWithValue("@salvamento", salvamento);
-                    if (formData["tiempoManiobras"].ToString()!="")
+                    if (formData["tiempoManiobras"].ToString() != "")
                         command.Parameters.AddWithValue("@minutosManiobra", int.Parse(formData["tiempoManiobras"].ToString()));
                     else
                         command.Parameters.AddWithValue("@minutosManiobra", 0);
@@ -837,7 +839,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     SqlCommand command = new SqlCommand(query, connection);
 
 
-                    command.Parameters.AddWithValue("@observaciones", formData.observaciones??"");
+                    command.Parameters.AddWithValue("@observaciones", formData.observaciones ?? "");
 
                     command.Parameters.AddWithValue("@idDeposito", iDep);
 
@@ -873,8 +875,8 @@ namespace GuanajuatoAdminUsuarios.Services
                     SqlCommand command = new SqlCommand(strQuery, connection);
                     command.CommandType = CommandType.Text;
                     command.Parameters.Add(new SqlParameter("@idDeposito", SqlDbType.Int)).Value = iDep;
-                    command.Parameters.AddWithValue("@numeroInventario",numeroInventario==null? DBNull.Value:numeroInventario);
-                    command.Parameters.Add(new SqlParameter("@inventario", SqlDbType.VarChar)).Value = string.IsNullOrEmpty( archivoInventario) ?DBNull.Value: archivoInventario;
+                    command.Parameters.AddWithValue("@numeroInventario", numeroInventario == null ? DBNull.Value : numeroInventario);
+                    command.Parameters.Add(new SqlParameter("@inventario", SqlDbType.VarChar)).Value = string.IsNullOrEmpty(archivoInventario) ? DBNull.Value : archivoInventario;
                     command.Parameters.Add(new SqlParameter("@Filename", SqlDbType.VarChar)).Value = nombre;
 
                     result = command.ExecuteNonQuery();
@@ -1149,9 +1151,9 @@ namespace GuanajuatoAdminUsuarios.Services
     }
 }
 
-  
 
 
 
-    
+
+
 

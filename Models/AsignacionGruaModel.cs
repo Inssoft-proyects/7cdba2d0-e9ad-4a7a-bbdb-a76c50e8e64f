@@ -5,10 +5,12 @@ namespace GuanajuatoAdminUsuarios.Models
 {
     public class AsignacionGruaModel
     {
-        
+
+
+
         public string NombreArchivo { get; set; }
         public string PathArchivo { get; set; }
-        
+
         public string FolioSolicitud { get; set; }
         public DateTime fecha { get; set; }
         public DateTime fechaSolicitud { get; set; }
