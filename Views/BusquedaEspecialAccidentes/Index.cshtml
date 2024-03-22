@@ -319,11 +319,16 @@
         }
 
     });
-    function buscarAccidente() {
+  function buscarAccidente() {
+    var grd = $("#gridBusquedaEspecialAccidentes").data("kendoGrid");
 
-        var grd = $("#gridBusquedaEspecialAccidentes").data("kendoGrid").dataSource
-        grd.read()
-    }
+    var dataSource = grd.dataSource;
+     
+    dataSource.page(1);  
+    // Ejecutamos la consulta para llenar el grid
+ 
+}
+
 
     function downLoadPdfFiltered() {
         if ('@autorizaciones' && '@autorizaciones'.indexOf('611') !== -1) {
