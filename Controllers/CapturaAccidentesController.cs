@@ -454,7 +454,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         {
             try
             {
-                var SeleccionVehiculo = _capturaAccidentesService.BuscarPorParametro(model.PlacasBusqueda, model.SerieBusqueda, model.FolioBusqueda);
+                var SeleccionVehiculo = _capturaAccidentesService.BuscarPorParametro(model.PlacasBusqueda.ToUpper(), model.SerieBusqueda, model.FolioBusqueda);
 
                 if (SeleccionVehiculo.Count > 0)
                 {

@@ -125,7 +125,7 @@ GROUP BY
                     command.Parameters.Add(new SqlParameter("@idTramoBusqueda", SqlDbType.Int)).Value = (object)model.IdTramoBusqueda ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@propietarioBusqueda", SqlDbType.NVarChar)).Value = (object)model.propietarioBusqueda ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@conductorBusqueda", SqlDbType.NVarChar)).Value = (object)model.conductorBusqueda ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@placasBusqueda", SqlDbType.NVarChar)).Value = (object)model.placasBusqueda ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@placasBusqueda", SqlDbType.NVarChar)).Value = (object)model.placasBusqueda.ToUpper() ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@serieBusqueda", SqlDbType.NVarChar)).Value = (object)model.serieBusqueda ?? DBNull.Value;
 
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
@@ -657,7 +657,7 @@ GROUP BY
                         if (model.folioBusqueda != null)
                             cmd.Parameters.AddWithValue("@FolioBusqueda", (object)model.folioBusqueda ?? DBNull.Value);
                         if (model.placasBusqueda != null)
-                            cmd.Parameters.AddWithValue("@PlacasBusqueda", (object)model.placasBusqueda ?? DBNull.Value);
+                            cmd.Parameters.AddWithValue("@PlacasBusqueda", (object)model.placasBusqueda.ToUpper() ?? DBNull.Value);
                         if (model.propietarioBusqueda != null)
                             cmd.Parameters.AddWithValue("@PropietarioBusqueda", (object)model.propietarioBusqueda ?? DBNull.Value);
                         if (model.serieBusqueda != null)
