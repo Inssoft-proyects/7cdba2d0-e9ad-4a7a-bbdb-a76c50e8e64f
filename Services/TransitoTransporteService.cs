@@ -196,6 +196,8 @@ namespace GuanajuatoAdminUsuarios.Services
                 {
                     SqlCommand command = new SqlCommand("[usp_ObtieneListadoTransitoTransporte]", connection);
 
+                    
+
                     command.Parameters.Add(new SqlParameter("@PageIndex", SqlDbType.Int)).Value = pagination.PageIndex;
                     command.Parameters.Add(new SqlParameter("@PageSize", SqlDbType.Int)).Value = pagination.PageSize;
 
@@ -213,10 +215,11 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.Add(new SqlParameter("@FechaIngreso", SqlDbType.DateTime)).Value = (object)model.FechaIngreso ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@FechaIngresoFin", SqlDbType.DateTime)).Value = (object)model.FechaIngresoFin ?? DBNull.Value;
 
-                    command.CommandTimeout = 8000;
+                    //command.CommandTimeout = 8000;
                     command.CommandType = CommandType.StoredProcedure;
                     connection.Open();
-                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {

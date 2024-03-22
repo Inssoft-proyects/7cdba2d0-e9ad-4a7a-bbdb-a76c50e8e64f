@@ -250,6 +250,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
             var result = new SelectList(_catMunicipiosService.GetMunicipios(), "IdMunicipio", "Municipio");
             return Json(result);
         }
+        public JsonResult Municipios_Drop2()
+        {
+            var result = new SelectList(_catMunicipiosService.GetMunicipios2(), "IdMunicipio", "Municipio");
+            return Json(result);
+        }
         public JsonResult Municipios_Por_Delegacion_Drop()
         {
             int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
@@ -449,7 +454,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         {
             try
             {
-                var SeleccionVehiculo = _capturaAccidentesService.BuscarPorParametro(model.PlacasBusqueda, model.SerieBusqueda, model.FolioBusqueda);
+                var SeleccionVehiculo = _capturaAccidentesService.BuscarPorParametro(model.PlacasBusqueda.ToUpper(), model.SerieBusqueda, model.FolioBusqueda);
 
                 if (SeleccionVehiculo.Count > 0)
                 {

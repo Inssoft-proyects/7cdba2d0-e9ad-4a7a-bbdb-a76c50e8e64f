@@ -7,6 +7,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
     public interface ICatMunicipiosService
     {
         List<CatMunicipiosModel> GetMunicipios();
+        List<CatMunicipiosModel> GetMunicipios2();
         List<CatMunicipiosModel> GetMunicipiosPorEntidad(int entidadDDlValue);
 
         List<CatMunicipiosModel> GetMunicipiosPorDelegacion(int idOficina);
