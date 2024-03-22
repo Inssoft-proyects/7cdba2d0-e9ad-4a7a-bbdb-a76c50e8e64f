@@ -539,7 +539,9 @@ namespace GuanajuatoAdminUsuarios.Services
             string strQuery = @"SELECT inf.idInfraccion, inf.idVehiculo,inf.idPersona,inf.folioInfraccion,inf.fechaInfraccion,
                                         v.placas,v.serie,v.idMarcaVehiculo,v.idSubmarca,v.modelo,v.idPersona,v.tarjeta,
                                         p.nombre,p.apellidoPaterno,p.apellidoMaterno,p.CURP,p.RFC,
-                                        cmv.marcaVehiculo,csv.nombreSubmarca,col.color
+                                        cmv.marcaVehiculo,csv.nombreSubmarca,col.color,
+                                        inf.archivoInventario,inf.nombreArchivo
+
                                         FROM infracciones AS inf
                                         LEFT JOIN vehiculos AS v ON inf.idVehiculo = v.idVehiculo
                                         LEFT JOIN personas AS p ON v.idPersona = p.idPersona
@@ -564,6 +566,10 @@ namespace GuanajuatoAdminUsuarios.Services
                         while (reader.Read())
                         {
                             AsignacionGruaModel model = new AsignacionGruaModel();
+
+                            model.NombreArchivo = reader["nombreArchivo"] is DBNull ? "" : (string)reader["nombreArchivo"];
+                            model.PathArchivo = reader["archivoInventario"] is DBNull ? "" : (string)reader["archivoInventario"];
+
                             model.idInfraccion = reader["idInfraccion"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idInfraccion"].ToString());
                             model.IdVehiculo = (int)(reader["idVehiculo"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idVehiculo"].ToString()));
                             model.folioInfraccion = reader["folioInfraccion"].ToString();
