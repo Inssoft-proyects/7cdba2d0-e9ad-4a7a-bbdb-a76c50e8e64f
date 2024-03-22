@@ -108,41 +108,18 @@ namespace GuanajuatoAdminUsuarios.Controllers
             model.idDelegacion = model2.idDelegacion;
             model.Evento = model2.Evento;
 
-            //if (String.IsNullOrEmpty(model2.FechaInicio))
-            //{
-            //    model.FechaInicio = DateTime.MinValue;
-            //}
-            //else
-            //{
-            //    var axudate1 = DateTime.ParseExact(model2.FechaInicio, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-
-            //    model.FechaInicio = axudate1;
-            //}
-
-            //if (String.IsNullOrEmpty( model2.FechaFin ))
-            //{
-
-            //    model.FechaFin = DateTime.MinValue;
-            //}
-            //else
-            //{
-            //    var axudate2 = DateTime.ParseExact(model2.FechaFin, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-
-            //    model.FechaFin = axudate2;
-            //}
-
-
-            if (model.FechaInicio == null)
+            if (String.IsNullOrEmpty(model2.FechaInicio))
             {
                 model.FechaInicio = DateTime.MinValue;
             }
-
-            if (model.FechaFin == null)
+            else
             {
-                model.FechaFin = DateTime.MaxValue;
+                var axudate1 = DateTime.ParseExact(model2.FechaInicio, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+                model.FechaInicio = axudate1;
             }
 
-            if (String.IsNullOrEmpty( model2.FechaFin ))
+            if (String.IsNullOrEmpty(model2.FechaFin))
             {
 
                 model.FechaFin = DateTime.MaxValue;
@@ -153,6 +130,29 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 model.FechaFin = axudate2;
             }
+
+
+            //if (model.FechaInicio == null)
+            //{
+            //    model.FechaInicio = DateTime.MinValue;
+            //}
+
+            //if (model.FechaFin == null)
+            //{
+            //    model.FechaFin = DateTime.MaxValue;
+            //}
+
+            //if (String.IsNullOrEmpty( model2.FechaFin ))
+            //{
+
+            //    model.FechaFin = DateTime.MaxValue;
+            //}
+            //else
+            //{
+            //    var axudate2 = DateTime.ParseExact(model2.FechaFin, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+            //    model.FechaFin = axudate2;
+            //}
 
 
             model.Evento = model2.Evento == string.Empty ? null : model2.Evento;
