@@ -120,7 +120,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             if (String.IsNullOrEmpty( model2.FechaFin ))
             {
 
-                model.FechaFin = DateTime.MinValue;
+                model.FechaFin = DateTime.MaxValue;
             }
             else
             {

@@ -265,7 +265,7 @@
                                         </g>
                                     </svg>
                                     <h2 id="NameFile">
-                                    @(!String.IsNullOrEmpty(Model.inventarios) ? Model.Nombreinventarios : "-----")
+                                    @(!String.IsNullOrEmpty(Model.inventarios) ? Model.Nombreinventarios : "Nombre no encontrado")
                                 </h2>
                                     <h5>Arrastra o adjunta la</h5>
                                     <h5 class="fw-bold">Archivo</h5>
@@ -547,8 +547,9 @@
     function enviarImagen() {
         var inputFile = document.getElementById("myFile");
         var numeroInventario = $("#numeroInventario").val();
+        var name = $("#NameFile").text()
 
-        if (inputFile.files.length === 0) {
+        if (inputFile.files.length === 0 && !name) {
             // No se seleccionó ningún archivo
             sitteg_warning("Selecciona una imagen antes de continuar.");
             return;
@@ -557,6 +558,7 @@
         var formData = new FormData();
         formData.append("myFile", inputFile.files[0]);
         formData.append("numeroInventario", numeroInventario); // Agregar el contenido del TextBox
+        formData.append("NombreArchivo", name); // Agregar el contenido del TextBox
         showLoading();
         $.ajax({
             url: '/AsignacionGruas/AgregarInventario',

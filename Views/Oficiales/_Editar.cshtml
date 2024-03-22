@@ -151,7 +151,10 @@
 
 <script>
     function editarOficial() {
-
+        if ($("#Nombre").val().length < 3) {
+            sitteg_warning("Debe ingresar el nombre.");
+            return;
+        }
         var Mydata = $("#EditarOficialForm").serialize();
         console.log(Mydata);
         $('#agregarOficial').modal('hide');

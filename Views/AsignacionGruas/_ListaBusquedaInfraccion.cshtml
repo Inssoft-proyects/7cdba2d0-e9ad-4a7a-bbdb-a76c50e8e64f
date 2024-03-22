@@ -34,6 +34,14 @@
                     document.getElementById("svgImagent").classList.add("active")
                 }
  
+                if (result.PathArchivo){
+                    $("#NameFile").empty().append(result.NombreArchivo)
+                    document.getElementById("svgImagent").classList.add("active")
+
+
+                }
+
+
                     hideLoading();
 
             },
@@ -69,6 +77,8 @@
             columns.Bound(c => c.NombreArchivo).Hidden();
             columns.Bound(c => c.PathArchivo).Hidden();
             columns.Bound(c => c.NumeroEconomico).Hidden();
+            columns.Bound(c => c.NombreArchivo).Hidden();
+            columns.Bound(c => c.PathArchivo).Hidden();
             columns.Bound(c => c.folioInfraccion).Title("Folio de Infracción").Width(80);
             columns.Bound(c => c.Propietario).Title("Propietario del vehículo").Width(150);
             columns.Bound(c => c.fechaInfraccion).Title("Fecha de Infracción").Width(100);

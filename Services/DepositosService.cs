@@ -365,8 +365,8 @@ namespace GuanajuatoAdminUsuarios.Services
 
                             solicitud.idPensionUbicacion = reader["idPension"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idPension"].ToString());
                             solicitud.idMunicipioUbicacion = reader["idMunicipioUbicacion"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idMunicipioUbicacion"].ToString());
-                            solicitud.IdTramo = reader["idTramoUbicacion"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idTramoUbicacion"].ToString());
                             solicitud.IdCarretera = reader["idCarreteraUbicacion"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idCarreteraUbicacion"].ToString());
+                            solicitud.IdTramo = reader["idTramoUbicacion"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idTramoUbicacion"].ToString());
                             solicitud.calleUbicacion = reader["vehiculoCalle"].ToString();
                             solicitud.coloniaUbicacion = reader["vehiculoColonia"].ToString();
                             solicitud.numeroUbicacion = reader["vehiculoNumero"].ToString();
