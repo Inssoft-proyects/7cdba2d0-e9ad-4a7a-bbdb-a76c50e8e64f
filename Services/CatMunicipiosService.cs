@@ -17,6 +17,60 @@ namespace GuanajuatoAdminUsuarios.Services
             _sqlClientConnectionBD = sqlClientConnectionBD;
         }
 
+
+
+        public List<CatMunicipiosModel> GetMunicipios2()
+        {
+            //
+            List<CatMunicipiosModel> ListaMunicipios = new List<CatMunicipiosModel>();
+
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+                try
+
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("SELECT m.*, e.estatusdesc, del.nombreOficina, ent.nombreEntidad FROM catMunicipios AS m INNER JOIN estatus AS e ON m.estatus = e.estatus" +
+                        " INNER JOIN catDelegacionesOficinasTransporte AS del ON m.idOficinaTransporte = del.idOficinaTransporte" +
+                        " INNER JOIN catEntidades AS ent ON m.idEntidad = ent.idEntidad  and m.estatus=1 where m.estatus=1;", connection);
+                    command.CommandType = CommandType.Text;
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            CatMunicipiosModel municipio = new CatMunicipiosModel();
+                            municipio.IdMunicipio = reader["IdMunicipio"] is DBNull ? 0 : Convert.ToInt32(reader["IdMunicipio"]);
+                            municipio.IdOficinaTransporte = reader["IdOficinaTransporte"] is DBNull ? 0 : Convert.ToInt32(reader["IdOficinaTransporte"]);
+                            municipio.IdEntidad = reader["IdEntidad"] is DBNull ? 0 : Convert.ToInt32(reader["IdEntidad"]);
+                            municipio.Municipio = reader["Municipio"] is DBNull ? string.Empty : reader["Municipio"].ToString();
+                            municipio.nombreOficina = reader["nombreOficina"] is DBNull ? string.Empty : reader["nombreOficina"].ToString();
+                            municipio.nombreEntidad = reader["nombreEntidad"] is DBNull ? string.Empty : reader["nombreEntidad"].ToString();
+                            municipio.estatusDesc = reader["estatusDesc"] is DBNull ? string.Empty : reader["estatusDesc"].ToString();
+                            municipio.FechaActualizacion = reader["FechaActualizacion"] is DBNull ? DateTime.MinValue : Convert.ToDateTime(reader["FechaActualizacion"]);
+                            municipio.Estatus = reader["estatus"] is DBNull ? 0 : Convert.ToInt32(reader["estatus"]);
+                            municipio.ActualizadoPor = reader["ActualizadoPor"] is DBNull ? 0 : Convert.ToInt32(reader["ActualizadoPor"]);
+
+                            ListaMunicipios.Add(municipio);
+
+                        }
+
+                    }
+
+                }
+                catch (SqlException ex)
+                {
+                    //Guardar la excepcion en algun log de errores
+                    //ex
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            return ListaMunicipios;
+
+
+        }
+
+
         public List<CatMunicipiosModel> GetMunicipios()
         {
             //
