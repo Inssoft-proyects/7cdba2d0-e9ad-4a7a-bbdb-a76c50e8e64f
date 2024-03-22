@@ -28,8 +28,7 @@
 
 @* .ClientTemplate("#= formatFechaSolicitud(fechaSolicitud) #")
                 .Format("{0:dd/MM/yyyy}");*@
-                columns.Bound(c => c.fechaLiberacion2)
-                .Title("Salida")
+                columns.Bound(c => c.fechaLiberacion2).Title("Salida")
                 .Width(90);
                @* .ClientTemplate("#= formatFechaLiberacion(fechaLiberacion) #")
                 .Format("{0:dd/MM/yyyy}");*@
