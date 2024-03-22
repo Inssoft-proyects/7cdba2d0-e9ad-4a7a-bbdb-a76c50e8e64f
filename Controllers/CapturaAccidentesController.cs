@@ -1401,7 +1401,6 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public ActionResult SetLastInsertedIdEdit(bool modoSoloLectura, int idAccidente)
         {
-
             ViewBag.ModoSoloLectura = modoSoloLectura;
             HttpContext.Session.SetInt32("LastInsertedId", idAccidente);
 

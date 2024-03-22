@@ -213,7 +213,7 @@
 
                         <div class="controlForm my-3">
                             <label for="timepicker1">Hora de arribo <b>(obligatorio)</b>:</label>
-                            @(Html.Kendo().TimePickerFor(t => t.horaArribo)
+                            @(Html.Kendo().TimePickerFor(t => t.horaArribo).Interval(1)
                                 .Format("HH:mm")
                                  .Events(events =>
                                 {
@@ -242,7 +242,7 @@
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm my-3">
                             <label for="timepicker2">Hora de inicio <b>(obligatorio)</b>:</label>
-                            @(Html.Kendo().TimePickerFor(t => t.horaInicio)
+                            @(Html.Kendo().TimePickerFor(t => t.horaInicio).Interval(1)
                              .Events(e =>
                                 {
                                     e.Change("validacionHoraInicioEdit");
@@ -270,7 +270,7 @@
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm my-3">
                             <label for="timepicker3">Hora de término <b>(obligatorio)</b>:</label>
-                            @(Html.Kendo().TimePickerFor(t => t.horaTermino)
+                            @(Html.Kendo().TimePickerFor(t => t.horaTermino).Interval(1)
                                 .Format("HH:mm")
                                 .Events(e =>
                                 {

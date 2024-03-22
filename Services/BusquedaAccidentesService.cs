@@ -498,8 +498,8 @@ namespace GuanajuatoAdminUsuarios.Services
                             cmd.Parameters.AddWithValue("@IdCarretera", (object)model.IdCarreteraBusqueda ?? DBNull.Value);
                         if (model.IdTramoBusqueda != null)
                             cmd.Parameters.AddWithValue("@IdTramo", (object)model.IdTramoBusqueda ?? DBNull.Value);
-                        if (model.idElabora != null)
-                            cmd.Parameters.AddWithValue("@IdElabora", (object)model.idElabora ?? DBNull.Value);
+                        if (model.IdOficialBusqueda != null)
+                            cmd.Parameters.AddWithValue("@IdElabora", (object)model.IdOficialBusqueda ?? DBNull.Value);
                         if (model.idAutoriza != null)
                             cmd.Parameters.AddWithValue("@IdAutoriza", (object)model.idAutoriza ?? DBNull.Value);
                         if (model.IdEstatusAccidente != 0)
