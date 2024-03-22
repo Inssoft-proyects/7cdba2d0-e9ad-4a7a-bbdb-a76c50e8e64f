@@ -600,7 +600,9 @@
         <div>
             <nav class="tabCustom">
                 <div class="nav nav-tabs row mx-0" id="nav-tab" role="tablist">
-                    <button class="nav-link active col" id="person-moral-tab" data-bs-toggle="tab" data-bs-target="#person-moral" type="button" role="tab" aria-controls="person-moral" aria-selected="true">
+                    <button class="nav-link active col" id="person-moral-tab" data-bs-toggle="tab"
+                        data-bs-target="#person-moral" type="button" role="tab" aria-controls="person-moral"
+                        aria-selected="true">
                         <div class="row justify-content-center align-items-center px-3 py-2">
                             <div class="col-auto radioCustom p-0">
                                 <div class="rounded-circle m-2"></div>
@@ -610,7 +612,9 @@
                             </div>
                         </div>
                     </button>
-                    <button class="nav-link col" id="person-fisica-tab" data-bs-toggle="tab" data-bs-target="#person-fisica" type="button" role="tab" aria-controls="person-fisica" aria-selected="false">
+                    <button class="nav-link col" id="person-fisica-tab" data-bs-toggle="tab"
+                        data-bs-target="#person-fisica" type="button" role="tab" aria-controls="person-fisica"
+                        aria-selected="false">
                         <div class="row justify-content-center align-items-center px-3 py-2">
                             <div class="col-auto radioCustom p-0">
                                 <div class="rounded-circle m-2"></div>
@@ -619,6 +623,18 @@
                                 <h5 class="m-0"><i class="icon-fisica h4"></i> <b>Persona física</b></h5>
                             </div>
                         </div>
+                    </button>
+                    <button class="nav-link col" id="none-person-tab" data-bs-toggle="tab"
+                    data-bs-target="#none-person" type="button" role="tab" aria-controls="none-person"
+                    aria-selected="false">
+                    <div class="row justify-content-center align-items-center px-3 py-2">
+                    <div class="col-auto radioCustom p-0">
+                    <div class="rounded-circle m-2"></div>
+                    </div>
+                    <div class="col-auto p-0">
+                    <h5 class="m-0"><i class="icon-sinPropietario h4"></i> <b>Se ignora propietario</b></h5>
+                    </div>
+                    </div>
                     </button>
                 </div>
             </nav>
@@ -692,6 +708,20 @@
                         <div class="tabCustomEnd">
                         </div>
                     </div>
+                </div>
+
+            </div>
+
+
+            @*SE IGNORA*@
+            <div class="tab-pane tabCustomConteiner fade" id="none-person" role="tabpanel"
+                aria-labelledby="none-person-tab">
+                <div class="row px-4 mt-4 pb-4 align-items-end">
+                    <div class="col-12 col-md-10 mx-md-auto text-center">
+                        <h3><b>Se utiliza cuando se tiene una infracción o accidente</b></h3>
+                            <h4 class="fw-normal">y se desconoce el propietario o conductor</h4>
+                    </div>
+
                 </div>
 
             </div>
@@ -903,13 +933,13 @@ $("#ddlCatTipoServicio").on("change", function () {
             sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
             return;
         }
-    var idPersona = $("#ddlIdPersona").val();
+    var idPersona = $("#ddlIdPersona").val() ;
 
     //Se valida que se haya seleccionado una persona
-     if ($("#ddlIdPersona").val() == '') {
+     /*if ($("#ddlIdPersona").val() == '') {
             sitteg_info('Debes seleccionar una Persona');
             return;
-        }
+        }*/
          var carga = $("#cargaSwitch").prop("checked");
         $("#idCarga").val(carga ? 1 : 0);
          var idTipoSer = $('#hdnIdCatTipoServicio').val();
@@ -927,12 +957,22 @@ $("#ddlCatTipoServicio").on("change", function () {
                 data: formData,
                 success: function (result) {
                     sitteg_success('Elemento guardado correctamente')
-                        if (result.success) {
+                        if (result.success || result.crearVehiculo) {
+                            console.log("success");
                             $('#IdVehiculoAsignado').val(result.data);
                             $('#IdVehiculoAsignado').change();
                             $('#vehiculoModal').modal('hide');
                             $('#agregarVehiculoModal').modal('hide');
                             $('.modal-backdrop').remove();
+
+                             try{
+                                $('#modalVehiculos').modal('hide');
+                                 console.log("mostrara info vehiculo");
+                                mostrarInfoVehiculo();
+                            } catch (error) {
+                                console.error(error);
+                            }
+
                         } else {
                              sitteg_warning('Lo sentimos, ha ocurrido un error favor de report');
                         }

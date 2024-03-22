@@ -146,7 +146,46 @@
         $("#Vehiculo_placas").focus();
     }
 
+    function validacionHora() {
+		var fechaSeleccionadaString = $("#fechaInfraccion").val();
+		var horaSeleccionada = $("#dateTime").val();
 
+		var fechaActual = new Date();
+		var fechaSeleccionada = kendo.parseDate(fechaSeleccionadaString, "dd/MM/yyyy");
+
+		var horaMaxima = fechaActual.getHours().toString().padStart(2, '0') + ':' + fechaActual.getMinutes().toString().padStart(2, '0');
+		var horaActual = kendo.parseDate(horaMaxima, "HH:mm");
+
+		console.log('Fecha seleccionada (string):', fechaSeleccionadaString);
+		console.log('Hora seleccionada (string):', horaSeleccionada);
+		console.log('Fecha actual:', fechaActual);
+		console.log('Fecha seleccionada (objeto):', fechaSeleccionada);
+		console.log('Hora máxima permitida:', horaMaxima);
+		console.log('Hora actual (objeto):', horaActual);
+
+		if (fechaSeleccionada && horaSeleccionada) {
+			var fechaSeleccionadaSinHora = new Date(fechaSeleccionada);
+			fechaSeleccionadaSinHora.setHours(0, 0, 0, 0);
+
+			if (fechaSeleccionadaSinHora.getTime() === fechaActual.setHours(0, 0, 0, 0)) {
+				console.log('Estableciendo límite máximo de hora:', horaMaxima);
+				$("#dateTime").data("kendoTimePicker").max(horaMaxima);
+			} else {
+				console.log('Removiendo límite máximo de hora.');
+				var horaLejana = "23:59";
+				$("#dateTime").data("kendoTimePicker").max(horaLejana);
+			}
+
+			if (fechaSeleccionadaSinHora.getTime() === fechaActual.setHours(0, 0, 0, 0) && kendo.parseDate(horaSeleccionada, "HH:mm") > horaActual) {
+				console.log('Ajustando hora seleccionada a la hora actual:', horaActual);
+				$("#dateTime").data("kendoTimePicker").value(horaActual);
+			}
+		} else {
+			console.log('Fecha o hora no seleccionada.');
+			var horaLejana = "23:59";
+			$("#dateTime").data("kendoTimePicker").max(horaLejana);
+		}
+	}
 </script>
 
 <div class="mainContainer bg-light">
@@ -316,8 +355,12 @@
 
                                         .Label(l => l.Content("Fecha: <b>(obligatorio)</b>:"))
                                         .Format("dd/MM/yyyy")
+                                          .Events(e =>
+											{
+												e.Change("validacionHora");
+											})
                                         .Enable(!ViewBag.EsSoloLectura)
-                                        .Culture("es-ES")
+                                        .Culture("es-ES")                                      
                                         .DateInput()
                                         .HtmlAttributes(new { style = "width: 100%", id = "fechaInfraccion", required = "required" })
                                         )
@@ -328,6 +371,10 @@
                                     @(Html.Kendo().TimePickerFor(t => t.horaInfraccion).Interval(1)
                                         .Label(l => l.Content("Hora:"))
                                         .Format("HH:mm")
+                                        .Events(e =>
+											{
+												e.Change("validacionHora");
+											})
                                          .Enable(!ViewBag.EsSoloLectura)
                                         .Culture("es-ES")
                                         .HtmlAttributes(new { style = "width: 100%", id = "dateTime" })

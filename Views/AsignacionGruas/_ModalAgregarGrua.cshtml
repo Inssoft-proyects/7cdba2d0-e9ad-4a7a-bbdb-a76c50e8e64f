@@ -1,63 +1,125 @@
 ﻿@model GuanajuatoAdminUsuarios.Models.SeleccionGruaModel
 <script>
-    function onFechaFinalChange() {
-        var fechaFinal = $("#fechaFinalInsert").data("kendoDatePicker").value();
-        var horaTerminoPicker = $("#horaTerminoInsert").data("kendoTimePicker");
+    function validacionHoraFinal(){
+    var fechaSeleccionadaString = $("#fechaFinalInsert").val();
+    var horaSeleccionada = $("#horaTerminoInsert").val();
 
-        if (fechaFinal == null || fechaFinal === "") {
-            horaTerminoPicker.max(null);
-        } else {
-            var fechaActual = new Date();
+        var fechaActual = new Date();
+        var fechaSeleccionada = kendo.parseDate(fechaSeleccionadaString, "dd/MM/yyyy");
 
-            var fechaFinalSoloFecha = new Date(fechaFinal.getFullYear(), fechaFinal.getMonth(), fechaFinal.getDate());
-            var fechaActualSoloFecha = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDate());
+        var horaMaxima = fechaActual.getHours().toString().padStart(2, '0') + ':' + fechaActual.getMinutes().toString().padStart(2, '0');
+        var horaActual = kendo.parseDate(horaMaxima, "HH:mm");
 
-            if (fechaFinalSoloFecha.getTime() === fechaActualSoloFecha.getTime()) {
-                horaTerminoPicker.max(fechaActual);
+        console.log('Fecha seleccionada (string):', fechaSeleccionadaString);
+        console.log('Hora seleccionada (string):', horaSeleccionada);
+        console.log('Fecha actual:', fechaActual);
+        console.log('Fecha seleccionada (objeto):', fechaSeleccionada);
+        console.log('Hora máxima permitida:', horaMaxima);
+        console.log('Hora actual (objeto):', horaActual);
+
+        if (fechaSeleccionada && horaSeleccionada) {
+            var fechaSeleccionadaSinHora = new Date(fechaSeleccionada);
+            fechaSeleccionadaSinHora.setHours(0, 0, 0, 0);
+
+            if (fechaSeleccionadaSinHora.getTime() === fechaActual.setHours(0, 0, 0, 0)) {
+                console.log('Estableciendo límite máximo de hora:', horaMaxima);
+                $("#horaTerminoInsert").data("kendoTimePicker").max(horaMaxima);
             } else {
-                horaTerminoPicker.max(new Date(fechaFinal.getFullYear(), fechaFinal.getMonth(), fechaFinal.getDate(), 23, 59, 59));
+                console.log('Removiendo límite máximo de hora.');
+                var horaLejana = "23:59";
+                $("#horaTerminoInsert").data("kendoTimePicker").max(horaLejana);
             }
+
+            if (fechaSeleccionadaSinHora.getTime() === fechaActual.setHours(0, 0, 0, 0) && kendo.parseDate(horaSeleccionada, "HH:mm") > horaActual) {
+                console.log('Ajustando hora seleccionada a la hora actual:', horaActual);
+                $("#horaTerminoInsert").data("kendoTimePicker").value(horaActual);
+            }
+        } else {
+            console.log('Fecha o hora no seleccionada.');
+            var horaLejana = "23:59";
+            $("#horaTerminoInsert").data("kendoTimePicker").max(horaLejana);
         }
     }
-        function onFechaInicioChange() {
-        var fechaInicio = $("#fechaInicioInsert").data("kendoDatePicker").value();
-        var horaInicioPicker = $("#horaInicioInsert").data("kendoTimePicker");
+        function validacionHoraInicio(){
+    var fechaSeleccionadaString = $("#fechaInicioInsert").val();
+    var horaSeleccionada = $("#horaInicioInsert").val();
 
-        if (fechaInicio == null || fechaInicio === "") {
-            horaInicioPicker.max(null);
-        } else {
-            var fechaActual = new Date();
+        var fechaActual = new Date();
+        var fechaSeleccionada = kendo.parseDate(fechaSeleccionadaString, "dd/MM/yyyy");
 
-            var fechaInicioSoloFecha = new Date(fechaInicio.getFullYear(), fechaInicio.getMonth(), fechaInicio.getDate());
-            var fechaActualSoloFecha = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDate());
+        var horaMaxima = fechaActual.getHours().toString().padStart(2, '0') + ':' + fechaActual.getMinutes().toString().padStart(2, '0');
+        var horaActual = kendo.parseDate(horaMaxima, "HH:mm");
 
-            if (fechaInicioSoloFecha.getTime() === fechaActualSoloFecha.getTime()) {
-                horaInicioPicker.max(fechaActual);
+        console.log('Fecha seleccionada (string):', fechaSeleccionadaString);
+        console.log('Hora seleccionada (string):', horaSeleccionada);
+        console.log('Fecha actual:', fechaActual);
+        console.log('Fecha seleccionada (objeto):', fechaSeleccionada);
+        console.log('Hora máxima permitida:', horaMaxima);
+        console.log('Hora actual (objeto):', horaActual);
+
+        if (fechaSeleccionada && horaSeleccionada) {
+            var fechaSeleccionadaSinHora = new Date(fechaSeleccionada);
+            fechaSeleccionadaSinHora.setHours(0, 0, 0, 0);
+
+            if (fechaSeleccionadaSinHora.getTime() === fechaActual.setHours(0, 0, 0, 0)) {
+                console.log('Estableciendo límite máximo de hora:', horaMaxima);
+                $("#horaInicioInsert").data("kendoTimePicker").max(horaMaxima);
             } else {
-                horaInicioPicker.max(new Date(fechaInicio.getFullYear(), fechaInicio.getMonth(), fechaInicio.getDate(), 23, 59, 59));
+                console.log('Removiendo límite máximo de hora.');
+                var horaLejana = "23:59";
+                $("#horaInicioInsert").data("kendoTimePicker").max(horaLejana);
             }
+
+            if (fechaSeleccionadaSinHora.getTime() === fechaActual.setHours(0, 0, 0, 0) && kendo.parseDate(horaSeleccionada, "HH:mm") > horaActual) {
+                console.log('Ajustando hora seleccionada a la hora actual:', horaActual);
+                $("#horaInicioInsert").data("kendoTimePicker").value(horaActual);
+            }
+        } else {
+            console.log('Fecha o hora no seleccionada.');
+            var horaLejana = "23:59";
+            $("#horaInicioInsert").data("kendoTimePicker").max(horaLejana);
         }
     }
-            function onFechaArriboChange() {
-        var fechaArribo = $("#fechaArriboInsert").data("kendoDatePicker").value();
-        var horaArriboPicker = $("#horaArriboInsert").data("kendoTimePicker");
+    function validacionHoraArribo(){
+    var fechaSeleccionadaString = $("#fechaArriboInsert").val();
+    var horaSeleccionada = $("#horaArriboInsert").val();
 
-        if (fechaArribo == null || fechaArribo === "") {
-            horaArriboPicker.max(null);
+    var fechaActual = new Date();
+    var fechaSeleccionada = kendo.parseDate(fechaSeleccionadaString, "dd/MM/yyyy");
+
+    var horaMaxima = fechaActual.getHours().toString().padStart(2, '0') + ':' + fechaActual.getMinutes().toString().padStart(2, '0');
+    var horaActual = kendo.parseDate(horaMaxima, "HH:mm");
+
+    console.log('Fecha seleccionada (string):', fechaSeleccionadaString);
+    console.log('Hora seleccionada (string):', horaSeleccionada);
+    console.log('Fecha actual:', fechaActual);
+    console.log('Fecha seleccionada (objeto):', fechaSeleccionada);
+    console.log('Hora máxima permitida:', horaMaxima);
+    console.log('Hora actual (objeto):', horaActual);
+
+    if (fechaSeleccionada && horaSeleccionada) {
+        var fechaSeleccionadaSinHora = new Date(fechaSeleccionada);
+        fechaSeleccionadaSinHora.setHours(0, 0, 0, 0);
+
+        if (fechaSeleccionadaSinHora.getTime() === fechaActual.setHours(0, 0, 0, 0)) {
+            console.log('Estableciendo límite máximo de hora:', horaMaxima);
+            $("#horaArriboInsert").data("kendoTimePicker").max(horaMaxima);
         } else {
-            var fechaActual = new Date();
-
-            var fechaArriboSoloFecha = new Date(fechaArribo.getFullYear(), fechaArribo.getMonth(), fechaArribo.getDate());
-            var fechaActualSoloFecha = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDate());
-
-            if (fechaArriboSoloFecha.getTime() === fechaActualSoloFecha.getTime()) {
-                horaArriboPicker.max(fechaActual);
-            } else {
-                horaArriboPicker.max(new Date(fechaArribo.getFullYear(), fechaArribo.getMonth(), fechaArribo.getDate(), 23, 59, 59));
-            }
+            console.log('Removiendo límite máximo de hora.');
+            var horaLejana = "23:59";
+            $("#horaArriboInsert").data("kendoTimePicker").max(horaLejana);
         }
-    }
 
+        if (fechaSeleccionadaSinHora.getTime() === fechaActual.setHours(0, 0, 0, 0) && kendo.parseDate(horaSeleccionada, "HH:mm") > horaActual) {
+            console.log('Ajustando hora seleccionada a la hora actual:', horaActual);
+            $("#horaArriboInsert").data("kendoTimePicker").value(horaActual);
+        }
+    } else {
+        console.log('Fecha o hora no seleccionada.');
+        var horaLejana = "23:59";
+        $("#horaArriboInsert").data("kendoTimePicker").max(horaLejana);
+    }
+        }
 
 </script>
 <div class="modal-dialog modal-xl boxShadow modal-dialog-centered">
@@ -128,12 +190,10 @@
                             <label for="datepicker1">Fecha de arribo <b>(obligatorio)</b>:</label>
                             @(Html.Kendo().DatePickerFor(t => t.fechaArribo).Max(DateTime.Now)
                                 .Format("dd/MM/yyyy")
-                                .Events(events =>
-                                {
-
-
-                                    events.Change("onFechaArriboChange");
-                                })
+                               .Events(e =>
+											{
+												e.Change("validacionHoraArribo");
+											})
                                 .HtmlAttributes(new { style = "width: 90%", id = "fechaArriboInsert", required = "required" })
                                 )
                         </div>
@@ -142,8 +202,12 @@
 
                         <div class="controlForm my-3">
                             <label for="timepicker1">Hora de arribo <b>(obligatorio)</b>:</label>
-                            @(Html.Kendo().TimePickerFor(t => t.horaArribo).Max(DateTime.Now)
+                            @(Html.Kendo().TimePickerFor(t => t.horaArribo).Interval(1)
                                 .Format("HH:mm")
+                                .Events(e =>
+                                {
+                                    e.Change("validacionHoraArribo");
+                                })
                                 .HtmlAttributes(new { style = "width: 90%", id = "horaArriboInsert", required = "required" })
                                 )
                         </div>
@@ -154,12 +218,10 @@
                             <label for="datepicker2">Fecha de inicio <b>(obligatorio)</b>:</label>
                             @(Html.Kendo().DatePickerFor(t => t.fechaInicio).Max(DateTime.Now)
                                 .Format("dd/MM/yyyy")
-                                .Events(events =>
-                                {
-
-
-                                    events.Change("onFechaInicioChange");
-                                })
+                                 .Events(e =>
+											{
+												e.Change("validacionHoraInicio");
+											})
                                 .HtmlAttributes(new { style = "width: 90%", id = "fechaInicioInsert", required = "required" })
                                 )
                         </div>
@@ -167,7 +229,11 @@
                      <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm my-3">
                             <label for="timepicker2">Hora de inicio <b>(obligatorio)</b>:</label>
-                            @(Html.Kendo().TimePickerFor(t => t.horaInicio).Max(DateTime.Now)
+                            @(Html.Kendo().TimePickerFor(t => t.horaInicio).Interval(1)
+                                .Events(e =>
+                                {
+                                    e.Change("validacionHoraInicio");
+                                })
                                 .Format("HH:mm")
                                 .HtmlAttributes(new { style = "width: 90%", id = "horaInicioInsert",required = "required" })
                               
@@ -181,11 +247,9 @@
                             @(Html.Kendo().DatePickerFor(t => t.fechaFinal).Max(DateTime.Now)
                                 .Format("dd/MM/yyyy")
                                 .HtmlAttributes(new { style = "width: 90%", id = "fechaFinalInsert", required = "required" })
-                                .Events(events =>
+                                .Events(e =>
                                 {
-
-
-                                    events.Change("onFechaFinalChange");
+                                    e.Change("validacionHoraFinal");
                                 })
                                 )
                         </div>
@@ -193,8 +257,12 @@
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm my-3">
                             <label for="timepicker3">Hora de término <b>(obligatorio)</b>:</label>
-                            @(Html.Kendo().TimePickerFor(t => t.horaTermino).Max(DateTime.Now)
+                            @(Html.Kendo().TimePickerFor(t => t.horaTermino).Interval(1)
                                 .Format("HH:mm")
+                                .Events(e =>
+                                {
+                                    e.Change("validacionHoraFinal");
+                                })
                                 .HtmlAttributes(new { style = "width: 90%", id = "horaTerminoInsert",required = "required" })
                              
                                 )
@@ -348,20 +416,44 @@ function enviarDatos() {
 }
 
     function updateDifference() {
-        var horaInicio = $("#horaInicioInsert").data("kendoTimePicker").value();
-        var horaFinal = $("#horaTerminoInsert").data("kendoTimePicker").value();
-        var timeDifferenceMinutes = Math.abs((horaFinal - horaInicio) / 60000); // Diferencia en minutos
-        // Redondear y convertir a entero
-        timeDifferenceMinutes = Math.round(timeDifferenceMinutes);
-        if (isNaN(timeDifferenceMinutes)) {
-            timeDifferenceMinutes = 0;
-        }
+        var fechaInicioPicker = $("#fechaInicioInsert").data("kendoDatePicker");
+        var fechaFinalPicker = $("#fechaFinalInsert").data("kendoDatePicker");
+        var horaInicioPicker = $("#horaInicioInsert").data("kendoTimePicker");
+        var horaFinalPicker = $("#horaTerminoInsert").data("kendoTimePicker");
 
-        $("#tiempoManiobrasInsert").val(timeDifferenceMinutes);
+        // Verificar si los pickers están inicializados
+        if (fechaInicioPicker && fechaFinalPicker && horaInicioPicker && horaFinalPicker) {
+            var fechaInicio = fechaInicioPicker.value();
+            var fechaFinal = fechaFinalPicker.value();
+            var horaInicio = horaInicioPicker.value();
+            var horaFinal = horaFinalPicker.value();
+
+            // Verificar si las fechas y horas no son null
+            if (fechaInicio !== null && fechaFinal !== null && horaInicio !== null && horaFinal !== null) {
+                // Convertir las fechas y horas a objetos Date para calcular la diferencia
+                var startDateTime = new Date(fechaInicio.getFullYear(), fechaInicio.getMonth(), fechaInicio.getDate(), horaInicio.getHours(), horaInicio.getMinutes());
+                var endDateTime = new Date(fechaFinal.getFullYear(), fechaFinal.getMonth(), fechaFinal.getDate(), horaFinal.getHours(), horaFinal.getMinutes());
+
+                // Calcular la diferencia en milisegundos
+                var timeDifferenceMilliseconds = Math.abs(endDateTime - startDateTime);
+
+                // Convertir la diferencia a minutos
+                var timeDifferenceMinutes = Math.round(timeDifferenceMilliseconds / 60000);
+
+                if (isNaN(timeDifferenceMinutes)) {
+                    timeDifferenceMinutes = 0;
+                }
+
+                $("#tiempoManiobrasInsert").val(timeDifferenceMinutes);
+            } else {
+                // Si alguna de las fechas o horas es null, establecer el valor de tiempo en 0
+                $("#tiempoManiobrasInsert").val(0);
+            }
+        }
     }
 
-    // Llamar a la función cuando cambie alguna de las fechas
-    $("input[name='horaInicio'], input[name='horaTermino']").on("change", function () {
+    // Llamar a la función cuando cambie alguna de las fechas o horas
+    $("input[name='horaInicio'], input[name='horaTermino'], #fechaInicioInsert, #fechaFinalInsert").on("change", function () {
         updateDifference();
     });
 

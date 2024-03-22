@@ -5,6 +5,9 @@ namespace GuanajuatoAdminUsuarios.Models
 {
     public class SolicitudDepositoModel
     {
+
+        public string NombreArchivo { get; set; }
+        public string pathArchivo { get; set; }
         public string folioBusquedaInfraccion { get; set; }
         public int? idSolicitud { get; set; }
         public string folio { get; set; }

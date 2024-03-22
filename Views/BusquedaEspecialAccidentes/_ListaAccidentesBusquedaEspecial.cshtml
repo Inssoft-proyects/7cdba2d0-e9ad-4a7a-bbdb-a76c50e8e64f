@@ -8,18 +8,18 @@
 
     function DataBusquedaEsp() {
                 var data = {
-            FechaInicioStr: $('#dateInicio').val(),
-            FechaFinStr: $('#dateFinal').val(),
+            FechaInicio: $('#dateInicio').val(),
+            FechaFin: $('#dateFinal').val(),
             placasBusqueda: $('#txtPlacas').val(),
             serieBusqueda: $('#txtSerie').val(),
             folioBusqueda: $('#txtFolio').val(),
             IdDelegacionBusqueda: $('#ddlDelegaciones').val(),
-            idCarreteraBusqueda: $('#ddlCarreteras').val(),
+            IdCarreteraBusqueda: $('#ddlCarreteras').val(),
             idTramoBusqueda: parseInt($('#ddlTramos').val()),
             propietarioBusqueda: $('#txtPropietarios').val(),
             conductorBusqueda: $('#txtConductores').val(),
             IdOficialBusqueda: $('#ddlOficiales').val(),
-            IdEstatusReporte: $('#ddlEstatus').val(),
+            IdEstatusAccidente: $('#ddlEstatus').val(),
         };
 
         return data
@@ -133,7 +133,10 @@
                     sitteg_warning("El usuario no tiene permisos suficientes para esta acción.");
                     hideLoading();
                 } else {
-                window.location.href = '/CapturaAccidentes/CapturaAaccidente/?showE=true'
+                   
+                        window.location.href = '/CapturaAccidentes/CapturaAaccidente/?showE=true'
+                  
+               
                     hideLoading();
                 }
              },

@@ -90,7 +90,7 @@
                 <div class="col-12 col-md-6 col-lg-4">
                     <div class="controlForm mb-3">
                         <label>Inicio de vigencia desde:</label>
-                        @(Html.Kendo().DatePickerFor(t => t.InicioVigenciaDesde).Max(DateTime.Now)
+                        @(Html.Kendo().DatePickerFor(t => t.InicioVigenciaDesde)
                             .Format("dd/MM/yyyy")
                             .Culture("es-ES")
                             .HtmlAttributes(new { style = "width: 100%", title = "datepicker", id = "inicioVigenciaDesde" })
@@ -108,7 +108,7 @@
                             )
                     </div>
                 </div>
-
+                <hr />
                 <div class="col-12 col-md-6 col-lg-4">
                     <div class="controlForm mb-3">
                         <label>Fin de vigencia desde:</label>

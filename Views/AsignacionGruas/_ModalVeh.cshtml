@@ -71,6 +71,17 @@
                             </div>
                         </div>
                     </button>
+            <button class="nav-link col" id="serie-vehiculo-tab" data-bs-toggle="tab" data-bs-target="#splaca-vehiculo" type="button" role="tab" aria-controls="splaca-vehiculo" aria-selected="false"
+                    onclick="crearSinPlaca()">
+                <div class="row justify-content-center align-items-center px-3 py-2">
+                    <div class="col-auto radioCustom p-0">
+                        <div class="rounded-circle m-2"></div>
+                    </div>
+                    <div class="col-auto p-0">
+                        <h5 class="m-0"><i class="icon-fisica h4"></i> <b>Sin serie o placa</b></h5>
+                    </div>
+                </div>
+            </button>
                 </div>
             </nav>
             <form id="buscarVehiculoForm">
@@ -123,6 +134,24 @@
                             <div class="col-12">
                                 <div class="tabCustomEnd"></div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane tabCustomConteiner fade" id="splaca-vehiculo" role="tabpanel" aria-labelledby="splaca-vehiculo-tab">
+                        <div class="row px-4 mt-4 pb-4 align-items-end">
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="controlForm my-3">
+                                    <div class="col-12 col-md-6 mx-md-auto col-lg-4 mx-lg-0 ">
+                                         <div class="controlButton my-3" onclick="busquedaVehiculo()">
+                                            @(Html.Kendo().Button()
+                                                .Name("buscar")
+                                                .HtmlAttributes(new { @class = "btnPrimary" })
+                                                .Content("<h5 class=\"m-0\"><b>Crear</b></h5>"))
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>

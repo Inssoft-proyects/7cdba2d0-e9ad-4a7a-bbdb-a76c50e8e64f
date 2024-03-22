@@ -250,6 +250,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
             var result = new SelectList(_catMunicipiosService.GetMunicipios(), "IdMunicipio", "Municipio");
             return Json(result);
         }
+        public JsonResult Municipios_Drop2()
+        {
+            var result = new SelectList(_catMunicipiosService.GetMunicipios2(), "IdMunicipio", "Municipio");
+            return Json(result);
+        }
         public JsonResult Municipios_Por_Delegacion_Drop()
         {
             int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
@@ -1401,7 +1406,6 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public ActionResult SetLastInsertedIdEdit(bool modoSoloLectura, int idAccidente)
         {
-
             ViewBag.ModoSoloLectura = modoSoloLectura;
             HttpContext.Session.SetInt32("LastInsertedId", idAccidente);
 

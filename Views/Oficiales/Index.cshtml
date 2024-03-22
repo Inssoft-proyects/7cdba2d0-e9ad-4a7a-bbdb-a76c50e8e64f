@@ -106,7 +106,7 @@
         </div>
         <div class="row">
             <div id="tablaOficiales">
-                <partial name="_ListaOficiales" model="@ViewBag.ListadoOficiales" />
+                <partial name="_ListaOficiales"  />
                 <!--/////////////////////////////////////////////////////////////////////********AGREGAR*********////////////////////////////////////////////////////////////////////-->
 
                 <div class="modal fade modalCustom" id="agregarOficial" aria-labelledby="agregarOficialLabel" aria-hidden="true">
@@ -160,46 +160,46 @@
 
     function submitSearch() {
 
-        var fd = new FormData();
-        fd.append("idDelegacionFiltro", $("#idDelegacionFiltro").val());
-        fd.append("nombre", $("#NombreB").val());
-        fd.append("apellidoPaterno", $("#ApellidoPaternoB").val());
-        fd.append("apellidoMaterno", $("#ApellidoMaternoB").val());
+        //var fd = new FormData();
+        //fd.append("idDelegacionFiltro", $("#idDelegacionFiltro").val());
+        //fd.append("nombre", $("#NombreB").val());
+        //fd.append("apellidoPaterno", $("#ApellidoPaternoB").val());
+        //fd.append("apellidoMaterno", $("#ApellidoMaternoB").val());
 
 
         var grd = $("#gridCatOficiales").data("kendoGrid").dataSource
         grd.read()
 
-        var idDelegacionFiltro = $("#idDelegacionFiltro").val();
+        //var idDelegacionFiltro = $("#idDelegacionFiltro").val();
 
-        showLoading();
-
-
-        $.ajax({
-            url: "/Oficiales/ajax_BuscarDelegacion",
-            type: "POST",
-            contentType: false, // Not to set any content header
-            processData: false, // Not to process data
-            data: fd,
-            success: function (data) {
-                console.log("REGRESO: " + data);
-                var grid = $("#gridCatOficiales").data("kendoGrid");
-
-                grid.dataSource.data([]);
-
-                for (var i = 0; i < data.length; i++) {
-                    grid.dataSource.add(data[i]);
-                }
-                grid.dataSource.page(1);
+        //showLoading();
 
 
-                hideLoading();
+        //$.ajax({
+        //    url: "/Oficiales/ajax_BuscarDelegacion",
+        //    type: "POST",
+        //    contentType: false, // Not to set any content header
+        //    processData: false, // Not to process data
+        //    data: fd,
+        //    success: function (data) {
+        //        console.log("REGRESO: " + data);
+        //        var grid = $("#gridCatOficiales").data("kendoGrid");
 
-            },
-            error: function (xhr, status) {
-                hideLoading();
-            }
-        });
+        //        grid.dataSource.data([]);
+
+        //        for (var i = 0; i < data.length; i++) {
+        //            grid.dataSource.add(data[i]);
+        //        }
+        //        grid.dataSource.page(1);
+
+
+        //        hideLoading();
+
+        //    },
+        //    error: function (xhr, status) {
+        //        hideLoading();
+        //    }
+        //});
 
         /*
         $.ajax({

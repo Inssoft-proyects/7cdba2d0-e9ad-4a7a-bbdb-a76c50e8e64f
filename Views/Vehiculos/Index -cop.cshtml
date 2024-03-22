@@ -53,16 +53,18 @@
         });
 
        function submitSearch() {
+           console.log("submit")
             var placasValue = $("#PlacasBusqueda").val().trim();
             $("#PlacasBusqueda").val(placasValue);
     var Mydata = $("#frmSearch").serialize();
     showLoading();
     $.ajax({
-        url: '@Url.Action("ajax_BuscarVehiculo")',
+        url: '@Url.Action("ajax_BuscarVehiculos")',
         type: 'POST',
         data: Mydata,
         success: function (result) {
-                document.getElementById("sec0").style.display = "none";
+            console.log("result",result)
+                    document.getElementById("sec0").style.display = "none";
                 document.getElementById("VehiculoLocalizado").style.display = "block";
                 $("#VehiculoLocalizado").html(result);
             hideLoading();
@@ -123,7 +125,7 @@
 
 
 <!-- ***************************** -->
-<div class="mainContainer bg-light">
+<div-- class="mainContainer bg-light">
     @Html.HiddenFor(m=> m.isFromUpdate, new { @id = "hdnIsFromUpdate" })
     <!-- ** Busqueda ** -->
     <section id="sec0" class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow mt-3 mb-5 rounded" style="display:block">
@@ -141,7 +143,7 @@
                         <i class="icon-car h1 colorPrimary"></i>
                     </div>
                     <div class="col-auto my-3">
-                        <h2 class="m-0 h3"><b>Búsqueda de vehículos en otras plataformas</b></h2>
+                        <h2 class="m-0 h3"><b>Captura de vehículos</b></h2>
                     </div>
                 </div>
             </div>
@@ -162,7 +164,6 @@
         </div>
 
 
-        <form id="frmSearch" class="row px-4 mb-4 align-items-end" method="post">
         <!-- *********************************************************** -->
         <div class="row px-4 align-items-end">
             <div class="col-12 mt-4 controlForm">
@@ -191,7 +192,7 @@
                         </div>
                     </div>
                 </button>
-                <!--button class="nav-link col" id="serie-vehiculo-tab" data-bs-toggle="tab" data-bs-target="#splaca-vehiculo" type="button" role="tab" aria-controls="splaca-vehiculo" aria-selected="false"
+                <button class="nav-link col" id="serie-vehiculo-tab" data-bs-toggle="tab" data-bs-target="#splaca-vehiculo" type="button" role="tab" aria-controls="splaca-vehiculo" aria-selected="false"
                         onclick="crearSinPlaca()">
                     <div class="row justify-content-center align-items-center px-3 py-2">
                         <div class="col-auto radioCustom p-0">
@@ -201,63 +202,79 @@
                             <h5 class="m-0"><i class="icon-fisica h4"></i> <b>Sin serie o placa</b></h5>
                         </div>
                     </div>
-                </button-->
+                </button>
 
             </div>
         </nav>
+        <form id="buscarVehiculoForm">
 
+            <div class="tab-content" id="nav-tabContent">
 
-        <div class="tab-content" id="nav-tabContent">
-
-            <div class="tab-pane tabCustomConteiner fade show active" id="placa-vehiculo" role="tabpanel" aria-labelledby="placa-vehiculo-tab">
-                <div class="row px-4 mt-4 pb-4 align-items-end">
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="controlForm my-3">
-                            @(Html.Kendo().TextBoxFor(t => t.PlacasBusqueda)
-                                .Label(l => l.Content("Placa del vehículo:"))
-                                .Placeholder("Ingresa la placa del vehículo")
-                                .HtmlAttributes(new { style = "width: 100%" })
-                                )
-                        </div>
-                        <div id="ErrorMessage" class="error-container"></div>
-                    </div>
-                </div>
-
-            </div>
-            <div class="tab-pane tabCustomConteiner fade" id="serie-vehiculo" role="tabpanel" aria-labelledby="serie-vehiculo-tab">
-                <div class="row px-4 mt-4 pb-4 align-items-end">
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="controlForm my-3">
-                            @(Html.Kendo().TextBoxFor(t => t.SerieBusqueda)
-                                .Label(l => l.Content("Número de serie del vehículo:"))
-                                .Placeholder("Ingresa el número de serie del vehículo")
-                                .HtmlAttributes(new { style = "width: 100%" })
-                                )
+                <div class="tab-pane tabCustomConteiner fade show active" id="placa-vehiculo" role="tabpanel" aria-labelledby="placa-vehiculo-tab">
+                    <div class="row px-4 mt-4 pb-4 align-items-end">
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="controlForm my-3">
+                                @(Html.Kendo().TextBoxFor(t => t.PlacasBusqueda)
+                                    .Label(l => l.Content("Placa del vehículo:"))
+                                    .Placeholder("Ingresa la placa del vehículo")
+                                    .HtmlAttributes(new { style = "width: 100%" })
+                                    )
+                            </div>
+                            <div id="ErrorMessage" class="error-container"></div>
                         </div>
                     </div>
 
                 </div>
+                <div class="tab-pane tabCustomConteiner fade" id="serie-vehiculo" role="tabpanel" aria-labelledby="serie-vehiculo-tab">
+                    <div class="row px-4 mt-4 pb-4 align-items-end">
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="controlForm my-3">
+                                @(Html.Kendo().TextBoxFor(t => t.SerieBusqueda)
+                                    .Label(l => l.Content("Número de serie del vehículo:"))
+                                    .Placeholder("Ingresa el número de serie del vehículo")
+                                    .HtmlAttributes(new { style = "width: 100%" })
+                                    )
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="tab-pane tabCustomConteiner fade" id="splaca-vehiculo" role="tabpanel" aria-labelledby="splaca-vehiculo-tab">
+                    <div class="row px-4 mt-4 pb-4 align-items-end">
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="controlForm my-3">
+                                <div class="col-12 col-md-6 mx-md-auto col-lg-4 mx-lg-0 ">
+                                    <div class="controlButton my-3" onclick="crearSinPlaca()">
+                                        @(Html.Kendo().Button()
+                                            .Name("buscar")
+                                            .HtmlAttributes(new { @class = "btnPrimary" })
+                                            .Content("<h5 class=\"m-0\"><b>Crear</b></h5>"))
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
             </div>
-
-
-
-
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="tabCustomEnd"></div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="tabCustomEnd"></div>
+                </div>
             </div>
-        </div>
-
+        </form>
 
 
         <!-- ****************************************************************-->
-
+       
 
         <div class="row px-4 mb-4 align-items-end">
             <!--todo select -->
-            
-
+            <form id="frmSearch" class="row px-4 mb-4 align-items-end" method="post">
+               
 
                 <div class="col-12 col-md-6 mx-md-auto col-lg-4 mx-lg-0 ">
                     @*<div class="controlButton my-3" onclick="closeForm()">*@
@@ -265,12 +282,8 @@
                         <button class="btnPrimary" type="button" id="btnBuscar" onclick="submitSearch()">  <h5 class="m-0"><b>Buscar</b></h5></button>
                     </div>
                 </div>
-            
+            </form>
         </div>
-        </form>
-
-
-
     </section>
     <div id="resultadoCotejo">
     </div>
@@ -586,12 +599,114 @@
 
 
                 </div>
+
+
+
+                
+
+
+
             </section>
         </div>
     </div>
 </div>
 
 
+    <div class="modal fade modalCustom" id="VehiculoServiceModal" aria-labelledby="VehiculoServiceLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-body bg-light" id="ModalBodyVehiculoService">
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+
+    function busquedaVehiculo() {
+        var placasValue = $("#PlacasBusqueda").val().trim();
+        $("#PlacasBusqueda").val(placasValue);
+        var formData = $("#buscarVehiculoForm").serialize();
+        showLoading();
+        $.ajax({
+            url: '@Url.Action("BuscarVehiculo")',
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                console.log("response",response);
+                if (response.success === false) {
+                    sitteg_warning("No se encontraron resultados");
+                    return;
+                }
+
+                if (response.noResults) {
+                    Swal.fire({
+                        icon: "info",
+                        title: "Vehículo no registrado en RIAG",
+                        text: "¡Vehículo sin captura en el Registro de Infracciones y Accidentes de Guanajuato!",
+                        showCancelButton: true,
+                        showConfirmButton: false,
+                        cancelButtonText: "Cerrar", 
+                    });
+                    $('#ModalBodyVehiculoService').html(response.data);
+                    $('#VehiculoServiceModal').modal({ backdrop: 'static', keyboard: false });
+                    $('#VehiculoServiceModal').modal('show');
+                    hideLoading();
+                } else if (response.data) {
+
+                    try{
+                    $("#gridInfraccionesVehiculo").data("kendoGrid").dataSource.filter({ field: response.field, operator: "contains", value: response.data })
+                    }
+                    catch{
+
+                    }
+                    setTimeout(() => { $('#agregarVehiculoModal').modal('hide'); },400)
+                    hideLoading();
+                }else{
+                    $('#agregarVehiculoModal').modal('hide');
+                    hideLoading();
+                    sitteg_warning('Sucedio un error intente de nuevo mas tarde.');
+                }
+                
+            },
+            error: function () {
+                sitteg_warning("Sucedio un error intente de nuevo mas tarde");
+                hideLoading();
+            }
+        });
+    }
+
+
+        function crearSinPlaca() {
+            showLoading();
+            $.ajax({
+                url: '@Url.Action("CrearvehiculoSinPlaca")',
+                type: 'POST',
+                data: {},
+                success: function (response) {
+                    Swal.fire({
+                        icon: "info",
+                        title: "Vehículo no registrado en RIAG",
+                        text: "¡Vehículo sin captura en el Registro de Infracciones y Accidentes de Guanajuato!",
+                        showCancelButton: true,
+                        showConfirmButton: false,
+                        cancelButtonText: "Cerrar",
+                    });
+                    $('#ModalBodyVehiculoService').html(response.data);
+                    $('#VehiculoServiceModal').modal({ backdrop: 'static', keyboard: false });
+                    $('#VehiculoServiceModal').modal('show');
+                    hideLoading();
+
+
+                },
+                error: function () {
+                    sitteg_warning("Sucedio un error intente de nuevo mas tarde");
+                    hideLoading();
+                }
+            });
+
+        }
+</script>
 
 
 

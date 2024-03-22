@@ -43,6 +43,47 @@
         ddlidCarretera.dataSource.read();
 
     }
+
+    function validacionHora() {
+        var fechaSeleccionadaString = $("#FechaSolicitud").val();
+		var horaSeleccionada = $("#dateTime").val();
+
+		var fechaActual = new Date();
+		var fechaSeleccionada = kendo.parseDate(fechaSeleccionadaString, "dd/MM/yyyy");
+
+		var horaMaxima = fechaActual.getHours().toString().padStart(2, '0') + ':' + fechaActual.getMinutes().toString().padStart(2, '0');
+		var horaActual = kendo.parseDate(horaMaxima, "HH:mm");
+
+		console.log('Fecha seleccionada (string):', fechaSeleccionadaString);
+		console.log('Hora seleccionada (string):', horaSeleccionada);
+		console.log('Fecha actual:', fechaActual);
+		console.log('Fecha seleccionada (objeto):', fechaSeleccionada);
+		console.log('Hora máxima permitida:', horaMaxima);
+		console.log('Hora actual (objeto):', horaActual);
+
+		if (fechaSeleccionada && horaSeleccionada) {
+			var fechaSeleccionadaSinHora = new Date(fechaSeleccionada);
+			fechaSeleccionadaSinHora.setHours(0, 0, 0, 0);
+
+			if (fechaSeleccionadaSinHora.getTime() === fechaActual.setHours(0, 0, 0, 0)) {
+				console.log('Estableciendo límite máximo de hora:', horaMaxima);
+				$("#dateTime").data("kendoTimePicker").max(horaMaxima);
+			} else {
+				console.log('Removiendo límite máximo de hora.');
+				var horaLejana = "23:59";
+				$("#dateTime").data("kendoTimePicker").max(horaLejana);
+			}
+
+			if (fechaSeleccionadaSinHora.getTime() === fechaActual.setHours(0, 0, 0, 0) && kendo.parseDate(horaSeleccionada, "HH:mm") > horaActual) {
+				console.log('Ajustando hora seleccionada a la hora actual:', horaActual);
+				$("#dateTime").data("kendoTimePicker").value(horaActual);
+			}
+		} else {
+			console.log('Fecha o hora no seleccionada.');
+			var horaLejana = "23:59";
+			$("#dateTime").data("kendoTimePicker").max(horaLejana);
+		}
+	}
 </script>
 <div class="mainContainer bg-light">
     <section id="seccionPrincipal" class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
@@ -91,9 +132,9 @@
                         .Max(DateTime.Now).Format("dd/MM/yyyy")
                             .Culture("es-ES")
                             .Events(e =>
-                            {
-                                e.Change("cambiaFecha");
-                            })
+                           {
+												e.Change("validacionHora");
+											})
                         .HtmlAttributes(new { style = "width: 100%", 
                             title = "datepicker", 
                             required = "required" })
@@ -107,6 +148,10 @@
                         @(Html.Kendo().TimePickerFor(t => t.HoraSolicitud).Interval(1)
                             .Label(l => l.Content("Hora:"))
                             .Format("HH:mm")
+                            .Events(e =>
+                            {
+                                e.Change("validacionHora");
+                            })
                             .Culture("es-ES")
                             .HtmlAttributes(new
                             {
@@ -428,9 +473,12 @@
 
             //Si hay un cambio en el id de vehiculo se muestra los datos
             $("#IdVehiculoAsignado").bind("change", function() {
-                if($(this).val()==='' || $(this).val()==0 || $(this).val()===undefined)
+                if($(this).val()==='' || $(this).val()==0 || $(this).val()===undefined){
                  $('#vehiculoPropietarioDatosContainer').hide();
-                else {
+                    $('#ModalBodyVehiculos').hide();
+                    concole.log("cierra modales 0");
+                 
+                } else {
                         $.ajax({
                                 url: '@Url.Action("MostrarDatosVehiculo","DepositosOtraDependencia")',
                                 type: "GET",

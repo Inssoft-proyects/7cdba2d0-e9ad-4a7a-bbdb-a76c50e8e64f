@@ -1362,7 +1362,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             {
                 //Se crea el nombre del archivo de la garantia
                 string nombreArchivo = _rutaArchivo + "/" + idInfraccion + "_" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss").Replace("/", "").Replace(":", "").Replace(" ", "") + System.IO.Path.GetExtension(file.FileName);
-
+                string nombreArchivostr = file.FileName;
                 try
                 {
                     //Se escribe el archivo en disco
@@ -1371,7 +1371,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                         await file.CopyToAsync(fileStream);
                     }
                     // Llamar al método del servicio para guardar la imagen
-                    int resultado = _infraccionesService.InsertarImagenEnInfraccion(nombreArchivo, idInfraccion);
+                    int resultado = _infraccionesService.InsertarImagenEnInfraccion(nombreArchivo, idInfraccion, nombreArchivostr);
                     if (resultado == 0)
                         return Json(new { success = false, message = "Ocurrió un error al actualizar infracción" });
 

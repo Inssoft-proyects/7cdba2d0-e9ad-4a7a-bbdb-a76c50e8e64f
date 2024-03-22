@@ -748,7 +748,9 @@ function mostrarMensajeRobado() {
                             </div>
                         </div>
                     </button>
-                    @*<button class="nav-link col" id="none-person-tab" data-bs-toggle="tab" data-bs-target="#none-person" type="button" role="tab" aria-controls="none-person" aria-selected="false">
+                    <button class="nav-link col" id="none-person-tab" data-bs-toggle="tab"
+                    data-bs-target="#none-person" type="button" role="tab" aria-controls="none-person"
+                    aria-selected="false">
                     <div class="row justify-content-center align-items-center px-3 py-2">
                     <div class="col-auto radioCustom p-0">
                     <div class="rounded-circle m-2"></div>
@@ -757,7 +759,7 @@ function mostrarMensajeRobado() {
                     <h5 class="m-0"><i class="icon-sinPropietario h4"></i> <b>Se ignora propietario</b></h5>
                     </div>
                     </div>
-                    </button>*@
+                    </button>
                 </div>
             </nav>
 
@@ -825,27 +827,52 @@ function mostrarMensajeRobado() {
             </div>
 
             @*PERSONA FISICA*@
-            <div class="tab-pane tabCustomConteiner fade" id="person-fisica" role="tabpanel" aria-labelledby="person-fisica-tab">
-                <div class="row px-4 mt-4 pb-4 align-items-end">
-
-                   @* <div id="personasFisicasAcc">
-                    </div>*@
-                    
-                    <div id="ListPersonasFisicas">
-                        @*<partial name="_PersonasFisicas"  />*@
-
-                    </div>
+            <div class="tab-pane tabCustomConteiner fade" id="person-fisica" role="tabpanel"
+                aria-labelledby="person-fisica-tab">
+                <div class="row px-4 mt-4 pb-4">
+     				@await Component.InvokeAsync("BusquedaPersonaFisica",new{config=new GuanajuatoAdminUsuarios.Models.Components.BusquedaPersonaFisicaConfig(),persona=Model.Persona})
                 </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="tabCustomEnd">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="tabCustomEnd">
+                                <div class="row ">
+                                            <div class="col-12 col-md-8 mx-md-auto col-lg-5 ">
+                                                <div class="controlButton my-3" onclick="submitCreateVehiculo()">
+                                                    @(Html.Kendo().Button()
+                                                        .Name("buscarFisica")
+                                                        .HtmlAttributes(new { @class = "btnPrimary" })
+                                                        .Content("<h5 class=\"m-0\"><b>Finalizar captura</b></h5>"))
+                                                </div>
+                                            </div>
+                                        </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-            </div>
-
-        </div>
+            <div class="tab-pane tabCustomConteiner fade" id="none-person" role="tabpanel" aria-labelledby="none-person-tab">
+                    <div class="row px-4 my-4 py-5 align-items-end">
+                        <div class="col-12 col-md-10 mx-md-auto text-center">
+                            <h3><b>Se utiliza cuando se tiene una infracción o accidente</b></h3>
+                            <h4 class="fw-normal">y se desconoce el propietario o conductor</h4>
+                            <div class="row ">
+                                <div class="col-12 col-md-8 mx-md-auto col-lg-5 ">
+                                    <div class="controlButton my-3" onclick="submitCreateVehiculoBefore()">
+                                        @(Html.Kendo().Button()
+                                            .Name("conductorNone")
+                                            .HtmlAttributes(new { @class = "btnPrimary" })
+                                            .Content("<h5 class=\"m-0\"><b>Finalizar captura</b></h5>"))
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="tabCustomEnd"></div>
+                        </div>
+                    </div>
+                </div>
     </section>
 
 
@@ -1748,22 +1775,33 @@ function asignarMensajeError(contenedorErrorId, mensaje) {
     $('<div class="error-message">' + mensaje + '</div>').appendTo("#" + contenedorErrorId).css('color', 'red');
 }
 
+    function submitCreateVehiculoBefore(){
+        $("#ddlIdPersona").val('');
+        $("#ddlIdCatTipoPersona").val('');
+        
+        submitCreateVehiculo();
+    }
+
     function submitCreateVehiculo() {
+        var idPers = $("#ddlIdPersona").val();
+        console.log("idPers",idPers);
         var carga = $("#cargaSwitch").prop("checked");
         $("#idCarga").val(carga ? 1 : 0);
 
         var validator = $("#frmCreateVehiculo").kendoValidator().data('kendoValidator');
         validator.validate();
 
-        if ($("#ddlIdPersona").val() == '') {
+        /*if ($("#ddlIdPersona").val() == '') {
             sitteg_info('Debe seleccionar una Persona');
             return;
-        }
+        }*/
             var idTipoSer = $('#hdnIdCatTipoServicio').val();
         if (validator.validate()) {
 
             var formData = $("#frmCreateVehiculo").serialize();
             var idVeh = $('#hdnIdVehiculo').val();
+
+            console.log("formData _Create Vehiculo",formData);
 
             console.log("Id servio: ", idTipoSer)
                console.log("dtaa: ", formData)
@@ -1773,12 +1811,16 @@ function asignarMensajeError(contenedorErrorId, mensaje) {
                 type: 'POST',
                 data: formData,
                 success: function (result) {
-                    console.log("hd", result)
-                    sitteg_success('Elemento guardado correctamente')
+                    console.log("hd", result);
+                    sitteg_success('Elemento guardado correctamente');
                     if (result.esEdicion) {
-                        window.location = '/Vehiculos/Editar';
+                            setTimeout(function () {
+                                 window.location = '/Vehiculos/Editar';
+                            }, 2000); 
                         } else {
-                            window.location = '/Vehiculos/Index';
+                            setTimeout(function () {
+                             window.location = '/Vehiculos/Index';
+                            }, 2000); 
                         }
                     hideLoading();
                 },

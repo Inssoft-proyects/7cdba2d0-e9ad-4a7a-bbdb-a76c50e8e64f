@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
@@ -66,6 +67,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
             int iDep = HttpContext.Session.GetInt32("idDeposito") ?? 0;
 
             var datosInfraccion = _asignacionGruasService.DatosInfraccionAsociada(solicitud.FolioSolicitud);
+
+            datosInfraccion.inventarios = solicitud.inventarios;
+            datosInfraccion.Nombreinventarios = solicitud.Nombreinventarios;
+
+
 
             return View("capturaGruas", datosInfraccion);
         }
@@ -219,11 +225,13 @@ namespace GuanajuatoAdminUsuarios.Controllers
         [HttpPost]
         public async Task<IActionResult> AgregarInventario(AsignacionGruaModel model)
         {
+            int iDep = HttpContext.Session.GetInt32("idDeposito") ?? 0;
+
+
             try
             {
                 if (model.MyFile != null && model.MyFile.Length > 0)
                 {
-                    int iDep = HttpContext.Session.GetInt32("idDeposito") ?? 0;
 
                     //Se crea el nombre del archivo del inventario
                     string nombreArchivo = _rutaArchivo + "/" + iDep + "_" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss").Replace("/", "").Replace(":", "").Replace(" ", "") + System.IO.Path.GetExtension(model.MyFile.FileName);
@@ -232,9 +240,10 @@ namespace GuanajuatoAdminUsuarios.Controllers
                     {
                         await model.MyFile.CopyToAsync(fileStream);
                     }
+                    var nombre = model.MyFile.FileName;
 
-    
-                    int resultado= _asignacionGruasService.InsertarInventario(nombreArchivo, iDep, model.numeroInventario);
+
+                    int resultado= _asignacionGruasService.InsertarInventario(nombreArchivo, iDep, model.numeroInventario, nombre);
                     if (resultado == 0)
                         return Json(new { success = false, message = "Ocurrió un error al actualizar depósito" });
 
@@ -244,9 +253,16 @@ namespace GuanajuatoAdminUsuarios.Controllers
                     _bitacoraServices.insertBitacora(iDep, ip, "AsignacionGruas_Inventario", "Insertar", "insert", user);
                     return Json(new { success = true, message = "Imagen e información guardadas exitosamente" });
                 }
+                else if (!string.IsNullOrEmpty(model.NombreArchivo))
+                {
+                    int resultado = _asignacionGruasService.InsertarInventario("", iDep, model.numeroInventario, model.NombreArchivo);
+                    return Json(new { success = true, message = "Imagen e información guardadas exitosamente" });
+
+                }
                 else
                 {
                     return Json(new { success = false, message = "No se seleccionó ninguna imagen" });
+
                 }
             }
             catch (Exception ex)

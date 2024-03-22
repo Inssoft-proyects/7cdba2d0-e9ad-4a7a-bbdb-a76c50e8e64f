@@ -5,6 +5,12 @@ namespace GuanajuatoAdminUsuarios.Models
 {
     public class AsignacionGruaModel
     {
+
+
+
+        public string NombreArchivo { get; set; }
+        public string PathArchivo { get; set; }
+
         public string FolioSolicitud { get; set; }
         public DateTime fecha { get; set; }
         public DateTime fechaSolicitud { get; set; }
@@ -81,6 +87,7 @@ namespace GuanajuatoAdminUsuarios.Models
         public string observaciones { get; set; }
         public string numeroInventario { get; set; }
         public string inventarios { get; set; }
+        public string Nombreinventarios { get; set; }
         public int IdDeposito { get; set; }
 		public int estatusSolicitud { get; set; }
 

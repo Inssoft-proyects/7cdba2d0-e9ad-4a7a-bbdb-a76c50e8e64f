@@ -17,6 +17,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
         List<CatOficialesModel> GetOficialesActivosTodos(bool todos, int tipo);
         List<CatOficialesModel> GetOficialesFiltrados(int idOficina, int idDependencia);
         List<CatOficialesModel> GetOficialesPorDependencia(int idDependencia);
+        List<CatOficialesModel> GetOficialesPorDependencia2(int idDependencia);
         List<CatOficialesModel> GetOficialesPorDependencia();
 
         CatOficialesModel GetOficialById(int IdOficial);

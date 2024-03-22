@@ -165,8 +165,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
             var tt = _catMunicipiosService.GetMunicipiosPorEntidad(entidadDDlValue);
 
-							tt.Add(new CatMunicipiosModel() { IdMunicipio = 1, Municipio = "No aplica" });
-			tt.Add(new CatMunicipiosModel() { IdMunicipio = 2, Municipio = "No especificado" });
+							tt.Add(new CatMunicipiosModel() { IdMunicipio = 49, Municipio = "No aplica" });
+			tt.Add(new CatMunicipiosModel() { IdMunicipio = 47, Municipio = "No especificado" });
 
 			var result = new SelectList(tt, "IdMunicipio", "Municipio");
 

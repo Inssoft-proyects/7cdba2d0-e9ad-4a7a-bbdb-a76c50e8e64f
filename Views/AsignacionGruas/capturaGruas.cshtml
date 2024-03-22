@@ -79,7 +79,7 @@
                                     )
                             </div>
                             <div class="col-auto">
-                                <div class="controlButton mb-5" onclick="modalVehiculos()">
+                                <div class="controlButton mb-5" onclick="mostrarBusquedaVehiculo()">
                                     @(
                                         Html.Kendo().Button()
                                 .Name("noInfraccion")
@@ -93,6 +93,18 @@
             </div>
             }
         </div>
+
+
+        <!-- *************************** -->
+        @Html.HiddenFor(m=> m.idVehiculo, new { @id = "IdVehiculoAsignado" })
+        <div class="row" id="vehiculoPropietarioDatosContainer" style="display:none">
+            <div class="col-12 my-4 mx-4">
+                <div id="vehiculoPropietarioDatos"> </div>
+            </div>
+        </div>
+        <!-- ************************ -->
+
+
         <div class="row px-4 mb-2 align-items-start" style="display:block" id="datosVehiculo">
             <div style="width: 50%; float: left;">
                 <h4 class="colorPrimary"><b>Vehículo</b></h4>
@@ -235,14 +247,14 @@
         
                 <div class="row px-4 mt-4 pb-5 align-items-end">
                     <div class="col-12 col-md-10 mx-md-auto text-center">
-                    @if (String.IsNullOrEmpty(Model.inventarios))
-                    {
+                    
 
                         <h3><b>Adjunta una imagen del inventario del vehículo</b></h3>
+                   
                         <div class="row justify-content-center">
                             <div class="drop-zone">
                                 <div class="drop-zone__prompt">
-                                    <svg id="svgImagent" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="106.791" height="87.148" viewBox="0 0 106.791 87.148">
+                                <svg id="svgImagent" class="@(!String.IsNullOrEmpty(Model.inventarios) ? "active" : "")" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="106.791" height="87.148" viewBox="0 0 106.791 87.148">
                                         <defs>
                                             <clipPath id="clip-path">
                                                 <rect id="Rectángulo_2602" data-name="Rectángulo 2602" width="106.791" height="87.148" fill="none" />
@@ -252,7 +264,9 @@
                                             <path id="Trazado_720" data-name="Trazado 720" d="M44.9,0C28.864,0,17.567,13.843,18.165,28.177A20.889,20.889,0,0,0,0,48.541C0,61.113,9.68,70.385,20.63,70.385H35.192a2.427,2.427,0,1,0,0-4.854H20.63c-8.224,0-15.776-6.878-15.776-16.99,0-8.142,7.119-15.776,15.776-15.776A2.427,2.427,0,0,0,23.018,30C21.3,17.739,30.906,4.856,44.9,4.856A21.8,21.8,0,0,1,58.022,9.065,2.427,2.427,0,1,0,60.9,5.159,26.783,26.783,0,0,0,44.9,0ZM73.419,11.718a18.018,18.018,0,0,0-7.774,1.859,2.442,2.442,0,0,0,2.2,4.361,13.4,13.4,0,0,1,12.817.493c3.844,2.306,6.713,6.581,6.713,13.121a2.426,2.426,0,0,0,2.01,2.389c7.292,1.224,12.553,8.5,12.553,15.814,0,8.781-6.924,15.776-18.2,15.776H71.6a2.427,2.427,0,1,0,0,4.854H83.734c13.4,0,23.057-9.195,23.057-20.63,0-8.993-5.879-17.7-14.79-20.137-.58-7.025-4.028-12.436-8.835-15.32a18.263,18.263,0,0,0-8.609-2.579c-.377-.016-.758-.006-1.138,0ZM53.112,41.42a2.587,2.587,0,0,0-1.539.729L41.2,52.521a2.593,2.593,0,1,0,3.646,3.687L50.8,50.252V84.518a2.593,2.593,0,1,0,5.186,0V50.252l5.956,5.956a2.593,2.593,0,1,0,3.647-3.687L55.219,42.149a2.592,2.592,0,0,0-2.107-.729Z" />
                                         </g>
                                     </svg>
-                                    <h2 id="NameFile"></h2>
+                                    <h2 id="NameFile">
+                                    @(!String.IsNullOrEmpty(Model.inventarios) ? Model.Nombreinventarios : "Nombre no encontrado")
+                                </h2>
                                     <h5>Arrastra o adjunta la</h5>
                                     <h5 class="fw-bold">Archivo</h5>
                                 </div>
@@ -277,7 +291,7 @@
                                 </div>
                             </div>
                         </div>
-                    }
+                    
                     <br />
                         <br />
                         <section>
@@ -345,6 +359,7 @@
 
     function finalizar() {
         var Mydata = $("#observacionesForm").serialize();
+        console.log("Mydata",Mydata);
         showLoading();
         $.ajax({
             url: '/AsignacionGruas/AgregarObservaciones',
@@ -473,6 +488,8 @@
             }
         })
     }
+
+    /***************** */
     function modalVehiculos() {
         showLoading();
         $.ajax({
@@ -489,6 +506,27 @@
             }
         })
     }
+
+    function mostrarBusquedaVehiculo() {
+        showLoading();
+        $.ajax({
+            url: '@Url.Action("MostrarBusquedaVehiculo","BusquedaVehiculoPropietario")',
+            type: "POST",
+            data: {},
+            success: function (result) {
+                $('#ModalBodyVehiculos').html(result);
+                $('#modalVehiculos').modal('show');
+                hideLoading();
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+                sitteg_error("Ocurrio un error al procesar su solicitud.");
+                hideLoading();
+            }
+        });
+    }
+
+    /******************* */
     function agregarGrua() {
         showLoading();
         $.ajax({
@@ -509,8 +547,9 @@
     function enviarImagen() {
         var inputFile = document.getElementById("myFile");
         var numeroInventario = $("#numeroInventario").val();
+        var name = $("#NameFile").text()
 
-        if (inputFile.files.length === 0) {
+        if (inputFile.files.length === 0 && !name) {
             // No se seleccionó ningún archivo
             sitteg_warning("Selecciona una imagen antes de continuar.");
             return;
@@ -519,6 +558,7 @@
         var formData = new FormData();
         formData.append("myFile", inputFile.files[0]);
         formData.append("numeroInventario", numeroInventario); // Agregar el contenido del TextBox
+        formData.append("NombreArchivo", name); // Agregar el contenido del TextBox
         showLoading();
         $.ajax({
             url: '/AsignacionGruas/AgregarInventario',
@@ -552,6 +592,69 @@
         window.location.href = '@Url.Action("Index", "AsignacionGruas")';
 
     }
+
+
+    function mostrarInfoVehiculo(){
+
+        var idVehiculo =$('#IdVehiculoAsignado').val();
+
+        console.log("mostrarInfoVehiculo idVehiculo",idVehiculo);
+
+
+        $.ajax({
+            url: '@Url.Action("MostrarDatosVehiculo","DepositosOtraDependencia")',
+            type: "GET",
+            data: { 'idVehiculo': idVehiculo },
+            success: function (result) {
+                datosVehiculo
+                $('#datosVehiculo').hide();
+                $('#vehiculoPropietarioDatosContainer').show();
+                $("#vehiculoPropietarioDatos").html(result);
+                hideLoading();
+
+            },
+            error: function (xhr, status, error) {
+                hideLoading();
+                console.log(error);
+            }
+        });
+    }
+
+    </script>
+
+    <script>
+
+    $(document).ready(function () {
+
+        //Si hay un cambio en el id de vehiculo se muestra los datos
+        $("#IdVehiculoAsignado").bind("change", function () {
+
+            console.log("entra al onchange");
+
+            $('#modalVehiculos').hide();
+            concole.log("cierra modales 2");
+
+                    else {
+                $.ajax({
+                    url: '@Url.Action("MostrarDatosVehiculo","DepositosOtraDependencia")',
+                    type: "GET",
+                    data: { 'idVehiculo': $(this).val() }, //$('#IdVehiculoAsignado').val(
+                    success: function (result) {
+                        $('#vehiculoPropietarioDatosContainer').show();
+                        $("#vehiculoPropietarioDatos").html(result);
+                        hideLoading();
+
+                    },
+                    error: function (xhr, status, error) {
+                        hideLoading();
+                        console.log(error);
+                    }
+                });
+
+            }
+        });
+
+    });
 
 
 </script>

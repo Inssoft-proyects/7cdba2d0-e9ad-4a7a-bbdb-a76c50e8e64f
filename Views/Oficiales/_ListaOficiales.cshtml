@@ -1,4 +1,4 @@
-@model List<CatOficialesModel>
+
 
 
 
@@ -71,6 +71,8 @@
     function getId(e) {
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         var IdOficial = dataItem.IdOficial;
+        
+
         console.log(IdOficial);
         showLoading();
         $.ajax({

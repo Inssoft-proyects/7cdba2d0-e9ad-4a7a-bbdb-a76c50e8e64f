@@ -139,8 +139,9 @@ namespace GuanajuatoAdminUsuarios.Services
                                ON inf.idMunicipio = mun.idMunicipio
                                 LEFT JOIN vehiculos veh
                                ON inf.idVehiculo = veh.idVehiculo
+                                left join garantiasInfraccion gar on gar.idinfraccion = inf.idinfraccion
                                 WHERE m.estatus = 1
-                               AND inf.estatus = 1 AND inf.transito = @transito" + condiciones + condicionFecha +
+                               AND inf.estatus = 1 AND inf.transito = @transito " + condiciones + condicionFecha +
 							   "group by ci.nombre;";
 
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
@@ -150,11 +151,11 @@ namespace GuanajuatoAdminUsuarios.Services
                     connection.Open();
                     SqlCommand command = new SqlCommand(strQuery, connection);
                     command.CommandType = CommandType.Text;
-                    if (modelBusqueda.idTipoMotivo.Equals(null))
+                  
                         command.Parameters.Add(new SqlParameter("@transito", SqlDbType.Int)).Value = idDependencia;
                    
-                    if (!modelBusqueda.idTipoMotivo.Equals(null))
-                        command.Parameters.Add(new SqlParameter("@transito", SqlDbType.Int)).Value = (object)modelBusqueda.idTipoMotivo ?? DBNull.Value;
+                    //if (!modelBusqueda.idTipoMotivo.Equals(null))
+                    //    command.Parameters.Add(new SqlParameter("@transito", SqlDbType.Int)).Value = (object)modelBusqueda.idTipoMotivo ?? DBNull.Value;
 
                     if (!modelBusqueda.idDelegacion.Equals(null) && modelBusqueda.idDelegacion != 0)
                         command.Parameters.Add(new SqlParameter("@idDelegacion", SqlDbType.Int)).Value = (object)modelBusqueda.idDelegacion ?? DBNull.Value;

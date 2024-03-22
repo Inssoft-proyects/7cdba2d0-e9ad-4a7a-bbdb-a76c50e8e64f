@@ -181,13 +181,11 @@
 
 
 
-    function EditarTemplate(data){
-        console.log("SAS",data)
+    function EditarTemplate(data){      
         if ((data.SolicitudEstatus == 1 || data.SolicitudEstatus == 2 || data.SolicitudEstatus == 3 || data.SolicitudEstatus == 4))
-return `<button onclick="ShowUpdatePopUp('${data.IdSolicitud}','${data.IdDeposito}','${data.IdGrua}','${data.IdConcesionario}','${data.SolicitudEstatus}')" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i></h6></button>`;        else 
+        return `<button onclick="ShowUpdatePopUp('${data.IdSolicitud}','${data.IdDeposito}','${data.IdGrua}','${data.IdConcesionario}','${data.SolicitudEstatus}')" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i></h6></button>`;        
+        else 
         return ""
-
-
     }
 
 
@@ -244,15 +242,12 @@ return `<button onclick="ShowUpdatePopUp('${data.IdSolicitud}','${data.IdDeposit
                     columns.Bound(c => c.Concesionario).Title("Grúa").Width(90);
                     columns.Bound(p => p.IdConcesionario).ClientTemplate(
                     "<button onclick=\"ShowGruaPopUp('#= IdDeposito #','#= IdDeposito #','#= IdGrua #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-research me-2'></i></h6></button>"
-                    ).Title("Detalle Grúa(s)").Sortable(false).Width(100);
-                    
+                    ).Title("Detalle Grúa(s)").Sortable(false).Width(100);                    
                     columns.Bound(p => p.IdDependencia).ClientTemplate(
                     "<button onclick=\"downLoadPdf('#= IdDeposito #')\" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-pdf me-2'></i></h6></button>"
                     ).Title("Descargar detalle").Sortable(false).Width(100);
                     columns.Bound(c => c.fullDependencia).ClientTemplate("#= EstatusTemplate(data) #")  .Title("Estatus").Width(190);
-
                     columns.Bound(p => p.IdGrua).ClientTemplate("#= EditarTemplate(data) #").Title("Editar").Sortable(false).Width(100);
-
                     columns.Bound(p => p.IdDeposito).ClientTemplate("#= eliminarTemplate(data) #").Title("Eliminar").Sortable(false).Width(100);
                     columns.Bound(p => p.transito).ClientTemplate(
                     "<div class='turno-captura'>" +
@@ -261,14 +256,8 @@ return `<button onclick="ShowUpdatePopUp('${data.IdSolicitud}','${data.IdDeposit
                     "<div class='dep-marked'>Dep:</div>" +
                     "#= IdDependenciaGenera == 1 ? '✓' : '' #" +
                     "</div>"
-                    ).Title("Turno Captura").Width(150);
-
-
-
+                    ).Title("Turno Captura").Width(150);//cambiar por esExterno
                 }).HtmlAttributes(new { style = "height:350" })
-                @*.Pageable(pager => pager.Input(true).Position(GridPagerPosition.Top))*@
-                @*.Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }))*@
-                //.Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }).Position(GridPagerPosition.Bottom))
                 .Pageable()
                 .Sortable()
                 .Scrollable(scr => scr.Height(350))
@@ -277,7 +266,6 @@ return `<button onclick="ShowUpdatePopUp('${data.IdSolicitud}','${data.IdDeposit
                 .Read(read => read.Action("GetListado", "TransitoTransporte").Data("returnData"))
                 .Events(e => e.Error("onError"))
                 )
-                //.Events(events => events.DataBound("dataBound"))
                 .ToolBar(t => t.Search().Text("Buscar..."))
                 .Search(s =>
                 {
@@ -313,19 +301,19 @@ return `<button onclick="ShowUpdatePopUp('${data.IdSolicitud}','${data.IdDeposit
 
                 //ELIMINAR
                 if (!auth.toString().includes("205")) {
-                    grid.hideColumn(12);
+                    grid.hideColumn(13);
                 }
                 // EDITAR
                 if (!auth.toString().includes("206")) {
-                    grid.hideColumn(11);
+                    grid.hideColumn(12);
                 }
                 //EXPORTAR
                 if (!auth.toString().includes("203")) {
-                    grid.hideColumn(9);
+                    grid.hideColumn(10);
                 }
                 //CONSULTAR
                 if (!auth.toString().includes("202")) {
-                    grid.hideColumn(8);
+                    grid.hideColumn(9);
                 }
 
             });

@@ -19,7 +19,7 @@ namespace GuanajuatoAdminUsuarios.Interfaces
         public int InsertDatosGrua(IFormCollection formData, int abanderamiento, int arrastre, int salvamento, int iDep, int iSo, string horaInicioInsert, string horaArriboInsert, string horaTerminoInsert);
         public List<SeleccionGruaModel> BusquedaGruaTabla(int iDep);
         public int AgregarObs(AsignacionGruaModel formData,int iDep);
-        public int InsertarInventario(string archivoInventario, int iDep, string numeroInventario);
+        public int InsertarInventario(string archivoInventario, int iDep, string numeroInventario, string nombre);
         public SeleccionGruaModel ObtenerAsignacionPorId(int idAsignacion);
         public int EliminarGrua(int idAsignacion);
         public int EditarDatosGrua(IFormCollection formData, int abanderamiento, int arrastre, int salvamento);

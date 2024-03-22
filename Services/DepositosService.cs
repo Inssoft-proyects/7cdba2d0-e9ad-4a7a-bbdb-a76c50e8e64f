@@ -309,7 +309,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     SqlCommand command = new SqlCommand(@"SELECT sol.idSolicitud,sol.folio, sol.fechaSolicitud, sol.idTipoVehiculo, sol.idPropietarioGrua, sol.idOficial, 
                                     sol.idEntidad, sol.idTipoUsuario, sol.solicitanteNombre, sol.solicitanteAp, sol.solicitanteAm, sol.solicitanteNumero, 
                                     sol.solicitanteColonia, sol.solicitanteCalle, sol.idEntidad, sol.idMunicipio, sol.solicitanteTel,sol.idEvento,sol.idMotivoAsignacion, 
-                                    ctv.tipoVehiculo, 
+                                    ctv.tipoVehiculo,sol.idServicioRequiere,
                                     propg.responsable, 
                                     ofi.nombre, ofi.apellidoPaterno, ofi.apellidoMaterno, 
                                    dev.descripcionEvento, 
@@ -338,6 +338,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             solicitud.fechaSolicitud = Convert.ToDateTime(reader["fechaSolicitud"].ToString());
                             solicitud.horaSolicitud = solicitud.fechaSolicitud.TimeOfDay;
                             solicitud.idTipoVehiculo = reader["idTipoVehiculo"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idTipoVehiculo"].ToString());
+                            solicitud.idServicioRequiere = reader["idServicioRequiere"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idServicioRequiere"].ToString());
                             solicitud.tipoVehiculo = reader["tipoVehiculo"].ToString();
                             solicitud.idConcecionario = reader["idPropietarioGrua"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idPropietarioGrua"].ToString());
                             solicitud.propietarioGrua = reader["responsable"].ToString();
@@ -364,8 +365,8 @@ namespace GuanajuatoAdminUsuarios.Services
 
                             solicitud.idPensionUbicacion = reader["idPension"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idPension"].ToString());
                             solicitud.idMunicipioUbicacion = reader["idMunicipioUbicacion"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idMunicipioUbicacion"].ToString());
-                            solicitud.IdTramo = reader["idTramoUbicacion"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idTramoUbicacion"].ToString());
                             solicitud.IdCarretera = reader["idCarreteraUbicacion"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idCarreteraUbicacion"].ToString());
+                            solicitud.IdTramo = reader["idTramoUbicacion"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idTramoUbicacion"].ToString());
                             solicitud.calleUbicacion = reader["vehiculoCalle"].ToString();
                             solicitud.coloniaUbicacion = reader["vehiculoColonia"].ToString();
                             solicitud.numeroUbicacion = reader["vehiculoNumero"].ToString();
@@ -459,6 +460,8 @@ namespace GuanajuatoAdminUsuarios.Services
                                                     ,inf.idOficial
                                                     ,inf.idDependencia
                                                     ,inf.idDelegacion
+                                                    ,inf.archivoInventario
+                                                    ,inf.nombreArchivo
                                                     ,inf.idVehiculo
                                                     ,inf.idAplicacion
                                                     ,inf.idGarantia
@@ -535,6 +538,10 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.numeroUbicacion = reader["lugarNumero"] == System.DBNull.Value ? string.Empty : reader["lugarNumero"].ToString();
                             model.coloniaUbicacion = reader["lugarColonia"] == System.DBNull.Value ? string.Empty : reader["lugarColonia"].ToString();
                             model.interseccion = reader["lugarEntreCalle"] == System.DBNull.Value ? string.Empty : reader["lugarEntreCalle"].ToString();
+                            
+                            model.pathArchivo = reader["archivoInventario"] == System.DBNull.Value ? string.Empty : reader["archivoInventario"].ToString();
+                            model.NombreArchivo = reader["nombreArchivo"] == System.DBNull.Value ? string.Empty : reader["nombreArchivo"].ToString();
+                           
                             model.folio = reader["folioInfraccion"] == System.DBNull.Value ? string.Empty : reader["folioInfraccion"].ToString();
                             model.municipio = reader["municipio"].ToString();
                             model.idEntidadUbicacion = reader["idEntidadUbicacion"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idEntidadUbicacion"].ToString());
@@ -636,7 +643,6 @@ namespace GuanajuatoAdminUsuarios.Services
                         {
                             model.idInfraccion = reader["idInfraccion"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idInfraccion"].ToString());
                             model.idVehiculo = reader["idVehiculo"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idVehiculo"].ToString());
-
                             model.fechaSolicitud = reader["fechaInfraccion"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(reader["fechaInfraccion"]);
                             string horaInfraccionString = reader["horaInfraccion"] == DBNull.Value ? null : reader["horaInfraccion"].ToString();
 

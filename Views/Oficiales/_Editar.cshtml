@@ -151,7 +151,10 @@
 
 <script>
     function editarOficial() {
-
+        if ($("#Nombre").val().length < 3) {
+            sitteg_warning("Debe ingresar el nombre.");
+            return;
+        }
         var Mydata = $("#EditarOficialForm").serialize();
         console.log(Mydata);
         $('#agregarOficial').modal('hide');
@@ -163,7 +166,7 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#gridCatOficiales").data("kendoGrid").dataSource.data(result);
+                $("#gridCatOficiales").data("kendoGrid").dataSource.read();
                 sitteg_info('Se ha actualizado la información exitosamente.');
                 hideLoading();
             }, error: function () {

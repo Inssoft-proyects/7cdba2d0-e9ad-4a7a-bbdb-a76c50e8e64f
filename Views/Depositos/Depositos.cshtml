@@ -41,6 +41,47 @@
 
     });
 
+    function validacionHora() {
+        var fechaSeleccionadaString = $("#fechaSolicitud").val();
+		var horaSeleccionada = $("#dateTime").val();
+
+		var fechaActual = new Date();
+		var fechaSeleccionada = kendo.parseDate(fechaSeleccionadaString, "dd/MM/yyyy");
+
+		var horaMaxima = fechaActual.getHours().toString().padStart(2, '0') + ':' + fechaActual.getMinutes().toString().padStart(2, '0');
+		var horaActual = kendo.parseDate(horaMaxima, "HH:mm");
+
+		console.log('Fecha seleccionada (string):', fechaSeleccionadaString);
+		console.log('Hora seleccionada (string):', horaSeleccionada);
+		console.log('Fecha actual:', fechaActual);
+		console.log('Fecha seleccionada (objeto):', fechaSeleccionada);
+		console.log('Hora máxima permitida:', horaMaxima);
+		console.log('Hora actual (objeto):', horaActual);
+
+		if (fechaSeleccionada && horaSeleccionada) {
+			var fechaSeleccionadaSinHora = new Date(fechaSeleccionada);
+			fechaSeleccionadaSinHora.setHours(0, 0, 0, 0);
+
+			if (fechaSeleccionadaSinHora.getTime() === fechaActual.setHours(0, 0, 0, 0)) {
+				console.log('Estableciendo límite máximo de hora:', horaMaxima);
+				$("#dateTime").data("kendoTimePicker").max(horaMaxima);
+			} else {
+				console.log('Removiendo límite máximo de hora.');
+				var horaLejana = "23:59";
+				$("#dateTime").data("kendoTimePicker").max(horaLejana);
+			}
+
+			if (fechaSeleccionadaSinHora.getTime() === fechaActual.setHours(0, 0, 0, 0) && kendo.parseDate(horaSeleccionada, "HH:mm") > horaActual) {
+				console.log('Ajustando hora seleccionada a la hora actual:', horaActual);
+				$("#dateTime").data("kendoTimePicker").value(horaActual);
+			}
+		} else {
+			console.log('Fecha o hora no seleccionada.');
+			var horaLejana = "23:59";
+			$("#dateTime").data("kendoTimePicker").max(horaLejana);
+		}
+	}
+
 </script>
 <div class="mainContainer bg-light">
     <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
@@ -125,10 +166,10 @@
 
                         <label>Fecha <b>(obligatorio)</b>:</label>
                         @(Html.Kendo().DatePickerFor(t => t.fechaSolicitud).Format("dd/MM/yyyy").Max(DateTime.Now)
-                            .Events(e =>
-                            {
-                                e.Change("cambiaFecha");
-                            })
+                         .Events(e =>
+											{
+												e.Change("validacionHora");
+											})
                             .HtmlAttributes(new
                             {
                                 style = "width: 100%",
@@ -145,6 +186,10 @@
                         <label>Hora <b>(obligatorio)</b>:</label>
                         @(Html.Kendo().TimePickerFor(t => t.horaSolicitud).Interval(1)
                             .Label(l => l.Content("Hora:"))
+                           .Events(e =>
+											{
+												e.Change("validacionHora");
+											})
                             .Format("HH:mm")
                             .Culture("es-ES")
 .Value(Model.horaSolicitud == default(TimeSpan) ? "" : Model.horaSolicitud.ToString(@"hh\:mm"))
@@ -955,6 +1000,8 @@
                 var selectedValueTramo = data.IdTramo;
                 var selectedValueMun = data.idMunicipioUbicacion;
                 var idTipoVehiculo = data.idTipoVehiculo;
+
+
 
                 //Cuando se terminen de cargar los catalogos de asigna el valor de la consulta
                 $('#IdTramo').on('onFinishLoading', function () {

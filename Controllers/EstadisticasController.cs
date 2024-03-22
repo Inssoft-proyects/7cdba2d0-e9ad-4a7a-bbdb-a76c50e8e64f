@@ -178,7 +178,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             var result = new SelectList(_catMunicipiosService.GetMunicipiosGuanajuato(), "IdMunicipio", "Municipio");
             return Json(result);
         }
-        public IActionResult ActualizarViewBag(IncidenciasBusquedaModel model)
+        public IActionResult ActualizarViewBag(IncidenciasBusquedaModelEstadisticas model)
         {
             int idDependencia = (int)HttpContext.Session.GetInt32("IdDependencia");
             var modelGridInfracciones = _infraccionesService.GetAllInfraccionesEstadisticasGrid(model, idDependencia);

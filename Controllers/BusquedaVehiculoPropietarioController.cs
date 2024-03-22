@@ -72,13 +72,26 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public IActionResult BuscarVehiculoEnPlataformas([FromServices] IOptions<AppSettings> appSettings, [FromServices] IRepuveService repuveService,
         [FromServices] IVehiculoPlataformaService vehiculoPlataformaService, [FromServices] IVehiculosService vehiculoService, [FromServices] ICotejarDocumentosClientService cotejarDocumentosService, VehiculoPropietarioBusquedaModel model)
         {
+            VehiculoBusquedaModel busquedaModel = new VehiculoBusquedaModel();
 
-            VehiculoBusquedaModel busquedaModel = new()
+            try
             {
-                IdEntidadBusqueda = model.IdEntidadBusqueda,
-                PlacasBusqueda = model.PlacaBusqueda.ToUpper(),
-                SerieBusqueda = model.SerieBusqueda
-            };
+                busquedaModel.IdEntidadBusqueda = model.IdEntidadBusqueda;
+
+            }
+            catch (Exception ex) { }
+
+            if (!string.IsNullOrEmpty(model.PlacaBusqueda))
+                {
+                    busquedaModel.PlacasBusqueda = model.PlacaBusqueda.ToUpper();
+                }
+                if (!string.IsNullOrEmpty(model.SerieBusqueda))
+                {
+                    busquedaModel.SerieBusqueda = model.SerieBusqueda.ToUpper();
+                }
+
+       
+
 
             List<VehiculoModel> listaVehiculos = vehiculoService.GetVehiculoPropietario(busquedaModel);
 

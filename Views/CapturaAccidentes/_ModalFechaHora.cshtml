@@ -1,5 +1,47 @@
 ﻿@model FechaHoraIngresoModel
+<script>
+	function validacionHora() {
+		var fechaSeleccionadaString = $("#date").val();
+		var horaSeleccionada = $("#HoraIngreso").val();
 
+		var fechaActual = new Date();
+		var fechaSeleccionada = kendo.parseDate(fechaSeleccionadaString, "dd/MM/yyyy");
+
+		var horaMaxima = fechaActual.getHours().toString().padStart(2, '0') + ':' + fechaActual.getMinutes().toString().padStart(2, '0');
+		var horaActual = kendo.parseDate(horaMaxima, "HH:mm");
+
+		console.log('Fecha seleccionada (string):', fechaSeleccionadaString);
+		console.log('Hora seleccionada (string):', horaSeleccionada);
+		console.log('Fecha actual:', fechaActual);
+		console.log('Fecha seleccionada (objeto):', fechaSeleccionada);
+		console.log('Hora máxima permitida:', horaMaxima);
+		console.log('Hora actual (objeto):', horaActual);
+
+		if (fechaSeleccionada && horaSeleccionada) {
+			var fechaSeleccionadaSinHora = new Date(fechaSeleccionada);
+			fechaSeleccionadaSinHora.setHours(0, 0, 0, 0);
+
+			if (fechaSeleccionadaSinHora.getTime() === fechaActual.setHours(0, 0, 0, 0)) {
+				console.log('Estableciendo límite máximo de hora:', horaMaxima);
+				$("#HoraIngreso").data("kendoTimePicker").max(horaMaxima);
+			} else {
+				console.log('Removiendo límite máximo de hora.');
+				var horaLejana = "23:59";
+				$("#HoraIngreso").data("kendoTimePicker").max(horaLejana);
+			}
+
+			if (fechaSeleccionadaSinHora.getTime() === fechaActual.setHours(0, 0, 0, 0) && kendo.parseDate(horaSeleccionada, "HH:mm") > horaActual) {
+				console.log('Ajustando hora seleccionada a la hora actual:', horaActual);
+				$("#HoraIngreso").data("kendoTimePicker").value(horaActual);
+			}
+		} else {
+			console.log('Fecha o hora no seleccionada.');
+			var horaLejana = "23:59";
+			$("#HoraIngreso").data("kendoTimePicker").max(horaLejana);
+		}
+	}
+
+</script>
 <section class=" bg-white rounded">
 	<div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
 		<div class="col-auto pe-0">
@@ -38,8 +80,12 @@
 				<label>Fecha:</label>
 				<span>
 					@Html.HiddenFor(model => model.IdPersona)
-					@(Html.Kendo().DatePickerFor(model => model.FechaIngreso)
+					@(Html.Kendo().DatePickerFor(model => model.FechaIngreso).Max(DateTime.Now)
 						.Culture("es-ES")
+						.Events(e =>
+						{
+							e.Change("validacionHora");
+						})
 						.HtmlAttributes(new { style = "width: 100%", id = "date" })
 						.Value("")
 
@@ -55,6 +101,10 @@
 					@(Html.Kendo().TimePickerFor(model => model.HoraIngreso)
 						.Label(l => l.Content("Hora:"))
 						.Format("HH:mm")
+						.Events(e =>
+						{
+							e.Change("validacionHora");
+						})
 						.Interval(1).Value("")
 						.HtmlAttributes(new { style = "width: 100%", title = "timepicker" })
 						)

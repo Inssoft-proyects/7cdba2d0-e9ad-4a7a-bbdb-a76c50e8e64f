@@ -142,6 +142,19 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 model.FechaFin = DateTime.MaxValue;
             }
 
+            if (String.IsNullOrEmpty( model2.FechaFin ))
+            {
+
+                model.FechaFin = DateTime.MaxValue;
+            }
+            else
+            {
+                var axudate2 = DateTime.ParseExact(model2.FechaFin, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+                model.FechaFin = axudate2;
+            }
+
+
             model.Evento = model2.Evento == string.Empty ? null : model2.Evento;
 
             Dictionary<string, string> ColumnsNames = new Dictionary<string, string>()

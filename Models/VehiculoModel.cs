@@ -28,7 +28,7 @@ namespace GuanajuatoAdminUsuarios.Models
         public int idSubmarcaUpdated { get; set; }
         public int idTipoVehiculo { get; set; }
         public string modelo { get; set; }
-        public int idColor { get; set; }
+        public int? idColor { get; set; }
         public int idEntidad { get; set; }
         public int idEdntidad2 { get; set; }
         public int idCatTipoServicio { get; set; }
@@ -44,7 +44,7 @@ namespace GuanajuatoAdminUsuarios.Models
         public string marca { get; set; }
         public string submarca { get; set; }
         public string tipoVehiculo { get; set; }
-        public string color { get; set; }
+        public string? color { get; set; }
         public string entidadRegistro { get; set; }
         public string tipoServicio { get; set; }
         public string subTipoServicio { get; set; }
