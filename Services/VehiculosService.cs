@@ -338,7 +338,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.idSubmarca = Convert.ToInt32(reader["idSubmarca"].ToString());
                             model.idTipoVehiculo = Convert.ToInt32(reader["idTipoVehiculo"].ToString());
                             model.modelo = reader["modelo"].ToString();
-                            model.idColor = Convert.ToInt32(reader["idColor"].ToString());
+                            model.idColor = reader["idColor"] is DBNull ? 0: Convert.ToInt32(reader["idColor"].ToString());
                             model.idEntidad = Convert.ToInt32(reader["idEntidad"].ToString());
                             model.idCatTipoServicio = Convert.ToInt32(reader["idCatTipoServicio"].ToString());
                             model.numeroEconomico = reader["numeroEconomico"].ToString();

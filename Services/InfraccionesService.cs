@@ -3485,8 +3485,8 @@ where catSal.estatus =1 AND catSal.fecha <=@anio  order by fecha desc, idSalario
 								infraccionModel.idCarretera = reader["idCarretera"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idCarretera"].ToString());
 								infraccionModel.idPersona = reader["idPersona"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idPersona"].ToString());
 								infraccionModel.idPersonaInfraccion = reader["idPersonaInfraccion"] == System.DBNull.Value ? default(int?) : Convert.ToInt32(reader["idPersonaInfraccion"].ToString());
-								infraccionModel.placasVehiculo = reader["placasVehiculo"].ToString();
-								infraccionModel.folioInfraccion = reader["folioInfraccion"].ToString();
+								infraccionModel.placasVehiculo = reader["placasVehiculo"] is DBNull?"": reader["placasVehiculo"].ToString();
+								infraccionModel.folioInfraccion = reader["folioInfraccion"] is DBNull?"": reader["folioInfraccion"].ToString();
 								infraccionModel.fechaInfraccion = reader["fechaInfraccion"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["fechaInfraccion"].ToString());
 								infraccionModel.kmCarretera = reader["kmCarretera"] == System.DBNull.Value ? string.Empty : reader["kmCarretera"].ToString();
 								infraccionModel.observaciones = reader["observaciones"] == System.DBNull.Value ? string.Empty : reader["observaciones"].ToString();
