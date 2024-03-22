@@ -827,25 +827,28 @@ function mostrarMensajeRobado() {
             </div>
 
             @*PERSONA FISICA*@
-            <div class="tab-pane tabCustomConteiner fade" id="person-fisica" role="tabpanel" aria-labelledby="person-fisica-tab">
-                <div class="row px-4 mt-4 pb-4 align-items-end">
-
-                   @* <div id="personasFisicasAcc">
-                    </div>*@
-                    
-                    <div id="ListPersonasFisicas">
-                        @*<partial name="_PersonasFisicas"  />*@
-
-                    </div>
+            <div class="tab-pane tabCustomConteiner fade" id="person-fisica" role="tabpanel"
+                aria-labelledby="person-fisica-tab">
+                <div class="row px-4 mt-4 pb-4">
+     				@await Component.InvokeAsync("BusquedaPersonaFisica",new{config=new GuanajuatoAdminUsuarios.Models.Components.BusquedaPersonaFisicaConfig(),persona=Model.Persona})
                 </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="tabCustomEnd">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="tabCustomEnd">
+                                <div class="row ">
+                                            <div class="col-12 col-md-8 mx-md-auto col-lg-5 ">
+                                                <div class="controlButton my-3" onclick="submitCreateVehiculo()">
+                                                    @(Html.Kendo().Button()
+                                                        .Name("buscarFisica")
+                                                        .HtmlAttributes(new { @class = "btnPrimary" })
+                                                        .Content("<h5 class=\"m-0\"><b>Finalizar captura</b></h5>"))
+                                                </div>
+                                            </div>
+                                        </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-            </div>
 
             <div class="tab-pane tabCustomConteiner fade" id="none-person" role="tabpanel" aria-labelledby="none-person-tab">
                     <div class="row px-4 my-4 py-5 align-items-end">
@@ -1780,6 +1783,8 @@ function asignarMensajeError(contenedorErrorId, mensaje) {
     }
 
     function submitCreateVehiculo() {
+        var idPers = $("#ddlIdPersona").val();
+        console.log("idPers",idPers);
         var carga = $("#cargaSwitch").prop("checked");
         $("#idCarga").val(carga ? 1 : 0);
 
@@ -1795,6 +1800,8 @@ function asignarMensajeError(contenedorErrorId, mensaje) {
 
             var formData = $("#frmCreateVehiculo").serialize();
             var idVeh = $('#hdnIdVehiculo').val();
+
+            console.log("formData _Create Vehiculo",formData);
 
             console.log("Id servio: ", idTipoSer)
                console.log("dtaa: ", formData)
