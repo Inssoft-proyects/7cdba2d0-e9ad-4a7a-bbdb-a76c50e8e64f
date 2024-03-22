@@ -184,7 +184,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                     ISNULL(sol.vehiculoKm,'') vehiculoKm, sol.idEvento,sol.idMotivoAsignacion,sol.solicitanteNombre,sol.idPension,
                                     sol.solicitanteAp,sol.solicitanteAm,sol.solicitanteEntidad,sol.solicitanteMunicipio,sol.solicitanteColonia,
                                     sol.solicitanteCalle,sol.solicitanteNumero,sol.idTipoVehiculo,sol.folio,ga.idGrua,g.idConcesionario,
-                                    d.fechaLiberacion,d.inventario,c.concesionario,c.alias,cOfi.nombre,cOfi.apellidoPaterno,cOfi.apellidoMaterno,p.pension,
+                                    d.fechaLiberacion,d.numeroInventario,c.concesionario,c.alias,cOfi.nombre,cOfi.apellidoPaterno,cOfi.apellidoMaterno,p.pension,
                                     carr.carretera,tra.tramo,mot.tipoAsignacion,ev.descripcionEvento,mun.municipio,tve.tipoVehiculo,cdel.nombreOficina
 
                                     FROM solicitudes sol
@@ -251,7 +251,7 @@ namespace GuanajuatoAdminUsuarios.Services
                            // ReporteAsignacion.grua = reader["noEconomico"] != DBNull.Value ? reader["noEconomico"].ToString() : string.Empty;
                             ReporteAsignacion.Delegacion = reader["nombreOficina"] != DBNull.Value ? reader["nombreOficina"].ToString() : string.Empty;
                             ReporteAsignacion.propietarioGrua = reader["concesionario"] != DBNull.Value ? reader["concesionario"].ToString() : string.Empty;
-                            ReporteAsignacion.numeroIventario = reader["inventario"] != DBNull.Value ? reader["inventario"].ToString() : string.Empty;
+                            ReporteAsignacion.numeroIventario = reader["numeroInventario"] != DBNull.Value ? reader["numeroInventario"].ToString() : string.Empty;
                             ReporteAsignacion.nombreOficial = reader["nombre"] != DBNull.Value ? reader["nombre"].ToString() : string.Empty;
                             ReporteAsignacion.apellidoPaternoOficial = reader["apellidoPaterno"] != DBNull.Value ? reader["apellidoPaterno"].ToString() : string.Empty;
                             ReporteAsignacion.apellidoMaternoOficial = reader["apellidoMaterno"] != DBNull.Value ? reader["apellidoMaterno"].ToString() : string.Empty;
