@@ -76,6 +76,12 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
 
                 var listReporteAsignacion = _reporteAsignacionService.GetAllReporteAsignaciones(model, idOficina);
+                foreach(ReporteAsignacionModel item in listReporteAsignacion)
+                {
+                    if (item.vehiculoKm.Trim()!="")
+                        item.vehiculoKm = Convert.ToDecimal(item.vehiculoKm).ToString("G29");
+                }
+
                 if (listReporteAsignacion.Count == 0)
                 {
                     ViewBag.NoResultsMessage = "No se encontraron registros que cumplan con los criterios de búsqueda.";
@@ -128,18 +134,18 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
             Dictionary<string, string> ColumnsNames = new Dictionary<string, string>()
             {
-            {"vehiculoCarretera","Carretera"},
-            {"vehiculoTramo","Tramo"},
-            {"vehiculoKm","Km"},
-            {"fechaSolicitud","Fecha"},
-            {"fechaLiberacion","Fecha Liberación"},
-            {"evento","Evento"},
-            {"fullName","Nombre Solicitante"}
+            {"vehiculoCarretera","#"},
+            {"vehiculoTramo","Servicio"},
+            {"vehiculoKm","Lugar"},
+            {"fechaSolicitud","Solicitante"},
+            {"fechaLiberacion","Otros"},
+            {"evento","Grúa / Pensión"},
+            //{"fullName","Nombre Solicitante"}
             };
             int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
 
             var listReporteAsignacion = _reporteAsignacionService.GetAllReporteAsignaciones(model,idOficina);
-            var result = _pdfService.CreatePdf<ReporteAsignacionModel>("ReporteAsignacionServicios", "Asignación de Servicios", ColumnsNames, listReporteAsignacion,Array.Empty<float>());
+            var result = _pdfService.CreatePdfReporteAsignacion("ReporteAsignacionServicios", "Reporte de Asignación de Servicios", ColumnsNames, listReporteAsignacion,Array.Empty<float>());
             return File(result.Item1, "application/pdf", result.Item2);
         }
 

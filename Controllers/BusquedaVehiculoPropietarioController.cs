@@ -74,19 +74,23 @@ namespace GuanajuatoAdminUsuarios.Controllers
         {
             VehiculoBusquedaModel busquedaModel = new VehiculoBusquedaModel();
 
-            try {
-                
-                   
-
-                busquedaModel = new()
-                {
-                    IdEntidadBusqueda = model.IdEntidadBusqueda,
-                    PlacasBusqueda =  model.PlacaBusqueda.ToUpper(),
-                    SerieBusqueda =  model.SerieBusqueda
-                };
+            try
+            {
+                busquedaModel.IdEntidadBusqueda = model.IdEntidadBusqueda;
 
             }
             catch (Exception ex) { }
+
+            if (!string.IsNullOrEmpty(model.PlacaBusqueda))
+                {
+                    busquedaModel.PlacasBusqueda = model.PlacaBusqueda.ToUpper();
+                }
+                if (!string.IsNullOrEmpty(model.SerieBusqueda))
+                {
+                    busquedaModel.SerieBusqueda = model.SerieBusqueda.ToUpper();
+                }
+
+       
 
 
             List<VehiculoModel> listaVehiculos = vehiculoService.GetVehiculoPropietario(busquedaModel);

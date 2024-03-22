@@ -71,6 +71,7 @@ function buscarPersonaFisica(){
             type: 'POST',
             data: model,
             success: function (response) {
+                console.log("response cargaListaPersonasRiagEncontradas",response)
                 $("#listadoPersonasContainer").fadeIn();
                  $("#listadoPersonasRiagContainer").html(response);
                   $("#listadoPersonasRiagContainer").show();

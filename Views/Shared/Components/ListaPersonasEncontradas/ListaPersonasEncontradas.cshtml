@@ -70,6 +70,13 @@
             var dataItem = grid.dataItem(row);
             var idPersona = dataItem.idPersona;
             $('#idPersonaInput').val(idPersona);
+            try {
+                console.log("asignara ddlIdPersona ",idPersona);
+                $('#ddlIdPersona').val(idPersona);
+
+            } catch (error) {
+            }
+            
             if (row.hasClass("k-selected")) {
                 setTimeout(function (e) {
                     var grid = $("#gridPersonas").data("kendoGrid");

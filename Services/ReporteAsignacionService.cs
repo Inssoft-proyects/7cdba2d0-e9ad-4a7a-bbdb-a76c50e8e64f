@@ -181,7 +181,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     }
                     string SqlTransact =
                                      @"SELECT sol.idSolicitud,sol.vehiculoCarretera, sol.vehiculoTramo,sol.fechaSolicitud,
-                                    sol.vehiculoKm, sol.idEvento,sol.idMotivoAsignacion,sol.solicitanteNombre,sol.idPension,
+                                    ISNULL(sol.vehiculoKm,'') vehiculoKm, sol.idEvento,sol.idMotivoAsignacion,sol.solicitanteNombre,sol.idPension,
                                     sol.solicitanteAp,sol.solicitanteAm,sol.solicitanteEntidad,sol.solicitanteMunicipio,sol.solicitanteColonia,
                                     sol.solicitanteCalle,sol.solicitanteNumero,sol.idTipoVehiculo,sol.folio,ga.idGrua,g.idConcesionario,
                                     d.fechaLiberacion,d.inventario,c.concesionario,c.alias,cOfi.nombre,cOfi.apellidoPaterno,cOfi.apellidoMaterno,p.pension,

@@ -232,6 +232,7 @@
         }*/
 
         var modeloBusqueda = $("#busquedaVehiculoForm").serialize();
+        console.log("busquedaVehiculoForm modeloBusqueda", modeloBusqueda);
         showLoading();
         $.ajax({
             url: '@Url.Action("BuscarVehiculoEnPlataformas", "BusquedaVehiculoPropietario")',

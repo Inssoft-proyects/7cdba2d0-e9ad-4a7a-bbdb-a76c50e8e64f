@@ -1,4 +1,5 @@
-﻿using iTextSharp.text;
+﻿using GuanajuatoAdminUsuarios.Models;
+using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.tool.xml;
 using Microsoft.AspNetCore.Hosting;
@@ -21,7 +22,63 @@ namespace GuanajuatoAdminUsuarios.Utils
 
         }
 
-        public (MemoryStream, string) CreatePdf<T>(string NamePdf, string Title, Dictionary<string, string> ColumnsNames, List<T> ModelData,float[] columnWidth)
+        public (MemoryStream, string) CreatePdfReporteAsignacion(string NamePdf, string Title, Dictionary<string, string> ColumnsNames, List<ReporteAsignacionModel> ModelData, float[] columnWidth)
+        {
+            try
+            {
+                MemoryStream workStream = new MemoryStream();
+                StringBuilder status = new StringBuilder("");
+                DateTime dTime = DateTime.Now;
+
+                string strPDFFileName = string.Format(NamePdf + "-" + dTime.ToString("ddMMyyyy") + ".pdf");
+                float left = 10;
+                float right = 10;
+                float top = 20;
+                float bottom = 0;
+                iText.Document doc = new Document(PageSize.LETTER.Rotate(), left,right,top,bottom);
+
+                PdfWriter.GetInstance(doc, workStream).CloseStream = false;
+                doc.Open();
+
+                #region Header
+                PdfPTable tableHeader = new PdfPTable(2);
+                tableHeader.DefaultCell.Border = iText.Rectangle.NO_BORDER;
+                float[] headers = new float[] { 30, 60 };
+                tableHeader.SetWidths(headers);
+                tableHeader.WidthPercentage = 100;
+
+
+                var path = Path.Combine(_hostingEnvironment.WebRootPath, "img", "logo-gto.png");
+                iText.Image image = iText.Image.GetInstance(path);
+                image.ScaleToFit(150f, 150f);
+                image.ScaleToFitHeight = false;
+                tableHeader.AddCell(new PdfPCell(image)).Border = 0;
+
+                BaseFont bf = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+                iText.Font fontInvoice = new iText.Font(bf, 20, iText.Font.BOLD);
+                tableHeader.AddCell(new PdfPCell(new iText.Phrase(Title, fontInvoice))).Border = 0;
+
+                doc.Add(tableHeader);
+
+                #endregion
+
+                doc.Add(new Paragraph("\n"));
+                PdfPTable tableLayout = new PdfPTable(ColumnsNames.Count);
+                doc.Add(Add_Content_To_PDFReporteAsignacion(tableLayout, ModelData, ColumnsNames, columnWidth));
+
+                doc.Close();
+                byte[] byteInfo = workStream.ToArray();
+                workStream.Write(byteInfo, 0, byteInfo.Length);
+                workStream.Position = 0;
+                return (workStream, strPDFFileName);
+            }
+            catch (Exception ex)
+            {
+                return (null, null);
+            }
+        }
+
+        public (MemoryStream, string) CreatePdf<T>(string NamePdf, string Title, Dictionary<string, string> ColumnsNames, List<T> ModelData, float[] columnWidth)
         {
             try
             {
@@ -31,7 +88,7 @@ namespace GuanajuatoAdminUsuarios.Utils
 
                 string strPDFFileName = string.Format(NamePdf + "-" + dTime.ToString("ddMMyyyy") + ".pdf");
 
-                iText.Document doc = new();
+                iText.Document doc = new Document(PageSize.LEGAL);
                 doc.SetMargins(10, 10, 20, 10);
 
                 PdfWriter.GetInstance(doc, workStream).CloseStream = false;
@@ -66,7 +123,7 @@ namespace GuanajuatoAdminUsuarios.Utils
                 //doc.Add(p3);
 
                 PdfPTable tableLayout = new PdfPTable(ColumnsNames.Count);
-                doc.Add(Add_Content_To_PDF(tableLayout, ModelData, ColumnsNames,columnWidth));
+                doc.Add(Add_Content_To_PDF(tableLayout, ModelData, ColumnsNames, columnWidth));
 
                 doc.Close();
                 byte[] byteInfo = workStream.ToArray();
@@ -80,7 +137,7 @@ namespace GuanajuatoAdminUsuarios.Utils
             }
         }
 
-        public (MemoryStream, string) CreatePdf<T>(string NamePdf, string Title, Dictionary<string, string> ColumnsNames, T ModelData,float[] columnWidth)
+        public (MemoryStream, string) CreatePdf<T>(string NamePdf, string Title, Dictionary<string, string> ColumnsNames, T ModelData, float[] columnWidth)
         {
             try
             {
@@ -124,7 +181,7 @@ namespace GuanajuatoAdminUsuarios.Utils
                 //doc.Add(p3);
 
                 PdfPTable tableLayout = new PdfPTable(ColumnsNames.Count);
-                doc.Add(Add_Content_To_PDF(tableLayout, ModelData, ColumnsNames,columnWidth));
+                doc.Add(Add_Content_To_PDF(tableLayout, ModelData, ColumnsNames, columnWidth));
 
                 doc.Close();
                 byte[] byteInfo = workStream.ToArray();
@@ -138,18 +195,19 @@ namespace GuanajuatoAdminUsuarios.Utils
             }
         }
 
-        private PdfPTable Add_Content_To_PDF<T>(PdfPTable tableLayout, T ModelData, Dictionary<string, string> ColumnsNames,float[] columnWidth)
+        private PdfPTable Add_Content_To_PDF<T>(PdfPTable tableLayout, T ModelData, Dictionary<string, string> ColumnsNames, float[] columnWidth)
         {
-           /* if (ColumnsNames.Count == size)
-            {*/
+            /* if (ColumnsNames.Count == size)
+             {*/
 
-                float[] headers = columnWidth.Length == 0 ? new float[ColumnsNames.Count] : columnWidth;
+            float[] headers = columnWidth.Length == 0 ? new float[ColumnsNames.Count] : columnWidth;
 
             if (headers.Length != ColumnsNames.Count)
-                throw new Exception("El número de columnas no coincide con el arreglo de ancho de columnas"); 
-            
+                throw new Exception("El número de columnas no coincide con el arreglo de ancho de columnas");
+
             //Se calcula el tamaño de cada columna en caso de no proporcionar ancho por cada columna
-                if (columnWidth.Length == 0) {
+            if (columnWidth.Length == 0)
+            {
                 var porcentHeader = (float)100 / ColumnsNames.Count;
                 for (int i = 0; i < ColumnsNames.Count; i++)
                 {
@@ -157,36 +215,36 @@ namespace GuanajuatoAdminUsuarios.Utils
                 }
             }
 
-                tableLayout.SetWidths(headers);
-                tableLayout.WidthPercentage = 100;
-                tableLayout.HeaderRows = 1;
-                var count = 1;
+            tableLayout.SetWidths(headers);
+            tableLayout.WidthPercentage = 100;
+            tableLayout.HeaderRows = 1;
+            var count = 1;
 
-                //Agrega nombre de columnas
-                foreach (var column in ColumnsNames)
+            //Agrega nombre de columnas
+            foreach (var column in ColumnsNames)
+            {
+                AddCellToTitleHeader(tableLayout, column.Value);
+            }
+
+            Type type = typeof(T);
+
+
+            if (count >= 1)
+            {
+                foreach (var item in ColumnsNames)
                 {
-                    AddCellToTitleHeader(tableLayout, column.Value);
+                    PropertyInfo property = type.GetProperty(item.Key);
+                    var value = property.GetValue(ModelData);
+                    AddCellToBody(tableLayout, count, Convert.ToString(value));
                 }
-
-                Type type = typeof(T);
-
-
-                if (count >= 1)
-                {
-                    foreach (var item in ColumnsNames)
-                    {
-                        PropertyInfo property = type.GetProperty(item.Key);
-                        var value = property.GetValue(ModelData);
-                        AddCellToBody(tableLayout, count, Convert.ToString(value));
-                    }
-                    count++;
-                }
-                return tableLayout;
-           /* }
-            return null;*/
+                count++;
+            }
+            return tableLayout;
+            /* }
+             return null;*/
         }
 
-        private PdfPTable Add_Content_To_PDF<T>(PdfPTable tableLayout, List<T> ModelData, Dictionary<string, string> ColumnsNames,float[] columnWidth)
+        private PdfPTable Add_Content_To_PDF<T>(PdfPTable tableLayout, List<T> ModelData, Dictionary<string, string> ColumnsNames, float[] columnWidth)
         {
             /* if (ColumnsNames.Count == size)
              {*/
@@ -194,64 +252,168 @@ namespace GuanajuatoAdminUsuarios.Utils
             float[] headers = columnWidth.Length == 0 ? new float[ColumnsNames.Count] : columnWidth;
 
             //Se calcula el tamaño de cada columna en caso de no proporcionar ancho por cada columna
-                if (columnWidth.Length == 0) {
-                var porcentHeader = (float)100 / ColumnsNames.Count;
+            if (columnWidth.Length == 0)
+            {
+                var porcentHeader = (float)100 / ColumnsNames.Count - 1;
                 for (int i = 0; i < ColumnsNames.Count; i++)
                 {
                     headers[i] = porcentHeader;
                 }
             }
 
-                tableLayout.SetWidths(headers);
-                tableLayout.WidthPercentage = 100;
-                tableLayout.HeaderRows = 1;
-                var count = 1;
+            tableLayout.SetWidths(headers);
+            tableLayout.WidthPercentage = 100;
+            tableLayout.HeaderRows = 1;
+            var count = 1;
 
-                //Agrega nombre de columnas
-                foreach (var column in ColumnsNames)
+            //Agrega nombre de columnas
+            foreach (var column in ColumnsNames)
+            {
+                AddCellToTitleHeader(tableLayout, column.Value);
+            }
+
+            Type type = typeof(T);
+
+            #region Comment
+            //Busqueda de 
+            //List<string> NameHeaders = new List<string>();
+            //PropertyInfo[] propertyInfos = type.GetProperties();
+            //foreach (PropertyInfo item in propertyInfos)
+            //{
+            //    var name = item.Name;
+            //    var findPropertyBool = ColumnsNames.ContainsKey(name);
+            //    //var findPropertyBool = Array.Find(ColumnsNames, n => n.Equals(name)) != null ? true : false;
+            //    if (findPropertyBool)
+            //    {
+            //        NameHeaders.Add(name);
+            //    }
+            //}
+            //si implemento la busqueda de propiedades tendria que ordenar la lista como viene la de ColumnsNames
+            //NameHeaders.OrderBy(x => x.Equals(ColumnsNames.Keys));
+            #endregion
+
+            foreach (dynamic objectItem in ModelData)
+            {
+                if (count >= 1)
                 {
-                    AddCellToTitleHeader(tableLayout, column.Value);
-                }
-
-                Type type = typeof(T);
-
-                #region Comment
-                //Busqueda de 
-                //List<string> NameHeaders = new List<string>();
-                //PropertyInfo[] propertyInfos = type.GetProperties();
-                //foreach (PropertyInfo item in propertyInfos)
-                //{
-                //    var name = item.Name;
-                //    var findPropertyBool = ColumnsNames.ContainsKey(name);
-                //    //var findPropertyBool = Array.Find(ColumnsNames, n => n.Equals(name)) != null ? true : false;
-                //    if (findPropertyBool)
-                //    {
-                //        NameHeaders.Add(name);
-                //    }
-                //}
-                //si implemento la busqueda de propiedades tendria que ordenar la lista como viene la de ColumnsNames
-                //NameHeaders.OrderBy(x => x.Equals(ColumnsNames.Keys));
-                #endregion
-
-                foreach (dynamic objectItem in ModelData)
-                {
-                    if (count >= 1)
+                    foreach (var item in ColumnsNames)
                     {
-                        foreach (var item in ColumnsNames)
-                        {
-							PropertyInfo pi = type.GetProperty(item.Key);
-                            var value = pi.GetValue(objectItem);
-                            AddCellToBody(tableLayout, count, Convert.ToString(
-                                pi.PropertyType == typeof(DateTime?) ? string.Empty : 
-                                pi.PropertyType == typeof(DateTime) ? (((DateTime)value) == DateTime.MinValue ? string.Empty : ((DateTime)value).ToString("dd-MM-yyyy")) : 
-                                value ?? string.Empty));
-                        }
-                        count++;
+                        PropertyInfo pi = type.GetProperty(item.Key);
+                        var value = pi.GetValue(objectItem);
+                        AddCellToBody(tableLayout, count, Convert.ToString(
+                            pi.PropertyType == typeof(DateTime?) ? string.Empty :
+                            pi.PropertyType == typeof(DateTime) ? (((DateTime)value) == DateTime.MinValue ? string.Empty : ((DateTime)value).ToString("dd-MM-yyyy")) :
+                            value ?? string.Empty));
                     }
+                    count++;
                 }
-                return tableLayout;
+            }
+            return tableLayout;
             /*}
             return null;*/
+        }
+
+
+        private PdfPTable Add_Content_To_PDFReporteAsignacion(PdfPTable tableLayout, List<ReporteAsignacionModel> ModelData, Dictionary<string, string> ColumnsNames, float[] columnWidth)
+        {
+            float[] headers = columnWidth.Length == 0 ? new float[ColumnsNames.Count] : columnWidth;
+
+            //Se calcula el tamaño de cada columna en caso de no proporcionar ancho por cada columna
+            if (columnWidth.Length == 0)
+            {
+                var porcentHeader = (float)100 / ColumnsNames.Count - 1;
+                for (int i = 0; i < ColumnsNames.Count; i++)
+                {
+                    if (i == 0)
+                        headers[i] = 4;
+                    else if (i == 1)
+                        headers[i] = 14;
+                    else if (i == 2)
+                        headers[i] = 22;
+                    else if (i == 3)
+                        headers[i] = 20;
+                    else
+                        headers[i] = porcentHeader;
+                }
+            }
+
+            tableLayout.SetWidths(headers);
+            tableLayout.WidthPercentage = 100;
+            tableLayout.HeaderRows = 1;
+            var count = 1;
+
+            //Agrega nombre de columnas
+            foreach (var column in ColumnsNames)
+            {
+                AddCellToTitleHeader(tableLayout, column.Value);
+            }
+
+            //Type type = typeof(T);
+            int row = 1;
+            foreach (var item in ModelData)
+            {
+               
+                //if (count >= 1)
+                //{
+                    for (int x=0; x<=ColumnsNames.Count-1; x++)
+                    {
+                        if (x == 0)
+                        {
+                            AddCellToBodyReporteAsignacion(tableLayout,
+                                                             x,
+                                                            "\n" + row.ToString() + "\n");
+                        row++;
+                    } else if (x== 1)
+                        {
+                            AddCellToBodyReporteAsignacion(tableLayout,
+                                                           x,
+                                                           "Folio: " + item.folio + "\n" + 
+                                                           "Fecha: " + item.fechaSolicitud.ToString("dd/MM/yyyy") + "\n" + 
+                                                           "Evento: " + item.evento);
+                           
+                        }
+                        else if (x == 2)
+                        {
+                            var km = (item.vehiculoKm.Trim() == "") ? "" : Convert.ToDecimal(item.vehiculoKm).ToString("G29");
+                            AddCellToBodyReporteAsignacion(tableLayout,
+                                                           x,
+                                                           "Carretera: " + item.carretera.Substring(0, item.carretera.Length > 30 ? 30 : item.carretera.Length) + "\n" +
+                                                           "Tramo: " + item.tramo.Substring(0, item.tramo.Length>30 ? 30 : item.tramo.Length) + "\n" +
+                                                           "Km: " + km);
+
+                        }
+                        else if (x == 3)
+                        {
+                            AddCellToBodyReporteAsignacion(tableLayout,
+                                                           x,
+                                                           "Nombre: " + item.fullName.Substring(0, item.fullName.Length>30 ? 30 : item.fullName.Length) + "\n" +
+                                                           "Dirección:" + item.fullcolonia + "\n" +
+                                                           "Motivo: " + item.motivoAsignacion);
+
+                        }
+                        else if (x == 4)
+                        {
+                            AddCellToBodyReporteAsignacion(tableLayout,
+                                                           x,
+                                                           "Delegación: " + item.Delegacion + "\n" +
+                                                           "Oficial: " + item.oficial + "\n" +
+                                                           "Tipo vehículo: " + item.tipoVehiculo);
+
+                        }
+                        else if (x == 5)
+                        {
+                            AddCellToBodyReporteAsignacion(tableLayout,
+                                                           x,
+                                                           "Grúa: " + item.propietarioGrua + "\n" +
+                                                           "Pensión: " + item.vehiculoPension + "\n" +
+                                                           "Inventario: " + item.numeroIventario);
+
+                        }
+                   
+                    //count++;
+                }
+            }
+            return tableLayout;
         }
 
 
@@ -259,7 +421,7 @@ namespace GuanajuatoAdminUsuarios.Utils
         {
             tableLayout.AddCell(new PdfPCell(new iText.Phrase(cellText, new iText.Font(iText.Font.FontFamily.HELVETICA, 8, 1, iText.BaseColor.BLACK)))
             {
-                HorizontalAlignment = iText.Element.ALIGN_LEFT,
+                HorizontalAlignment = iText.Element.ALIGN_CENTER,
                 Padding = 8,
                 BackgroundColor = new iText.BaseColor(185, 200, 230)
             });
@@ -296,6 +458,17 @@ namespace GuanajuatoAdminUsuarios.Utils
                     BackgroundColor = new iText.BaseColor(255, 255, 255)
                 });
             }
+        }
+
+        private static void AddCellToBodyReporteAsignacion(PdfPTable tableLayout, int count, string cellText = null)
+        {
+            tableLayout.AddCell(new PdfPCell(new iText.Phrase(cellText, new iText.Font(iText.Font.NORMAL, 7, 1, iText.BaseColor.BLACK)))
+            {
+                HorizontalAlignment = (count == 0) ? iText.Element.ALIGN_CENTER : iText.Element.ALIGN_LEFT,
+                VerticalAlignment = (count == 0) ? iText.Element.ALIGN_CENTER : iText.Element.ALIGN_LEFT,
+                Padding = 5,
+                BackgroundColor = new iText.BaseColor(255, 255, 255),
+            });
         }
 
 
