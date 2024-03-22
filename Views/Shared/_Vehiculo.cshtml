@@ -15,9 +15,9 @@
     string fechaAveriguacionRoboRepuve="";
     string agenteRoboRepuve="";
 
-    if(Model.RepuveRobo!=null){
-     placaRoboRepuve =Model.RepuveRobo.Placa;
-     nivRoboRepuve = Model.RepuveRobo.Niv;
+    if(Model!=null&&Model.RepuveRobo!=null){
+     placaRoboRepuve =Model.RepuveRobo.Placa!=null?Model.RepuveRobo.Placa:"";
+     nivRoboRepuve = Model.RepuveRobo.Niv!=null?Model.RepuveRobo.Niv:"";
      fechaRoboRepuve = Model.RepuveRobo.Fecha ;
      fuenteRoboRepuve = Model.RepuveRobo.FuenteRobo;
      averiguacionRoboRepuve = Model.RepuveRobo.Averiguacion;
@@ -933,7 +933,7 @@ $("#ddlCatTipoServicio").on("change", function () {
             sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
             return;
         }
-    var idPersona = $("#ddlIdPersona").val() ;
+    var idPersona = $("#ddlIdPersona").val();
 
     //Se valida que se haya seleccionado una persona
      /*if ($("#ddlIdPersona").val() == '') {
