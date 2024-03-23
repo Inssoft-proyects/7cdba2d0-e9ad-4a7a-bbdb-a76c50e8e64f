@@ -352,7 +352,7 @@ namespace GuanajuatoAdminUsuarios.Services
                         "left JOIN catTiposVehiculo tv ON v.idTipoVehiculo = tv.idTipoVehiculo " +
                         "left JOIN catTipoServicio ts ON v.idCatTipoServicio = ts.idCatTipoServicio " +
                         "LEFT JOIN personas p ON v.idPersona = p.idPersona " +
-                        "WHERE v.estatus = 1 AND v.serie LIKE '%' + @Serie + '%' ORDER BY v.idVehiculo DESC", connection);
+                        "WHERE v.estatus = 1 AND v.serie = @Serie  ORDER BY v.idVehiculo DESC", connection);
 
                         command.Parameters.AddWithValue("@Serie", Serie);
                     }
