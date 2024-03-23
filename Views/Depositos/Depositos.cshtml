@@ -42,51 +42,29 @@
     });
 
     function validacionHora(event) {
-        var key = event.keyCode || event.charCode;
         var horaIngresada = event.target.value;
 
         // Permitir números del 0 al 9 y teclas especiales como borrar y arrow keys
-        if ((key < 48 || key > 57) && (key !== 8 && key !== 46) && (key < 37 || key > 40)) {
+        if ((isNaN(parseInt(horaIngresada.charAt(horaIngresada.length - 1))) || parseInt(horaIngresada.charAt(horaIngresada.length - 1)) > 9) && !["Backspace", "Delete", "ArrowLeft", "ArrowRight"].includes(event.inputType)) {
             event.preventDefault();
-
-
             return;
         }
 
         // Verificar si ya hay cinco dígitos ingresados o si se intenta borrar
-        if (horaIngresada.length >= 5 && key !== 8 && key !== 46) {
+        if (horaIngresada.length >= 5 && !["Backspace", "Delete"].includes(event.inputType)) {
             event.preventDefault();
+            setTimeout(validarFecha, 0); // Llama a validarFecha después de que el valor del campo se haya actualizado
             return;
         }
 
-        // Verificar los límites de cada dígito
-        if (horaIngresada.length === 0 && key > 50) {
-            event.preventDefault();
-            return;
-        }
-
-        if (horaIngresada.length === 1 && horaIngresada.charAt(0) === "2" && key > 51) {
-            event.preventDefault();
-            return;
-        }
-
-        if (horaIngresada.length === 2 && key > 53) {
-            event.preventDefault();
-            return;
-        }
-
-        if (horaIngresada.length === 2 && key !== 8 && key !== 46) {
+        // Agregar ":" después de ingresar los dos primeros dígitos
+        if (horaIngresada.length === 2 && !["Backspace", "Delete"].includes(event.inputType)) {
             event.target.value += ":";
         }
-
-        if (horaIngresada.length === 4 && key > 57) {
-            event.preventDefault();
-            validarFecha();
-            return;
-        }
-        validarFecha();
-
     }
+
+
+
     function validarFecha() {
         // Obtener la fecha actual
         var fechaActual = new Date();
@@ -119,6 +97,7 @@
             }
         }
     }
+
 </script>
 <div class="mainContainer bg-light">
     <section class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
@@ -231,9 +210,9 @@
                             .HtmlAttributes(new { style = "width: 60%", id = "dateTime" })
                         )*@
                         <div class="col-12 col-md-6 col-lg-6 col-xl-3">
-                    <div class="controlForm my-3" style="height:60%">
+                    <div class="controlForm my-3" style="height:60px">
 						    <label class="tex">Hora(Formato 24 horas):</label>
-                            <input type="text" value="@(Model.horaSolicitud == default(TimeSpan) ? "" : Model.horaSolicitud.TimeOfDay)" id="horaSolicitudStr" name="horaSolicitudStr" onkeydown="validacionHora(event)" step="60" />
+                        <input type="text" value='@(Model.horaSolicitud == default(TimeSpan) ? "" : Model.horaSolicitud.ToString(@"hh\:mm"))' id="horaSolicitudStr" name="horaSolicitudStr" oninput="validacionHora(event)" step="60" />
                             </div>
                             </div>
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3">
