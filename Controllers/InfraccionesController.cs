@@ -985,7 +985,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                     else if (!string.IsNullOrEmpty(model.PlacasBusqueda))
                     {
                         text = "placas";
-                        value = model.PlacasBusqueda;
+                        value = model.PlacasBusqueda.ToUpper();
                     }
 
 

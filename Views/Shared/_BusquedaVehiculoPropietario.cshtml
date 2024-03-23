@@ -275,7 +275,8 @@
                     } 
 
             },
-            error: function () {
+            error: function (err) {
+                console.log("err",err);
                 sitteg_error("Ocurrio un error al procesar su solicitud.");
                 hideLoading();
             }

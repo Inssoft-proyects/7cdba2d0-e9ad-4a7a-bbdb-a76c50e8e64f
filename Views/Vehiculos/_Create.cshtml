@@ -1851,11 +1851,22 @@ function asignarMensajeError(contenedorErrorId, mensaje) {
     });
 
     function cerrarModalV() {
-        $('#confirmacionModal').modal('show');
+        console.log("entra este cierre modal");
+        const searchParams = window.location.href;
+        console.log("searchParams",searchParams);
+
+        if(searchParams.includes("/Vehiculos/Index")){
+            console.log("redirect",searchParams);
+            window.location.href = "/Vehiculos/Index";
+        } else {
+            console.log("no redirect",searchParams);
+            window.location.href = "/Vehiculos/Editar";            
+        }
 
         $('#confirmarCerrar').on('click', function () {
-            $('#confirmacionModal').modal('hide');
-        });
+                $('#confirmacionModal').modal('hide');
+            });
+
     }
 
     $(document).ready(function () {

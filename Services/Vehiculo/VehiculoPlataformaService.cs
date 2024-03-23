@@ -119,7 +119,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     CotejarDatosRequestModel cotejarDatosRequestModel = new CotejarDatosRequestModel
                     {
                         Tp_folio = "4",
-                        Folio = busquedaModel.PlacasBusqueda,
+                        Folio = busquedaModel.PlacasBusqueda.ToUpper(),
                         tp_consulta = "3"
                     };
                     var endPointName = "CotejarDatosEndPoint";
