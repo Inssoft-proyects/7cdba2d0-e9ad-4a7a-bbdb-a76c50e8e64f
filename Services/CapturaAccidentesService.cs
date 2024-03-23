@@ -1859,7 +1859,7 @@ namespace GuanajuatoAdminUsuarios.Services
 					connection.Open();
                     SqlCommand command = new SqlCommand("usp_ObtieneVehiculosInvolucrados", connection);
 
-                    command.CommandType = CommandType.Text;
+                    command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.AddWithValue("@idAccidente", IdAccidente);
 
                     using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
