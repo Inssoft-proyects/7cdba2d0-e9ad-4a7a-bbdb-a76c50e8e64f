@@ -651,9 +651,24 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
 
         [HttpPost]
-        public IActionResult ActualizarInfoAccidente(DateTime Fecha, TimeSpan Hora, int IdMunicipio, int IdCarretera, int IdTramo, int Kilometro)
-        {
-            int idAccidente = HttpContext.Session.GetInt32("LastInsertedId") ?? 0; // Obtener el valor de lastInsertedId desde la variable de sesión
+        public IActionResult ActualizarInfoAccidente(DateTime Fecha, string HoraStr, int IdMunicipio, int IdCarretera, int IdTramo, int Kilometro)
+		{
+			TimeSpan Hora = TimeSpan.Zero;
+			if (!string.IsNullOrEmpty(HoraStr))
+			{
+				TimeSpan hora;
+				if (TimeSpan.TryParse(HoraStr, out hora))
+				{
+					// Asignar la hora convertida al modelo
+					Hora = hora;
+				}
+				else
+				{
+					ModelState.AddModelError("HoraComoString", "La hora proporcionada no es válida.");
+				}
+			}
+
+			int idAccidente = HttpContext.Session.GetInt32("LastInsertedId") ?? 0; // Obtener el valor de lastInsertedId desde la variable de sesión
             var idAccidenteActualizado = _capturaAccidentesService.ActualizaInfoAccidente(idAccidente, Fecha, Hora, IdMunicipio, IdCarretera, IdTramo, Kilometro);
 
             //BITACORA
@@ -1409,8 +1424,21 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
         [HttpPost]
         public ActionResult AgregarFechaHora(FechaHoraIngresoModel model)
-        {
-            var errors = ModelState.Values.Select(s => s.Errors);
+		{
+			if (!string.IsNullOrEmpty(model.HoraIngresoStr))
+			{
+				TimeSpan hora;
+				if (TimeSpan.TryParse(model.HoraIngresoStr, out hora))
+				{
+					// Asignar la hora convertida al modelo
+					model.HoraIngreso = hora;
+				}
+				else
+				{
+					ModelState.AddModelError("HoraComoString", "La hora proporcionada no es válida.");
+				}
+			}
+			var errors = ModelState.Values.Select(s => s.Errors);
             if (ModelState.IsValid)
             {
                 int idAccidente = HttpContext.Session.GetInt32("LastInsertedId") ?? 0;
