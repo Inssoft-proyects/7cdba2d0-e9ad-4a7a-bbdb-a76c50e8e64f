@@ -78,7 +78,7 @@ namespace GuanajuatoAdminUsuarios.Services
                 // Logger.Debug("Infracciones - ajax_BuscarVehiculo - Request:" + request);
 
                 //Se realiza la consulta para validar si el vehiculo tiene reporte de robo
-                RepuveConsgralRequestModel repuveGralModel = new(busquedaModel.PlacasBusqueda.ToUpper(), busquedaModel.SerieBusqueda);
+                RepuveConsgralRequestModel repuveGralModel = new(busquedaModel.PlacasBusqueda, busquedaModel.SerieBusqueda);
                 // Logger.Debug("Infracciones - ajax_BuscarVehiculo - ValidarRobo ");
                 RepuveRoboModel repuveRoboModel = new();
 
