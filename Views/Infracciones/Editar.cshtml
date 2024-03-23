@@ -405,9 +405,9 @@ if (fechaParseo.getTime() === objetoFecha.getTime()) {
                                         )
                                 </div>
 
-                                <div class="form-group col-md-3 controlForm" style="height: 65%">
+                                <div class="form-group col-md-3 controlForm" style="height: 90%">
                                     <label class="tex">Hora(Formato 24 horas):</label>
-                                    <input type="text" id="dateTime" onkeydown="validacionHora(event)" step="60" />
+                                    <input class="form-control" type="text" id="dateTime" value="@(Model.horaInfraccion.TimeOfDay)" onkeydown="validacionHora(event)" step="60" />
                                 </div>
                             </div>
 

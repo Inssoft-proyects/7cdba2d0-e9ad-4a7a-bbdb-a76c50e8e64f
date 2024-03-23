@@ -21,9 +21,9 @@ namespace GuanajuatoAdminUsuarios.Models
         public DateTime? Fecha { get; set; }
         public string FechaFormateada => Fecha.HasValue ? Fecha.Value.ToString("dd/MM/yyyy") : string.Empty;
 
-        [Required(ErrorMessage = "-El campo Hora  es obligatorio")]
         public TimeSpan? Hora { get; set; }
-
+        public string HoraStr { get; set; }
+    
         [Required(ErrorMessage = "-Debe seleccionar una opción para Municipio")]
         public int? IdMunicipio { get; set; }
 
