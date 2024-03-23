@@ -146,27 +146,70 @@
         $("#Vehiculo_placas").focus();
     }
 
-    function validacionHora(event) {
-        var horaIngresada = event.target.value;
+	function validacionHora(event) {
+		var horaIngresada = event.target.value;
+		var key = event.key
+		var keycode = event.keyCode
+		var horalength = horaIngresada.length
+		if ([8, 46, 37, 38, 39, 40, 9].indexOf(keycode) != -1) {
+			return
+		}
+		event.preventDefault();
 
-        // Permitir números del 0 al 9 y teclas especiales como borrar y arrow keys
-        if ((isNaN(parseInt(horaIngresada.charAt(horaIngresada.length - 1))) || parseInt(horaIngresada.charAt(horaIngresada.length - 1)) > 9) && !["Backspace", "Delete", "ArrowLeft", "ArrowRight"].includes(event.inputType)) {
-            event.preventDefault();
-            return;
-        }
 
-        // Verificar si ya hay cinco dígitos ingresados o si se intenta borrar
-        if (horaIngresada.length >= 5 && !["Backspace", "Delete"].includes(event.inputType)) {
-            event.preventDefault();
-            setTimeout(validarFecha, 0); // Llama a validarFecha después de que el valor del campo se haya actualizado
-            return;
-        }
 
-        // Agregar ":" después de ingresar los dos primeros dígitos
-        if (horaIngresada.length === 2 && !["Backspace", "Delete"].includes(event.inputType)) {
-            event.target.value += ":";
+		console.log(key,keycode)
+
+
+		if(horalength == 0 ){
+			if("012".indexOf(key)!=-1){
+				event.target.value=key
+			}
+		}
+		if(horalength == 1 ){
+			var lastval =horaIngresada[0]
+			if(":"==key && lastval!="0"){
+				event.target.value=  "0"+ event.target.value+key
+			}
+			else if( lastval=="2"){
+				if("0123".indexOf(key) != -1){
+				event.target.value=  event.target.value+key
+				}
+			}else if("0123456789".indexOf(key)!=-1){
+				event.target.value = event.target.value + key
+			}
+		}
+		if(horalength == 2){
+			if(key==":"){
+				event.target.value = event.target.value + key
+			}
+			else if ("012345".indexOf(key)!= -1){
+				event.target.value = event.target.value + ":" + key
+			} 
+		}
+		if(horalength == 3){
+			if ("012345".indexOf(key) != -1) {
+				event.target.value = event.target.value + key
+			}
+		}
+		if(horalength == 4){
+			var lastval = horaIngresada[3]
+			var hours = parseInt(horaIngresada[0]+horaIngresada[1])
+
+			if(lastval =="0" && hours==0 ){
+				if ("123456789".indexOf(key) != -1) {
+					event.target.value = event.target.value + key
+					setTimeout(validarFecha,2)
+				}
+			} else{
+				if ("0123456789".indexOf(key) != -1) {
+					event.target.value = event.target.value + key
+					setTimeout(validarFecha, 2)
+				}
+			}
+
+		}
         }
-    }
 
 
 
@@ -178,8 +221,8 @@
 
         var fechaSeleccionadaString = $("#fechaInfraccion").val();
         var splitFechaSeleccion = fechaSeleccionadaString.split('/')
-        var objetoFecha = new Date(parseInt(splitFechaSeleccion[2]), parseInt(splitFechaSeleccion[1]) - 1, parseInt(splitFechaSeleccion[0]));
-        console.log("objetoFecha:", objetoFecha)
+            var objetoFecha = !fechaSeleccionadaString ? fechaParseo : new Date(parseInt(splitFechaSeleccion[2]), parseInt(splitFechaSeleccion[1]) - 1, parseInt(splitFechaSeleccion[0]));
+            console.log("objetoFecha:", objetoFecha)
         console.log("fechaParseo:", fechaParseo)
         // Comparar la fecha seleccionada con la fecha actual
         if (fechaParseo.getTime() === objetoFecha.getTime()) {
@@ -375,7 +418,7 @@
                                         .Format("dd/MM/yyyy")
                                           .Events(e =>
 											{
-												e.Change("validacionHora");
+                                            e.Change("validarFecha");
 											})
                                         .Enable(!ViewBag.EsSoloLectura)
                                         .Culture("es-ES")                                      
@@ -386,7 +429,7 @@
 
                                 <div class="form-group col-md-3 controlForm" style="height: 70px">
                                     <label class="tex">Hora(Formato 24 horas):</label>
-                                    <input type="text" id="dateTime" value="@(Model.horaInfraccion.TimeOfDay)" oninput="validacionHora(event)" step="60" />
+                                    <input type="text" id="dateTime" value="@(Model.horaInfraccion.TimeOfDay)" onkeydown="validacionHora(event)" />
                                     </div>
                             </div>
 

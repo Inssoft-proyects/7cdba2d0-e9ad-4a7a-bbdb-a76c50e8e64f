@@ -7,6 +7,9 @@ namespace GuanajuatoAdminUsuarios.Models
         public int IdPersona { get; set; }
         public DateTime? FechaIngreso { get; set; }
         public TimeSpan? HoraIngreso { get; set; }
+		public string HoraIngresoStr { get; set; }
 
-    }
+		
+
+	}
 }
