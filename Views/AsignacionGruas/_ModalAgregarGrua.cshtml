@@ -1,52 +1,30 @@
 ﻿@model GuanajuatoAdminUsuarios.Models.SeleccionGruaModel
 <script>
-    function validacionHora(event) {
-        var key = event.keyCode || event.charCode;
+    function validacionHoraArribo(event) {
         var horaIngresada = event.target.value;
 
         // Permitir números del 0 al 9 y teclas especiales como borrar y arrow keys
-        if ((key < 48 || key > 57) && (key !== 8 && key !== 46) && (key < 37 || key > 40)) {
+        if ((isNaN(parseInt(horaIngresada.charAt(horaIngresada.length - 1))) || parseInt(horaIngresada.charAt(horaIngresada.length - 1)) > 9) && !["Backspace", "Delete", "ArrowLeft", "ArrowRight"].includes(event.inputType)) {
             event.preventDefault();
-
-
             return;
         }
 
         // Verificar si ya hay cinco dígitos ingresados o si se intenta borrar
-        if (horaIngresada.length >= 5 && key !== 8 && key !== 46) {
+        if (horaIngresada.length >= 5 && !["Backspace", "Delete"].includes(event.inputType)) {
             event.preventDefault();
+            setTimeout(validarFechaArribo, 0); // Llama a validarFecha después de que el valor del campo se haya actualizado
             return;
         }
 
-        // Verificar los límites de cada dígito
-        if (horaIngresada.length === 0 && key > 50) {
-            event.preventDefault();
-            return;
-        }
-
-        if (horaIngresada.length === 1 && horaIngresada.charAt(0) === "2" && key > 51) {
-            event.preventDefault();
-            return;
-        }
-
-        if (horaIngresada.length === 2 && key > 53) {
-            event.preventDefault();
-            return;
-        }
-
-        if (horaIngresada.length === 2 && key !== 8 && key !== 46) {
+        // Agregar ":" después de ingresar los dos primeros dígitos
+        if (horaIngresada.length === 2 && !["Backspace", "Delete"].includes(event.inputType)) {
             event.target.value += ":";
         }
-
-        if (horaIngresada.length === 4 && key > 57) {
-            event.preventDefault();
-            validarFecha();
-            return;
-        }
-        validarFecha();
-
     }
-    function validarFecha() {
+
+
+
+    function validarFechaArribo() {
         // Obtener la fecha actual
         var fechaActual = new Date();
         var fechaParseo = new Date(parseInt(fechaActual.getFullYear()), parseInt(fechaActual.getMonth()), parseInt(fechaActual.getDate()));
@@ -78,54 +56,31 @@
             }
         }
     }
-/////////////////
 
-    function validacionHoraInicio(event) {
-        var key = event.keyCode || event.charCode;
+     function validacionHoraInicio(event) {
         var horaIngresada = event.target.value;
 
         // Permitir números del 0 al 9 y teclas especiales como borrar y arrow keys
-        if ((key < 48 || key > 57) && (key !== 8 && key !== 46) && (key < 37 || key > 40)) {
+        if ((isNaN(parseInt(horaIngresada.charAt(horaIngresada.length - 1))) || parseInt(horaIngresada.charAt(horaIngresada.length - 1)) > 9) && !["Backspace", "Delete", "ArrowLeft", "ArrowRight"].includes(event.inputType)) {
             event.preventDefault();
-
-
             return;
         }
 
         // Verificar si ya hay cinco dígitos ingresados o si se intenta borrar
-        if (horaIngresada.length >= 5 && key !== 8 && key !== 46) {
+        if (horaIngresada.length >= 5 && !["Backspace", "Delete"].includes(event.inputType)) {
             event.preventDefault();
+            setTimeout(validarFechaInicio, 0); // Llama a validarFecha después de que el valor del campo se haya actualizado
             return;
         }
 
-        // Verificar los límites de cada dígito
-        if (horaIngresada.length === 0 && key > 50) {
-            event.preventDefault();
-            return;
-        }
-
-        if (horaIngresada.length === 1 && horaIngresada.charAt(0) === "2" && key > 51) {
-            event.preventDefault();
-            return;
-        }
-
-        if (horaIngresada.length === 2 && key > 53) {
-            event.preventDefault();
-            return;
-        }
-
-        if (horaIngresada.length === 2 && key !== 8 && key !== 46) {
+        // Agregar ":" después de ingresar los dos primeros dígitos
+        if (horaIngresada.length === 2 && !["Backspace", "Delete"].includes(event.inputType)) {
             event.target.value += ":";
         }
-
-        if (horaIngresada.length === 4 && key > 57) {
-            event.preventDefault();
-            validarFechaInicio();
-            return;
-        }
-        validarFechaInicio();
-
     }
+
+
+
     function validarFechaInicio() {
         // Obtener la fecha actual
         var fechaActual = new Date();
@@ -158,55 +113,31 @@
             }
         }
     }
-/////////////////////////
-
 
     function validacionHoraFin(event) {
-        var key = event.keyCode || event.charCode;
         var horaIngresada = event.target.value;
 
         // Permitir números del 0 al 9 y teclas especiales como borrar y arrow keys
-        if ((key < 48 || key > 57) && (key !== 8 && key !== 46) && (key < 37 || key > 40)) {
+        if ((isNaN(parseInt(horaIngresada.charAt(horaIngresada.length - 1))) || parseInt(horaIngresada.charAt(horaIngresada.length - 1)) > 9) && !["Backspace", "Delete", "ArrowLeft", "ArrowRight"].includes(event.inputType)) {
             event.preventDefault();
-
-
             return;
         }
 
         // Verificar si ya hay cinco dígitos ingresados o si se intenta borrar
-        if (horaIngresada.length >= 5 && key !== 8 && key !== 46) {
+        if (horaIngresada.length >= 5 && !["Backspace", "Delete"].includes(event.inputType)) {
             event.preventDefault();
+            setTimeout(validarFechaFin, 0); // Llama a validarFecha después de que el valor del campo se haya actualizado
             return;
         }
 
-        // Verificar los límites de cada dígito
-        if (horaIngresada.length === 0 && key > 50) {
-            event.preventDefault();
-            return;
-        }
-
-        if (horaIngresada.length === 1 && horaIngresada.charAt(0) === "2" && key > 51) {
-            event.preventDefault();
-            return;
-        }
-
-        if (horaIngresada.length === 2 && key > 53) {
-            event.preventDefault();
-            return;
-        }
-
-        if (horaIngresada.length === 2 && key !== 8 && key !== 46) {
+        // Agregar ":" después de ingresar los dos primeros dígitos
+        if (horaIngresada.length === 2 && !["Backspace", "Delete"].includes(event.inputType)) {
             event.target.value += ":";
         }
-
-        if (horaIngresada.length === 4 && key > 57) {
-            event.preventDefault();
-            validarFechaFin();
-            return;
-        }
-        validarFechaFin();
-
     }
+
+
+
     function validarFechaFin() {
         // Obtener la fecha actual
         var fechaActual = new Date();
@@ -239,6 +170,7 @@
             }
         }
     }
+
 </script>
 <div class="modal-dialog modal-xl boxShadow modal-dialog-centered">
     <div class="modal-content">
@@ -310,13 +242,14 @@
                                 .Format("dd/MM/yyyy")
                                 .Events(e =>
                                 {
-                                    e.Change("validarFecha");
+                                    e.Change("validarFechaArribo");
                                 })
                                 .HtmlAttributes(new { style = "width: 90%", id = "fechaArriboInsert", required = "required" })
                                 )
                         </div>
                         </div>
                     <div class="col-12 col-md-6 col-lg-3">
+                        <div class="controlForm my-3" style="height:60px">
 
                        @* <div class="controlForm my-3">
                             <label for="timepicker1">Hora de arribo <b>(obligatorio)</b>:</label>
@@ -330,9 +263,9 @@
                                 )
                         </div>*@
 											<label class="tex">Hora(Formato 24 horas):</label>
-											<input type="text" id="horaArriboInsert" name="horaArriboInsertStr" onkeydown="validacionHora(event)" step="60" />
+                        <input type="text" id="horaArriboInsert" name="horaArriboInsertStr" oninput="validacionHoraArribo(event)" step="60" />
                     </div>
-
+                    </div>
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm my-3">
                             <label for="datepicker2">Fecha de inicio <b>(obligatorio)</b>:</label>
@@ -347,6 +280,7 @@
                         </div>
                     </div>
                      <div class="col-12 col-md-6 col-lg-3">
+                                    <div class="controlForm my-3"  style="height:60px">
                        @* <div class="controlForm my-3">
                             <label for="timepicker2">Hora de inicio <b>(obligatorio)</b>:</label>
                             @(Html.Kendo().TimePickerFor(t => t.horaInicio).Interval(1)
@@ -360,9 +294,9 @@
                                 )
                         </div>*@
                             <label class="tex">Hora(Formato 24 horas):</label>
-                            <input type="text" id="horaInicioInsert" name="horaInicioInsertStr" onkeydown="validacionHoraInicio(event)" step="60" />
+                        <input type="text" id="horaInicioInsert" name="horaInicioInsertStr" oninput="validacionHoraInicio(event)" step="60" />
                     </div>
-
+                    </div>
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm my-3">
                             <label for="datepicker3">Fecha de término <b>(obligatorio)</b>:</label>
@@ -377,6 +311,7 @@
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
+                                                <div class="controlForm my-3" style="height:60px">
                        @* <div class="controlForm my-3">
                             <label for="timepicker3">Hora de término <b>(obligatorio)</b>:</label>
                             @(Html.Kendo().TimePickerFor(t => t.horaTermino).Interval(1)
@@ -391,9 +326,9 @@
                         </div>*@
 
                             <label class="tex">Hora(Formato 24 horas):</label>
-                            <input type="text" id="horaTerminoInsert" name="horaFinInsertStr" onkeydown="validacionHoraFin(event)" step="60" />
+                            <input type="text" id="horaTerminoInsert" name="horaFinInsertStr" oninput="validacionHoraFin(event)" step="60" />
                     </div>
-
+                    </div>
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="controlForm my-3">
                             <label for="timeDifference">Diferencia en minutos <b>(obligatorio)</b>:</label>
@@ -543,27 +478,38 @@ function enviarDatos() {
     function updateDifference() {
         var fechaInicioPicker = $("#fechaInicioInsert").data("kendoDatePicker");
         var fechaFinalPicker = $("#fechaFinalInsert").data("kendoDatePicker");
-        var horaInicioPicker = $("#horaInicioInsert");
-        var horaFinalPicker = $("#horaTerminoInsert");
+        var horaInicioString = $("#horaInicioInsert").val();
+        var horaTerminoString = $("#horaTerminoInsert").val();
+        console.log("HORAINICIO",horaInicioString)
+        console.log("HORAFIN", horaTerminoString)
 
-        // Verificar si los pickers están inicializados
-        if (fechaInicioPicker && fechaFinalPicker && horaInicioPicker && horaFinalPicker) {
+        // Verificar si los pickers de fecha están inicializados
+        if (fechaInicioPicker && fechaFinalPicker && horaInicioString && horaTerminoString) {
             var fechaInicio = fechaInicioPicker.value();
             var fechaFinal = fechaFinalPicker.value();
-            var horaInicio = horaInicioPicker;
-            var horaFinal = horaFinalPicker;
 
-            // Verificar si las fechas y horas no son null
-            if (fechaInicio !== null && fechaFinal !== null && horaInicio !== null && horaFinal !== null) {
-                // Convertir las fechas y horas a objetos Date para calcular la diferencia
-                var startDateTime = new Date(fechaInicio.getFullYear(), fechaInicio.getMonth(), fechaInicio.getDate(), horaInicio.getHours(), horaInicio.getMinutes());
-                var endDateTime = new Date(fechaFinal.getFullYear(), fechaFinal.getMonth(), fechaFinal.getDate(), horaFinal.getHours(), horaFinal.getMinutes());
+            var horaInicioParts = horaInicioString.split(':');
+            var horaInicioHour = parseInt(horaInicioParts[0]);
+            var horaInicioMinute = parseInt(horaInicioParts[1]);
+             console.log("HORAINH", horaInicioHour)
+            console.log("HORAINMIN", horaInicioMinute)
+            var horaTerminoParts = horaTerminoString.split(':');
+            var horaTerminoHour = parseInt(horaTerminoParts[0]);
+            var horaTerminoMinute = parseInt(horaTerminoParts[1]);
+            console.log("HORTERHO", horaTerminoHour)
+            console.log("HORTERMIN", horaTerminoMinute)
+            // Verificar si las fechas no son null
+            if (fechaInicio !== null && fechaFinal !== null) {
+                // Crear objetos de fecha con las fechas seleccionadas y las horas obtenidas
+                var startDateTime = new Date(fechaInicio.getFullYear(), fechaInicio.getMonth(), fechaInicio.getDate(), horaInicioHour, horaInicioMinute);
+                var endDateTime = new Date(fechaFinal.getFullYear(), fechaFinal.getMonth(), fechaFinal.getDate(), horaTerminoHour, horaTerminoMinute);
 
                 // Calcular la diferencia en milisegundos
                 var timeDifferenceMilliseconds = Math.abs(endDateTime - startDateTime);
-                console.log("TIMEDIF", timeDifferenceMilliseconds)
+
                 // Convertir la diferencia a minutos
                 var timeDifferenceMinutes = Math.round(timeDifferenceMilliseconds / 60000);
+                            console.log("TIMEDIFf", timeDifferenceMinutes)
 
                 if (isNaN(timeDifferenceMinutes)) {
                     timeDifferenceMinutes = 0;
@@ -571,14 +517,15 @@ function enviarDatos() {
 
                 $("#tiempoManiobrasInsert").val(timeDifferenceMinutes);
             } else {
-                // Si alguna de las fechas o horas es null, establecer el valor de tiempo en 0
+                // Si alguna de las fechas es null, establecer el valor de tiempo en 0
                 $("#tiempoManiobrasInsert").val(0);
             }
         }
     }
 
+
     // Llamar a la función cuando cambie alguna de las fechas o horas
-    $("input[name='horaInicio'], input[name='horaTermino'], #fechaInicioInsert, #fechaFinalInsert").on("change", function () {
+    $("input[name='horaInicioInsertStr'], input[name='horaFinInsertStr'], #fechaInicioInsert, #fechaFinalInsert").on("change", function () {
         updateDifference();
     });
 
