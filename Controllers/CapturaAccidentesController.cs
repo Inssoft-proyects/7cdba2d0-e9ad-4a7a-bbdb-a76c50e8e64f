@@ -312,6 +312,20 @@ namespace GuanajuatoAdminUsuarios.Controllers
         [HttpPost]
         public ActionResult GuardarUbicacionAccidente(CapturaAccidentesModel model)
         {
+            if (!string.IsNullOrEmpty(model.HoraStr))
+            {
+                TimeSpan hora;
+                if (TimeSpan.TryParse(model.HoraStr, out hora))
+                {
+                    // Asignar la hora convertida al modelo
+                    model.Hora = hora;
+                }
+                else
+                {
+                    ModelState.AddModelError("HoraComoString", "La hora proporcionada no es válida.");
+                }
+            }
+
 
             if (!ModelState.IsValid)
             {

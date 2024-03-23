@@ -232,8 +232,20 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public ActionResult ajax_EnviarSolicitudDeposito(int? Isol,[FromBody] SolicitudDepositoModel model)
         {
-          
-                if (model.idSolicitud.HasValue && model.idSolicitud.Value > 0)
+            if (!string.IsNullOrEmpty(model.horaSolicitudStr))
+            {
+                TimeSpan hora;
+                if (TimeSpan.TryParse(model.horaSolicitudStr, out hora))
+                {
+                    // Asignar la hora convertida al modelo
+                    model.horaSolicitud = hora;
+                }
+                else
+                {
+                    ModelState.AddModelError("HoraComoString", "La hora proporcionada no es válida.");
+                }
+            }
+            if (model.idSolicitud.HasValue && model.idSolicitud.Value > 0)
                 {
                     // mEs una actualizaci�n, as� que actualiza los datos en la base de datos
                     // utilizando el ID 'Isol' para identificar la solicitud existente
