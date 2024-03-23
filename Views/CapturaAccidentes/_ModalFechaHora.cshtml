@@ -1,45 +1,62 @@
 ﻿@model FechaHoraIngresoModel
 <script>
-	function validacionHora() {
-		var fechaSeleccionadaString = $("#date").val();
-		var horaSeleccionada = $("#HoraIngreso").val();
+	function validacionHora(event) {
+		var horaIngresada = event.target.value;
 
-		var fechaActual = new Date();
-		var fechaSeleccionada = kendo.parseDate(fechaSeleccionadaString, "dd/MM/yyyy");
+		// Permitir números del 0 al 9 y teclas especiales como borrar y arrow keys
+		if ((isNaN(parseInt(horaIngresada.charAt(horaIngresada.length - 1))) || parseInt(horaIngresada.charAt(horaIngresada.length - 1)) > 9) && !["Backspace", "Delete", "ArrowLeft", "ArrowRight"].includes(event.inputType)) {
+			event.preventDefault();
+			return;
+		}
 
-		var horaMaxima = fechaActual.getHours().toString().padStart(2, '0') + ':' + fechaActual.getMinutes().toString().padStart(2, '0');
-		var horaActual = kendo.parseDate(horaMaxima, "HH:mm");
+		// Verificar si ya hay cinco dígitos ingresados o si se intenta borrar
+		if (horaIngresada.length >= 5 && !["Backspace", "Delete"].includes(event.inputType)) {
+			event.preventDefault();
+			setTimeout(validarFecha, 0); // Llama a validarFecha después de que el valor del campo se haya actualizado
+			return;
+		}
 
-		console.log('Fecha seleccionada (string):', fechaSeleccionadaString);
-		console.log('Hora seleccionada (string):', horaSeleccionada);
-		console.log('Fecha actual:', fechaActual);
-		console.log('Fecha seleccionada (objeto):', fechaSeleccionada);
-		console.log('Hora máxima permitida:', horaMaxima);
-		console.log('Hora actual (objeto):', horaActual);
-
-		if (fechaSeleccionada && horaSeleccionada) {
-			var fechaSeleccionadaSinHora = new Date(fechaSeleccionada);
-			fechaSeleccionadaSinHora.setHours(0, 0, 0, 0);
-
-			if (fechaSeleccionadaSinHora.getTime() === fechaActual.setHours(0, 0, 0, 0)) {
-				console.log('Estableciendo límite máximo de hora:', horaMaxima);
-				$("#HoraIngreso").data("kendoTimePicker").max(horaMaxima);
-			} else {
-				console.log('Removiendo límite máximo de hora.');
-				var horaLejana = "23:59";
-				$("#HoraIngreso").data("kendoTimePicker").max(horaLejana);
-			}
-
-			if (fechaSeleccionadaSinHora.getTime() === fechaActual.setHours(0, 0, 0, 0) && kendo.parseDate(horaSeleccionada, "HH:mm") > horaActual) {
-				console.log('Ajustando hora seleccionada a la hora actual:', horaActual);
-				$("#HoraIngreso").data("kendoTimePicker").value(horaActual);
-			}
-		} else {
-			console.log('Fecha o hora no seleccionada.');
-			var horaLejana = "23:59";
-			$("#HoraIngreso").data("kendoTimePicker").max(horaLejana);
+		// Agregar ":" después de ingresar los dos primeros dígitos
+		if (horaIngresada.length === 2 && !["Backspace", "Delete"].includes(event.inputType)) {
+			event.target.value += ":";
 		}
 	}
+
+
+
+	function validarFecha() {
+		// Obtener la fecha actual
+		var fechaActual = new Date();
+		var fechaParseo = new Date(parseInt(fechaActual.getFullYear()), parseInt(fechaActual.getMonth()), parseInt(fechaActual.getDate()));
+
+
+		var fechaSeleccionadaString = $("#date").val();
+		var splitFechaSeleccion = fechaSeleccionadaString.split('/')
+		var objetoFecha = new Date(parseInt(splitFechaSeleccion[2]), parseInt(splitFechaSeleccion[1]) - 1, parseInt(splitFechaSeleccion[0]));
+		console.log("objetoFecha:", objetoFecha)
+		console.log("fechaParseo:", fechaParseo)
+		// Comparar la fecha seleccionada con la fecha actual
+		if (fechaParseo.getTime() === objetoFecha.getTime()) {
+			// Si la fecha seleccionada es la fecha actual, verificar la hora ingresada
+			console.log("SI Entra")
+			var horaIngresada = $("#HoraIngreso").val();
+			var horaActual = fechaActual.getHours() * 60 + fechaActual.getMinutes();
+			var horaIngresadaSplit = horaIngresada.split(':');
+			var horaIngresadaEnMinutos = parseInt(horaIngresadaSplit[0]) * 60 + parseInt(horaIngresadaSplit[1]);
+			console.log("horaIngresada", horaIngresada)
+			console.log("horaActual", horaActual)
+			console.log("horaSplit", horaIngresadaSplit)
+
+			console.log("horaIngresadaEnMinutos", horaIngresadaEnMinutos)
+
+			if (horaIngresadaEnMinutos > horaActual) {
+
+				$("#HoraIngreso").val('');
+				event.preventDefault();
+			}
+		}
+	}
+
 
 </script>
 <section class=" bg-white rounded">
@@ -96,19 +113,9 @@
 
 		<div class="col-12 col-md-6">
 			<div class="controlForm my-3">
-				<label>Hora:</label>
-				<span>
-					@(Html.Kendo().TimePickerFor(model => model.HoraIngreso)
-						.Label(l => l.Content("Hora:"))
-						.Format("HH:mm")
-						.Events(e =>
-						{
-							e.Change("validacionHora");
-						})
-						.Interval(1).Value("")
-						.HtmlAttributes(new { style = "width: 100%", title = "timepicker" })
-						)
-				</span>
+				
+										<label class="tex">Hora (Formato 24 horas):</label>
+				<input type="text" name="HoraIngreso" id="HoraIngreso" oninput="validacionHora(event)" step="60" />
 			</div>
 		</div>
 	</form>
