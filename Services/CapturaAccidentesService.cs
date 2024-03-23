@@ -1857,44 +1857,7 @@ namespace GuanajuatoAdminUsuarios.Services
 					int numeroConsecutivo = 1;
 
 					connection.Open();
-                    SqlCommand command = new SqlCommand(@"
-                       SELECT cva.*, COALESCE(cva.idPersona, pcv.idPersona) AS idConductor,cva.idTipoCarga,cva.poliza,ctc.tipoCarga,v.placas, v.tarjeta, v.serie, v.idMarcaVehiculo,  
-                        v.idSubmarca,v.idEntidad, v.idTipoVehiculo,acc.numeroReporte,v.idPersona AS idPropietario, v.modelo, v.idColor, v.idCatTipoServicio, v.motor, v.capacidad,  
-                        cm.marcaVehiculo, csv.nombreSubmarca, tv.tipoVehiculo, COALESCE(p.nombre, pcv.nombre) AS nombre, COALESCE(p.apellidoPaterno, pcv.apellidoPaterno) AS apellidoPaterno,  
-                        p.apellidoMaterno,p.RFC,p.CURP, CONVERT(varchar, p.fechaNacimiento, 103) AS fechaNacimiento, c.color, ts.tipoServicio, pcv.nombre AS nombreConductor, pcv.apellidoPaterno AS apellidoPConductor, pcv.apellidoMaterno AS apellidoMConductor,  
-                        tc.tipoCarga, pen.pension, ft.formaTraslado, cent.nombreEntidad,va.montoVehiculo ,p.vigenciaLicencia ,
-						isnull(epd.nombreentidad,'') +', '+isnull(mpd.municipio,'') +', '+isnull(pd.colonia,'') +', '+ isnull(pd.calle,'') +', '+isnull(pd.numero,'') as direccion,
-						isnull(epdc.nombreentidad,'')+', '+isnull(mpdc.municipio,'')+', '+isnull(pdc.colonia,'')+', '+ isnull(pdc.calle,'')+', '+isnull(pdc.numero,'') as direccionc,
-						p.nombre,pcv.nombre, GC.genero,pcv.numeroLicencia,tl.tipoLicencia,v.numeroeconomico as numeroeconomico, '' grua, 0 MontoDanos
-
-                        FROM conductoresVehiculosAccidente AS cva 
-						INNER JOIN vehiculos AS v ON cva.idVehiculo = v.idVehiculo  
-                        LEFT JOIN catMarcasVehiculos AS cm ON v.idMarcaVehiculo = cm.idMarcaVehiculo  
-                        LEFT JOIN catTiposcarga AS ctc ON cva.idTipoCarga = ctc.idTipoCarga  
-                        LEFT JOIN catSubmarcasVehiculos AS csv ON v.idSubmarca = csv.idSubmarca  
-                        LEFT JOIN catTiposVehiculo AS tv ON v.idTipoVehiculo = tv.idTipoVehiculo  
-                        LEFT JOIN personas AS p ON v.idPersona = p.idPersona  
-                        LEFT JOIN catColores AS c ON v.idColor = c.idColor  
-                        LEFT JOIN catTiposcarga AS tc ON cva.idTipoCarga = tc.idTipoCarga  
-                        LEFT JOIN pensiones AS pen ON cva.idPension = pen.idPension  
-                        LEFT JOIN vehiculosAccidente AS va ON cva.idVehiculo = va.idVehiculo AND cva.idAccidente = va.idAccidente  
-                        LEFT JOIN catFormasTraslado AS ft ON cva.idFormaTraslado = ft.idFormaTraslado  
-                        LEFT JOIN catTipoServicio AS ts ON v.idCatTipoServicio = ts.idCatTipoServicio  
-                        LEFT JOIN accidentes AS acc ON cva.idAccidente = acc.idAccidente  
-                        LEFT JOIN catEntidades AS cent ON v.idEntidad = cent.idEntidad  
-                        LEFT JOIN personas AS pcv ON cva.idPersona = pcv.idPersona  
-						left join personasDirecciones pd on pd.idPersona=p.idPersona
-						left join personasDirecciones pdc on pdc.idPersona=pcv.idPersona
-						left join catmunicipios mpd on pd.idmunicipio=mpd.idmunicipio
-						left join catentidades epd on pd.identidad=epd.identidad
-						left join catmunicipios mpdc on pdc.idmunicipio=mpdc.idmunicipio
-						left join catentidades epdc on pdc.identidad=epdc.identidad
-						left join catGeneros GC on GC.idGenero=pcv.idGenero
-						left join catTipoLicencia tl on pcv.idTipoLicencia=tl.idTipoLicencia
-
-
-                        WHERE cva.idAccidente = @idAccidente AND cva.idAccidente > 0 AND cva.estatus = 1;
-                        ", connection);
+                    SqlCommand command = new SqlCommand("usp_ObtieneVehiculosInvolucrados", connection);
 
                     command.CommandType = CommandType.Text;
                     command.Parameters.AddWithValue("@idAccidente", IdAccidente);
