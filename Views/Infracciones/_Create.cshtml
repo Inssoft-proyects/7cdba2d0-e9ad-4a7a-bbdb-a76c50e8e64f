@@ -349,6 +349,7 @@
                         .DataTextField("Text")
                         .DataValueField("Value")
                         .OptionLabel("Seleccione Marca...")
+                        .Events(e => e.Change("subMarcaDropDownChange"))
                         .HtmlAttributes(new { style = "width:100%;", id = "ddlMarcas" })
                         .DataSource(source =>
                         {
@@ -365,6 +366,7 @@
                         .DataTextField("Text")
                         .DataValueField("Value")
                         .OptionLabel("Seleccione Marca...")
+                        .Events(e => e.Change("subMarcaDropDownChange"))
                         .HtmlAttributes(new { style = "width:100%;", id = "ddlMarcas" })
                         .DataSource(source =>
                         {
@@ -382,15 +384,25 @@
         <div class="col-12 col-md-4 col-lg-3 col-xl-2">
             <div class="controlForm my-3">
                 <label>Sub-Marca <b>(obligatorio):</b></label>
-                @if (Model.idSubmarca != 0)
-                {
-                    @*<div id="divSubmarca">
-                @(Html.Kendo().DropDownListFor(f => f.idSubmarca)
-                .OptionLabel("-- Seleccione --")
-                .HtmlAttributes(new { style = "width:100%;", required = "required", @readonly = "readonly", })
-                )
 
-                </div>*@
+                 @Html.HiddenFor(m => m.idSubmarcaUpdated, new { @id = "hdnIdSubmarca" })
+
+                    @(Html.Kendo().DropDownListFor(d => d.idSubmarca).Filter(FilterType.Contains)
+                        .DataTextField("Text")
+                        .DataValueField("Value")
+                        .OptionLabel("Seleccione Sub-Marca...")
+                        .HtmlAttributes(new { style = "width:100%;",id = "idSubmarca" })
+                        .DataSource(source =>
+                        {
+                            source.Read(read =>
+                            {
+                                read.Action("SubMarcas_ReadId", "Vehiculos");
+                            });
+                        })
+                        )
+
+                @*@if (Model.idSubmarca != 0)
+                {
                     @Html.HiddenFor(m => m.idSubmarcaUpdated, new { @id = "hdnIdSubmarca" })
 
                     @(Html.Kendo().DropDownListFor(d => d.idSubmarca).Filter(FilterType.Contains)
@@ -415,12 +427,12 @@
                         @(Html.Kendo().DropDownList()
                             .Name("ddlIdSubIn")
                             .OptionLabel(@Model.submarca)
-                            .HtmlAttributes(new { style = "width:100%;" })
+                            .HtmlAttributes(new { style = "width:100%;", id = "idSubmarca"  })
                             .Filter(FilterType.Contains)
                             )
 
                     </div>
-                }
+                }*@
 
             </div>
         </div>
@@ -1483,12 +1495,12 @@
         });
     }
 
-    $("#ddlMarcas").on("change", function () {
-        var value = $(this).val();
-        _set_combo_catalog("CatSubmarcasByFilter", value, "idSubmarca", "false", "divSubmarca", "");
-        $('#idSubmarca').kendoDropDownList();
+    //$("#ddlMarcas").on("change", function () {
+    //    var value = $(this).val();
+    //    _set_combo_catalog("CatSubmarcasByFilter", value, "idSubmarca", "false", "divSubmarca", "");
+    //    $('#idSubmarca').kendoDropDownList();
 
-    });
+    //});
 
     $("#Persona_PersonaDireccion_idEntidadFisico").on("change", function () {
         var value = $(this).val();
@@ -1813,4 +1825,25 @@ function cancelarConfirmacionV(){
    $('#confirmacionModalV').modal('hide');
  
 }
+
+
+    function subMarcaDropDownChange () {
+        var _idMarca = $("#ddlMarcas").data("kendoDropDownList").value();
+        showLoading();
+        $.ajax({
+            url: "/Vehiculos/SubMarcas_ReadId",
+            type: "POST",
+            data: { idMarca: _idMarca },
+            success: function (data) {
+                var TramosDropDown = $("#idSubmarca").data("kendoDropDownList");
+                TramosDropDown.dataSource.data(data);
+                hideLoading();
+            },
+            error: function (xhr, status, error) {
+                console.log("EE", error)
+                hideLoading();
+            }
+        });
+    }
+
 </script>
