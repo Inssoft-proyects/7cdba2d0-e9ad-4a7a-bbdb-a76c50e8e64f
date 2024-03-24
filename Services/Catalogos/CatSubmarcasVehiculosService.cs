@@ -102,9 +102,47 @@ namespace GuanajuatoAdminUsuarios.Services
                 return submarca;
             }
 
+        public List<CatSubmarcasVehiculosModel> GetSubmarcaByIDMarca(int IdMarca)
+        {
+         
+            List<CatSubmarcasVehiculosModel> submarcas = new List<CatSubmarcasVehiculosModel>();
+
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("Select * from catSubmarcasVehiculos where idMarcaVehiculo=@IdMarca", connection);
+                    command.Parameters.Add(new SqlParameter("@IdMarca", SqlDbType.Int)).Value = IdMarca;
+                    command.CommandType = CommandType.Text;
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            CatSubmarcasVehiculosModel submarca = new CatSubmarcasVehiculosModel();
+                            submarca.IdSubmarca = Convert.ToInt32(reader["IdSubmarca"].ToString());
+                            submarca.IdMarcaVehiculo = Convert.ToInt32(reader["IdMarcaVehiculo"].ToString());
+                            submarca.NombreSubmarca = reader["NombreSubmarca"].ToString();
+                            // submarca.FechaActualizacion = Convert.ToDateTime(reader["FechaActualizacion"].ToString());
+                            submarca.ActualizadoPor = 1;
+                            submarca.Estatus = Convert.ToInt32(reader["Estatus"].ToString());
+                            submarcas.Add(submarca);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                }
+                finally
+                {
+                    connection.Close();
+                }
+
+            return submarcas;
+        }
 
 
-            public bool ValidarExistenciaSubmarca(int idMarca,string descripcion)
+
+        public bool ValidarExistenciaSubmarca(int idMarca,string descripcion)
         {
             var result = false;
 

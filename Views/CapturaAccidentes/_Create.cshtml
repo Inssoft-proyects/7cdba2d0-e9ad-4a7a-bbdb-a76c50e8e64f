@@ -343,6 +343,7 @@ function mostrarMensajeRobado() {
                         .DataTextField("Text")
                         .DataValueField("Value")
                         .OptionLabel("Seleccione Marca...")
+                        .Events(e => e.Change("subMarcaDropDownChange"))
                         .HtmlAttributes(new { style = "width:100%;",  id = "ddlMarcas"})
                                             .Filter(FilterType.Contains)
 
@@ -363,6 +364,7 @@ function mostrarMensajeRobado() {
                         .DataTextField("Text")
                         .DataValueField("Value")
                         .OptionLabel("Seleccione Marca...")
+                        .Events(e => e.Change("subMarcaDropDownChange"))
                         .HtmlAttributes(new { style = "width:100%;", id = "ddlMarcas" })
                         .Filter(FilterType.Contains)
                         .DataSource(source =>
@@ -381,8 +383,8 @@ function mostrarMensajeRobado() {
         <div class="col-12 col-md-4 col-lg-3 col-xl-2">
             <div class="controlForm my-3">
                 <label>Sub-Marca <b>(obligatorio):</b></label>
-                @if (Model.idMarcaVehiculo != 0 && Model.idSubmarca != 0)               
-                {
+@*                @if (Model.idMarcaVehiculo != 0 && Model.idSubmarca != 0)               
+                {*@
                     @*<div id="divSubmarca">
                 @(Html.Kendo().DropDownListFor(f => f.idSubmarca)
                 .OptionLabel("-- Seleccione --")
@@ -403,11 +405,11 @@ function mostrarMensajeRobado() {
                         {
                             source.Read(read =>
                             {
-                                read.Action("SubMarcas_Read", "Vehiculos");
+                            read.Action("SubMarcas_ReadId", "Vehiculos");
                             });
                         })
                         )
-                }
+                @*}
                 else
                 {
 
@@ -423,7 +425,7 @@ function mostrarMensajeRobado() {
                             )
 
                     </div>
-                }
+                }*@
 
             </div>
         </div>
@@ -1494,12 +1496,12 @@ function mostrarMensajeRobado() {
         });
     }
 
-    $("#ddlMarcas").on("change", function () {
-        var value = $(this).val();
-        _set_combo_catalog("CatSubmarcasByFilter", value, "idSubmarca", "false", "divSubmarca", "");
-        $('#idSubmarca').kendoDropDownList();
+    //$("#ddlMarcas").on("change", function () {
+    //    var value = $(this).val();
+    //    _set_combo_catalog("CatSubmarcasByFilter", value, "idSubmarca", "false", "divSubmarca", "");
+    //    $('#idSubmarca').kendoDropDownList();
 
-    });
+    //});
     
    $("#idEntidadFisico").on("change", function () {
         var value = $(this).val();

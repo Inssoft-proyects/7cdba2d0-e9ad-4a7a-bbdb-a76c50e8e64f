@@ -6,7 +6,10 @@ namespace GuanajuatoAdminUsuarios.Interfaces
     public interface ICatSubmarcasVehiculosService
     {
         List<CatSubmarcasVehiculosModel> ObtenerSubarcas();
-        public CatSubmarcasVehiculosModel GetSubmarcaByID(int IdSubmarca);
+
+        public CatSubmarcasVehiculosModel GetSubmarcaByID(int IdSubmarca); 
+        public List<CatSubmarcasVehiculosModel> GetSubmarcaByIDMarca(int IdMarca);
+        
         bool ValidarExistenciaSubmarca(int idMarca, string descripcion);
 
 		public int GuardarSubmarca(CatSubmarcasVehiculosModel model);

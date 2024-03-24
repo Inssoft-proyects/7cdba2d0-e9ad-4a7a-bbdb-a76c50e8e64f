@@ -53,6 +53,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         private readonly IBitacoraService _bitacoraServices;
         private readonly ICatSubtipoServicio _subtipoServicio;
         private readonly IVehiculoPlataformaService _vehiculoPlataformaService;
+        //private readonly ISubmarcasVehiculos submarcasVehiculos;
 
         private string resultValue = string.Empty;
         public static VehiculoBusquedaModel vehModel = new VehiculoBusquedaModel();
@@ -64,7 +65,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             ICatTiposVehiculosService catTiposVehiculosService
         , IRepuveService repuveService,
             IBitacoraService bitacoraService,
-            ICatSubtipoServicio subtipoServicio
+            ICatSubtipoServicio subtipoServicio//, ISubmarcasVehiculos submarcasVehiculos
             )
         {
             _vehiculosService = vehiculosService;
@@ -84,6 +85,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             _repuveService = repuveService;
             _bitacoraServices = bitacoraService;
             _subtipoServicio = subtipoServicio;
+            //_catSubmarcasVehiculosService = _submar
         }
 
         public IActionResult Index()
@@ -93,6 +95,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             vehiculoBusquedaModel.Vehiculo.PersonaMoralBusquedaModel = new PersonaMoralBusquedaModel();
             vehiculoBusquedaModel.Vehiculo.PersonaMoralBusquedaModel.PersonasMorales = new List<PersonaModel>();
             //ViewBag.PersonasFisicas= _personasService.GetAllPersonas();
+            HttpContext.Session.Remove("IdMarcaVehiculo");
             return View(vehiculoBusquedaModel);
         }
 
@@ -177,6 +180,27 @@ namespace GuanajuatoAdminUsuarios.Controllers
             return Json(result);
         }
 
+        public JsonResult SubMarcas_ReadId(int idMarca)
+        {
+            List<CatSubmarcasVehiculosModel> vm = new List<CatSubmarcasVehiculosModel>();
+            if (HttpContext.Session.GetInt32("IdMarcaVehiculo")!=null)
+            {
+                if (idMarca <= 0)
+                {
+                    vm = _catSubmarcasVehiculosService.GetSubmarcaByIDMarca(Convert.ToInt32(HttpContext.Session.GetInt32("IdMarcaVehiculo")));
+                    HttpContext.Session.Remove("IdMarcaVehiculo");
+                } else
+                {
+                    vm = _catSubmarcasVehiculosService.GetSubmarcaByIDMarca(idMarca);
+                }
+            } else
+            {
+                vm = _catSubmarcasVehiculosService.GetSubmarcaByIDMarca(idMarca);
+            }
+            var result = new SelectList(vm, "IdSubmarca", "NombreSubmarca");
+            return Json(result);
+        }
+
         public JsonResult TiposVehiculo_Read()
         {
             var catEntidades = _catDictionary.GetCatalog("CatTiposVehiculo", "0");
@@ -197,6 +221,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         {
             //Se busca el vehiculo en el padron RIAG, Finanzas y REPUVE
             VehiculoModel vehiculo = vehiculoPlataformaService.BuscarVehiculoEnPlataformas(model);
+            HttpContext.Session.SetInt32("IdMarcaVehiculo", vehiculo.idMarcaVehiculo);
 
             return await this.RenderViewAsync("_Create", vehiculo, true);
         }
