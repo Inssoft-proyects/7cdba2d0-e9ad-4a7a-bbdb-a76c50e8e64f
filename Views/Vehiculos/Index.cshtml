@@ -76,12 +76,12 @@
 
 
 
-        function setDataToIdSubmarca(idMarca) {
-            //console.log("Update Veh IdMarc: ".value);
-            _set_combo_catalog("CatSubmarcasByFilter", idMarca, "idSubmarca", "false", "divSubmarca", "");
-            $('#idSubmarca').kendoDropDownList();
+        //function setDataToIdSubmarca(idMarca) {
+        //    //console.log("Update Veh IdMarc: ".value);
+        //    _set_combo_catalog("CatSubmarcasByFilter", idMarca, "idSubmarca", "false", "divSubmarca", "");
+        //    $('#idSubmarca').kendoDropDownList();
 
-        }
+        //}
 
         //function closeForm() {
         //    console.log("hola ", document.getElementById("placas").value);
@@ -116,6 +116,28 @@
         function EditarBusquedaMoral() {
             document.getElementById("sec3").style.display = "block";
             document.getElementById("PersonaMoralLocalizada").style.display = "none";
+        }
+
+
+
+
+        function subMarcaDropDownChange() {
+            var _idMarca = $("#ddlMarcas").data("kendoDropDownList").value();
+            showLoading();
+            $.ajax({
+                url: "/Vehiculos/SubMarcas_ReadId",
+                type: "POST",
+                data: { idMarca: _idMarca },
+                success: function (data) {
+                    var TramosDropDown = $("#ddlidSubmarcaDisabled").data("kendoDropDownList");
+                    TramosDropDown.dataSource.data(data);
+                    hideLoading();
+                },
+                error: function (xhr, status, error) {
+                    console.log("EE", error)
+                    hideLoading();
+                }
+            });
         }
 
     </script>

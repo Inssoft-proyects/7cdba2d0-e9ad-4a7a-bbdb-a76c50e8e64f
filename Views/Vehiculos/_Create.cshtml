@@ -377,6 +377,7 @@ function mostrarMensajeRobado() {
                         .DataTextField("Text")
                         .DataValueField("Value")
                         .OptionLabel("Seleccione Marca...")
+                        .Events(e => e.Change("subMarcaDropDownChange"))
                         .HtmlAttributes(new { style = "width:100%;" })
                                             .Filter(FilterType.Contains)
 
@@ -397,6 +398,7 @@ function mostrarMensajeRobado() {
                         .DataTextField("Text")
                         .DataValueField("Value")
                         .OptionLabel("Seleccione Marca...")
+                        .Events(e => e.Change("subMarcaDropDownChange"))
                         .HtmlAttributes(new { style = "width:100%;", id = "ddlMarcas" })
                         .Filter(FilterType.Contains)
                         .DataSource(source =>
@@ -415,8 +417,25 @@ function mostrarMensajeRobado() {
         <div class="col-12 col-md-4 col-lg-3 col-xl-2">
             <div class="controlForm my-3">
                 <label>Sub-Marca <b>(obligatorio):</b></label>
-                @if (Model.idSubmarca != 0)               
-                {
+                             @Html.HiddenFor(m=> m.idSubmarcaUpdated, new { @id = "hdnIdSubmarca" })
+
+                    @(Html.Kendo().DropDownListFor(d => d.idSubmarca)
+                                        .Filter(FilterType.Contains)
+                        .DataTextField("Text")
+                        .DataValueField("Value")
+                        .OptionLabel("Seleccione Sub-Marca...")
+                        .HtmlAttributes(new { style = "width:100%;",id = "ddlidSubmarcaDisabled" })
+                        .DataSource(source =>
+                        {
+                            source.Read(read =>
+                            {
+                                read.Action("SubMarcas_ReadId", "Vehiculos");
+                            });
+                        })
+                        )
+
+@*                @if (Model.idSubmarca != 0)               
+                {*@
                     @*<div id="divSubmarca">
                 @(Html.Kendo().DropDownListFor(f => f.idSubmarca)
                 .OptionLabel("-- Seleccione --")
@@ -424,7 +443,7 @@ function mostrarMensajeRobado() {
                 )
 
                 </div>*@
-                    @Html.HiddenFor(m=> m.idSubmarcaUpdated, new { @id = "hdnIdSubmarca" })
+                    @*@Html.HiddenFor(m=> m.idSubmarcaUpdated, new { @id = "hdnIdSubmarca" })
 
                     @(Html.Kendo().DropDownListFor(d => d.idSubmarca)
                                         .Filter(FilterType.Contains)
@@ -457,7 +476,7 @@ function mostrarMensajeRobado() {
                             )
 
                     </div>
-                }
+                }*@
 
             </div>
         </div>

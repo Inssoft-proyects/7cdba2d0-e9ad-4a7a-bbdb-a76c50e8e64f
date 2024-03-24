@@ -135,7 +135,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             List<InfraccionesModel> listInfracciones = new List<InfraccionesModel>();
             //_infraccionesService.GetAllInfracciones(idOficina);
             searchModel.ListInfracciones = listInfracciones;
-
+            HttpContext.Session.Remove("IdMarcaVehiculo");
 
 
             return View(searchModel);
@@ -1026,6 +1026,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 
                 var models = _vehiculoPlataformaService.BuscarVehiculoEnPlataformas(model);
+                HttpContext.Session.SetInt32("IdMarcaVehiculo", models.idMarcaVehiculo);
+
 
                 var test = await this.RenderViewAsync2("", models);
 

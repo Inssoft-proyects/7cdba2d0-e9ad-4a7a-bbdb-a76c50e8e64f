@@ -190,8 +190,9 @@ namespace GuanajuatoAdminUsuarios.Controllers
             pagination.PageIndex = request.Page - 1;
             pagination.PageSize = 1;
             pagination.Filter = resultValue;
+			HttpContext.Session.Remove("IdMarcaVehiculo");
 
-            int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+			int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
             var ListAccidentesModel = _capturaAccidentesService.ObtenerAccidentesPagination(idOficina, pagination);
             if (ListAccidentesModel.Count == 0)
             {
@@ -534,7 +535,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                //Se busca el vehiculo en el padron RIAG, Finanzas y REPUVE
             VehiculoModel vehiculo = _vehiculoPlataformaService.BuscarVehiculoEnPlataformas(model);
-                return await this.RenderViewAsync("_Create", vehiculo, true);
+			HttpContext.Session.SetInt32("IdMarcaVehiculo", vehiculo.idMarcaVehiculo);
+			return await this.RenderViewAsync("_Create", vehiculo, true);
             }
             catch (Exception ex)
             {

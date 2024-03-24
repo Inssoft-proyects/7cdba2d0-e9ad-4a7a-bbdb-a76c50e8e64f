@@ -962,5 +962,25 @@ formData += "&horaInfraccion=" + encodeURIComponent(horaInfraccion);
 		}
 	}
 
+
+	function subMarcaDropDownChange() {
+		var _idMarca = $("#ddlMarcas").data("kendoDropDownList").value();
+		showLoading();
+		$.ajax({
+			url: "/Vehiculos/SubMarcas_ReadId",
+			type: "POST",
+			data: { idMarca: _idMarca },
+			success: function (data) {
+				var TramosDropDown = $("#idSubmarca").data("kendoDropDownList");
+				TramosDropDown.dataSource.data(data);
+				hideLoading();
+			},
+			error: function (xhr, status, error) {
+				console.log("EE", error)
+				hideLoading();
+			}
+		});
+	}
+
 </script>
 
