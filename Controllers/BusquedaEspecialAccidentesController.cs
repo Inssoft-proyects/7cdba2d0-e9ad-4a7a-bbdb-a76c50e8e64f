@@ -278,6 +278,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 			Pagination pagination = new Pagination();
             pagination.PageIndex = request.Page - 1;
             pagination.PageSize = 10;
+            model.IdDelegacionBusqueda = HttpContext.Session.GetInt32("IdOficina").Value;
 
             //model.FechaInicio = String.IsNullOrEmpty(model.FechaInicioStr) ? null : DateTime.ParseExact(model.FechaInicioStr, "dd/MM/yyyy",CultureInfo.InvariantCulture);
             //model.FechaFin = String.IsNullOrEmpty(model.FechaFinStr) ? null : DateTime.ParseExact(model.FechaFinStr, "dd/MM/yyyy", CultureInfo.InvariantCulture);

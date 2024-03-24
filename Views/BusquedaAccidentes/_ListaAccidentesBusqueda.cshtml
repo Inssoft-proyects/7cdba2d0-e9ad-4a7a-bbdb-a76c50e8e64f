@@ -1,14 +1,20 @@
-﻿
+﻿@{
+	@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+
+	var delegacion = @HttpContextAccessor.HttpContext.Session.GetInt32("IdOficina").Value;
+
+
+}
 
 
 
 <script>
-
+	var oficina = "@delegacion"
 
 	function TemplateMostrar(data){
 
 		
-		if(data.idEstatusReporte=="3")
+		if (data.idEstatusReporte == "3" && data.idDelegacion == oficina)
 	return	`<button onclick="mostrarAccidente('${data.IdAccidente}')" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-research me-2'></i><b>Mostrar</b></h6></button>`
 	else
 	return ""
@@ -17,7 +23,7 @@
 
 	function TemplatePdf(data){
 
-		if (data.idEstatusReporte == "3")
+		if (data.idEstatusReporte == "3" && data.idDelegacion == oficina)
 		return `<button onclick="downLoadPdf('${data.IdAccidente}')" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='h5 icon-pdf me-2'></i><b>Descargar</b></h6></button>`
 		else
 		return ""
@@ -25,9 +31,11 @@
 
 	}
 	function TemplateEditar(data) {
-
+		console.log(data, oficina)
+		if ( data.idDelegacion == oficina)
 		return`<button onclick="editarAccidente('${data.IdAccidente}')" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>`
-
+		else
+		return ""
 
 	}
 
