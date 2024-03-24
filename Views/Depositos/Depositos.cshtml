@@ -238,24 +238,14 @@
                             )
                     </div>
                 </div>
-            
-                       @* @(Html.Kendo().TimePickerFor(t => t.horaSolicitud).Interval(1)
-                            .Label(l => l.Content("Hora:"))
-                           .Events(e =>
-											{
-												e.Change("validacionHora");
-											})
-                            .Format("HH:mm")
-                            .Culture("es-ES")
-.Value(Model.horaSolicitud == default(TimeSpan) ? "" : Model.horaSolicitud.ToString(@"hh\:mm"))
-                            .HtmlAttributes(new { style = "width: 60%", id = "dateTime" })
-                        )*@
-                        <div class="col-12 col-md-6 col-lg-6 col-xl-3">
-                    <div class="controlForm my-3" style="height:60px">
-						    <label class="tex">Hora(Formato 24 horas):</label>
-                        <input type="text" value='@(Model.horaSolicitud == default(TimeSpan) ? "" : Model.horaSolicitud.ToString(@"hh\:mm"))' id="horaSolicitudStr" name="horaSolicitudStr" onkeydown="validacionHora(event)" step="60" />
-                            </div>
-                            </div>
+                <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                    <div class="controlForm my-3" style="height: auto;">
+                        <label>Hora <b>(Formato 24 horas)</b>:</label>
+                        <div class="input-group">
+                            <input type="text" value='@(Model.horaSolicitud == default(TimeSpan) ? "" : Model.horaSolicitud.ToString(@"hh\:mm"))' id="horaSolicitudStr" name="horaSolicitudStr" onkeydown="validacionHora(event)" style="height: 3.5em;" />
+                        </div>
+                    </div>
+                </div>
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3">
                     <div class="controlForm my-3">
                         <label>Tipo de vehículo <b>(obligatorio)</b>:</label>
@@ -1158,8 +1148,10 @@
     function convertirTiempoATimeSpan(tiempo) {
         var horas = parseInt(tiempo.substring(0, 2));
         var minutos = parseInt(tiempo.substring(2));
+        var horaFormateada = ("0" + horas).slice(-2); // Asegurar que siempre tenga 2 dígitos
+        var minutosFormateados = ("0" + minutos).slice(-2); // Asegurar que siempre tenga 2 dígitos
 
-        return new Date(1970, 0, 1, horas, minutos);
+        return horaFormateada + ":" + minutosFormateados;
     }
     function requiredControlsUser() {
         depositControlsValidate = [];
