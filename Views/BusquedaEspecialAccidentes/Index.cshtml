@@ -21,9 +21,9 @@
                 }, 200);
             } else {
                 // BUSQUEA
-                if (!auth.toString().includes("611")) {
-                    $("#BuscarEspecial").prop('disabled', true).css({ "opacity": "0.3" });
-                }        
+                //if (!auth.toString().includes("611")) {
+                //    $("#BuscarEspecial").prop('disabled', true).css({ "opacity": "0.3" });
+                //}        
 
 
             }
@@ -134,7 +134,7 @@
                                     .DataTextField("Text")
                                     .DataValueField("Value")
                                     .Filter(FilterType.Contains)
-
+                                    .Enable(false)
                                     .OptionLabel("Selecciona la Delegación")
                                     .DataSource(source =>
                                     {
@@ -304,19 +304,19 @@
 </div>
 <script>
     $(document).ready(function () {
-        var auth = @autorizaciones;
-        var grid = $("#gridBusquedaEspecialAccidentes").data("kendoGrid");
+        //var auth = @autorizaciones;
+        //var grid = $("#gridBusquedaEspecialAccidentes").data("kendoGrid");
 
-        if (!auth.toString().includes("611")) {
-            grid.hideColumn(9);
-        }
-        if (!auth.toString().includes("614")) {
-            grid.hideColumn(10);
-        }
-        if (!auth.toString().includes("616")) {
-            $("#btnFolio").prop('disabled', true).css({ "opacity": "0.3" });
+        //if (!auth.toString().includes("611")) {
+        //    grid.hideColumn(9);
+        //}
+        //if (!auth.toString().includes("614")) {
+        //    grid.hideColumn(10);
+        //}
+        //if (!auth.toString().includes("616")) {
+        //    $("#btnFolio").prop('disabled', true).css({ "opacity": "0.3" });
 
-        }
+        //}
 
     });
   function buscarAccidente() {
