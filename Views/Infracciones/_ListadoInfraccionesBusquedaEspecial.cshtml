@@ -5,7 +5,7 @@
     var autorizaciones = @HttpContextAccessor.HttpContext.Session.GetString("Autorizaciones").ToString();
 
     var modificarP = autorizaciones.Contains("486") ? 1 : 0;
-
+    var delegacion = HttpContextAccessor.HttpContext.Session.GetInt32("IdOficina").Value;
 
 
 }
@@ -15,7 +15,7 @@
 <script>
 
     window.modificarP = "@modificarP"
-
+    window.delegacion = "@delegacion"
 
     function TemplateEliminar(data) {
 
@@ -34,18 +34,14 @@
         console.log(data)
         var element = `<div> ${data.infraccionCortesiaString == null ? "" : data.infraccionCortesiaString} </div>`
 
-        if (data.infraccionCortesiaString !== null && data.infraccionCortesiaString === 'Cortesía' && window.modificarP==1) {
+        if (data.infraccionCortesiaString !== null && data.infraccionCortesiaString === 'Cortesía' && data.idDelegacion== window.delegacion)//window.modificarP==1   )
+        {
             element=`    ${element}                
             <button id = 'btnCortesia' onclick ="ModalEditarCortesia('${data.idInfraccion}','${data.folioInfraccion}')" class='w-100 btn'>
                     <h6 class='m-0 colorPrimary' > <i class='icon-edit me-2' > </i><b></b > </h6>
                         </button>`
         }
-
-
-
         return `<div style='display: flex; align - items: center; '> ${element} </div>`
-
-
     }
 
 
