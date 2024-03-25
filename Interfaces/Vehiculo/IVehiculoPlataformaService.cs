@@ -14,13 +14,15 @@
 
 using GuanajuatoAdminUsuarios.Models;
 using GuanajuatoAdminUsuarios.RESTModels;
+using System.ComponentModel;
+using System.Threading.Tasks;
 using static GuanajuatoAdminUsuarios.RESTModels.CotejarDatosResponseModel;
 namespace GuanajuatoAdminUsuarios.Interfaces
 {
     public interface IVehiculoPlataformaService
     {
-        RepuveRoboModel ValidarRoboRepuve(RepuveConsgralRequestModel repuveGralModel);
-        VehiculoModel GetVehiculoModelFromFinanzas(RootCotejarDatosRes result);
-        VehiculoModel BuscarVehiculoEnPlataformas(VehiculoBusquedaModel busquedaModel);
+        Task<RepuveRoboModel> ValidarRoboRepuve(RepuveConsgralRequestModel repuveGralModel);
+        Task<VehiculoModel> GetVehiculoModelFromFinanzas(RootCotejarDatosRes result);
+        Task<VehiculoModel> BuscarVehiculoEnPlataformas(VehiculoBusquedaModel busquedaModel);
     }
 }

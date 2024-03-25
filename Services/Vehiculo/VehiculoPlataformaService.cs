@@ -18,6 +18,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
 using GuanajuatoAdminUsuarios.RESTModels;
@@ -70,7 +71,7 @@ namespace GuanajuatoAdminUsuarios.Services
         /// </summary>
         /// <param name="busquedaModel"></param>
         /// <returns></returns>
-        public VehiculoModel BuscarVehiculoEnPlataformas(VehiculoBusquedaModel busquedaModel)
+        public async Task<VehiculoModel> BuscarVehiculoEnPlataformas(VehiculoBusquedaModel busquedaModel)
         {
             try
             {
@@ -84,7 +85,7 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 try
                 {
-                    repuveRoboModel = ValidarRoboRepuve(repuveGralModel);
+                    repuveRoboModel = await ValidarRoboRepuve(repuveGralModel);
                 }
                 catch (Exception e)
                 {
@@ -128,7 +129,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     if (result.MT_CotejarDatos_res != null && result.MT_CotejarDatos_res.Es_mensaje != null && result.MT_CotejarDatos_res.Es_mensaje.TpMens.ToString().Equals("I", StringComparison.OrdinalIgnoreCase))
                     {
                         // Logger.Debug("Infracciones - ajax_BuscarVehiculo - GetVEiculoModelFromFinanzas - Response - " + JsonConvert.SerializeObject(result));
-                        vehiculoModel = GetVehiculoModelFromFinanzas(result);
+                        vehiculoModel = await GetVehiculoModelFromFinanzas(result);
 
 
                         if (!vehiculoModel.serie.Contains("SINSERIE"))
@@ -188,9 +189,9 @@ namespace GuanajuatoAdminUsuarios.Services
         /// <param name="repuveGralModel"></param>
         /// <returns></returns>
 
-        public RepuveRoboModel ValidarRoboRepuve(RepuveConsgralRequestModel repuveGralModel)
+        public async Task<RepuveRoboModel> ValidarRoboRepuve(RepuveConsgralRequestModel repuveGralModel)
         {
-            var repuveConsRoboResponse = _repuveService.ConsultaRobo(repuveGralModel)?.FirstOrDefault() ?? new RepuveRoboModel();
+            var repuveConsRoboResponse = (await _repuveService.ConsultaRobo(repuveGralModel))?.FirstOrDefault() ?? new RepuveRoboModel();
             return repuveConsRoboResponse;
         }
 
@@ -200,7 +201,7 @@ namespace GuanajuatoAdminUsuarios.Services
         /// </summary>
         /// <param name="result"></param>
         /// <returns></returns>
-        public VehiculoModel GetVehiculoModelFromFinanzas(RootCotejarDatosRes result)
+        public async Task<VehiculoModel> GetVehiculoModelFromFinanzas(RootCotejarDatosRes result)
         {
             var vehiculoEncontradoData = result.MT_CotejarDatos_res.tb_vehiculo[0];
             var vehiculoDireccionData = result.MT_CotejarDatos_res.tb_direccion[0];

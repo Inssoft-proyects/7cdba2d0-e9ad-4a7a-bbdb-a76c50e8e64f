@@ -175,12 +175,10 @@ namespace GuanajuatoAdminUsuarios.Controllers
         {
             var catEntidades = _catDictionary.GetCatalog("CatSubmarcasVehiculos", "0");
             var result = new SelectList(catEntidades.CatalogList, "Id", "Text");
-            //var selected = result.Where(x => x.Value == Convert.ToString(idSubmarca)).First();
-            //selected.Selected = true;
             return Json(result);
         }
 
-        public JsonResult SubMarcas_ReadId(int idMarca)
+        public JsonResult SubMarcas_ReadPorMarca(int idMarca)
         {
             List<CatSubmarcasVehiculosModel> vm = new List<CatSubmarcasVehiculosModel>();
             if (HttpContext.Session.GetInt32("IdMarcaVehiculo")!=null)
@@ -220,7 +218,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public async Task<string> ajax_BuscarVehiculo([FromServices] IVehiculoPlataformaService vehiculoPlataformaService, VehiculoBusquedaModel model)
         {
             //Se busca el vehiculo en el padron RIAG, Finanzas y REPUVE
-            VehiculoModel vehiculo = vehiculoPlataformaService.BuscarVehiculoEnPlataformas(model);
+            VehiculoModel vehiculo = await vehiculoPlataformaService.BuscarVehiculoEnPlataformas(model);
             HttpContext.Session.SetInt32("IdMarcaVehiculo", vehiculo.idMarcaVehiculo);
 
             return await this.RenderViewAsync("_Create", vehiculo, true);

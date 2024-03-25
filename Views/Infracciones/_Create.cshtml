@@ -396,7 +396,7 @@
                         {
                             source.Read(read =>
                             {
-                                read.Action("SubMarcas_ReadId", "Vehiculos");
+                                read.Action("SubMarcas_Read", "Vehiculos");
                             });
                         })
                         )
@@ -1831,7 +1831,7 @@ function cancelarConfirmacionV(){
         var _idMarca = $("#ddlMarcas").data("kendoDropDownList").value();
         showLoading();
         $.ajax({
-            url: "/Vehiculos/SubMarcas_ReadId",
+            url: "/Vehiculos/SubMarcas_ReadPorMarca",
             type: "POST",
             data: { idMarca: _idMarca },
             success: function (data) {

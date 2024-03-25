@@ -1,14 +1,11 @@
-﻿using GuanajuatoAdminUsuarios.Framework;
-using GuanajuatoAdminUsuarios.Interfaces;
+﻿using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
-using GuanajuatoAdminUsuarios.Services;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;

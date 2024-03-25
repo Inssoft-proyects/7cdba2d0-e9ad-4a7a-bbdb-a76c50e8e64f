@@ -1,28 +1,29 @@
-      @using static GuanajuatoAdminUsuarios.Utils.CatalogosEnums;
-      @model GuanajuatoAdminUsuarios.Models.VehiculoModel
-      @{
-         bool disableInput = false;
+@using static GuanajuatoAdminUsuarios.Utils.CatalogosEnums;
+@model GuanajuatoAdminUsuarios.Models.VehiculoModel
+@{
+    bool disableInput = false;
     if (Model != null)
     {
         disableInput = Model.encontradoEn == (int)EstatusBusquedaVehiculo.Sitteg ? true : false;
     }
     //En caso de exitir un reporte de robo de REPUVE se asignan las variables para mostrar alerta
-    string placaRoboRepuve="";
-    string nivRoboRepuve="";
-    string fechaRoboRepuve="";
-    string fuenteRoboRepuve="";
-    string averiguacionRoboRepuve="";
-    string fechaAveriguacionRoboRepuve="";
-    string agenteRoboRepuve="";
+    string placaRoboRepuve = "";
+    string nivRoboRepuve = "";
+    string fechaRoboRepuve = "";
+    string fuenteRoboRepuve = "";
+    string averiguacionRoboRepuve = "";
+    string fechaAveriguacionRoboRepuve = "";
+    string agenteRoboRepuve = "";
 
-    if(Model!=null&&Model.RepuveRobo!=null){
-     placaRoboRepuve =Model.RepuveRobo.Placa!=null?Model.RepuveRobo.Placa:"";
-     nivRoboRepuve = Model.RepuveRobo.Niv!=null?Model.RepuveRobo.Niv:"";
-     fechaRoboRepuve = Model.RepuveRobo.Fecha ;
-     fuenteRoboRepuve = Model.RepuveRobo.FuenteRobo;
-     averiguacionRoboRepuve = Model.RepuveRobo.Averiguacion;
-     fechaAveriguacionRoboRepuve = Model.RepuveRobo.FechaAveriguacion;
-     agenteRoboRepuve = Model.RepuveRobo.AgenteMinisterioPublico;
+    if (Model != null && Model.RepuveRobo != null)
+    {
+        placaRoboRepuve = Model.RepuveRobo.Placa != null ? Model.RepuveRobo.Placa : "";
+        nivRoboRepuve = Model.RepuveRobo.Niv != null ? Model.RepuveRobo.Niv : "";
+        fechaRoboRepuve = Model.RepuveRobo.Fecha;
+        fuenteRoboRepuve = Model.RepuveRobo.FuenteRobo;
+        averiguacionRoboRepuve = Model.RepuveRobo.Averiguacion;
+        fechaAveriguacionRoboRepuve = Model.RepuveRobo.FechaAveriguacion;
+        agenteRoboRepuve = Model.RepuveRobo.AgenteMinisterioPublico;
     }
 }
 <script>
@@ -32,17 +33,17 @@
 
         if (idTipoServicio == 1 || idTipoServicio == 5)
             DivSubTipoServicio.css('display', 'block');
-        else 
+        else
             DivSubTipoServicio.css('display', 'none');
 
         showLoading();
         $.ajax({
-             url: '@Url.Action("GetSubtipoPorTipo_Drop","BusquedaVehiculoPropietario")',
+            url: '@Url.Action("GetSubtipoPorTipo_Drop","BusquedaVehiculoPropietario")',
             type: "POST",
             data: { idTipoServicio: idTipoServicio },
             success: function (data) {
                 var SubTipoServicio = $("#ddlCatSubTipoServicio").data("kendoDropDownList");
-                if (SubTipoServicio) 
+                if (SubTipoServicio)
                     SubTipoServicio.dataSource.data(data);
                 console.log(data);
                 hideLoading();
@@ -52,14 +53,14 @@
             }
         });
     }
-	
+
     $("#ddlCatSubTipoServicio").on("change", function () {
         var value = $(this).val();
         console.log(value);
         $('#hdnidSubtipoServicio').val(value);
     });
 </script>
-       <section id="sectionCap" class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow mt-3 mb-5 rounded">
+<section id="sectionCap" class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow mt-3 mb-5 rounded">
     <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
         <div class="col-12 col-md-auto pe-0">
             <div class="row align-items-center justify-content-center justify-content-md-start">
@@ -89,7 +90,7 @@
             </div>
         </div>
     </div>
-     <div class="row">
+    <div class="row">
         <div class="col-8 pe-0">
             <div class="bgDanger py-1"></div>
         </div>
@@ -97,16 +98,16 @@
             <div class="bg-light py-1"></div>
         </div>
     </div>
-  @if (Model != null)
+    @if (Model != null)
     {
-        @if (Model.idVehiculo >0)
+        @if (Model.idVehiculo > 0)
         {
             <div class="row">
                 <div class="col-12 my-4">
                     <h5 class="px-4 colorSuccess d-flex align-items-center"><b class="d-flex align-items-center justify-content-center bgSuccess mb-1 me-2 rounded-circle px-1"><i style="font-size: 10px; padding: 7px 2px;" class="icon-correct text-white"></i></b><b>Vehículo capturado en Registro de Infracciones y Accidentes de Guanajuato</b></h5>
-                      @if (Model.ReporteRobo == true)
+                    @if (Model.ReporteRobo == true)
                     {
-                          <div class="row align-items-start"><div class="col-12 col-md-8 col-lg-8"><h5 class="px-4 colorDanger"><b class="text-white bgDanger mb-1 me-2 rounded-circle px-2 h6">i</b><b>El vehículo cuenta con reporte de robo en REPUVE</b><button class="btn" onclick="mostrarMensajeRobado();"><h5 class="colorPrimary"><b>[Ver]</b></h5></button></h5></div></div>
+                        <div class="row align-items-start"><div class="col-12 col-md-8 col-lg-8"><h5 class="px-4 colorDanger"><b class="text-white bgDanger mb-1 me-2 rounded-circle px-2 h6">i</b><b>El vehículo cuenta con reporte de robo en REPUVE</b><button class="btn" onclick="mostrarMensajeRobado();"><h5 class="colorPrimary"><b>[Ver]</b></h5></button></h5></div></div>
                     }
                     <h6 class="px-4 text-muted">El vehículo ya está capturado en la plataforma. Puede actualizar o corregir la información del vehículo.</h6>
                 </div>
@@ -117,22 +118,22 @@
             <div class="row">
                 <div class="col-12 my-4">
                     <h5 class="px-4 colorDanger d-flex align-items-center"><b class="text-white bgDanger mb-1 me-2 rounded-circle px-2 h6">i</b><b>Vehículo sin captura en Registro de Infracciones y Accidentes de Guanajuato</b></h5>
-                      @if (Model.ReporteRobo == true)
+                    @if (Model.ReporteRobo == true)
                     {
-                          <div class="row align-items-start"><div class="col-12 col-md-8 col-lg-8"><h5 class="px-4 colorDanger"><b class="text-white bgDanger mb-1 me-2 rounded-circle px-2 h6">i</b><b>El vehículo cuenta con reporte de robo en REPUVE</b><button class="btn" onclick="mostrarMensajeRobado();"><h5 class="colorPrimary"><b>[Ver]</b></h5></button></h5></div></div>
+                        <div class="row align-items-start"><div class="col-12 col-md-8 col-lg-8"><h5 class="px-4 colorDanger"><b class="text-white bgDanger mb-1 me-2 rounded-circle px-2 h6">i</b><b>El vehículo cuenta con reporte de robo en REPUVE</b><button class="btn" onclick="mostrarMensajeRobado();"><h5 class="colorPrimary"><b>[Ver]</b></h5></button></h5></div></div>
                     }
-                     @if (Model.origenDatos!=null)
-                        {
-                         <h6 class="px-4"><b>Vehículo encontrado en el @Model.origenDatos</b></h6>
-                        }
+                    @if (Model.origenDatos != null)
+                    {
+                        <h6 class="px-4"><b>Vehículo encontrado en el @Model.origenDatos</b></h6>
+                    }
                     <h6 class="px-4 text-muted">Vehículo sin captura en la plataforma <b class="colorPrimary">Realiza o Completa</b> la captura de vehículo.</h6>
                 </div>
             </div>
         }
     }
 
-          <!-- ** Formulario de vehiculo ** -->
-          <form id="frmCreateVehiculo" class="row px-4 mb-4 align-items-end">
+    <!-- ** Formulario de vehiculo ** -->
+    <form id="frmCreateVehiculo" class="row px-4 mb-4 align-items-end">
         <div class="col-12 col-md-6 col-lg-3">
             <div class="controlForm my-3">
                 <label>Entidad de registro <b>(obligatorio):</b></label>
@@ -164,21 +165,23 @@
         <div class="col-12 col-md-6 col-lg-3">
             <div class="controlForm my-3">
                 <label>Serie:</label>
-                
-                
+
+
                 <!--@Html.CustomTextBoxFor(m => m.serie,"Ingresa Serie", disableInput)-->
-                             @if(@disableInput){
-                     <span class="k-widget k-textbox" style="width:100%;">
-                 <input  type="text" style="width:100%;" value="@Model.serie" name="serie" id="serie" class="k-input k-state-disabled" />
-             </span>
+                @if (@disableInput)
+                {
+                    <span class="k-widget k-textbox" style="width:100%;">
+                        <input type="text" style="width:100%;" value="@Model.serie" name="serie" id="serie" class="k-input k-state-disabled" />
+                    </span>
 
-             }
-             else{
-                 <span class="k-widget k-textbox" style="width:100%;">
-                 <input  type="text" style="width:100%;" value="@Model.serie" name="serie" id="serie" class="k-input" />
-             </span>
+                }
+                else
+                {
+                    <span class="k-widget k-textbox" style="width:100%;">
+                        <input type="text" style="width:100%;" value="@Model.serie" name="serie" id="serie" class="k-input" />
+                    </span>
 
-             }
+                }
 
 
             </div>
@@ -220,7 +223,7 @@
                 {
                     @(Html.Kendo().DatePickerFor(m => m.vigenciaTarjeta).Format("dd/MM/yyyy")
                         .Value("")
-                     //   .DateInput()
+                        //   .DateInput()
                         .Culture("es-ES")
                         .HtmlAttributes(new { style = "width: 100%", title = "datetimepicker" })
                         )
@@ -229,7 +232,7 @@
                 {
                     @(Html.Kendo().DatePickerFor(m => m.vigenciaTarjeta).Format("dd/MM/yyyy")
                         .Value("")
-                       // .DateInput()
+                        // .DateInput()
                         .Culture("es-ES")
                         .HtmlAttributes(new { style = "width: 100%", title = "datetimepicker" })
                         )
@@ -241,12 +244,13 @@
         <div class="col-12 col-md-4 col-lg-3 col-xl-2">
             <div class="controlForm my-3">
                 <label>Marca <b>(obligatorio):</b></label>
-                @if (Model.idMarcaVehiculo != 0 && Model.idSubmarca !=0)               
+                @if (Model.idMarcaVehiculo != 0 && Model.idSubmarca != 0)
                 {
                     @(Html.Kendo().DropDownListFor(m => m.idMarcaVehiculo).Filter(FilterType.Contains)
                         .DataTextField("Text")
                         .DataValueField("Value")
                         .OptionLabel("Seleccione Marca...")
+                        .Events(e => e.Change("subMarcaDropDownChange"))
                         .HtmlAttributes(new { style = "width:100%;", @readonly = "readonly", id = "ddlMarcas" })
                         .DataSource(source =>
                         {
@@ -263,6 +267,7 @@
                         .DataTextField("Text")
                         .DataValueField("Value")
                         .OptionLabel("Seleccione Marca...")
+                        .Events(e => e.Change("subMarcaDropDownChange"))
                         .HtmlAttributes(new { style = "width:100%;", id = "ddlMarcas" })
                         .DataSource(source =>
                         {
@@ -280,45 +285,45 @@
         <div class="col-12 col-md-4 col-lg-3 col-xl-2">
             <div class="controlForm my-3">
                 <label>Sub-Marca <b>(obligatorio):</b></label>
-                @if (Model.idSubmarca != 0)               
-                {
-                    @*<div id="divSubmarca">
+                @*                @if (Model.idSubmarca != 0)
+                {*@
+                @*<div id="divSubmarca">
                 @(Html.Kendo().DropDownListFor(f => f.idSubmarca)
                 .OptionLabel("-- Seleccione --")
                 .HtmlAttributes(new { style = "width:100%;", required = "required", @readonly = "readonly", })
                 )
 
                 </div>*@
-                    @Html.HiddenFor(m=> m.idSubmarcaUpdated, new { @id = "hdnIdSubmarca" })
+                @Html.HiddenFor(m=> m.idSubmarcaUpdated, new { @id = "hdnIdSubmarca" })
 
-                    @(Html.Kendo().DropDownListFor(d => d.idSubmarca).Filter(FilterType.Contains)
-                        .DataTextField("Text")
-                        .DataValueField("Value")
-                        .OptionLabel("Seleccione Sub-Marca...")
-                        .HtmlAttributes(new { style = "width:100%;", @readonly = "readonly", id = "idSubmarca" })
-                        .DataSource(source =>
+                @(Html.Kendo().DropDownListFor(d => d.idSubmarca).Filter(FilterType.Contains)
+                    .DataTextField("Text")
+                    .DataValueField("Value")
+                    .OptionLabel("Seleccione Sub-Marca...")
+                    .HtmlAttributes(new { style = "width:100%;", id = "idSubmarca" })
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
                         {
-                            source.Read(read =>
-                            {
-                                read.Action("SubMarcas_Drop", "BusquedaVehiculoPropietario");
-                            });
-                        })
-                        )
-                }
+                            read.Action("SubMarcas_Read", "Vehiculos");
+                        });
+                    })
+                    )
+                @* }
                 else
                 {
 
-                    <div id="divSubmarca">
-                        @Html.HiddenFor(m=> m.idSubmarca)
-                        @(Html.Kendo().DropDownList()
-                            .Name("ddlIdSubIn")
-                            .OptionLabel(@Model.submarca)
-                            .HtmlAttributes(new { style = "width:100%;" })
-                            .Filter(FilterType.Contains)
-                            )
+                <div id="divSubmarca">
+                @Html.HiddenFor(m=> m.idSubmarca)
+                @(Html.Kendo().DropDownList()
+                .Name("ddlIdSubIn")
+                .OptionLabel(@Model.submarca)
+                .HtmlAttributes(new { style = "width:100%;" })
+                .Filter(FilterType.Contains)
+                )
 
-                    </div>
-                }
+                </div>
+                }*@
 
             </div>
         </div>
@@ -436,10 +441,10 @@
                 <div class="btnToggleActive">
                     @Html.HiddenFor(m => m.cargaInt, new { id = "idCarga" })
                     @(Html.Kendo().SwitchFor(m => m.carga)
-                            .Messages(c => c.Checked("SI").Unchecked("NO"))
-                            .HtmlAttributes(new { id = "cargaSwitch" })
+                        .Messages(c => c.Checked("SI").Unchecked("NO"))
+                        .HtmlAttributes(new { id = "cargaSwitch" })
 
-                            )
+                        )
 
                 </div>
             </div>
@@ -448,15 +453,15 @@
         @Html.HiddenFor(m=> m.idVehiculo, new { @id = "hdnIdVehiculo" })
         @Html.HiddenFor(m=> m.Persona.idPersona, new { @id = "ddlIdPersona" })
         @Html.HiddenFor(m=> m.Persona.idCatTipoPersona, new { @id = "ddlIdCatTipoPersona" })
-        
-     <input type="hidden" value="@Model.idCatTipoServicio" name="idCatTipoServicio" id="hdnIdCatTipoServicio">
-     <input type="hidden" value="@Model.idSubtipoServicio" name="idSubtipoServicio" id="hdnidSubtipoServicio">
-     
-     @Html.HiddenFor(m=> m.encontradoEn, new { @id = "hdnEncontradoEn" })
+
+        <input type="hidden" value="@Model.idCatTipoServicio" name="idCatTipoServicio" id="hdnIdCatTipoServicio">
+        <input type="hidden" value="@Model.idSubtipoServicio" name="idSubtipoServicio" id="hdnidSubtipoServicio">
+
+        @Html.HiddenFor(m=> m.encontradoEn, new { @id = "hdnEncontradoEn" })
 
     </form>
-    </section>
-    <section id="sec2" class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
+</section>
+<section id="sec2" class="mx-md-3 mx-lg-4 mx-xl-5 bg-white boxShadow my-5 rounded">
     <div class="row align-items-center justify-content-between px-4 px-md-4 pt-3 pb-2">
         <div class="col-12 col-md-auto">
             <div class="row align-items-center justify-content-center justify-content-md-start">
@@ -493,106 +498,108 @@
     </div>
     <div class="row align-items-end px-4">
 
-        <div class="col-6 controlForm my-3" >
-                <label>Tipo de Servicio:</label>
-                @(Html.Kendo().DropDownListFor(d => d.idCatTipoServicio).Filter(FilterType.Contains)
+        <div class="col-6 controlForm my-3">
+            <label>Tipo de Servicio:</label>
+            @(Html.Kendo().DropDownListFor(d => d.idCatTipoServicio).Filter(FilterType.Contains)
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .OptionLabel("Seleccione Tipo de Servicio...:")
+                .HtmlAttributes(new { style = "width:100%;", id = "ddlCatTipoServicio" })
+                .Events(e => e.Change("ChangeSubTipoServicio"))
+                .DataSource(source =>
+                {
+                    source.Read(read =>
+                    {
+                        read.Action("TipoServicios_Drop", "BusquedaVehiculoPropietario");
+                    });
+                })
+                )
+        </div>
+        @if (Model.showSubTipo == true)
+        {
+            <div class="col-6 controlForm my-3" id="DivSubTipoServicio" style="display:block">
+                <label>Subtipo de Servicio:</label>
+                @(
+                    Html.Kendo().DropDownListFor(d => d.idSubtipoServicio)
+                    .Filter(FilterType.Contains)
+
                     .DataTextField("Text")
                     .DataValueField("Value")
-                    .OptionLabel("Seleccione Tipo de Servicio...:")
-                    .HtmlAttributes(new { style = "width:100%;", id = "ddlCatTipoServicio" })
-                    .Events(e => e.Change("ChangeSubTipoServicio"))
+                    .OptionLabel("Seleccione Subtipo de Servicio...:")
+                    .HtmlAttributes(new { style = "width:100%;", id = "ddlCatSubTipoServicio" })
                     .DataSource(source =>
                     {
                         source.Read(read =>
                         {
-                            read.Action("TipoServicios_Drop", "BusquedaVehiculoPropietario");
+                            read.Action("GetSubtipoPorTipo_Drop", "BusquedaVehiculoPropietario");
                         });
                     })
                     )
-        </div>
-         @if (Model.showSubTipo == true)
+            </div>
+        }
+        else
+        {
+            <div class="col-6 controlForm my-3" id="DivSubTipoServicio" style="display:none">
+                <label>Subtipo de Servicio:</label>
+                @(
+                    Html.Kendo().DropDownListFor(d => d.idSubtipoServicio)
+                    .Filter(FilterType.Contains)
+
+                    .DataTextField("Text")
+                    .DataValueField("Value")
+                    .OptionLabel("Seleccione Subtipo de Servicio...:")
+                    .HtmlAttributes(new { style = "width:100%;", id = "ddlCatSubTipoServicio" })
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("GetSubtipoPorTipo_Drop", "BusquedaVehiculoPropietario");
+                        });
+                    })
+                    )
+            </div>
+        }
+
+        @if (Model.Persona.idPersona > 0)
+        {
+            if (Model.Persona.idCatTipoPersona == 1)
             {
-                <div class="col-6 controlForm my-3" id="DivSubTipoServicio" style="display:block">
-                <label>Subtipo de Servicio:</label>
-                @(
-                Html.Kendo().DropDownListFor(d => d.idSubtipoServicio)
-                                            .Filter(FilterType.Contains)
-
-                            .DataTextField("Text")
-                            .DataValueField("Value")
-                            .OptionLabel("Seleccione Subtipo de Servicio...:")
-                            .HtmlAttributes(new { style = "width:100%;", id = "ddlCatSubTipoServicio" })
-                            .DataSource(source =>
-                            {
-                                source.Read(read =>
-                                {
-                                    read.Action("GetSubtipoPorTipo_Drop", "BusquedaVehiculoPropietario");
-                                });
-                            })
-                            )
-            </div>
-            } else {
-                <div class="col-6 controlForm my-3" id="DivSubTipoServicio" style="display:none">
-                <label>Subtipo de Servicio:</label>
-                @(
-                Html.Kendo().DropDownListFor(d => d.idSubtipoServicio)
-                                            .Filter(FilterType.Contains)
-
-                            .DataTextField("Text")
-                            .DataValueField("Value")
-                            .OptionLabel("Seleccione Subtipo de Servicio...:")
-                            .HtmlAttributes(new { style = "width:100%;", id = "ddlCatSubTipoServicio" })
-                            .DataSource(source =>
-                            {
-                                source.Read(read =>
-                                {
-                                    read.Action("GetSubtipoPorTipo_Drop", "BusquedaVehiculoPropietario");
-                                });
-                            })
-                            )
-            </div>
-            }   
-
-                @if (Model.Persona.idPersona>0)
-{
-    if (Model.Persona.idCatTipoPersona == 1)
-    {
-        <div class="alert alert-warning" role="alert">
-            <h4 class="alert-heading">Se encontraron datos de persona física</h4>
-            <p class="mb-0">Ingresa a "Agregar Nueva Persona Física" para verificar y guardar los datos.</p>
-        </div>
-    }
-    /*else if (Model.Persona.idCatTipoPersona == 2)
-    {
-        <div class="alert alert-warning" role="alert">
+                <div class="alert alert-warning" role="alert">
+                    <h4 class="alert-heading">Se encontraron datos de persona física</h4>
+                    <p class="mb-0">Ingresa a "Agregar Nueva Persona Física" para verificar y guardar los datos.</p>
+                </div>
+            }
+            /*else if (Model.Persona.idCatTipoPersona == 2)
+            {
+            <div class="alert alert-warning" role="alert">
             <h4 class="alert-heading">Se encontraron datos de persona moral</h4>
             <p class="mb-0">Ingresa a "Agregar Nueva Persona Moral" para verificar y guardar los datos.</p>
-        </div>
-    }*/
-}       
+            </div>
+            }*/
+        }
     </div>
 
 
 
 
     <section id="sec3" style="display:block">
-         @if (Model.idTipoPersona.HasValue)
-{
-    if (Model.idTipoPersona == 1)
-    {
-        <div class="alert alert-warning" role="alert">
-            <h4 class="alert-heading">Se encontraron datos de persona física</h4>
-            <p class="mb-0">Ingresa a "Editar" para verificar y guardar los datos.</p>
-        </div>
-    }
-    else if (Model.idTipoPersona == 2)
-    {
-        <div class="alert alert-warning" role="alert">
-            <h4 class="alert-heading">Se encontraron datos de persona moral</h4>
-            <p class="mb-0">Ingresa a "Agregar Nueva Persona Moral" para verificar y guardar los datos.</p>
-        </div>
-    }
-}
+        @if (Model.idTipoPersona.HasValue)
+        {
+            if (Model.idTipoPersona == 1)
+            {
+                <div class="alert alert-warning" role="alert">
+                    <h4 class="alert-heading">Se encontraron datos de persona física</h4>
+                    <p class="mb-0">Ingresa a "Editar" para verificar y guardar los datos.</p>
+                </div>
+            }
+            else if (Model.idTipoPersona == 2)
+            {
+                <div class="alert alert-warning" role="alert">
+                    <h4 class="alert-heading">Se encontraron datos de persona moral</h4>
+                    <p class="mb-0">Ingresa a "Agregar Nueva Persona Moral" para verificar y guardar los datos.</p>
+                </div>
+            }
+        }
 
         <div class="col-12 mt-4 controlForm px-4">
             <label>Tipo de propietario:</label>
@@ -601,8 +608,8 @@
             <nav class="tabCustom">
                 <div class="nav nav-tabs row mx-0" id="nav-tab" role="tablist">
                     <button class="nav-link active col" id="person-moral-tab" data-bs-toggle="tab"
-                        data-bs-target="#person-moral" type="button" role="tab" aria-controls="person-moral"
-                        aria-selected="true">
+                            data-bs-target="#person-moral" type="button" role="tab" aria-controls="person-moral"
+                            aria-selected="true">
                         <div class="row justify-content-center align-items-center px-3 py-2">
                             <div class="col-auto radioCustom p-0">
                                 <div class="rounded-circle m-2"></div>
@@ -613,8 +620,8 @@
                         </div>
                     </button>
                     <button class="nav-link col" id="person-fisica-tab" data-bs-toggle="tab"
-                        data-bs-target="#person-fisica" type="button" role="tab" aria-controls="person-fisica"
-                        aria-selected="false">
+                            data-bs-target="#person-fisica" type="button" role="tab" aria-controls="person-fisica"
+                            aria-selected="false">
                         <div class="row justify-content-center align-items-center px-3 py-2">
                             <div class="col-auto radioCustom p-0">
                                 <div class="rounded-circle m-2"></div>
@@ -625,22 +632,22 @@
                         </div>
                     </button>
                     <button class="nav-link col" id="none-person-tab" data-bs-toggle="tab"
-                    data-bs-target="#none-person" type="button" role="tab" aria-controls="none-person"
-                    aria-selected="false">
-                    <div class="row justify-content-center align-items-center px-3 py-2">
-                    <div class="col-auto radioCustom p-0">
-                    <div class="rounded-circle m-2"></div>
-                    </div>
-                    <div class="col-auto p-0">
-                    <h5 class="m-0"><i class="icon-sinPropietario h4"></i> <b>Se ignora propietario</b></h5>
-                    </div>
-                    </div>
+                            data-bs-target="#none-person" type="button" role="tab" aria-controls="none-person"
+                            aria-selected="false">
+                        <div class="row justify-content-center align-items-center px-3 py-2">
+                            <div class="col-auto radioCustom p-0">
+                                <div class="rounded-circle m-2"></div>
+                            </div>
+                            <div class="col-auto p-0">
+                                <h5 class="m-0"><i class="icon-sinPropietario h4"></i> <b>Se ignora propietario</b></h5>
+                            </div>
+                        </div>
                     </button>
                 </div>
             </nav>
 
         </div>
-       
+
         <div class="tab-content" id="nav-tabContent">
 
             @*PERSONA MORAL*@
@@ -675,21 +682,21 @@
                         </div>
 
                     </form>
-                        <div class="row px-4 py-5 align-items-end">
-                    <div class="col-12 col-md-10 mx-md-auto text-center">
-                        <h3><b>Aún no has realizado ninguna búsqueda</b></h3>
-                        <h4>Realiza la búsqueda con el RFC o nombre de la persona moral</h4>
-                        <div class="row ">
-                            <div class="col-12 col-md-8 mx-md-auto col-lg-5 ">
-                                <div class="btnOutline btnOutlinePrimary my-3">
-                                    <button onclick="abrirModalPersonaMoral()">
-                                        <h5 class="m-0"><i class="me-2 icon-addMoral"></i><b>Agregar nueva persona moral</b></h5>
-                                    </button>
+                    <div class="row px-4 py-5 align-items-end">
+                        <div class="col-12 col-md-10 mx-md-auto text-center">
+                            <h3><b>Aún no has realizado ninguna búsqueda</b></h3>
+                            <h4>Realiza la búsqueda con el RFC o nombre de la persona moral</h4>
+                            <div class="row ">
+                                <div class="col-12 col-md-8 mx-md-auto col-lg-5 ">
+                                    <div class="btnOutline btnOutlinePrimary my-3">
+                                        <button onclick="abrirModalPersonaMoral()">
+                                            <h5 class="m-0"><i class="me-2 icon-addMoral"></i><b>Agregar nueva persona moral</b></h5>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 </div>
                 <div class="row">
                     <div class="col-12">
@@ -701,7 +708,7 @@
             @*PERSONA FISICA*@
             <div class="tab-pane tabCustomConteiner fade" id="person-fisica" role="tabpanel" aria-labelledby="person-fisica-tab">
                 <div class="row px-4 mt-4 pb-4 align-items-end">
-                              	@await Component.InvokeAsync("BusquedaPersonaFisica",new{config=new GuanajuatoAdminUsuarios.Models.Components.BusquedaPersonaFisicaConfig(),persona=Model.Persona})
+                    @await Component.InvokeAsync("BusquedaPersonaFisica",new{config=new GuanajuatoAdminUsuarios.Models.Components.BusquedaPersonaFisicaConfig(),persona=Model.Persona})
                 </div>
                 <div class="row">
                     <div class="col-12">
@@ -715,11 +722,11 @@
 
             @*SE IGNORA*@
             <div class="tab-pane tabCustomConteiner fade" id="none-person" role="tabpanel"
-                aria-labelledby="none-person-tab">
+                 aria-labelledby="none-person-tab">
                 <div class="row px-4 mt-4 pb-4 align-items-end">
                     <div class="col-12 col-md-10 mx-md-auto text-center">
                         <h3><b>Se utiliza cuando se tiene una infracción o accidente</b></h3>
-                            <h4 class="fw-normal">y se desconoce el propietario o conductor</h4>
+                        <h4 class="fw-normal">y se desconoce el propietario o conductor</h4>
                     </div>
 
                 </div>
@@ -730,14 +737,14 @@
     </section>
 </section>
 
-    <div id="PersonaMoralLocalizada" style="display:none">
+<div id="PersonaMoralLocalizada" style="display:none">
     <partial name="_ListPersonasMorales" model="Model.PersonaMoralBusquedaModel.PersonasMorales" />
 </div>
 
 
 @*PERSONA MORAL*@
 <div id="personaMoralContainer"></div>
-<div class="modal fade modalCustom" id="modalUpdateMoral"  aria-labelledby="updateMoralLabel" aria-hidden="true">
+<div class="modal fade modalCustom" id="modalUpdateMoral" aria-labelledby="updateMoralLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl boxShadow modal-dialog-centered">
         <div class="modal-content">
 
@@ -785,20 +792,20 @@
     </div>
 </div>
 <div class="row justify-content-center">
-  <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
-                    <div class="controlButton" onclick="submitCreateVehiculo()">
-                        @(Html.Kendo().Button()
-                            .Name("saveMoral")
-                            .HtmlAttributes(new { @class = "btnPrimary px-5" })
-                            .Content("<h5 class=\"m-0\"><b>Finalizar captura</b></h5>"))
-                    </div>
-                </div>
-  </div>
+    <div class="col-auto btnOutline btnOutlinePrimary my-2 mx-auto mx-xl-2 p-0">
+        <div class="controlButton" onclick="submitCreateVehiculo()">
+            @(Html.Kendo().Button()
+                .Name("saveMoral")
+                .HtmlAttributes(new { @class = "btnPrimary px-5" })
+                .Content("<h5 class=\"m-0\"><b>Finalizar captura</b></h5>"))
+        </div>
+    </div>
+</div>
 
 @*Modal de confirmación para salir de la ventana*@
 
 
-  <div class="modal fade" id="confirmacionModalV"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirmacionModalV" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -815,78 +822,79 @@
         </div>
     </div>
 </div>
-    <script>
-            var vehiculoControlsValidate = [];
-          $(document).ready(function() {
-                    var esRobado = "@Model.ReporteRobo";
+<script>
+    var vehiculoControlsValidate = [];
+    $(document).ready(function () {
+        var esRobado = "@Model.ReporteRobo";
         //Si el vehículo tiene reporte de robo se muestra mensaje
         if (esRobado == "True") {
             setTimeout(() => { mostrarMensajeRobado() }, 400);
         }
-    @if (Model.idVehiculo == 0) {
+    @if (Model.idVehiculo == 0)
+    {
         <text>
-        Swal.fire({
-        icon: "info",
-                title: "Vehículo no registrado en RIAG",
-                text: "¡Vehículo sin captura en el Registro de Infracciones y Accidentes de Guanajuato!",
-                showCancelButton: true,
-                showConfirmButton: false,
-                cancelButtonText: "Cerrar",
-            });
+                Swal.fire({
+                    icon: "info",
+                    title: "Vehículo no registrado en RIAG",
+                    text: "¡Vehículo sin captura en el Registro de Infracciones y Accidentes de Guanajuato!",
+                    showCancelButton: true,
+                    showConfirmButton: false,
+                    cancelButtonText: "Cerrar",
+                });
         </text>
     }
-    //Se agregan campos requeridos de vehiculo
-    vehiculoControlsValidate.push({ 'controlName': 'idEntidad', 'isDropDown': true });
-     vehiculoControlsValidate.push({ 'controlName': 'ddlMarcas', 'isDropDown': true });
-     vehiculoControlsValidate.push({ 'controlName': 'idSubmarca', 'isDropDown': true });
-     vehiculoControlsValidate.push({ 'controlName': 'idTipoVehiculo', 'isDropDown': true });
-      
+            //Se agregan campos requeridos de vehiculo
+            vehiculoControlsValidate.push({ 'controlName': 'idEntidad', 'isDropDown': true });
+        vehiculoControlsValidate.push({ 'controlName': 'ddlMarcas', 'isDropDown': true });
+        vehiculoControlsValidate.push({ 'controlName': 'idSubmarca', 'isDropDown': true });
+        vehiculoControlsValidate.push({ 'controlName': 'idTipoVehiculo', 'isDropDown': true });
+
 
         //Se agrega a los controles requeridos el evento de perdida de foco para remover el estilo de requerido
         addOnLostFocusRequiredControls(vehiculoControlsValidate);
 
-$("#ddlCatTipoServicio").on("change", function () {
-        var value = $(this).val();
-        $('#hdnIdCatTipoServicio').val(value);
+        $("#ddlCatTipoServicio").on("change", function () {
+            var value = $(this).val();
+            $('#hdnIdCatTipoServicio').val(value);
 
-    });
-     $("#ddlMarcas").on("change", function () {
-        var value = $(this).val();
-        _set_combo_catalog("CatSubmarcasByFilter", value, "idSubmarca", "false", "divSubmarca", "");
-        $('#idSubmarca').kendoDropDownList();
+        });
+        //$("#ddlMarcas").on("change", function () {
+        //    var value = $(this).val();
+        //    _set_combo_catalog("CatSubmarcasByFilter", value, "idSubmarca", "false", "divSubmarca", "");
+        //    $('#idSubmarca').kendoDropDownList();
 
-    });
+        //});
 
-     $('#ddlIdPersona').on('onPersonaSeleccionadaTrigger', function (event, data) {
+        $('#ddlIdPersona').on('onPersonaSeleccionadaTrigger', function (event, data) {
             if (data.idPersona === '' || data.idPersona == 0 || data.idPersona === undefined)
                 $('#ddlIdPersona').val('');
             else {
-                 $('#ddlIdPersona').val(data.idPersona);
-                }
+                $('#ddlIdPersona').val(data.idPersona);
+            }
         });
 
-    $('#mensajeBuscandoPersonaFisica').hide();
+        $('#mensajeBuscandoPersonaFisica').hide();
         buscarPersonasFisicas();
-        });
+    });
 
-        function buscarPersonasFisicas() {
+    function buscarPersonasFisicas() {
         //showLoading();
-         $('#mensajeBuscandoPersonaFisica').show();
+        $('#mensajeBuscandoPersonaFisica').show();
         $.ajax({
             url: '@Url.Action("BuscarPersonasFiscas","BusquedaVehiculoPropietario")',
             type: 'POST',
             success: function (result) {
-                 $('#mensajeBuscandoPersonaFisica').hide();
+                $('#mensajeBuscandoPersonaFisica').hide();
                 $("#personasFisicasInf").html(result);
-               // hideLoading();
-            },error: function () {
+                // hideLoading();
+            }, error: function () {
                 $('#mensajeBuscandoPersonaFisica').hide();
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");
                 hideLoading();
             }
         });
     }
-   function mostrarMensajeRobado() {
+    function mostrarMensajeRobado() {
         Swal.fire({
             icon: "error",
             title: "Vehículo con REPORTE DE ROBO",
@@ -907,13 +915,13 @@ $("#ddlCatTipoServicio").on("change", function () {
                 var grid = $("#gridPersonasMorales").data("kendoGrid");
                 grid.refresh();
                 hideLoading();
-            },error: function () {
+            }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");
                 hideLoading();
             }
         });
     }
-       function abrirModalPersonaMoral(){
+    function abrirModalPersonaMoral() {
         $.ajax({
             url: '@Url.Action("MostrarPersonaMoral","BusquedaVehiculoPropietario")',
             type: 'GET',
@@ -921,11 +929,11 @@ $("#ddlCatTipoServicio").on("change", function () {
             success: function (result) {
                 $('#personaMoralContainer').html(result);
                 $('#addMoral').modal('show');
-             },
+            },
             error: function (xhr, textStatus, errorThrown) {
                 console.error("Error en la solicitud AJAX:", textStatus, errorThrown);
             }
-    });
+        });
     }
 
     function submitCreateVehiculo() {
@@ -933,73 +941,76 @@ $("#ddlCatTipoServicio").on("change", function () {
             sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
             return;
         }
-    var idPersona = $("#ddlIdPersona").val();
+        var idPersona = $("#ddlIdPersona").val();
 
-    //Se valida que se haya seleccionado una persona
-     /*if ($("#ddlIdPersona").val() == '') {
-            sitteg_info('Debes seleccionar una Persona');
-            return;
-        }*/
-         var carga = $("#cargaSwitch").prop("checked");
+        //Se valida que se haya seleccionado una persona
+        /*if ($("#ddlIdPersona").val() == '') {
+               sitteg_info('Debes seleccionar una Persona');
+               return;
+           }*/
+        var carga = $("#cargaSwitch").prop("checked");
         $("#idCarga").val(carga ? 1 : 0);
-         var idTipoSer = $('#hdnIdCatTipoServicio').val();
+        var idTipoSer = $('#hdnIdCatTipoServicio').val();
 
-    
- //Se validan los campos del formulario
-        
 
-            var formData = $("#frmCreateVehiculo").serialize();
-            var idVeh = $('#hdnIdVehiculo').val();
-            showLoading();
-            $.ajax({
-                url: '@Url.Action("CrearEditarVehiculo","BusquedaVehiculoPropietario")',
-                type: 'POST',
-                data: formData,
-                success: function (result) {
-                    sitteg_success('Elemento guardado correctamente')
-                        if (result.success || result.crearVehiculo) {
-                            console.log("success");
-                            $('#IdVehiculoAsignado').val(result.data);
-                            $('#IdVehiculoAsignado').change();
-                            $('#vehiculoModal').modal('hide');
-                            $('#agregarVehiculoModal').modal('hide');
-                            $('.modal-backdrop').remove();
+        //Se validan los campos del formulario
 
-                             try{
-                                $('#modalVehiculos').modal('hide');
-                                 console.log("mostrara info vehiculo");
-                                mostrarInfoVehiculo();
-                            } catch (error) {
-                                console.error(error);
-                            }
 
-                        } else {
-                             sitteg_warning('Lo sentimos, ha ocurrido un error favor de report');
-                        }
-                        hideLoading();
-                    },
-                error: function (xhr, status) {
-                    var errmsg = xhr.responseText;
-                    sitteg_warning('Lo sentimos, ha ocurrido un error.Comuníquese con su mesa de ayuda');
-                    hideLoading();
+        var formData = $("#frmCreateVehiculo").serialize();
+        var idVeh = $('#hdnIdVehiculo').val();
+        showLoading();
+        $.ajax({
+            url: '@Url.Action("CrearEditarVehiculo","BusquedaVehiculoPropietario")',
+            type: 'POST',
+            data: formData,
+            success: function (result) {
+                sitteg_success('Elemento guardado correctamente')
+                if (result.success || result.crearVehiculo) {
+                    console.log("success");
+                    $('#IdVehiculoAsignado').val(result.data);
+                    $('#IdVehiculoAsignado').change();
+                    $('#vehiculoModal').modal('hide');
+                    $('#agregarVehiculoModal').modal('hide');
+                    $('.modal-backdrop').remove();
+
+                    try {
+                        $('#modalVehiculos').modal('hide');
+                        console.log("mostrara info vehiculo");
+                        mostrarInfoVehiculo();
+                    } catch (error) {
+                        console.error(error);
+                    }
+
+                } else {
+                    sitteg_warning('Lo sentimos, ha ocurrido un error favor de report');
                 }
-            });
+                hideLoading();
+            },
+            error: function (xhr, status) {
+                var errmsg = xhr.responseText;
+                sitteg_warning('Lo sentimos, ha ocurrido un error.Comuníquese con su mesa de ayuda');
+                hideLoading();
+            }
+        });
     }
 
     function cerrarModalV() {
-         $('#confirmacionModalV').modal('show');
-          // Maneja el clic en el botón "Aceptar" dentro del modal de confirmación
-          $('#confirmarCerrar').on('click', function () {
-         $('#confirmacionModalV').modal('hide');
-                 // Cierra la ventana
+        $('#confirmacionModalV').modal('show');
+        // Maneja el clic en el botón "Aceptar" dentro del modal de confirmación
+        $('#confirmarCerrar').on('click', function () {
+            $('#confirmacionModalV').modal('hide');
+            // Cierra la ventana
         });
     }
-    function cerrarModalFisica(){
-   $('#addFisico').modal('hide');
- 
-}
-function cancelarConfirmacionV(){
-   $('#confirmacionModalV').modal('hide');
- 
-}
-    </script>
+    function cerrarModalFisica() {
+        $('#addFisico').modal('hide');
+
+    }
+    function cancelarConfirmacionV() {
+        $('#confirmacionModalV').modal('hide');
+
+    }
+
+  
+
+</script>
