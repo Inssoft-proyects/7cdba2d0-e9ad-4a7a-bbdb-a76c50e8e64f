@@ -162,9 +162,13 @@
 
 			<div class="col-auto">
 				<div class="controlForm mb-3 mt-1">
-						<label class="tex">Hora (Formato 24 horas):</label>
-						<input type="text" value ="@Model.Hora" id="dateTime" name="HoraStr" onkeydown="validacionHora(event)" />
+					<label class="tex">Hora (Formato 24 horas):</label>
+					@{
+						string horaFormateada = Model.Hora != null ? Model.Hora.Value.ToString("hh\\:mm") : string.Empty;
+					}
+					<input type="text" value="@horaFormateada" id="dateTime" name="HoraStr" onkeydown="validacionHora(event)" style="height: 3.6em;" />
 				</div>
+
 			</div>
 			<div class="col-12 col-md-6 col-lg-4">
 				<div class="controlForm mb-3">
