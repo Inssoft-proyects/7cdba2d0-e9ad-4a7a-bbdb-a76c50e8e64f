@@ -1,5 +1,57 @@
 ﻿@model GuanajuatoAdminUsuarios.Models.SeleccionGruaModel
 <script>
+     function updateDifference() {
+        var fechaInicioPicker = $("#fechaInicioInsert").data("kendoDatePicker");
+        var fechaFinalPicker = $("#fechaFinalInsert").data("kendoDatePicker");
+        var horaInicioString = $("#horaInicioInsert").val();
+        var horaTerminoString = $("#horaTerminoInsert").val();
+        console.log("HORAINICIO",horaInicioString)
+        console.log("HORAFIN", horaTerminoString)
+
+        // Verificar si los pickers de fecha están inicializados
+        if (fechaInicioPicker && fechaFinalPicker && horaInicioString && horaTerminoString) {
+            var fechaInicio = fechaInicioPicker.value();
+            var fechaFinal = fechaFinalPicker.value();
+
+            var horaInicioParts = horaInicioString.split(':');
+            var horaInicioHour = parseInt(horaInicioParts[0]);
+            var horaInicioMinute = parseInt(horaInicioParts[1]);
+             console.log("HORAINH", horaInicioHour)
+            console.log("HORAINMIN", horaInicioMinute)
+            var horaTerminoParts = horaTerminoString.split(':');
+            var horaTerminoHour = parseInt(horaTerminoParts[0]);
+            var horaTerminoMinute = parseInt(horaTerminoParts[1]);
+            console.log("HORTERHO", horaTerminoHour)
+            console.log("HORTERMIN", horaTerminoMinute)
+            // Verificar si las fechas no son null
+            if (fechaInicio !== null && fechaFinal !== null) {
+                // Crear objetos de fecha con las fechas seleccionadas y las horas obtenidas
+                var startDateTime = new Date(fechaInicio.getFullYear(), fechaInicio.getMonth(), fechaInicio.getDate(), horaInicioHour, horaInicioMinute);
+                var endDateTime = new Date(fechaFinal.getFullYear(), fechaFinal.getMonth(), fechaFinal.getDate(), horaTerminoHour, horaTerminoMinute);
+
+                // Calcular la diferencia en milisegundos
+                var timeDifferenceMilliseconds = Math.abs(endDateTime - startDateTime);
+
+                // Convertir la diferencia a minutos
+                var timeDifferenceMinutes = Math.round(timeDifferenceMilliseconds / 60000);
+                            console.log("TIMEDIFf", timeDifferenceMinutes)
+
+                if (isNaN(timeDifferenceMinutes)) {
+                    timeDifferenceMinutes = 0;
+                }
+
+                $("#tiempoManiobrasInsert").val(timeDifferenceMinutes);
+            } else {
+                // Si alguna de las fechas es null, establecer el valor de tiempo en 0
+                $("#tiempoManiobrasInsert").val(0);
+            }
+        }
+    }
+
+
+     $(document).ready(function () {
+        updateDifference();
+    });
     function validacionHoraArribo(event) {
         var horaIngresada = event.target.value;
         var key = event.key
@@ -294,6 +346,9 @@
 
                 $("#horaTerminoInsert").val('');
                 event.preventDefault();
+            }
+            else{
+                updateDifference()
             }
         }
     }
@@ -602,64 +657,13 @@ function enviarDatos() {
     }
 }
 
-    function updateDifference() {
-        var fechaInicioPicker = $("#fechaInicioInsert").data("kendoDatePicker");
-        var fechaFinalPicker = $("#fechaFinalInsert").data("kendoDatePicker");
-        var horaInicioString = $("#horaInicioInsert").val();
-        var horaTerminoString = $("#horaTerminoInsert").val();
-        console.log("HORAINICIO",horaInicioString)
-        console.log("HORAFIN", horaTerminoString)
-
-        // Verificar si los pickers de fecha están inicializados
-        if (fechaInicioPicker && fechaFinalPicker && horaInicioString && horaTerminoString) {
-            var fechaInicio = fechaInicioPicker.value();
-            var fechaFinal = fechaFinalPicker.value();
-
-            var horaInicioParts = horaInicioString.split(':');
-            var horaInicioHour = parseInt(horaInicioParts[0]);
-            var horaInicioMinute = parseInt(horaInicioParts[1]);
-             console.log("HORAINH", horaInicioHour)
-            console.log("HORAINMIN", horaInicioMinute)
-            var horaTerminoParts = horaTerminoString.split(':');
-            var horaTerminoHour = parseInt(horaTerminoParts[0]);
-            var horaTerminoMinute = parseInt(horaTerminoParts[1]);
-            console.log("HORTERHO", horaTerminoHour)
-            console.log("HORTERMIN", horaTerminoMinute)
-            // Verificar si las fechas no son null
-            if (fechaInicio !== null && fechaFinal !== null) {
-                // Crear objetos de fecha con las fechas seleccionadas y las horas obtenidas
-                var startDateTime = new Date(fechaInicio.getFullYear(), fechaInicio.getMonth(), fechaInicio.getDate(), horaInicioHour, horaInicioMinute);
-                var endDateTime = new Date(fechaFinal.getFullYear(), fechaFinal.getMonth(), fechaFinal.getDate(), horaTerminoHour, horaTerminoMinute);
-
-                // Calcular la diferencia en milisegundos
-                var timeDifferenceMilliseconds = Math.abs(endDateTime - startDateTime);
-
-                // Convertir la diferencia a minutos
-                var timeDifferenceMinutes = Math.round(timeDifferenceMilliseconds / 60000);
-                            console.log("TIMEDIFf", timeDifferenceMinutes)
-
-                if (isNaN(timeDifferenceMinutes)) {
-                    timeDifferenceMinutes = 0;
-                }
-
-                $("#tiempoManiobrasInsert").val(timeDifferenceMinutes);
-            } else {
-                // Si alguna de las fechas es null, establecer el valor de tiempo en 0
-                $("#tiempoManiobrasInsert").val(0);
-            }
-        }
-    }
-
-
-    // Llamar a la función cuando cambie alguna de las fechas o horas
-    $("input[name='horaInicioInsertStr'], input[name='horaFinInsertStr'], #fechaInicioInsert, #fechaFinalInsert").on("change", function () {
+   
+    $("input[name='horaInicioInsertStr'], input[name='horaFinInsertStr'], #fechaInicioInsert, #fechaFinalInsert").on("change input", function () {
         updateDifference();
+        console.log("LLAMA")
     });
 
-    // Inicializar la diferencia al cargar la página
-    $(document).ready(function () {
-        updateDifference();
-    });
+   
 
     function goBack() {
         
