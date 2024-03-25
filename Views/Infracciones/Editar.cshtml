@@ -430,7 +430,7 @@
                                 <div class="form-group col-md-3 controlForm">
                                         <label>Hora <b>(Formato 24 horas)</b>:</label>
                                         <div class="input-group">
-                                        <input type="text" id="dateTime" value="@Model.horaInfraccion.ToString("HH:mm")" onkeydown="validacionHora(event)" style="height: 3.5em;" />
+                                        <input type="text" name="horaInfraccion" id="dateTime" value="@Model.horaInfraccion.ToString("HH:mm")" onkeydown="validacionHora(event)" style="height: 3.5em;" />
                                  </div>
                           </div>
                             <div class="row my-4 px-2">
@@ -1728,6 +1728,8 @@ function  OmitirConductor() {
 
         controlsValidate.push({ 'controlName': 'folioInfraccion' });
         controlsValidate.push({ 'controlName': 'kmCarretera' });
+        controlsValidate.push({ 'controlName': 'fechaInfraccion' });
+        controlsValidate.push({ 'controlName': 'dateTime' });
 
         // INPUTS
         if (!isControlsValid(controlsValidate)) { isValid = false; }
