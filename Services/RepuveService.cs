@@ -1,6 +1,7 @@
 ﻿using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.RESTModels;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using static GuanajuatoAdminUsuarios.Framework.Catalogs.CatWebServicesEnumerator;
 
 namespace GuanajuatoAdminUsuarios.Services
@@ -26,7 +27,7 @@ namespace GuanajuatoAdminUsuarios.Services
             return response;
         }
 
-		public List<RepuveRoboModel> ConsultaRobo(RepuveConsgralRequestModel model)
+		public async Task<List<RepuveRoboModel>> ConsultaRobo(RepuveConsgralRequestModel model)
 		{
             model.placa = model.placa?.ToUpper();
             model.niv = model.niv?.ToUpper();

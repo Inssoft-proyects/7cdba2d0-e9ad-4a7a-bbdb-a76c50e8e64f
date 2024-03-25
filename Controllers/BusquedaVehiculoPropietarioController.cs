@@ -35,6 +35,7 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http.Extensions;
 using System.Net.Http;
 using Kendo.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Http;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
@@ -69,7 +70,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         #region Vehiculo
         [HttpPost]
-        public IActionResult BuscarVehiculoEnPlataformas([FromServices] IOptions<AppSettings> appSettings, [FromServices] IRepuveService repuveService,
+        public async Task<IActionResult> BuscarVehiculoEnPlataformas([FromServices] IOptions<AppSettings> appSettings, [FromServices] IRepuveService repuveService,
         [FromServices] IVehiculoPlataformaService vehiculoPlataformaService, [FromServices] IVehiculosService vehiculoService, [FromServices] ICotejarDocumentosClientService cotejarDocumentosService, VehiculoPropietarioBusquedaModel model)
         {
             VehiculoBusquedaModel busquedaModel = new VehiculoBusquedaModel();
@@ -91,8 +92,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             catch (Exception ex) { }
 
             try
-                {
-                    if (!string.IsNullOrEmpty(model.SerieBusqueda))
+            {
+                if (!string.IsNullOrEmpty(model.SerieBusqueda))
                 {
                     busquedaModel.SerieBusqueda = model.SerieBusqueda.ToUpper();
                 }
@@ -102,7 +103,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 
 
-           List<VehiculoModel> listaVehiculos = vehiculoService.GetVehiculoPropietario(busquedaModel);
+            List<VehiculoModel> listaVehiculos = vehiculoService.GetVehiculoPropietario(busquedaModel);
 
 
 
@@ -119,17 +120,20 @@ namespace GuanajuatoAdminUsuarios.Controllers
             }
 
             //Esto es una bandera para busqueda sin serie y placa - asi nos permitira obtener el objeto vehiculo preinicializado
-            if (busquedaModel.PlacasBusqueda == null && busquedaModel.SerieBusqueda==null)
+            if (busquedaModel.PlacasBusqueda == null && busquedaModel.SerieBusqueda == null)
             {
                 busquedaModel.PlacasBusqueda = "flag1";
             }
-            
-            VehiculoModel vehiculo = vehiculoPlataformaService.BuscarVehiculoEnPlataformas(busquedaModel);
+
+            VehiculoModel vehiculo = await vehiculoPlataformaService.BuscarVehiculoEnPlataformas(busquedaModel);
             if (vehiculo == null)
             {
                 vehiculo = new VehiculoModel();
                 vehiculo.Persona = new PersonaModel();
                 vehiculo.Persona.PersonaDireccion = new PersonaDireccionModel();
+            } else
+            {
+                HttpContext.Session.SetInt32("IdMarcaVehiculo",vehiculo.idMarcaVehiculo);
             }
 
             //Se remueve la bandera antes descrita
@@ -267,7 +271,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public IActionResult MostrarListaPersonasRiagEncontradas(BusquedaPersonaModel model)
         {
-            return ViewComponent("ListaPersonasEncontradas", new {  model });
+            return ViewComponent("ListaPersonasEncontradas", new { model });
         }
 
         public IActionResult MostrarListaPersonasLicenciasEncontradas(BusquedaPersonaModel model)
@@ -331,7 +335,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             var modelList = personasService.ObterPersonaPorIDList(IdPersonaFisica);
 
             modeloBusqueda.ListadoPersonas = modelList;
-        
+
             return Json(new { success = true, data = modeloBusqueda });
         }
         /// <summary>

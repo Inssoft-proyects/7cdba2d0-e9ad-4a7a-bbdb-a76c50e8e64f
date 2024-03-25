@@ -16,6 +16,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 
 using System.Net;
+using System.Threading.Tasks;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
@@ -95,7 +96,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 
         [HttpGet]
-        public ActionResult ajax_UpdateLiberacion(int Id)
+        public async Task<ActionResult> ajax_UpdateLiberacion(int Id)
         {
            
                 int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
@@ -111,7 +112,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 var user = Convert.ToDecimal(User.FindFirst(CustomClaims.IdUsuario).Value);
                 _bitacoraServices.insertBitacora(Id, ip, "LiberacionVehiculo_Liberacion", "Actualizar", "update", user);
 
-                  var repuveConsRoboResponse = _repuveService.ConsultaRobo(repuveGralModel).FirstOrDefault();
+                  var repuveConsRoboResponse = (await _repuveService.ConsultaRobo(repuveGralModel)).FirstOrDefault();
                  ViewBag.ReporteRobo = repuveConsRoboResponse.EsRobado;
            
                 //model.FechaIngreso.ToString("dd/MM/yyyy");

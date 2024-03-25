@@ -370,7 +370,7 @@ function mostrarMensajeRobado() {
 
         <div class="col-12 col-md-4 col-lg-3 col-xl-2">
             <div class="controlForm my-3">
-                <label>Marca<b>(obligatorio):</b></label>
+                <label>Marca <b>(obligatorio):</b></label>
                 @if (Model.idMarcaVehiculo != 0 && Model.idSubmarca !=0)               
                   {
                     @(Html.Kendo().DropDownListFor(d => d.idMarcaVehiculo)
@@ -378,7 +378,7 @@ function mostrarMensajeRobado() {
                         .DataValueField("Value")
                         .OptionLabel("Seleccione Marca...")
                         .Events(e => e.Change("subMarcaDropDownChange"))
-                        .HtmlAttributes(new { style = "width:100%;" })
+                        .HtmlAttributes(new { style = "width:100%;", id = "ddlMarcas" })
                                             .Filter(FilterType.Contains)
 
                         .DataSource(source =>
@@ -417,7 +417,7 @@ function mostrarMensajeRobado() {
         <div class="col-12 col-md-4 col-lg-3 col-xl-2">
             <div class="controlForm my-3">
                 <label>Sub-Marca <b>(obligatorio):</b></label>
-                             @Html.HiddenFor(m=> m.idSubmarcaUpdated, new { @id = "hdnIdSubmarca" })
+                    @Html.HiddenFor(m=> m.idSubmarcaUpdated, new { @id = "hdnIdSubmarca" })
 
                     @(Html.Kendo().DropDownListFor(d => d.idSubmarca)
                                         .Filter(FilterType.Contains)
@@ -429,7 +429,7 @@ function mostrarMensajeRobado() {
                         {
                             source.Read(read =>
                             {
-                                read.Action("SubMarcas_ReadId", "Vehiculos");
+                                read.Action("SubMarcas_Read", "Vehiculos");
                             });
                         })
                         )
@@ -1558,12 +1558,12 @@ function mostrarMensajeRobado() {
         });
     }
 
-    $("#ddlMarcas").on("change", function () {
-        var value = $(this).val();
-        _set_combo_catalog("CatSubmarcasByFilter", value, "idSubmarca", "false", "divSubmarca", "");
-        $('#idSubmarca').kendoDropDownList();
+    //$("#ddlMarcas").on("change", function () {
+    //    var value = $(this).val();
+    //    _set_combo_catalog("CatSubmarcasByFilter", value, "idSubmarca", "false", "divSubmarca", "");
+    //    $('#idSubmarca').kendoDropDownList();
 
-    });
+    //});
      $("#idEntidadFisico").on("change", function () {
         var value = $(this).val();
          console.log("ENT", value)

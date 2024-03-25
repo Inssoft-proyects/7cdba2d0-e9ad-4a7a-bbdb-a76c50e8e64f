@@ -1,43 +1,27 @@
-﻿using GuanajuatoAdminUsuarios.Entity;
-using GuanajuatoAdminUsuarios.Models;
-using Kendo.Mvc.UI;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Drawing;
-using System;
-using System.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Security.Cryptography;
-using Kendo.Mvc.Extensions;
+﻿using GuanajuatoAdminUsuarios.Helpers;
 using GuanajuatoAdminUsuarios.Interfaces;
-using GuanajuatoAdminUsuarios.Services;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using GuanajuatoAdminUsuarios.Framework;
-using Newtonsoft.Json;
-using Microsoft.EntityFrameworkCore.Metadata;
-using System.Net.Http;
-using System.Threading.Tasks;
+using GuanajuatoAdminUsuarios.Models;
 using GuanajuatoAdminUsuarios.RESTModels;
-using static GuanajuatoAdminUsuarios.RESTModels.CotejarDatosResponseModel;
-using System.Web;
-using System.Numerics;
-using static GuanajuatoAdminUsuarios.Utils.CatalogosEnums;
-using Microsoft.Extensions.Options;
-using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Http.Extensions;
-using System.Globalization;
-using GuanajuatoAdminUsuarios.Helpers;
-using Microsoft.AspNetCore.Authorization;
-using static iTextSharp.tool.xml.html.table.TableRowElement;
-using Kendo.Mvc;
-using static GuanajuatoAdminUsuarios.RESTModels.ConsultarDocumentoResponseModel;
 using GuanajuatoAdminUsuarios.Util;
-using System.Text;
+using Kendo.Mvc;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using static GuanajuatoAdminUsuarios.Utils.CatalogosEnums;
 
 namespace GuanajuatoAdminUsuarios.Controllers
 {
@@ -101,7 +85,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             ICatEntidadesService catEntidadesService,
             IColores coloresService, ICatMarcasVehiculosService catMarcasVehiculosService, ICatSubmarcasVehiculosService catSubmarcasVehiculosService
             , IRepuveService repuveService, IBitacoraService bitacoraService,
-            ICatSubtipoServicio subtipoServicio,IVehiculoPlataformaService vehiculoPlataformaService
+            ICatSubtipoServicio subtipoServicio, IVehiculoPlataformaService vehiculoPlataformaService
 
             )
         {
@@ -190,9 +174,9 @@ namespace GuanajuatoAdminUsuarios.Controllers
             pagination.PageIndex = request.Page - 1;
             pagination.PageSize = 1;
             pagination.Filter = resultValue;
-			HttpContext.Session.Remove("IdMarcaVehiculo");
+            HttpContext.Session.Remove("IdMarcaVehiculo");
 
-			int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
+            int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
             var ListAccidentesModel = _capturaAccidentesService.ObtenerAccidentesPagination(idOficina, pagination);
             if (ListAccidentesModel.Count == 0)
             {
@@ -448,14 +432,13 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
 
 
-       
+
 
 
         public async Task<ActionResult> BuscarVehiculo(VehiculoBusquedaModel model)
         {
             try
             {
-
                 if (!string.IsNullOrEmpty(model.PlacasBusqueda))
                 {
                     model.PlacasBusqueda = model.PlacasBusqueda.ToUpper();
@@ -464,8 +447,6 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 {
                     model.SerieBusqueda = model.SerieBusqueda.ToUpper();
                 }
-
-
 
                 var SeleccionVehiculo = _capturaAccidentesService.BuscarPorParametro(model.PlacasBusqueda, model.SerieBusqueda, model.FolioBusqueda);
 
@@ -533,10 +514,10 @@ namespace GuanajuatoAdminUsuarios.Controllers
             try
             {
 
-               //Se busca el vehiculo en el padron RIAG, Finanzas y REPUVE
-            VehiculoModel vehiculo = _vehiculoPlataformaService.BuscarVehiculoEnPlataformas(model);
-			HttpContext.Session.SetInt32("IdMarcaVehiculo", vehiculo.idMarcaVehiculo);
-			return await this.RenderViewAsync("_Create", vehiculo, true);
+                //Se busca el vehiculo en el padron RIAG, Finanzas y REPUVE
+                VehiculoModel vehiculo = await _vehiculoPlataformaService.BuscarVehiculoEnPlataformas(model);
+                HttpContext.Session.SetInt32("IdMarcaVehiculo", vehiculo.idMarcaVehiculo);
+                return await this.RenderViewAsync("_Create", vehiculo, true);
             }
             catch (Exception ex)
             {
@@ -546,7 +527,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
 
 
-       
+
         public static string RemoveDiacritics(string text)
         {
             var normalizedString = text.Normalize(NormalizationForm.FormD);
@@ -563,8 +544,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
             return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
-       
-       
+
+
 
         public JsonResult ObtVehiculosInvol([DataSourceRequest] DataSourceRequest request)
         {
@@ -574,13 +555,13 @@ namespace GuanajuatoAdminUsuarios.Controllers
             return Json(ListVehiculosInvolucrados.ToDataSourceResult(request));
         }
 
-        public IActionResult ActualizarAccidenteConVehiculo(int IdVehiculo, int IdPersona, string Placa="", string Serie="")
+        public IActionResult ActualizarAccidenteConVehiculo(int IdVehiculo, int IdPersona, string Placa = "", string Serie = "")
         {
             int idAccidente = HttpContext.Session.GetInt32("LastInsertedId") ?? 0;
             var can = _capturaAccidentesService.ActualizarConVehiculo(IdVehiculo, idAccidente, IdPersona, Placa, Serie);
             if (can == 0)
             {
-                return Json(new { IdPersona = IdPersona, IdVehiculoH = IdVehiculo , error=1 });
+                return Json(new { IdPersona = IdPersona, IdVehiculoH = IdVehiculo, error = 1 });
             }
 
             var idVehiculoInsertado = IdVehiculo;
@@ -607,7 +588,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public IActionResult ActualizarConConductor(int IdVehiculo, int IdPersona)
         {
             int idAccidente = HttpContext.Session.GetInt32("LastInsertedId") ?? 0; // Obtener el valor de lastInsertedId desde la variable de sesión
-           
+
             var idVehiculoInsertado = _capturaAccidentesService.InsertarConductor(IdVehiculo, idAccidente, IdPersona);
 
             //BITACORA
@@ -844,30 +825,30 @@ namespace GuanajuatoAdminUsuarios.Controllers
             return PartialView("_ModalAgregarInvolucradoPersona");
         }
 
-	
-		public IActionResult AbrirModalBuscarInvolucrado()
-		{
-			BusquedaInvolucradoModel model = new BusquedaInvolucradoModel();
+
+        public IActionResult AbrirModalBuscarInvolucrado()
+        {
+            BusquedaInvolucradoModel model = new BusquedaInvolucradoModel();
 
 
 
-			return PartialView("BusquedaPersonaFisica");
-		}
-		public IActionResult SinInvolucrado()
-		{
-			int idAccidente = HttpContext.Session.GetInt32("LastInsertedId") ?? 0; // Obtener el valor de lastInsertedId desde la variable de sesión
-			var personamodel = new PersonaModel();
-			personamodel.nombre = "SE Ignora";
-			personamodel.idCatTipoPersona = 1;
-			personamodel.PersonaDireccion = new PersonaDireccionModel();
+            return PartialView("BusquedaPersonaFisica");
+        }
+        public IActionResult SinInvolucrado()
+        {
+            int idAccidente = HttpContext.Session.GetInt32("LastInsertedId") ?? 0; // Obtener el valor de lastInsertedId desde la variable de sesión
+            var personamodel = new PersonaModel();
+            personamodel.nombre = "SE Ignora";
+            personamodel.idCatTipoPersona = 1;
+            personamodel.PersonaDireccion = new PersonaDireccionModel();
 
-			var nuevaPersona = _personasService.CreatePersona(personamodel);
+            var nuevaPersona = _personasService.CreatePersona(personamodel);
             personamodel.idPersona = nuevaPersona;
 
-			return Json (personamodel);
-		}
-		
-		public ActionResult ModalAgregarComplemeto()
+            return Json(personamodel);
+        }
+
+        public ActionResult ModalAgregarComplemeto()
         {
             return PartialView("_ModalComplementoVehiculo");
         }
@@ -1239,8 +1220,8 @@ namespace GuanajuatoAdminUsuarios.Controllers
             model.Kilometro = DatosAccidente.Kilometro;
 
             DateTime fechaInfraccion = (DateTime)DatosAccidente.Fecha;
-       //     string horaInfraccion = DatosAccidente.Hora.ToString("hhmm");
-            
+            //     string horaInfraccion = DatosAccidente.Hora.ToString("hhmm");
+
 
 
             model.fechaInfraccion = fechaInfraccion;
@@ -1322,7 +1303,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
             return Json(ListInfracciones.ToDataSourceResult(request));
         }
-        public IActionResult GuardarRelacionPersonaVehiculo(int IdPersona, int IdVehiculoInvolucrado,int IdInvolucrado)
+        public IActionResult GuardarRelacionPersonaVehiculo(int IdPersona, int IdVehiculoInvolucrado, int IdInvolucrado)
         {
             int idAccidente = HttpContext.Session.GetInt32("LastInsertedId") ?? 0;
             var PersonaVehiculo = _capturaAccidentesService.RelacionPersonaVehiculo(IdPersona, idAccidente, IdVehiculoInvolucrado, IdInvolucrado);
@@ -1630,7 +1611,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         }
 
 
-                [HttpPost]
+        [HttpPost]
         public ActionResult ajax_CrearVehiculo(VehiculoModel model)
         {
             int IdVehiculo = 0;
@@ -1732,7 +1713,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             try
             {
                 var id = _personasService.InsertarDesdeServicio(personaDatos);
-                var datosTabla = _personasService.BuscarPersonaSoloLicencia(personaDatos.NUM_LICENCIA==null?"sin numero licencia": personaDatos.NUM_LICENCIA);
+                var datosTabla = _personasService.BuscarPersonaSoloLicencia(personaDatos.NUM_LICENCIA == null ? "sin numero licencia" : personaDatos.NUM_LICENCIA);
 
                 CapturaAccidentesModel involucrado = new CapturaAccidentesModel();
                 involucrado.IdPersona = (int)datosTabla.idPersona;
@@ -1851,11 +1832,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
                     apellidoMaterno = modelList.apellidoMaterno,
                     RFC = modelList.RFC,
                     CURP = modelList.CURP,
-					fechaNacimiento = modelList.fechaNacimiento != null ? ((DateTime)modelList.fechaNacimiento).ToString("dd/MM/yyyy") : "" ,                   
+                    fechaNacimiento = modelList.fechaNacimiento != null ? ((DateTime)modelList.fechaNacimiento).ToString("dd/MM/yyyy") : "",
                     numeroLicencia = modelList.numeroLicencia,
                     entidad = modelList.PersonaDireccion.entidad,
                     municipio = modelList.PersonaDireccion.municipio,
-                    calle= modelList.PersonaDireccion.calle,
+                    calle = modelList.PersonaDireccion.calle,
                     numero = modelList.PersonaDireccion.numero,
                     colonia = modelList.PersonaDireccion.colonia,
                     telefono = modelList.PersonaDireccion.telefono,
@@ -1893,24 +1874,24 @@ namespace GuanajuatoAdminUsuarios.Controllers
             //    perModel = model;
             //else
             //   model = perModel;
-            BusquedaPersonaModel  model= new BusquedaPersonaModel();
+            BusquedaPersonaModel model = new BusquedaPersonaModel();
             PersonaModel personaM = new PersonaModel();
-            personaM.CURPBusqueda =capturaModel.CURPBusqueda;
+            personaM.CURPBusqueda = capturaModel.CURPBusqueda;
             personaM.RFCBusqueda = capturaModel.RFCBusqueda;
-            personaM.nombreBusqueda= capturaModel.nombreBusqueda;
+            personaM.nombreBusqueda = capturaModel.nombreBusqueda;
             personaM.apellidoPaternoBusqueda = capturaModel.apellidoPaternoBusqueda;
             personaM.apellidoMaternoBusqueda = capturaModel.apellidoMaternoBusqueda;
             personaM.numeroLicenciaBusqueda = capturaModel.numeroLicenciaBusqueda;
 
             model.PersonaModel = personaM;
 
-           var findAll = false;
+            var findAll = false;
             var personas = new BusquedaPersonaModel();
             Pagination pagination = new Pagination();
             pagination.PageIndex = request.Page - 1;
             if (model != null)
             {
-                
+
                 if (model.PersonaModel.apellidoMaternoBusqueda == null &&
                     model.PersonaModel.apellidoPaternoBusqueda == null &&
                     model.PersonaModel.CURPBusqueda == null &&
@@ -1950,7 +1931,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 //              Data = personas.ListadoPersonas,
                 //                Total = total,                    
                 //              };
-                List<CapturaAccidentesModel> resultado = new List<CapturaAccidentesModel>(); 
+                List<CapturaAccidentesModel> resultado = new List<CapturaAccidentesModel>();
                 foreach (PersonaModel pivote in personas.ListadoPersonas)
                 {
                     CapturaAccidentesModel capAcc = new CapturaAccidentesModel();
@@ -1958,16 +1939,16 @@ namespace GuanajuatoAdminUsuarios.Controllers
                     capAcc.nombre = pivote.nombre;
                     capAcc.apellidoPaterno = pivote.apellidoPaterno;
                     capAcc.apellidoMaterno = pivote.apellidoMaterno;
-                    capAcc.TipoLicencia= pivote.tipoLicencia;
+                    capAcc.TipoLicencia = pivote.tipoLicencia;
                     capAcc.numeroLicencia = pivote.numeroLicencia;
-                    capAcc.CURP= pivote.CURP;
+                    capAcc.CURP = pivote.CURP;
                     resultado.Add(capAcc);
                 }
 
 
                 return Json(new { encontrada = true, Data = resultado, tipo = "riag", message = "busqueda exitosa" });
 
-//                
+                //                
             }
 
             // Si no se encontraron resultados en la búsqueda de personas, realizar la búsqueda por licencia
@@ -2019,7 +2000,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 
 
-                  //  return Json(pEncontradas);
+                    //  return Json(pEncontradas);
                     return Json(new { encontrada = true, Data = resultado, tipo = "success", message = "busqueda exitosa" });
 
                 }
@@ -2030,7 +2011,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 return Json(new { encontrada = false, Data = "", message = "Ocurrió un error al obtener los datos. " + ex.Message + "; " + ex.InnerException });
             }
 
-            
+
             //                
 
             return Json(new { encontrada = false, Data = "1", tipo = "sin datos", message = "busca en licencias" });

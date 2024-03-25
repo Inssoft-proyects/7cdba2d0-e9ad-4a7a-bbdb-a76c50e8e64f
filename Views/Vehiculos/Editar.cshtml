@@ -34,7 +34,6 @@
             }, 200);
         }
     });
-
 </script>
 <!-- ***************************** -->
 <div class="mainContainer bg-light">
@@ -130,6 +129,7 @@
                             .DataTextField("Text")
                             .DataValueField("Value")
                             .OptionLabel("Seleccione Marca...")
+                            .Events(e => e.Change("subMarcaDropDownChangeEditar"))
                             .HtmlAttributes(new { style = "width:100%; text-transform: uppercase;", id = "ddlMarcas" })
                             .Filter(FilterType.Contains)
                             .DataSource(source =>
@@ -147,13 +147,29 @@
                 <div class="controlForm my-3">
                     <label>SubMarca <b>(obligatorio)</b>:</label>
                     <span>
-                        <div id="divSubmarca">
+@*                        <div id="divSubmarca">
                             @(Html.Kendo().DropDownListFor(f => f.idSubMarca).Filter(FilterType.Contains)
                                 .OptionLabel("-- Seleccione --")
                                 .HtmlAttributes(new { style = "width:100%;", required = "required" })
                                 )
 
-                        </div>
+                        </div>*@
+
+
+                        @(Html.Kendo().DropDownListFor(d => d.idSubMarca)
+                            .Filter(FilterType.Contains)
+                            .DataTextField("Text")
+                            .DataValueField("Value")
+                            .OptionLabel("Seleccione Sub-Marca...")
+                            .HtmlAttributes(new { style = "width:100%;", id = "idSubMarca" })
+                            .DataSource(source =>
+                            {
+                                source.Read(read =>
+                                {
+                                    read.Action("SubMarcas_Read", "Vehiculos");
+                                });
+                            })
+                            )
                     </span>
                 </div>
             </div>
@@ -310,12 +326,33 @@
         });
     }
 
-    $("#ddlMarcas").on("change", function () {
-        var value = $(this).val();
-        _set_combo_catalog("CatSubmarcasByFilter", value, "idSubmarca", "false", "divSubmarca", "");
-        $('#idSubmarca').kendoDropDownList();
+    //$("#ddlMarcas").on("change", function () {
+    //    var value = $(this).val();
+    //    _set_combo_catalog("CatSubmarcasByFilter", value, "idSubmarca", "false", "divSubmarca", "");
+    //    $('#idSubmarca').kendoDropDownList();
 
-    });
+    //});
+
+
+
+    function subMarcaDropDownChangeEditar() {
+        var _idMarca = $("#ddlMarcas").data("kendoDropDownList").value();
+        showLoading();
+        $.ajax({
+            url: "/Vehiculos/SubMarcas_ReadPorMarca",
+            type: "POST",
+            data: { idMarca: _idMarca },
+            success: function (data) {
+                var TramosDropDown = $("#idSubMarca").data("kendoDropDownList");
+                TramosDropDown.dataSource.data(data);
+                hideLoading();
+            },
+            error: function (xhr, status, error) {
+                console.log("EE", error)
+                hideLoading();
+            }
+        });
+    }
 
 
 </script>

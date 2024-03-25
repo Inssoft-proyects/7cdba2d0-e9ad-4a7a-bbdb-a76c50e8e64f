@@ -1,50 +1,32 @@
-﻿using GuanajuatoAdminUsuarios.Interfaces;
+﻿using GuanajuatoAdminUsuarios.Framework.Catalogs;
+using GuanajuatoAdminUsuarios.Helpers;
+using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
-using GuanajuatoAdminUsuarios.Services;
+using GuanajuatoAdminUsuarios.RESTModels;
+using GuanajuatoAdminUsuarios.Services.CustomReportsService;
+using GuanajuatoAdminUsuarios.Util;
+using Kendo.Mvc;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json.Converters;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using System.Collections.Generic;
-using GuanajuatoAdminUsuarios.Utils;
-using GuanajuatoAdminUsuarios.Framework;
-using System.Linq;
 using System;
-using iTextSharp.text;
-using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Globalization;
 using System.IO;
-using System.Threading.Tasks;
-using System.Net.Http.Headers;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
-using GuanajuatoAdminUsuarios.RESTModels;
-using Microsoft.Extensions.Options;
-using Kendo.Mvc.Extensions;
-using static GuanajuatoAdminUsuarios.RESTModels.CotejarDatosResponseModel;
-using System.Net.Http.Json;
-using static GuanajuatoAdminUsuarios.Utils.CatalogosEnums;
-using GuanajuatoAdminUsuarios.Framework.Catalogs;
-using static GuanajuatoAdminUsuarios.RESTModels.ConsultarDocumentoResponseModel;
 using System.Text.RegularExpressions;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Kendo.Mvc.UI;
-using Org.BouncyCastle.Crypto;
-using Microsoft.AspNetCore.Authorization;
-using GuanajuatoAdminUsuarios.Services.CustomReportsService;
-using Org.BouncyCastle.Asn1.X509.SigI;
-using System.Data.SqlClient;
-using static System.Formats.Asn1.AsnWriter;
-using iTextSharp.tool.xml.html;
-using Kendo.Mvc;
-using static GuanajuatoAdminUsuarios.Controllers.PDFExampleController;
-using Microsoft.Extensions.Configuration;
-using GuanajuatoAdminUsuarios.Util;
-using System.Globalization;
-using GuanajuatoAdminUsuarios.Helpers;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using String = System.String;
-using static iTextSharp.tool.xml.html.HTML;
+using System.Threading.Tasks;
+using static GuanajuatoAdminUsuarios.RESTModels.CotejarDatosResponseModel;
+using static GuanajuatoAdminUsuarios.Utils.CatalogosEnums;
 //using Telerik.SvgIcons;
 
 namespace GuanajuatoAdminUsuarios.Controllers
@@ -755,11 +737,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
    
 
 
-        private bool ValidarRobo(RepuveConsgralRequestModel repuveGralModel)
+        private async Task<bool> ValidarRobo(RepuveConsgralRequestModel repuveGralModel)
         {
             var estatus = false;
 
-            var repuveConsRoboResponse = _repuveService.ConsultaRobo(repuveGralModel)?.FirstOrDefault() ?? new RepuveRoboModel();
+            var repuveConsRoboResponse = (await _repuveService.ConsultaRobo(repuveGralModel))?.FirstOrDefault() ?? new RepuveRoboModel();
 
             estatus = repuveConsRoboResponse.EsRobado;
 
@@ -1025,7 +1007,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 }
 
 
-                var models = _vehiculoPlataformaService.BuscarVehiculoEnPlataformas(model);
+                var models = await _vehiculoPlataformaService.BuscarVehiculoEnPlataformas(model);
                 HttpContext.Session.SetInt32("IdMarcaVehiculo", models.idMarcaVehiculo);
 
 
