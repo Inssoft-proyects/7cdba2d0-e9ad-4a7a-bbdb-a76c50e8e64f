@@ -34,7 +34,7 @@
                         <div class="controlForm my-3">
                             @Html.HiddenFor(t=>t.idDeposito)
                             <label>Fecha Ingreso:</label>
-                            @(Html.Kendo().DatePickerFor(t => t.fechaIngreso)
+                            @(Html.Kendo().DatePickerFor(t => t.fechaIngreso).Max(DateTime.Now)
                                 .Label(l => l.Content("Fecha Ingreso:"))
                                 .Value(Model.fechaIngreso)
                                 .Culture("es-ES")
