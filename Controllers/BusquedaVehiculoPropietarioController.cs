@@ -35,460 +35,466 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http.Extensions;
 using System.Net.Http;
 using Kendo.Mvc.Infrastructure;
+using AdminUsuarios.Helpers;
 using Microsoft.AspNetCore.Http;
+namespace GuanajuatoAdminUsuarios.Controllers;
 
-namespace GuanajuatoAdminUsuarios.Controllers
+[Authorize]
+public class BusquedaVehiculoPropietarioController : BaseController
 {
-    [Authorize]
-    public class BusquedaVehiculoPropietarioController : BaseController
+    #region Variables
+    private readonly ICatDictionary _catDictionary;
+
+    #endregion
+    #region Constructor
+    public BusquedaVehiculoPropietarioController(ICatDictionary catDictionary)
     {
-        #region Variables
-        private readonly ICatDictionary _catDictionary;
+        _catDictionary = catDictionary;
+    }
+    #endregion
 
-        #endregion
-        #region Constructor
-        public BusquedaVehiculoPropietarioController(ICatDictionary catDictionary)
+    #region MostrarBusqueda
+    public ActionResult MostrarBusquedaVehiculo()
+    {
+        VehiculoPropietarioBusquedaModel model = new()
         {
-            _catDictionary = catDictionary;
+            Vehiculo = new VehiculoModel
+            {
+                Persona = new PersonaModel()
+            },
+            IdEntidadBusqueda = CatEntidadesModel.GUANAJUATO
+        };
+        return PartialView("_BusquedaVehiculoPropietario", model);
+    }
+    #endregion
+
+    #region Vehiculo
+    [HttpPost]
+    public async Task<IActionResult> BuscarVehiculoEnPlataformasAsync([FromServices] IOptions<AppSettings> appSettings, [FromServices] IRepuveService repuveService,
+    [FromServices] IVehiculoPlataformaService vehiculoPlataformaService, [FromServices] IVehiculosService vehiculoService, [FromServices] ICotejarDocumentosClientService cotejarDocumentosService, VehiculoPropietarioBusquedaModel model)
+    {
+        VehiculoBusquedaModel busquedaModel = new VehiculoBusquedaModel();
+
+        try
+        {
+            busquedaModel.IdEntidadBusqueda = model.IdEntidadBusqueda;
+
         }
-        #endregion
+        catch (Exception ex) { }
 
-        #region MostrarBusqueda
-        public ActionResult MostrarBusquedaVehiculo()
+        try
         {
-            VehiculoPropietarioBusquedaModel model = new()
+            if (!string.IsNullOrEmpty(model.PlacaBusqueda))
             {
-                Vehiculo = new VehiculoModel
-                {
-                    Persona = new PersonaModel()
-                },
-                IdEntidadBusqueda = CatEntidadesModel.GUANAJUATO
-            };
-            return PartialView("_BusquedaVehiculoPropietario", model);
+                busquedaModel.PlacasBusqueda = model.PlacaBusqueda.ToUpper();
+            }
         }
-        #endregion
+        catch (Exception ex) { }
 
-        #region Vehiculo
-        [HttpPost]
-        public async Task<IActionResult> BuscarVehiculoEnPlataformas([FromServices] IOptions<AppSettings> appSettings, [FromServices] IRepuveService repuveService,
-        [FromServices] IVehiculoPlataformaService vehiculoPlataformaService, [FromServices] IVehiculosService vehiculoService, [FromServices] ICotejarDocumentosClientService cotejarDocumentosService, VehiculoPropietarioBusquedaModel model)
+        try
         {
-            VehiculoBusquedaModel busquedaModel = new VehiculoBusquedaModel();
-
-            try
+            if (!string.IsNullOrEmpty(model.SerieBusqueda))
             {
-                busquedaModel.IdEntidadBusqueda = model.IdEntidadBusqueda;
-
-            }
-            catch (Exception ex) { }
-
-            try
-            {
-                if (!string.IsNullOrEmpty(model.PlacaBusqueda))
-                {
-                    busquedaModel.PlacasBusqueda = model.PlacaBusqueda.ToUpper();
-                }
-            }
-            catch (Exception ex) { }
-
-            try
-            {
-                if (!string.IsNullOrEmpty(model.SerieBusqueda))
-                {
-                    busquedaModel.SerieBusqueda = model.SerieBusqueda.ToUpper();
-                }
-            }
-            catch (Exception ex) { }
-
-
-
-
-            List<VehiculoModel> listaVehiculos = vehiculoService.GetVehiculoPropietario(busquedaModel);
-
-
-
-            if (listaVehiculos.Count > 1)
-            {
-                var view1 = this.RenderViewAsync("_ListaVehiculos", listaVehiculos, true);
-                return Json(new { listaVehiculos = true, view = view1 });
-
-            }
-            if (listaVehiculos.Count == 1)
-            {
-
-                return Json(new { listaVehiculos.FirstOrDefault().idVehiculo });
+                busquedaModel.SerieBusqueda = model.SerieBusqueda.ToUpper();
             }
 
-            //Esto es una bandera para busqueda sin serie y placa - asi nos permitira obtener el objeto vehiculo preinicializado
-            if (busquedaModel.PlacasBusqueda == null && busquedaModel.SerieBusqueda == null)
-            {
-                busquedaModel.PlacasBusqueda = "flag1";
-            }
-
-            VehiculoModel vehiculo = await vehiculoPlataformaService.BuscarVehiculoEnPlataformas(busquedaModel);
-            if (vehiculo == null)
-            {
-                vehiculo = new VehiculoModel();
-                vehiculo.Persona = new PersonaModel();
-                vehiculo.Persona.PersonaDireccion = new PersonaDireccionModel();
-            } else
-            {
-                HttpContext.Session.SetInt32("IdMarcaVehiculo",vehiculo.idMarcaVehiculo);
-            }
-
-            //Se remueve la bandera antes descrita
-            if (busquedaModel.PlacasBusqueda == "flag1")
-            {
-                vehiculo.placas = "";
-            }
-            var view = this.RenderViewAsync("_Vehiculo", vehiculo, true);
-            return Json(new { crearVehiculo = true, view });
         }
-        /// <summary>
-        /// Crea o actualiza un registro de un vehiculo en la bd
-        /// </summary>
-        /// <param name="vehiculoService"></param>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public ActionResult CrearEditarVehiculo([FromServices] IVehiculosService vehiculoService, VehiculoModel model)
+        catch (Exception ex) { }
+
+
+
+
+        List<VehiculoModel> listaVehiculos = vehiculoService.GetVehiculoPropietario(busquedaModel);
+
+
+
+        if (listaVehiculos.Count > 1)
         {
-            int IdVehiculo;
-            model.propietario = model.Persona?.idPersona.ToString();
-            if (model.idVehiculo > 0)
-            {
-                vehiculoService.UpdateVehiculo(model);
-                IdVehiculo = model.idVehiculo;
-            }
-            else
-                IdVehiculo = vehiculoService.CreateVehiculo(model);
+            var view1 = this.RenderViewAsync("_ListaVehiculos", listaVehiculos, true);
+            return Json(new { listaVehiculos = true, view = view1 });
 
-            if (IdVehiculo <= 0)
-                return Json(new { success = false });
-
-            return Json(new { success = true, data = IdVehiculo });
         }
-        #endregion
-
-        #region Propietario, Conductor, Persona
-        /// <summary>
-        /// Muestra vista para crear persona fisica
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult MostrarPersonaFisica(BusquedaPersonaModel model)
+        if (listaVehiculos.Count == 1)
         {
 
-            return ViewComponent("CrearPersona", new { model });
-        }
-        /// <summary>
-        /// Muestra vista para crear persona moral
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult MostrarPersonaMoral()
-        {
-            var model = new PersonaModel
-            {
-                PersonaDireccion = new PersonaDireccionModel()
-            };
-            return PartialView("_PersonaMoral", model);
+            return Json(new { listaVehiculos.FirstOrDefault().idVehiculo });
         }
 
-        /// <summary>
-        /// Busca todas las personas morales
-        /// </summary>
-        /// <param name="personasService"></param>
-        /// <param name="PersonaMoralBusquedaModel"></param>
-        /// <returns></returns>
-        public ActionResult BuscarPersonaMoral([FromServices] IPersonasService personasService, PersonaMoralBusquedaModel PersonaMoralBusquedaModel)
+        //Esto es una bandera para busqueda sin serie y placa - asi nos permitira obtener el objeto vehiculo preinicializado
+        if (busquedaModel.PlacasBusqueda == null && busquedaModel.SerieBusqueda == null)
         {
-            PersonaMoralBusquedaModel.IdTipoPersona = (int)TipoPersona.Moral;
-            var personasMoralesModel = personasService.GetAllPersonasMorales(PersonaMoralBusquedaModel);
-            return PartialView("_ListPersonasMorales", personasMoralesModel);
+            busquedaModel.PlacasBusqueda = "flag1";
         }
 
-        /// <summary>
-        /// Busca todas las personas fisicas
-        /// </summary>
-        /// <param name="personasService"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public ActionResult BuscarPersonasFiscas([FromServices] IPersonasService personasService)
+        VehiculoModel vehiculo = await vehiculoPlataformaService.BuscarVehiculoEnPlataformas(busquedaModel);
+        if (vehiculo == null)
         {
-            var personasFisicas = personasService.GetAllPersonas();
-            return PartialView("_PersonasFisicas", personasFisicas);
+            vehiculo = new VehiculoModel();
+            vehiculo.Persona = new PersonaModel();
+            vehiculo.Persona.PersonaDireccion = new PersonaDireccionModel();
+        }
+        else
+        {
+            HttpContext.Session.SetInt32("IdMarcaVehiculo", vehiculo.idMarcaVehiculo);
         }
 
-        [HttpPost]
-        public IActionResult BuscarPersonaFisicaWithPaginado([FromServices] IPersonasService personasService, [DataSourceRequest] DataSourceRequest request, BusquedaPersonaModel model)
+        //Se remueve la bandera antes descrita
+        if (busquedaModel.PlacasBusqueda == "flag1")
         {
-            //Se eliminan espacios en blanco de los campos de busqueda
-            model.PersonaModel ??= new();
-            model.CURPBusqueda = model.CURPBusqueda?.Trim();
-            model.RFCBusqueda = model.RFCBusqueda?.Trim();
-            model.NombreBusqueda = model.NombreBusqueda?.Trim();
-            model.ApellidoPaternoBusqueda = model.ApellidoPaternoBusqueda?.Trim();
-            model.ApellidoMaternoBusqueda = model.ApellidoMaternoBusqueda?.Trim();
-            model.NumeroLicenciaBusqueda = model.NumeroLicenciaBusqueda?.Trim();
-            model.IdTipoPersona = Convert.ToInt16(TipoPersona.Fisica);
+            vehiculo.placas = "";
+        }
+        if (vehiculo.idTipoPersona == 2)
+        {
+            HttpContext.Session.SetObject("PersonaModel", vehiculo.Persona);
+        }
+        var view = this.RenderViewAsync("_Vehiculo", vehiculo, true);
+        return Json(new { crearVehiculo = true, view });
+    }
+    /// <summary>
+    /// Crea o actualiza un registro de un vehiculo en la bd
+    /// </summary>
+    /// <param name="vehiculoService"></param>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    public ActionResult CrearEditarVehiculo([FromServices] IVehiculosService vehiculoService, VehiculoModel model)
+    {
+        int IdVehiculo;
+        model.propietario = model.Persona?.idPersona.ToString();
+        if (model.idVehiculo > 0)
+        {
+            vehiculoService.UpdateVehiculo(model);
+            IdVehiculo = model.idVehiculo;
+        }
+        else
+            IdVehiculo = vehiculoService.CreateVehiculo(model);
 
-            //Logger.Info("Buscar persona fisica en RIAG por :" + model);
-            Pagination pagination = new()
+        if (IdVehiculo <= 0)
+            return Json(new { success = false });
+
+        return Json(new { success = true, data = IdVehiculo });
+    }
+    #endregion
+
+    #region Propietario, Conductor, Persona
+    /// <summary>
+    /// Muestra vista para crear persona fisica
+    /// </summary>
+    /// <returns></returns>
+    public ActionResult MostrarPersonaFisica(BusquedaPersonaModel model)
+    {
+
+        return ViewComponent("CrearPersona", new { model });
+    }
+    /// <summary>
+    /// Muestra vista para crear persona moral
+    /// </summary>
+    /// <returns></returns>
+    public ActionResult MostrarPersonaMoral()
+    {
+        var model = new PersonaModel
+        {
+            PersonaDireccion = new PersonaDireccionModel()
+        };
+        var q = HttpContext.Session.GetObject<PersonaModel>("PersonaModel");
+        return PartialView("_PersonaMoral", q);
+    }
+
+    /// <summary>
+    /// Busca todas las personas morales
+    /// </summary>
+    /// <param name="personasService"></param>
+    /// <param name="PersonaMoralBusquedaModel"></param>
+    /// <returns></returns>
+    public ActionResult BuscarPersonaMoral([FromServices] IPersonasService personasService, PersonaMoralBusquedaModel PersonaMoralBusquedaModel)
+    {
+        PersonaMoralBusquedaModel.IdTipoPersona = (int)TipoPersona.Moral;
+        var personasMoralesModel = personasService.GetAllPersonasMorales(PersonaMoralBusquedaModel);
+        return PartialView("_ListPersonasMorales", personasMoralesModel);
+    }
+
+    /// <summary>
+    /// Busca todas las personas fisicas
+    /// </summary>
+    /// <param name="personasService"></param>
+    /// <returns></returns>
+    [HttpPost]
+    public ActionResult BuscarPersonasFiscas([FromServices] IPersonasService personasService)
+    {
+        var personasFisicas = personasService.GetAllPersonas();
+        return PartialView("_PersonasFisicas", personasFisicas);
+    }
+
+    [HttpPost]
+    public IActionResult BuscarPersonaFisicaWithPaginado([FromServices] IPersonasService personasService, [DataSourceRequest] DataSourceRequest request, BusquedaPersonaModel model)
+    {
+        //Se eliminan espacios en blanco de los campos de busqueda
+        model.PersonaModel ??= new();
+        model.CURPBusqueda = model.CURPBusqueda?.Trim();
+        model.RFCBusqueda = model.RFCBusqueda?.Trim();
+        model.NombreBusqueda = model.NombreBusqueda?.Trim();
+        model.ApellidoPaternoBusqueda = model.ApellidoPaternoBusqueda?.Trim();
+        model.ApellidoMaternoBusqueda = model.ApellidoMaternoBusqueda?.Trim();
+        model.NumeroLicenciaBusqueda = model.NumeroLicenciaBusqueda?.Trim();
+        model.IdTipoPersona = Convert.ToInt16(TipoPersona.Fisica);
+
+        //Logger.Info("Buscar persona fisica en RIAG por :" + model);
+        Pagination pagination = new()
+        {
+            PageIndex = request.Page - 1
+        };
+        if (model.PersonaModel != null)
+        {
+            if (model.PersonaModel.apellidoMaternoBusqueda == null &&
+                model.PersonaModel.apellidoPaternoBusqueda == null &&
+                model.PersonaModel.CURPBusqueda == null &&
+                model.PersonaModel.RFCBusqueda == null &&
+                model.PersonaModel.numeroLicenciaBusqueda == null &&
+                model.PersonaModel.nombreBusqueda == null)
             {
-                PageIndex = request.Page - 1
-            };
-            if (model.PersonaModel != null)
-            {
-                if (model.PersonaModel.apellidoMaternoBusqueda == null &&
-                    model.PersonaModel.apellidoPaternoBusqueda == null &&
-                    model.PersonaModel.CURPBusqueda == null &&
-                    model.PersonaModel.RFCBusqueda == null &&
-                    model.PersonaModel.numeroLicenciaBusqueda == null &&
-                    model.PersonaModel.nombreBusqueda == null)
-                {
-                    pagination.PageSize = (request.PageSize > 0) ? request.PageSize : 10000;
-                }
-                else
-                {
-                    pagination.PageSize = 10000;
-                }
+                pagination.PageSize = (request.PageSize > 0) ? request.PageSize : 10000;
             }
             else
             {
-                pagination.PageSize = (request.PageSize > 0) ? request.PageSize : 10;
+                pagination.PageSize = 10000;
             }
-
-            int total = personasService.ObtenerTotalBusquedaPersona(model, pagination);
-            model.Total = total;
-
-            model.Pagination = pagination;
-            // Verificar si se encontraron resultados en la búsqueda de personas
-            if (total > 0)
-                return Json(new { encontrada = true, result = model });
-
-
-            // Si no se encontraron resultados en la búsqueda de personas, realizar la búsqueda por licencia
-            return Json(new { encontrada = false, tipo = "sin datos", message = "busca en licencias" });
         }
-
-        public IActionResult MostrarListaPersonasRiagEncontradas(BusquedaPersonaModel model)
+        else
         {
-            return ViewComponent("ListaPersonasEncontradas", new { model });
+            pagination.PageSize = (request.PageSize > 0) ? request.PageSize : 10;
         }
 
-        public IActionResult MostrarListaPersonasLicenciasEncontradas(BusquedaPersonaModel model)
+        int total = personasService.ObtenerTotalBusquedaPersona(model, pagination);
+        model.Total = total;
+
+        model.Pagination = pagination;
+        // Verificar si se encontraron resultados en la búsqueda de personas
+        if (total > 0)
+            return Json(new { encontrada = true, result = model });
+
+
+        // Si no se encontraron resultados en la búsqueda de personas, realizar la búsqueda por licencia
+        return Json(new { encontrada = false, tipo = "sin datos", message = "busca en licencias" });
+    }
+
+    public IActionResult MostrarListaPersonasRiagEncontradas(BusquedaPersonaModel model)
+    {
+        return ViewComponent("ListaPersonasEncontradas", new { model });
+    }
+
+    public IActionResult MostrarListaPersonasLicenciasEncontradas(BusquedaPersonaModel model)
+    {
+        return ViewComponent("ListaPersonasEncontradasOtras", new { listaPersonas = model.ListadoPersonasOtras });
+    }
+
+    public IActionResult GuardaPersonaLicenciasEnRiag([FromServices] IPersonasService personasService, [FromServices] IBitacoraService bitacoraServices, PersonaLicenciaModel personaLicencia)
+    {
+
+        //Se busca a la persona por licencia o curp
+        int idPersona = personasService.ExistePersona(personaLicencia.NumeroLicencia, personaLicencia.Curp);
+
+        //Si no existe la persona se inserta
+        if (idPersona <= 0)
+            idPersona = personasService.InsertarPersonaDeLicencias(personaLicencia);
+
+        //Se obtienen los datos de la persona por id
+        PersonaModel persona = personasService.GetPersonaById(idPersona);
+
+
+        //BITACORA
+        var ip = HttpContext.Connection.RemoteIpAddress.ToString();
+        var user = Convert.ToDecimal(User.FindFirst(CustomClaims.IdUsuario).Value);
+        bitacoraServices.insertBitacora(idPersona, ip, "Personas_DesdeServicio", "Insertar", "insert", user);
+
+        BusquedaPersonaModel modelo = new()
         {
-            return ViewComponent("ListaPersonasEncontradasOtras", new { listaPersonas = model.ListadoPersonasOtras });
-        }
-
-        public IActionResult GuardaPersonaLicenciasEnRiag([FromServices] IPersonasService personasService, [FromServices] IBitacoraService bitacoraServices, PersonaLicenciaModel personaLicencia)
+            ListadoPersonas = new List<PersonaModel>()
+        };
+        modelo.ListadoPersonas.Add(persona);
+        return Json(new { data = modelo });
+    }
+    /// <summary>
+    /// Crea un nuevo registro en la bd de una persona fisica
+    /// </summary>
+    /// <param name="personasService"></param>
+    /// <param name="Persona"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    public ActionResult CrearPersonaFisica([FromServices] IPersonasService personasService, BusquedaPersonaModel modeloBusqueda)
+    {
+        var persona = modeloBusqueda.PersonaModel;
+        int IdPersonaFisica = 0;
+        if (persona.idPersona > 0)
         {
-
-            //Se busca a la persona por licencia o curp
-            int idPersona = personasService.ExistePersona(personaLicencia.NumeroLicencia, personaLicencia.Curp);
-
-            //Si no existe la persona se inserta
-            if (idPersona <= 0)
-                idPersona = personasService.InsertarPersonaDeLicencias(personaLicencia);
-
-            //Se obtienen los datos de la persona por id
-            PersonaModel persona = personasService.GetPersonaById(idPersona);
-
-
-            //BITACORA
-            var ip = HttpContext.Connection.RemoteIpAddress.ToString();
-            var user = Convert.ToDecimal(User.FindFirst(CustomClaims.IdUsuario).Value);
-            bitacoraServices.insertBitacora(idPersona, ip, "Personas_DesdeServicio", "Insertar", "insert", user);
-
-            BusquedaPersonaModel modelo = new()
-            {
-                ListadoPersonas = new List<PersonaModel>()
-            };
-            modelo.ListadoPersonas.Add(persona);
-            return Json(new { data = modelo });
+            persona.idCatTipoPersona = (int)TipoPersona.Fisica;
+            int result = personasService.UpdatePersona(persona);
+            if (result > 0)
+                IdPersonaFisica = (int)persona.idPersona;
         }
-        /// <summary>
-        /// Crea un nuevo registro en la bd de una persona fisica
-        /// </summary>
-        /// <param name="personasService"></param>
-        /// <param name="Persona"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        public ActionResult CrearPersonaFisica([FromServices] IPersonasService personasService, BusquedaPersonaModel modeloBusqueda)
+        else
         {
-            var persona = modeloBusqueda.PersonaModel;
-            int IdPersonaFisica = 0;
-            if (persona.idPersona > 0)
-            {
-                persona.idCatTipoPersona = (int)TipoPersona.Fisica;
-                int result = personasService.UpdatePersona(persona);
-                if (result > 0)
-                    IdPersonaFisica = (int)persona.idPersona;
-            }
-            else
-            {
-                persona.idCatTipoPersona = (int)TipoPersona.Fisica;
-                IdPersonaFisica = personasService.CreatePersona(persona);
-            }
-            if (IdPersonaFisica == 0)
-            {
-                throw new Exception("Ocurrio un error al dar de alta la persona");
-            }
-            var modelList = personasService.ObterPersonaPorIDList(IdPersonaFisica);
-
-            modeloBusqueda.ListadoPersonas = modelList;
-
-            return Json(new { success = true, data = modeloBusqueda });
+            persona.idCatTipoPersona = (int)TipoPersona.Fisica;
+            IdPersonaFisica = personasService.CreatePersona(persona);
         }
-        /// <summary>
-        /// Crea un nuevo registro en la bd de una persona moral
-        /// </summary>
-        /// <param name="personasService"></param>
-        /// <param name="Persona"></param>
-        /// <returns></returns>
-        public ActionResult CrearPersonaMoral([FromServices] IPersonasService personasService, PersonaModel Persona)
+        if (IdPersonaFisica == 0)
         {
-            Persona.idCatTipoPersona = (int)TipoPersona.Moral;
-            Persona.PersonaDireccion.telefono = System.String.IsNullOrEmpty(Persona.telefono) ? null : Persona.telefono;
-            var IdPersonaMoral = personasService.CreatePersonaMoral(Persona);
-            if (IdPersonaMoral == 0)
-                return Json(new { success = false, message = "Ocurrió un error al procesar su solicitud." });
-            else
-            {
-                var modelList = personasService.ObterPersonaPorIDList(IdPersonaMoral);
-                return PartialView("_ListPersonasMorales", modelList);
-            }
-
-
-            //var personasMoralesModel = _personasService.GetAllPersonasMorales();
-
+            throw new Exception("Ocurrio un error al dar de alta la persona");
         }
-        /// <summary>
-        /// Busca personas en el sistema de licencias a través de un servicio web publicado
-        /// </summary>
-        /// <param name="_httpClientFactory"></param>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public async Task<IActionResult> BuscarPersonasEnLicencias([FromServices] IHttpClientFactory _httpClientFactory, [FromServices] ICatEntidadesService catEntidadesService, BusquedaPersonaModel model)
+        var modelList = personasService.ObterPersonaPorIDList(IdPersonaFisica);
+
+        modeloBusqueda.ListadoPersonas = modelList;
+
+        return Json(new { success = true, data = modeloBusqueda });
+    }
+    /// <summary>
+    /// Crea un nuevo registro en la bd de una persona moral
+    /// </summary>
+    /// <param name="personasService"></param>
+    /// <param name="Persona"></param>
+    /// <returns></returns>
+    public ActionResult CrearPersonaMoral([FromServices] IPersonasService personasService, PersonaModel Persona)
+    {
+        Persona.idCatTipoPersona = (int)TipoPersona.Moral;
+        Persona.PersonaDireccion.telefono = System.String.IsNullOrEmpty(Persona.telefono) ? null : Persona.telefono;
+        var IdPersonaMoral = personasService.CreatePersonaMoral(Persona);
+        if (IdPersonaMoral == 0)
+            return Json(new { success = false, message = "Ocurrió un error al procesar su solicitud." });
+        else
         {
-            string parametros = "";
-            parametros += string.IsNullOrEmpty(model.NumeroLicenciaBusqueda) ? "" : "licencia=" + model.NumeroLicenciaBusqueda + "&";
-            parametros += string.IsNullOrEmpty(model.CURPBusqueda) ? "" : "curp=" + model.CURPBusqueda + "&";
-            parametros += string.IsNullOrEmpty(model.RFCBusqueda) ? "" : "rfc=" + model.RFCBusqueda + "&";
-            parametros += string.IsNullOrEmpty(model.NombreBusqueda) ? "" : "nombre=" + model.NombreBusqueda + "&";
-            parametros += string.IsNullOrEmpty(model.ApellidoPaternoBusqueda) ? "" : "primer_apellido=" + model.ApellidoPaternoBusqueda + "&";
-            parametros += string.IsNullOrEmpty(model.ApellidoMaternoBusqueda) ? "" : "segundo_apellido=" + model.ApellidoMaternoBusqueda;
-            string ultimo = parametros[^1..];
-            if (ultimo.Equals("&"))
-                parametros = parametros[..^1];
-
-            string urlServ = Request.GetDisplayUrl();
-            Uri uri = new(urlServ);
-            string requested = uri.Scheme + Uri.SchemeDelimiter + uri.Host + ":" + uri.Port;
-
-            var url = requested + $"/api/Licencias/datos_generales?" + parametros;
-
-            var httpClient = _httpClientFactory.CreateClient();
-            var response = await httpClient.GetAsync(url);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-
-
-                List<LicenciaPersonaDatos> respuesta = JsonConvert.DeserializeObject<List<LicenciaPersonaDatos>>(content);
-
-                List<PersonaModel> resultado = new();
-
-                foreach (LicenciaPersonaDatos p in respuesta)
-                {
-                    PersonaModel pm = new();
-                    pm.ConvertirModeloDeLicencias(p);
-                    CatEntidadesModel entidad = catEntidadesService.ObtenerEntidadesByNombre(p.ESTADO_NACIMIENTO);
-                    if (entidad != null && entidad.idEntidad > 0)
-                        pm.PersonaDireccion.idEntidad = entidad.idEntidad;
-                    resultado.Add(pm);
-                }
-
-                return Json(new { success = true, data = resultado });
-            }
-
-            return Json(new { success = true, message = "No se pudo conectar al servicio de licencias" });
+            var modelList = personasService.ObterPersonaPorIDList(IdPersonaMoral);
+            return PartialView("_ListPersonasMorales", modelList);
         }
 
 
-        #endregion
-        #region Catalogos
-        public JsonResult GetEntidades_Drop()
-        {
-            var catEntidades = _catDictionary.GetCatalog("CatEntidades", "0");
-            var result = new SelectList(catEntidades.CatalogList, "Id", "Text");
-            return Json(result);
-        }
-        public JsonResult SubTipoServicios_Drop()
-        {
-            var catEntidades = _catDictionary.GetCatalog("CatSubtipoServicio", "0");
-            var result = new SelectList(catEntidades.CatalogList, "Id", "Text");
-            return Json(result);
-        }
-
-        public JsonResult GetSubtipoPorTipo_Drop([FromServices] ICatSubtipoServicio subtipoServicio, int idTipoServicio)
-        {
-            var result = new SelectList(subtipoServicio.GetSubtipoPorTipo(idTipoServicio), "idSubTipoServicio", "subTipoServicio");
-            return Json(result);
-        }
-        public JsonResult Entidades_Drop()
-        {
-            var catEntidades = _catDictionary.GetCatalog("CatEntidades", "0");
-            var result = new SelectList(catEntidades.CatalogList, "Id", "Text");
-            return Json(result);
-        }
-
-        public JsonResult TipoServicios_Drop()
-        {
-            var catEntidades = _catDictionary.GetCatalog("CatTipoServicio", "0");
-            var result = new SelectList(catEntidades.CatalogList, "Id", "Text");
-            return Json(result);
-        }
-        public JsonResult Municipios_Drop([FromServices] ICatMunicipiosService _catMunicipiosService, int entidadDDlValue)
-        {
-            var result = new SelectList(_catMunicipiosService.GetMunicipiosPorEntidad(entidadDDlValue), "IdMunicipio", "Municipio");
-            return Json(result);
-        }
-        public JsonResult Colores_Drop()
-        {
-            var catEntidades = _catDictionary.GetCatalog("CatColores", "0");
-            var result = new SelectList(catEntidades.CatalogList, "Id", "Text");
-            return Json(result);
-        }
-
-        public JsonResult Marcas_Drop()
-        {
-            var catEntidades = _catDictionary.GetCatalog("CatMarcasVehiculos", "0");
-            var orderedList = catEntidades.CatalogList.OrderBy(item => item.Text);
-            var result = new SelectList(orderedList, "Id", "Text"); return Json(result);
-        }
-
-        public JsonResult SubMarcas_Drop()
-        {
-            var catEntidades = _catDictionary.GetCatalog("CatSubmarcasVehiculos", "0");
-            var result = new SelectList(catEntidades.CatalogList, "Id", "Text");
-            //var selected = result.Where(x => x.Value == Convert.ToString(idSubmarca)).First();
-            //selected.Selected = true;
-            return Json(result);
-        }
-
-        public JsonResult TiposVehiculo_Drop()
-        {
-            var catEntidades = _catDictionary.GetCatalog("CatTiposVehiculo", "0");
-            var result = new SelectList(catEntidades.CatalogList, "Id", "Text");
-            return Json(result);
-        }
-        public JsonResult TipoLicencias_Drop([FromServices] ICatTipoLicenciasService catTipoLicenciasService)
-        {
-            var result = new SelectList(catTipoLicenciasService.ObtenerTiposLicencia(), "idTipoLicencia", "tipoLicencia");
-            return Json(result);
-        }
-
-        #endregion
+        //var personasMoralesModel = _personasService.GetAllPersonasMorales();
 
     }
+    /// <summary>
+    /// Busca personas en el sistema de licencias a través de un servicio web publicado
+    /// </summary>
+    /// <param name="_httpClientFactory"></param>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    public async Task<IActionResult> BuscarPersonasEnLicencias([FromServices] IHttpClientFactory _httpClientFactory, [FromServices] ICatEntidadesService catEntidadesService, BusquedaPersonaModel model)
+    {
+        string parametros = "";
+        parametros += string.IsNullOrEmpty(model.NumeroLicenciaBusqueda) ? "" : "licencia=" + model.NumeroLicenciaBusqueda + "&";
+        parametros += string.IsNullOrEmpty(model.CURPBusqueda) ? "" : "curp=" + model.CURPBusqueda + "&";
+        parametros += string.IsNullOrEmpty(model.RFCBusqueda) ? "" : "rfc=" + model.RFCBusqueda + "&";
+        parametros += string.IsNullOrEmpty(model.NombreBusqueda) ? "" : "nombre=" + model.NombreBusqueda + "&";
+        parametros += string.IsNullOrEmpty(model.ApellidoPaternoBusqueda) ? "" : "primer_apellido=" + model.ApellidoPaternoBusqueda + "&";
+        parametros += string.IsNullOrEmpty(model.ApellidoMaternoBusqueda) ? "" : "segundo_apellido=" + model.ApellidoMaternoBusqueda;
+        string ultimo = parametros[^1..];
+        if (ultimo.Equals("&"))
+            parametros = parametros[..^1];
+
+        string urlServ = Request.GetDisplayUrl();
+        Uri uri = new(urlServ);
+        string requested = uri.Scheme + Uri.SchemeDelimiter + uri.Host + ":" + uri.Port;
+
+        var url = requested + $"/api/Licencias/datos_generales?" + parametros;
+
+        var httpClient = _httpClientFactory.CreateClient();
+        var response = await httpClient.GetAsync(url);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+
+
+            List<LicenciaPersonaDatos> respuesta = JsonConvert.DeserializeObject<List<LicenciaPersonaDatos>>(content);
+
+            List<PersonaModel> resultado = new();
+
+            foreach (LicenciaPersonaDatos p in respuesta)
+            {
+                PersonaModel pm = new();
+                pm.ConvertirModeloDeLicencias(p);
+                CatEntidadesModel entidad = catEntidadesService.ObtenerEntidadesByNombre(p.ESTADO_NACIMIENTO);
+                if (entidad != null && entidad.idEntidad > 0)
+                    pm.PersonaDireccion.idEntidad = entidad.idEntidad;
+                resultado.Add(pm);
+            }
+
+            return Json(new { success = true, data = resultado });
+        }
+
+        return Json(new { success = true, message = "No se pudo conectar al servicio de licencias" });
+    }
+
+
+    #endregion
+    #region Catalogos
+    public JsonResult GetEntidades_Drop()
+    {
+        var catEntidades = _catDictionary.GetCatalog("CatEntidades", "0");
+        var result = new SelectList(catEntidades.CatalogList, "Id", "Text");
+        return Json(result);
+    }
+    public JsonResult SubTipoServicios_Drop()
+    {
+        var catEntidades = _catDictionary.GetCatalog("CatSubtipoServicio", "0");
+        var result = new SelectList(catEntidades.CatalogList, "Id", "Text");
+        return Json(result);
+    }
+
+    public JsonResult GetSubtipoPorTipo_Drop([FromServices] ICatSubtipoServicio subtipoServicio, int idTipoServicio)
+    {
+        var result = new SelectList(subtipoServicio.GetSubtipoPorTipo(idTipoServicio), "idSubTipoServicio", "subTipoServicio");
+        return Json(result);
+    }
+    public JsonResult Entidades_Drop()
+    {
+        var catEntidades = _catDictionary.GetCatalog("CatEntidades", "0");
+        var result = new SelectList(catEntidades.CatalogList, "Id", "Text");
+        return Json(result);
+    }
+
+    public JsonResult TipoServicios_Drop()
+    {
+        var catEntidades = _catDictionary.GetCatalog("CatTipoServicio", "0");
+        var result = new SelectList(catEntidades.CatalogList, "Id", "Text");
+        return Json(result);
+    }
+    public JsonResult Municipios_Drop([FromServices] ICatMunicipiosService _catMunicipiosService, int entidadDDlValue)
+    {
+        var result = new SelectList(_catMunicipiosService.GetMunicipiosPorEntidad(entidadDDlValue), "IdMunicipio", "Municipio");
+        return Json(result);
+    }
+    public JsonResult Colores_Drop()
+    {
+        var catEntidades = _catDictionary.GetCatalog("CatColores", "0");
+        var result = new SelectList(catEntidades.CatalogList, "Id", "Text");
+        return Json(result);
+    }
+
+    public JsonResult Marcas_Drop()
+    {
+        var catEntidades = _catDictionary.GetCatalog("CatMarcasVehiculos", "0");
+        var orderedList = catEntidades.CatalogList.OrderBy(item => item.Text);
+        var result = new SelectList(orderedList, "Id", "Text"); return Json(result);
+    }
+
+    public JsonResult SubMarcas_Drop()
+    {
+        var catEntidades = _catDictionary.GetCatalog("CatSubmarcasVehiculos", "0");
+        var result = new SelectList(catEntidades.CatalogList, "Id", "Text");
+        //var selected = result.Where(x => x.Value == Convert.ToString(idSubmarca)).First();
+        //selected.Selected = true;
+        return Json(result);
+    }
+
+    public JsonResult TiposVehiculo_Drop()
+    {
+        var catEntidades = _catDictionary.GetCatalog("CatTiposVehiculo", "0");
+        var result = new SelectList(catEntidades.CatalogList, "Id", "Text");
+        return Json(result);
+    }
+    public JsonResult TipoLicencias_Drop([FromServices] ICatTipoLicenciasService catTipoLicenciasService)
+    {
+        var result = new SelectList(catTipoLicenciasService.ObtenerTiposLicencia(), "idTipoLicencia", "tipoLicencia");
+        return Json(result);
+    }
+
+    #endregion
+
 }

@@ -1,4 +1,29 @@
 @model GuanajuatoAdminUsuarios.Models.PersonaModel
+
+@{
+
+    var idMunicipio = Model.PersonaDireccion.idMunicipio;
+    var idEntidad = Model.PersonaDireccion.idEntidad;
+
+}
+<script>
+
+    window.idEntidadPersonaMoral = '@idEntidad'
+
+    function GetData() {
+
+        var t = {entidadDDlValue: window.idEntidadPersonaMoral}
+        return t
+    }
+
+    function updateMunicipio(){
+        var entidad = $("#PersonaDireccion_idEntidad").val();
+        window.idEntidadPersonaMoral = entidad || "0"
+        var ddl = $("#PersonaDireccion_idMunicipio").data("kendoDropDownList")
+        ddl.dataSource.read()
+    }
+
+    </script>
 <div class="modal fade modalCustom" id="addMoral"  aria-labelledby="addMoralLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl boxShadow modal-dialog-centered">
         <div class="modal-content">
@@ -85,7 +110,7 @@
                                     .DataValueField("Value")
                                     .OptionLabel("Seleccione Entidad...")
                                     .HtmlAttributes(new { style = "width:100%;" })
-                                    //.Events(e => e.Change("EntidadDropDownChangeV"))
+                                    .Events(e => e.Change("updateMunicipio"))
                                     .DataSource(source =>
                                     {
                                         source.Read(read =>
@@ -110,7 +135,7 @@
                                     {
                                         source.Read(read =>
                                         {
-                                            read.Action("Municipios_Drop", "BusquedaVehiculoPropietario");
+                                            read.Action("Municipios_Drop", "BusquedaVehiculoPropietario").Data("GetData");
                                         });
                                     })
                                     )
