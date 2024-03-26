@@ -5,7 +5,7 @@
     var autorizaciones = @HttpContextAccessor.HttpContext.Session.GetString("Autorizaciones").ToString();
 
     var modificarP = autorizaciones.Contains("486") ? 1 : 0;
-    var delegacion = HttpContextAccessor.HttpContext.Session.GetInt32("IdOficina").Value;
+    var delegacion = User.FindFirst(CustomClaims.OficinaDelegacion).Value;
 
 
 }

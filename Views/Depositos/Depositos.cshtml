@@ -41,6 +41,17 @@
 
     });
 
+    function valid5char(e) {
+
+        var value = e.target.value
+        var reg = /[0-2][0-9][\:][0-5][0-9]/g
+        var can = reg.test(value)
+        if (!can) {
+            e.target.value = ""
+        }
+    }
+
+
     function validacionHora(event) {
         var horaIngresada = event.target.value;
         var key = event.key
@@ -242,7 +253,7 @@
                     <div class="controlForm my-3" style="height: auto;">
                         <label>Hora <b>(Formato 24 horas)</b>:</label>
                         <div class="input-group">
-                            <input type="text" value='@(Model.horaSolicitud == default(TimeSpan) ? "" : Model.horaSolicitud.ToString(@"hh\:mm"))' id="horaSolicitudStr" name="horaSolicitudStr" onkeydown="validacionHora(event)" style="height: 3.5em;" />
+                            <input type="text" value='@(Model.horaSolicitud == default(TimeSpan) ? "" : Model.horaSolicitud.ToString(@"hh\:mm"))' onblur="valid5char(event)" id="horaSolicitudStr" name="horaSolicitudStr" onkeydown="validacionHora(event)" style="height: 3.5em;" />
                         </div>
                     </div>
                 </div>

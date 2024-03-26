@@ -52,6 +52,17 @@
      $(document).ready(function () {
         updateDifference();
     });
+
+    function valid5char(e) {
+
+        var value = e.target.value
+        var reg = /[0-2][0-9][\:][0-5][0-9]/g
+        var can = reg.test(value)
+        if (!can) {
+            e.target.value = ""
+        }
+    }
+
     function validacionHoraArribo(event) {
         var horaIngresada = event.target.value;
         var key = event.key
@@ -445,7 +456,7 @@
                                 )
                         </div>*@
 											<label class="tex">Hora(Formato 24 horas):</label>
-                        <input type="text" id="horaArriboInsert" name="horaArriboInsertStr" onkeydown="validacionHoraArribo(event)" />
+                        <input type="text" id="horaArriboInsert" name="horaArriboInsertStr" onkeydown="validacionHoraArribo(event)" onblur="valid5char(event)" />
                     </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
@@ -476,7 +487,7 @@
                                 )
                         </div>*@
                             <label class="tex">Hora(Formato 24 horas):</label>
-                        <input type="text" id="horaInicioInsert" name="horaInicioInsertStr" onkeydown="validacionHoraInicio(event)" step="60" />
+                            <input type="text" id="horaInicioInsert" name="horaInicioInsertStr" onkeydown="validacionHoraInicio(event)" onblur="valid5char(event)" step="60" />
                     </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
@@ -508,7 +519,7 @@
                         </div>*@
 
                             <label class="tex">Hora(Formato 24 horas):</label>
-                            <input type="text" id="horaTerminoInsert" name="horaFinInsertStr" onkeydown="validacionHoraFin(event)" step="60" />
+                            <input type="text" id="horaTerminoInsert" name="horaFinInsertStr" onkeydown="validacionHoraFin(event)" onblur="valid5char(event)" step="60" />
                     </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
