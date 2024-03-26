@@ -194,31 +194,29 @@ namespace GuanajuatoAdminUsuarios.Services
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
                 try
                 {
-                    SqlCommand command = new SqlCommand("[usp_ObtieneListadoTransitoTransporte]", connection);
-
-                    
+                    SqlCommand command = new SqlCommand("dbo.usp_ObtieneListadoTransitoTransporte", connection);
 
                     command.Parameters.Add(new SqlParameter("@PageIndex", SqlDbType.Int)).Value = pagination.PageIndex;
                     command.Parameters.Add(new SqlParameter("@PageSize", SqlDbType.Int)).Value = pagination.PageSize;
 
-                    command.Parameters.Add(new SqlParameter("@Placa", SqlDbType.NVarChar)).Value = (object)model.Placas ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@FolioSolicitud", SqlDbType.NVarChar)).Value = (object)model.FolioSolicitud ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@folioInfraccion", SqlDbType.NVarChar)).Value = (object)model.FolioInfraccion ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@Propietario", SqlDbType.NVarChar)).Value = (object)model.Propietario ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@numeroEconomico", SqlDbType.NVarChar)).Value = (object)model.NumeroEconomico ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@Placa", SqlDbType.VarChar)).Value = (model.Placas != null) ? model.Placas.Trim() : DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@FolioSolicitud", SqlDbType.VarChar)).Value = (model.FolioSolicitud != null) ? model.FolioSolicitud.Trim() : DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@folioInfraccion", SqlDbType.VarChar)).Value = (model.FolioInfraccion!=null) ? model.FolioInfraccion.Trim() : DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@Propietario", SqlDbType.VarChar)).Value = (model.Propietario!=null) ? model.Propietario.Trim() : DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@numeroEconomico", SqlDbType.VarChar)).Value = (model.NumeroEconomico!=null) ? model.NumeroEconomico.Trim() : DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idOficina", SqlDbType.Int)).Value = (object)idOficina ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@IdDelegacion", SqlDbType.Int)).Value = (object)model.IdDelegacion ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@IdPension", SqlDbType.Int)).Value = (object)model.IdPension ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@IdDependenciaNoTransito", SqlDbType.Int)).Value = (object)model.IdDependenciaNoTransito ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@IdDependenciaTransito", SqlDbType.Int)).Value = (object)model.IdDependenciaTransito ?? DBNull.Value;
                     command.Parameters.Add(new SqlParameter("@idEstatus", SqlDbType.Int)).Value = (object)model.IdEstatus ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@FechaIngreso", SqlDbType.DateTime)).Value = (object)model.FechaIngreso ?? DBNull.Value;
-                    command.Parameters.Add(new SqlParameter("@FechaIngresoFin", SqlDbType.DateTime)).Value = (object)model.FechaIngresoFin ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@FechaIngreso", SqlDbType.Date)).Value = (object)model.FechaIngreso ?? DBNull.Value;
+                    command.Parameters.Add(new SqlParameter("@FechaIngresoFin", SqlDbType.Date)).Value = (object)model.FechaIngresoFin ?? DBNull.Value;
 
                     //command.CommandTimeout = 8000;
                     command.CommandType = CommandType.StoredProcedure;
                     connection.Open();
-                    
+
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -282,7 +280,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             transitoList.Add(transito);
 
                         }
-                       
+                        reader.Close();
                     }
 
                 }
