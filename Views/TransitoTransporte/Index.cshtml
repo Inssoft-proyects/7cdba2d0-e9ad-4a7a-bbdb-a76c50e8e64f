@@ -23,10 +23,10 @@
                     window.location.href = "/Principal";
                 }, 200);
             } else {
-                if (!auth.toString().includes("203")) {
-                    $("#btnExcelTransito").prop('disabled', true).css({ "opacity": "0.3" });
-                    $("#btnPDFTransito").prop('disabled', true).css({ "opacity": "0.3" });
-                }
+                //if (!auth.toString().includes("203")) {
+                //    $("#btnExcelTransito").prop('disabled', true).css({ "opacity": "0.3" });
+                //    $("#btnPDFTransito").prop('disabled', true).css({ "opacity": "0.3" });
+                //}
 
             }
         } else {
@@ -399,17 +399,7 @@
         var auth = @autorizaciones;
         var grid = $("#Grid").data("kendoGrid");
 
-        if (!auth.toString().includes("203")) {
-            grid.hideColumn(9);
-        }
 
-        if (!auth.toString().includes("206")) {
-            grid.hideColumn(11);
-        }
-
-        if (!auth.toString().includes("205")) {
-            grid.hideColumn(12);
-        }
     });
 
     function submitSearch() {
