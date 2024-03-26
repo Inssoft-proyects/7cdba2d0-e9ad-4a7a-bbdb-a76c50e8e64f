@@ -169,6 +169,15 @@
             <div id="listadoDetalleVehiculo">
                 <partial name="_ListaBusquedaVehiculo" model="Model" />
             </div>
+
+    <div class="modal fade modalCustom" id="VehiculoServiceModal" aria-labelledby="VehiculoServiceLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-body bg-light" id="ModalBodyVehiculoService">
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 <script>
@@ -176,22 +185,52 @@
         var formData = $("#buscarVehiculoForm").serialize();
         showLoading();
         $.ajax({
-            url: '/AsignacionGruas/BuscarVehiculo',
+            url: '@Url.Action("BuscarVehiculo")',
             type: 'POST',
             data: formData,
             success: function (response) {
-                console.log("Response:", response);
-                var grid = $("#gridVehiculosDeposito").data("kendoGrid");
-                grid.dataSource.data(response);
-                hideLoading();
+                if (response.success === false) {
+                    sitteg_warning("No se encontraron resultados");
+                    return;
+                }
+
+                if (response.noResults) {
+                    Swal.fire({
+                        icon: "info",
+                        title: "Vehículo no registrado en RIAG",
+                        text: "¡Vehículo sin captura en el Registro de Infracciones y Accidentes de Guanajuato!",
+                        showCancelButton: true,
+                        showConfirmButton: false,
+                        cancelButtonText: "Cerrar",
+                    });
+                    $('#ModalBodyVehiculoService').html(response.data);
+                    $('#VehiculoServiceModal').modal({ backdrop: 'static', keyboard: false });
+                    $('#VehiculoServiceModal').modal('show');
+                    hideLoading();
+                } else if (response.data) {
+
+                    try {
+                        $("#gridVehiculosDeposito").data("kendoGrid").dataSource.filter({ field: response.field, operator: "contains", value: response.data })
+                    }
+                    catch {
+
+                    }
+                    setTimeout(() => { $('#agregarVehiculoModal').modal('hide'); }, 400)
+                    hideLoading();
+                } else {
+                    $('#agregarVehiculoModal').modal('hide');
+                    hideLoading();
+                    sitteg_warning('Sucedio un error intente de nuevo mas tarde.');
+                }
+
             },
-            error: function (error) {
-                var errorMessage = error.responseText || "Ocurrió un error, inténtelo nuevamente más tarde.";
-                sitteg_warning(errorMessage);
+            error: function () {
+                sitteg_warning("Sucedio un error intente de nuevo mas tarde");
                 hideLoading();
             }
         });
     }
+
     function goBack() {
 
         $('#modalVehiculos').modal('hide');

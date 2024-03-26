@@ -1,4 +1,5 @@
-﻿using GuanajuatoAdminUsuarios.Interfaces;
+﻿using GuanajuatoAdminUsuarios.Helpers;
+using GuanajuatoAdminUsuarios.Interfaces;
 using GuanajuatoAdminUsuarios.Models;
 using GuanajuatoAdminUsuarios.Services;
 using GuanajuatoAdminUsuarios.Util;
@@ -24,17 +25,22 @@ namespace GuanajuatoAdminUsuarios.Controllers
     {
         private readonly IAsignacionGruasService _asignacionGruasService;
         private readonly IGruasService _gruasService;
+        private readonly IVehiculosService _vehiculosService;
+        private readonly IVehiculoPlataformaService _vehiculoPlataformaService;
         private readonly IBitacoraService _bitacoraServices;
         private readonly string _rutaArchivo;
         private bool editar = true;
 
-        public AsignacionGruasController(IAsignacionGruasService asignacionGruasService, IGruasService gruasService, IBitacoraService bitacoraServices, IConfiguration configuration)
+        public AsignacionGruasController(IAsignacionGruasService asignacionGruasService, IGruasService gruasService, IBitacoraService bitacoraServices, IConfiguration configuration, 
+            IVehiculosService vehiculosService, IVehiculoPlataformaService vehiculoPlataformaService)
 
         {
             _asignacionGruasService = asignacionGruasService;
             _gruasService = gruasService;
             _bitacoraServices = bitacoraServices;
             _rutaArchivo = configuration.GetValue<string>("AppSettings:RutaArchivoInventarioDeposito");
+            _vehiculosService = vehiculosService;
+            _vehiculoPlataformaService = vehiculoPlataformaService;
         }
         public IActionResult Index(string folio)
         {
@@ -97,11 +103,85 @@ namespace GuanajuatoAdminUsuarios.Controllers
             return PartialView("_ModalAgregarGrua");
         }
 
-        public ActionResult BuscarVehiculo(string Placa, string Serie)
+        public async Task<ActionResult> BuscarVehiculo(VehiculoBusquedaModel model)
         {
-            var SeleccionVehiculo = _asignacionGruasService.BuscarPorParametro(Placa, Serie);
-            return Json(SeleccionVehiculo);
+            try
+            {
+                //var SeleccionVehiculo = _capturaAccidentesService.BuscarPorParametro(model.PlacasBusqueda, model.SerieBusqueda, model.FolioBusqueda);
+                var SeleccionVehiculo = _vehiculosService.BuscarPorParametro(model.PlacasBusqueda ?? "", model.SerieBusqueda ?? "", model.FolioBusqueda);
+
+                if (SeleccionVehiculo > 0)
+                {
+                    var text = "";
+                    var value = "";
+
+                    if (!string.IsNullOrEmpty(model.SerieBusqueda))
+                    {
+                        text = "serie";
+                        value = model.SerieBusqueda;
+
+                    }
+                    else if (!string.IsNullOrEmpty(model.PlacasBusqueda))
+                    {
+                        text = "placas";
+                        value = model.PlacasBusqueda.ToUpper();
+                    }
+
+
+
+                    return Json(new { noResults = false, data = value, field = text });
+                }
+                else
+                {
+                    var jsonPartialVehiculosByWebServices = await ajax_BuscarVehiculo(model);
+
+                    if (jsonPartialVehiculosByWebServices != null)
+                    {
+                        return Json(new { noResults = true, data = jsonPartialVehiculosByWebServices });
+                    }
+                    else
+                    {
+                        return Json(new { noResults = true, data = "" });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { noResults = true, error = "Se produjo un error al procesar la solicitud", data = "" });
+            }
         }
+
+        [HttpPost]
+        public async Task<string> ajax_BuscarVehiculo(VehiculoBusquedaModel model)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(model.PlacasBusqueda))
+                {
+                    model.PlacasBusqueda = model.PlacasBusqueda.ToUpper();
+                }
+                if (!string.IsNullOrEmpty(model.SerieBusqueda))
+                {
+                    model.SerieBusqueda = model.SerieBusqueda.ToUpper();
+                }
+
+
+                var models = await _vehiculoPlataformaService.BuscarVehiculoEnPlataformas(model);
+                HttpContext.Session.SetInt32("IdMarcaVehiculo", models.idMarcaVehiculo);
+
+
+                var test = await this.RenderViewAsync2("", models);
+
+
+                return test;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("Infracciones - ajax_BuscarVehiculo: " + ex.Message);
+                return null;
+            }
+        }
+
 
         [HttpPost]
         public ActionResult ActualizarDatosVehiculo([FromBody] AsignacionGruaModel selectedRowData)
