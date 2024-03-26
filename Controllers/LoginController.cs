@@ -188,8 +188,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
                return View("ErrorView", oReply);
            }*/
         [HttpPost]
-        public async Task<IActionResult> IniciarSesion(string usuario, string contrasena)
+        public async Task<IActionResult> IniciarSesion(string usuario, string contrasena, int horaUsuario)            
         {
+
+            var horaEnviada = horaUsuario;
+
             try
             {
                 HttpContext.Session.Clear();
@@ -213,11 +216,24 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                     if (response.IsSuccessStatusCode)
                     {
+                       
                         string content = await response.Content.ReadAsStringAsync();
                         dynamic json = JsonConvert.DeserializeObject(content);
 
                         if (json != null && json.Count > 0)
                         {
+                            var fechaServidor = DateTime.Now;
+                            int horaServidor = (fechaServidor.Hour * 100) + (fechaServidor.Minute);
+
+                        
+                            // Calcular la diferencia de tiempo entre la hora del servidor y la hora enviada por el cliente
+                            int diferenciaTiempo = Math.Abs( horaEnviada - horaServidor); 
+
+                            // Comprobar si la diferencia es mayor o igual a dos minutos
+                            if (diferenciaTiempo > 2)
+                            {
+                                return Json(new { success = false });
+                            }
                             string usuarioLogin = usuario;
                             string nombre = json[0].nombre;
                             string oficina = json[0].oficina;
@@ -306,7 +322,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                                 HttpContext.Session.SetString("Oficina", oficina);
                                 // HttpContext.Session.SetInt32("IdDependencia", idDependencia);
 
-                                return Json(listaIdsPermitidosJson);
+                                return Json(new { success = true, data = listaIdsPermitidosJson });
                             }
                             else
                             {

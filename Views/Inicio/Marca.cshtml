@@ -38,6 +38,7 @@
         }
 
 
+
         function showLoading() {
             $('#loading').css('display', 'block');
         }
@@ -46,7 +47,6 @@
             var isValid = true;
             var usuario = document.getElementById('usuario').value;
             var contrasena = document.getElementById('contrasena').value;
-
             $('#usuario').removeClass("errorData");
             $('#contrasena').removeClass("errorData");
             if (usuario === '' || usuario === undefined) {
@@ -58,39 +58,47 @@
                 $('#contrasena').addClass("errorData");
                 isValid = false;
             }
+            var horaActual = new Date(Date.now());
+            var horaUsuario = parseInt(horaActual.getHours() * 100) + parseInt(horaActual.getMinutes())
 
             var data = {
                 usuario: usuario,
-                contrasena: contrasena
+                contrasena: contrasena,
+                horaUsuario: horaUsuario
             };
             showLoading();
             $.ajax({
                 url: '/Login/IniciarSesion',
                 type: 'POST',
                 data: data,
-                success: function (listaIdsPermitidosJson) {
+                success: function (data) {
+                    console.log(data); // Asegúrate de estar recibiendo los datos correctamente
                     var mensajeUsuario = document.getElementById('mensajeUsuario');
-                    if (listaIdsPermitidosJson.length > 0) {
+                    if (data.success === true) {
                         mensajeUsuario.textContent = "Inicio de sesión autorizado";
                         mensajeUsuario.style.color = "green";
                         window.location.href = "/Principal";
                     } else {
-                        mensajeUsuario.textContent = "Usuario no capturado";
-                        mensajeUsuario.style.color = "red";
+                        if (data.success === false) {
+                            mensajeUsuario.textContent = "Sucedio un error con el horario de su equipo. Verifique su configuración.";
+                            mensajeUsuario.style.color = "red";
+                        } else {
+                            mensajeUsuario.textContent = "Usuario no capturado";
+                            mensajeUsuario.style.color = "red";
+                        }
                     }
 
                     mensajeUsuario.style.display = "block";
                     hideLoading();
                 },
-                error: function (error) {
+                error: function (xhr, textStatus, errorThrown) {
                     var mensajeUsuario = document.getElementById('mensajeUsuario');
-                    mensajeUsuario.textContent = "Ocurrió un error al procesar su solicitud.";
+                    mensajeUsuario.textContent = "Error al procesar la solicitud. Por favor, inténtelo de nuevo más tarde.";
                     mensajeUsuario.style.color = "red";
                     mensajeUsuario.style.display = "block";
-
-                    console.error(error);
                     hideLoading();
                 }
+
             });
         }
     </script>
@@ -185,7 +193,7 @@
                     <div class="card-footer text-center">
                         <div class="col-md-4"></div>
                         <div class="class="mx-md-auto col-lg-4 mx-lg-0">
-                            <button type="button" class="btn btn-primary controlForm" onclick="inicioSesion()" style="width:400px; height:60px;">
+                            <button type="button" id="botonLogin" class="btn btn-primary controlForm" onclick="inicioSesion()" style="width:400px; height:60px;">
                                 Iniciar sesión
                             </button>
 
