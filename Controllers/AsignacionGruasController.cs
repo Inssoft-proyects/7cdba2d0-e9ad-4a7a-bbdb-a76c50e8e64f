@@ -166,7 +166,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 }
 
 
-                var models = _vehiculoPlataformaService.BuscarVehiculoEnPlataformas(model);
+                var models = await _vehiculoPlataformaService.BuscarVehiculoEnPlataformas(model);
                 HttpContext.Session.SetInt32("IdMarcaVehiculo", models.idMarcaVehiculo);
 
 
