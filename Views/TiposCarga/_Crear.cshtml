@@ -71,7 +71,18 @@
 
 <script>
     function submitTipoCarga() {
+        var controlsValidate = [];
+        var isValid = true;
 
+        controlsValidate.push({ 'controlName': 'TipoCarga' });
+
+        if (!isControlsValid(controlsValidate)) { isValid = false; }
+
+
+        if (!isValid) {
+            sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
+            return;
+        }
         var Mydata = $("#ProductForm").serialize();
         console.log(Mydata);
         $('#addTipoCarga').modal('hide');
@@ -83,7 +94,8 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#gridCatTiposCarga").data("kendoGrid").dataSource.data(result);
+                var grid = $("#gridCatTiposCarga").data("kendoGrid");
+                    grid.dataSource.read();
                 hideLoading();
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");

@@ -68,7 +68,18 @@
     
 <script>
     function agregarTipoVehiculo() {
+        var controlsValidate = [];
+        var isValid = true;
 
+        controlsValidate.push({ 'controlName': 'TipoVehiculo' });
+
+        if (!isControlsValid(controlsValidate)) { isValid = false; }
+        
+
+        if (!isValid) {
+            sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
+            return;
+        }
         var Mydata = $("#ProductForm").serialize();
         console.log(Mydata);
         $('#addTipo').modal('hide');
@@ -76,11 +87,12 @@
         $('.modal-backdrop').remove();
         showLoading();
         $.ajax({
-            url: '@Url.Action("CreatePartialTipoModal")',
+            url: '@Url.Action("AgregarTipoDesdeCatalogo")',
             type: 'POST',
             data: Mydata,
             success: function (result) {
                 $("#gridCatTipoVehiculo").data("kendoGrid").dataSource.data(result);
+                sitteg_success("Información guardada correctamente.");
                 hideLoading();
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");

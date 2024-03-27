@@ -91,7 +91,21 @@
 
 <script>
     function agregarTramo() {
+        var controlsValidate = [];
+        var isValid = true;
 
+        controlsValidate.push({ 'controlName': 'Tramo' });
+
+        if (!isControlsValid(controlsValidate)) { isValid = false; }
+        controlsValidate = [];
+        controlsValidate.push({ 'controlName': 'IdCarretera' });
+
+        if (!isControlsValidDropDown(controlsValidate)) { isValid = false; }
+
+        if (!isValid) {
+            sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
+            return;
+        }
         var Mydata = $("#agregarTramoForm").serialize();
         console.log(Mydata);
         $('#agregarTramo').modal('hide');

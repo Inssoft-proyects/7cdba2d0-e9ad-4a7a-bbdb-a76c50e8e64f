@@ -167,9 +167,9 @@ namespace GuanajuatoAdminUsuarios.Services
                                             m.marcaVehiculo,
                                             subm.nombreSubmarca,
                                             v.idPersona,
-                                            p.nombre,
-                                            p.apellidoPaterno,
-                                            p.apellidoMaterno
+                                            MAX(p.nombre) AS nombre,
+                                            MAX(p.apellidoPaterno) AS apellidoPaterno,
+                                            MAX(p.apellidoMaterno) AS apellidoMaterno
                                         FROM
                                             depositos d
                                         LEFT JOIN
@@ -187,7 +187,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                         LEFT JOIN
                                             catSubmarcasVehiculos subm ON d.idSubmarca = subm.idSubmarca
                                         LEFT JOIN
-                                            vehiculos v ON v.placas = d.Placa
+                                            vehiculos v ON v.idVehiculo = sol.idVehiculo
                                         LEFT JOIN
                                             personas p ON p.idPersona = v.idPersona
                                         LEFT JOIN
@@ -207,9 +207,6 @@ namespace GuanajuatoAdminUsuarios.Services
                                             m.marcaVehiculo,
                                             subm.nombreSubmarca,
                                             v.idPersona,
-                                            p.nombre,
-                                            p.apellidoPaterno,
-                                            p.apellidoMaterno,
                                             d.Placa;
                                         ";
 

@@ -188,6 +188,49 @@ namespace GuanajuatoAdminUsuarios.Services
             return placas;
         }
 
+        public List<PlacaModel> GetPlacasLiberacion(int idOficina)
+        {
+            List<PlacaModel> placas = new List<PlacaModel>();
+
+            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand();
+                    {
+                        command = new SqlCommand(@"SELECT d.placa,d.idDeposito
+                            FROM depositos d 
+                            WHERE d.estatusSolicitud = 4 AND d.idDelegacion = @idDelegacion  AND d.placa IS NOT NULL; ", connection);
+                    }
+                    command.Parameters.Add(new SqlParameter("@idDelegacion", SqlDbType.Int)).Value = idOficina;
+                    command.CommandType = CommandType.Text;
+                    //sqlData Reader sirve para la obtencion de datos 
+                    using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            PlacaModel placa = new PlacaModel();
+                            placa.IdDepositos = Convert.ToInt32(reader["IdDeposito"].ToString());
+                            placa.Placa = reader["Placa"].ToString();
+                            placas.Add(placa);
+                        }
+
+                    }
+
+                }
+                catch (SqlException ex)
+                {
+                    //Guardar la excepcion en algun log de errores
+                    //ex
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            return placas;
+        }
+
+
     }
 }
 

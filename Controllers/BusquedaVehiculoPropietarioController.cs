@@ -73,6 +73,8 @@ public class BusquedaVehiculoPropietarioController : BaseController
     public async Task<IActionResult> BuscarVehiculoEnPlataformasAsync([FromServices] IOptions<AppSettings> appSettings, [FromServices] IRepuveService repuveService,
     [FromServices] IVehiculoPlataformaService vehiculoPlataformaService, [FromServices] IVehiculosService vehiculoService, [FromServices] ICotejarDocumentosClientService cotejarDocumentosService, VehiculoPropietarioBusquedaModel model)
     {
+        HttpContext.Session.Remove("PersonaModel");
+
         VehiculoBusquedaModel busquedaModel = new VehiculoBusquedaModel();
 
         try
@@ -191,13 +193,25 @@ public class BusquedaVehiculoPropietarioController : BaseController
     /// <returns></returns>
     public ActionResult MostrarPersonaMoral()
     {
-        var model = new PersonaModel
-        {
-            PersonaDireccion = new PersonaDireccionModel()
-        };
+        PersonaModel model;
+
         var q = HttpContext.Session.GetObject<PersonaModel>("PersonaModel");
-        return PartialView("_PersonaMoral", q);
+
+        if (q == null)
+        {
+            model = new PersonaModel
+            {
+                PersonaDireccion = new PersonaDireccionModel()
+            };
+        }
+        else
+        {
+            model = q;
+        }
+
+        return PartialView("_PersonaMoral", model);
     }
+
 
     /// <summary>
     /// Busca todas las personas morales

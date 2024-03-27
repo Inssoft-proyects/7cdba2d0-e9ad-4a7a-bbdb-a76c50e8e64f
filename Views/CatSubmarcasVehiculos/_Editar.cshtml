@@ -103,7 +103,21 @@
 
 <script>
     function editarSubmarca() {
+        var controlsValidate = [];
+        var isValid = true;
 
+        controlsValidate.push({ 'controlName': 'NombreSubmarca' });
+
+        if (!isControlsValid(controlsValidate)) { isValid = false; }
+        controlsValidate = [];
+        controlsValidate.push({ 'controlName': 'IdMarcaVehiculo' });
+
+        if (!isControlsValidDropDown(controlsValidate)) { isValid = false; }
+
+        if (!isValid) {
+            sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
+            return;
+        }
         var Mydata = $("#editarSubmarcaForm").serialize();
         console.log(Mydata);
         $('#agregarSubmarca').modal('hide');

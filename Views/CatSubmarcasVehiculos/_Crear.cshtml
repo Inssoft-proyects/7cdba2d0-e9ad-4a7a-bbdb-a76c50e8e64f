@@ -93,7 +93,21 @@
 
 <script>
     function submitProduct() {
+        var controlsValidate = [];
+        var isValid = true;
 
+        controlsValidate.push({ 'controlName': 'NombreSubmarca' });
+
+        if (!isControlsValid(controlsValidate)) { isValid = false; }
+        controlsValidate = [];
+        controlsValidate.push({ 'controlName': 'IdMarcaVehiculo' });
+
+        if (!isControlsValidDropDown(controlsValidate)) { isValid = false; }
+
+        if (!isValid) {
+            sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
+            return;
+        }
         var Mydata = $("#ProductForm").serialize();
         console.log(Mydata);
         $('#addSubMarca').modal('hide');
@@ -101,7 +115,7 @@
         $('.modal-backdrop').remove();
         showLoading();
         $.ajax({
-            url: '@Url.Action("CreatePartialModal")',
+            url: '@Url.Action("CrearSubMarcaCatalogo")',
             type: 'POST',
             data: Mydata,
             success: function (result) {

@@ -122,6 +122,8 @@ namespace GuanajuatoAdminUsuarios.Services
                         while (reader.Read())
                         {
                             tramo.IdCarretera = Convert.ToInt32(reader["IdCarretera"].ToString());
+                            tramo.Estatus = Convert.ToInt32(reader["estatus"].ToString());
+
                             tramo.IdTramo = Convert.ToInt32(reader["idTramo"].ToString());
                             tramo.Carretera = reader["carretera"].ToString();
                             tramo.Tramo = reader["tramo"].ToString();

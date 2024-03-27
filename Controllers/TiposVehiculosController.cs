@@ -98,7 +98,19 @@ namespace GuanajuatoAdminUsuarios.Controllers
 			var ListTiposVehiculosModel = _catTiposVehiculoService.GetTiposVehiculos();
 			return Json(ListTiposVehiculosModel);
 		}
-
+        public ActionResult AgregarTipoDesdeCatalogo(TiposVehiculosModel model)
+        {
+            var errors = ModelState.Values.Select(s => s.Errors);
+            ModelState.Remove("TipoVehiculo");
+            if (ModelState.IsValid)
+            {
+              
+                    _catTiposVehiculoService.CreateTipoVehiculo(model);
+                }
+            
+            var ListTiposVehiculosModel = _catTiposVehiculoService.GetTiposVehiculos();
+            return Json(ListTiposVehiculosModel);
+        }
         public ActionResult UpdatePartialTipoModal(TiposVehiculosModel model)
         {
             bool switchTiposVehiculos = Request.Form["tiposVehiculoSwitch"].Contains("true");
