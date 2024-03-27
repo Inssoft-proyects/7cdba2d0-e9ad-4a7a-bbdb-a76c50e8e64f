@@ -137,7 +137,7 @@
                             <div class="col-12 col-md-6 col-lg-4">
                                 <div class="controlForm my-3">
                                     <div class="col-12 col-md-6 mx-md-auto col-lg-4 mx-lg-0 ">
-                                        <div class="controlButton my-3" onclick="buscarVehiculoEnPlataformas()">
+                                        <div class="controlButton my-3" onclick="buscarVehiculoEnPlataformas(0)">
                                             @(Html.Kendo().Button()
                                                 .Name("buscar")
                                                 .HtmlAttributes(new { @class = "btnPrimary" })
@@ -164,7 +164,7 @@
 
                 <div class="col-12 col-md-6 col-lg-3 col-xl-auto">
                     <div class="col-auto btnOutline btnOutlinePrimary my-3">
-                        <button id="btnBuscarVehiculo" onclick="buscarVehiculoEnPlataformas()" type="button">
+                        <button id="btnBuscarVehiculo" onclick="buscarVehiculoEnPlataformas(1)" type="button">
                             <h6 class="m-0 d-flex align-items-center"><i class="icon-addCar h5 mb-0 me-2"></i><b>Buscar vehículo</b></h6>
                         </button>
                     </div>
@@ -214,7 +214,7 @@
         $('#agregarVehiculoModal').modal('hide');
         $("#IdVehiculoAsignado").change();
     }
-    function buscarVehiculoEnPlataformas() {
+    function buscarVehiculoEnPlataformas(bandera) {
         $('#resultadoContainer').fadeOut();
         if (!isControlsValidWithFocus(busquedaVehiculoValidate).isValid) {
             sitteg_warning('Debes seleccionar una entidad.');

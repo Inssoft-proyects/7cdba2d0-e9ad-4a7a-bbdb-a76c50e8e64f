@@ -142,7 +142,7 @@
                             <div class="col-12 col-md-6 col-lg-4">
                                 <div class="controlForm my-3">
                                     <div class="col-12 col-md-6 mx-md-auto col-lg-4 mx-lg-0 ">
-                                         <div class="controlButton my-3" onclick="busquedaVehiculo()">
+                                         <div class="controlButton my-3" onclick="busquedaVehiculo(0)">
                                             @(Html.Kendo().Button()
                                                 .Name("buscar")
                                                 .HtmlAttributes(new { @class = "btnPrimary" })
@@ -158,7 +158,7 @@
             </form>
             <div class="row justify-content-center align-items-center">
                 <div class="col-12 col-md-6 col-lg-4 text-center">
-                    <div class="controlButton my-3" onclick="busquedaVehiculo()">
+                    <div class="controlButton my-3" onclick="busquedaVehiculo(1)">
                         @(Html.Kendo().Button()
                             .Name("buscar")
                             .HtmlAttributes(new { @class = "btnPrimary" })
@@ -181,8 +181,10 @@
 </section>
 
 <script>
-    function busquedaVehiculo() {
+    function busquedaVehiculo(bandera) {
         var formData = $("#buscarVehiculoForm").serialize();
+
+        console.log(formData);
         showLoading();
         $.ajax({
             url: '@Url.Action("BuscarVehiculo")',
@@ -193,16 +195,20 @@
                     sitteg_warning("No se encontraron resultados");
                     return;
                 }
+                var sinBusqueda = "@ViewBag.SinBusquedaAG";
 
                 if (response.noResults) {
-                    Swal.fire({
-                        icon: "info",
-                        title: "Vehículo no registrado en RIAG",
-                        text: "¡Vehículo sin captura en el Registro de Infracciones y Accidentes de Guanajuato!",
-                        showCancelButton: true,
-                        showConfirmButton: false,
-                        cancelButtonText: "Cerrar",
-                    });
+                    if (sinBusqueda == "FALSE") {
+                        Swal.fire({
+                            icon: "info",
+                            title: "Vehículo no registrado en RIAG",
+                            text: "¡Vehículo sin captura en el Registro de Infracciones y Accidentes de Guanajuato!",
+                            showCancelButton: true,
+                            showConfirmButton: false,
+                            cancelButtonText: "Cerrar",
+                        });
+                    }
+
                     $('#ModalBodyVehiculoService').html(response.data);
                     $('#VehiculoServiceModal').modal({ backdrop: 'static', keyboard: false });
                     $('#VehiculoServiceModal').modal('show');

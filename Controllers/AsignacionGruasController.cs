@@ -110,6 +110,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
                 //var SeleccionVehiculo = _capturaAccidentesService.BuscarPorParametro(model.PlacasBusqueda, model.SerieBusqueda, model.FolioBusqueda);
                 var SeleccionVehiculo = _vehiculosService.BuscarPorParametro(model.PlacasBusqueda ?? "", model.SerieBusqueda ?? "", model.FolioBusqueda);
 
+                if (System.String.IsNullOrEmpty(model.PlacasBusqueda) && System.String.IsNullOrEmpty(model.SerieBusqueda))
+                    ViewBag.SinBusquedaAG = "TRUE";
+                else
+                    ViewBag.SinBusquedaAG = "FALSE";
+
                 if (SeleccionVehiculo > 0)
                 {
                     var text = "";

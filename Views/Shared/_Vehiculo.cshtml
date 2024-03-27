@@ -828,23 +828,27 @@
     var vehiculoControlsValidate = [];
     $(document).ready(function () {
         var esRobado = "@Model.ReporteRobo";
+        var sinBusqueda =  "@ViewBag.SinBusqueda";
         //Si el vehículo tiene reporte de robo se muestra mensaje
         if (esRobado == "True") {
             setTimeout(() => { mostrarMensajeRobado() }, 400);
         }
-    @if (Model.idVehiculo == 0)
-    {
-        <text>
-                Swal.fire({
-                    icon: "info",
-                    title: "Vehículo no registrado en RIAG",
-                    text: "¡Vehículo sin captura en el Registro de Infracciones y Accidentes de Guanajuato!",
-                    showCancelButton: true,
-                    showConfirmButton: false,
-                    cancelButtonText: "Cerrar",
-                });
-        </text>
-    }
+
+        if (sinBusqueda == "FALSE") {
+            @if (Model.idVehiculo == 0)
+            {
+                <text>
+                        Swal.fire({
+                            icon: "info",
+                            title: "Vehículo no registrado en RIAG..",
+                            text: "¡Vehículo sin captura en el Registro de Infracciones y Accidentes de Guanajuato!",
+                            showCancelButton: true,
+                            showConfirmButton: false,
+                            cancelButtonText: "Cerrar",
+                        });
+                </text>
+            }
+        }
             //Se agregan campos requeridos de vehiculo
             vehiculoControlsValidate.push({ 'controlName': 'idEntidad', 'isDropDown': true });
         vehiculoControlsValidate.push({ 'controlName': 'ddlMarcas', 'isDropDown': true });

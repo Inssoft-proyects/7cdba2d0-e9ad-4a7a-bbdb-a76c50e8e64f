@@ -188,6 +188,7 @@
 
 <script>
     function abrirModalVehiculo(placa) {
+
         showLoading();
         $.ajax({
             url: '/CapturaAccidentes/AbrirModalVehiculo',
@@ -243,14 +244,14 @@
             type: 'POST',
             data: {},
             success: function (response) {
-                Swal.fire({
-                    icon: "info",
-                    title: "Vehículo no registrado en RIAG",
-                    text: "¡Vehículo sin captura en el Registro de Infracciones y Accidentes de Guanajuato!",
-                    showCancelButton: true,
-                    showConfirmButton: false,
-                    cancelButtonText: "Cerrar",
-                });
+                //Swal.fire({
+                //    icon: "info",
+                //    title: "Vehículo no registrado en RIAG",
+                //    text: "¡Vehículo sin captura en el Registro de Infracciones y Accidentes de Guanajuato!",
+                //    showCancelButton: true,
+                //    showConfirmButton: false,
+                //    cancelButtonText: "Cerrar",
+                //});
                     $('#ModalBodyVehiculoService').html(response.data);
                     $('#VehiculoServiceModal').modal({ backdrop: 'static', keyboard: false });
                     $('#VehiculoServiceModal').modal('show');
