@@ -8,6 +8,7 @@ namespace GuanajuatoAdminUsuarios.Models
 {
     public class TransitoTransporteModel : EntityModel
 	{
+
         public int transito { get; set; }
         public int cons { get; set; }
         public string nombreEstatus { get; set; }
@@ -39,9 +40,12 @@ namespace GuanajuatoAdminUsuarios.Models
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime FechaIngreso { get; set; }
 
-        public string FechaIngresoDesc { get { return FechaIngreso.ToString("dd/MM/yyyy"); } }
+        public string FechaIngresoDesc { get { return FechaIngreso ==DateTime.MinValue?"": FechaIngreso.ToString("dd/MM/yyyy"); } }
 
         public DateTime FechaLiberacion { get; set; }
+
+        public string FechaLiberacionDesc { get { return FechaLiberacion == DateTime.MinValue ? "" : FechaLiberacion.ToString("dd/MM/yyyy"); } }
+
 
         public string Folio { get; set; }
 
