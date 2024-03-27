@@ -333,7 +333,7 @@
                                 <input type="text" class="form-control" value="@(Model.strIsPropietarioConductor?? string.Empty)" readonly />
                                 <label class="form-label">Cortesia:</label>
                                 <input type="text" class="form-control" value="@(Model.infraccionCortesia.HasValue ? (Model.infraccionCortesia.Value ? "Si se aplicó" : "No se aplicó") : "Valor nulo")" readonly />
-                                <label class="form-label">Observaciones de cortesia:</label>
+                                <label class="form-label">Concepto de la infracción:</label>
                                 <input type="text" class="form-control" value="@(Model.observaciones?? string.Empty)" readonly />
                             </div>
                         </div>
