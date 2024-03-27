@@ -76,69 +76,78 @@ public class BusquedaVehiculoPropietarioController : BaseController
         HttpContext.Session.Remove("PersonaModel");
 
         VehiculoBusquedaModel busquedaModel = new VehiculoBusquedaModel();
+        VehiculoModel vehiculo = new VehiculoModel();
 
-        try
-        {
-            busquedaModel.IdEntidadBusqueda = model.IdEntidadBusqueda;
 
-        }
-        catch (Exception ex) { }
-
-        try
-        {
-            if (!string.IsNullOrEmpty(model.PlacaBusqueda))
+            try
             {
-                busquedaModel.PlacasBusqueda = model.PlacaBusqueda.ToUpper();
-            }
-        }
-        catch (Exception ex) { }
+                busquedaModel.IdEntidadBusqueda = model.IdEntidadBusqueda;
 
-        try
-        {
-            if (!string.IsNullOrEmpty(model.SerieBusqueda))
+            }
+            catch (Exception ex) { }
+
+            try
             {
-                busquedaModel.SerieBusqueda = model.SerieBusqueda.ToUpper();
+                if (!string.IsNullOrEmpty(model.PlacaBusqueda))
+                {
+                    busquedaModel.PlacasBusqueda = model.PlacaBusqueda.ToUpper();
+                }
+            }
+            catch (Exception ex) { }
+
+            try
+            {
+                if (!string.IsNullOrEmpty(model.SerieBusqueda))
+                {
+                    busquedaModel.SerieBusqueda = model.SerieBusqueda.ToUpper();
+                }
+
+            }
+            catch (Exception ex) { }
+            List<VehiculoModel> listaVehiculos = vehiculoService.GetVehiculoPropietario(busquedaModel);
+            if (listaVehiculos.Count > 1)
+            {
+                var view1 = this.RenderViewAsync("_ListaVehiculos", listaVehiculos, true);
+                return Json(new { listaVehiculos = true, view = view1 });
+
+            }
+            if (listaVehiculos.Count == 1)
+            {
+
+                return Json(new { listaVehiculos.FirstOrDefault().idVehiculo });
             }
 
-        }
-        catch (Exception ex) { }
+            //Esto es una bandera para busqueda sin serie y placa - asi nos permitira obtener el objeto vehiculo preinicializado
+            if (busquedaModel.PlacasBusqueda == null && busquedaModel.SerieBusqueda == null)
+            {
+                busquedaModel.PlacasBusqueda = "flag1";
+            }
 
+            vehiculo = await vehiculoPlataformaService.BuscarVehiculoEnPlataformas(busquedaModel);
+            if (vehiculo == null)
+            {
+                vehiculo = new VehiculoModel();
+                vehiculo.Persona = new PersonaModel();
+                vehiculo.Persona.PersonaDireccion = new PersonaDireccionModel();
+            }
+            else
+            {
+                HttpContext.Session.SetInt32("IdMarcaVehiculo", vehiculo.idMarcaVehiculo);
+            }
 
+        //ViewBag.SinBusqueda = false;
+        //} else
+        //{
+        //    vehiculo = new VehiculoModel();
+        //    vehiculo.Persona = new PersonaModel();
+        //    vehiculo.Persona.PersonaDireccion = new PersonaDireccionModel();
+        //    ViewBag.SinBusqueda = true;
+        //}
 
-
-        List<VehiculoModel> listaVehiculos = vehiculoService.GetVehiculoPropietario(busquedaModel);
-
-
-
-        if (listaVehiculos.Count > 1)
-        {
-            var view1 = this.RenderViewAsync("_ListaVehiculos", listaVehiculos, true);
-            return Json(new { listaVehiculos = true, view = view1 });
-
-        }
-        if (listaVehiculos.Count == 1)
-        {
-
-            return Json(new { listaVehiculos.FirstOrDefault().idVehiculo });
-        }
-
-        //Esto es una bandera para busqueda sin serie y placa - asi nos permitira obtener el objeto vehiculo preinicializado
-        if (busquedaModel.PlacasBusqueda == null && busquedaModel.SerieBusqueda == null)
-        {
-            busquedaModel.PlacasBusqueda = "flag1";
-        }
-
-        VehiculoModel vehiculo = await vehiculoPlataformaService.BuscarVehiculoEnPlataformas(busquedaModel);
-        if (vehiculo == null)
-        {
-            vehiculo = new VehiculoModel();
-            vehiculo.Persona = new PersonaModel();
-            vehiculo.Persona.PersonaDireccion = new PersonaDireccionModel();
-        }
+        if (String.IsNullOrEmpty(model.PlacaBusqueda) && String.IsNullOrEmpty(model.SerieBusqueda))
+            ViewBag.SinBusqueda = "TRUE";
         else
-        {
-            HttpContext.Session.SetInt32("IdMarcaVehiculo", vehiculo.idMarcaVehiculo);
-        }
+            ViewBag.SinBusqueda = "FALSE";
 
         //Se remueve la bandera antes descrita
         if (busquedaModel.PlacasBusqueda == "flag1")
@@ -152,6 +161,26 @@ public class BusquedaVehiculoPropietarioController : BaseController
         var view = this.RenderViewAsync("_Vehiculo", vehiculo, true);
         return Json(new { crearVehiculo = true, view });
     }
+
+
+
+    private async Task<string> ajax_CrearVehiculoSinPlacasVehiculo()
+    {
+
+        var models = new VehiculoModel();
+        models.Persona = new PersonaModel();
+        models.Persona.PersonaDireccion = new PersonaDireccionModel();
+        models.PersonasFisicas = new List<PersonaModel>();
+        models.PersonaMoralBusquedaModel = new PersonaMoralBusquedaModel();
+        models.PersonaMoralBusquedaModel.PersonasMorales = new List<PersonaModel>();
+        models.placas = "";
+        models.serie = "";
+        models.RepuveRobo = new RepuveRoboModel();
+        var result = await this.RenderViewAsync2("", models);
+        return result;
+    }
+
+
     /// <summary>
     /// Crea o actualiza un registro de un vehiculo en la bd
     /// </summary>
