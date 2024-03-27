@@ -90,6 +90,22 @@ namespace GuanajuatoAdminUsuarios.Controllers
 		}
 
         [HttpPost]
+        public ActionResult CrearSubMarcaCatalogo(CatSubmarcasVehiculosModel model)
+        {
+            var errors = ModelState.Values.Select(s => s.Errors);
+            ModelState.Remove("NombreSubmarca");
+            if (ModelState.IsValid)
+            {
+               
+                    _catSubmarcasVehiculosService.GuardarSubmarca(model);              
+            }
+
+            var ListSubmarcasModel2 = _catSubmarcasVehiculosService.ObtenerSubarcas();
+            return Json(ListSubmarcasModel2);
+
+        }
+
+        [HttpPost]
         public ActionResult EditarSubmarca(CatSubmarcasVehiculosModel model)
         {
             bool switchSubmarcas = Request.Form["submarcasSwitch"].Contains("true");

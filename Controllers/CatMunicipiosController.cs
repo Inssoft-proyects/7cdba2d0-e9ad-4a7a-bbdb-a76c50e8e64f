@@ -35,7 +35,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         {
             //var result = new SelectList(_catEntidadesService.ObtenerEntidades(), "idEntidad", "nombreEntidad");
             var municipios = new CatMunicipiosDTO();
-            var ListMunicipiosModel = _catMunicipiosService.GetMunicipios();
+            var ListMunicipiosModel = _catMunicipiosService.GetMunicipiosCatalogo();
             municipios.MunicipiosModel = ListMunicipiosModel;
 
             return View(municipios);
@@ -79,7 +79,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 
                 _catMunicipiosService.AgregarMunicipio(model);
-                var ListMunicipiosModel = _catMunicipiosService.GetMunicipios();
+                var ListMunicipiosModel = _catMunicipiosService.GetMunicipiosCatalogo();
                 return Json(ListMunicipiosModel);
             }
             //SetDDLCategories();
@@ -97,7 +97,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 
                 _catMunicipiosService.EditarMunicipio(model);
-                var ListMunicipiosModel = _catMunicipiosService.GetMunicipios();
+                var ListMunicipiosModel = _catMunicipiosService.GetMunicipiosCatalogo();
                 return Json(ListMunicipiosModel);
             }
 
@@ -106,7 +106,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
         public JsonResult GetMun([DataSourceRequest] DataSourceRequest request, string nombre, int idEntidad, int IdOficinaTransporte)
         {
-            var ListMunicipiosModel = _catMunicipiosService.GetMunicipios();
+            var ListMunicipiosModel = _catMunicipiosService.GetMunicipiosCatalogo();
             if (!String.IsNullOrEmpty(nombre) && idEntidad>0 && IdOficinaTransporte>0)
                 ListMunicipiosModel = ListMunicipiosModel.Where(x=>x.Municipio.ToUpper().Contains(nombre.ToUpper()) && x.IdEntidad == idEntidad && x.IdOficinaTransporte == IdOficinaTransporte ).ToList();
             else if (!String.IsNullOrEmpty(nombre) && idEntidad == 0 && IdOficinaTransporte == 0)

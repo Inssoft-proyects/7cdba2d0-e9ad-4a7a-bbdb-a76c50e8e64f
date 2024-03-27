@@ -41,9 +41,9 @@
                 @Html.HiddenFor(m=>m.IdSalario)
                 @(Html.Kendo().SwitchFor(t => t.ValorEstatusSalarios)
                     .Name("salariosSwitch")
-                    .Checked(true)
+                    .Checked(Model.Estatus == 1)
                     .Messages(c => c.Checked("Activo").Unchecked("Inactivo"))
-                    .HtmlAttributes(new { data_valor = 1 })
+                    .HtmlAttributes(new { data_valor = Model.Estatus })
 
                     )
             </div>
@@ -120,7 +120,19 @@
 
 <script>
     function editarSalario() {
+        var controlsValidate = [];
+        var isValid = true;
 
+        controlsValidate.push({ 'controlName': 'Salario' });
+        controlsValidate.push({ 'controlName': 'Fecha' });
+
+        if (!isControlsValid(controlsValidate)) { isValid = false; }
+
+
+        if (!isValid) {
+            sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
+            return;
+        }
         var Mydata = $("#EditarSalarioForm").serialize();
         console.log(Mydata);
         $('#addUdiSalario').modal('hide');
@@ -132,8 +144,9 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#gridCatUmas").data("kendoGrid").dataSource.data(result);
-                sitteg_info('Se ha actualizado la información exitosamente.');
+               var grid = $("#gridCatUmas").data("kendoGrid");
+               grid.dataSource.read();
+                sitteg_success('Se ha actualizado la información exitosamente.');
                 hideLoading();
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");

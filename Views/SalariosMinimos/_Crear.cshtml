@@ -73,7 +73,7 @@
                     <label class="control-label">"Fecha Vigencia <b>(obligatorio)</b>:"</label>
                     @(Html.Kendo().DatePickerFor(t => t.Fecha)
                         .Culture("es-ES")
-                        .Value(DateTime.Now)
+                        .Value("")
                         .HtmlAttributes(new { style = "width: 100%" })
                         )
                 </div>
@@ -109,14 +109,17 @@
 
 <script>
     function agregarSalario() {
-        var anio = new Date().getFullYear();//$("#Anio").val();
-        var importe = $("#Salario").val();
-        if (anio < 1) {
-            sitteg_warning("Debe ingresar el año.");
-            return;
-        }
-        if (importe < 1) {
-            sitteg_warning("Debe ingresar el valor de UMA.");
+        var controlsValidate = [];
+        var isValid = true;
+
+        controlsValidate.push({ 'controlName': 'Salario' });
+        controlsValidate.push({ 'controlName': 'Fecha' });
+
+        if (!isControlsValid(controlsValidate)) { isValid = false; }
+       
+
+        if (!isValid) {
+            sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
             return;
         }
 
@@ -132,8 +135,9 @@
             type: 'POST',
             data: Mydata,
             success: function (result) {
-                $("#gridCatUmas").data("kendoGrid").dataSource.data(result);
-                sitteg_info('Se ha registrado la información exitosamente.');
+               var grid= $("#gridCatUmas").data("kendoGrid");
+               grid.dataSource.read();
+                sitteg_success('Se ha registrado la información exitosamente.');
                 hideLoading();
             }, error: function () {
                 sitteg_warning("Ocurrio un error al procesar su solicitud.");

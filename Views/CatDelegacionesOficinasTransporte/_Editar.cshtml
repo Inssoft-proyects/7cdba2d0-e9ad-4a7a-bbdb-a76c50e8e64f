@@ -113,7 +113,18 @@
 
 <script>
     function editarDelegacionOficina() {
+        var controlsValidate = [];
+        var isValid = true;
 
+        controlsValidate.push({ 'controlName': 'JefeOficina' });
+
+        if (!isControlsValid(controlsValidate)) { isValid = false; }
+       
+
+        if (!isValid) {
+            sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
+            return;
+        }
         var Mydata = $("#editarDelOficinaForm").serialize();
         console.log(Mydata);
         $('#agregarDelegacionOficina').modal('hide');
