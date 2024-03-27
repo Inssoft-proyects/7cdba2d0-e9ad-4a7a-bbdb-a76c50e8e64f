@@ -333,7 +333,10 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.placas = reader["placas"].GetType() == typeof(DBNull) ? "" : reader["placas"].ToString();
                             model.serie = reader["serie"].ToString();
                             model.tarjeta = reader["tarjeta"].ToString();
-                            model.vigenciaTarjeta = reader["vigenciaTarjeta"].GetType() == typeof(DBNull) ? null : Convert.ToDateTime(reader["vigenciaTarjeta"].ToString());
+                            object valorLeido = reader["vigenciaTarjeta"];
+
+                            model.vigenciaTarjeta = valorLeido == DBNull.Value || (valorLeido is DateTime && ((DateTime)valorLeido).Year <= 1901) ? (DateTime?)null : (DateTime)valorLeido;
+
                             model.idMarcaVehiculo = Convert.ToInt32(reader["idMarcaVehiculo"].ToString());
                             model.idSubmarca = Convert.ToInt32(reader["idSubmarca"].ToString());
                             model.idTipoVehiculo = Convert.ToInt32(reader["idTipoVehiculo"].ToString());

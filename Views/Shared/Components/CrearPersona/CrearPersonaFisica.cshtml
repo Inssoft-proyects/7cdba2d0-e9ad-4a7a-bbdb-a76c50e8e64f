@@ -1,5 +1,28 @@
 @model GuanajuatoAdminUsuarios.Models.BusquedaPersonaModel
+@{
+
+    var idMunicipio = Model.PersonaModel.PersonaDireccion.idMunicipio;
+    var idEntidad = Model.PersonaModel.PersonaDireccion.idEntidad;
+
+}
 <script>
+
+    window.idEntidadPersonaFisica = '@idEntidad'
+
+    function GetData() {
+
+        var t = { entidadDDlValue: window.idEntidadPersonaFisica }
+        return t
+    }
+
+    function updateMunicipio() {
+        var entidad = $("#PersonaModel_PersonaDireccion_idEntidad").val();
+        window.idEntidadPersonaFisica = entidad || "0"
+        var ddl = $("#PersonaModel_PersonaDireccion_idMunicipio").data("kendoDropDownList")
+        ddl.dataSource.read()
+    }
+
+
     function EntidadDropDownChange() {
         var entidadDDlValue = $("#PersonaModel_PersonaDireccion_idEntidad").data("kendoDropDownList").value();
         showLoading();
@@ -190,7 +213,7 @@
                                     .DataValueField("Value")
                                     .OptionLabel("Seleccione Entidad...")
                                     .HtmlAttributes(new { style = "width:100%;" })
-                                   .Events(e => e.Change("EntidadDropDownChange"))
+                                   .Events(e => e.Change("updateMunicipio"))
                                     .DataSource(source =>
                                     {
                                         source.Read(read =>
@@ -254,7 +277,7 @@
                                     {
                                         source.Read(read =>
                                         {
-                                            read.Action("Municipios_Drop", "BusquedaVehiculoPropietario");
+                                            read.Action("Municipios_Drop", "BusquedaVehiculoPropietario").Data("GetData");;
                                         });
                                     })
                                     )
