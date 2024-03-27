@@ -299,23 +299,6 @@
                 var auth = @autorizaciones;
                 var grid = $("#Grid").data("kendoGrid");
 
-                //ELIMINAR
-                if (!auth.toString().includes("205")) {
-                    grid.hideColumn(13);
-                }
-                // EDITAR
-                if (!auth.toString().includes("206")) {
-                    grid.hideColumn(12);
-                }
-                //EXPORTAR
-                if (!auth.toString().includes("203")) {
-                    grid.hideColumn(10);
-                }
-                //CONSULTAR
-                if (!auth.toString().includes("202")) {
-                    grid.hideColumn(9);
-                }
-
             });
 
         </script>

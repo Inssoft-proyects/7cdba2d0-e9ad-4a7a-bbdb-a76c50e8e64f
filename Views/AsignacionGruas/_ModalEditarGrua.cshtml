@@ -5,6 +5,18 @@
     var salvamento = Model.SalvamentoBool;
 }
 <script>
+
+    function valid5char(e) {
+
+        var value = e.target.value
+        var reg = /[0-2][0-9][\:][0-5][0-9]/g
+        var can = reg.test(value)
+        if (!can) {
+            e.target.value = ""
+        }
+    }
+
+
       function validacionHoraArribo(event) {
         var horaIngresada = event.target.value;
         var key = event.key
@@ -400,7 +412,7 @@
                                 )
                         </div>*@
                         <label class="tex">Hora(Formato 24 horas):</label>
-                            <input type="text" value="@(Model.horaArribo.ToString(@"hh\:mm"))" id="horaArriboInsertEdit" name="horaArriboInserEdittStr" onkeydown="validacionHoraArribo(event)" step="60" />
+                            <input type="text" value="@(Model.horaArribo.ToString(@"hh\:mm"))" id="horaArriboInsertEdit" onblur="valid5char(event)" name="horaArriboInserEdittStr" onkeydown="validacionHoraArribo(event)" step="60" />
                     </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
@@ -432,7 +444,7 @@
                                 )
                         </div>*@
                         <label class="tex">Hora(Formato 24 horas):</label>
-                            <input type="text" value="@(Model.horaInicio.ToString(@"hh\:mm"))" id="horaInicioInsertEdit" name="horaInicioInsertEditStr" onkeydown="validacionHoraInicio(event)" step="60" />
+                            <input type="text" value="@(Model.horaInicio.ToString(@"hh\:mm"))" id="horaInicioInsertEdit" onblur="valid5char(event)" name="horaInicioInsertEditStr" onkeydown="validacionHoraInicio(event)" step="60" />
                     </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
@@ -464,7 +476,7 @@
                                 )
                         </div>*@
                          <label class="tex">Hora(Formato 24 horas):</label>
-                            <input type="text" value="@(Model.horaTermino.ToString(@"hh\:mm"))" id="horaTerminoInsertEdit" name="horaInicioTerminotEditStr" onkeydown="validacionHoraFin(event)" step="60" />
+                            <input type="text" value="@(Model.horaTermino.ToString(@"hh\:mm"))" id="horaTerminoInsertEdit" onblur="valid5char(event)" name="horaInicioTerminotEditStr" onkeydown="validacionHoraFin(event)" step="60" />
                     </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
