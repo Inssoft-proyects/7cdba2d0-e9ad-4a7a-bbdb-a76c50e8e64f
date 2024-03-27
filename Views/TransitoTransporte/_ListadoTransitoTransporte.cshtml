@@ -236,8 +236,8 @@
                     columns.Bound(p => p.fullSolicitudfolioInfraccion)/*.ClientTemplate("#=TemplateEvPolInf(data)#")*/.Title("Fecha_Evento/Folio_Solicitud/Folio_Infracción").Width(190);
 
                     columns.Bound(p => p.fullVehiculo).Title("Vehículo").Width(150);
-                    columns.Bound(c => c.FechaIngreso).ClientTemplate("#= convertDate(FechaIngreso) #").Title("Fecha de ingreso").Width(110);
-                    columns.Bound(c => c.FechaLiberacion).ClientTemplate("#= convertDate(FechaLiberacion) #").Title("Fecha de salida").Width(110);
+                    columns.Bound(c => c.FechaIngresoDesc).ClientTemplate("#= convertDate(FechaIngreso) #").Title("Fecha de ingreso").Width(110);
+                    columns.Bound(c => c.FechaLiberacionDesc).ClientTemplate("#= convertDate(FechaLiberacion) #").Title("Fecha de salida").Width(110);
                     columns.Bound(c => c.pension).Title("Pensión").Width(100);
                     columns.Bound(c => c.Concesionario).Title("Grúa").Width(90);
                     columns.Bound(p => p.IdConcesionario).ClientTemplate(
