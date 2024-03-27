@@ -53,7 +53,7 @@ window.TemplateCortecia = (d) => {
 window.TemplateEditar = (d) => {
 
     if (d.idDelegacion == window.delegacion)
-        return `<button onclick="ShowUpdate('${d.idInfraccion}' )" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Ver</b></h6></button>`
+        return `<button onclick="ShowUpdate('${d.idInfraccion}' )" class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>`
     else
     return ""
 }

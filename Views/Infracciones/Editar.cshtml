@@ -146,6 +146,19 @@
         $("#Vehiculo_placas").focus();
     }
 
+
+    function valid5char(e) {
+
+        var value = e.target.value
+        var reg = /[0-2][0-9][\:][0-5][0-9]/g
+        var can = reg.test(value)
+        if (!can) {
+            e.target.value = ""
+        }
+    }
+
+
+
 	function validacionHora(event) {
 		var horaIngresada = event.target.value;
 		var key = event.key
@@ -430,7 +443,7 @@
                                 <div class="form-group col-md-3 controlForm">
                                         <label>Hora <b>(Formato 24 horas)</b>:</label>
                                         <div class="input-group">
-                                        <input type="text" name="horaInfraccion" id="dateTime" value="@Model.horaInfraccion.ToString("HH:mm")" onkeydown="validacionHora(event)" style="height: 3.5em;" />
+                                        <input type="text" name="horaInfraccion" id="dateTime" onblur="valid5char(event)" value="@Model.horaInfraccion.ToString("HH:mm")" onkeydown="validacionHora(event)" style="height: 3.5em;" />
                                  </div>
                           </div>
                             <div class="row my-4 px-2">
