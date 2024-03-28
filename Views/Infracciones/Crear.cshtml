@@ -334,7 +334,7 @@ if (fechaParseo.getTime() === objetoFecha.getTime()) {
 
 
 								<div class="row my-4 px-4">
-									<div class="form-group col-md-3 controlForm">
+									<div class="form-group col-md-4 controlForm">
 										<label>Fecha infracción <b>(obligatorio)</b>:</label>
 										@(Html.Kendo().DatePickerFor(t => t.fechaInfraccion).Max(DateTime.Now)
 											.Label(l => l.Content("Fecha: <b>(obligatorio)</b>:"))

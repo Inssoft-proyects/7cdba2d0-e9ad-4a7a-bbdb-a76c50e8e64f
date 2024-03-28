@@ -276,7 +276,7 @@
                     </div>
                 <div class="col-4 col-md-4   col-sm-6 ">
                     <label class="form-label">Fecha nacimiento</label>
-                        <input type="text" class="form-control" value="@(!string.IsNullOrWhiteSpace(ObtenerValorSeguro(Model, "PersonaInfraccion.fechaNacimiento")) && ObtenerValorSeguro(Model, "PersonaInfraccion.fechaNacimiento") != "01/01/1900" ? ObtenerValorSeguro(Model, "PersonaInfraccion.fechaNacimiento") : "-")" readonly />
+                        <input type="text" class="form-control" value="@(!string.IsNullOrWhiteSpace(ObtenerValorSeguro(Model, "PersonaInfraccion.fechaNacimiento")) && ObtenerValorSeguro(Model, "PersonaInfraccion.fechaNacimiento") != "01/01/0001" ? ObtenerValorSeguro(Model, "PersonaInfraccion.fechaNacimiento") : "-")" readonly />
                     </div>
                         <div class="col-4 col-md-4   col-sm-6 ">
                             <label class="form-label">Municipio</label>
@@ -316,7 +316,7 @@
                 </div>
                 <div class="col-4 col-md-4   col-sm-6 ">
                     <label class="form-label">Vigencia Licencia</label>
-                        <input type="text" class="form-control" value="@((ObtenerValorSeguro(Model, "PersonaInfraccion.vigenciaLicencia") == "01/01/1900") ? "-" : ObtenerValorSeguro(Model, "PersonaInfraccion.vigenciaLicencia"))" readonly />
+                        <input type="text" class="form-control" value="@((ObtenerValorSeguro(Model, "PersonaInfraccion.vigenciaLicencia") == "01/01/0001") ? "-" : ObtenerValorSeguro(Model, "PersonaInfraccion.vigenciaLicencia"))" readonly />
                     </div>
             </div>
         </div>
@@ -333,7 +333,7 @@
                                 <input type="text" class="form-control" value="@(Model.strIsPropietarioConductor?? string.Empty)" readonly />
                                 <label class="form-label">Cortesia:</label>
                                 <input type="text" class="form-control" value="@(Model.infraccionCortesia.HasValue ? (Model.infraccionCortesia.Value ? "Si se aplicó" : "No se aplicó") : "Valor nulo")" readonly />
-                                <label class="form-label">Observaciones de cortesia:</label>
+                                <label class="form-label">Concepto de la infracción:</label>
                                 <input type="text" class="form-control" value="@(Model.observaciones?? string.Empty)" readonly />
                             </div>
                         </div>
