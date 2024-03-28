@@ -80,7 +80,7 @@
 					<td><p class="s5">TIPO</p></td>
 					<td><p class="s5">MARCA</p></td>
 					<td><p class="s5">SUBMARCA</p></td>
-					<td><p class="s5">MODEL</p></td>
+					<td><p class="s5">MODELO</p></td>
 					<td><p class="s5">COLOR</p></td>
 					<td><p class="s5">No. DE SERIE</p></td>
 					<td><p class="s5">PLACAS</p></td>
@@ -136,9 +136,10 @@
 				<tr>
 					<td colspan="3"><p class="s2">@item.ConductorInvolucrado</p></td>
 					<td colspan="3"><p class="s2">@(item.DireccionConductor==null?"":item.DireccionConductor.Trim().ToUpper())</p></td>
-					<td><p class="s2">@(DateTime.Now.Year - Convert.ToDateTime(item.FechaNacimientoFormateada).Year)</p></td>
+					<td><p class="s2">@item.Edad</p></td>
 					<td><p class="s2">@item.Sexo</p></td>
 				</tr>
+
 				@*Columnas*@
 				<tr>
 					<td colspan="2"><p class="s5">FECHA DE NAC.</p></td>
@@ -148,10 +149,10 @@
 				</tr>
 				@*Datos*@
 				<tr>
-					<td colspan="2"><p class="s2">@item.FechaNacimientoFormateada</p></td>
+					<td colspan="2"><p class="s2">@item.FechaNacimientoTexto</p></td>
 					<td colspan="2"><p class="s2">@item.TipoLicencia</p></td>
 					<td><p class="s2">@item.numeroLicencia</p></td>
-					<td colspan="3"><p class="s2">@(item.vigenciaLicencia == DateTime.MinValue ? "-" : item.vigenciaLicencia.ToString("dd/MM/yyyy"))</p></td>
+					<td colspan="3"><p class="s2">@item.FechaVigenciaLicenciaTexto</p></td>
 				</tr>
 			}
 		</table>

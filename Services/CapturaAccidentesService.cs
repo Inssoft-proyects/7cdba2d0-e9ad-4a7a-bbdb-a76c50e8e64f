@@ -1867,6 +1867,9 @@ namespace GuanajuatoAdminUsuarios.Services
                         while (reader.Read())
                         {
                             CapturaAccidentesModel vehiculo = new CapturaAccidentesModel();
+                            vehiculo.Edad = Convert.ToInt32(reader["Edad"]);
+                            vehiculo.FechaNacimientoTexto = reader["FechaNacimientoFormateada"].ToString();
+                            vehiculo.FechaVigenciaLicenciaTexto = reader["FechaVigenciaLicenciaFormateada"].ToString();
                             vehiculo.IdPropietarioInvolucrado = Convert.IsDBNull(reader["idPersona"]) ? 0 : Convert.ToInt32(reader["idPersona"]);
                             vehiculo.IdAccidente = Convert.IsDBNull(reader["idAccidente"]) ? 0 : Convert.ToInt32(reader["idAccidente"]);
                             vehiculo.IdVehiculoInvolucrado = Convert.IsDBNull(reader["idVehiculo"]) ? 0 : Convert.ToInt32(reader["idVehiculo"]);

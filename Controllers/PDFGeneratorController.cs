@@ -129,7 +129,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
 				.Select(o => CultureInfo.InvariantCulture.TextInfo.ToTitleCase($"{o.Nombre} {o.ApellidoPaterno} {o.ApellidoMaterno}")).FirstOrDefault();
 			model.Supervisor = _oficialesService.GetOficialesActivos().Where(w => w.IdOficial == datosAccidente.IdSupervisa)
 				.Select(o => CultureInfo.InvariantCulture.TextInfo.ToTitleCase($"{o.Nombre} {o.ApellidoPaterno} {o.ApellidoMaterno}")).FirstOrDefault();
-			model.Autoriza = _oficialesService.GetOficialesActivos().Where(w => w.IdOficial == datosAccidente.IdAutoriza)
+			model.Autoriza = _oficialesService.GetOficiales().Where(w => w.IdOficial == datosAccidente.IdAutoriza)
 				.Select(o => CultureInfo.InvariantCulture.TextInfo.ToTitleCase($"{o.Nombre} {o.ApellidoPaterno} {o.ApellidoMaterno}")).FirstOrDefault();
 
 			string jsonView = await this.RenderViewAsync("_AccidentesDetallado", model, false);
