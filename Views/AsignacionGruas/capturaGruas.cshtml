@@ -96,7 +96,6 @@
 
 
         <!-- *************************** -->
-        @Html.HiddenFor(m=> m.idVehiculo, new { @id = "IdVehiculoAsignado" })
         <div class="row" id="vehiculoPropietarioDatosContainer" style="display:none">
             <div class="col-12 my-4 mx-4">
                 <div id="vehiculoPropietarioDatos"> </div>
@@ -158,6 +157,9 @@
             <div class="row px-4">
                 <div class="col-12 mb-4">
                     <div class="controlForm my-3">
+                                @Html.HiddenFor(m=> m.idVehiculo, new { @id = "IdVehiculoAsignado" })
+                                <input type="hidden" id="placaHidden" name="placa" value="" />
+
                         @(Html.Kendo().TextAreaFor(t => t.observaciones)
                             .Label(label => label.Content("Observaciones:"))
                             .Placeholder("Puede agregar o no observaciones referentes al servicio.")

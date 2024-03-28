@@ -36,22 +36,22 @@ namespace GuanajuatoAdminUsuarios.Services
             };
 
             string strQuery = @"SELECT d.idDeposito,d.idVehiculo,d.numeroInventario,d.idSolicitud,
-                                       d.idMarca,d.placa,d.serie,d.idPension,d.fechaIngreso,d.esExterno,
-                                       v.modelo,v.idSubmarca,
-                                       v.idColor,v.idPersona,
-                                       mv.marcaVehiculo,co.color,sol.fechaSolicitud,
-                                       smv.nombreSubmarca,per.nombre,per.apellidoPaterno,per.apellidoMaterno,
-                                       pen.pension
-                                       FROM depositos AS d
-                                       LEFT JOIN vehiculos AS v ON d.idVehiculo = v.idVehiculo
-                                       LEFT JOIN catMarcasVehiculos AS mv ON d.idMarca = mv.idMarcaVehiculo
-                                       LEFT JOIN catSubmarcasVehiculos AS smv ON d.idSubmarca = smv.idSubmarca
-                                       LEFT JOIN catColores AS co ON d.idColor = co.idColor
-                                       LEFT JOIN personas AS per ON v.idPersona = per.idPersona
-                                       LEFT JOIN solicitudes AS sol ON d.idSolicitud = sol.idSolicitud
-                                       LEFT JOIN pensiones AS pen ON d.idPension = pen.idPension
-                                       WHERE d.idPension = @idPension and estatusSolicitud=5 and d.liberado = 1 " + condiciones;
-
+	                                    d.idMarca,d.placa,d.serie,d.idPension,d.fechaIngreso,d.esExterno,
+	                                    v.modelo,v.idSubmarca,
+	                                    v.idColor,v.idPersona,
+	                                    mv.marcaVehiculo,co.color,sol.fechaSolicitud,
+										smv.nombreSubmarca,per.nombre,per.apellidoPaterno,per.apellidoMaterno,
+										pen.pension
+                                    FROM depositos AS d
+                                    LEFT JOIN vehiculos AS v ON d.idVehiculo = v.idVehiculo
+                                    LEFT JOIN catMarcasVehiculos AS mv ON v.idMarcaVehiculo = mv.idMarcaVehiculo
+                                    LEFT JOIN catSubmarcasVehiculos AS smv ON v.idSubmarca = smv.idSubmarca
+								    LEFT JOIN catColores AS co ON v.idColor = co.idColor
+					   		        LEFT JOIN personas AS per ON v.idPersona = per.idPersona
+                                    LEFT JOIN solicitudes AS sol ON d.idSolicitud = sol.idSolicitud
+	                                LEFT JOIN pensiones AS pen ON d.idPension = pen.idPension
+                                    WHERE d.idPension = @idPension and estatusSolicitud=5 and d.liberado = 1 " + condiciones;
+                                   
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
             {
                 try

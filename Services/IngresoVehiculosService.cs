@@ -32,11 +32,11 @@ namespace GuanajuatoAdminUsuarios.Services
 	                                    mv.marcaVehiculo,tv.tipoVehiculo,co.color,sol.fechaSolicitud
                                     FROM depositos AS d
                                     LEFT JOIN vehiculos AS v ON d.idVehiculo = v.idVehiculo
-                                    LEFT JOIN catMarcasVehiculos AS mv ON d.idMarca = mv.idMarcaVehiculo
+                                    LEFT JOIN catMarcasVehiculos AS mv ON V.idMarcaVehiculo = mv.idMarcaVehiculo
                                     LEFT JOIN catColores AS co ON v.idColor = co.idColor
                                     LEFT JOIN catTiposVehiculo AS tv ON v.idTipoVehiculo = tv.idTipoVehiculo
                                     LEFT JOIN solicitudes AS sol ON d.idSolicitud = sol.idSolicitud
-                                    WHERE d.fechaIngreso is null AND d.idPension = @idPension AND d.liberado = 0 AND d.estatusSolicitud = 3 " + condiciones;
+                                    WHERE d.fechaIngreso is null AND d.idPension = @idPension AND d.liberado = 0 AND d.estatusSolicitud = 3" + condiciones;
             using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
             {
                 try

@@ -825,39 +825,97 @@ namespace GuanajuatoAdminUsuarios.Services
         {
             int result = 0;
 
-            using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+            // Validar si idVehiculo es igual a 0 o nulo
+            if (formData.IdVehiculo != 0)
             {
-                try
+                using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
                 {
-                    connection.Open();
-                    string query = "UPDATE depositos SET " +
-                                    "observaciones=@observaciones, " +
-                                    "estatusSolicitud = 3 " +
-                                    "Where depositos.idDeposito = @idDeposito";
+                    try
+                    {
+                        connection.Open();
 
+                        // Buscar la placa y la serie del vehículo utilizando su idVehiculo
+                        string vehiculoQuery = "SELECT placas, serie FROM vehiculos WHERE idVehiculo = @idVehiculo";
+
+                        SqlCommand vehiculoCommand = new SqlCommand(vehiculoQuery, connection);
+                        vehiculoCommand.Parameters.AddWithValue("@idVehiculo", formData.IdVehiculo);
+
+                        SqlDataReader reader = vehiculoCommand.ExecuteReader();
+
+                        string placa = "";
+                        string serie = "";
+
+                        if (reader.Read())
+                        {
+                            placa = reader["placas"].ToString();
+                            serie = reader["serie"].ToString();
+                        }
+
+                        reader.Close();
+
+                                      string query = "UPDATE depositos SET " +
+                                    "observaciones = @observaciones, " +
+                                    "idVehiculo = @idVehiculo, " +
+                                    "placa = @placa, " +
+                                    "serie = @serie, " +
+                                    "estatusSolicitud = 3 " +
+                                    "WHERE idDeposito = @idDeposito";
 
                     SqlCommand command = new SqlCommand(query, connection);
-
-
                     command.Parameters.AddWithValue("@observaciones", formData.observaciones ?? "");
-
                     command.Parameters.AddWithValue("@idDeposito", iDep);
+                    command.Parameters.AddWithValue("@idVehiculo", formData.IdVehiculo);
+                    command.Parameters.AddWithValue("@placa", placa);
+                    command.Parameters.AddWithValue("@serie", serie);
 
-
-                    result = command.ExecuteNonQuery();
+                        result = command.ExecuteNonQuery();
+                    }
+                    catch (SqlException ex)
+                    {
+                        // Manejar la excepción aquí, si es necesario
+                        return result;
+                    }
+                    finally
+                    {
+                        connection.Close();
+                    }
                 }
-                catch (SqlException ex)
-                {
-                    return result;
-                }
-                finally
-                {
-                    connection.Close();
-                }
-
-                return result;
             }
+            else
+            {
+                // Si idVehiculo es igual a 0 o nulo, solo actualiza la tabla depositos sin incluir los elementos idVehiculo, placa y serie
+                using (SqlConnection connection = new SqlConnection(_sqlClientConnectionBD.GetConnection()))
+                {
+                    try
+                    {
+                        connection.Open();
+
+                        string query = "UPDATE depositos SET " +
+                                        "observaciones = @observaciones, " +
+                                        "estatusSolicitud = 3 " +
+                                        "WHERE idDeposito = @idDeposito";
+
+                        SqlCommand command = new SqlCommand(query, connection);
+                        command.Parameters.AddWithValue("@observaciones", formData.observaciones ?? "");
+                        command.Parameters.AddWithValue("@idDeposito", iDep);
+
+                        result = command.ExecuteNonQuery();
+                    }
+                    catch (SqlException ex)
+                    {
+                        // Manejar la excepción aquí, si es necesario
+                        return result;
+                    }
+                    finally
+                    {
+                        connection.Close();
+                    }
+                }
+            }
+
+            return result;
         }
+
         public int InsertarInventario(string archivoInventario, int iDep, string numeroInventario, string nombre = "GenericFile.txt")
         {
             int result = 0;
