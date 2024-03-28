@@ -43,9 +43,9 @@ namespace GuanajuatoAdminUsuarios.Services
 										pen.pension
                                     FROM depositos AS d
                                     LEFT JOIN vehiculos AS v ON d.idVehiculo = v.idVehiculo
-                                    LEFT JOIN catMarcasVehiculos AS mv ON d.idMarca = mv.idMarcaVehiculo
-                                    LEFT JOIN catSubmarcasVehiculos AS smv ON d.idSubmarca = smv.idSubmarca
-								    LEFT JOIN catColores AS co ON d.idColor = co.idColor
+                                    LEFT JOIN catMarcasVehiculos AS mv ON v.idMarcaVehiculo = mv.idMarcaVehiculo
+                                    LEFT JOIN catSubmarcasVehiculos AS smv ON v.idSubmarca = smv.idSubmarca
+								    LEFT JOIN catColores AS co ON v.idColor = co.idColor
 					   		        LEFT JOIN personas AS per ON v.idPersona = per.idPersona
                                     LEFT JOIN solicitudes AS sol ON d.idSolicitud = sol.idSolicitud
 	                                LEFT JOIN pensiones AS pen ON d.idPension = pen.idPension

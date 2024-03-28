@@ -307,12 +307,12 @@ namespace GuanajuatoAdminUsuarios.Services
                  
 
                     const string SqlTransact =
-									   @"SELECT d.idDeposito,d.placa,d.idInfraccion,d.fechaIngreso,d.idVehiculo,d.fechaLiberacion,
+                                       @"SELECT d.idDeposito,d.placa,d.idInfraccion,d.fechaIngreso,d.idVehiculo,d.fechaLiberacion,
                                                     sol.idSolicitud,sol.fechaSolicitud,sol.idEvento,sol.idTipoUsuario,
                                                     sol.solicitanteNombre,sol.solicitanteAp,sol.solicitanteAm,sol.folio,
 													sol.vehiculoCalle,sol.vehiculoNumero,sol.vehiculoColonia,sol.idCarreteraUbicacion,
 													sol.idTramoUbicacion,sol.idPension,sol.vehiculoInterseccion,sol.vehiculoKm,sol.solicitanteColonia,
-													sol.solicitanteCalle,sol.solicitanteNumero,
+													sol.solicitanteCalle,sol.solicitanteNumero,con.concesionario,
                                                     tas.tipoAsignacion,
                                                     te.descripcionEvento,tu.tipoUsuario,tve.tipoVehiculo,c.concesionario,
                                                     ga.abanderamiento,ga.arrastre,ga.salvamento,ofi.nombre,ofi.apellidoPaterno,ofi.apellidoMaterno,
@@ -343,6 +343,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                                     LEFT JOIN serviciosDepositos AS sde ON sde.idDeposito = d.idDeposito
                                                     LEFT JOIN infracciones AS inf ON inf.idInfraccion = d.idInfraccion
                                                     LEFT JOIN pensiones AS pen ON pen.idPension = d.idPension
+													LEFT JOIN concesionarios AS con ON con.idConcesionario = sol.idPropietarioGrua
                                                  where  sol.estatus !=0 and d.estatus!=0 and	d.idDeposito=@idDeposito ";
 
                     SqlCommand command = new SqlCommand(SqlTransact, connection);

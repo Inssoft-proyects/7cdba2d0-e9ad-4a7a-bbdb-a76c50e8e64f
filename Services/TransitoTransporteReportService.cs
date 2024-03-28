@@ -102,7 +102,7 @@ namespace GuanajuatoAdminUsuarios.Services
 				nested.AddCell(FieldCellBox("Descripción del evento: ", ModelTransitoTransporte.evento));
 				nested.AddCell(FieldCellBox("Tipo de usuario: ", ModelTransitoTransporte.tipoUsuario));
 				nested.AddCell(FieldCellBox("Tipo de vehículo: ", ModelTransitoTransporte.tipoVehiculo));
-				nested.AddCell(FieldCellBox("Propietario de grúa: ", ModelTransitoTransporte.fullPropietario));
+				nested.AddCell(FieldCellBox("Propietario de grúa: ", ModelTransitoTransporte.Concesionario));
 				nested.AddCell(FieldCellBox("Servicio que requiere: ", ModelTransitoTransporte.tipoServicio));
 				nested.AddCell(FieldCellBox("Nombre del oficial: ", ModelTransitoTransporte.fullOficial));
 				nested.AddCell("");
@@ -165,9 +165,10 @@ namespace GuanajuatoAdminUsuarios.Services
 			Invoicetable.DefaultCell.Border = Rectangle.NO_BORDER;
 			{
 				PdfPTable nested = new PdfPTable(1);
-				nested.DefaultCell.Border = Rectangle.NO_BORDER;		
-				nested.AddCell(FieldCellBox("Solicita: ", "POR DEFINIR"));
-				PdfPCell nesthousing = new PdfPCell(nested);
+				nested.DefaultCell.Border = Rectangle.NO_BORDER;
+				nested.AddCell(FieldCellBox("Solicita: ", string.IsNullOrEmpty(ModelTransitoTransporte.solicitanteNombre) ? "Oficial" : "Usuario"));
+
+                PdfPCell nesthousing = new PdfPCell(nested);
 				nesthousing.Border = Rectangle.NO_BORDER;
 				nesthousing.Rowspan = 5;
 				nesthousing.PaddingBottom = 5f;
@@ -431,8 +432,11 @@ namespace GuanajuatoAdminUsuarios.Services
 			{
 				PdfPTable nested = new PdfPTable(1);
 				nested.DefaultCell.Border = Rectangle.NO_BORDER;
-				nested.AddCell(FieldCellBox("", ModelTransitoTransporte.tipoServicio));
-				nested.AddCell("");
+				nested.AddCell(FieldCellBox("", ModelTransitoTransporte.arrastre == 1 ? "Arrastre" : ""));
+                nested.AddCell(FieldCellBox("", ModelTransitoTransporte.salvamento == 1 ? "Salvamento" : ""));
+                nested.AddCell(FieldCellBox("", ModelTransitoTransporte.abanderamiento == 1 ? "Abanderamiento" : ""));
+
+                nested.AddCell("");
 				PdfPCell nesthousing = new PdfPCell(nested);
 				nesthousing.Border = Rectangle.NO_BORDER;
 				nesthousing.Rowspan = 5;

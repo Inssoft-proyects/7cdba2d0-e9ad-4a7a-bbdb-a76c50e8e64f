@@ -292,14 +292,14 @@ namespace GuanajuatoAdminUsuarios.Services
                                             p.apellidoPaterno,
                                             p.apellidoMaterno
 		                from depositos d left join catDelegaciones del on d.idDelegacion= del.idDelegacion
+						LEFT JOIN vehiculos v ON v.placas = d.Placa
 		                left join catMarcasVehiculos m on d.idMarca=m.idMarcaVehiculo
-		                left join catSubmarcasVehiculos  subm on m.idMarcaVehiculo=subm.idMarcaVehiculo
+		                left join catSubmarcasVehiculos  subm on v.idSubmarca=subm.idSubmarca
 						left join solicitudes sol on d.idSolicitud = sol.idSolicitud
 						left join catColores col on d.idColor = col.idColor
 	                    left join pensiones pen on d.idPension	= pen.idPension
                         left join catTramos cTra  on d.Idtramo=cTra.idTramo
                         left join catCarreteras car on car.idCarretera = sol.idCarreteraUbicacion
-                        LEFT JOIN vehiculos v ON v.placas = d.Placa
                         LEFT JOIN personas p ON p.idPersona = v.idPersona
 		                where d.liberado=0 and d.estatus=1 and d.IdDeposito=@IdDeposito and d.idDelegacion = @idOficina";
                     SqlCommand command = new SqlCommand(SqlTransact, connection);
