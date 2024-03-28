@@ -619,7 +619,7 @@
                                             <i class="icon-edit-car h1 colorPrimary"></i>
                                         </div>
                                         <div class="col-auto my-3">
-                                            <h5 class="px-4"><b>Vehículo de la infracción</b></h5>
+                                            <h5 class="px-4"><b>Vehículo de la infracción.</b></h5>
                                             @*<h6 class="px-4 text-muted">Marque el vehículo que desea asociar.</h6>*@
                                         </div>
                                     </div>
@@ -1393,8 +1393,6 @@
     function PropietarioConductor(){
 
         showLoading();
-
-
         $.ajax({
             url: '@Url.Action("ajax_PropietarioConductor2")',
             type: 'POST',
@@ -1551,7 +1549,6 @@ function  OmitirConductor() {
 
 
     function onRowSelect() {
-
         var grid = $("#gridPersonasLicencia").data("kendoGrid");
         var selectedRowData = grid.dataItem(grid.select());
 
@@ -1918,6 +1915,33 @@ function  OmitirConductor() {
                 else {
                     $('#listadoPersonas').css('display', 'none');
                 }
+                hideLoading();
+            }, error: function () {
+               // sitteg_warning("Ocurrio un error al procesar su solicitud.");
+                hideLoading();
+            }
+
+        });
+    }
+
+        function buscarPersonaPropietario(pidPersona) {
+        showLoading();
+        var editarVehiculo = '@ViewBag.EditarVehiculo';
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("ajax_detallePersona")',
+            data: {
+                "idPersona": pidPersona,
+            },
+            success: function (data) {
+                //$("#detallePersonas").html(data);
+                //$("#idPersona").val(pidPersona);
+
+                //if (editarVehiculo == false)
+                //    $("#detallePersonas").show();
+                //else {
+                //    $('#listadoPersonas').css('display', 'none');
+                //}
                 hideLoading();
             }, error: function () {
                // sitteg_warning("Ocurrio un error al procesar su solicitud.");
