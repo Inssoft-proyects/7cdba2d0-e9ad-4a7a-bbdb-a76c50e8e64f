@@ -299,6 +299,9 @@ namespace GuanajuatoAdminUsuarios.Models
 
 		//Por Modelo Personas
 		public int idPersona { get; set; }
+        public int Edad { get; set; }
+        public string? FechaNacimientoTexto { get; set; }
+        public string? FechaVigenciaLicenciaTexto { get; set; }
 
-	}
+    }
 }
