@@ -204,7 +204,8 @@
     <div class="col-12 col-md-6 col-lg-6">
         <div class="controlForm my-3">
             @*<p>@Model.Persona.nombreCompleto</p>*@
-
+            @Html.HiddenFor(t => t.Vehiculo.Persona.idPersona)
+           
             @(Html.Kendo().TextBoxFor(t => t.Vehiculo.Persona.nombreCompleto)
                 .Label(l => l.Content("Propietario:"))
                 .HtmlAttributes(new { style = "width: 100%" })

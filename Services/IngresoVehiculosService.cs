@@ -100,9 +100,18 @@ namespace GuanajuatoAdminUsuarios.Services
                 {
                     connection.Open();
                     const string SqlTransact =
-                                            @"SELECT d.idVehiculo,d.numeroInventario,d.idSolicitud,d.idDeposito,
-                                            v.modelo,v.idMarcaVehiculo,v.idTipoVehiculo,v.idColor,v.idPersona,
-                                            mv.marcaVehiculo,tv.tipoVehiculo,c.color,
+                                            @"SELECT 
+                                            d.idVehiculo,
+                                            d.numeroInventario,
+                                            d.idSolicitud,
+                                            d.idDeposito,
+                                            v.modelo,
+                                            v.idMarcaVehiculo,
+                                            v.idTipoVehiculo,
+                                            v.idColor,
+                                            v.idPersona,
+                                            mv.marcaVehiculo,
+                                            tv.tipoVehiculo,c.color,
                                             per.nombre,per.apellidoPaterno,per.apellidoMaterno,
                                             sol.solicitanteNombre,sol.solicitanteAp,sol.solicitanteAm,
                                             sol.idPropietarioGrua,sol.fechaSolicitud,sol.idEvento,
@@ -111,10 +120,10 @@ namespace GuanajuatoAdminUsuarios.Services
                                             de.descripcionEvento,tra.tramo,car.carretera,mun.municipio,con.concesionario,ga.fechaFinal
                                             FROM depositos AS d
                                             LEFT JOIN vehiculos AS v ON d.idVehiculo = v.idVehiculo
-                                            LEFT JOIN catMarcasVehiculos AS mv ON v.idMarcaVehiculo = mv.idMarcaVehiculo
+                                            LEFT JOIN catMarcasVehiculos AS mv ON d.idMarca = mv.idMarcaVehiculo
                                             LEFT JOIN catTiposVehiculo AS tv ON tv.idTipoVehiculo = v.idTipoVehiculo
                                             LEFT JOIN catColores AS c ON c.idColor = v.idColor
-                                            LEFT JOIN personas AS per ON per.idPersona = v.idPersona
+                                            LEFT JOIN personas AS per ON per.idPersona = d.idPropietario
                                             LEFT JOIN solicitudes AS sol ON sol.idSolicitud = d.idSolicitud
                                             LEFT JOIN catDescripcionesEvento AS de ON sol.idEvento = de.idDescripcion
                                             LEFT JOIN catTramos AS tra ON sol.idTramoUbicacion = tra.idTramo
@@ -145,7 +154,8 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.fechaFinal = reader["fechaFinal"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(reader["fechaFinal"]);
                             model.tramo = reader["tramo"].ToString();
                             model.carretera = reader["carretera"].ToString();
-                            model.kilometro = reader["vehiculoKm"].ToString();
+                            decimal aux;
+                            model.kilometro = reader["vehiculoKm"] is DBNull ?"-": Decimal.TryParse(reader["vehiculoKm"].ToString(), out aux)? Convert.ToDecimal(reader["vehiculoKm"]).ToString("G29"):"-";
                             model.colonia = reader["vehiculoColonia"].ToString();
                             model.calle = reader["vehiculoCalle"].ToString();
                             model.numero = reader["vehiculoNumero"].ToString();

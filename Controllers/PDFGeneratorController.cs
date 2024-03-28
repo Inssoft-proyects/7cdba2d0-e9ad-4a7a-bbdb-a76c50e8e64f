@@ -147,12 +147,25 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
 		[HttpPost]
 		public ActionResult AccidentesGeneral(BusquedaAccidentesModel model)
+
 		{
 			int idOficina = HttpContext.Session.GetInt32("IdOficina") ?? 0;
 			int idDependencia = (int)HttpContext.Session.GetInt32("IdDependencia");
+			if (model.idMunicipio == null) model.idMunicipio = 0;
+            if (model.IdOficialBusqueda == null) model.IdOficialBusqueda = 0;
+            if (model.IdCarreteraBusqueda == null) model.IdCarreteraBusqueda = 0;
+            if (model.IdTramoBusqueda == null) model.IdTramoBusqueda = 0;
+            if (model.IdOficialBusqueda == null) model.IdOficialBusqueda = 0;
+            if (model.IdEstatusAccidente == null) model.IdEstatusAccidente = 0;
+			if (model.folioBusqueda == null) model.folioBusqueda = string.Empty;
+            if (model.placasBusqueda == null) model.placasBusqueda = string.Empty;
+            if (model.propietarioBusqueda == null) model.propietarioBusqueda = string.Empty;
+            if (model.serieBusqueda == null) model.serieBusqueda = string.Empty;
+            if (model.conductorBusqueda == null) model.conductorBusqueda = string.Empty;
 
-			var modelList = _busquedaAccidentesService.GetAllAccidentes()
-												.Where(w => w.idMunicipio == (model.idMunicipio > 0 ? model.idMunicipio : w.idMunicipio)
+
+            var modelList = _busquedaAccidentesService.GetAllAccidentes()
+												.Where(w => w.idMunicipio ==  (model.idMunicipio > 0 ? model.idMunicipio : w.idMunicipio)
 													&& w.idSupervisa == (model.IdOficialBusqueda > 0 ? model.IdOficialBusqueda : w.idSupervisa)
 													&& w.idCarretera == (model.IdCarreteraBusqueda > 0 ? model.IdCarreteraBusqueda : w.idCarretera)
 													&& w.idTramo == (model.IdTramoBusqueda > 0 ? model.IdTramoBusqueda : w.idTramo)

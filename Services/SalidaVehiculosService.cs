@@ -34,6 +34,7 @@ namespace GuanajuatoAdminUsuarios.Services
             {
                 condiciones += " AND CONVERT (date,d.fechaIngreso) = @fechaIngreso";
             };
+
             string strQuery = @"SELECT d.idDeposito,d.idVehiculo,d.numeroInventario,d.idSolicitud,
 	                                    d.idMarca,d.placa,d.serie,d.idPension,d.fechaIngreso,d.esExterno,
 	                                    v.modelo,v.idSubmarca,
@@ -126,11 +127,11 @@ namespace GuanajuatoAdminUsuarios.Services
 											ga.idGrua,ga.costoTotal,g.noEconomico,g.idTipoGrua,ctg.TipoGrua                                         
 										    FROM depositos AS d
                                             LEFT JOIN vehiculos AS v ON d.idVehiculo = v.idVehiculo
-                                            LEFT JOIN catMarcasVehiculos AS mv ON v.idMarcaVehiculo = mv.idMarcaVehiculo
-											LEFT JOIN catSubmarcasVehiculos AS smv ON smv.idSubmarca = v.idSubmarca
+                                            LEFT JOIN catMarcasVehiculos AS mv ON d.idMarca = mv.idMarcaVehiculo
+											LEFT JOIN catSubmarcasVehiculos AS smv ON smv.idSubmarca = d.idSubmarca
                                             LEFT JOIN catTiposVehiculo AS tv ON tv.idTipoVehiculo = v.idTipoVehiculo
                                             LEFT JOIN catColores AS c ON c.idColor = v.idColor
-                                            LEFT JOIN personas AS per ON per.idPersona = v.idPersona
+                                            LEFT JOIN personas AS per ON per.idPersona = d.idPropietario
                                             LEFT JOIN solicitudes AS sol ON sol.idSolicitud = d.idSolicitud
                                             LEFT JOIN catDescripcionesEvento AS de ON sol.idEvento = de.idDescripcion
                                             LEFT JOIN catTramos AS tra ON sol.idTramoUbicacion = tra.idTramo
@@ -355,7 +356,7 @@ namespace GuanajuatoAdminUsuarios.Services
                             model.costoBanderazo = float.TryParse(reader["costoBanderazo"]?.ToString(), out float costoBanderazo) ? costoBanderazo : 0.0f;
                             model.costoAbanderamiento = float.TryParse(reader["costoAbanderamiento"]?.ToString(), out float costoAbanderamiento) ? costoAbanderamiento : 0.0f;
                             model.costoTotalPorGrua = float.TryParse(reader["costoTotal"]?.ToString(), out float costoTotal) ? costoTotal : 0.0f;
-                           
+
                             model.abanderamiento = Convert.ToInt32(reader["abanderamiento"]?.ToString() ?? "0");
                             model.salvamento = Convert.ToInt32(reader["salvamento"]?.ToString() ?? "0");
                             model.arrastre = Convert.ToInt32(reader["arrastre"]?.ToString() ?? "0");
@@ -391,7 +392,7 @@ namespace GuanajuatoAdminUsuarios.Services
                                    "costoTotal = @costoTotal " +
                                    "where idDeposito=@idDeposito AND idGrua = @idGrua",
                         connection);
-                    
+
                     sqlCommand.Parameters.Add(new SqlParameter("@idDeposito", SqlDbType.Int)).Value = model.idDeposito;
                     sqlCommand.Parameters.Add(new SqlParameter("@idGrua", SqlDbType.Int)).Value = model.idGrua;
                     sqlCommand.Parameters.Add(new SqlParameter("@costoAbanderamiento", SqlDbType.Float)).Value = model.costoAbanderamiento;
@@ -467,8 +468,8 @@ namespace GuanajuatoAdminUsuarios.Services
 
 
 
-                  //  connection.Open();
-                    SqlCommand sqlCommand = new(@"update depositos set estatusSolicitud=6,fechaActualizacion=@fechaAct where idDeposito=@idDeposito;",connection);
+                    //  connection.Open();
+                    SqlCommand sqlCommand = new(@"update depositos set estatusSolicitud=6,fechaActualizacion=@fechaAct where idDeposito=@idDeposito;", connection);
 
                     sqlCommand.Parameters.Add(new SqlParameter("@idDeposito", SqlDbType.Int)).Value = model.idDeposito;
                     sqlCommand.Parameters.Add(new SqlParameter("@fechaAct", SqlDbType.DateTime)).Value = DateTime.Now;

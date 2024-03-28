@@ -237,7 +237,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public IActionResult ajax_OmitirConductor()
         {
             var personamodel = new PersonaModel();
-            personamodel.nombre = "SE Ignora";
+            personamodel.nombre = "Se ignora";
             personamodel.idCatTipoPersona = 1;
             personamodel.PersonaDireccion=new PersonaDireccionModel();
 
@@ -250,7 +250,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public IActionResult ajax_OmitirConductor2(int idInfraccion)
         {
             var personamodel = new PersonaModel();
-            personamodel.nombre = "SE Ignora";
+            personamodel.nombre = "Se ignora";
             personamodel.idCatTipoPersona = 1;
             personamodel.PersonaDireccion = new PersonaDireccionModel();
 
@@ -631,7 +631,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             else
             {
                 model.Garantia.idGarantia = model.idGarantia;
-                var result = _infraccionesService.ModificarGarantiaInfraccion(model.Garantia, idInf);
+                var result = _infraccionesService.ModificarGarantiaInfraccion(model, idInf);
             }
 
 
@@ -1692,11 +1692,11 @@ namespace GuanajuatoAdminUsuarios.Controllers
 
                 PersonaDireccionModel direccion = new PersonaDireccionModel();
                 direccion.idEntidad = 35;
-                direccion.colonia = "se ignora";
-                direccion.calle = "se ignora";
-                direccion.numero = "se ignora";
+                direccion.colonia = "Se ignora";
+                direccion.calle = "Se ignora";
+                direccion.numero = "Se ignora";
                 PersonaModel persona = new PersonaModel();
-                persona.nombre = "se ignora";
+                persona.nombre = "Se ignora";
                 persona.idCatTipoPersona = (int)TipoPersona.Fisica;
                 persona.PersonaDireccion = direccion;
                 persona.idGenero = 1;

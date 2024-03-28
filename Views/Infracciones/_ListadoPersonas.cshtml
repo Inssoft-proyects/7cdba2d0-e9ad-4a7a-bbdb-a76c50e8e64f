@@ -50,9 +50,10 @@
             var idPersona = dataItem.idPersona;
             var nombre = dataItem.nombre + ' ' + dataItem.apellidoPaterno + ' ' + dataItem.apellidoMaterno;
             $("#idPersona").val(idPersona);
-            $("#Vehiculo_idPersona").val(idPersona);
 
-            $("#Persona_nombreCompleto").val(nombre);
+            $("#Vehiculo_Persona_idPersona").val(idPersona);
+
+            $("#Vehiculo_Persona_nombreCompleto").val(nombre);
             if (row.hasClass("k-selected")) {
                 setTimeout(function (e) {
                     var grid = $("#gridInfraccionesPersonas").data("kendoGrid");
@@ -62,9 +63,9 @@
                 grid.clearSelection();
             };
 
-            $("#textoConductor").empty()
+            //$("#textoConductor").empty()
 
-            buscarPersona(idPersona);
+            buscarPersonaPropietario(idPersona);
         };
     })
 </script>
