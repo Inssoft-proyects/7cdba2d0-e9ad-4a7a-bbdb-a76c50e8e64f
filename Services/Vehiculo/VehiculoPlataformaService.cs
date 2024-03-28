@@ -273,7 +273,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     apellidoPaterno = vehiculoInterlocutorData.es_per_fisica?.Ape_paterno,
                     apellidoMaterno = vehiculoInterlocutorData.es_per_fisica?.Ape_materno,
                     CURP = vehiculoInterlocutorData.es_per_fisica?.Nro_curp,
-                    Origen = "FINANZAS",
+                    Origen = "PADRÓN ESTATAL",
                     idCatTipoPersona = vehiculoInterlocutorData.es_per_fisica != null ? 1 : 2,
 
                     PersonaDireccion = new PersonaDireccionModel

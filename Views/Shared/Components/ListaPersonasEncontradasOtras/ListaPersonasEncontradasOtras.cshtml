@@ -2,29 +2,29 @@
 @{
     var origen = Model.First().Origen;
 }
- <script>
-        function validaFechaGrid(data) {
-            if(data.fechaNacimiento==undefined ||  data.fechaNacimiento==='null' || data.fechaNacimiento==='')
+<script>
+    function validaFechaGrid(data) {
+        if (data.fechaNacimiento == undefined || data.fechaNacimiento === 'null' || data.fechaNacimiento === '')
             return '';
-    var minDate = new Date('0001-01-01T00:00:00Z');
-    minDate.setDate(minDate.getDate() + 1);
-    if (data.fechaNacimiento < minDate) {
-        return '';
-    } else {
-        return kendo.toString(data.fechaNacimiento, 'dd/MM/yyyy');
+        var minDate = new Date('0001-01-01T00:00:00Z');
+        minDate.setDate(minDate.getDate() + 1);
+        if (data.fechaNacimiento < minDate) {
+            return '';
+        } else {
+            return kendo.toString(data.fechaNacimiento, 'dd/MM/yyyy');
+        }
     }
-}
 
-    </script>
-   <div class="row  my-2 mb-3">
+</script>
+<div class="row  my-2 mb-3">
     <div class="col-12 mt-4 mb-2">
         <h5 class="px-4"><b>Personas encontradas en @origen</b></h5>
         <h6 class="px-4 colorDanger d-flex align-items-center"><b class="text-white bgDanger mb-1 me-2 rounded-circle px-2 h6">i</b><b>Edita una persona para agregarla a RIAG</b></h6>
     </div>
 </div>
-    
+
 <div class="col-12 mb-4 px-4 rounded gridCustom">
-@(
+    @(
         Html.Kendo().Grid(Model)
         .Name("gridPersonasOtras")
         //.Events(events => events.Change("guadarPersonaLicenciasEnRiag"))
@@ -41,11 +41,11 @@
             "<button  class='w-100 btn'><h6 class='m-0 colorPrimary'><i class='icon-edit me-2'></i><b>Editar</b></h6></button>"
             ).Title("Acciones").Sortable(false).Width(100);
         })
-         .Pageable(pager => pager.AlwaysVisible(true).Position(GridPagerPosition.Bottom).PageSizes(true))
+        .Pageable(pager => pager.AlwaysVisible(true).Position(GridPagerPosition.Bottom).PageSizes(true))
         .Sortable()
         .Scrollable(scr => scr.Enabled(true))
-         .DataSource(dataSource => dataSource
-         .Custom().PageSize(10))
+        .DataSource(dataSource => dataSource
+        .Custom().PageSize(10))
         .ToolBar(t => t.Custom().Text("Buscar...").Name("search"))
         .Search(s =>
         {
@@ -62,15 +62,15 @@
         )
 </div>
 <script>
-     $(document).ready(function () {
+    $(document).ready(function () {
         var grid = $("#gridPersonasOtras").data("kendoGrid");
         grid.tbody.on("click", ".btn", onClickEditarPersonasOtras);
 
-         function onClickEditarPersonasOtras(e) {
+        function onClickEditarPersonasOtras(e) {
             var grid = $("#gridPersonasOtras").data("kendoGrid");
             var row = $(e.target).closest("tr");
             var itemPersona = grid.dataItem(row);
-            abrirModalPersonaFisica(0,itemPersona);
+            abrirModalPersonaFisica(0, itemPersona);
         };
-  });
+    });
 </script>
