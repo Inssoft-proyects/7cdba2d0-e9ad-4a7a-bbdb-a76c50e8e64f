@@ -104,7 +104,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     FROM infracciones i 
                     JOIN vehiculos v ON i.idVehiculo = v.idVehiculo 
                     JOIN catEstatusInfraccion AS e ON i.idEstatusInfraccion = e.idEstatusInfraccion 
-                    LEFT JOIN personas AS pI ON pI.IdPersona = i.IdPersona 
+                    LEFT JOIN personas AS pI ON pI.IdPersona = i.IdPersonaInfraccion 
                     LEFT JOIN personas AS pV ON pV.IdPersona = v.idPersona 
                     WHERE i.IdInfraccion = @Id", connection);
                     command.Parameters.Add(new SqlParameter("@Id", SqlDbType.Int)).Value = Id;

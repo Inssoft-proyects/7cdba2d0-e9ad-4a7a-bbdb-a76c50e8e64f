@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System;
+using System.Collections.Generic;
 
 namespace GuanajuatoAdminUsuarios.Models
 {
@@ -45,6 +46,12 @@ namespace GuanajuatoAdminUsuarios.Models
         public string Observaciones { get; set; }
         public string Capturista { get; set; }
         public string Baja { get; set; }
+        public decimal umas { get; set; }
+        public decimal totalInfraccion { get; set; }
+        public int Total { get; set; }
+        public DateTime fecha { get; set; }
+
+        public virtual IEnumerable<MotivosInfraccionVistaModel> MotivosInfraccion { get; set; }
 
     }
 }

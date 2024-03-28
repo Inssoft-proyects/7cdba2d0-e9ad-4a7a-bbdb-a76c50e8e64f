@@ -1932,10 +1932,13 @@ namespace GuanajuatoAdminUsuarios.Controllers
         public IActionResult ajax_EliminarMotivo(int idMotivoInfraccion, int idInfraccion)
         {
             var MotivoEliminar = _infraccionesService.EliminarMotivoInfraccion(idMotivoInfraccion);
-
+            var fecha = _infraccionesService.GetDateInfraccion(idInfraccion);
+            var umas = _infraccionesService.GetUmas(fecha);
+            ViewBag.Umas = umas;
             var datosGrid = _infraccionesService.GetMotivosInfraccionByIdInfraccion(idInfraccion);
+            ViewBag.Totales = datosGrid.Sum(s => s.calificacion) * umas;
 
-            return Json(datosGrid);
+            return Json(new { DatosGrid = datosGrid, Totales = ViewBag.Totales });
         }
         public ActionResult MostrarInfraccion(bool modoSoloLectura, int Id)
         {

@@ -33,20 +33,14 @@
                 columns.Bound(c => c.CalificacionMaxima).Title("Calif. Max.");
             columns.Template(
             "<div class='custom-number-input' style='height: 50px;'>" +
-            "<input type='text' " +
-            "name='calificacionEditor_#=calificacion#' " +
-            "class='k-input2 custom-input' " +
-            "style='width: calc(100% - 50px); height: 100%;' " +
-            "value='#=calificacion#' " +
-            "data-bind='value:calificacion' " +
-            "min='#=CalificacionMinima#' " +
-            "# if(esSoloLecturaGrid) { # disabled='disabled' # } #" +
-            "/>" +
-            "<div class='spinner-controls'>" +
-            "<button type='button' class='increase' formnovalidate>&uarr;</button>" +
-            "<button type='button' class='decrease' formnovalidate>&darr;</button>" +
-            "</div>" +
+            "<span class='k-input2 custom-input' " +
+            "style='width: calc(100% - 50px); height: 100%;'>" +
+            "#=calificacion#" +
+            "</span>" +
             "</div>"
+
+
+
             ).Title("Calificación").Width(190);
 
 
