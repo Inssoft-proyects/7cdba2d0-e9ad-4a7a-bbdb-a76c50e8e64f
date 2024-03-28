@@ -3501,6 +3501,8 @@ where catSal.estatus =1 AND catSal.fecha <=@anio  order by fecha desc, idSalario
 
 								//infraccionModel.Persona = _personasService.GetPersonaById((int)infraccionModel.idPersona);
 								infraccionModel.PersonaInfraccion = GetPersonaInfraccionById((int)infraccionModel.idInfraccion);
+								infraccionModel.PersonaInfraccion2 = _personasService.GetPersonaById((int)infraccionModel.idPersonaInfraccion);
+								infraccionModel.PersonaConductor2 = _personasService.GetPersonaById((int)infraccionModel.idPersona) ;
 								infraccionModel.Vehiculo = _vehiculosService.GetVehiculoById((int)infraccionModel.idVehiculo);
 
 								//infraccionModel.MotivosInfraccion = GetMotivosInfraccionByIdInfraccion(infraccionModel.idInfraccion);
@@ -3511,17 +3513,17 @@ where catSal.estatus =1 AND catSal.fecha <=@anio  order by fecha desc, idSalario
 								infraccionModel.strIsPropietarioConductor = infraccionModel.Vehiculo == null ? "NO" : infraccionModel.Vehiculo.idPersona == infraccionModel.idPersona ? "SI" : "NO";
 								infraccionModel.delegacion = reader["nombreOficina"] == System.DBNull.Value ? string.Empty : reader["nombreOficina"].ToString();
 
-								if (infraccionModel.PersonaInfraccion != null)
+								if (infraccionModel.PersonaInfraccion2 != null)
 								{
-									infraccionModel.NombreConductor = infraccionModel.PersonaInfraccion.nombreCompleto;
+									infraccionModel.NombreConductor = infraccionModel.PersonaInfraccion2.nombreCompleto;
 								}
 								else
 								{
 									infraccionModel.NombreConductor = null; // O cualquier otro valor predeterminado que desees
 								}
-								infraccionModel.NombrePropietario = infraccionModel.Vehiculo == null ? "" : infraccionModel.Vehiculo.Persona == null ? "" : infraccionModel.Vehiculo.Persona.nombreCompleto;
-								// infraccionModel.NombreGarantia = infraccionModel.garantia;
-								infraccionModel.NombreGarantia = reader["garantia"] == System.DBNull.Value ? string.Empty : reader["garantia"].ToString();
+								infraccionModel.NombrePropietario = infraccionModel.PersonaConductor2 == null ? "" : infraccionModel.PersonaConductor2.nombreCompleto;  //infraccionModel.Vehiculo == null ? "" : infraccionModel.Vehiculo.Persona == null ? "" : infraccionModel.Vehiculo.Persona.nombreCompleto;
+                                // infraccionModel.NombreGarantia = infraccionModel.garantia;
+                                infraccionModel.NombreGarantia = reader["garantia"] == System.DBNull.Value ? string.Empty : reader["garantia"].ToString();
 								infraccionModel.Total = Convert.ToInt32(reader["Total"]);
 								InfraccionesList.Add(infraccionModel);
 							}
