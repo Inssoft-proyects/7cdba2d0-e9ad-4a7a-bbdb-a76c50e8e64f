@@ -27,7 +27,7 @@
                 <div class="bg-light py-1"></div>
             </div>
         </div>
-        
+
         <form id="salidaOtrasDeoform" class="row px-4 mb-4 align-items-end">
             <div class="col-12">
                 <div class="row">
@@ -44,15 +44,15 @@
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 col-xl-3">
                         <div class="controlForm my-3">
-                              <label>Fecha de salida (obligatorio:</label>
+                            <label>Fecha de salida (obligatorio:</label>
                             @(Html.Kendo().DatePickerFor(t => t.fechaSalida).Max(DateTime.Now)
-                            .Culture("es-ES")
-                            .Label(l => l.Content("Fecha Salida(obligatorio):"))
-                            .Format("dd/MM/yyyy")
-                            .HtmlAttributes(new { style = "width: 80%", id = "fechaSalida" })
-                            .Events(e => e.Change("calcularDiferenciaDias"))
+                                .Culture("es-ES")
+                                .Label(l => l.Content("Fecha Salida(obligatorio):"))
+                                .Format("dd/MM/yyyy")
+                                .HtmlAttributes(new { style = "width: 80%", id = "fechaSalida" })
+                                .Events(e => e.Change("calcularDiferenciaDias"))
 
-                            )
+                                )
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 col-xl-3">
@@ -147,11 +147,13 @@
                 </div>
             </div>
 
-  
-        <div id="datosDepositoContainer">
-            <div style="width: 50%; float: left;">
-                <h4 class="colorPrimary"><b>Vehículo</b></h4>
-                    <p><b>Tipo de Vehículo:</b> <span id="tipoVehiculo">@{
+
+            <div id="datosDepositoContainer">
+                <div style="width: 50%; float: left;">
+                    <h4 class="colorPrimary"><b>Vehículo</b></h4>
+                    <p>
+                        <b>Tipo de Vehículo:</b> <span id="tipoVehiculo">
+                            @{
                                 if (Model.tipoVehiculo != null)
                                 {
                                     @Model.tipoVehiculo
@@ -162,24 +164,116 @@
                                     @("-")
                                     ;
                                 }
+                            }
+                        </span>
+                    </p>
+                    <p><b>Marca:</b> <span id="marca">@{
+                                if (Model.marca != null)
+                                {
+                                    @Model.marca
+                                    ;
+                                }
+                                else
+                                {
+                                    @("-")
+                                    ;
+                                }
                             }</span></p>
-                <p><b>Marca:</b> <span id="marca">@{ if (Model.marca != null) { @Model.marca; } else { @("-"); } }</span></p>
 
-                <p><b>Submarca:</b> <span id="submarca">@{ if (Model.submarca != null) { @Model.submarca; } else { @("-"); } }</span></p>
-                    <p><b>Serie:</b> <span id="serie">@{ if (Model.serie != null) { @Model.serie; } else { @("-"); } }</span></p>
-                <p><b>Color:</b> <span id="color">@{ if (Model.color != null) { @Model.color; } else { @("-"); } }</span></p>
-                <p><b>Placa:</b> <span id="color">@{ if (Model.placa != null) { @Model.placa; } else { @("-"); } }</span></p>
-                <p><b>Modelo:</b> <span id="color">@{ if (!String.IsNullOrEmpty(Model.modelo) && Model.modelo !="0"  ) { @Model.modelo; } else { @("-"); } }</span></p>
-                <p><b>Folio Inventario:</b> <span id="folioInventario">@{ if (Model.folioInventario != null) { @Model.folioInventario; } else { @("-"); } }</span></p>
+                    <p><b>Submarca:</b> <span id="submarca">@{
+                                if (Model.submarca != null)
+                                {
+                                    @Model.submarca
+                                    ;
+                                }
+                                else
+                                {
+                                    @("-")
+                                    ;
+                                }
+                            }</span></p>
+                    <p><b>Serie:</b> <span id="serie">@{
+                                if (Model.serie != null)
+                                {
+                                    @Model.serie
+                                    ;
+                                }
+                                else
+                                {
+                                    @("-")
+                                    ;
+                                }
+                            }</span></p>
+                    <p><b>Color:</b> <span id="color">@{
+                                if (Model.color != null)
+                                {
+                                    @Model.color
+                                    ;
+                                }
+                                else
+                                {
+                                    @("-")
+                                    ;
+                                }
+                            }</span></p>
+                    <p><b>Placa:</b> <span id="color">@{
+                                if (Model.placa != null)
+                                {
+                                    @Model.placa
+                                    ;
+                                }
+                                else
+                                {
+                                    @("-")
+                                    ;
+                                }
+                            }</span></p>
+                    <p><b>Modelo:</b> <span id="color">@{
+                                if (!String.IsNullOrEmpty(Model.modelo) && Model.modelo != "0")
+                                {
+                                    @Model.modelo
+                                    ;
+                                }
+                                else
+                                {
+                                    @("-")
+                                    ;
+                                }
+                            }</span></p>
+                    <p><b>Folio Inventario:</b> <span id="folioInventario">@{
+                                if (Model.folioInventario != null)
+                                {
+                                    @Model.folioInventario
+                                    ;
+                                }
+                                else
+                                {
+                                    @("-")
+                                    ;
+                                }
+                            }</span></p>
 
-            </div>
-            <div style="width: 50%; float: left;">
-                <h4 class="colorPrimary"><b>Propietario</b></h4>
-                 <p><b>Nombre:</b> <span id="propietario">@{ if (Model.propietario != null) { @Model.propietario; } else { @("-"); } }</span></p>
-            </div>
-            <div style="width: 50%; float: left;">
-                <h4 class="colorPrimary"><b>Evento</b></h4>
-                    <p><b>Envia vehículo:</b> <span id="envia">@{
+                </div>
+                <div style="width: 50%; float: left;">
+                    <h4 class="colorPrimary"><b>Propietario</b></h4>
+                    <p><b>Nombre:</b> <span id="propietario">@{
+                                if (Model.propietario != null)
+                                {
+                                    @Model.propietario
+                                    ;
+                                }
+                                else
+                                {
+                                    @("-")
+                                    ;
+                                }
+                            }</span></p>
+                </div>
+                <div style="width: 50%; float: left;">
+                    <h4 class="colorPrimary"><b>Evento</b></h4>
+                    <p>
+                        <b>Envia vehículo:</b> <span id="envia">
+                            @{
                                 if (Model.enviaVehiculo != null)
                                 {
                                     @Model.enviaVehiculo
@@ -190,30 +284,131 @@
                                     @("-")
                                     ;
                                 }
+                            }
+                        </span>
+                    </p>
+                    <p><b>Motivo Ingreso:</b> <span id="motivo">@{
+                                if (Model.motivoIngreso != null)
+                                {
+                                    @Model.motivoIngreso
+                                    ;
+                                }
+                                else
+                                {
+                                    @("-")
+                                    ;
+                                }
                             }</span></p>
-                <p><b>Motivo Ingreso:</b> <span id="motivo">@{ if (Model.motivoIngreso != null) { @Model.motivoIngreso; } else { @("-"); } }</span></p>
-               
+
+                </div>
+                <div style="width: 50%; float: left;">
+                    <p><b>Tramo:</b> <span id="tramo">@{
+                                if (Model.tramo != null)
+                                {
+                                    @Model.tramo
+                                    ;
+                                }
+                                else
+                                {
+                                    @("-")
+                                    ;
+                                }
+                            }</span></p>
+                    <p><b>Carretera:</b> <span id="carretera">@{
+                                if (Model.carretera != null)
+                                {
+                                    @Model.carretera
+                                    ;
+                                }
+                                else
+                                {
+                                    @("-")
+                                    ;
+                                }
+                            }</span></p>
+                    <p><b>Kilometro:</b> <span id="kilometro">@{
+                                if (Model.kilometro != null)
+                                {
+                                    @Model.kilometro
+                                    ;
+                                }
+                                else
+                                {
+                                    @("-")
+                                    ;
+                                }
+                            }</span></p>
+                    <p><b>Colonia:</b> <span id="colonia">@{
+                                if (Model.colonia != null)
+                                {
+                                    @Model.colonia
+                                    ;
+                                }
+                                else
+                                {
+                                    @("-")
+                                    ;
+                                }
+                            }</span></p>
+                    <p><b>Calle:</b> <span id="calle">@{
+                                if (Model.calle != null)
+                                {
+                                    @Model.calle
+                                    ;
+                                }
+                                else
+                                {
+                                    @("-")
+                                    ;
+                                }
+                            }</span></p>
+                    <p><b>Número:</b> <span id="numero">@{
+                                if (Model.numero != null)
+                                {
+                                    @Model.numero
+                                    ;
+                                }
+                                else
+                                {
+                                    @("-")
+                                    ;
+                                }
+                            }</span></p>
+                    <p><b>Municipio:</b> <span id="municipio">@{
+                                if (Model.municipio != null)
+                                {
+                                    @Model.municipio
+                                    ;
+                                }
+                                else
+                                {
+                                    @("-")
+                                    ;
+                                }
+                            }</span></p>
+                    <p><b>Intersección:</b> <span id="interseccion">@{
+                                if (Model.interseccion != null)
+                                {
+                                    @Model.interseccion
+                                    ;
+                                }
+                                else
+                                {
+                                    @("-")
+                                    ;
+                                }
+                            }</span></p>
+                </div>
+                <div style="clear: both;"></div>
             </div>
-            <div style="width: 50%; float: left;">
-                <p><b>Tramo:</b> <span id="tramo">@{ if (Model.tramo != null) { @Model.tramo; } else { @("-"); } }</span></p>
-                    <p><b>Carretera:</b> <span id="carretera">@{ if (Model.carretera != null) { @Model.carretera; } else { @("-"); } }</span></p>
-                    <p><b>Kilometro:</b> <span id="kilometro">@{ if (Model.kilometro != null) { @Model.kilometro; } else { @("-"); } }</span></p>
-                    <p><b>Colonia:</b> <span id="colonia">@{ if (Model.colonia != null) { @Model.colonia; } else { @("-"); } }</span></p>
-                    <p><b>Calle:</b> <span id="calle">@{ if (Model.calle != null) { @Model.calle; } else { @("-"); } }</span></p>
-                    <p><b>Número:</b> <span id="numero">@{ if (Model.numero != null) { @Model.numero; } else { @("-"); } }</span></p>
-                    <p><b>Municipio:</b> <span id="municipio">@{ if (Model.municipio != null) { @Model.municipio; } else { @("-"); } }</span></p>
-                    <p><b>Intersección:</b> <span id="interseccion">@{ if (Model.interseccion != null) { @Model.interseccion; } else { @("-"); } }</span></p>
-            </div>
-            <div style="clear: both;"></div>
-        </div>
-        <div id="idDepContainer" style="display:none"></div>
-  </form>
+            <div id="idDepContainer" style="display:none"></div>
+        </form>
 
     </section>
     <section>
 
         <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-            <div type = "button" class="controlButton my-3">
+            <div type="button" class="controlButton my-3">
                 @(Html.Kendo().Button()
                     .Name("guardarData")
                     .HtmlAttributes(new { @class = "btnPrimary", @onclick = "guardarDatos(); return false;" })
@@ -250,7 +445,7 @@
 
         // INPUTS
         if (!isControlsValid(controlsValidate)) { isValid = false; }
-         if (!isValid) {
+        if (!isValid) {
             sitteg_warning('Hacen falta datos o existen datos incorrectos, favor de verificar.');
             return;
         }
