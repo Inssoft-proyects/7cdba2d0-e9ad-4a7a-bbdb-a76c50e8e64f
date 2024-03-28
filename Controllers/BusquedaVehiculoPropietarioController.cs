@@ -104,6 +104,8 @@ public class BusquedaVehiculoPropietarioController : BaseController
 
             }
             catch (Exception ex) { }
+
+          
             List<VehiculoModel> listaVehiculos = vehiculoService.GetVehiculoPropietario(busquedaModel);
             if (listaVehiculos.Count > 1)
             {
@@ -133,16 +135,7 @@ public class BusquedaVehiculoPropietarioController : BaseController
             else
             {
                 HttpContext.Session.SetInt32("IdMarcaVehiculo", vehiculo.idMarcaVehiculo);
-            }
-
-        //ViewBag.SinBusqueda = false;
-        //} else
-        //{
-        //    vehiculo = new VehiculoModel();
-        //    vehiculo.Persona = new PersonaModel();
-        //    vehiculo.Persona.PersonaDireccion = new PersonaDireccionModel();
-        //    ViewBag.SinBusqueda = true;
-        //}
+            }    
 
         if (String.IsNullOrEmpty(model.PlacaBusqueda) && String.IsNullOrEmpty(model.SerieBusqueda))
             ViewBag.SinBusqueda = "TRUE";

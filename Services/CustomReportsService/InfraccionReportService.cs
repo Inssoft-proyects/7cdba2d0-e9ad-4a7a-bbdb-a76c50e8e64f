@@ -465,7 +465,7 @@ namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
             {
                 PdfPTable nested = new PdfPTable(1);
                 nested.DefaultCell.Border = Rectangle.NO_BORDER;
-				nested.AddCell(new PdfPCell(new Phrase("TOTAL (SALARIOS):", new iText.Font(iText.Font.FontFamily.HELVETICA, 8, iText.Font.BOLD, BaseColor.BLACK)))
+				nested.AddCell(new PdfPCell(new Phrase("TOTAL (UMAS):", new iText.Font(iText.Font.FontFamily.HELVETICA, 8, iText.Font.BOLD, BaseColor.BLACK)))
 				{
 					Border = Rectangle.RECTANGLE,
 					HorizontalAlignment = Element.ALIGN_RIGHT,
@@ -604,6 +604,11 @@ namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
         {
             RoundRectangle roundRectangle = new RoundRectangle();
 
+            var total = ModelDataInfracciones.Uma;
+            var mot = ModelDataInfracciones.MotivosInfraccion.Sum(s => s.calificacion);
+            var result = total * mot;
+            ModelDataInfracciones.montoCalificacion = result.HasValue?result.Value:0;
+
             PdfPTable TableMain = new PdfPTable(1);
             TableMain.HorizontalAlignment = 0;
             TableMain.WidthPercentage = 100;
@@ -619,7 +624,7 @@ namespace GuanajuatoAdminUsuarios.Services.CustomReportsService
                 PdfPTable nested = new PdfPTable(1);
                 nested.DefaultCell.Border = Rectangle.NO_BORDER;
                 nested.AddCell(FieldCellTitleBox("Datos pago"));
-                nested.AddCell(FieldCellBox("Monto calificación: ", ModelDataInfracciones.montoCalificacion));
+                nested.AddCell(FieldCellBox("Monto calificación: ","$ "+ ModelDataInfracciones.montoCalificacion.ToString("###,###,###.00")));
                 nested.AddCell(FieldCellBox("Monto pagado: ", ModelDataInfracciones.montoPagado));
                 nested.AddCell(FieldCellBox("Recibo: ", ModelDataInfracciones.reciboPago));
                 nested.AddCell("");
