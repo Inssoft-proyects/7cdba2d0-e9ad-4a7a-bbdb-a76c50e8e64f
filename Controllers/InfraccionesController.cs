@@ -631,7 +631,7 @@ namespace GuanajuatoAdminUsuarios.Controllers
             else
             {
                 model.Garantia.idGarantia = model.idGarantia;
-                var result = _infraccionesService.ModificarGarantiaInfraccion(model.Garantia, idInf);
+                var result = _infraccionesService.ModificarGarantiaInfraccion(model, idInf);
             }
 
 

@@ -1738,7 +1738,7 @@ where catSal.estatus =1 AND catSal.fecha <=@anio  order by fecha desc, idSalario
 			return result;
 		}
 
-		public int ModificarGarantiaInfraccion(GarantiaInfraccionModel model, int idInfraccion)
+		public int ModificarGarantiaInfraccion(InfraccionesModel model, int idInfraccion)
 		{
 			int result = 0;
 			string strQuery = @"UPDATE garantiasInfraccion SET  idCatGarantia = @idCatGarantia
@@ -1758,12 +1758,12 @@ where catSal.estatus =1 AND catSal.fecha <=@anio  order by fecha desc, idSalario
 					connection.Open();
 					SqlCommand command = new SqlCommand(strQuery, connection);
 					command.CommandType = CommandType.Text;
-					command.Parameters.Add(new SqlParameter("idCatGarantia", SqlDbType.Int)).Value = (object)model.idCatGarantia ?? DBNull.Value;
-					command.Parameters.Add(new SqlParameter("idTipoPlaca", SqlDbType.Int)).Value = (object)model.idTipoPlaca ?? DBNull.Value;
-					command.Parameters.Add(new SqlParameter("idTipoLicencia", SqlDbType.Int)).Value = (object)model.idTipoLicencia ?? DBNull.Value;
-					command.Parameters.Add(new SqlParameter("numPlaca", SqlDbType.NVarChar)).Value = (object)model.numPlaca ?? DBNull.Value;
-					command.Parameters.Add(new SqlParameter("numLicencia", SqlDbType.NVarChar)).Value = (object)model.numLicencia ?? DBNull.Value;
-					command.Parameters.Add(new SqlParameter("vehiculoDocumento", SqlDbType.NVarChar)).Value = (object)model.vehiculoDocumento ?? DBNull.Value;
+					command.Parameters.Add(new SqlParameter("idCatGarantia", SqlDbType.Int)).Value = (object)model.Garantia.idCatGarantia ?? DBNull.Value;
+					command.Parameters.Add(new SqlParameter("idTipoPlaca", SqlDbType.Int)).Value = (object)model.Garantia.idTipoPlaca ?? DBNull.Value;
+					command.Parameters.Add(new SqlParameter("idTipoLicencia", SqlDbType.Int)).Value = (object)model.Garantia.idTipoLicencia ?? DBNull.Value;
+					command.Parameters.Add(new SqlParameter("numPlaca", SqlDbType.NVarChar)).Value = (object)model.Garantia.numPlaca ?? DBNull.Value;
+					command.Parameters.Add(new SqlParameter("numLicencia", SqlDbType.NVarChar)).Value = (object)model.Garantia.numLicencia ?? DBNull.Value;
+					command.Parameters.Add(new SqlParameter("vehiculoDocumento", SqlDbType.NVarChar)).Value = (object)model.Garantia.vehiculoDocumento ?? DBNull.Value;
 					command.Parameters.Add(new SqlParameter("fechaActualizacion", SqlDbType.DateTime)).Value = (object)DateTime.Now;
 					command.Parameters.Add(new SqlParameter("actualizadoPor", SqlDbType.Int)).Value = (object)1;
 					command.Parameters.Add(new SqlParameter("idGarantia", SqlDbType.Int)).Value = model.idGarantia;
@@ -3153,7 +3153,7 @@ where catSal.estatus =1 AND catSal.fecha <=@anio  order by fecha desc, idSalario
 					command.Parameters.Add(new SqlParameter("idMunicipio", SqlDbType.Int)).Value = (object)model.idMunicipio ?? DBNull.Value;
 					command.Parameters.Add(new SqlParameter("idTramo", SqlDbType.Int)).Value = (object)model.idTramo ?? DBNull.Value;
 					command.Parameters.Add(new SqlParameter("idCarretera", SqlDbType.Int)).Value = (object)model.idCarretera ?? DBNull.Value;
-					command.Parameters.Add(new SqlParameter("idPersona", SqlDbType.Int)).Value = (object)model.Vehiculo.idPersona ?? DBNull.Value;
+					command.Parameters.Add(new SqlParameter("idPersona", SqlDbType.Int)).Value = (object)model.Vehiculo.Persona.idPersona ?? DBNull.Value;
 					command.Parameters.Add(new SqlParameter("idPersonaInfraccion", SqlDbType.Int)).Value = (object)model.idPersonaInfraccion ?? DBNull.Value;
 					command.Parameters.Add(new SqlParameter("placasVehiculo", SqlDbType.NVarChar)).Value = (object)model.Vehiculo.placas ?? DBNull.Value;
 					command.Parameters.Add(new SqlParameter("folioInfraccion", SqlDbType.NVarChar)).Value = (object)model.folioInfraccion ?? DBNull.Value;
