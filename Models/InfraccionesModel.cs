@@ -93,6 +93,11 @@ namespace GuanajuatoAdminUsuarios.Models
         public virtual PersonaInfraccionModel PersonaInfraccion { get; set; }
          public virtual PersonaModel PersonaInfraccion2 { get; set; }
 
+
+        public virtual PersonaInfraccionModel PersonaConductor { get; set; }
+        public virtual PersonaModel PersonaConductor2 { get; set; }
+
+
         public virtual IEnumerable<MotivosInfraccionVistaModel> MotivosInfraccion { get; set; }
         public virtual GarantiaInfraccionModel Garantia { get; set; }
 

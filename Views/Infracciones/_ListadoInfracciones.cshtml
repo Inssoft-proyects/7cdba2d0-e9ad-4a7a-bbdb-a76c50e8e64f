@@ -115,8 +115,8 @@
             {                
                 columns.Bound(c => c.idInfraccion).Hidden();
                 columns.Bound(p => p.folioInfraccion).Title("Folio").Width(90);
-                columns.Bound(p => p.PersonaInfraccion.nombreCompleto).Title("Conductor").Width(90);
-                columns.Bound(p => p.Vehiculo.Persona.nombreCompleto).Title("Propietario").Width(90);
+                columns.Bound(p => p.NombreConductor).Title("Conductor").Width(90);
+                columns.Bound(p => p.NombrePropietario).Title("Propietario").Width(90);
 				columns.Bound(c => c.fechaInfraccion).Title("Fecha").Width(100).Format("{0:dd/MM/yyyy}");
 				columns.Bound(p => p.aplicacion).Title("Aplicada a").Width(120);
                 columns.Bound(c => c.Garantia.garantia).Title("Garantía").Width(90);
