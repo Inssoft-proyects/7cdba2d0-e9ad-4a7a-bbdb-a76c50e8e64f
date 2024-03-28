@@ -7,6 +7,7 @@ using GuanajuatoAdminUsuarios.Models;
 using System.Data.SqlClient;
 using System.Globalization;
 using GuanajuatoAdminUsuarios.Framework.Catalogs;
+using System.Linq;
 
 namespace GuanajuatoAdminUsuarios.Services
 {
@@ -88,7 +89,7 @@ namespace GuanajuatoAdminUsuarios.Services
 
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand(@"SELECT 
+                    SqlCommand command = new SqlCommand(@"SELECT i.idInfraccion,
                     i.folioInfraccion,m.municipio,cde.delegacion,
                     CONCAT(f.nombre,' ',f.apellidoPaterno,' ', f.apellidoMaterno)AS Oficial, t.tramo,
                     i.kmCarretera, CONCAT(pI.nombre,' ',pI.apellidoPaterno,' ', pI.apellidoMaterno)AS Conductor,
@@ -122,8 +123,9 @@ namespace GuanajuatoAdminUsuarios.Services
                         SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
                         while (reader.Read())
-                        {
-                            infraccion.folioInfraccion = reader["folioInfraccion"].ToString();
+						{
+							infraccion.IdInfraccion = reader["idInfraccion"] == System.DBNull.Value ? default(int) : Convert.ToInt32(reader["idInfraccion"].ToString());
+							infraccion.folioInfraccion = reader["folioInfraccion"].ToString();
                             infraccion.Municipio = reader["municipio"].ToString();
                             infraccion.Delegacion = reader["delegacion"].ToString();
                             infraccion.Oficial = reader["Oficial"].ToString();
@@ -169,8 +171,18 @@ namespace GuanajuatoAdminUsuarios.Services
                             //infraccion.Capturista = reader["Capturista"].ToString();
                             infraccion.Baja = reader["estatus"].ToString();
                             infraccion.FechaInfraccion = reader["fechaInfraccion"].ToString();
-                            infraccion.Serie = reader["serie"].ToString();
+                            infraccion.FechaInfraccion = reader["fechaInfraccion"].ToString();
+                            infraccion.fecha = reader["fechaInfraccion"] == System.DBNull.Value ? default(DateTime) : Convert.ToDateTime(reader["fechaInfraccion"].ToString());
+							infraccion.MotivosInfraccion = _infraccionesService.GetMotivosInfraccionByIdInfraccion((int)infraccion.IdInfraccion);
 
+							infraccion.Serie = reader["serie"].ToString();
+                            infraccion.umas = _infraccionesService.GetUmas(infraccion.fecha);
+
+
+                            if (infraccion.MotivosInfraccion.Any(w => w.calificacion != null))
+                            {
+                                infraccion.totalInfraccion = (infraccion.MotivosInfraccion.Sum(s => (int)s.calificacion) * infraccion.umas);
+                            }
                         }
 
                     }

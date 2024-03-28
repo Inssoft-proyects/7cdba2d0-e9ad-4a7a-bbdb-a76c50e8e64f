@@ -501,7 +501,7 @@ namespace GuanajuatoAdminUsuarios.Services
                 {
                     connection.Open();
                     string mergeQuery =
-                        @"MERGE INTO serviciosDepositos AS target
+						@"MERGE INTO serviciosDepositos AS target
                 USING (SELECT @idDeposito AS idDeposito) AS source
                 ON target.idDeposito = source.idDeposito
                 WHEN MATCHED THEN
@@ -509,19 +509,16 @@ namespace GuanajuatoAdminUsuarios.Services
                         fechaIngreso = @fechaIngreso,
                         fechaSalida = @fechaSalida,
                         diasResguardo = @diasResguardo,
-                        costoDeposito = @costoDeposito,
-                        oficio = @oficio,
-                        fechaOficio = @fechaOficio,
+                        costoDeposito = @costoDeposito,                    
                         nombreRecibe = @nombreRecibe,
                         nombreEntrega = @nombreEntrega,
                         observaciones = @observaciones,
-                        estatus = @estatus,
-                         estatusSolicitud = 6,
+                        estatus = @estatus,                     
                         actualizadoPor = @actualizadoPor,
                         fechaActualizacion = @fechaActualizacion
                 WHEN NOT MATCHED THEN
-                    INSERT (idDeposito, fechaIngreso, fechaSalida, diasResguardo, costoDeposito, oficio,fechaOficio, nombreRecibe, nombreEntrega, observaciones, estatus, actualizadoPor, fechaActualizacion, estatusSolicitud)
-                    VALUES (@idDeposito, @fechaIngreso, @fechaSalida, @diasResguardo, @costoDeposito, @oficio,@fechaOficio, @nombreRecibe, @nombreEntrega, @observaciones, @estatus, @actualizadoPor, @fechaActualizacion,6);";
+                    INSERT (idDeposito, fechaIngreso, fechaSalida, diasResguardo, costoDeposito,nombreRecibe, nombreEntrega, observaciones, estatus, actualizadoPor, fechaActualizacion)
+                    VALUES (@idDeposito, @fechaIngreso, @fechaSalida, @diasResguardo, @costoDeposito,@nombreRecibe, @nombreEntrega, @observaciones, @estatus, @actualizadoPor, @fechaActualizacion);";
 
                     SqlCommand command = new SqlCommand(mergeQuery, connection);
 
@@ -530,8 +527,7 @@ namespace GuanajuatoAdminUsuarios.Services
                     command.Parameters.AddWithValue("@fechaSalida", model.fechaSalida);
                     command.Parameters.AddWithValue("@diasResguardo", model.diasResguardo);
                     command.Parameters.AddWithValue("@costoDeposito", model.costoDeposito);
-                    command.Parameters.AddWithValue("@oficio", model.oficio);
-                    command.Parameters.AddWithValue("@fechaOficio", model.fechaOficio);
+                   
                     command.Parameters.AddWithValue("@nombreRecibe", model.recibe != null ? model.recibe : DBNull.Value);
                     command.Parameters.AddWithValue("@nombreEntrega", model.entrega != null ? model.entrega : DBNull.Value);
                     command.Parameters.AddWithValue("@observaciones", model.observaciones != null ? model.observaciones : DBNull.Value);
@@ -544,11 +540,18 @@ namespace GuanajuatoAdminUsuarios.Services
 
 
                     //  connection.Open();
-                    SqlCommand sqlCommand = new(@"update depositos set estatusSolicitud=6,fechaActualizacion=@fechaAct where idDeposito=@idDeposito;", connection);
+                    SqlCommand sqlCommand = new(@"update depositos set 
+                        estatusSolicitud = 6,
+                        oficio = @oficio,
+                        fechaOficio = @fechaOficio,
+                        fechaActualizacion=@fechaAct 
+                        where idDeposito=@idDeposito;", connection);
 
                     sqlCommand.Parameters.Add(new SqlParameter("@idDeposito", SqlDbType.Int)).Value = model.idDeposito;
                     sqlCommand.Parameters.Add(new SqlParameter("@fechaAct", SqlDbType.DateTime)).Value = DateTime.Now;
-                    sqlCommand.CommandType = CommandType.Text;
+					sqlCommand.Parameters.AddWithValue("@oficio", model.oficio);
+					sqlCommand.Parameters.AddWithValue("@fechaOficio", model.fechaOficio);
+					sqlCommand.CommandType = CommandType.Text;
                     result = sqlCommand.ExecuteNonQuery();
 
 

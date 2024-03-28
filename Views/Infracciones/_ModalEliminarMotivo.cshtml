@@ -80,13 +80,12 @@
             type: 'POST',
             data: Mydata,
             success: function (data) {
-
-                $("#gridMotivosInfraccion").data("kendoGrid").dataSource.data(data);
+                $("#gridMotivosInfraccion").data("kendoGrid").dataSource.data(data.DatosGrid);
+                $('#lblTotales').text(data.Totales); // Actualiza el valor de Totales en la vista
                 sitteg_success("Se ha modificado la información");
                 $('#EliminarMotivoModal').modal('hide');
                 $('modal-body').removeClass('model-open');
                 $('.modal-backdrop').remove();
-
                 hideLoading();
             },
             error: function (error) {
